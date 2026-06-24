@@ -1,29 +1,23 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ilnd_app/core/repositories/food_repository.dart';
+import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 
-// ─── Hardcoded data models ────────────────────────────────────────────────────
+// ─── Statik hedefler (ileride kullanıcıya göre hesaplanacak) ─────────────────
 
-class _Macro {
-  const _Macro(this.label, this.current, this.goal, this.unit, this.color);
-  final String label;
-  final double current;
-  final double goal;
-  final String unit;
-  final Color color;
-}
+const _kKaloriHedef = 2000;
+const _kProteinHedef = 130;
+const _kKarbHedef = 250;
+const _kYagHedef = 70;
 
-class _Meal {
-  const _Meal(this.name, this.description, this.kcal);
-  final String name;
-  final String description;
-  final int kcal;
-}
+// ─── Alışkanlıklar (şimdilik sabit, Phase 2C'de dinamik olacak) ──────────────
 
 class _Habit {
   const _Habit(this.name, this.checkedDays);
@@ -31,22 +25,10 @@ class _Habit {
   final int checkedDays;
 }
 
-const _macros = [
-  _Macro('Kalori', 1840, 2000, 'kcal', AppColors.amber),
-  _Macro('Protein', 94, 130, 'g', AppColors.sage),
-  _Macro('Karb', 210, 250, 'g', AppColors.sageLight),
-  _Macro('Yağ', 58, 70, 'g', AppColors.amberLight),
-];
-
-const _meals = [
-  _Meal('Kahvaltı', 'Yulaf + muz + badem sütü', 420),
-  _Meal('Öğle', 'Tavuklu salata + bulgur', 650),
-];
-
 const _habits = [
-  _Habit('Meditasyon', 3),
-  _Habit('Okuma', 2),
   _Habit('Su içme', 5),
+  _Habit('Hareket', 3),
+  _Habit('Uyku', 4),
 ];
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
@@ -138,12 +120,13 @@ class _SectionLabel extends StatelessWidget {
 
 // ─── SECTION 1: Macro card with donut chart ───────────────────────────────────
 
-class _MacroCard extends StatelessWidget {
+class _MacroCard extends ConsumerWidget {
   const _MacroCard({required this.p});
   final AppPalette p;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final macros = ref.watch(dailyMacrosProvider);
     return _Card(
       p: p,
       child: Column(
@@ -153,12 +136,17 @@ class _MacroCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _DonutChart(p: p),
+              _DonutChart(p: p, macros: macros),
               const SizedBox(width: 20),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _macros.map((m) => _MacroRow(macro: m, p: p)).toList(),
+                  children: [
+                    _MacroRow(label: 'Kalori', current: macros.kalori, goal: _kKaloriHedef, unit: 'kcal', color: AppColors.amber, p: p),
+                    _MacroRow(label: 'Protein', current: macros.protein, goal: _kProteinHedef, unit: 'g', color: AppColors.sage, p: p),
+                    _MacroRow(label: 'Karb', current: macros.karbonhidrat, goal: _kKarbHedef, unit: 'g', color: AppColors.sageLight, p: p),
+                    _MacroRow(label: 'Yağ', current: macros.yag, goal: _kYagHedef, unit: 'g', color: AppColors.amberLight, p: p),
+                  ],
                 ),
               ),
             ],
@@ -170,15 +158,14 @@ class _MacroCard extends StatelessWidget {
 }
 
 class _DonutChart extends StatelessWidget {
-  const _DonutChart({required this.p});
+  const _DonutChart({required this.p, required this.macros});
   final AppPalette p;
+  final DailyMacros macros;
 
   @override
   Widget build(BuildContext context) {
-    final protein = _macros[1];
-    final karb = _macros[2];
-    final fat = _macros[3];
-    final total = protein.current + karb.current + fat.current;
+    final total = (macros.protein + macros.karbonhidrat + macros.yag).toDouble();
+    final hasData = total > 0;
 
     return SizedBox(
       width: 110,
@@ -191,17 +178,19 @@ class _DonutChart extends StatelessWidget {
               startDegreeOffset: -90,
               sectionsSpace: 2,
               centerSpaceRadius: 36,
-              sections: [
-                PieChartSectionData(value: protein.current / total * 100, color: protein.color, radius: 17, showTitle: false),
-                PieChartSectionData(value: karb.current / total * 100, color: karb.color, radius: 17, showTitle: false),
-                PieChartSectionData(value: fat.current / total * 100, color: fat.color, radius: 17, showTitle: false),
-              ],
+              sections: hasData
+                  ? [
+                      PieChartSectionData(value: macros.protein / total * 100, color: AppColors.sage, radius: 17, showTitle: false),
+                      PieChartSectionData(value: macros.karbonhidrat / total * 100, color: AppColors.sageLight, radius: 17, showTitle: false),
+                      PieChartSectionData(value: macros.yag / total * 100, color: AppColors.amberLight, radius: 17, showTitle: false),
+                    ]
+                  : [PieChartSectionData(value: 100, color: p.border, radius: 17, showTitle: false)],
             ),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('1840',
+              Text('${macros.kalori}',
                   style: AppTextStyles.mono(fontSize: 18, fontWeight: FontWeight.w600, color: p.text)),
               Text('kcal',
                   style: AppTextStyles.label(fontSize: 10, color: p.textMuted)
@@ -215,15 +204,26 @@ class _DonutChart extends StatelessWidget {
 }
 
 class _MacroRow extends StatelessWidget {
-  const _MacroRow({required this.macro, required this.p});
-  final _Macro macro;
+  const _MacroRow({
+    required this.label,
+    required this.current,
+    required this.goal,
+    required this.unit,
+    required this.color,
+    required this.p,
+  });
+  final String label;
+  final int current;
+  final int goal;
+  final String unit;
+  final Color color;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    final label = macro.unit == 'kcal'
-        ? '${macro.current.toInt()} / ${macro.goal.toInt()}'
-        : '${macro.current.toInt()}${macro.unit} / ${macro.goal.toInt()}${macro.unit}';
+    final text = unit == 'kcal'
+        ? '$current / $goal'
+        : '$current$unit / $goal$unit';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -237,15 +237,15 @@ class _MacroRow extends StatelessWidget {
                 height: 8,
                 margin: const EdgeInsets.only(right: 6),
                 decoration: BoxDecoration(
-                  color: macro.color,
+                  color: color,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              Text(macro.label, style: AppTextStyles.body(fontSize: 12, color: p.textMuted)),
+              Text(label, style: AppTextStyles.body(fontSize: 12, color: p.textMuted)),
             ],
           ),
-          Text(label,
-              style: AppTextStyles.mono(fontSize: 12, fontWeight: FontWeight.w500, color: macro.color)),
+          Text(text,
+              style: AppTextStyles.mono(fontSize: 12, fontWeight: FontWeight.w500, color: color)),
         ],
       ),
     );
@@ -254,12 +254,15 @@ class _MacroRow extends StatelessWidget {
 
 // ─── SECTION 2: Meals ─────────────────────────────────────────────────────────
 
-class _MealsSection extends StatelessWidget {
+class _MealsSection extends ConsumerWidget {
   const _MealsSection({required this.p});
   final AppPalette p;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final entriesAsync = ref.watch(todayFoodEntriesProvider);
+    final entries = entriesAsync.valueOrNull ?? [];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -269,11 +272,18 @@ class _MealsSection extends StatelessWidget {
           padding: EdgeInsets.zero,
           child: Column(
             children: [
-              ..._meals.asMap().entries.map((e) {
-                final isLast = e.key == _meals.length - 1;
+              if (entries.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                  child: Text('Henüz yemek eklenmedi.',
+                      style: AppTextStyles.body(fontSize: 13, color: p.textMuted)),
+                )
+              else
+                ...entries.asMap().entries.map((e) {
+                final isLast = e.key == entries.length - 1;
                 return Column(
                   children: [
-                    _MealRow(meal: e.value, p: p),
+                    _FoodEntryRow(entry: e.value, p: p),
                     if (!isLast) Divider(height: 1, indent: 16, endIndent: 16, color: p.border),
                   ],
                 );
@@ -288,9 +298,9 @@ class _MealsSection extends StatelessWidget {
   }
 }
 
-class _MealRow extends StatelessWidget {
-  const _MealRow({required this.meal, required this.p});
-  final _Meal meal;
+class _FoodEntryRow extends StatelessWidget {
+  const _FoodEntryRow({required this.entry, required this.p});
+  final FoodEntry entry;
   final AppPalette p;
 
   @override
@@ -304,14 +314,15 @@ class _MealRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(meal.name,
+                Text(entry.yemekAdi,
                     style: AppTextStyles.heading(fontSize: 15, fontWeight: FontWeight.w600, color: p.text)),
                 const SizedBox(height: 2),
-                Text(meal.description, style: AppTextStyles.body(fontSize: 12, color: p.textMuted)),
+                Text('P: ${entry.protein}g  K: ${entry.karbonhidrat}g  Y: ${entry.yag}g',
+                    style: AppTextStyles.body(fontSize: 12, color: p.textMuted)),
               ],
             ),
           ),
-          Text('${meal.kcal} kcal',
+          Text('${entry.kalori} kcal',
               style: AppTextStyles.mono(fontSize: 13, fontWeight: FontWeight.w500, color: p.textMuted)),
         ],
       ),
@@ -326,7 +337,7 @@ class _AddMealRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Pressable(
-      onTap: () {},
+      onTap: () => context.push(routeYemekEkle),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
