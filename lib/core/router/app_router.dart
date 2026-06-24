@@ -14,6 +14,7 @@ import 'package:ilnd_app/features/onboarding/screens/name_input_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/onboarding_questions_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/value_props_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/welcome_screen.dart';
+import 'package:ilnd_app/features/ekle/yemek_ekle_screen.dart';
 import 'package:ilnd_app/features/splash/splash_screen.dart';
 import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/features/takip/takip_screen.dart';
@@ -31,6 +32,7 @@ const routeExplore = '/explore';
 const routeJournal = '/journal';
 const routeTakip = '/takip';
 const routeProfile = '/profile';
+const routeYemekEkle = '/yemek-ekle';
 
 // ─── Auth-aware router notifier ───────────────────────────────────────────────
 
@@ -110,6 +112,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: routeChat,
         pageBuilder: (context, state) => _fade(state, const ChatScreen()),
+      ),
+      GoRoute(
+        path: routeYemekEkle,
+        pageBuilder: (context, state) => _fade(state, const YemekEkleScreen()),
       ),
 
       // ── Onboarding (no shell) ──────────────────────────────────────────────

@@ -13,6 +13,7 @@ import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
 
 // ─── API key ──────────────────────────────────────────────────────────────────
@@ -299,6 +300,25 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
     }
   }
 
+  void _saveAndPop(BuildContext ctx) {
+    final result = _result;
+    if (result != null) {
+      final repo = ref.read(foodRepositoryProvider);
+      if (repo != null) {
+        repo.add(FoodEntry(
+          id: '',
+          yemekAdi: result.yemekAdi,
+          kalori: result.kalori,
+          protein: result.protein.round(),
+          karbonhidrat: result.karbonhidrat.round(),
+          yag: result.yag.round(),
+          createdAt: DateTime.now(),
+        ));
+      }
+    }
+    if (ctx.mounted) Navigator.of(ctx).pop();
+  }
+
   void _retry() {
     setState(() {
       _photo = null;
@@ -350,7 +370,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
               result: _result!,
               comment: _comment,
               onRetry: _retry,
-              onSave: () => Navigator.of(context).pop(),
+              onSave: () => _saveAndPop(context),
               p: p,
             ),
           _Phase.error => _ErrorView(message: _errorMsg, onRetry: _retry, p: p),

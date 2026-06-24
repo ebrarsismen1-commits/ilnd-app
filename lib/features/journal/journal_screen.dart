@@ -6,27 +6,12 @@ import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_learner.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
+import 'package:ilnd_app/core/repositories/journal_repository.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-class _Entry {
-  const _Entry({
-    required this.date,
-    required this.preview,
-    required this.body,
-  });
-  final String date;
-  final String preview;
-  final String body;
-}
-
-// TODO: Replace with real Supabase/Firestore data
-const _entries = <_Entry>[];
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
 
@@ -36,6 +21,8 @@ class JournalScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final p = ref.watch(paletteProvider);
+    final entriesAsync = ref.watch(journalEntriesProvider);
+
     return Scaffold(
       backgroundColor: p.base,
       body: AnimatedBackground(
@@ -55,27 +42,38 @@ class JournalScreen extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.screenPadding, 20, AppSpacing.screenPadding, 0),
-                  child: _NewEntryButton(p: p, onTap: () => _showWriteSheet(context)),
+                  child: _NewEntryButton(p: p, onTap: () => _showWriteSheet(context, ref)),
                 ),
               ),
-              if (_entries.isEmpty)
-                SliverFillRemaining(
+              entriesAsync.when(
+                loading: () => const SliverFillRemaining(
                   hasScrollBody: false,
-                  child: _EmptyJournal(p: p, onTap: () => _showWriteSheet(context)),
-                )
-              else
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding, 20, AppSpacing.screenPadding, 32),
-                  sliver: SliverList.separated(
-                    itemCount: _entries.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 12),
-                    itemBuilder: (context, i) => Entrance(
-                      index: i,
-                      child: _EntryCard(entry: _entries[i], p: p),
-                    ),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+                error: (e, st) => SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Text('Yüklenemedi', style: AppTextStyles.body(fontSize: 14, color: p.textMuted)),
                   ),
                 ),
+                data: (entries) => entries.isEmpty
+                    ? SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: _EmptyJournal(p: p, onTap: () => _showWriteSheet(context, ref)),
+                      )
+                    : SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.screenPadding, 20, AppSpacing.screenPadding, 32),
+                        sliver: SliverList.separated(
+                          itemCount: entries.length,
+                          separatorBuilder: (ctx2, i2) => const SizedBox(height: 12),
+                          itemBuilder: (context, i) => Entrance(
+                            index: i,
+                            child: _EntryCard(entry: entries[i], p: p),
+                          ),
+                        ),
+                      ),
+              ),
             ],
           ),
         ),
@@ -167,7 +165,7 @@ class _NewEntryButton extends StatelessWidget {
 
 class _EntryCard extends StatelessWidget {
   const _EntryCard({required this.entry, required this.p});
-  final _Entry entry;
+  final JournalEntry entry;
   final AppPalette p;
 
   @override
@@ -184,24 +182,28 @@ class _EntryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(entry.date, style: AppTextStyles.sectionLabel(color: p.textMuted)),
+            Text(_formatDate(entry.createdAt), style: AppTextStyles.sectionLabel(color: p.textMuted)),
             const SizedBox(height: 6),
             Text(
-              entry.preview,
+              entry.body,
               style: AppTextStyles.heading(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 height: 1.3,
                 color: p.text,
               ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              entry.body,
-              style: AppTextStyles.body(fontSize: 13, color: p.textMuted, height: 1.5),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            if (entry.ilndReply.isNotEmpty) ...[
+              const SizedBox(height: 5),
+              Text(
+                entry.ilndReply,
+                style: AppTextStyles.body(fontSize: 13, color: p.textMuted, height: 1.5),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ],
         ),
       ),
@@ -211,7 +213,16 @@ class _EntryCard extends StatelessWidget {
 
 // ─── Write bottom sheet ───────────────────────────────────────────────────────
 
-void _showWriteSheet(BuildContext context) {
+String _formatDate(DateTime dt) {
+  const months = [
+    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık',
+  ];
+  const days = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+  return '${days[dt.weekday - 1]}, ${dt.day} ${months[dt.month - 1]}';
+}
+
+void _showWriteSheet(BuildContext context, WidgetRef ref) {
   showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,
@@ -264,7 +275,6 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
     FocusScope.of(context).unfocus();
     setState(() => _phase = _WritePhase.reflecting);
 
-    // TODO: persist entry locally / Supabase.
     final memory = ref.read(ilndMemoryProvider);
     final service = ref.read(ilndServiceProvider);
 
@@ -282,6 +292,17 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
       );
     } catch (e) {
       reply = IlndService.friendlyError(e);
+    }
+
+    // Firestore'a kaydet
+    final repo = ref.read(journalRepositoryProvider);
+    if (repo != null) {
+      unawaited(repo.add(JournalEntry(
+        id: '',
+        body: text,
+        ilndReply: reply,
+        createdAt: DateTime.now(),
+      )));
     }
 
     await ref
