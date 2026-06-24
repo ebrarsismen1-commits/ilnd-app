@@ -1,46 +1,71 @@
-// Keşfet içeriğinin veri modeli.
-//
-// Şimdilik kodda sabit; Supabase açılınca `articles` tablosundan okunacak
-// (aynı alanlar). Diyetisyen ortağın buraya içerik girer.
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum ArticleCategory { wellness, tarif, yazi }
 
 extension ArticleCategoryX on ArticleCategory {
-  /// Kart üstünde görünen küçük etiket.
   String get tag => switch (this) {
         ArticleCategory.wellness => 'wellness',
         ArticleCategory.tarif => 'tarif',
         ArticleCategory.yazi => 'yazı',
       };
 
-  /// Editoryal arka plan paleti (görsel yoksa / yüklenmezse).
   int get palette => switch (this) {
         ArticleCategory.wellness => 0,
         ArticleCategory.tarif => 1,
         ArticleCategory.yazi => 3,
       };
+
+  String get firestoreValue => name; // 'wellness' | 'tarif' | 'yazi'
+
+  static ArticleCategory fromString(String s) =>
+      ArticleCategory.values.firstWhere((e) => e.name == s,
+          orElse: () => ArticleCategory.wellness);
 }
 
 class Article {
   const Article({
+    required this.id,
     required this.title,
     required this.category,
     required this.readTime,
     required this.excerpt,
     required this.body,
     this.imageUrl,
+    this.order = 0,
   });
 
+  final String id;
   final String title;
   final ArticleCategory category;
   final String readTime;
   final String excerpt;
-
-  /// Yazının gövdesi — her eleman bir paragraf.
   final List<String> body;
-
-  /// Kapak fotoğrafı (web). Boşsa veya yüklenemezse editoryal degrade kullanılır.
   final String? imageUrl;
+  final int order;
+
+  factory Article.fromDoc(DocumentSnapshot doc) {
+    final d = doc.data()! as Map<String, dynamic>;
+    return Article(
+      id: doc.id,
+      title: d['title'] as String? ?? '',
+      category: ArticleCategoryX.fromString(d['category'] as String? ?? ''),
+      readTime: d['readTime'] as String? ?? '',
+      excerpt: d['excerpt'] as String? ?? '',
+      body: List<String>.from(d['body'] as List? ?? []),
+      imageUrl: d['imageUrl'] as String?,
+      order: (d['order'] as num?)?.toInt() ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        'title': title,
+        'category': category.firestoreValue,
+        'readTime': readTime,
+        'excerpt': excerpt,
+        'body': body,
+        'imageUrl': imageUrl,
+        'order': order,
+      };
 }
 
 const _img =
@@ -48,6 +73,8 @@ const _img =
 
 const kArticles = <Article>[
   Article(
+    id: '',
+    order: 0,
     title: 'nefes & sakinlik',
     category: ArticleCategory.wellness,
     readTime: '4 dk',
@@ -60,6 +87,8 @@ const kArticles = <Article>[
     ],
   ),
   Article(
+    id: '',
+    order: 1,
     title: 'yeşil smoothie',
     category: ArticleCategory.tarif,
     readTime: '2 dk',
@@ -72,6 +101,8 @@ const kArticles = <Article>[
     ],
   ),
   Article(
+    id: '',
+    order: 2,
     title: 'dijital detoks',
     category: ArticleCategory.yazi,
     readTime: '6 dk',
@@ -85,6 +116,8 @@ const kArticles = <Article>[
     ],
   ),
   Article(
+    id: '',
+    order: 3,
     title: 'protein kasesi',
     category: ArticleCategory.tarif,
     readTime: '3 dk',
@@ -97,6 +130,8 @@ const kArticles = <Article>[
     ],
   ),
   Article(
+    id: '',
+    order: 4,
     title: 'sabah ritüeli',
     category: ArticleCategory.wellness,
     readTime: '5 dk',
@@ -109,6 +144,8 @@ const kArticles = <Article>[
     ],
   ),
   Article(
+    id: '',
+    order: 5,
     title: 'sınır koymak',
     category: ArticleCategory.yazi,
     readTime: '7 dk',
