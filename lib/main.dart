@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,6 +8,7 @@ import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
+import 'package:ilnd_app/core/repositories/explore_repository.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 
 void main() async {
@@ -13,6 +16,7 @@ void main() async {
 
   // Firebase
   await FirebaseService.initialize();
+  unawaited(ExploreRepository.seedIfEmpty()); // ilk açılışta makale yoksa yükle
 
   // Supabase — key'ler --dart-define-from-file=.env ile gelir
   await Supabase.initialize(

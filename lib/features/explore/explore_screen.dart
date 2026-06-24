@@ -7,6 +7,7 @@ import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/editorial_gradient.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/core/repositories/explore_repository.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
 
@@ -60,9 +61,6 @@ class ExploreScreen extends ConsumerStatefulWidget {
 class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   _Filter _selected = _Filter.hepsi;
 
-  List<Article> get _filtered =>
-      kArticles.where((a) => _selected.matches(a)).toList();
-
   void _open(Article a) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => ArticleDetailScreen(article: a)),
@@ -72,6 +70,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     final p = ref.watch(paletteProvider);
+    final allArticles = ref.watch(articlesProvider).valueOrNull ?? kArticles;
+    final filtered = allArticles.where((a) => _selected.matches(a)).toList();
     return Scaffold(
       backgroundColor: p.base,
       body: AnimatedBackground(
@@ -100,7 +100,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 12)),
-              SliverToBoxAdapter(child: _FeaturedCarousel(p: p, onTap: _open)),
+              SliverToBoxAdapter(child: _FeaturedCarousel(articles: allArticles, p: p, onTap: _open)),
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
               // ── Filter pills ──────────────────────────────────────────────
@@ -144,15 +144,17 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPadding, 0, AppSpacing.screenPadding, 32),
-                sliver: SliverList.separated(
-                  itemCount: _filtered.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 10),
-                  itemBuilder: (context, i) => Entrance(
-                    index: i,
-                    delayStep: const Duration(milliseconds: 55),
-                    child: _FeedRow(article: _filtered[i], p: p, onTap: _open),
-                  ),
-                ),
+                sliver: filtered.isEmpty
+                    ? const SliverToBoxAdapter(child: SizedBox.shrink())
+                    : SliverList.separated(
+                        itemCount: filtered.length,
+                        separatorBuilder: (ctx2, i2) => const SizedBox(height: 10),
+                        itemBuilder: (context, i) => Entrance(
+                          index: i,
+                          delayStep: const Duration(milliseconds: 55),
+                          child: _FeedRow(article: filtered[i], p: p, onTap: _open),
+                        ),
+                      ),
               ),
             ],
           ),
@@ -223,13 +225,14 @@ class _StoriesRow extends StatelessWidget {
 // ─── Featured carousel ─────────────────────────────────────────────────────────
 
 class _FeaturedCarousel extends StatelessWidget {
-  const _FeaturedCarousel({required this.p, required this.onTap});
+  const _FeaturedCarousel({required this.articles, required this.p, required this.onTap});
+  final List<Article> articles;
   final AppPalette p;
   final void Function(Article) onTap;
 
   @override
   Widget build(BuildContext context) {
-    final featured = kArticles.take(4).toList();
+    final featured = articles.take(4).toList();
     return SizedBox(
       height: 160,
       child: ListView.separated(
