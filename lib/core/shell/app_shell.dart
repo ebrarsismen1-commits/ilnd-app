@@ -144,7 +144,7 @@ class _AddButton extends StatelessWidget {
   }
 }
 
-class _NavItem extends StatelessWidget {
+class _NavItem extends StatefulWidget {
   const _NavItem({
     required this.p,
     required this.icon,
@@ -162,28 +162,86 @@ class _NavItem extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<_NavItem> createState() => _NavItemState();
+}
+
+class _NavItemState extends State<_NavItem>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _bounce = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 300),
+  );
+  late final Animation<double> _scale = TweenSequence([
+    TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.28), weight: 40),
+    TweenSequenceItem(tween: Tween(begin: 1.28, end: 0.90), weight: 30),
+    TweenSequenceItem(tween: Tween(begin: 0.90, end: 1.0), weight: 30),
+  ]).animate(CurvedAnimation(parent: _bounce, curve: Curves.easeOut));
+
+  @override
+  void didUpdateWidget(_NavItem old) {
+    super.didUpdateWidget(old);
+    if (!old.active && widget.active) {
+      _bounce.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _bounce.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final color = active ? p.accent : p.textMuted;
+    final p = widget.p;
+    final color = widget.active ? p.accent : p.textMuted;
 
     return Expanded(
       child: Pressable(
-        onTap: onTap,
+        onTap: widget.onTap,
         child: SizedBox(
           height: 64,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(active ? activeIcon : icon, color: color, size: 22),
+              AnimatedBuilder(
+                animation: _scale,
+                builder: (context, child) => Transform.scale(
+                  scale: widget.active ? _scale.value : 1.0,
+                  child: child,
+                ),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: widget.active ? 12 : 0,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: widget.active
+                        ? p.accent.withValues(alpha: 0.12)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Icon(
+                    widget.active ? widget.activeIcon : widget.icon,
+                    color: color,
+                    size: 22,
+                  ),
+                ),
+              ),
               const SizedBox(height: 3),
-              Text(
-                label,
+              AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
                 style: AppTextStyles.label(
                   fontSize: 10,
                   color: color,
                 ).copyWith(
                   letterSpacing: 0,
-                  fontWeight: active ? FontWeight.w600 : FontWeight.w400,
+                  fontWeight:
+                      widget.active ? FontWeight.w600 : FontWeight.w400,
                 ),
+                child: Text(widget.label),
               ),
             ],
           ),

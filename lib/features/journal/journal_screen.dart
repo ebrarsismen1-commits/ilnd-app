@@ -12,6 +12,7 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/core/widgets/shimmer.dart';
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
 
@@ -46,15 +47,18 @@ class JournalScreen extends ConsumerWidget {
                 ),
               ),
               entriesAsync.when(
-                loading: () => const SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Center(child: CircularProgressIndicator()),
+                loading: () => SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPadding, 20, AppSpacing.screenPadding, 0),
+                  sliver: SliverList.separated(
+                    itemCount: 4,
+                    separatorBuilder: (ctx1, i1) => const SizedBox(height: 12),
+                    itemBuilder: (ctx1, i1) => const ShimmerCard(),
+                  ),
                 ),
                 error: (e, st) => SliverFillRemaining(
                   hasScrollBody: false,
-                  child: Center(
-                    child: Text('Yüklenemedi', style: AppTextStyles.body(fontSize: 14, color: p.textMuted)),
-                  ),
+                  child: _ErrorState(p: p, onRetry: () => ref.invalidate(journalEntriesProvider)),
                 ),
                 data: (entries) => entries.isEmpty
                     ? SliverFillRemaining(
@@ -77,6 +81,45 @@ class JournalScreen extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ─── Error state ─────────────────────────────────────────────────────────────
+
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.p, required this.onRetry});
+  final dynamic p;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('🔌', style: const TextStyle(fontSize: 40)),
+          const SizedBox(height: 16),
+          Text(
+            'bağlantı kurulamadı',
+            style: AppTextStyles.heading(fontSize: 16, color: p.text),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'İnternet bağlantını kontrol edip tekrar dene.',
+            style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 24),
+          TextButton(
+            onPressed: onRetry,
+            child: Text('tekrar dene',
+                style: AppTextStyles.body(fontSize: 14, color: p.accent)),
+          ),
+        ],
       ),
     );
   }

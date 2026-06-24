@@ -2,46 +2,44 @@ import 'package:flutter/material.dart';
 
 /// ILND brand color system.
 ///
-/// Editorial / prestige lifestyle palette — Kinfolk / Goop / Byredo
-/// inspired. Warm cream backgrounds, sage greens for primary actions,
-/// amber for accents and warmth.
+/// Pastel wellness × Gen-Z: lavender base, blush + mint accents,
+/// clean whites, soft purple-gray text.
 class AppColors {
   AppColors._();
 
   // ── Core palette ──────────────────────────────────────────────────────────
 
-  /// Primary background — warm cream.
-  static const cream = Color(0xFFF5F0E8);
+  /// Primary background — barely-lavender white.
+  static const cream = Color(0xFFF7F5FF);
 
-  /// Card backgrounds, input fields — slightly deeper cream.
-  static const creamDark = Color(0xFFEDE8DF);
+  /// Card backgrounds, input fields — soft lavender tint.
+  static const creamDark = Color(0xFFEFECFF);
 
-  /// Primary action color, active states, progress indicators.
-  static const sage = Color(0xFF6B8F5E);
+  /// Primary action — medium violet (gen-z lavender).
+  static const sage = Color(0xFF8B5CF6);
 
-  /// Secondary sage — habit checkboxes, soft active states.
-  static const sageLight = Color(0xFFA8C49A);
+  /// Secondary — mint green pastel.
+  static const sageLight = Color(0xFF6EE7B7);
 
-  /// Accent color — warnings, fat macro, secondary highlights.
-  static const amber = Color(0xFFC4956A);
+  /// Accent — blush rose pink.
+  static const amber = Color(0xFFF472B6);
 
-  /// Amber tint — backgrounds for amber-accented elements.
-  static const amberLight = Color(0xFFE8C9A0);
+  /// Accent tint.
+  static const amberLight = Color(0xFFFBBFE0);
 
-  /// Primary text color.
-  static const charcoal = Color(0xFF2C2C2A);
+  /// Primary text — deep purple-black.
+  static const charcoal = Color(0xFF1E1B2E);
 
-  /// Secondary text, placeholders.
-  static const muted = Color(0xFF8C8880);
+  /// Secondary text — dusty lilac-gray.
+  static const muted = Color(0xFF8B85A0);
 
   /// Card / surface color.
   static const white = Color(0xFFFFFFFF);
 
-  /// Hairline border color for cards and dividers.
-  static const border = Color(0xFFE8E4DC);
+  /// Hairline border — lavender tint.
+  static const border = Color(0xFFE4DFFF);
 
   // ── Legacy aliases ────────────────────────────────────────────────────────
-  // Kept so existing screens referencing the old token names keep compiling.
 
   static const background = cream;
   static const primary = sage;

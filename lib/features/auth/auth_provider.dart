@@ -74,14 +74,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signIn(String email, String password) async {
     state = const AuthLoading();
     try {
-      await _client.auth.signInWithPassword(
+      final res = await _client.auth.signInWithPassword(
         email: email.trim(),
         password: password,
-      );
+      ).timeout(const Duration(seconds: 15));
+      // Stream zaten state'i güncelliyor ama başarı garantisi için:
+      if (res.session != null) {
+        state = AuthAuthenticated(res.user!);
+      } else {
+        state = const AuthError('Giriş yapılamadı. E-posta onayı gerekiyor olabilir.');
+      }
     } on AuthException catch (e) {
       state = AuthError(_mapError(e));
-    } catch (_) {
-      state = const AuthError('Bir hata oluştu. Lütfen tekrar deneyin.');
+    } catch (e) {
+      debugPrint('[Auth] signIn error: $e');
+      state = const AuthError('Bağlantı hatası. İnternet bağlantınızı kontrol edin.');
     }
   }
 
@@ -92,17 +99,24 @@ class AuthNotifier extends StateNotifier<AuthState> {
         email: email.trim(),
         password: password,
         data: {'name': name.trim()},
-      );
+      ).timeout(const Duration(seconds: 15));
+      // profiles tablosu opsiyonel — hata verse bile kayıt başarılı sayılır
       if (res.user != null) {
-        await _client.from('profiles').upsert({
-          'id': res.user!.id,
-          'name': name.trim(),
-          'updated_at': DateTime.now().toIso8601String(),
-        });
+        try {
+          await _client.from('profiles').upsert({
+            'id': res.user!.id,
+            'name': name.trim(),
+            'updated_at': DateTime.now().toIso8601String(),
+          });
+        } catch (e) {
+          debugPrint('[Auth] profiles upsert failed: $e');
+        }
       }
+      // signUp state'i auth stream'den otomatik gelir (AuthAuthenticated)
     } on AuthException catch (e) {
       state = AuthError(_mapError(e));
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[Auth] signUp error: $e');
       state = const AuthError('Kayıt oluşturulamadı. Lütfen tekrar deneyin.');
     }
   }
