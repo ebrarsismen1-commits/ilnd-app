@@ -11,6 +11,7 @@ import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
+import 'package:ilnd_app/features/profile/profile_provider.dart';
 
 const _danger = Color(0xFFB3554A);
 
@@ -44,13 +45,13 @@ class ProfileScreen extends ConsumerWidget {
                   delegate: SliverChildListDelegate.fixed([
                     Entrance(index: 0, child: _ProfileHeader(name: name, initial: initial, p: p)),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 1, child: _StatsRow(p: p)),
+                    Entrance(index: 1, child: _StatsRow(p: p, ref: ref)),
                     const SizedBox(height: AppSpacing.sectionGap),
                     Entrance(index: 2, child: _MemoryCard(p: p)),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 3, child: _BadgesSection(p: p)),
+                    Entrance(index: 3, child: _BadgesSection(p: p, ref: ref)),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 4, child: _WeeklySummaryCard(p: p)),
+                    Entrance(index: 4, child: _WeeklySummaryCard(p: p, ref: ref)),
                     const SizedBox(height: AppSpacing.sectionGap),
                     Entrance(index: 5, child: _SettingsSection(p: p)),
                   ]),
@@ -186,18 +187,25 @@ class _MemoryChip extends StatelessWidget {
 // ─── Stats row ────────────────────────────────────────────────────────────────
 
 class _StatsRow extends StatelessWidget {
-  const _StatsRow({required this.p});
+  const _StatsRow({required this.p, required this.ref});
   final AppPalette p;
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
+    final statsAsync = ref.watch(profileStatsProvider);
+    final streak = statsAsync.valueOrNull?.streakDays ?? 0;
+    final journalCount = statsAsync.valueOrNull?.weeklyJournalCount ?? 0;
+    final foodCount = statsAsync.valueOrNull?.weeklyFoodCount ?? 0;
+    final puan = streak * 10 + journalCount * 5 + foodCount * 3;
+
     return Row(
       children: [
-        Expanded(child: _StatCard(value: '12', label: 'seri', suffix: ' 🔥', p: p)),
+        Expanded(child: _StatCard(value: '$streak', label: 'seri', suffix: ' 🔥', p: p)),
         const SizedBox(width: 10),
-        Expanded(child: _StatCard(value: '340', label: 'toplam puan', p: p)),
+        Expanded(child: _StatCard(value: '$puan', label: 'puan', p: p)),
         const SizedBox(width: 10),
-        Expanded(child: _StatCard(value: '7', label: 'rozet', p: p)),
+        Expanded(child: _StatCard(value: streak >= 7 ? '2' : '1', label: 'rozet', p: p)),
       ],
     );
   }
@@ -237,11 +245,16 @@ class _StatCard extends StatelessWidget {
 // ─── Badges section ───────────────────────────────────────────────────────────
 
 class _BadgesSection extends StatelessWidget {
-  const _BadgesSection({required this.p});
+  const _BadgesSection({required this.p, required this.ref});
   final AppPalette p;
+  final WidgetRef ref;
 
   @override
   Widget build(BuildContext context) {
+    final stats = ref.watch(profileStatsProvider).valueOrNull ?? ProfileStats.zero;
+    final hasFirstEntry = stats.weeklyJournalCount > 0 || stats.weeklyFoodCount > 0 || stats.streakDays > 0;
+    final hasWeekStreak = stats.streakDays >= 7;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -249,13 +262,13 @@ class _BadgesSection extends StatelessWidget {
         const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(child: _BadgeCard(emoji: '⭐', label: 'ilk adım', color: p.accent, locked: false, p: p)),
+            Expanded(child: _BadgeCard(emoji: '⭐', label: 'ilk adım', color: p.accent, locked: !hasFirstEntry, p: p)),
             const SizedBox(width: 10),
-            Expanded(child: _BadgeCard(emoji: '🔥', label: '7 günlük', color: p.amber, locked: false, p: p)),
+            Expanded(child: _BadgeCard(emoji: '🔥', label: '7 günlük', color: p.amber, locked: !hasWeekStreak, p: p)),
             const SizedBox(width: 10),
-            Expanded(child: _BadgeCard(emoji: '📖', label: 'okur', color: p.accent, locked: false, p: p)),
+            Expanded(child: _BadgeCard(emoji: '📖', label: 'okur', color: p.accent, locked: true, p: p)),
             const SizedBox(width: 10),
-            Expanded(child: _BadgeCard(emoji: '🔒', label: 'kilit', color: p.textMuted, locked: true, p: p)),
+            Expanded(child: _BadgeCard(emoji: '🏆', label: '30 günlük', color: p.amber, locked: stats.streakDays < 30, p: p)),
           ],
         ),
       ],
@@ -310,14 +323,18 @@ class _BadgeCard extends StatelessWidget {
 // ─── Weekly summary card ──────────────────────────────────────────────────────
 
 class _WeeklySummaryCard extends StatelessWidget {
-  const _WeeklySummaryCard({required this.p});
+  const _WeeklySummaryCard({required this.p, required this.ref});
   final AppPalette p;
+  final WidgetRef ref;
 
-  static const _barValues = [0.7, 0.9, 0.5, 1.0, 0.4, 0.0, 0.0];
   static const _dayLabels = ['Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pa'];
 
   @override
   Widget build(BuildContext context) {
+    final statsAsync = ref.watch(profileStatsProvider);
+    final stats = statsAsync.valueOrNull ?? ProfileStats.zero;
+    final barValues = stats.weeklyActivityByDay;
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.cardPadding),
       decoration: BoxDecoration(
@@ -337,9 +354,9 @@ class _WeeklySummaryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SummaryRow(value: '3', label: 'içerik okundu', p: p),
+                    _SummaryRow(value: '${stats.weeklyFoodCount}', label: 'yemek eklendi', p: p),
                     const SizedBox(height: 10),
-                    _SummaryRow(value: '4.2k', label: 'ort. adım', p: p),
+                    _SummaryRow(value: '${stats.streakDays}', label: 'günlük seri', p: p),
                   ],
                 ),
               ),
@@ -348,9 +365,13 @@ class _WeeklySummaryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SummaryRow(value: '2', label: 'günlük yazıldı', p: p),
+                    _SummaryRow(value: '${stats.weeklyJournalCount}', label: 'günlük yazıldı', p: p),
                     const SizedBox(height: 10),
-                    _SummaryRow(value: '1.8L', label: 'ort. su', p: p),
+                    _SummaryRow(
+                      value: statsAsync.isLoading ? '…' : '✓',
+                      label: 'senkronize',
+                      p: p,
+                    ),
                   ],
                 ),
               ),
@@ -363,8 +384,8 @@ class _WeeklySummaryCard extends StatelessWidget {
             height: 64,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(_barValues.length, (i) {
-                final value = _barValues[i];
+              children: List.generate(barValues.length, (i) {
+                final value = barValues[i];
                 final isEmpty = value == 0.0;
                 return Expanded(
                   child: Padding(
