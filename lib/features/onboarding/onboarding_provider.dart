@@ -10,10 +10,26 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Override this provider with the real instance');
 });
 
-final onboardingDoneProvider = Provider<bool>((ref) {
-  final prefs = ref.watch(sharedPreferencesProvider);
-  return prefs.getBool(_kOnboardingDone) ?? false;
+// ── Onboarding tamamlandı mı? (reaktif StateNotifier) ─────────────────────────
+
+final onboardingDoneProvider =
+    StateNotifierProvider<OnboardingDoneNotifier, bool>((ref) {
+  return OnboardingDoneNotifier(ref.watch(sharedPreferencesProvider));
 });
+
+class OnboardingDoneNotifier extends StateNotifier<bool> {
+  OnboardingDoneNotifier(this._prefs)
+      : super(_prefs.getBool(_kOnboardingDone) ?? false);
+
+  final SharedPreferences _prefs;
+
+  Future<void> setDone() async {
+    await _prefs.setBool(_kOnboardingDone, true);
+    state = true; // router'ı anında tetikler
+  }
+}
+
+// ── Kullanıcı adı ─────────────────────────────────────────────────────────────
 
 final userNameProvider = StateNotifierProvider<UserNameNotifier, String>((ref) {
   return UserNameNotifier(ref.watch(sharedPreferencesProvider));
@@ -27,11 +43,10 @@ class UserNameNotifier extends StateNotifier<String> {
   Future<void> save(String name) async {
     state = name;
     await _prefs.setString(_kUserName, name);
-    await _prefs.setBool(_kOnboardingDone, true);
   }
 }
 
-// ── Onboarding answers ────────────────────────────────────────────────────────
+// ── Onboarding cevapları ──────────────────────────────────────────────────────
 
 final onboardingGoalsProvider =
     StateNotifierProvider<OnboardingGoalsNotifier, List<String>>((ref) {

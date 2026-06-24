@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,9 +15,17 @@ import 'package:ilnd_app/core/services/firebase_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Production'da Flutter framework hatalarını sessizce logla, çökme yok.
+  if (kReleaseMode) {
+    FlutterError.onError = (details) {
+      // Gerçek uygulamada burası Sentry/Crashlytics'e gönderilir.
+      FlutterError.presentError(details);
+    };
+  }
+
   // Firebase
   await FirebaseService.initialize();
-  unawaited(ExploreRepository.seedIfEmpty()); // ilk açılışta makale yoksa yükle
+  unawaited(ExploreRepository.forceSeed()); // makaleleri Firestore'a yükle
 
   // Supabase — key'ler --dart-define-from-file=.env ile gelir
   await Supabase.initialize(

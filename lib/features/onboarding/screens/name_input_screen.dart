@@ -37,7 +37,8 @@ class _NameInputScreenState extends ConsumerState<NameInputScreen> {
     final name = _controller.text.trim();
     if (name.isEmpty) return;
     await ref.read(userNameProvider.notifier).save(name);
-    if (mounted) context.go(routeHome);
+    await ref.read(onboardingDoneProvider.notifier).setDone();
+    if (mounted) context.go(routeRegister); // onboarding bitti → hesap oluştur
   }
 
   @override

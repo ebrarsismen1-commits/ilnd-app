@@ -6,6 +6,7 @@ import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/auth/shared_input_field.dart';
+import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -22,6 +23,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
   bool _hasFieldError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final saved = ref.read(userNameProvider);
+      if (saved.isNotEmpty) _nameCtrl.text = saved;
+    });
+  }
 
   @override
   void dispose() {

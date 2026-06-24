@@ -45,7 +45,7 @@ class AppTheme {
         onSurface: AppColors.charcoal,
         surfaceContainerHighest: AppColors.creamDark,
         outline: AppColors.border,
-        error: Color(0xFFB3554A),
+        error: Color(0xFFE53E82),
       ),
 
       // ── Typography ──────────────────────────────────────────────────────
@@ -227,7 +227,7 @@ class AppTheme {
   }
 }
 
-/// Fade + slight upward slide page transition (~200ms), used app-wide.
+/// Fade + scale reveal page transition, used app-wide.
 class _FadeUpTransitionsBuilder extends PageTransitionsBuilder {
   const _FadeUpTransitionsBuilder();
 
@@ -239,15 +239,22 @@ class _FadeUpTransitionsBuilder extends PageTransitionsBuilder {
     Animation<double> secondaryAnimation,
     Widget child,
   ) {
-    final curved = CurvedAnimation(parent: animation, curve: Curves.easeOut);
+    final curved = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutQuart,
+    );
+    final secondaryCurved = CurvedAnimation(
+      parent: secondaryAnimation,
+      curve: Curves.easeInOut,
+    );
     return FadeTransition(
       opacity: curved,
-      child: SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(0, 0.03),
-          end: Offset.zero,
-        ).animate(curved),
-        child: child,
+      child: ScaleTransition(
+        scale: Tween<double>(begin: 0.97, end: 1.0).animate(curved),
+        child: FadeTransition(
+          opacity: Tween<double>(begin: 1.0, end: 0.92).animate(secondaryCurved),
+          child: child,
+        ),
       ),
     );
   }

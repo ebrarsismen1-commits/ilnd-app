@@ -11,17 +11,39 @@ class ExploreRepository {
       .snapshots()
       .map((s) => s.docs.map(Article.fromDoc).toList());
 
-  // İlk açılışta collection boşsa kArticles'ı yükle (one-time seeder)
   static Future<void> seedIfEmpty() async {
-    final snap = await _col.limit(1).get();
-    if (snap.docs.isNotEmpty) return; // zaten var, geç
+    try {
+      final snap = await _col.limit(1).get();
+      if (snap.docs.isNotEmpty) return;
 
-    final batch = FirebaseService.firestore.batch();
-    for (final article in kArticles) {
-      final ref = _col.doc();
-      batch.set(ref, article.toMap());
+      final batch = FirebaseService.firestore.batch();
+      for (final article in kArticles) {
+        batch.set(_col.doc(), article.toMap());
+      }
+      await batch.commit();
+    } catch (e) {
+      // seed hatası uygulamayı çökertmesin
     }
-    await batch.commit();
+  }
+
+  static Future<void> forceSeed() async {
+    try {
+      // önce hepsini sil
+      final snap = await _col.get();
+      final batch = FirebaseService.firestore.batch();
+      for (final doc in snap.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+      // sonra yeniden yaz
+      final batch2 = FirebaseService.firestore.batch();
+      for (final article in kArticles) {
+        batch2.set(_col.doc(), article.toMap());
+      }
+      await batch2.commit();
+    } catch (e) {
+      // ignore
+    }
   }
 }
 
