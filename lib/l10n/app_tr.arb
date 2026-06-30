@@ -1,0 +1,954 @@
+{
+  "@@locale": "tr",
+
+  "loginTagline": "hoş geldin geri.",
+  "@loginTagline": {"description": "Login screen tagline below the logo"},
+
+  "loginEmailHint": "e-posta",
+  "@loginEmailHint": {"description": "Login email field placeholder"},
+
+  "loginPasswordHint": "şifre",
+  "@loginPasswordHint": {"description": "Login password field placeholder"},
+
+  "loginForgotPassword": "şifremi unuttum",
+  "@loginForgotPassword": {"description": "Forgot password link"},
+
+  "loginSubmit": "giriş yap",
+  "@loginSubmit": {"description": "Login submit button"},
+
+  "loginNoAccount": "hesabın yok mu? ",
+  "@loginNoAccount": {"description": "Prefix before register link"},
+
+  "loginRegisterLink": "kayıt ol",
+  "@loginRegisterLink": {"description": "Register link on login screen"},
+
+  "loginEnterValidEmailFirst": "Önce geçerli bir e-posta adresi gir.",
+  "@loginEnterValidEmailFirst": {"description": "Shown when requesting password reset without a valid email"},
+
+  "loginResetLinkSent": "Şifre sıfırlama bağlantısı e-postana gönderildi.",
+  "@loginResetLinkSent": {"description": "Shown after password reset email is sent"},
+
+  "registerTagline": "hesap oluştur.",
+  "@registerTagline": {"description": "Register screen tagline below the logo"},
+
+  "registerNameHint": "adın",
+  "@registerNameHint": {"description": "Register name field placeholder"},
+
+  "registerEmailHint": "e-posta",
+  "@registerEmailHint": {"description": "Register email field placeholder"},
+
+  "registerPasswordHint": "şifre",
+  "@registerPasswordHint": {"description": "Register password field placeholder"},
+
+  "registerConfirmPasswordHint": "şifreyi tekrarla",
+  "@registerConfirmPasswordHint": {"description": "Register confirm-password field placeholder"},
+
+  "registerTermsPrefix": "kayıt olarak ",
+  "@registerTermsPrefix": {"description": "Terms acceptance text, part 1"},
+
+  "registerTermsOfService": "Kullanım Şartları",
+  "@registerTermsOfService": {"description": "Terms of Service link text"},
+
+  "registerTermsAnd": " ve ",
+  "@registerTermsAnd": {"description": "Terms acceptance text, 'and' connector"},
+
+  "registerPrivacyPolicy": "Gizlilik Politikası'nı",
+  "@registerPrivacyPolicy": {"description": "Privacy Policy link text"},
+
+  "registerTermsSuffix": " kabul ediyorsun.",
+  "@registerTermsSuffix": {"description": "Terms acceptance text, suffix"},
+
+  "registerSubmit": "kayıt ol",
+  "@registerSubmit": {"description": "Register submit button"},
+
+  "registerHaveAccount": "zaten hesabın var mı? ",
+  "@registerHaveAccount": {"description": "Prefix before login link"},
+
+  "registerLoginLink": "giriş yap",
+  "@registerLoginLink": {"description": "Login link on register screen"},
+
+  "registerSuccess": "Hesabın oluşturuldu! Hoş geldin 🌿",
+  "@registerSuccess": {"description": "Shown after successful registration"},
+
+  "validatorEmailRequired": "E-posta adresi gerekli.",
+  "@validatorEmailRequired": {"description": "Email validation: empty"},
+
+  "validatorEmailInvalid": "Geçerli bir e-posta adresi gir.",
+  "@validatorEmailInvalid": {"description": "Email validation: invalid format"},
+
+  "validatorPasswordRequired": "Şifre gerekli.",
+  "@validatorPasswordRequired": {"description": "Password validation: empty"},
+
+  "validatorPasswordTooShort": "Şifre en az 6 karakter olmalı.",
+  "@validatorPasswordTooShort": {"description": "Password validation: too short"},
+
+  "validatorPasswordConfirmRequired": "Şifreyi tekrar gir.",
+  "@validatorPasswordConfirmRequired": {"description": "Password confirm validation: empty"},
+
+  "validatorPasswordMismatch": "Şifreler eşleşmiyor.",
+  "@validatorPasswordMismatch": {"description": "Password confirm validation: mismatch"},
+
+  "validatorNameRequired": "Adını gir.",
+  "@validatorNameRequired": {"description": "Name validation: empty"},
+
+  "validatorNameTooShort": "Adın en az 2 karakter olmalı.",
+  "@validatorNameTooShort": {"description": "Name validation: too short"},
+
+  "welcomeTagline": "günlük tut, ruh halini takip et, ILND'le konuş.",
+  "@welcomeTagline": {"description": "Welcome screen tagline (Turkish)"},
+
+  "welcomeTaglineEn": "journal, track your mood, talk to ILND.",
+  "@welcomeTaglineEn": {"description": "Welcome screen tagline (English subtitle shown alongside Turkish)"},
+
+  "welcomeStart": "başla",
+  "@welcomeStart": {"description": "Welcome screen start button"},
+
+  "quickSetupTitle": "seni biraz tanıyalım",
+  "@quickSetupTitle": {"description": "Quick setup screen title (Turkish)"},
+
+  "quickSetupTitleEn": "let's get to know you a little",
+  "@quickSetupTitleEn": {"description": "Quick setup screen title (English subtitle)"},
+
+  "quickSetupNameHint": "adın ne?",
+  "@quickSetupNameHint": {"description": "Quick setup name field placeholder"},
+
+  "quickSetupGoalsTitle": "neye odaklanmak istersin?",
+  "@quickSetupGoalsTitle": {"description": "Quick setup goals section title"},
+
+  "quickSetupGoalsSubtitle": "istediğin kadar seçebilirsin",
+  "@quickSetupGoalsSubtitle": {"description": "Quick setup goals section subtitle"},
+
+  "quickSetupGoalCalories": "kalori/besin takibi",
+  "@quickSetupGoalCalories": {"description": "Goal option: calorie/nutrition tracking"},
+
+  "quickSetupGoalWeight": "kilo vermek/almak",
+  "@quickSetupGoalWeight": {"description": "Goal option: lose/gain weight"},
+
+  "quickSetupGoalMovement": "daha fazla hareket",
+  "@quickSetupGoalMovement": {"description": "Goal option: more movement"},
+
+  "quickSetupGoalWaterSleep": "su/uyku takibi",
+  "@quickSetupGoalWaterSleep": {"description": "Goal option: water/sleep tracking"},
+
+  "quickSetupGoalHabit": "alışkanlık oluşturma",
+  "@quickSetupGoalHabit": {"description": "Goal option: building habits"},
+
+  "quickSetupGoalMood": "ruh hali takibi",
+  "@quickSetupGoalMood": {"description": "Goal option: mood tracking"},
+
+  "quickSetupInviteCodeTitle": "davet kodun var mı?",
+  "@quickSetupInviteCodeTitle": {"description": "Invite code section title"},
+
+  "quickSetupInviteCodeHint": "davet kodu",
+  "@quickSetupInviteCodeHint": {"description": "Invite code field placeholder"},
+
+  "quickSetupHaveInviteCode": "davet kodum var",
+  "@quickSetupHaveInviteCode": {"description": "Link to reveal the invite code field"},
+
+  "quickSetupContinue": "devam et",
+  "@quickSetupContinue": {"description": "Quick setup continue button"},
+
+  "firstEntryHeader": "İLK GÜNLÜK",
+  "@firstEntryHeader": {"description": "First entry screen header label"},
+
+  "firstEntrySkip": "şimdi değil",
+  "@firstEntrySkip": {"description": "Skip first entry"},
+
+  "firstEntryReady": "hazırım",
+  "@firstEntryReady": {"description": "Continue button after ILND's response"},
+
+  "firstEntrySave": "kaydet",
+  "@firstEntrySave": {"description": "Save the first journal entry"},
+
+  "firstEntryPrompt": "bugün nasılsın?",
+  "@firstEntryPrompt": {"description": "First entry writing prompt"},
+
+  "firstEntryHint": "ne aklından geçiyorsa yaz...",
+  "@firstEntryHint": {"description": "First entry text field hint"},
+
+  "homeTodaysReadTitle": "BUGÜNÜN OKUMASI",
+  "@homeTodaysReadTitle": {"description": "Home screen section title for today's article"},
+
+  "homeTodaysIntentionTitle": "BUGÜNKÜ NİYETİN",
+  "@homeTodaysIntentionTitle": {"description": "Home screen section title for daily intention"},
+
+  "homeGreetingNight": "iyi geceler",
+  "@homeGreetingNight": {"description": "Greeting shown before 6am"},
+
+  "homeGreetingMorning": "günaydın",
+  "@homeGreetingMorning": {"description": "Greeting shown 6am-12pm"},
+
+  "homeGreetingDay": "iyi günler",
+  "@homeGreetingDay": {"description": "Greeting shown 12pm-6pm"},
+
+  "homeGreetingEvening": "iyi akşamlar",
+  "@homeGreetingEvening": {"description": "Greeting shown after 6pm"},
+
+  "homeGreetingWithName": "{greeting}, {name}",
+  "@homeGreetingWithName": {
+    "description": "Greeting combined with the user's name",
+    "placeholders": {
+      "greeting": {"type": "String"},
+      "name": {"type": "String"}
+    }
+  },
+
+  "homeProactiveGoal": "\"{goal}\" hedefin için buradayım.",
+  "@homeProactiveGoal": {
+    "description": "Proactive line referencing the user's first goal",
+    "placeholders": {
+      "goal": {"type": "String"}
+    }
+  },
+
+  "homeProactiveRecentNotes": "son yazdıklarını okudum, konuşmak ister misin?",
+  "@homeProactiveRecentNotes": {"description": "Proactive line when the user has recent notes but no goal"},
+
+  "homeProactiveDefault": "bugün nasıl geçiyor?",
+  "@homeProactiveDefault": {"description": "Default proactive line when no memory exists yet"},
+
+  "homeMoodQuestion": "şu an nasılsın?",
+  "@homeMoodQuestion": {"description": "Mood check-in question"},
+
+  "homeMoodCalm": "sakin",
+  "@homeMoodCalm": {"description": "Mood option: calm"},
+
+  "homeMoodGood": "iyi",
+  "@homeMoodGood": {"description": "Mood option: good"},
+
+  "homeMoodOkay": "fena değil",
+  "@homeMoodOkay": {"description": "Mood option: okay"},
+
+  "homeMoodTired": "yorgun",
+  "@homeMoodTired": {"description": "Mood option: tired"},
+
+  "homeMoodHard": "zor",
+  "@homeMoodHard": {"description": "Mood option: hard"},
+
+  "homeReadTimeArrow": "{readTime} oku →",
+  "@homeReadTimeArrow": {
+    "description": "Article read time with arrow; readTime already includes its own unit, e.g. '5 dk'",
+    "placeholders": {
+      "readTime": {"type": "String"}
+    }
+  },
+
+  "homeIntentionEdit": "düzenle",
+  "@homeIntentionEdit": {"description": "Edit the daily intention"},
+
+  "homeIntentionHint": "bugün neye odaklanmak istiyorsun?",
+  "@homeIntentionHint": {"description": "Daily intention input hint"},
+
+  "homeIntentionSave": "kaydet",
+  "@homeIntentionSave": {"description": "Save the daily intention"},
+
+  "journalTitle": "günlük",
+  "@journalTitle": {"description": "Journal screen title"},
+
+  "journalConnectionError": "bağlantı sorunu",
+  "@journalConnectionError": {"description": "Journal error state title"},
+
+  "journalConnectionErrorBody": "günlüğüne şu an erişilemiyor. bağlantını kontrol et.",
+  "@journalConnectionErrorBody": {"description": "Journal error state body"},
+
+  "journalRetry": "tekrar dene",
+  "@journalRetry": {"description": "Journal error state retry button"},
+
+  "journalEmptyTitle": "henüz bir şey yazmadın",
+  "@journalEmptyTitle": {"description": "Journal empty state title"},
+
+  "journalEmptyBody": "bugün nasıl hissettiğini, ya da aklından geçeni yaz. ILND seninle düşünür.",
+  "@journalEmptyBody": {"description": "Journal empty state body"},
+
+  "journalWriteFirst": "ilk yazını yaz",
+  "@journalWriteFirst": {"description": "Journal empty state CTA"},
+
+  "journalNewEntry": "yeni günlük yaz",
+  "@journalNewEntry": {"description": "New journal entry button"},
+
+  "journalMonths": "Oca,Şub,Mar,Nis,May,Haz,Tem,Ağu,Eyl,Eki,Kas,Ara",
+  "@journalMonths": {"description": "Comma-separated abbreviated month names, January through December, split at call sites"},
+
+  "journalWeekdaysShort": "Pt,Sa,Ça,Pe,Cu,Ct,Pa",
+  "@journalWeekdaysShort": {"description": "Comma-separated abbreviated weekday names, Monday through Sunday"},
+
+  "journalWeekdaysLong": "Pazartesi,Salı,Çarşamba,Perşembe,Cuma,Cumartesi,Pazar",
+  "@journalWeekdaysLong": {"description": "Comma-separated full weekday names, Monday through Sunday"},
+
+  "journalDone": "bitti",
+  "@journalDone": {"description": "Finish writing a journal entry after ILND's response"},
+
+  "journalSave": "kaydet",
+  "@journalSave": {"description": "Save a journal entry"},
+
+  "journalWritingHint": "ne düşünüyorsun?",
+  "@journalWritingHint": {"description": "Journal entry text field hint"},
+
+  "profileShareWeeklySummary": "haftalık özeti paylaş",
+  "@profileShareWeeklySummary": {"description": "Share weekly summary row on profile"},
+
+  "profileDefaultUserName": "Kullanıcı",
+  "@profileDefaultUserName": {"description": "Fallback display name when none is set"},
+
+  "profileMemoryHeading": "ILND seni hatırlıyor",
+  "@profileMemoryHeading": {"description": "Memory card heading on profile"},
+
+  "profileGoalsLabel": "HEDEFLERİN",
+  "@profileGoalsLabel": {"description": "Goals section label in memory card"},
+
+  "profileAboutYouLabel": "SENİN HAKKINDA",
+  "@profileAboutYouLabel": {"description": "Facts-about-you section label in memory card"},
+
+  "profileStatStreak": "seri",
+  "@profileStatStreak": {"description": "Streak stat label"},
+
+  "profileStatPoints": "puan",
+  "@profileStatPoints": {"description": "Points stat label"},
+
+  "profileStatBadge": "rozet",
+  "@profileStatBadge": {"description": "Badge count stat label"},
+
+  "profileBadgesLabel": "ROZETLER",
+  "@profileBadgesLabel": {"description": "Badges section label"},
+
+  "profileBadgeFirstStep": "ilk adım",
+  "@profileBadgeFirstStep": {"description": "First-entry badge label"},
+
+  "profileBadgeSevenDays": "7 günlük",
+  "@profileBadgeSevenDays": {"description": "7-day streak badge label"},
+
+  "profileBadgeReader": "okur",
+  "@profileBadgeReader": {"description": "Reader badge label"},
+
+  "profileBadgeThirtyDays": "30 günlük",
+  "@profileBadgeThirtyDays": {"description": "30-day streak badge label"},
+
+  "profileWeekdaysShort": "Pt,Sa,Ça,Pe,Cu,Ct,Pa",
+  "@profileWeekdaysShort": {"description": "Comma-separated abbreviated weekday names for the weekly bar chart, Monday through Sunday"},
+
+  "profileWeeklySummaryLabel": "HAFTALIK ÖZET",
+  "@profileWeeklySummaryLabel": {"description": "Weekly summary card section label"},
+
+  "profileThisWeek": "bu hafta",
+  "@profileThisWeek": {"description": "Weekly summary card heading"},
+
+  "profileMealsAdded": "yemek eklendi",
+  "@profileMealsAdded": {"description": "Weekly summary: meals added stat label"},
+
+  "profileDayStreak": "günlük seri",
+  "@profileDayStreak": {"description": "Weekly summary: day streak stat label"},
+
+  "profileJournalEntriesWritten": "günlük yazıldı",
+  "@profileJournalEntriesWritten": {"description": "Weekly summary: journal entries written stat label"},
+
+  "profileSynced": "senkronize",
+  "@profileSynced": {"description": "Weekly summary: synced status label"},
+
+  "profilePremiumMember": "ILND+ üyesisin",
+  "@profilePremiumMember": {"description": "Shown when the user already has premium"},
+
+  "profileGoPremium": "ILND+’a geç",
+  "@profileGoPremium": {"description": "CTA to upgrade to premium"},
+
+  "profileSettingsLabel": "AYARLAR",
+  "@profileSettingsLabel": {"description": "Settings section label"},
+
+  "profileInviteFriend": "arkadaşını davet et",
+  "@profileInviteFriend": {"description": "Invite a friend settings row"},
+
+  "profileSettingsRow": "ayarlar",
+  "@profileSettingsRow": {"description": "Generic settings row"},
+
+  "profilePrivacyPolicy": "gizlilik politikası",
+  "@profilePrivacyPolicy": {"description": "Privacy policy settings row"},
+
+  "profileTermsOfService": "kullanım şartları",
+  "@profileTermsOfService": {"description": "Terms of service settings row"},
+
+  "profileSignedOut": "Çıkış yapıldı. Görüşürüz 👋",
+  "@profileSignedOut": {"description": "Toast shown after signing out"},
+
+  "profileSignOut": "çıkış yap",
+  "@profileSignOut": {"description": "Sign out settings row"},
+
+  "profileDeleteAccount": "hesabımı sil",
+  "@profileDeleteAccount": {"description": "Delete account settings row"},
+
+  "profileDeleteAccountDialogTitle": "Hesabını sil",
+  "@profileDeleteAccountDialogTitle": {"description": "Delete account confirmation dialog title"},
+
+  "profileDeleteAccountDialogBody": "Bu işlem geri alınamaz. Günlüklerin, yemek kayıtların, seri geçmişin ve hesabınla ilgili her şey kalıcı olarak silinir.",
+  "@profileDeleteAccountDialogBody": {"description": "Delete account confirmation dialog body"},
+
+  "profileDeleteAccountCancel": "Vazgeç",
+  "@profileDeleteAccountCancel": {"description": "Delete account dialog cancel button"},
+
+  "profileDeleteAccountConfirm": "Hesabımı sil",
+  "@profileDeleteAccountConfirm": {"description": "Delete account dialog confirm button"},
+
+  "profileAccountDeleted": "Hesabın silindi. İyi günler 👋",
+  "@profileAccountDeleted": {"description": "Toast shown after successful account deletion"},
+
+  "exploreTitle": "keşfet.",
+  "@exploreTitle": {"description": "Explore screen title"},
+
+  "exploreSubtitle": "iyi hissetmenin küçük adımları",
+  "@exploreSubtitle": {"description": "Explore screen subtitle"},
+
+  "exploreFilterAll": "hepsi",
+  "@exploreFilterAll": {"description": "Explore filter: all"},
+
+  "exploreFilterWellness": "wellness",
+  "@exploreFilterWellness": {"description": "Explore filter: wellness"},
+
+  "exploreFilterRecipes": "tarifler",
+  "@exploreFilterRecipes": {"description": "Explore filter: recipes"},
+
+  "exploreFilterArticles": "yazılar",
+  "@exploreFilterArticles": {"description": "Explore filter: articles"},
+
+  "exploreFeaturedLabel": "ÖNE ÇIKANLAR",
+  "@exploreFeaturedLabel": {"description": "Featured section label"},
+
+  "exploreSeeAllArrow": "hepsi →",
+  "@exploreSeeAllArrow": {"description": "See-all link with arrow"},
+
+  "exploreStoryBreathing": "nefes",
+  "@exploreStoryBreathing": {"description": "Story tile: breathing"},
+
+  "exploreStorySleep": "uyku",
+  "@exploreStorySleep": {"description": "Story tile: sleep"},
+
+  "exploreStoryWater": "su",
+  "@exploreStoryWater": {"description": "Story tile: water"},
+
+  "exploreStoryMovement": "hareket",
+  "@exploreStoryMovement": {"description": "Story tile: movement"},
+
+  "exploreStoryMeditation": "meditasyon",
+  "@exploreStoryMeditation": {"description": "Story tile: meditation"},
+
+  "exploreStorySelfCare": "öz-bakım",
+  "@exploreStorySelfCare": {"description": "Story tile: self-care"},
+
+  "exploreQuote": "\"Bugün küçük bir adım, yarının büyük farkı.\"",
+  "@exploreQuote": {"description": "Daily quote on explore screen"},
+
+  "exploreQuoteSubtitle": "günün alıntısı",
+  "@exploreQuoteSubtitle": {"description": "Daily quote section label"},
+
+  "paywallSubtitle": "sınırsız sohbet, daha derin hafıza, kişisel plan.",
+  "@paywallSubtitle": {"description": "Paywall subtitle under the ILND+ heading"},
+
+  "paywallBenefitUnlimitedChatTitle": "sınırsız sohbet",
+  "@paywallBenefitUnlimitedChatTitle": {"description": "Paywall benefit: unlimited chat title"},
+
+  "paywallBenefitUnlimitedChatSubtitle": "ILND ile istediğin kadar konuş",
+  "@paywallBenefitUnlimitedChatSubtitle": {"description": "Paywall benefit: unlimited chat subtitle"},
+
+  "paywallBenefitLongMemoryTitle": "daha derin hafıza",
+  "@paywallBenefitLongMemoryTitle": {"description": "Paywall benefit: long memory title"},
+
+  "paywallBenefitLongMemorySubtitle": "ILND seni daha uzun süre hatırlar",
+  "@paywallBenefitLongMemorySubtitle": {"description": "Paywall benefit: long memory subtitle"},
+
+  "paywallBenefitProactiveTitle": "proaktif destek",
+  "@paywallBenefitProactiveTitle": {"description": "Paywall benefit: proactive support title"},
+
+  "paywallBenefitProactiveSubtitle": "ILND seni düşünür, sana ulaşır",
+  "@paywallBenefitProactiveSubtitle": {"description": "Paywall benefit: proactive support subtitle"},
+
+  "paywallBenefitPersonalPlanTitle": "kişisel plan",
+  "@paywallBenefitPersonalPlanTitle": {"description": "Paywall benefit: personal plan title"},
+
+  "paywallBenefitPersonalPlanSubtitle": "hedeflerine göre özelleştirilmiş yol",
+  "@paywallBenefitPersonalPlanSubtitle": {"description": "Paywall benefit: personal plan subtitle"},
+
+  "paywallYearly": "yıllık",
+  "@paywallYearly": {"description": "Paywall pricing plan: yearly"},
+
+  "paywallFreeTrial": "7 gün ücretsiz dene",
+  "@paywallFreeTrial": {"description": "Paywall pricing plan: free trial note"},
+
+  "paywallDiscount": "%40 indirim",
+  "@paywallDiscount": {"description": "Paywall pricing plan: discount badge"},
+
+  "paywallStartFreeTrial": "ücretsiz denemeyi başlat",
+  "@paywallStartFreeTrial": {"description": "Paywall purchase button"},
+
+  "paywallNotNow": "şimdi değil",
+  "@paywallNotNow": {"description": "Paywall dismiss link"},
+
+  "paywallRestore": "satın alımları geri yükle",
+  "@paywallRestore": {"description": "Paywall restore purchases link"},
+
+  "paywallPurchaseCancelled": "Satın alma iptal edildi.",
+  "@paywallPurchaseCancelled": {"description": "Toast shown when purchase is cancelled"},
+
+  "paywallPurchaseFailed": "Satın alma başarısız. Tekrar dene.",
+  "@paywallPurchaseFailed": {"description": "Toast shown when purchase fails"},
+
+  "paywallRestoreSuccess": "Satın alımların geri yüklendi!",
+  "@paywallRestoreSuccess": {"description": "Toast shown when restore succeeds"},
+
+  "paywallNoActiveSubscription": "Aktif abonelik bulunamadı.",
+  "@paywallNoActiveSubscription": {"description": "Toast shown when there's nothing to restore"},
+
+  "paywallRestoreFailed": "Geri yükleme başarısız. Tekrar dene.",
+  "@paywallRestoreFailed": {"description": "Toast shown when restore fails"},
+
+  "articleDetailReadTime": "  ·  {readTime}",
+  "@articleDetailReadTime": {
+    "description": "Article detail read time next to category tag; readTime already includes its own unit, e.g. '5 dk'",
+    "placeholders": {
+      "readTime": {"type": "String"}
+    }
+  },
+
+  "articleDetailSignOff": "🌿",
+  "@articleDetailSignOff": {"description": "Soft sign-off shown at the end of an article"},
+
+  "referralTitle": "arkadaşını davet et",
+  "@referralTitle": {"description": "Referral screen title"},
+
+  "referralSubtitle": "kodunu paylaş, ikiniz de ödül kazanın",
+  "@referralSubtitle": {"description": "Referral screen subtitle"},
+
+  "referralEnterCode": "davet kodu gir",
+  "@referralEnterCode": {"description": "Button to open the redeem-code sheet"},
+
+  "vibeCardShareText": "ilnd'deki ruh halimi paylaşıyorum 🌿",
+  "@vibeCardShareText": {"description": "Share sheet text when sharing the vibe card"},
+
+  "vibeCardError": "kart oluşturulamadı.",
+  "@vibeCardError": {"description": "Vibe card error state"},
+
+  "vibeCardShare": "paylaş",
+  "@vibeCardShare": {"description": "Vibe card share button"},
+
+  "vibeCardShareFailed": "Paylaşılamadı. Tekrar dene.",
+  "@vibeCardShareFailed": {"description": "Toast shown when sharing the vibe card fails"},
+
+  "vibeCardStatStreak": "seri",
+  "@vibeCardStatStreak": {"description": "Vibe card stat: streak"},
+
+  "vibeCardStatJournal": "günlük",
+  "@vibeCardStatJournal": {"description": "Vibe card stat: journal count"},
+
+  "vibeCardStatHabit": "alışkanlık",
+  "@vibeCardStatHabit": {"description": "Vibe card stat: habit completion count"},
+
+  "chatPaywallReason": "bu hafta benimle çok konuştun 🌿",
+  "@chatPaywallReason": {"description": "Context shown on the paywall when the weekly chat limit is reached"},
+
+  "chatGreeting": "selam.",
+  "@chatGreeting": {"description": "Chat empty state greeting without a name"},
+
+  "chatGreetingWithName": "selam, {name}.",
+  "@chatGreetingWithName": {
+    "description": "Chat empty state greeting with the user's name",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+
+  "chatEmptyPrompt": "ne düşünüyorsun? seninle buradayım.",
+  "@chatEmptyPrompt": {"description": "Chat empty state prompt"},
+
+  "chatComposerHint": "bir şey yaz...",
+  "@chatComposerHint": {"description": "Chat message composer hint"},
+
+  "redeemCodeSuccess": "Davet kodu kullanıldı! 🎉",
+  "@redeemCodeSuccess": {"description": "Toast shown when a referral code is redeemed successfully"},
+
+  "redeemCodeInvalid": "Geçersiz kod ya da zaten kullanılmış.",
+  "@redeemCodeInvalid": {"description": "Toast shown when a referral code can't be redeemed"},
+
+  "redeemCodeTitle": "davet kodun var mı?",
+  "@redeemCodeTitle": {"description": "Redeem code bottom sheet title"},
+
+  "redeemCodeHint": "davet kodu",
+  "@redeemCodeHint": {"description": "Redeem code text field hint"},
+
+  "redeemCodeConfirm": "kullan",
+  "@redeemCodeConfirm": {"description": "Redeem code confirm button"},
+
+  "referralCodeLoadError": "kod yüklenemedi",
+  "@referralCodeLoadError": {"description": "Referral code load error title"},
+
+  "referralCodeLoadErrorBody": "davet kodun şu an yüklenemiyor. bağlantını kontrol et.",
+  "@referralCodeLoadErrorBody": {"description": "Referral code load error body"},
+
+  "referralRetry": "tekrar dene",
+  "@referralRetry": {"description": "Referral code load error retry button"},
+
+  "referralCodeCopied": "Kod kopyalandı!",
+  "@referralCodeCopied": {"description": "Toast shown when the referral code is copied"},
+
+  "referralShareText": "ilnd'e benimle katıl! davet kodum: {code}",
+  "@referralShareText": {
+    "description": "Share sheet text when sharing the referral code",
+    "placeholders": {
+      "code": {"type": "String"}
+    }
+  },
+
+  "referralShareSubject": "ilnd davet kodum",
+  "@referralShareSubject": {"description": "Share sheet subject when sharing the referral code"},
+
+  "referralFoundingMember": "KURUCU ÜYE",
+  "@referralFoundingMember": {"description": "Founding member badge label"},
+
+  "referralYourCode": "DAVET KODUN",
+  "@referralYourCode": {"description": "Referral code label"},
+
+  "referralCopy": "kopyala",
+  "@referralCopy": {"description": "Copy referral code button"},
+
+  "referralShare": "paylaş",
+  "@referralShare": {"description": "Share referral code button"},
+
+  "splashTagline": "iyi hisset, iyi yaşa",
+  "@splashTagline": {"description": "Splash screen tagline under the logo"},
+
+  "takipTitle": "takip",
+  "@takipTitle": {"description": "Takip (tracking) screen title"},
+
+  "takipMacrosLabel": "MAKROLAR",
+  "@takipMacrosLabel": {"description": "Macros card section label"},
+
+  "takipCalories": "kalori",
+  "@takipCalories": {"description": "Macro row label: calories"},
+
+  "takipProtein": "protein",
+  "@takipProtein": {"description": "Macro row label: protein"},
+
+  "takipCarbs": "karbonhidrat",
+  "@takipCarbs": {"description": "Macro row label: carbs"},
+
+  "takipFat": "yağ",
+  "@takipFat": {"description": "Macro row label: fat"},
+
+  "takipMealsLabel": "ÖĞÜNLER",
+  "@takipMealsLabel": {"description": "Meals section label"},
+
+  "takipNoMealsYet": "henüz öğün eklenmedi",
+  "@takipNoMealsYet": {"description": "Empty meals list message"},
+
+  "takipAddMeal": "öğün ekle",
+  "@takipAddMeal": {"description": "Add meal row CTA"},
+
+  "takipMacroSummary": "{protein}g protein · {carbs}g karbonhidrat · {fat}g yağ",
+  "@takipMacroSummary": {
+    "description": "Macro breakdown summary for a food entry",
+    "placeholders": {
+      "protein": {"type": "int"},
+      "carbs": {"type": "int"},
+      "fat": {"type": "int"}
+    }
+  },
+
+  "takipKcal": "{kcal} kcal",
+  "@takipKcal": {
+    "description": "Calorie count for a food entry",
+    "placeholders": {
+      "kcal": {"type": "int"}
+    }
+  },
+
+  "takipActivityLabel": "AKTİVİTE",
+  "@takipActivityLabel": {"description": "Activity section label"},
+
+  "takipSteps": "ADIM",
+  "@takipSteps": {"description": "Steps stat label"},
+
+  "takipWaterGoal": "hedef: {ml}ml",
+  "@takipWaterGoal": {
+    "description": "Water intake goal",
+    "placeholders": {
+      "ml": {"type": "int"}
+    }
+  },
+
+  "takipHabitsLabel": "ALIŞKANLIKLAR",
+  "@takipHabitsLabel": {"description": "Habits section label"},
+
+  "takipNoHabitsYet": "henüz alışkanlık eklenmedi",
+  "@takipNoHabitsYet": {"description": "Empty habits list message"},
+
+  "ilndServiceSessionError": "Oturum doğrulanamadı.",
+  "@ilndServiceSessionError": {"description": "Error when no Firebase ID token is available for the AI proxy"},
+
+  "ilndServiceUnavailable": "ILND şu an yanıt veremiyor.",
+  "@ilndServiceUnavailable": {"description": "Error when the AI proxy isn't configured"},
+
+  "ilndServiceDailyLimitReached": "Bugünlük ILND ile konuşma hakkın doldu, yarın tekrar dene.",
+  "@ilndServiceDailyLimitReached": {"description": "Error when the daily AI usage cap is hit"},
+
+  "ilndServiceResponseFailed": "ILND yanıt veremedi ({statusCode}).",
+  "@ilndServiceResponseFailed": {
+    "description": "Generic AI proxy failure with HTTP status code",
+    "placeholders": {
+      "statusCode": {"type": "int"}
+    }
+  },
+
+  "ilndServiceNoInternet": "İnternet bağlantısı yok. Bağlantını kontrol et.",
+  "@ilndServiceNoInternet": {"description": "Error shown on SocketException"},
+
+  "ilndServiceGenericError": "Bir şeyler ters gitti. Birazdan tekrar dener misin?",
+  "@ilndServiceGenericError": {"description": "Generic fallback error message"},
+
+  "ekleTitle": "ekle.",
+  "@ekleTitle": {"description": "Add-sheet title"},
+
+  "ekleFoodTitle": "yemek",
+  "@ekleFoodTitle": {"description": "Add-sheet action: food"},
+
+  "ekleFoodSubtitle": "fotoğraf çek, analiz et",
+  "@ekleFoodSubtitle": {"description": "Add-sheet action subtitle: food"},
+
+  "ekleJournalTitle": "günlük",
+  "@ekleJournalTitle": {"description": "Add-sheet action: journal"},
+
+  "ekleJournalSubtitle": "bugünü yaz",
+  "@ekleJournalSubtitle": {"description": "Add-sheet action subtitle: journal"},
+
+  "ekleHabitTitle": "alışkanlık",
+  "@ekleHabitTitle": {"description": "Add-sheet action: habit"},
+
+  "ekleHabitSubtitle": "yeni hedef ekle",
+  "@ekleHabitSubtitle": {"description": "Add-sheet action subtitle: habit"},
+
+  "ekleWaterTitle": "su",
+  "@ekleWaterTitle": {"description": "Add-sheet action: water"},
+
+  "ekleWaterSubtitle": "bir bardak ekle",
+  "@ekleWaterSubtitle": {"description": "Add-sheet action subtitle: water"},
+
+  "gorevEkleNameEmpty": "Önce alışkanlığa bir ad ver.",
+  "@gorevEkleNameEmpty": {"description": "Error when habit name is empty"},
+
+  "gorevEkleSuccess": "Alışkanlık eklendi!",
+  "@gorevEkleSuccess": {"description": "Toast shown when a habit is saved"},
+
+  "gorevEkleFailed": "Eklenemedi. Tekrar dene.",
+  "@gorevEkleFailed": {"description": "Toast shown when saving a habit fails"},
+
+  "gorevEkleTitle": "yeni alışkanlık",
+  "@gorevEkleTitle": {"description": "Add-habit sheet title"},
+
+  "gorevEkleHint": "alışkanlığın ne?",
+  "@gorevEkleHint": {"description": "Habit name field hint"},
+
+  "gorevEkleDaysPerWeek": "HAFTADA KAÇ GÜN",
+  "@gorevEkleDaysPerWeek": {"description": "Target days per week label"},
+
+  "gorevEkleSave": "kaydet",
+  "@gorevEkleSave": {"description": "Save habit button"},
+
+  "suEkleTitle": "su takibi",
+  "@suEkleTitle": {"description": "Add-water sheet title"},
+
+  "suEkleDailyGoal": "günlük hedef: {ml}ml",
+  "@suEkleDailyGoal": {
+    "description": "Daily water goal",
+    "placeholders": {
+      "ml": {"type": "int"}
+    }
+  },
+
+  "suEkleProgress": "{current}ml / {goal}ml",
+  "@suEkleProgress": {
+    "description": "Water progress, current of goal",
+    "placeholders": {
+      "current": {"type": "int"},
+      "goal": {"type": "int"}
+    }
+  },
+
+  "suEkleReset": "Sıfırlandı.",
+  "@suEkleReset": {"description": "Toast shown after resetting water intake"},
+
+  "suEkleResetButton": "sıfırla",
+  "@suEkleResetButton": {"description": "Reset water intake button"},
+
+  "suEkleHowMuch": "NE KADAR EKLEYELİM",
+  "@suEkleHowMuch": {"description": "Quick-add water amount section label"},
+
+  "suEkleAdded": "+{ml}ml eklendi",
+  "@suEkleAdded": {
+    "description": "Toast shown after adding water",
+    "placeholders": {
+      "ml": {"type": "int"}
+    }
+  },
+
+  "suEkleMl": "ML",
+  "@suEkleMl": {"description": "Unit label under a quick-add water amount"},
+
+  "yemekEklePaywallReason": "bugünlük yemek analizi hakkın doldu 🌿",
+  "@yemekEklePaywallReason": {"description": "Context shown on the paywall when the daily food-scan limit is reached"},
+
+  "yemekEklePhotoAccessError": "Fotoğrafa erişilemedi. Tekrar dene.",
+  "@yemekEklePhotoAccessError": {"description": "Error when picking a photo fails"},
+
+  "yemekEkleAnalysisFailed": "Analiz başarısız oldu. Tekrar dener misin?",
+  "@yemekEkleAnalysisFailed": {"description": "Generic food analysis failure"},
+
+  "yemekEkleAnalysisFailedStatus": "Analiz başarısız oldu ({statusCode}).",
+  "@yemekEkleAnalysisFailedStatus": {
+    "description": "Food analysis failure with HTTP status code",
+    "placeholders": {
+      "statusCode": {"type": "int"}
+    }
+  },
+
+  "yemekEkleNoInternet": "İnternet bağlantısı yok. Bağlantını kontrol et.",
+  "@yemekEkleNoInternet": {"description": "Error shown on SocketException during food analysis"},
+
+  "yemekEkleTitle": "yemek ekle",
+  "@yemekEkleTitle": {"description": "Add-food screen title"},
+
+  "yemekEklePhotoPrompt": "ne yiyorsun?",
+  "@yemekEklePhotoPrompt": {"description": "Add-food picker prompt"},
+
+  "yemekEklePhotoPromptBody": "fotoğrafını çek, ILND kalorisini ve makrolarını tahmin etsin",
+  "@yemekEklePhotoPromptBody": {"description": "Add-food picker prompt body"},
+
+  "yemekEkleOpenCamera": "kamerayı aç",
+  "@yemekEkleOpenCamera": {"description": "Open camera button"},
+
+  "yemekEkleChooseFromGallery": "galeriden seç",
+  "@yemekEkleChooseFromGallery": {"description": "Choose from gallery button"},
+
+  "yemekEkleAnalyzing": "analiz ediliyor...",
+  "@yemekEkleAnalyzing": {"description": "Food photo analysis loading message"},
+
+  "yemekEkleCalories": "KALORİ",
+  "@yemekEkleCalories": {"description": "Macro card label: calories"},
+
+  "yemekEkleProtein": "PROTEİN",
+  "@yemekEkleProtein": {"description": "Macro card label: protein"},
+
+  "yemekEkleCarbs": "KARBONHİDRAT",
+  "@yemekEkleCarbs": {"description": "Macro card label: carbs"},
+
+  "yemekEkleFat": "YAĞ",
+  "@yemekEkleFat": {"description": "Macro card label: fat"},
+
+  "yemekEkleIngredients": "MALZEMELER",
+  "@yemekEkleIngredients": {"description": "Ingredients section label"},
+
+  "yemekEkleSaveButton": "kaydet",
+  "@yemekEkleSaveButton": {"description": "Save food entry button"},
+
+  "yemekEkleRetryButton": "tekrar dene",
+  "@yemekEkleRetryButton": {"description": "Retry button"},
+
+  "yemekEkleErrorTitle": "bir şeyler ters gitti",
+  "@yemekEkleErrorTitle": {"description": "Food analysis error state title"},
+
+  "yemekEkleIlndThinking": "ILND düşünüyor...",
+  "@yemekEkleIlndThinking": {"description": "Placeholder while ILND's comment on the food entry is loading"},
+
+  "legalBackTooltip": "Geri",
+  "@legalBackTooltip": {"description": "Back button tooltip on legal screens"},
+
+  "ilndFallbackChat1": "seni dinliyorum. biraz daha anlatmak ister misin?",
+  "@ilndFallbackChat1": {"description": "ILND offline chat fallback reply 1"},
+
+  "ilndFallbackChat2": "bunu paylaşman güzel. şu an bedeninde bunu nerede hissediyorsun?",
+  "@ilndFallbackChat2": {"description": "ILND offline chat fallback reply 2"},
+
+  "ilndFallbackChat3": "buradayım. bugün sana en çok dokunan şey neydi?",
+  "@ilndFallbackChat3": {"description": "ILND offline chat fallback reply 3"},
+
+  "ilndFallbackChat4": "anlıyorum. bunu biraz daha açsak, altında ne var sence?",
+  "@ilndFallbackChat4": {"description": "ILND offline chat fallback reply 4"},
+
+  "ilndFallbackJournal1": "bunu yazdığın için teşekkürler. bugün sana iyi gelen tek küçük şey neydi?",
+  "@ilndFallbackJournal1": {"description": "ILND offline journal fallback reply 1"},
+
+  "ilndFallbackJournal2": "duygularını buraya bırakman değerli. yarın kendine ne dilemek istersin?",
+  "@ilndFallbackJournal2": {"description": "ILND offline journal fallback reply 2"},
+
+  "ilndFallbackJournal3": "seni duyuyorum. bu hissin sana söylemeye çalıştığı şey ne olabilir?",
+  "@ilndFallbackJournal3": {"description": "ILND offline journal fallback reply 3"},
+
+  "ilndFallbackFood1": "güzel bir seçim. yanına biraz yeşillik eklersen dengesi tam olur.",
+  "@ilndFallbackFood1": {"description": "ILND offline food-comment fallback 1"},
+
+  "ilndFallbackFood2": "iyi görünüyor. bol su içmeyi de unutma, sana iyi gelir.",
+  "@ilndFallbackFood2": {"description": "ILND offline food-comment fallback 2"},
+
+  "ilndFallbackFood3": "dengeli bir öğün. protein iyi, sonraki öğünde lif eklemeyi deneyebilirsin.",
+  "@ilndFallbackFood3": {"description": "ILND offline food-comment fallback 3"},
+
+  "ilndFallbackFood4": "keyifli görünüyor. suçluluk yok — küçük dokunuşlar yeter, baskı değil.",
+  "@ilndFallbackFood4": {"description": "ILND offline food-comment fallback 4"},
+
+  "streakCopyLongStreak": "{days} gündür kendine sadıksın. bu bir alışkanlık artık.",
+  "@streakCopyLongStreak": {
+    "description": "Streak banner text for 30+ day streaks",
+    "placeholders": { "days": {"type": "int"} }
+  },
+
+  "streakCopyWeekStreak": "{days} gündür kendine vakit ayırıyorsun.",
+  "@streakCopyWeekStreak": {
+    "description": "Streak banner text for 7-29 day streaks",
+    "placeholders": { "days": {"type": "int"} }
+  },
+
+  "streakCopyDayStreak": "{days}. gün — devam ediyorsun.",
+  "@streakCopyDayStreak": {
+    "description": "Streak banner text for 1-6 day streaks",
+    "placeholders": { "days": {"type": "int"} }
+  },
+
+  "streakCopyRestart": "yeniden başlamak da bir başlangıç. bugün küçük bir adım at.",
+  "@streakCopyRestart": {"description": "Streak banner text shown after a streak breaks but a longest streak exists"},
+
+  "vibeCardHeadlineWeekStreak": "Bir haftadır kendine sadıksın.",
+  "@vibeCardHeadlineWeekStreak": {"description": "Vibe card headline for 7+ day streaks"},
+
+  "vibeCardHeadlineActiveWeek": "Bu hafta kendine zaman ayırdın.",
+  "@vibeCardHeadlineActiveWeek": {"description": "Vibe card headline for 3+ journal entries this week"},
+
+  "vibeCardHeadlineFirstStep": "İlk adımı attın bile.",
+  "@vibeCardHeadlineFirstStep": {"description": "Vibe card headline for 1-2 journal entries this week"},
+
+  "vibeCardHeadlineQuietWeek": "Bu hafta sessizdi — yeni haftaya hazır mısın?",
+  "@vibeCardHeadlineQuietWeek": {"description": "Vibe card headline for a week with no entries"},
+
+  "vibeCardSublineEmpty": "Her şey küçük bir başlangıçla başlar.",
+  "@vibeCardSublineEmpty": {"description": "Vibe card subline when there's no journal or habit activity"},
+
+  "vibeCardSublineJournalCount": "{count, plural, =1{1 günlük yazdın} other{{count} günlük yazdın}}",
+  "@vibeCardSublineJournalCount": {
+    "description": "Vibe card subline fragment: journal entry count",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "vibeCardSublineHabitCount": "{count, plural, =1{1 alışkanlığı tamamladın} other{{count} alışkanlığı tamamladın}}",
+  "@vibeCardSublineHabitCount": {
+    "description": "Vibe card subline fragment: completed habit count",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "a11yToggleTheme": "Açık/koyu temayı değiştir",
+  "@a11yToggleTheme": {"description": "Screen-reader label for the theme toggle icon button"},
+
+  "a11yOpenProfile": "Profili aç",
+  "@a11yOpenProfile": {"description": "Screen-reader label for the profile avatar icon button"},
+
+  "a11yBack": "Geri",
+  "@a11yBack": {"description": "Screen-reader label for a back icon button"},
+
+  "a11yClose": "Kapat",
+  "@a11yClose": {"description": "Screen-reader label for a close icon button"}
+}

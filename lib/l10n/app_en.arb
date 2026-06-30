@@ -1,0 +1,413 @@
+{
+  "@@locale": "en",
+
+  "loginTagline": "welcome back.",
+  "loginEmailHint": "email",
+  "loginPasswordHint": "password",
+  "loginForgotPassword": "forgot password",
+  "loginSubmit": "sign in",
+  "loginNoAccount": "don't have an account? ",
+  "loginRegisterLink": "sign up",
+  "loginEnterValidEmailFirst": "Enter a valid email address first.",
+  "loginResetLinkSent": "A password reset link has been sent to your email.",
+
+  "registerTagline": "create an account.",
+  "registerNameHint": "your name",
+  "registerEmailHint": "email",
+  "registerPasswordHint": "password",
+  "registerConfirmPasswordHint": "confirm password",
+  "registerTermsPrefix": "by signing up you accept the ",
+  "registerTermsOfService": "Terms of Service",
+  "registerTermsAnd": " and ",
+  "registerPrivacyPolicy": "Privacy Policy",
+  "registerTermsSuffix": ".",
+  "registerSubmit": "sign up",
+  "registerHaveAccount": "already have an account? ",
+  "registerLoginLink": "sign in",
+  "registerSuccess": "Your account has been created! Welcome 🌿",
+
+  "validatorEmailRequired": "Email address is required.",
+  "validatorEmailInvalid": "Enter a valid email address.",
+  "validatorPasswordRequired": "Password is required.",
+  "validatorPasswordTooShort": "Password must be at least 6 characters.",
+  "validatorPasswordConfirmRequired": "Re-enter your password.",
+  "validatorPasswordMismatch": "Passwords don't match.",
+  "validatorNameRequired": "Enter your name.",
+  "validatorNameTooShort": "Name must be at least 2 characters.",
+
+  "welcomeTagline": "journal, track your mood, talk to ILND.",
+  "welcomeTaglineEn": "journal, track your mood, talk to ILND.",
+  "welcomeStart": "start",
+
+  "quickSetupTitle": "let's get to know you",
+  "quickSetupTitleEn": "let's get to know you a little",
+  "quickSetupNameHint": "what's your name?",
+  "quickSetupGoalsTitle": "what do you want to focus on?",
+  "quickSetupGoalsSubtitle": "pick as many as you like",
+  "quickSetupGoalCalories": "calorie/nutrition tracking",
+  "quickSetupGoalWeight": "lose/gain weight",
+  "quickSetupGoalMovement": "more movement",
+  "quickSetupGoalWaterSleep": "water/sleep tracking",
+  "quickSetupGoalHabit": "building habits",
+  "quickSetupGoalMood": "mood tracking",
+  "quickSetupInviteCodeTitle": "have an invite code?",
+  "quickSetupInviteCodeHint": "invite code",
+  "quickSetupHaveInviteCode": "I have an invite code",
+  "quickSetupContinue": "continue",
+
+  "firstEntryHeader": "FIRST JOURNAL ENTRY",
+  "firstEntrySkip": "not now",
+  "firstEntryReady": "ready",
+  "firstEntrySave": "save",
+  "firstEntryPrompt": "how are you today?",
+  "firstEntryHint": "write whatever's on your mind...",
+
+  "homeTodaysReadTitle": "TODAY'S READ",
+  "homeTodaysIntentionTitle": "TODAY'S INTENTION",
+  "homeGreetingNight": "good night",
+  "homeGreetingMorning": "good morning",
+  "homeGreetingDay": "good day",
+  "homeGreetingEvening": "good evening",
+  "homeGreetingWithName": "{greeting}, {name}",
+  "@homeGreetingWithName": {
+    "placeholders": {
+      "greeting": {"type": "String"},
+      "name": {"type": "String"}
+    }
+  },
+  "homeProactiveGoal": "I'm here for your \"{goal}\" goal.",
+  "@homeProactiveGoal": {
+    "placeholders": {
+      "goal": {"type": "String"}
+    }
+  },
+  "homeProactiveRecentNotes": "I read what you wrote recently — want to talk?",
+  "homeProactiveDefault": "how's today going?",
+  "homeMoodQuestion": "how are you right now?",
+  "homeMoodCalm": "calm",
+  "homeMoodGood": "good",
+  "homeMoodOkay": "okay",
+  "homeMoodTired": "tired",
+  "homeMoodHard": "hard",
+  "homeReadTimeArrow": "{readTime} read →",
+  "@homeReadTimeArrow": {
+    "placeholders": {
+      "readTime": {"type": "String"}
+    }
+  },
+  "homeIntentionEdit": "edit",
+  "homeIntentionHint": "what do you want to focus on today?",
+  "homeIntentionSave": "save",
+
+  "journalTitle": "journal",
+  "journalConnectionError": "connection issue",
+  "journalConnectionErrorBody": "can't reach your journal right now. check your connection.",
+  "journalRetry": "try again",
+  "journalEmptyTitle": "you haven't written anything yet",
+  "journalEmptyBody": "write how you're feeling today, or whatever's on your mind. ILND will think it through with you.",
+  "journalWriteFirst": "write your first entry",
+  "journalNewEntry": "write a new entry",
+  "journalMonths": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
+  "journalWeekdaysShort": "Mon,Tue,Wed,Thu,Fri,Sat,Sun",
+  "journalWeekdaysLong": "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+  "journalDone": "done",
+  "journalSave": "save",
+  "journalWritingHint": "what's on your mind?",
+
+  "profileShareWeeklySummary": "share your weekly summary",
+  "profileDefaultUserName": "User",
+  "profileMemoryHeading": "ILND remembers you",
+  "profileGoalsLabel": "YOUR GOALS",
+  "profileAboutYouLabel": "ABOUT YOU",
+  "profileStatStreak": "streak",
+  "profileStatPoints": "points",
+  "profileStatBadge": "badges",
+  "profileBadgesLabel": "BADGES",
+  "profileBadgeFirstStep": "first step",
+  "profileBadgeSevenDays": "7-day",
+  "profileBadgeReader": "reader",
+  "profileBadgeThirtyDays": "30-day",
+
+  "profileWeekdaysShort": "Mon,Tue,Wed,Thu,Fri,Sat,Sun",
+  "profileWeeklySummaryLabel": "WEEKLY SUMMARY",
+  "profileThisWeek": "this week",
+  "profileMealsAdded": "meals added",
+  "profileDayStreak": "day streak",
+  "profileJournalEntriesWritten": "journal entries written",
+  "profileSynced": "synced",
+  "profilePremiumMember": "you're an ILND+ member",
+  "profileGoPremium": "upgrade to ILND+",
+  "profileSettingsLabel": "SETTINGS",
+  "profileInviteFriend": "invite a friend",
+  "profileSettingsRow": "settings",
+  "profilePrivacyPolicy": "privacy policy",
+  "profileTermsOfService": "terms of service",
+  "profileSignedOut": "Signed out. See you soon 👋",
+  "profileSignOut": "sign out",
+  "profileDeleteAccount": "delete my account",
+  "profileDeleteAccountDialogTitle": "Delete your account",
+  "profileDeleteAccountDialogBody": "This can't be undone. Your journal entries, meal logs, streak history, and everything tied to your account will be permanently deleted.",
+  "profileDeleteAccountCancel": "Cancel",
+  "profileDeleteAccountConfirm": "Delete my account",
+  "profileAccountDeleted": "Your account has been deleted. Take care 👋",
+
+  "exploreTitle": "explore.",
+  "exploreSubtitle": "small steps toward feeling good",
+  "exploreFilterAll": "all",
+  "exploreFilterWellness": "wellness",
+  "exploreFilterRecipes": "recipes",
+  "exploreFilterArticles": "articles",
+  "exploreFeaturedLabel": "FEATURED",
+  "exploreSeeAllArrow": "see all →",
+  "exploreStoryBreathing": "breathing",
+  "exploreStorySleep": "sleep",
+  "exploreStoryWater": "water",
+  "exploreStoryMovement": "movement",
+  "exploreStoryMeditation": "meditation",
+  "exploreStorySelfCare": "self-care",
+  "exploreQuote": "\"A small step today, a big difference tomorrow.\"",
+  "exploreQuoteSubtitle": "quote of the day",
+
+  "paywallSubtitle": "unlimited chat, deeper memory, a personal plan.",
+  "paywallBenefitUnlimitedChatTitle": "unlimited chat",
+  "paywallBenefitUnlimitedChatSubtitle": "talk to ILND as much as you want",
+  "paywallBenefitLongMemoryTitle": "deeper memory",
+  "paywallBenefitLongMemorySubtitle": "ILND remembers you for longer",
+  "paywallBenefitProactiveTitle": "proactive support",
+  "paywallBenefitProactiveSubtitle": "ILND thinks of you and reaches out",
+  "paywallBenefitPersonalPlanTitle": "personal plan",
+  "paywallBenefitPersonalPlanSubtitle": "a path tailored to your goals",
+  "paywallYearly": "yearly",
+  "paywallFreeTrial": "try free for 7 days",
+  "paywallDiscount": "40% off",
+  "paywallStartFreeTrial": "start free trial",
+  "paywallNotNow": "not now",
+  "paywallRestore": "restore purchases",
+  "paywallPurchaseCancelled": "Purchase cancelled.",
+  "paywallPurchaseFailed": "Purchase failed. Try again.",
+  "paywallRestoreSuccess": "Your purchases have been restored!",
+  "paywallNoActiveSubscription": "No active subscription found.",
+  "paywallRestoreFailed": "Restore failed. Try again.",
+
+  "articleDetailReadTime": "  ·  {readTime}",
+  "@articleDetailReadTime": {
+    "placeholders": {
+      "readTime": {"type": "String"}
+    }
+  },
+  "articleDetailSignOff": "🌿",
+
+  "referralTitle": "invite a friend",
+  "referralSubtitle": "share your code, you both get a reward",
+  "referralEnterCode": "enter invite code",
+
+  "vibeCardShareText": "sharing my mood on ilnd 🌿",
+  "vibeCardError": "couldn't generate the card.",
+  "vibeCardShare": "share",
+  "vibeCardShareFailed": "Couldn't share. Try again.",
+  "vibeCardStatStreak": "streak",
+  "vibeCardStatJournal": "journal",
+  "vibeCardStatHabit": "habits",
+
+  "chatPaywallReason": "you've talked to me a lot this week 🌿",
+  "chatGreeting": "hey.",
+  "chatGreetingWithName": "hey, {name}.",
+  "@chatGreetingWithName": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "chatEmptyPrompt": "what's on your mind? I'm here with you.",
+  "chatComposerHint": "write something...",
+
+  "redeemCodeSuccess": "Invite code redeemed! 🎉",
+  "redeemCodeInvalid": "Invalid code, or it's already been used.",
+  "redeemCodeTitle": "have an invite code?",
+  "redeemCodeHint": "invite code",
+  "redeemCodeConfirm": "redeem",
+
+  "referralCodeLoadError": "couldn't load your code",
+  "referralCodeLoadErrorBody": "your invite code can't be loaded right now. check your connection.",
+  "referralRetry": "try again",
+  "referralCodeCopied": "Code copied!",
+  "referralShareText": "join me on ilnd! my invite code: {code}",
+  "@referralShareText": {
+    "placeholders": {
+      "code": {"type": "String"}
+    }
+  },
+  "referralShareSubject": "my ilnd invite code",
+  "referralFoundingMember": "FOUNDING MEMBER",
+  "referralYourCode": "YOUR INVITE CODE",
+  "referralCopy": "copy",
+  "referralShare": "share",
+
+  "splashTagline": "feel good, live good",
+  "takipTitle": "tracking",
+  "takipMacrosLabel": "MACROS",
+  "takipCalories": "calories",
+  "takipProtein": "protein",
+  "takipCarbs": "carbs",
+  "takipFat": "fat",
+  "takipMealsLabel": "MEALS",
+  "takipNoMealsYet": "no meals added yet",
+  "takipAddMeal": "add a meal",
+  "takipMacroSummary": "{protein}g protein · {carbs}g carbs · {fat}g fat",
+  "@takipMacroSummary": {
+    "placeholders": {
+      "protein": {"type": "int"},
+      "carbs": {"type": "int"},
+      "fat": {"type": "int"}
+    }
+  },
+  "takipKcal": "{kcal} kcal",
+  "@takipKcal": {
+    "placeholders": {
+      "kcal": {"type": "int"}
+    }
+  },
+  "takipActivityLabel": "ACTIVITY",
+  "takipSteps": "STEPS",
+  "takipWaterGoal": "goal: {ml}ml",
+  "@takipWaterGoal": {
+    "placeholders": {
+      "ml": {"type": "int"}
+    }
+  },
+  "takipHabitsLabel": "HABITS",
+  "takipNoHabitsYet": "no habits added yet",
+
+  "ilndServiceSessionError": "Couldn't verify your session.",
+  "ilndServiceUnavailable": "ILND can't respond right now.",
+  "ilndServiceDailyLimitReached": "You've reached today's chat limit with ILND, try again tomorrow.",
+  "ilndServiceResponseFailed": "ILND couldn't respond ({statusCode}).",
+  "@ilndServiceResponseFailed": {
+    "placeholders": {
+      "statusCode": {"type": "int"}
+    }
+  },
+  "ilndServiceNoInternet": "No internet connection. Check your connection.",
+  "ilndServiceGenericError": "Something went wrong. Want to try again in a bit?",
+
+  "ekleTitle": "add.",
+  "ekleFoodTitle": "food",
+  "ekleFoodSubtitle": "snap a photo, analyze it",
+  "ekleJournalTitle": "journal",
+  "ekleJournalSubtitle": "write about today",
+  "ekleHabitTitle": "habit",
+  "ekleHabitSubtitle": "add a new goal",
+  "ekleWaterTitle": "water",
+  "ekleWaterSubtitle": "add a glass",
+
+  "gorevEkleNameEmpty": "Give the habit a name first.",
+  "gorevEkleSuccess": "Habit added!",
+  "gorevEkleFailed": "Couldn't add it. Try again.",
+  "gorevEkleTitle": "new habit",
+  "gorevEkleHint": "what's the habit?",
+  "gorevEkleDaysPerWeek": "DAYS PER WEEK",
+  "gorevEkleSave": "save",
+
+  "suEkleTitle": "water tracking",
+  "suEkleDailyGoal": "daily goal: {ml}ml",
+  "@suEkleDailyGoal": {
+    "placeholders": {
+      "ml": {"type": "int"}
+    }
+  },
+  "suEkleProgress": "{current}ml / {goal}ml",
+  "@suEkleProgress": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "goal": {"type": "int"}
+    }
+  },
+  "suEkleReset": "Reset.",
+  "suEkleResetButton": "reset",
+  "suEkleHowMuch": "HOW MUCH TO ADD",
+  "suEkleAdded": "+{ml}ml added",
+  "@suEkleAdded": {
+    "placeholders": {
+      "ml": {"type": "int"}
+    }
+  },
+  "suEkleMl": "ML",
+
+  "yemekEklePaywallReason": "you've used today's food scans 🌿",
+  "yemekEklePhotoAccessError": "Couldn't access the photo. Try again.",
+  "yemekEkleAnalysisFailed": "Analysis failed. Want to try again?",
+  "yemekEkleAnalysisFailedStatus": "Analysis failed ({statusCode}).",
+  "@yemekEkleAnalysisFailedStatus": {
+    "placeholders": {
+      "statusCode": {"type": "int"}
+    }
+  },
+  "yemekEkleNoInternet": "No internet connection. Check your connection.",
+  "yemekEkleTitle": "add food",
+  "yemekEklePhotoPrompt": "what are you eating?",
+  "yemekEklePhotoPromptBody": "take a photo, ILND will estimate calories and macros",
+  "yemekEkleOpenCamera": "open camera",
+  "yemekEkleChooseFromGallery": "choose from gallery",
+  "yemekEkleAnalyzing": "analyzing...",
+  "yemekEkleCalories": "CALORIES",
+  "yemekEkleProtein": "PROTEIN",
+  "yemekEkleCarbs": "CARBS",
+  "yemekEkleFat": "FAT",
+  "yemekEkleIngredients": "INGREDIENTS",
+  "yemekEkleSaveButton": "save",
+  "yemekEkleRetryButton": "try again",
+  "yemekEkleErrorTitle": "something went wrong",
+  "yemekEkleIlndThinking": "ILND is thinking...",
+
+  "legalBackTooltip": "Back",
+
+  "ilndFallbackChat1": "I'm listening. want to tell me more?",
+  "ilndFallbackChat2": "thanks for sharing that. where do you feel it in your body right now?",
+  "ilndFallbackChat3": "I'm here. what touched you most today?",
+  "ilndFallbackChat4": "I hear you. if we dig into that a bit more, what's underneath it?",
+
+  "ilndFallbackJournal1": "thank you for writing this. what's one small thing that felt good today?",
+  "ilndFallbackJournal2": "it matters that you put this down. what would you wish for yourself tomorrow?",
+  "ilndFallbackJournal3": "I hear you. what might this feeling be trying to tell you?",
+
+  "ilndFallbackFood1": "nice choice. add a bit of greens and it's perfectly balanced.",
+  "ilndFallbackFood2": "looks good. don't forget to drink plenty of water, it'll do you good.",
+  "ilndFallbackFood3": "a balanced meal. protein's solid — try adding some fiber next meal.",
+  "ilndFallbackFood4": "looks lovely. no guilt here — small touches are enough, no pressure.",
+
+  "streakCopyLongStreak": "{days} days of showing up for yourself. that's a habit now.",
+  "@streakCopyLongStreak": {
+    "placeholders": { "days": {"type": "int"} }
+  },
+  "streakCopyWeekStreak": "{days} days of making time for yourself.",
+  "@streakCopyWeekStreak": {
+    "placeholders": { "days": {"type": "int"} }
+  },
+  "streakCopyDayStreak": "day {days} — you're keeping it up.",
+  "@streakCopyDayStreak": {
+    "placeholders": { "days": {"type": "int"} }
+  },
+  "streakCopyRestart": "starting again is still a start. take one small step today.",
+
+  "vibeCardHeadlineWeekStreak": "You've shown up for yourself all week.",
+  "vibeCardHeadlineActiveWeek": "You made time for yourself this week.",
+  "vibeCardHeadlineFirstStep": "You've already taken the first step.",
+  "vibeCardHeadlineQuietWeek": "This week was quiet — ready for a new one?",
+  "vibeCardSublineEmpty": "Everything starts with a small beginning.",
+  "vibeCardSublineJournalCount": "{count, plural, =1{wrote 1 journal entry} other{wrote {count} journal entries}}",
+  "@vibeCardSublineJournalCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "vibeCardSublineHabitCount": "{count, plural, =1{completed 1 habit} other{completed {count} habits}}",
+  "@vibeCardSublineHabitCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "a11yToggleTheme": "Toggle light/dark theme",
+  "a11yOpenProfile": "Open profile",
+  "a11yBack": "Back",
+  "a11yClose": "Close"
+}
