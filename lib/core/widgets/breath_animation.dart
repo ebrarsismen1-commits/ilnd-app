@@ -27,26 +27,28 @@ class _BreathAnimationState extends State<BreathAnimation>
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 14000), // _total * 1000
-    )..addStatusListener((s) {
-        if (s == AnimationStatus.completed) _ctrl.repeat();
-      });
+    _ctrl =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 14000), // _total * 1000
+        )..addStatusListener((s) {
+          if (s == AnimationStatus.completed) _ctrl.repeat();
+        });
 
     _scale = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween(begin: 0.65, end: 1.0)
-            .chain(CurveTween(curve: Curves.easeInOut)),
+        tween: Tween(
+          begin: 0.65,
+          end: 1.0,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
         weight: _inhale,
       ),
+      TweenSequenceItem(tween: ConstantTween(1.0), weight: _hold),
       TweenSequenceItem(
-        tween: ConstantTween(1.0),
-        weight: _hold,
-      ),
-      TweenSequenceItem(
-        tween: Tween(begin: 1.0, end: 0.65)
-            .chain(CurveTween(curve: Curves.easeInOut)),
+        tween: Tween(
+          begin: 1.0,
+          end: 0.65,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
         weight: _exhale,
       ),
     ]).animate(_ctrl);

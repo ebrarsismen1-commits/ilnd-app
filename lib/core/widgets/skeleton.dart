@@ -42,7 +42,9 @@ class _SkeletonBoxState extends State<SkeletonBox>
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final base = isDark ? const Color(0xFF20242B) : const Color(0xFFE8E6E1);
-    final highlight = isDark ? const Color(0xFF2A3040) : const Color(0xFFF5F4F1);
+    final highlight = isDark
+        ? const Color(0xFF2A3040)
+        : const Color(0xFFF5F4F1);
 
     return AnimatedBuilder(
       animation: _anim,
@@ -60,12 +62,7 @@ class _SkeletonBoxState extends State<SkeletonBox>
 
 /// Bir kart iskelet — isteğe bağlı satır sayısı ile.
 class SkeletonCard extends StatelessWidget {
-  const SkeletonCard({
-    super.key,
-    this.lines = 3,
-    this.height,
-    required this.p,
-  });
+  const SkeletonCard({super.key, this.lines = 3, this.height, required this.p});
 
   final int lines;
   final double? height;

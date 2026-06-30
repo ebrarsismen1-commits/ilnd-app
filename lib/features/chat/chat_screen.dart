@@ -7,6 +7,7 @@ import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/chat/chat_provider.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key});
@@ -30,7 +31,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final text = _controller.text;
     if (text.trim().isEmpty) return;
     _controller.clear();
-    ref.read(chatProvider.notifier).send(text);
+    final l10n = AppLocalizations.of(context)!;
+    ref.read(chatProvider.notifier).send(text, l10n);
     _scrollToBottomSoon();
   }
 
@@ -48,6 +50,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final state = ref.watch(chatProvider);
     final name = ref.watch(ilndMemoryProvider).name;
@@ -56,7 +59,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       _scrollToBottomSoon();
       if (next.limitReached) {
         ref.read(chatProvider.notifier).acknowledgeLimit();
-        PaywallScreen.show(context, reason: 'bu hafta benimle çok konuştun 🌿');
+        PaywallScreen.show(context, reason: l10n.chatPaywallReason);
       }
     });
 
@@ -70,7 +73,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               _Header(p: p),
               Expanded(
                 child: state.messages.isEmpty
-                    ? _EmptyState(name: name, p: p)
+                    ? _EmptyState(name: name, p: p, l10n: l10n)
                     : ListView.builder(
                         controller: _scrollController,
                         padding: const EdgeInsets.fromLTRB(
@@ -114,7 +117,11 @@ class _Header extends StatelessWidget {
             onTap: () => Navigator.of(context).maybePop(),
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: Icon(Icons.arrow_back_ios_rounded, size: 18, color: p.text),
+              child: Icon(
+                Icons.arrow_back_ios_rounded,
+                size: 18,
+                color: p.text,
+              ),
             ),
           ),
           Container(
@@ -122,11 +129,16 @@ class _Header extends StatelessWidget {
             height: 36,
             decoration: BoxDecoration(color: p.accent, shape: BoxShape.circle),
             alignment: Alignment.center,
-            child: Text('i',
-                style: AppTextStyles.display(fontSize: 18, color: p.onAccent)),
+            child: Text(
+              'i',
+              style: AppTextStyles.display(fontSize: 18, color: p.onAccent),
+            ),
           ),
           const SizedBox(width: 10),
-          Text('ilnd', style: AppTextStyles.display(fontSize: 20, color: p.text)),
+          Text(
+            'ilnd',
+            style: AppTextStyles.display(fontSize: 20, color: p.text),
+          ),
         ],
       ),
     );
@@ -136,25 +148,34 @@ class _Header extends StatelessWidget {
 // ─── Empty state ──────────────────────────────────────────────────────────────
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState({required this.name, required this.p});
+  const _EmptyState({required this.name, required this.p, required this.l10n});
   final String name;
   final AppPalette p;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
-    final greeting = name.isNotEmpty ? 'merhaba $name,' : 'merhaba,';
+    final greeting = name.isNotEmpty
+        ? l10n.chatGreetingWithName(name)
+        : l10n.chatGreeting;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPadding),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(greeting,
-              style: AppTextStyles.display(fontSize: 30, color: p.text),
-              textAlign: TextAlign.center),
+          Text(
+            greeting,
+            style: AppTextStyles.display(fontSize: 30, color: p.text),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 10),
           Text(
-            'bugün içinden ne geçiyor?\nyaz, buradayım.',
-            style: AppTextStyles.body(fontSize: 15, color: p.textMuted, height: 1.5),
+            l10n.chatEmptyPrompt,
+            style: AppTextStyles.body(
+              fontSize: 15,
+              color: p.textMuted,
+              height: 1.5,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -216,9 +237,10 @@ class _TypingDots extends StatefulWidget {
 
 class _TypingDotsState extends State<_TypingDots>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _c =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 900))
-        ..repeat();
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  )..repeat();
 
   @override
   void dispose() {
@@ -238,8 +260,10 @@ class _TypingDotsState extends State<_TypingDots>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(3, (i) {
               final t = (_c.value - i * 0.2) % 1.0;
-              final opacity =
-                  (0.3 + 0.7 * (1 - (t - 0.5).abs() * 2)).clamp(0.3, 1.0);
+              final opacity = (0.3 + 0.7 * (1 - (t - 0.5).abs() * 2)).clamp(
+                0.3,
+                1.0,
+              );
               return Container(
                 width: 7,
                 height: 7,
@@ -273,6 +297,7 @@ class _Composer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.screenPadding,
@@ -303,9 +328,11 @@ class _Composer extends StatelessWidget {
                 textCapitalization: TextCapitalization.sentences,
                 style: AppTextStyles.body(fontSize: 15, color: p.text),
                 decoration: InputDecoration(
-                  hintText: 'ILND’ye yaz...',
-                  hintStyle:
-                      AppTextStyles.body(fontSize: 15, color: p.textMuted),
+                  hintText: l10n.chatComposerHint,
+                  hintStyle: AppTextStyles.body(
+                    fontSize: 15,
+                    color: p.textMuted,
+                  ),
                   border: InputBorder.none,
                   isDense: true,
                   contentPadding: const EdgeInsets.symmetric(vertical: 12),
@@ -330,9 +357,15 @@ class _Composer extends StatelessWidget {
                       width: 18,
                       height: 18,
                       child: CircularProgressIndicator(
-                          strokeWidth: 2, color: p.onAccent),
+                        strokeWidth: 2,
+                        color: p.onAccent,
+                      ),
                     )
-                  : Icon(Icons.arrow_upward_rounded, color: p.onAccent, size: 22),
+                  : Icon(
+                      Icons.arrow_upward_rounded,
+                      color: p.onAccent,
+                      size: 22,
+                    ),
             ),
           ),
         ],

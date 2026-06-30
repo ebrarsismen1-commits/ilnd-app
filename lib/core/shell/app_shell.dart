@@ -50,9 +50,7 @@ class _BottomNav extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: p.isDark ? p.base : Colors.white.withValues(alpha: 0.85),
-        border: Border(
-          top: BorderSide(color: p.border, width: 0.5),
-        ),
+        border: Border(top: BorderSide(color: p.border, width: 0.5)),
       ),
       child: SafeArea(
         top: false,
@@ -130,11 +128,7 @@ class _AddButton extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Icon(
-                  Icons.add_rounded,
-                  color: p.onAccent,
-                  size: 22,
-                ),
+                child: Icon(Icons.add_rounded, color: p.onAccent, size: 22),
               ),
             ],
           ),
@@ -233,13 +227,9 @@ class _NavItemState extends State<_NavItem>
               const SizedBox(height: 3),
               AnimatedDefaultTextStyle(
                 duration: const Duration(milliseconds: 200),
-                style: AppTextStyles.label(
-                  fontSize: 10,
-                  color: color,
-                ).copyWith(
+                style: AppTextStyles.label(fontSize: 10, color: color).copyWith(
                   letterSpacing: 0,
-                  fontWeight:
-                      widget.active ? FontWeight.w600 : FontWeight.w400,
+                  fontWeight: widget.active ? FontWeight.w600 : FontWeight.w400,
                 ),
                 child: Text(widget.label),
               ),

@@ -1,42 +1,36 @@
 import 'package:flutter/material.dart';
 
-/// ILND brand color system.
+/// ILND brand color system — light-mode-only constants, kept `const` so
+/// they remain usable as default-parameter/const-widget values across the
+/// codebase (app_text_styles.dart, app_theme.dart, login/register screens).
 ///
-/// Pastel wellness × Gen-Z: lavender base, blush + mint accents,
-/// clean whites, soft purple-gray text.
+/// IMPORTANT — single source of truth: `cream`/`sage`/`amber`/`charcoal`/
+/// `muted`/`white`/`border` MUST always equal [AppPalette.light]'s
+/// `base`/`accent`/`amber`/`text`/`textMuted`/`surface`/`border` one-for-one
+/// (`sageLight`/`amberLight` have no AppPalette equivalent — they're
+/// legacy-only mint/pink tints, not used by the dark-aware palette). These
+/// can't be real Dart references to AppPalette.light's fields because that
+/// would make them non-const, breaking every const default-param/const-widget
+/// call site that currently depends on AppColors being compile-time constant.
+/// If you change a shared light-mode color, update it in BOTH files.
+///
+/// New code should prefer `ref.watch(paletteProvider)` over [AppColors] —
+/// it gets dark mode for free. Only reach for [AppColors] when no
+/// [WidgetRef]/[Ref] is available (e.g. inside a `const` widget tree).
 class AppColors {
   AppColors._();
 
-  // ── Core palette ──────────────────────────────────────────────────────────
+  // ── Core palette — mirrors AppPalette.light, see class doc above ───────────
 
-  /// Primary background — barely-lavender white.
   static const cream = Color(0xFFF7F5FF);
-
-  /// Card backgrounds, input fields — soft lavender tint.
   static const creamDark = Color(0xFFEFECFF);
-
-  /// Primary action — medium violet (gen-z lavender).
   static const sage = Color(0xFF8B5CF6);
-
-  /// Secondary — mint green pastel.
   static const sageLight = Color(0xFF6EE7B7);
-
-  /// Accent — blush rose pink.
   static const amber = Color(0xFFF472B6);
-
-  /// Accent tint.
   static const amberLight = Color(0xFFFBBFE0);
-
-  /// Primary text — deep purple-black.
   static const charcoal = Color(0xFF1E1B2E);
-
-  /// Secondary text — dusty lilac-gray.
   static const muted = Color(0xFF8B85A0);
-
-  /// Card / surface color.
   static const white = Color(0xFFFFFFFF);
-
-  /// Hairline border — lavender tint.
   static const border = Color(0xFFE4DFFF);
 
   // ── Legacy aliases ────────────────────────────────────────────────────────

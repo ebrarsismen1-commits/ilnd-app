@@ -1,12 +1,18 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ilnd_app/core/router/app_router.dart';
+import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
+import 'package:ilnd_app/core/utils/validators.dart';
+import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/auth/shared_input_field.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -22,7 +28,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _confirmCtrl = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
-  bool _hasFieldError = false;
+
+  // Per-field error flags — only highlight the specific field that failed.
+  bool _nameError = false;
+  bool _emailError = false;
+  bool _passwordError = false;
+  bool _confirmError = false;
 
   @override
   void initState() {
@@ -42,32 +53,38 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     super.dispose();
   }
 
-  String? _validate() {
-    final name = _nameCtrl.text.trim();
-    final email = _emailCtrl.text.trim();
-    final password = _passwordCtrl.text;
-    final confirm = _confirmCtrl.text;
+  /// Validates all fields, updates per-field error flags, and returns the
+  /// first error message — or null when everything is valid.
+  String? _validate(AppLocalizations l10n) {
+    final nameErr = Validators.name(_nameCtrl.text, l10n);
+    final emailErr = Validators.email(_emailCtrl.text, l10n);
+    final passwordErr = Validators.password(_passwordCtrl.text, l10n);
+    final confirmErr = Validators.passwordConfirm(
+      _passwordCtrl.text,
+      _confirmCtrl.text,
+      l10n,
+    );
 
-    if (name.isEmpty) return 'Adını gir.';
-    if (email.isEmpty) return 'E-posta adresini gir.';
-    if (!RegExp(r'^[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}$').hasMatch(email)) {
-      return 'Geçerli bir e-posta adresi gir.';
-    }
-    if (password.length < 6) return 'Şifre en az 6 karakter olmalı.';
-    if (password != confirm) return 'Şifreler eşleşmiyor.';
-    return null;
+    setState(() {
+      _nameError = nameErr != null;
+      _emailError = emailErr != null;
+      _passwordError = passwordErr != null;
+      _confirmError = confirmErr != null;
+    });
+
+    return nameErr ?? emailErr ?? passwordErr ?? confirmErr;
   }
 
-  Future<void> _submit() async {
-    final error = _validate();
+  Future<void> _submit(AppLocalizations l10n) async {
+    final error = _validate(l10n);
     if (error != null) {
-      setState(() => _hasFieldError = true);
       IlndToast.error(context, error);
       return;
     }
-    setState(() => _hasFieldError = false);
 
-    await ref.read(authNotifierProvider.notifier).signUp(
+    await ref
+        .read(authNotifierProvider.notifier)
+        .signUp(
           _emailCtrl.text.trim(),
           _passwordCtrl.text,
           _nameCtrl.text.trim(),
@@ -78,165 +95,240 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (authState is AuthError) {
       IlndToast.error(context, authState.message);
     } else if (authState is AuthAuthenticated) {
-      IlndToast.success(context, 'Hesabın oluşturuldu! Hoş geldin 🌿');
+      IlndToast.success(context, l10n.registerSuccess);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final p = ref.watch(paletteProvider);
     final authState = ref.watch(authNotifierProvider);
     final isLoading = authState is AuthLoading;
 
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.screenPadding,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 52),
+      backgroundColor: p.base,
+      body: AnimatedBackground(
+        palette: p,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 52),
 
-              Text(
-                'ilnd.',
-                style: AppTextStyles.display(fontSize: 44),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'hesap oluştur.',
-                style: AppTextStyles.body(
-                  fontSize: 15,
-                  color: AppColors.muted,
-                ).copyWith(letterSpacing: 0.2),
-                textAlign: TextAlign.center,
-              ),
+                Text(
+                  'ilnd.',
+                  style: AppTextStyles.display(fontSize: 44, color: p.text),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.registerTagline,
+                  style: AppTextStyles.body(
+                    fontSize: 15,
+                    color: p.textMuted,
+                  ).copyWith(letterSpacing: 0.2),
+                  textAlign: TextAlign.center,
+                ),
 
-              const SizedBox(height: 40),
+                const SizedBox(height: 40),
 
-              AuthInputField(
-                controller: _nameCtrl,
-                hint: 'adın',
-                icon: Icons.person_outline_rounded,
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-                hasError: _hasFieldError,
-              ),
-              const SizedBox(height: 12),
+                AuthInputField(
+                  controller: _nameCtrl,
+                  hint: l10n.registerNameHint,
+                  icon: Icons.person_outline_rounded,
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.next,
+                  hasError: _nameError,
+                  onChanged: (_) {
+                    if (_nameError) setState(() => _nameError = false);
+                  },
+                ),
+                const SizedBox(height: 12),
 
-              AuthInputField(
-                controller: _emailCtrl,
-                hint: 'e-posta',
-                icon: Icons.mail_outline_rounded,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                hasError: _hasFieldError,
-              ),
-              const SizedBox(height: 12),
+                AuthInputField(
+                  controller: _emailCtrl,
+                  hint: l10n.registerEmailHint,
+                  icon: Icons.mail_outline_rounded,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  hasError: _emailError,
+                  onChanged: (_) {
+                    if (_emailError) setState(() => _emailError = false);
+                  },
+                ),
+                const SizedBox(height: 12),
 
-              AuthInputField(
-                controller: _passwordCtrl,
-                hint: 'şifre',
-                icon: Icons.lock_outline_rounded,
-                obscureText: _obscurePassword,
-                textInputAction: TextInputAction.next,
-                hasError: _hasFieldError,
-                trailing: Pressable(
-                  onTap: () =>
-                      setState(() => _obscurePassword = !_obscurePassword),
-                  child: Icon(
-                    _obscurePassword
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    size: 20,
-                    color: AppColors.muted,
+                AuthInputField(
+                  controller: _passwordCtrl,
+                  hint: l10n.registerPasswordHint,
+                  icon: Icons.lock_outline_rounded,
+                  obscureText: _obscurePassword,
+                  textInputAction: TextInputAction.next,
+                  hasError: _passwordError,
+                  onChanged: (_) {
+                    if (_passwordError) setState(() => _passwordError = false);
+                  },
+                  trailing: Pressable(
+                    onTap: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
+                    child: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      size: 20,
+                      color: p.textMuted,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
+                const SizedBox(height: 12),
 
-              AuthInputField(
-                controller: _confirmCtrl,
-                hint: 'şifreyi tekrarla',
-                icon: Icons.lock_outline_rounded,
-                obscureText: _obscureConfirm,
-                textInputAction: TextInputAction.done,
-                onSubmitted: (_) => _submit(),
-                hasError: _hasFieldError,
-                trailing: Pressable(
-                  onTap: () =>
-                      setState(() => _obscureConfirm = !_obscureConfirm),
-                  child: Icon(
-                    _obscureConfirm
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    size: 20,
-                    color: AppColors.muted,
+                AuthInputField(
+                  controller: _confirmCtrl,
+                  hint: l10n.registerConfirmPasswordHint,
+                  icon: Icons.lock_outline_rounded,
+                  obscureText: _obscureConfirm,
+                  textInputAction: TextInputAction.done,
+                  onSubmitted: (_) => _submit(l10n),
+                  hasError: _confirmError,
+                  onChanged: (_) {
+                    if (_confirmError) setState(() => _confirmError = false);
+                  },
+                  trailing: Pressable(
+                    onTap: () =>
+                        setState(() => _obscureConfirm = !_obscureConfirm),
+                    child: Icon(
+                      _obscureConfirm
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      size: 20,
+                      color: p.textMuted,
+                    ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
-              Pressable(
-                onTap: isLoading ? null : _submit,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: 52,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: isLoading
-                        ? AppColors.sage.withValues(alpha: 0.5)
-                        : AppColors.sage,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  alignment: Alignment.center,
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.white,
-                          ),
-                        )
-                      : Text(
-                          'kayıt ol',
-                          style: AppTextStyles.body(
-                            fontSize: 15,
-                            color: AppColors.white,
-                          ).copyWith(fontWeight: FontWeight.w600),
-                        ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              Pressable(
-                onTap: () => context.pop(),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text.rich(
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'zaten hesabın var mı? ',
-                          style: AppTextStyles.body(fontSize: 13, color: AppColors.muted),
+                          text: l10n.registerTermsPrefix,
+                          style: AppTextStyles.body(
+                            fontSize: 12,
+                            color: p.textMuted,
+                          ),
                         ),
                         TextSpan(
-                          text: 'giriş yap',
-                          style: AppTextStyles.body(fontSize: 13, color: AppColors.sage)
-                              .copyWith(fontWeight: FontWeight.w600),
+                          text: l10n.registerTermsOfService,
+                          style: AppTextStyles.body(
+                            fontSize: 12,
+                            color: p.accent,
+                          ).copyWith(fontWeight: FontWeight.w600),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => context.push(routeTermsOfService),
+                        ),
+                        TextSpan(
+                          text: l10n.registerTermsAnd,
+                          style: AppTextStyles.body(
+                            fontSize: 12,
+                            color: p.textMuted,
+                          ),
+                        ),
+                        TextSpan(
+                          text: l10n.registerPrivacyPolicy,
+                          style: AppTextStyles.body(
+                            fontSize: 12,
+                            color: p.accent,
+                          ).copyWith(fontWeight: FontWeight.w600),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => context.push(routePrivacyPolicy),
+                        ),
+                        TextSpan(
+                          text: l10n.registerTermsSuffix,
+                          style: AppTextStyles.body(
+                            fontSize: 12,
+                            color: p.textMuted,
+                          ),
                         ),
                       ],
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 40),
-            ],
+                const SizedBox(height: 16),
+
+                Pressable(
+                  onTap: isLoading ? null : () => _submit(l10n),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    height: 52,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: isLoading
+                          ? p.accent.withValues(alpha: 0.5)
+                          : p.accent,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    alignment: Alignment.center,
+                    child: isLoading
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: p.onAccent,
+                            ),
+                          )
+                        : Text(
+                            l10n.registerSubmit,
+                            style: AppTextStyles.body(
+                              fontSize: 15,
+                              color: p.onAccent,
+                            ).copyWith(fontWeight: FontWeight.w600),
+                          ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                Pressable(
+                  onTap: () => context.pop(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: l10n.registerHaveAccount,
+                            style: AppTextStyles.body(
+                              fontSize: 13,
+                              color: p.textMuted,
+                            ),
+                          ),
+                          TextSpan(
+                            text: l10n.registerLoginLink,
+                            style: AppTextStyles.body(
+                              fontSize: 13,
+                              color: p.accent,
+                            ).copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),

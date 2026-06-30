@@ -7,6 +7,7 @@ import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_learner.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// Sohbetteki tek mesaj.
 class ChatMessage {
@@ -43,16 +44,16 @@ class ChatState {
     List<ChatMessage>? messages,
     bool? sending,
     bool? limitReached,
-  }) =>
-      ChatState(
-        messages: messages ?? this.messages,
-        sending: sending ?? this.sending,
-        limitReached: limitReached ?? this.limitReached,
-      );
+  }) => ChatState(
+    messages: messages ?? this.messages,
+    sending: sending ?? this.sending,
+    limitReached: limitReached ?? this.limitReached,
+  );
 }
 
-final chatProvider =
-    StateNotifierProvider<ChatNotifier, ChatState>((ref) => ChatNotifier(ref));
+final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>(
+  (ref) => ChatNotifier(ref),
+);
 
 class ChatNotifier extends StateNotifier<ChatState> {
   ChatNotifier(this._ref) : super(_initialState());
@@ -81,7 +82,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
     if (state.limitReached) state = state.copyWith(limitReached: false);
   }
 
-  Future<void> send(String text) async {
+  Future<void> send(String text, AppLocalizations l10n) async {
     final trimmed = text.trim();
     if (trimmed.isEmpty || state.sending) return;
 
@@ -94,7 +95,11 @@ class ChatNotifier extends StateNotifier<ChatState> {
 
     final userMsg = ChatMessage(fromUser: true, text: trimmed);
     state = state.copyWith(
-      messages: [...state.messages, userMsg, const ChatMessage(fromUser: false, text: '', pending: true)],
+      messages: [
+        ...state.messages,
+        userMsg,
+        const ChatMessage(fromUser: false, text: '', pending: true),
+      ],
       sending: true,
     );
 
@@ -110,8 +115,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
         ? history.sublist(history.length - _historyWindow)
         : history;
     // Son kullanıcı mesajını userMessage olarak ayır.
-    final priorTurns =
-        windowed.isNotEmpty ? windowed.sublist(0, windowed.length - 1) : <IlndTurn>[];
+    final priorTurns = windowed.isNotEmpty
+        ? windowed.sublist(0, windowed.length - 1)
+        : <IlndTurn>[];
 
     String reply;
     try {
@@ -119,10 +125,11 @@ class ChatNotifier extends StateNotifier<ChatState> {
         memory: memory,
         userMessage: trimmed,
         history: priorTurns,
-        fallback: IlndFallbacks.chat(),
+        fallback: IlndFallbacks.chat(l10n),
+        l10n: l10n,
       );
     } catch (e) {
-      reply = IlndService.friendlyError(e);
+      reply = IlndService.friendlyError(e, l10n);
     }
 
     final resolved = [...state.messages];
@@ -141,7 +148,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
     // Birkaç mesajda bir kalıcı hafıza çıkar (fire-and-forget, maliyet sınırı).
     _userMessageCount++;
     if (_userMessageCount % _learnEvery == 0) {
-      unawaited(_ref.read(ilndLearnerProvider).learnFrom(trimmed));
+      unawaited(_ref.read(ilndLearnerProvider).learnFrom(trimmed, l10n));
     }
   }
 }

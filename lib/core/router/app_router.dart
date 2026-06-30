@@ -9,21 +9,22 @@ import 'package:ilnd_app/features/auth/register_screen.dart';
 import 'package:ilnd_app/features/chat/chat_screen.dart';
 import 'package:ilnd_app/features/explore/explore_screen.dart';
 import 'package:ilnd_app/features/home/home_screen.dart';
+import 'package:ilnd_app/features/legal/legal_screen.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
-import 'package:ilnd_app/features/onboarding/screens/name_input_screen.dart';
-import 'package:ilnd_app/features/onboarding/screens/onboarding_questions_screen.dart';
-import 'package:ilnd_app/features/onboarding/screens/value_props_screen.dart';
+import 'package:ilnd_app/features/onboarding/screens/first_entry_screen.dart';
+import 'package:ilnd_app/features/onboarding/screens/quick_setup_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/welcome_screen.dart';
 import 'package:ilnd_app/features/ekle/yemek_ekle_screen.dart';
 import 'package:ilnd_app/features/splash/splash_screen.dart';
 import 'package:ilnd_app/features/profile/profile_screen.dart';
+import 'package:ilnd_app/features/referral/referral_screen.dart';
 import 'package:ilnd_app/features/takip/takip_screen.dart';
+import 'package:ilnd_app/features/vibe_card/vibe_card_screen.dart';
 
 const routeSplash = '/splash';
 const routeWelcome = '/onboarding/welcome';
-const routeValueProps = '/onboarding/value-props';
-const routeOnboardingQuestions = '/onboarding/questions';
-const routeNameInput = '/onboarding/name';
+const routeQuickSetup = '/onboarding/quick-setup';
+const routeFirstEntry = '/onboarding/first-entry';
 const routeLogin = '/login';
 const routeRegister = '/register';
 const routeHome = '/home';
@@ -33,13 +34,27 @@ const routeJournal = '/journal';
 const routeTakip = '/takip';
 const routeProfile = '/profile';
 const routeYemekEkle = '/yemek-ekle';
+const routeVibeCard = '/vibe-card';
+const routeReferral = '/referral';
+const routePrivacyPolicy = '/legal/privacy';
+const routeTermsOfService = '/legal/terms';
 
 // ─── Auth-aware router notifier ───────────────────────────────────────────────
 
 class _RouterNotifier extends ChangeNotifier {
   _RouterNotifier(this._ref) {
-    _ref.listen<AuthState>(authNotifierProvider, (prev, next) => notifyListeners());
-    _ref.listen<bool>(onboardingDoneProvider, (prev, next) => notifyListeners());
+    _ref.listen<AuthState>(
+      authNotifierProvider,
+      (prev, next) => notifyListeners(),
+    );
+    _ref.listen<bool>(
+      onboardingDoneProvider,
+      (prev, next) => notifyListeners(),
+    );
+    _ref.listen<bool>(
+      firstEntryDoneProvider,
+      (prev, next) => notifyListeners(),
+    );
   }
 
   final Ref _ref;
@@ -50,7 +65,15 @@ class _RouterNotifier extends ChangeNotifier {
 
     final authState = _ref.read(authNotifierProvider);
     final onboardingDone = _ref.read(onboardingDoneProvider);
+    final firstEntryDone = _ref.read(firstEntryDoneProvider);
     final location = state.matchedLocation;
+
+    // Gizlilik Politikası / Kullanım Şartları her zaman erişilebilir olmalı —
+    // App Store/Play Store gereksinimi, kayıt formundan (henüz auth yok) ya
+    // da ayarlardan açılabilir. Auth/onboarding durumundan bağımsız.
+    if (location == routePrivacyPolicy || location == routeTermsOfService) {
+      return null;
+    }
 
     // Still resolving — show splash screen.
     if (authState is AuthInitial) {
@@ -61,7 +84,7 @@ class _RouterNotifier extends ChangeNotifier {
     final isOnAuthRoute = location == routeLogin || location == routeRegister;
     final isOnboarding = location.startsWith('/onboarding');
 
-    // Not onboarded → always push through onboarding first.
+    // Not onboarded → always push through onboarding (name/goals) first.
     if (!onboardingDone) {
       if (isOnboarding) return null;
       return routeWelcome;
@@ -73,8 +96,15 @@ class _RouterNotifier extends ChangeNotifier {
       return routeLogin;
     }
 
-    // Authenticated but stuck on an auth route → home.
-    if (isAuthenticated && isOnAuthRoute) {
+    // Authenticated but hasn't written/skipped the first journal entry yet —
+    // force the folded "first value" step before letting them reach home.
+    if (!firstEntryDone) {
+      if (location == routeFirstEntry) return null;
+      return routeFirstEntry;
+    }
+
+    // Authenticated, first entry done, but stuck on an auth/onboarding route → home.
+    if (isOnAuthRoute || location == routeFirstEntry) {
       return routeHome;
     }
 
@@ -117,6 +147,24 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: routeYemekEkle,
         pageBuilder: (context, state) => _fade(state, const YemekEkleScreen()),
       ),
+      GoRoute(
+        path: routeReferral,
+        pageBuilder: (context, state) => _fade(state, const ReferralScreen()),
+      ),
+      GoRoute(
+        path: routeVibeCard,
+        pageBuilder: (context, state) => _fade(state, const VibeCardScreen()),
+      ),
+      GoRoute(
+        path: routePrivacyPolicy,
+        pageBuilder: (context, state) =>
+            _fade(state, LegalScreen.privacyPolicy),
+      ),
+      GoRoute(
+        path: routeTermsOfService,
+        pageBuilder: (context, state) =>
+            _fade(state, LegalScreen.termsOfService),
+      ),
 
       // ── Onboarding (no shell) ──────────────────────────────────────────────
       GoRoute(
@@ -124,17 +172,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => _fade(state, const WelcomeScreen()),
       ),
       GoRoute(
-        path: routeValueProps,
-        pageBuilder: (context, state) => _fade(state, const ValuePropsScreen()),
+        path: routeQuickSetup,
+        pageBuilder: (context, state) => _fade(state, const QuickSetupScreen()),
       ),
       GoRoute(
-        path: routeOnboardingQuestions,
-        pageBuilder: (context, state) =>
-            _fade(state, const OnboardingQuestionsScreen()),
-      ),
-      GoRoute(
-        path: routeNameInput,
-        pageBuilder: (context, state) => _fade(state, const NameInputScreen()),
+        path: routeFirstEntry,
+        pageBuilder: (context, state) => _fade(state, const FirstEntryScreen()),
       ),
 
       // ── Main app shell: 4 branches ────────────────────────────────────────

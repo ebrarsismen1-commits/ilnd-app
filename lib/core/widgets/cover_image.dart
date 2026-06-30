@@ -4,11 +4,7 @@ import 'package:ilnd_app/core/widgets/editorial_gradient.dart';
 /// Kapak görseli: gerçek web fotoğrafını yükler, yüklenemezse (internet yok,
 /// 404, demo) editoryal degradeye düşer. Yani asla kırık görünmez.
 class CoverImage extends StatelessWidget {
-  const CoverImage({
-    super.key,
-    required this.imageUrl,
-    required this.palette,
-  });
+  const CoverImage({super.key, required this.imageUrl, required this.palette});
 
   final String? imageUrl;
   final int palette;

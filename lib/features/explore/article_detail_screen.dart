@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// Editoryal okuma sayfası — kapak fotoğrafı + başlık + gövde.
 class ArticleDetailScreen extends ConsumerWidget {
@@ -14,6 +15,7 @@ class ArticleDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
 
     return Scaffold(
@@ -54,17 +56,25 @@ class ArticleDetailScreen extends ConsumerWidget {
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(8),
-                    child: Pressable(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        width: 38,
-                        height: 38,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.3),
-                          shape: BoxShape.circle,
+                    child: Semantics(
+                      button: true,
+                      label: l10n.a11yBack,
+                      child: Pressable(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 16,
+                            color: Colors.white,
+                          ),
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new_rounded,
-                            size: 16, color: Colors.white),
                       ),
                     ),
                   ),
@@ -76,36 +86,69 @@ class ArticleDetailScreen extends ConsumerWidget {
           // ── Body ────────────────────────────────────────────────────────
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(
-                AppSpacing.screenPadding, 24, AppSpacing.screenPadding, 48),
+              AppSpacing.screenPadding,
+              24,
+              AppSpacing.screenPadding,
+              48,
+            ),
             sliver: SliverList(
               delegate: SliverChildListDelegate.fixed([
                 Row(
                   children: [
-                    Text(article.category.tag.toUpperCase(),
-                        style: AppTextStyles.label(fontSize: 11, color: p.accent)),
-                    Text('  ·  ${article.readTime} okuma',
-                        style: AppTextStyles.body(fontSize: 12, color: p.textMuted)),
+                    Text(
+                      article.category.tag.toUpperCase(),
+                      style: AppTextStyles.label(fontSize: 11, color: p.accent),
+                    ),
+                    Text(
+                      l10n.articleDetailReadTime(article.readTime),
+                      style: AppTextStyles.body(
+                        fontSize: 12,
+                        color: p.textMuted,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                Text(article.title,
-                    style: AppTextStyles.display(fontSize: 32, color: p.text, height: 1.1)),
+                Text(
+                  article.title,
+                  style: AppTextStyles.display(
+                    fontSize: 32,
+                    color: p.text,
+                    height: 1.1,
+                  ),
+                ),
                 const SizedBox(height: 10),
-                Text(article.excerpt,
-                    style: AppTextStyles.body(
-                        fontSize: 16, color: p.textMuted, height: 1.5)),
+                Text(
+                  article.excerpt,
+                  style: AppTextStyles.body(
+                    fontSize: 16,
+                    color: p.textMuted,
+                    height: 1.5,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 Divider(height: 32, color: p.border),
                 for (final paragraph in article.body) ...[
-                  Text(paragraph,
-                      style: AppTextStyles.body(fontSize: 16, color: p.text, height: 1.7)),
+                  Text(
+                    paragraph,
+                    style: AppTextStyles.body(
+                      fontSize: 16,
+                      color: p.text,
+                      height: 1.7,
+                    ),
+                  ),
                   const SizedBox(height: 18),
                 ],
                 const SizedBox(height: 12),
                 // Soft sign-off
                 Center(
-                  child: Text('— ilnd',
-                      style: AppTextStyles.display(fontSize: 18, color: p.textMuted)),
+                  child: Text(
+                    l10n.articleDetailSignOff,
+                    style: AppTextStyles.display(
+                      fontSize: 18,
+                      color: p.textMuted,
+                    ),
+                  ),
                 ),
               ]),
             ),

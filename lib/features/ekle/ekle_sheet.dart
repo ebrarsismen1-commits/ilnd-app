@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/ekle/gorev_ekle_sheet.dart';
+import 'package:ilnd_app/features/ekle/su_ekle_sheet.dart';
 import 'package:ilnd_app/features/ekle/yemek_ekle_screen.dart';
 import 'package:ilnd_app/features/journal/journal_screen.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 // ─── Public entry point ───────────────────────────────────────────────────────
 
@@ -25,6 +28,7 @@ class _EkleSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final bottomPadding = MediaQuery.viewInsetsOf(context).bottom;
 
@@ -59,8 +63,10 @@ class _EkleSheet extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.screenPadding,
                 ),
-                child: Text('ekle',
-                    style: AppTextStyles.display(fontSize: 28, color: p.text)),
+                child: Text(
+                  l10n.ekleTitle,
+                  style: AppTextStyles.display(fontSize: 28, color: p.text),
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -80,32 +86,32 @@ class _EkleSheet extends ConsumerWidget {
                       p: p,
                       icon: Icons.camera_alt_outlined,
                       iconColor: p.amber,
-                      title: 'yemek ekle',
-                      subtitle: 'fotoğrafla analiz et',
+                      title: l10n.ekleFoodTitle,
+                      subtitle: l10n.ekleFoodSubtitle,
                       action: 'yemek_ekle',
                     ),
                     _ActionCard(
                       p: p,
                       icon: Icons.edit_outlined,
                       iconColor: p.accent,
-                      title: 'günlük yaz',
-                      subtitle: 'düşüncelerini not et',
+                      title: l10n.ekleJournalTitle,
+                      subtitle: l10n.ekleJournalSubtitle,
                       action: 'gunluk_yaz',
                     ),
                     _ActionCard(
                       p: p,
                       icon: Icons.check_box_outlined,
                       iconColor: p.accent,
-                      title: 'görev ekle',
-                      subtitle: 'alışkanlık oluştur',
+                      title: l10n.ekleHabitTitle,
+                      subtitle: l10n.ekleHabitSubtitle,
                       action: 'gorev_ekle',
                     ),
                     _ActionCard(
                       p: p,
                       icon: Icons.water_drop_outlined,
                       iconColor: p.accent,
-                      title: 'su ekle',
-                      subtitle: 'su takibini güncelle',
+                      title: l10n.ekleWaterTitle,
+                      subtitle: l10n.ekleWaterSubtitle,
                       action: 'su_ekle',
                     ),
                   ],
@@ -165,20 +171,19 @@ class _ActionCard extends StatelessWidget {
         if (action == 'yemek_ekle') {
           Navigator.of(context).pop();
           Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => const YemekEkleScreen(),
-            ),
+            MaterialPageRoute<void>(builder: (_) => const YemekEkleScreen()),
           );
         } else if (action == 'gunluk_yaz') {
           Navigator.of(context).pop();
           Navigator.of(context).push(
-            MaterialPageRoute<void>(
-              builder: (_) => const JournalScreen(),
-            ),
+            MaterialPageRoute<void>(builder: (_) => const JournalScreen()),
           );
-        } else {
-          debugPrint('ekle: $action');
+        } else if (action == 'gorev_ekle') {
           Navigator.of(context).pop();
+          showGorevEkleSheet(context);
+        } else if (action == 'su_ekle') {
+          Navigator.of(context).pop();
+          showSuEkleSheet(context);
         }
       },
       child: Container(
@@ -195,13 +200,19 @@ class _ActionCard extends StatelessWidget {
             const Spacer(),
             Text(
               title,
-              style: AppTextStyles.body(fontSize: 13, color: p.text)
-                  .copyWith(fontWeight: FontWeight.w600),
+              style: AppTextStyles.body(
+                fontSize: 13,
+                color: p.text,
+              ).copyWith(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 2),
             Text(
               subtitle,
-              style: AppTextStyles.body(fontSize: 11, color: p.textMuted, height: 1.3),
+              style: AppTextStyles.body(
+                fontSize: 11,
+                color: p.textMuted,
+                height: 1.3,
+              ),
             ),
           ],
         ),

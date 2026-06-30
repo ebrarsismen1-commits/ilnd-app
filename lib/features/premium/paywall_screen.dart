@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/billing/entitlement.dart';
+import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
+import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// ILND+ tanıtım ekranı. Limit aşımında veya profilden açılır.
 ///
 /// [reason] varsa başlıkta nazik bir bağlam gösterir
 /// (ör. "bu hafta benimle çok konuştun").
-class PaywallScreen extends ConsumerWidget {
+class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key, this.reason});
 
   final String? reason;
@@ -26,7 +29,54 @@ class PaywallScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PaywallScreen> createState() => _PaywallScreenState();
+}
+
+class _PaywallScreenState extends ConsumerState<PaywallScreen> {
+  bool _purchasing = false;
+  bool _restoring = false;
+
+  Future<void> _purchase(AppLocalizations l10n) async {
+    setState(() => _purchasing = true);
+    try {
+      final success = await RevenueCatService.purchase();
+      if (!mounted) return;
+      if (success) {
+        await ref.read(isPremiumProvider.notifier).setPremium(true);
+        if (mounted) Navigator.of(context).pop();
+      } else {
+        IlndToast.error(context, l10n.paywallPurchaseCancelled);
+      }
+    } catch (_) {
+      if (mounted) IlndToast.error(context, l10n.paywallPurchaseFailed);
+    } finally {
+      if (mounted) setState(() => _purchasing = false);
+    }
+  }
+
+  Future<void> _restore(AppLocalizations l10n) async {
+    setState(() => _restoring = true);
+    try {
+      final success = await RevenueCatService.restorePurchases();
+      if (!mounted) return;
+      if (success) {
+        await ref.read(isPremiumProvider.notifier).setPremium(true);
+        if (!mounted) return;
+        IlndToast.success(context, l10n.paywallRestoreSuccess);
+        Navigator.of(context).pop();
+      } else {
+        IlndToast.error(context, l10n.paywallNoActiveSubscription);
+      }
+    } catch (_) {
+      if (mounted) IlndToast.error(context, l10n.paywallRestoreFailed);
+    } finally {
+      if (mounted) setState(() => _restoring = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     // Premium hep "luxe" hissettirsin: gündüz/gece fark etmeksizin koyu palet.
     const p = AppPalette.dark;
     return ClipRRect(
@@ -41,7 +91,11 @@ class PaywallScreen extends ConsumerWidget {
             const Positioned.fill(child: AnimatedBackground(palette: p)),
             SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacing.screenPadding, 12, AppSpacing.screenPadding, 28),
+                AppSpacing.screenPadding,
+                12,
+                AppSpacing.screenPadding,
+                28,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -56,39 +110,49 @@ class PaywallScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  if (reason != null) ...[
-                    Text(reason!, style: AppTextStyles.body(fontSize: 14, color: p.accent)),
+                  if (widget.reason != null) ...[
+                    Text(
+                      widget.reason!,
+                      style: AppTextStyles.body(fontSize: 14, color: p.accent),
+                    ),
                     const SizedBox(height: 8),
                   ],
-                  Text('ILND+', style: AppTextStyles.display(fontSize: 40, color: p.text)),
+                  Text(
+                    'ILND+',
+                    style: AppTextStyles.display(fontSize: 40, color: p.text),
+                  ),
                   const SizedBox(height: 6),
                   Text(
-                    'sınırsız, seni gerçekten hatırlayan bir ILND.',
-                    style: AppTextStyles.body(fontSize: 15, color: p.textMuted, height: 1.5),
+                    l10n.paywallSubtitle,
+                    style: AppTextStyles.body(
+                      fontSize: 15,
+                      color: p.textMuted,
+                      height: 1.5,
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  const _Benefit(
+                  _Benefit(
                     icon: Icons.all_inclusive_rounded,
-                    title: 'sınırsız sohbet & analiz',
-                    subtitle: 'haftalık limit yok, istediğin kadar konuş',
+                    title: l10n.paywallBenefitUnlimitedChatTitle,
+                    subtitle: l10n.paywallBenefitUnlimitedChatSubtitle,
                     p: p,
                   ),
-                  const _Benefit(
+                  _Benefit(
                     icon: Icons.psychology_outlined,
-                    title: 'uzun hafıza',
-                    subtitle: 'ILND geçmişini gerçekten hatırlar',
+                    title: l10n.paywallBenefitLongMemoryTitle,
+                    subtitle: l10n.paywallBenefitLongMemorySubtitle,
                     p: p,
                   ),
-                  const _Benefit(
+                  _Benefit(
                     icon: Icons.favorite_border_rounded,
-                    title: 'proaktif ILND',
-                    subtitle: 'sana kendi gelir, hatırlatır, sorar',
+                    title: l10n.paywallBenefitProactiveTitle,
+                    subtitle: l10n.paywallBenefitProactiveSubtitle,
                     p: p,
                   ),
-                  const _Benefit(
+                  _Benefit(
                     icon: Icons.map_outlined,
-                    title: 'kişisel plan',
-                    subtitle: 'sana özel diyet & koçluk yol haritası',
+                    title: l10n.paywallBenefitPersonalPlanTitle,
+                    subtitle: l10n.paywallBenefitPersonalPlanSubtitle,
                     p: p,
                   ),
                   const SizedBox(height: 24),
@@ -105,56 +169,126 @@ class PaywallScreen extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('yıllık',
-                                  style: AppTextStyles.body(fontSize: 14, color: p.text)
-                                      .copyWith(fontWeight: FontWeight.w600)),
+                              Text(
+                                l10n.paywallYearly,
+                                style: AppTextStyles.body(
+                                  fontSize: 14,
+                                  color: p.text,
+                                ).copyWith(fontWeight: FontWeight.w600),
+                              ),
                               const SizedBox(height: 2),
-                              Text('7 gün ücretsiz dene',
-                                  style: AppTextStyles.body(fontSize: 12, color: p.textMuted)),
+                              Text(
+                                l10n.paywallFreeTrial,
+                                style: AppTextStyles.body(
+                                  fontSize: 12,
+                                  color: p.textMuted,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: p.accent.withValues(alpha: 0.25),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Text('−%40',
-                              style: AppTextStyles.label(fontSize: 11, color: p.accent)
-                                  .copyWith(letterSpacing: 0)),
+                          child: Text(
+                            l10n.paywallDiscount,
+                            style: AppTextStyles.label(
+                              fontSize: 11,
+                              color: p.accent,
+                            ).copyWith(letterSpacing: 0),
+                          ),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 16),
                   Pressable(
-                    onTap: () async {
-                      await ref.read(isPremiumProvider.notifier).setPremium(true);
-                      if (context.mounted) Navigator.of(context).pop();
-                    },
-                    child: Container(
+                    onTap: (_purchasing || _restoring)
+                        ? null
+                        : () => _purchase(l10n),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
                       height: 54,
                       decoration: BoxDecoration(
-                        color: p.accent,
+                        color: _purchasing
+                            ? p.accent.withValues(alpha: 0.5)
+                            : p.accent,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       alignment: Alignment.center,
-                      child: Text('ücretsiz denemeyi başlat',
-                          style: AppTextStyles.body(fontSize: 15, color: p.onAccent)
-                              .copyWith(fontWeight: FontWeight.w600)),
+                      child: _purchasing
+                          ? SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: p.onAccent,
+                              ),
+                            )
+                          : Text(
+                              l10n.paywallStartFreeTrial,
+                              style: AppTextStyles.body(
+                                fontSize: 15,
+                                color: p.onAccent,
+                              ).copyWith(fontWeight: FontWeight.w600),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Center(
-                    child: Pressable(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text('şimdi değil',
-                            style: AppTextStyles.body(fontSize: 14, color: p.textMuted)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Pressable(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            l10n.paywallNotNow,
+                            style: AppTextStyles.body(
+                              fontSize: 14,
+                              color: p.textMuted,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Text(
+                        ' · ',
+                        style: AppTextStyles.body(
+                          fontSize: 14,
+                          color: p.textMuted,
+                        ),
+                      ),
+                      Pressable(
+                        onTap: (_purchasing || _restoring)
+                            ? null
+                            : () => _restore(l10n),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: _restoring
+                              ? SizedBox(
+                                  width: 14,
+                                  height: 14,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1.5,
+                                    color: p.textMuted,
+                                  ),
+                                )
+                              : Text(
+                                  l10n.paywallRestore,
+                                  style: AppTextStyles.body(
+                                    fontSize: 14,
+                                    color: p.textMuted,
+                                  ),
+                                ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -200,12 +334,22 @@ class _Benefit extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: AppTextStyles.body(fontSize: 15, color: p.text)
-                        .copyWith(fontWeight: FontWeight.w600)),
+                Text(
+                  title,
+                  style: AppTextStyles.body(
+                    fontSize: 15,
+                    color: p.text,
+                  ).copyWith(fontWeight: FontWeight.w600),
+                ),
                 const SizedBox(height: 2),
-                Text(subtitle,
-                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted, height: 1.4)),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.body(
+                    fontSize: 13,
+                    color: p.textMuted,
+                    height: 1.4,
+                  ),
+                ),
               ],
             ),
           ),
