@@ -8,12 +8,12 @@ String _intentionKey(DateTime date) =>
 
 final dailyIntentionProvider =
     StateNotifierProvider<DailyIntentionNotifier, String?>((ref) {
-  return DailyIntentionNotifier(ref.watch(sharedPreferencesProvider));
-});
+      return DailyIntentionNotifier(ref.watch(sharedPreferencesProvider));
+    });
 
 class DailyIntentionNotifier extends StateNotifier<String?> {
   DailyIntentionNotifier(this._prefs)
-      : super(_prefs.getString(_intentionKey(DateTime.now())));
+    : super(_prefs.getString(_intentionKey(DateTime.now())));
 
   final SharedPreferences _prefs;
 

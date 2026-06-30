@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ilnd_app/core/billing/entitlement.dart';
+import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
@@ -12,6 +14,7 @@ import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 const _danger = Color(0xFFB3554A);
 
@@ -20,6 +23,7 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final onboardingName = ref.watch(userNameProvider);
     final name = onboardingName.isNotEmpty
@@ -43,17 +47,73 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                    Entrance(index: 0, child: _ProfileHeader(name: name, initial: initial, p: p)),
+                    Entrance(
+                      index: 0,
+                      child: _ProfileHeader(name: name, initial: initial, p: p),
+                    ),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 1, child: _StatsRow(p: p, ref: ref)),
+                    Entrance(
+                      index: 1,
+                      child: _StatsRow(p: p, ref: ref),
+                    ),
                     const SizedBox(height: AppSpacing.sectionGap),
                     Entrance(index: 2, child: _MemoryCard(p: p)),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 3, child: _BadgesSection(p: p, ref: ref)),
+                    Entrance(
+                      index: 3,
+                      child: _BadgesSection(p: p, ref: ref),
+                    ),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 4, child: _WeeklySummaryCard(p: p, ref: ref)),
+                    Entrance(
+                      index: 4,
+                      child: _WeeklySummaryCard(p: p, ref: ref),
+                    ),
+                    const SizedBox(height: 12),
+                    Entrance(
+                      index: 5,
+                      child: Pressable(
+                        onTap: () => context.push(routeVibeCard),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            color: p.surface,
+                            borderRadius: BorderRadius.circular(
+                              AppSpacing.radius,
+                            ),
+                            border: Border.all(color: p.border, width: 0.5),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.auto_awesome_rounded,
+                                size: 20,
+                                color: p.accent,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  l10n.profileShareWeeklySummary,
+                                  style: AppTextStyles.body(
+                                    fontSize: 15,
+                                    color: p.text,
+                                  ).copyWith(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              Icon(
+                                Icons.chevron_right_rounded,
+                                size: 20,
+                                color: p.textMuted,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 5, child: _SettingsSection(p: p)),
+                    Entrance(index: 6, child: _SettingsSection(p: p)),
                   ]),
                 ),
               ),
@@ -68,13 +128,18 @@ class ProfileScreen extends ConsumerWidget {
 // ─── Profile header ───────────────────────────────────────────────────────────
 
 class _ProfileHeader extends StatelessWidget {
-  const _ProfileHeader({required this.name, required this.initial, required this.p});
+  const _ProfileHeader({
+    required this.name,
+    required this.initial,
+    required this.p,
+  });
   final String name;
   final String initial;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -83,15 +148,21 @@ class _ProfileHeader extends StatelessWidget {
           height: 56,
           decoration: BoxDecoration(color: p.accent, shape: BoxShape.circle),
           alignment: Alignment.center,
-          child: Text(initial,
-              style: AppTextStyles.heading(fontSize: 24, color: p.onAccent)),
+          child: Text(
+            initial,
+            style: AppTextStyles.heading(fontSize: 24, color: p.onAccent),
+          ),
         ),
         const SizedBox(height: 14),
-        Text(name.isNotEmpty ? name : 'Kullanıcı',
-            style: AppTextStyles.heading(fontSize: 22, color: p.text)),
+        Text(
+          name.isNotEmpty ? name : l10n.profileDefaultUserName,
+          style: AppTextStyles.heading(fontSize: 22, color: p.text),
+        ),
         const SizedBox(height: 3),
-        Text('@${name.toLowerCase().replaceAll(' ', '_')}_ilnd',
-            style: AppTextStyles.body(fontSize: 13, color: p.textMuted)),
+        Text(
+          '@${name.toLowerCase().replaceAll(' ', '_')}_ilnd',
+          style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+        ),
       ],
     );
   }
@@ -105,6 +176,7 @@ class _MemoryCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final memory = ref.watch(ilndMemoryProvider);
     final goals = memory.goals;
     final facts = memory.facts;
@@ -126,34 +198,53 @@ class _MemoryCard extends ConsumerWidget {
               Container(
                 width: 28,
                 height: 28,
-                decoration: BoxDecoration(color: p.accent, shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: p.accent,
+                  shape: BoxShape.circle,
+                ),
                 alignment: Alignment.center,
-                child: Text('i',
-                    style: AppTextStyles.display(fontSize: 14, color: p.onAccent)),
+                child: Text(
+                  'i',
+                  style: AppTextStyles.display(fontSize: 14, color: p.onAccent),
+                ),
               ),
               const SizedBox(width: 10),
-              Text('ILND seni hatırlıyor',
-                  style: AppTextStyles.heading(fontSize: 17, color: p.text)),
+              Text(
+                l10n.profileMemoryHeading,
+                style: AppTextStyles.heading(fontSize: 17, color: p.text),
+              ),
             ],
           ),
           const SizedBox(height: 16),
           if (goals.isNotEmpty) ...[
-            Text('HEDEFLERİN', style: AppTextStyles.sectionLabel(color: p.accent)),
+            Text(
+              l10n.profileGoalsLabel,
+              style: AppTextStyles.sectionLabel(color: p.accent),
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: [for (final g in goals) _MemoryChip(label: g, accent: true, p: p)],
+              children: [
+                for (final g in goals)
+                  _MemoryChip(label: g, accent: true, p: p),
+              ],
             ),
             const SizedBox(height: 16),
           ],
           if (facts.isNotEmpty) ...[
-            Text('SENİN HAKKINDA', style: AppTextStyles.sectionLabel(color: p.textMuted)),
+            Text(
+              l10n.profileAboutYouLabel,
+              style: AppTextStyles.sectionLabel(color: p.textMuted),
+            ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: [for (final f in facts) _MemoryChip(label: f, accent: false, p: p)],
+              children: [
+                for (final f in facts)
+                  _MemoryChip(label: f, accent: false, p: p),
+              ],
             ),
           ],
         ],
@@ -163,7 +254,11 @@ class _MemoryCard extends ConsumerWidget {
 }
 
 class _MemoryChip extends StatelessWidget {
-  const _MemoryChip({required this.label, required this.accent, required this.p});
+  const _MemoryChip({
+    required this.label,
+    required this.accent,
+    required this.p,
+  });
   final String label;
   final bool accent;
   final AppPalette p;
@@ -177,9 +272,13 @@ class _MemoryChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: p.border, width: 0.5),
       ),
-      child: Text(label,
-          style: AppTextStyles.body(
-              fontSize: 13, color: accent ? p.accent : p.text)),
+      child: Text(
+        label,
+        style: AppTextStyles.body(
+          fontSize: 13,
+          color: accent ? p.accent : p.text,
+        ),
+      ),
     );
   }
 }
@@ -193,6 +292,7 @@ class _StatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final statsAsync = ref.watch(profileStatsProvider);
     final streak = statsAsync.valueOrNull?.streakDays ?? 0;
     final journalCount = statsAsync.valueOrNull?.weeklyJournalCount ?? 0;
@@ -201,18 +301,38 @@ class _StatsRow extends StatelessWidget {
 
     return Row(
       children: [
-        Expanded(child: _StatCard(value: '$streak', label: 'seri', suffix: ' 🔥', p: p)),
+        Expanded(
+          child: _StatCard(
+            value: '$streak',
+            label: l10n.profileStatStreak,
+            suffix: ' 🔥',
+            p: p,
+          ),
+        ),
         const SizedBox(width: 10),
-        Expanded(child: _StatCard(value: '$puan', label: 'puan', p: p)),
+        Expanded(
+          child: _StatCard(value: '$puan', label: l10n.profileStatPoints, p: p),
+        ),
         const SizedBox(width: 10),
-        Expanded(child: _StatCard(value: streak >= 7 ? '2' : '1', label: 'rozet', p: p)),
+        Expanded(
+          child: _StatCard(
+            value: streak >= 7 ? '2' : '1',
+            label: l10n.profileStatBadge,
+            p: p,
+          ),
+        ),
       ],
     );
   }
 }
 
 class _StatCard extends StatelessWidget {
-  const _StatCard({required this.value, required this.label, this.suffix = '', required this.p});
+  const _StatCard({
+    required this.value,
+    required this.label,
+    this.suffix = '',
+    required this.p,
+  });
   final String value;
   final String label;
   final String suffix;
@@ -229,13 +349,23 @@ class _StatCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text('$value$suffix',
-              style: AppTextStyles.mono(fontSize: 22, fontWeight: FontWeight.w700, color: p.text)),
+          Text(
+            '$value$suffix',
+            style: AppTextStyles.mono(
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+              color: p.text,
+            ),
+          ),
           const SizedBox(height: 3),
-          Text(label,
-              style: AppTextStyles.label(fontSize: 10, color: p.textMuted)
-                  .copyWith(letterSpacing: 0.4),
-              textAlign: TextAlign.center),
+          Text(
+            label,
+            style: AppTextStyles.label(
+              fontSize: 10,
+              color: p.textMuted,
+            ).copyWith(letterSpacing: 0.4),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );
@@ -251,24 +381,64 @@ class _BadgesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final stats = ref.watch(profileStatsProvider).valueOrNull ?? ProfileStats.zero;
-    final hasFirstEntry = stats.weeklyJournalCount > 0 || stats.weeklyFoodCount > 0 || stats.streakDays > 0;
+    final l10n = AppLocalizations.of(context)!;
+    final stats =
+        ref.watch(profileStatsProvider).valueOrNull ?? ProfileStats.zero;
+    final hasFirstEntry =
+        stats.weeklyJournalCount > 0 ||
+        stats.weeklyFoodCount > 0 ||
+        stats.streakDays > 0;
     final hasWeekStreak = stats.streakDays >= 7;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('ROZETLER', style: AppTextStyles.sectionLabel(color: p.textMuted)),
+        Text(
+          l10n.profileBadgesLabel,
+          style: AppTextStyles.sectionLabel(color: p.textMuted),
+        ),
         const SizedBox(height: 10),
         Row(
           children: [
-            Expanded(child: _BadgeCard(emoji: '⭐', label: 'ilk adım', color: p.accent, locked: !hasFirstEntry, p: p)),
+            Expanded(
+              child: _BadgeCard(
+                emoji: '⭐',
+                label: l10n.profileBadgeFirstStep,
+                color: p.accent,
+                locked: !hasFirstEntry,
+                p: p,
+              ),
+            ),
             const SizedBox(width: 10),
-            Expanded(child: _BadgeCard(emoji: '🔥', label: '7 günlük', color: p.amber, locked: !hasWeekStreak, p: p)),
+            Expanded(
+              child: _BadgeCard(
+                emoji: '🔥',
+                label: l10n.profileBadgeSevenDays,
+                color: p.amber,
+                locked: !hasWeekStreak,
+                p: p,
+              ),
+            ),
             const SizedBox(width: 10),
-            Expanded(child: _BadgeCard(emoji: '📖', label: 'okur', color: p.accent, locked: true, p: p)),
+            Expanded(
+              child: _BadgeCard(
+                emoji: '📖',
+                label: l10n.profileBadgeReader,
+                color: p.accent,
+                locked: true,
+                p: p,
+              ),
+            ),
             const SizedBox(width: 10),
-            Expanded(child: _BadgeCard(emoji: '🏆', label: '30 günlük', color: p.amber, locked: stats.streakDays < 30, p: p)),
+            Expanded(
+              child: _BadgeCard(
+                emoji: '🏆',
+                label: l10n.profileBadgeThirtyDays,
+                color: p.amber,
+                locked: stats.streakDays < 30,
+                p: p,
+              ),
+            ),
           ],
         ),
       ],
@@ -302,7 +472,10 @@ class _BadgeCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Opacity(opacity: locked ? 0.4 : 1.0, child: Text(emoji, style: const TextStyle(fontSize: 22))),
+          Opacity(
+            opacity: locked ? 0.4 : 1.0,
+            child: Text(emoji, style: const TextStyle(fontSize: 22)),
+          ),
           const SizedBox(height: 6),
           Text(
             label,
@@ -327,10 +500,10 @@ class _WeeklySummaryCard extends StatelessWidget {
   final AppPalette p;
   final WidgetRef ref;
 
-  static const _dayLabels = ['Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct', 'Pa'];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final dayLabels = l10n.profileWeekdaysShort.split(',');
     final statsAsync = ref.watch(profileStatsProvider);
     final stats = statsAsync.valueOrNull ?? ProfileStats.zero;
     final barValues = stats.weeklyActivityByDay;
@@ -345,8 +518,14 @@ class _WeeklySummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('HAFTALIK ÖZET', style: AppTextStyles.sectionLabel(color: p.textMuted)),
-          Text('bu hafta', style: AppTextStyles.display(fontSize: 20, color: p.text)),
+          Text(
+            l10n.profileWeeklySummaryLabel,
+            style: AppTextStyles.sectionLabel(color: p.textMuted),
+          ),
+          Text(
+            l10n.profileThisWeek,
+            style: AppTextStyles.display(fontSize: 20, color: p.text),
+          ),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -354,9 +533,17 @@ class _WeeklySummaryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SummaryRow(value: '${stats.weeklyFoodCount}', label: 'yemek eklendi', p: p),
+                    _SummaryRow(
+                      value: '${stats.weeklyFoodCount}',
+                      label: l10n.profileMealsAdded,
+                      p: p,
+                    ),
                     const SizedBox(height: 10),
-                    _SummaryRow(value: '${stats.streakDays}', label: 'günlük seri', p: p),
+                    _SummaryRow(
+                      value: '${stats.streakDays}',
+                      label: l10n.profileDayStreak,
+                      p: p,
+                    ),
                   ],
                 ),
               ),
@@ -365,11 +552,15 @@ class _WeeklySummaryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _SummaryRow(value: '${stats.weeklyJournalCount}', label: 'günlük yazıldı', p: p),
+                    _SummaryRow(
+                      value: '${stats.weeklyJournalCount}',
+                      label: l10n.profileJournalEntriesWritten,
+                      p: p,
+                    ),
                     const SizedBox(height: 10),
                     _SummaryRow(
                       value: statsAsync.isLoading ? '…' : '✓',
-                      label: 'senkronize',
+                      label: l10n.profileSynced,
                       p: p,
                     ),
                   ],
@@ -412,10 +603,12 @@ class _WeeklySummaryCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
                         Text(
-                          _dayLabels[i],
+                          dayLabels[i],
                           style: AppTextStyles.label(
                             fontSize: 9,
-                            color: isEmpty ? p.textMuted.withValues(alpha: 0.5) : p.accent,
+                            color: isEmpty
+                                ? p.textMuted.withValues(alpha: 0.5)
+                                : p.accent,
                           ).copyWith(letterSpacing: 0),
                         ),
                       ],
@@ -432,7 +625,11 @@ class _WeeklySummaryCard extends StatelessWidget {
 }
 
 class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({required this.value, required this.label, required this.p});
+  const _SummaryRow({
+    required this.value,
+    required this.label,
+    required this.p,
+  });
   final String value;
   final String label;
   final AppPalette p;
@@ -443,13 +640,21 @@ class _SummaryRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.baseline,
       textBaseline: TextBaseline.alphabetic,
       children: [
-        Text(value,
-            style: AppTextStyles.mono(fontSize: 16, fontWeight: FontWeight.w600, color: p.text)),
+        Text(
+          value,
+          style: AppTextStyles.mono(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: p.text,
+          ),
+        ),
         const SizedBox(width: 5),
         Expanded(
-          child: Text(label,
-              style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
-              overflow: TextOverflow.ellipsis),
+          child: Text(
+            label,
+            style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
       ],
     );
@@ -464,6 +669,7 @@ class _SettingsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final isPremium = ref.watch(isPremiumProvider);
 
     return Column(
@@ -476,7 +682,10 @@ class _SettingsSection extends ConsumerWidget {
             decoration: BoxDecoration(
               color: isPremium ? p.surface : p.accent,
               borderRadius: BorderRadius.circular(AppSpacing.radius),
-              border: Border.all(color: isPremium ? p.border : p.accent, width: 0.5),
+              border: Border.all(
+                color: isPremium ? p.border : p.accent,
+                width: 0.5,
+              ),
             ),
             child: Row(
               children: [
@@ -488,7 +697,9 @@ class _SettingsSection extends ConsumerWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    isPremium ? 'ILND+ üyesisin' : 'ILND+’a geç',
+                    isPremium
+                        ? l10n.profilePremiumMember
+                        : l10n.profileGoPremium,
                     style: AppTextStyles.body(
                       fontSize: 15,
                       color: isPremium ? p.text : p.onAccent,
@@ -496,27 +707,81 @@ class _SettingsSection extends ConsumerWidget {
                   ),
                 ),
                 if (!isPremium)
-                  Icon(Icons.arrow_forward_rounded, size: 20, color: p.onAccent),
+                  Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 20,
+                    color: p.onAccent,
+                  ),
               ],
             ),
           ),
         ),
         const SizedBox(height: AppSpacing.sectionGap),
-        Text('AYARLAR', style: AppTextStyles.sectionLabel(color: p.textMuted)),
+        Text(
+          l10n.profileSettingsLabel,
+          style: AppTextStyles.sectionLabel(color: p.textMuted),
+        ),
         const SizedBox(height: 10),
         Pressable(
+          onTap: () => context.push(routeReferral),
+          child: _SettingsRow(
+            icon: Icons.card_giftcard_rounded,
+            label: l10n.profileInviteFriend,
+            showChevron: true,
+            p: p,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Pressable(
           onTap: () {},
-          child: _SettingsRow(icon: Icons.settings_outlined, label: 'ayarlar', showChevron: true, p: p),
+          child: _SettingsRow(
+            icon: Icons.settings_outlined,
+            label: l10n.profileSettingsRow,
+            showChevron: true,
+            p: p,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Pressable(
+          onTap: () => context.push(routePrivacyPolicy),
+          child: _SettingsRow(
+            icon: Icons.privacy_tip_outlined,
+            label: l10n.profilePrivacyPolicy,
+            showChevron: true,
+            p: p,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Pressable(
+          onTap: () => context.push(routeTermsOfService),
+          child: _SettingsRow(
+            icon: Icons.description_outlined,
+            label: l10n.profileTermsOfService,
+            showChevron: true,
+            p: p,
+          ),
         ),
         const SizedBox(height: 8),
         Pressable(
           onTap: () async {
-              await ref.read(authNotifierProvider.notifier).signOut();
-              if (context.mounted) IlndToast.info(context, 'Çıkış yapıldı. Görüşürüz 👋');
-            },
+            await ref.read(authNotifierProvider.notifier).signOut();
+            if (context.mounted) IlndToast.info(context, l10n.profileSignedOut);
+          },
           child: _SettingsRow(
             icon: Icons.logout_rounded,
-            label: 'çıkış yap',
+            label: l10n.profileSignOut,
+            labelColor: _danger,
+            iconColor: _danger,
+            showChevron: false,
+            p: p,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Pressable(
+          onTap: () => _confirmDeleteAccount(context, ref),
+          child: _SettingsRow(
+            icon: Icons.delete_forever_rounded,
+            label: l10n.profileDeleteAccount,
             labelColor: _danger,
             iconColor: _danger,
             showChevron: false,
@@ -525,6 +790,51 @@ class _SettingsSection extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _confirmDeleteAccount(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.profileDeleteAccountDialogTitle),
+        content: Text(l10n.profileDeleteAccountDialogBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.profileDeleteAccountCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(
+              l10n.profileDeleteAccountConfirm,
+              style: const TextStyle(color: _danger),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      await ref.read(authNotifierProvider.notifier).deleteAccount();
+      if (!context.mounted) return;
+      Navigator.of(context).pop(); // loading dialog
+      IlndToast.info(context, l10n.profileAccountDeleted);
+    } catch (e) {
+      if (!context.mounted) return;
+      Navigator.of(context).pop(); // loading dialog
+      IlndToast.error(context, e.toString());
+    }
   }
 }
 
@@ -561,8 +871,10 @@ class _SettingsRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: AppTextStyles.body(fontSize: 15, color: labelColor ?? p.text)
-                  .copyWith(fontWeight: FontWeight.w500),
+              style: AppTextStyles.body(
+                fontSize: 15,
+                color: labelColor ?? p.text,
+              ).copyWith(fontWeight: FontWeight.w500),
             ),
           ),
           if (showChevron)

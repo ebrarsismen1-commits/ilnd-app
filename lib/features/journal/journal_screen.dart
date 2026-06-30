@@ -13,6 +13,7 @@ import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/widgets/shimmer.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
 
@@ -21,6 +22,7 @@ class JournalScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final entriesAsync = ref.watch(journalEntriesProvider);
 
@@ -34,22 +36,39 @@ class JournalScreen extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding, 28, AppSpacing.screenPadding, 0),
-                  child: Text('günlük.',
-                      style: AppTextStyles.display(fontSize: 32, color: p.text)),
+                    AppSpacing.screenPadding,
+                    28,
+                    AppSpacing.screenPadding,
+                    0,
+                  ),
+                  child: Text(
+                    l10n.journalTitle,
+                    style: AppTextStyles.display(fontSize: 32, color: p.text),
+                  ),
                 ),
               ),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding, 20, AppSpacing.screenPadding, 0),
-                  child: _NewEntryButton(p: p, onTap: () => _showWriteSheet(context, ref)),
+                    AppSpacing.screenPadding,
+                    20,
+                    AppSpacing.screenPadding,
+                    0,
+                  ),
+                  child: _NewEntryButton(
+                    p: p,
+                    onTap: () => _showWriteSheet(context, ref),
+                  ),
                 ),
               ),
               entriesAsync.when(
                 loading: () => SliverPadding(
                   padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding, 20, AppSpacing.screenPadding, 0),
+                    AppSpacing.screenPadding,
+                    20,
+                    AppSpacing.screenPadding,
+                    0,
+                  ),
                   sliver: SliverList.separated(
                     itemCount: 4,
                     separatorBuilder: (ctx1, i1) => const SizedBox(height: 12),
@@ -58,19 +77,30 @@ class JournalScreen extends ConsumerWidget {
                 ),
                 error: (e, st) => SliverFillRemaining(
                   hasScrollBody: false,
-                  child: _ErrorState(p: p, onRetry: () => ref.invalidate(journalEntriesProvider)),
+                  child: _ErrorState(
+                    p: p,
+                    onRetry: () => ref.invalidate(journalEntriesProvider),
+                  ),
                 ),
                 data: (entries) => entries.isEmpty
                     ? SliverFillRemaining(
                         hasScrollBody: false,
-                        child: _EmptyJournal(p: p, onTap: () => _showWriteSheet(context, ref)),
+                        child: _EmptyJournal(
+                          p: p,
+                          onTap: () => _showWriteSheet(context, ref),
+                        ),
                       )
                     : SliverPadding(
                         padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.screenPadding, 20, AppSpacing.screenPadding, 32),
+                          AppSpacing.screenPadding,
+                          20,
+                          AppSpacing.screenPadding,
+                          32,
+                        ),
                         sliver: SliverList.separated(
                           itemCount: entries.length,
-                          separatorBuilder: (ctx2, i2) => const SizedBox(height: 12),
+                          separatorBuilder: (ctx2, i2) =>
+                              const SizedBox(height: 12),
                           itemBuilder: (context, i) => Entrance(
                             index: i,
                             child: _EntryCard(entry: entries[i], p: p),
@@ -95,6 +125,7 @@ class _ErrorState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -103,21 +134,23 @@ class _ErrorState extends StatelessWidget {
           Text('🔌', style: const TextStyle(fontSize: 40)),
           const SizedBox(height: 16),
           Text(
-            'bağlantı kurulamadı',
+            l10n.journalConnectionError,
             style: AppTextStyles.heading(fontSize: 16, color: p.text),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 6),
           Text(
-            'İnternet bağlantını kontrol edip tekrar dene.',
+            l10n.journalConnectionErrorBody,
             style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
           TextButton(
             onPressed: onRetry,
-            child: Text('tekrar dene',
-                style: AppTextStyles.body(fontSize: 14, color: p.accent)),
+            child: Text(
+              l10n.journalRetry,
+              style: AppTextStyles.body(fontSize: 14, color: p.accent),
+            ),
           ),
         ],
       ),
@@ -134,6 +167,7 @@ class _EmptyJournal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(32, 0, 32, 80),
       child: Column(
@@ -142,14 +176,18 @@ class _EmptyJournal extends StatelessWidget {
           Text('✍️', style: const TextStyle(fontSize: 48)),
           const SizedBox(height: 20),
           Text(
-            'henüz bir yazı yok.',
+            l10n.journalEmptyTitle,
             style: AppTextStyles.display(fontSize: 22, color: p.text),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Text(
-            'Bugün ne hissettiğini yaz.\nİlk kelimeyi sen koy, geri kalanı gelir.',
-            style: AppTextStyles.body(fontSize: 14, color: p.textMuted, height: 1.5),
+            l10n.journalEmptyBody,
+            style: AppTextStyles.body(
+              fontSize: 14,
+              color: p.textMuted,
+              height: 1.5,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
@@ -164,9 +202,11 @@ class _EmptyJournal extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: Text(
-                'ilk yazıyı yaz',
-                style: AppTextStyles.body(fontSize: 15, color: p.onAccent)
-                    .copyWith(fontWeight: FontWeight.w600),
+                l10n.journalWriteFirst,
+                style: AppTextStyles.body(
+                  fontSize: 15,
+                  color: p.onAccent,
+                ).copyWith(fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -185,6 +225,7 @@ class _NewEntryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Pressable(
       onTap: onTap,
       child: Container(
@@ -195,9 +236,11 @@ class _NewEntryButton extends StatelessWidget {
         ),
         alignment: Alignment.center,
         child: Text(
-          'yeni yazı yaz +',
-          style: AppTextStyles.body(fontSize: 15, color: p.onAccent)
-              .copyWith(fontWeight: FontWeight.w600),
+          l10n.journalNewEntry,
+          style: AppTextStyles.body(
+            fontSize: 15,
+            color: p.onAccent,
+          ).copyWith(fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -213,6 +256,7 @@ class _EntryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Pressable(
       onTap: () {},
       child: Container(
@@ -225,7 +269,10 @@ class _EntryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(_formatDate(entry.createdAt), style: AppTextStyles.sectionLabel(color: p.textMuted)),
+            Text(
+              _formatDate(entry.createdAt, l10n),
+              style: AppTextStyles.sectionLabel(color: p.textMuted),
+            ),
             const SizedBox(height: 6),
             Text(
               entry.body,
@@ -242,7 +289,11 @@ class _EntryCard extends StatelessWidget {
               const SizedBox(height: 5),
               Text(
                 entry.ilndReply,
-                style: AppTextStyles.body(fontSize: 13, color: p.textMuted, height: 1.5),
+                style: AppTextStyles.body(
+                  fontSize: 13,
+                  color: p.textMuted,
+                  height: 1.5,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -256,12 +307,13 @@ class _EntryCard extends StatelessWidget {
 
 // ─── Write bottom sheet ───────────────────────────────────────────────────────
 
-String _formatDate(DateTime dt) {
-  const months = [
-    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık',
-  ];
-  const days = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+// Date formatting is locale-aware via AppLocalizations month/day arrays —
+// kept Turkish-only here intentionally is NOT desired, so resolve via l10n
+// at call sites instead. This helper is only used with a BuildContext
+// available at each call site below.
+String _formatDate(DateTime dt, AppLocalizations l10n) {
+  final months = l10n.journalMonths.split(',');
+  final days = l10n.journalWeekdaysShort.split(',');
   return '${days[dt.weekday - 1]}, ${dt.day} ${months[dt.month - 1]}';
 }
 
@@ -295,14 +347,9 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
     super.dispose();
   }
 
-  String get _todayLabel {
-    const months = [
-      'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-      'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık',
-    ];
-    const days = [
-      'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar',
-    ];
+  String _todayLabel(AppLocalizations l10n) {
+    final months = l10n.journalMonths.split(',');
+    final days = l10n.journalWeekdaysLong.split(',');
     final now = DateTime.now();
     // weekday: 1=Mon … 7=Sun
     return '${now.day} ${months[now.month - 1]}, ${days[now.weekday - 1]}';
@@ -315,6 +362,7 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
       return;
     }
 
+    final l10n = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
     setState(() => _phase = _WritePhase.reflecting);
 
@@ -331,29 +379,36 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
             'Önce duygusunu karşıla, sonra düşünmeye davet eden tek nazik bir '
             'soru sor. Liste yapma, 2-3 cümleyi geçme.',
         tier: IlndTier.deep,
-        fallback: IlndFallbacks.journal(),
+        fallback: IlndFallbacks.journal(l10n),
+        l10n: l10n,
       );
     } catch (e) {
-      reply = IlndService.friendlyError(e);
+      reply = IlndService.friendlyError(e, l10n);
     }
 
     // Firestore'a kaydet
     final repo = ref.read(journalRepositoryProvider);
     if (repo != null) {
-      unawaited(repo.add(JournalEntry(
-        id: '',
-        body: text,
-        ilndReply: reply,
-        createdAt: DateTime.now(),
-      )));
+      unawaited(
+        repo.add(
+          JournalEntry(
+            id: '',
+            body: text,
+            ilndReply: reply,
+            createdAt: DateTime.now(),
+          ),
+        ),
+      );
     }
 
     await ref
         .read(ilndMemoryProvider.notifier)
-        .addNote('Günlük: ${text.length > 80 ? '${text.substring(0, 80)}…' : text}');
+        .addNote(
+          'Günlük: ${text.length > 80 ? '${text.substring(0, 80)}…' : text}',
+        );
 
     // ILND günlükten kalıcı hafıza biriktirir (fire-and-forget).
-    unawaited(ref.read(ilndLearnerProvider).learnFrom(text));
+    unawaited(ref.read(ilndLearnerProvider).learnFrom(text, l10n));
 
     if (mounted) {
       setState(() {
@@ -365,6 +420,7 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
     final screenHeight = MediaQuery.sizeOf(context).height;
@@ -390,28 +446,41 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPadding),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: Text(_todayLabel, style: AppTextStyles.sectionLabel(color: p.textMuted)),
+              child: Text(
+                _todayLabel(l10n),
+                style: AppTextStyles.sectionLabel(color: p.textMuted),
+              ),
             ),
           ),
           const SizedBox(height: 12),
           Expanded(
             child: _phase == _WritePhase.response
-                ? _ResponseView(reply: _ilndReply, entry: _controller.text, p: p)
+                ? _ResponseView(
+                    reply: _ilndReply,
+                    entry: _controller.text,
+                    p: p,
+                  )
                 : _WritingView(controller: _controller, p: p),
           ),
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.fromLTRB(
-              AppSpacing.screenPadding, 0, AppSpacing.screenPadding, 24),
+              AppSpacing.screenPadding,
+              0,
+              AppSpacing.screenPadding,
+              24,
+            ),
             child: Pressable(
               onTap: _phase == _WritePhase.reflecting
                   ? null
                   : (_phase == _WritePhase.response
-                      ? () => Navigator.of(context).pop()
-                      : _save),
+                        ? () => Navigator.of(context).pop()
+                        : _save),
               child: Container(
                 height: 52,
                 decoration: BoxDecoration(
@@ -425,12 +494,19 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
                     ? SizedBox(
                         width: 20,
                         height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: p.onAccent),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: p.onAccent,
+                        ),
                       )
                     : Text(
-                        _phase == _WritePhase.response ? 'tamam' : 'kaydet',
-                        style: AppTextStyles.body(fontSize: 15, color: p.onAccent)
-                            .copyWith(fontWeight: FontWeight.w600),
+                        _phase == _WritePhase.response
+                            ? l10n.journalDone
+                            : l10n.journalSave,
+                        style: AppTextStyles.body(
+                          fontSize: 15,
+                          color: p.onAccent,
+                        ).copyWith(fontWeight: FontWeight.w600),
                       ),
               ),
             ),
@@ -450,6 +526,7 @@ class _WritingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPadding),
       child: TextField(
@@ -465,7 +542,7 @@ class _WritingView extends StatelessWidget {
           height: 1.55,
         ),
         decoration: InputDecoration(
-          hintText: 'bugün ne hissediyorsun?',
+          hintText: l10n.journalWritingHint,
           hintStyle: AppTextStyles.display(
             fontSize: 20,
             fontWeight: FontWeight.w400,
@@ -484,7 +561,11 @@ class _WritingView extends StatelessWidget {
 // ─── ILND response view ───────────────────────────────────────────────────────
 
 class _ResponseView extends StatelessWidget {
-  const _ResponseView({required this.reply, required this.entry, required this.p});
+  const _ResponseView({
+    required this.reply,
+    required this.entry,
+    required this.p,
+  });
   final String reply;
   final String entry;
   final AppPalette p;
@@ -521,16 +602,28 @@ class _ResponseView extends StatelessWidget {
                 Container(
                   width: 30,
                   height: 30,
-                  decoration: BoxDecoration(color: p.accent, shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                    color: p.accent,
+                    shape: BoxShape.circle,
+                  ),
                   alignment: Alignment.center,
-                  child: Text('i',
-                      style: AppTextStyles.display(fontSize: 15, color: p.onAccent)),
+                  child: Text(
+                    'i',
+                    style: AppTextStyles.display(
+                      fontSize: 15,
+                      color: p.onAccent,
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     reply,
-                    style: AppTextStyles.body(fontSize: 15, height: 1.5, color: p.text),
+                    style: AppTextStyles.body(
+                      fontSize: 15,
+                      height: 1.5,
+                      color: p.text,
+                    ),
                   ),
                 ),
               ],

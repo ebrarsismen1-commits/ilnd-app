@@ -44,19 +44,25 @@ class _PressableState extends State<Pressable>
 
   @override
   Widget build(BuildContext context) {
+    final disabled = widget.onTap == null;
     return GestureDetector(
       behavior: widget.behavior,
       onTap: widget.onTap,
-      onTapDown: _onDown,
-      onTapUp: _onUp,
-      onTapCancel: _onCancel,
-      child: AnimatedBuilder(
-        animation: _scale,
-        builder: (context, child) => Transform.scale(
-          scale: _scale.value,
-          child: child,
+      onTapDown: disabled ? null : _onDown,
+      onTapUp: disabled ? null : _onUp,
+      onTapCancel: disabled ? null : _onCancel,
+      child: AnimatedOpacity(
+        // onTap null'a düşünce kullanıcı "buton tıklanamaz" diye görsel
+        // geri bildirim alır — önceden hiçbir dimming yoktu, dokunup hiçbir
+        // şey olmadığını fark etmek zorunda kalıyordu.
+        duration: const Duration(milliseconds: 150),
+        opacity: disabled ? 0.45 : 1.0,
+        child: AnimatedBuilder(
+          animation: _scale,
+          builder: (context, child) =>
+              Transform.scale(scale: _scale.value, child: child),
+          child: widget.child,
         ),
-        child: widget.child,
       ),
     );
   }

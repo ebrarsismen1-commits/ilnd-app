@@ -9,27 +9,16 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/habits/habits_provider.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
-// ─── Statik hedefler (ileride kullanıcıya göre hesaplanacak) ─────────────────
+// ─── Statik hedefler (ileride kullanıcıya göre ayarlanacak) ──────────────────
 
 const _kKaloriHedef = 2000;
 const _kProteinHedef = 130;
 const _kKarbHedef = 250;
 const _kYagHedef = 70;
-
-// ─── Alışkanlıklar (şimdilik sabit, Phase 2C'de dinamik olacak) ──────────────
-
-class _Habit {
-  const _Habit(this.name, this.checkedDays);
-  final String name;
-  final int checkedDays;
-}
-
-const _habits = [
-  _Habit('Su içme', 5),
-  _Habit('Hareket', 3),
-  _Habit('Uyku', 4),
-];
+const _kSuHedef = 2000; // ml
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
 
@@ -38,6 +27,7 @@ class TakipScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     return Scaffold(
       backgroundColor: p.base,
@@ -49,23 +39,45 @@ class TakipScreen extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding, 28, AppSpacing.screenPadding, 0),
-                  child: Text('takip.',
-                      style: AppTextStyles.display(fontSize: 32, color: p.text)),
+                    AppSpacing.screenPadding,
+                    28,
+                    AppSpacing.screenPadding,
+                    0,
+                  ),
+                  child: Text(
+                    l10n.takipTitle,
+                    style: AppTextStyles.display(fontSize: 32, color: p.text),
+                  ),
                 ),
               ),
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenPadding, 20, AppSpacing.screenPadding, 32),
+                  AppSpacing.screenPadding,
+                  20,
+                  AppSpacing.screenPadding,
+                  32,
+                ),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                    Entrance(index: 0, child: _MacroCard(p: p)),
+                    Entrance(
+                      index: 0,
+                      child: _MacroCard(p: p, l10n: l10n),
+                    ),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 1, child: _MealsSection(p: p)),
+                    Entrance(
+                      index: 1,
+                      child: _MealsSection(p: p, l10n: l10n),
+                    ),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 2, child: _ActivitySection(p: p)),
+                    Entrance(
+                      index: 2,
+                      child: _ActivitySection(p: p, l10n: l10n),
+                    ),
                     const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 3, child: _HabitsSection(p: p)),
+                    Entrance(
+                      index: 3,
+                      child: _HabitsSection(p: p, l10n: l10n),
+                    ),
                   ]),
                 ),
               ),
@@ -121,8 +133,9 @@ class _SectionLabel extends StatelessWidget {
 // ─── SECTION 1: Macro card with donut chart ───────────────────────────────────
 
 class _MacroCard extends ConsumerWidget {
-  const _MacroCard({required this.p});
+  const _MacroCard({required this.p, required this.l10n});
   final AppPalette p;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -132,7 +145,7 @@ class _MacroCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _SectionLabel('BUGÜNÜN MAKROLARI', color: p.accent),
+          _SectionLabel(l10n.takipMacrosLabel, color: p.accent),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -142,10 +155,38 @@ class _MacroCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _MacroRow(label: 'Kalori', current: macros.kalori, goal: _kKaloriHedef, unit: 'kcal', color: AppColors.amber, p: p),
-                    _MacroRow(label: 'Protein', current: macros.protein, goal: _kProteinHedef, unit: 'g', color: AppColors.sage, p: p),
-                    _MacroRow(label: 'Karb', current: macros.karbonhidrat, goal: _kKarbHedef, unit: 'g', color: AppColors.sageLight, p: p),
-                    _MacroRow(label: 'Yağ', current: macros.yag, goal: _kYagHedef, unit: 'g', color: AppColors.amberLight, p: p),
+                    _MacroRow(
+                      label: l10n.takipCalories,
+                      current: macros.kalori,
+                      goal: _kKaloriHedef,
+                      unit: 'kcal',
+                      color: p.amber,
+                      p: p,
+                    ),
+                    _MacroRow(
+                      label: l10n.takipProtein,
+                      current: macros.protein,
+                      goal: _kProteinHedef,
+                      unit: 'g',
+                      color: p.accent,
+                      p: p,
+                    ),
+                    _MacroRow(
+                      label: l10n.takipCarbs,
+                      current: macros.karbonhidrat,
+                      goal: _kKarbHedef,
+                      unit: 'g',
+                      color: p.accentSoft,
+                      p: p,
+                    ),
+                    _MacroRow(
+                      label: l10n.takipFat,
+                      current: macros.yag,
+                      goal: _kYagHedef,
+                      unit: 'g',
+                      color: p.amber.withValues(alpha: 0.6),
+                      p: p,
+                    ),
                   ],
                 ),
               ),
@@ -164,7 +205,8 @@ class _DonutChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = (macros.protein + macros.karbonhidrat + macros.yag).toDouble();
+    final total = (macros.protein + macros.karbonhidrat + macros.yag)
+        .toDouble();
     final hasData = total > 0;
 
     return SizedBox(
@@ -180,21 +222,53 @@ class _DonutChart extends StatelessWidget {
               centerSpaceRadius: 36,
               sections: hasData
                   ? [
-                      PieChartSectionData(value: macros.protein / total * 100, color: AppColors.sage, radius: 17, showTitle: false),
-                      PieChartSectionData(value: macros.karbonhidrat / total * 100, color: AppColors.sageLight, radius: 17, showTitle: false),
-                      PieChartSectionData(value: macros.yag / total * 100, color: AppColors.amberLight, radius: 17, showTitle: false),
+                      PieChartSectionData(
+                        value: macros.protein / total * 100,
+                        color: p.accent,
+                        radius: 17,
+                        showTitle: false,
+                      ),
+                      PieChartSectionData(
+                        value: macros.karbonhidrat / total * 100,
+                        color: p.accentSoft,
+                        radius: 17,
+                        showTitle: false,
+                      ),
+                      PieChartSectionData(
+                        value: macros.yag / total * 100,
+                        color: p.amber.withValues(alpha: 0.6),
+                        radius: 17,
+                        showTitle: false,
+                      ),
                     ]
-                  : [PieChartSectionData(value: 100, color: p.border, radius: 17, showTitle: false)],
+                  : [
+                      PieChartSectionData(
+                        value: 100,
+                        color: p.border,
+                        radius: 17,
+                        showTitle: false,
+                      ),
+                    ],
             ),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('${macros.kalori}',
-                  style: AppTextStyles.mono(fontSize: 18, fontWeight: FontWeight.w600, color: p.text)),
-              Text('kcal',
-                  style: AppTextStyles.label(fontSize: 10, color: p.textMuted)
-                      .copyWith(letterSpacing: 0)),
+              Text(
+                '${macros.kalori}',
+                style: AppTextStyles.mono(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: p.text,
+                ),
+              ),
+              Text(
+                'kcal',
+                style: AppTextStyles.label(
+                  fontSize: 10,
+                  color: p.textMuted,
+                ).copyWith(letterSpacing: 0),
+              ),
             ],
           ),
         ],
@@ -224,7 +298,6 @@ class _MacroRow extends StatelessWidget {
     final text = unit == 'kcal'
         ? '$current / $goal'
         : '$current$unit / $goal$unit';
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
@@ -241,11 +314,20 @@ class _MacroRow extends StatelessWidget {
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              Text(label, style: AppTextStyles.body(fontSize: 12, color: p.textMuted)),
+              Text(
+                label,
+                style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+              ),
             ],
           ),
-          Text(text,
-              style: AppTextStyles.mono(fontSize: 12, fontWeight: FontWeight.w500, color: color)),
+          Text(
+            text,
+            style: AppTextStyles.mono(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: color,
+            ),
+          ),
         ],
       ),
     );
@@ -255,8 +337,9 @@ class _MacroRow extends StatelessWidget {
 // ─── SECTION 2: Meals ─────────────────────────────────────────────────────────
 
 class _MealsSection extends ConsumerWidget {
-  const _MealsSection({required this.p});
+  const _MealsSection({required this.p, required this.l10n});
   final AppPalette p;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -266,7 +349,7 @@ class _MealsSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionLabel('ÖĞÜNLER', color: p.textMuted),
+        _SectionLabel(l10n.takipMealsLabel, color: p.textMuted),
         _Card(
           p: p,
           padding: EdgeInsets.zero,
@@ -274,22 +357,33 @@ class _MealsSection extends ConsumerWidget {
             children: [
               if (entries.isEmpty)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-                  child: Text('Henüz yemek eklenmedi.',
-                      style: AppTextStyles.body(fontSize: 13, color: p.textMuted)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 18,
+                  ),
+                  child: Text(
+                    l10n.takipNoMealsYet,
+                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+                  ),
                 )
               else
                 ...entries.asMap().entries.map((e) {
-                final isLast = e.key == entries.length - 1;
-                return Column(
-                  children: [
-                    _FoodEntryRow(entry: e.value, p: p),
-                    if (!isLast) Divider(height: 1, indent: 16, endIndent: 16, color: p.border),
-                  ],
-                );
-              }),
+                  final isLast = e.key == entries.length - 1;
+                  return Column(
+                    children: [
+                      _FoodEntryRow(entry: e.value, p: p, l10n: l10n),
+                      if (!isLast)
+                        Divider(
+                          height: 1,
+                          indent: 16,
+                          endIndent: 16,
+                          color: p.border,
+                        ),
+                    ],
+                  );
+                }),
               Divider(height: 1, indent: 16, endIndent: 16, color: p.border),
-              _AddMealRow(p: p),
+              _AddMealRow(p: p, l10n: l10n),
             ],
           ),
         ),
@@ -299,9 +393,14 @@ class _MealsSection extends ConsumerWidget {
 }
 
 class _FoodEntryRow extends StatelessWidget {
-  const _FoodEntryRow({required this.entry, required this.p});
+  const _FoodEntryRow({
+    required this.entry,
+    required this.p,
+    required this.l10n,
+  });
   final FoodEntry entry;
   final AppPalette p;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -314,16 +413,34 @@ class _FoodEntryRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(entry.yemekAdi,
-                    style: AppTextStyles.heading(fontSize: 15, fontWeight: FontWeight.w600, color: p.text)),
+                Text(
+                  entry.yemekAdi,
+                  style: AppTextStyles.heading(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: p.text,
+                  ),
+                ),
                 const SizedBox(height: 2),
-                Text('P: ${entry.protein}g  K: ${entry.karbonhidrat}g  Y: ${entry.yag}g',
-                    style: AppTextStyles.body(fontSize: 12, color: p.textMuted)),
+                Text(
+                  l10n.takipMacroSummary(
+                    entry.protein,
+                    entry.karbonhidrat,
+                    entry.yag,
+                  ),
+                  style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+                ),
               ],
             ),
           ),
-          Text('${entry.kalori} kcal',
-              style: AppTextStyles.mono(fontSize: 13, fontWeight: FontWeight.w500, color: p.textMuted)),
+          Text(
+            l10n.takipKcal(entry.kalori),
+            style: AppTextStyles.mono(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: p.textMuted,
+            ),
+          ),
         ],
       ),
     );
@@ -331,8 +448,9 @@ class _FoodEntryRow extends StatelessWidget {
 }
 
 class _AddMealRow extends StatelessWidget {
-  const _AddMealRow({required this.p});
+  const _AddMealRow({required this.p, required this.l10n});
   final AppPalette p;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -343,8 +461,14 @@ class _AddMealRow extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: Text('Akşam ekle…',
-                  style: AppTextStyles.display(fontSize: 14, fontWeight: FontWeight.w400, color: p.textMuted)),
+              child: Text(
+                l10n.takipAddMeal,
+                style: AppTextStyles.display(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: p.textMuted,
+                ),
+              ),
             ),
             Icon(Icons.add_rounded, size: 18, color: p.textMuted),
           ],
@@ -354,43 +478,85 @@ class _AddMealRow extends StatelessWidget {
   }
 }
 
-// ─── SECTION 3: Activity ──────────────────────────────────────────────────────
+// ─── SECTION 3: Activity (steps hardcoded, water real) ───────────────────────
 
-class _ActivitySection extends StatelessWidget {
-  const _ActivitySection({required this.p});
+class _ActivitySection extends ConsumerWidget {
+  const _ActivitySection({required this.p, required this.l10n});
   final AppPalette p;
+  final AppLocalizations l10n;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final waterMl = ref.watch(waterTodayProvider);
+    final waterPct = (waterMl / _kSuHedef).clamp(0.0, 1.0);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionLabel('AKTİVİTE', color: p.textMuted),
+        _SectionLabel(l10n.takipActivityLabel, color: p.textMuted),
         Row(
           children: [
+            // Steps (placeholder — sensor entegrasyonu post-MVP)
             Expanded(
               child: _Card(
                 p: p,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('4.2k', style: AppTextStyles.mono(fontSize: 24, fontWeight: FontWeight.w600, color: p.text)),
+                    Text(
+                      '4.2k',
+                      style: AppTextStyles.mono(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: p.text,
+                      ),
+                    ),
                     const SizedBox(height: 4),
-                    Text('adım', style: AppTextStyles.label(fontSize: 11, color: p.textMuted)),
+                    Text(
+                      l10n.takipSteps,
+                      style: AppTextStyles.label(
+                        fontSize: 11,
+                        color: p.textMuted,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
             const SizedBox(width: 12),
+            // Water — real data from SharedPreferences
             Expanded(
               child: _Card(
                 p: p,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('34', style: AppTextStyles.mono(fontSize: 24, fontWeight: FontWeight.w600, color: p.text)),
+                    Text(
+                      '${waterMl}ml',
+                      style: AppTextStyles.mono(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: p.text,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(2),
+                      child: LinearProgressIndicator(
+                        value: waterPct,
+                        minHeight: 3,
+                        backgroundColor: p.border,
+                        color: const Color(0xFF93D5FF),
+                      ),
+                    ),
                     const SizedBox(height: 4),
-                    Text('aktif dk', style: AppTextStyles.label(fontSize: 11, color: p.textMuted)),
+                    Text(
+                      l10n.takipWaterGoal(_kSuHedef),
+                      style: AppTextStyles.label(
+                        fontSize: 10,
+                        color: p.textMuted,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -402,71 +568,159 @@ class _ActivitySection extends StatelessWidget {
   }
 }
 
-// ─── SECTION 4: Habits ───────────────────────────────────────────────────────
+// ─── SECTION 4: Habits — Firestore'dan gerçek veri ───────────────────────────
 
-class _HabitsSection extends StatelessWidget {
-  const _HabitsSection({required this.p});
+class _HabitsSection extends ConsumerWidget {
+  const _HabitsSection({required this.p, required this.l10n});
   final AppPalette p;
+  final AppLocalizations l10n;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final habitsAsync = ref.watch(habitsProvider);
+    final completionsAsync = ref.watch(last7DaysCompletionsProvider);
+    final todayCompletions =
+        ref.watch(todayCompletionsProvider).valueOrNull ?? {};
+    final toggle = ref.read(toggleHabitCompletionProvider);
+
+    final habits = habitsAsync.valueOrNull ?? [];
+    final last7 = completionsAsync.valueOrNull ?? {};
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionLabel('GÜNLÜK ALIŞKANLIKLAR', color: p.textMuted),
-        _Card(
-          p: p,
-          padding: EdgeInsets.zero,
-          child: Column(
-            children: _habits.asMap().entries.map((e) {
-              final isLast = e.key == _habits.length - 1;
-              return Column(
-                children: [
-                  _HabitRow(habit: e.value, p: p),
-                  if (!isLast) Divider(height: 1, indent: 16, endIndent: 16, color: p.border),
-                ],
-              );
-            }).toList(),
+        _SectionLabel(l10n.takipHabitsLabel, color: p.textMuted),
+        if (habitsAsync.isLoading)
+          _Card(
+            p: p,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: CircularProgressIndicator(
+                  color: p.accent,
+                  strokeWidth: 1.5,
+                ),
+              ),
+            ),
+          )
+        else if (habits.isEmpty)
+          _Card(
+            p: p,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 18),
+              child: Text(
+                l10n.takipNoHabitsYet,
+                style: AppTextStyles.body(
+                  fontSize: 13,
+                  color: p.textMuted,
+                  height: 1.5,
+                ),
+              ),
+            ),
+          )
+        else
+          _Card(
+            p: p,
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: habits.asMap().entries.map((e) {
+                final isLast = e.key == habits.length - 1;
+                final habit = e.value;
+                final isToday = todayCompletions.contains(habit.id);
+                return Column(
+                  children: [
+                    _HabitRow(
+                      habitId: habit.id,
+                      name: habit.name,
+                      last7: last7,
+                      isTodayDone: isToday,
+                      onToggle: () => toggle(habit.id),
+                      p: p,
+                    ),
+                    if (!isLast)
+                      Divider(
+                        height: 1,
+                        indent: 16,
+                        endIndent: 16,
+                        color: p.border,
+                      ),
+                  ],
+                );
+              }).toList(),
+            ),
           ),
-        ),
       ],
     );
   }
 }
 
 class _HabitRow extends StatelessWidget {
-  const _HabitRow({required this.habit, required this.p});
-  final _Habit habit;
+  const _HabitRow({
+    required this.habitId,
+    required this.name,
+    required this.last7,
+    required this.isTodayDone,
+    required this.onToggle,
+    required this.p,
+  });
+
+  final String habitId;
+  final String name;
+  final Map<String, Set<String>> last7;
+  final bool isTodayDone;
+  final VoidCallback onToggle;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(habit.name,
-                style: AppTextStyles.body(fontSize: 14, color: p.text)
-                    .copyWith(fontWeight: FontWeight.w500)),
-          ),
-          const SizedBox(width: 12),
-          Row(
-            children: List.generate(7, (i) {
-              final checked = i < habit.checkedDays;
-              return Container(
-                width: 18,
-                height: 18,
-                margin: const EdgeInsets.only(left: 4),
-                decoration: BoxDecoration(
-                  color: checked ? p.accent : p.surfaceStrong,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: checked ? Icon(Icons.check_rounded, size: 11, color: p.onAccent) : null,
-              );
-            }),
-          ),
-        ],
+    // Build 7-day grid: oldest → newest (today is last)
+    final now = DateTime.now();
+    final dates = List.generate(7, (i) {
+      final d = now.subtract(Duration(days: 6 - i));
+      return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+    });
+
+    return Pressable(
+      onTap: onToggle,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                name,
+                style: AppTextStyles.body(
+                  fontSize: 14,
+                  color: p.text,
+                ).copyWith(fontWeight: FontWeight.w500),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Row(
+              children: dates.map((date) {
+                final isToday = date == dates.last;
+                final done = isToday
+                    ? isTodayDone
+                    : (last7[date]?.contains(habitId) ?? false);
+                return Container(
+                  width: 18,
+                  height: 18,
+                  margin: const EdgeInsets.only(left: 4),
+                  decoration: BoxDecoration(
+                    color: done ? p.accent : p.surfaceStrong,
+                    borderRadius: BorderRadius.circular(4),
+                    border: isToday
+                        ? Border.all(color: p.accent, width: 1.5)
+                        : null,
+                  ),
+                  child: done
+                      ? Icon(Icons.check_rounded, size: 11, color: p.onAccent)
+                      : null,
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }

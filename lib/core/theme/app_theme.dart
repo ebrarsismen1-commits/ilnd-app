@@ -64,10 +64,7 @@ class AppTheme {
         // Body — DM Sans 400
         bodyLarge: AppTextStyles.body(fontSize: 16),
         bodyMedium: AppTextStyles.body(fontSize: 14),
-        bodySmall: AppTextStyles.body(
-          fontSize: 13,
-          color: AppColors.muted,
-        ),
+        bodySmall: AppTextStyles.body(fontSize: 13, color: AppColors.muted),
 
         // Label — DM Sans 500, uppercase, tracked
         labelLarge: AppTextStyles.label(fontSize: 13),
@@ -252,7 +249,10 @@ class _FadeUpTransitionsBuilder extends PageTransitionsBuilder {
       child: ScaleTransition(
         scale: Tween<double>(begin: 0.97, end: 1.0).animate(curved),
         child: FadeTransition(
-          opacity: Tween<double>(begin: 1.0, end: 0.92).animate(secondaryCurved),
+          opacity: Tween<double>(
+            begin: 1.0,
+            end: 0.92,
+          ).animate(secondaryCurved),
           child: child,
         ),
       ),

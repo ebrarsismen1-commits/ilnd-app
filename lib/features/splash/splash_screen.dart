@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_text_styles.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -16,10 +17,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     vsync: this,
     duration: const Duration(milliseconds: 900),
   );
-  late final Animation<double> _fade =
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
-  late final Animation<double> _scale = Tween(begin: 0.88, end: 1.0)
-      .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutQuart));
+  late final Animation<double> _fade = CurvedAnimation(
+    parent: _ctrl,
+    curve: Curves.easeOut,
+  );
+  late final Animation<double> _scale = Tween(
+    begin: 0.88,
+    end: 1.0,
+  ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutQuart));
 
   @override
   void initState() {
@@ -35,6 +40,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
 
     return Scaffold(
@@ -44,10 +50,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           animation: _ctrl,
           builder: (context, child) => Opacity(
             opacity: _fade.value,
-            child: Transform.scale(
-              scale: _scale.value,
-              child: child,
-            ),
+            child: Transform.scale(scale: _scale.value, child: child),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -55,14 +58,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               // Logo: "ilnd." büyük harf
               Text(
                 'ilnd.',
-                style: AppTextStyles.display(
-                  fontSize: 56,
-                  color: p.text,
-                ),
+                style: AppTextStyles.display(fontSize: 56, color: p.text),
               ),
               const SizedBox(height: 8),
               Text(
-                'iyi hisset, iyi yaşa.',
+                l10n.splashTagline,
                 style: TextStyle(
                   fontSize: 13,
                   color: p.textMuted,

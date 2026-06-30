@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 
-class AuthInputField extends StatefulWidget {
+class AuthInputField extends ConsumerStatefulWidget {
   const AuthInputField({
     super.key,
     required this.controller,
@@ -11,6 +13,7 @@ class AuthInputField extends StatefulWidget {
     this.keyboardType,
     this.textInputAction,
     this.onSubmitted,
+    this.onChanged,
     this.trailing,
     this.hasError = false,
   });
@@ -22,14 +25,17 @@ class AuthInputField extends StatefulWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final ValueChanged<String>? onSubmitted;
+  final ValueChanged<String>? onChanged;
   final Widget? trailing;
   final bool hasError;
 
   @override
-  State<AuthInputField> createState() => _AuthInputFieldState();
+  ConsumerState<AuthInputField> createState() => _AuthInputFieldState();
 }
 
-class _AuthInputFieldState extends State<AuthInputField> {
+class _AuthInputFieldState extends ConsumerState<AuthInputField> {
+  static const _danger = Color(0xFFB3554A);
+
   final _focus = FocusNode();
   bool _focused = false;
 
@@ -51,17 +57,23 @@ class _AuthInputFieldState extends State<AuthInputField> {
 
   @override
   Widget build(BuildContext context) {
+    final p = ref.watch(paletteProvider);
     final borderColor = widget.hasError
-        ? const Color(0xFFB3554A)
+        ? _danger
         : _focused
-            ? AppColors.sage
-            : Colors.transparent;
+        ? p.accent
+        : Colors.transparent;
+    final iconTextColor = widget.hasError
+        ? _danger
+        : _focused
+        ? p.accent
+        : p.textMuted;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
       height: 52,
       decoration: BoxDecoration(
-        color: AppColors.creamDark,
+        color: p.surfaceStrong,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: borderColor,
@@ -73,22 +85,8 @@ class _AuthInputFieldState extends State<AuthInputField> {
           const SizedBox(width: 14),
           AnimatedDefaultTextStyle(
             duration: const Duration(milliseconds: 150),
-            style: TextStyle(
-              color: widget.hasError
-                  ? const Color(0xFFB3554A)
-                  : _focused
-                      ? AppColors.sage
-                      : AppColors.muted,
-            ),
-            child: Icon(
-              widget.icon,
-              size: 20,
-              color: widget.hasError
-                  ? const Color(0xFFB3554A)
-                  : _focused
-                      ? AppColors.sage
-                      : AppColors.muted,
-            ),
+            style: TextStyle(color: iconTextColor),
+            child: Icon(widget.icon, size: 20, color: iconTextColor),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -99,13 +97,14 @@ class _AuthInputFieldState extends State<AuthInputField> {
               keyboardType: widget.keyboardType,
               textInputAction: widget.textInputAction,
               onSubmitted: widget.onSubmitted,
-              style: AppTextStyles.body(fontSize: 15),
+              onChanged: widget.onChanged,
+              style: AppTextStyles.body(fontSize: 15, color: p.text),
               decoration: InputDecoration(
                 hintText: widget.hint,
                 hintStyle: AppTextStyles.display(
                   fontSize: 15,
                   fontWeight: FontWeight.w400,
-                  color: AppColors.muted,
+                  color: p.textMuted,
                 ),
                 border: InputBorder.none,
                 isDense: true,

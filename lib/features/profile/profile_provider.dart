@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
+import 'package:ilnd_app/core/services/streak_tracker.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 
 // ─── Model ────────────────────────────────────────────────────────────────────
@@ -37,7 +40,9 @@ final profileStatsProvider = FutureProvider<ProfileStats>((ref) async {
 
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
-  final weekStart = today.subtract(Duration(days: today.weekday - 1)); // Pazartesi
+  final weekStart = today.subtract(
+    Duration(days: today.weekday - 1),
+  ); // Pazartesi
 
   // ── Son 60 günün tarihlerini çek (streak için yeterli) ────────────────────
   final since60 = Timestamp.fromDate(today.subtract(const Duration(days: 60)));
@@ -62,13 +67,16 @@ final profileStatsProvider = FutureProvider<ProfileStats>((ref) async {
 
   // ── Aktif günleri DateOnly seti olarak topla ──────────────────────────────
   Set<DateTime> activeDays(List<QueryDocumentSnapshot> docs) {
-    return docs.map((d) {
-      final data = d.data() as Map<String, dynamic>?;
-      final ts = data?['createdAt'] as Timestamp?;
-      if (ts == null) return null;
-      final dt = ts.toDate();
-      return DateTime(dt.year, dt.month, dt.day);
-    }).whereType<DateTime>().toSet();
+    return docs
+        .map((d) {
+          final data = d.data() as Map<String, dynamic>?;
+          final ts = data?['createdAt'] as Timestamp?;
+          if (ts == null) return null;
+          final dt = ts.toDate();
+          return DateTime(dt.year, dt.month, dt.day);
+        })
+        .whereType<DateTime>()
+        .toSet();
   }
 
   final journalDays = activeDays(journalDocs);
@@ -109,6 +117,8 @@ final profileStatsProvider = FutureProvider<ProfileStats>((ref) async {
     final hasActivity = allActiveDays.contains(day);
     return hasActivity ? 1.0 : 0.0;
   });
+
+  unawaited(ref.read(longestStreakProvider.notifier).observe(streak));
 
   return ProfileStats(
     streakDays: streak,

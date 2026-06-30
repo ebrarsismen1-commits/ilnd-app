@@ -10,25 +10,26 @@ import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/repositories/explore_repository.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 // ─── Filter ───────────────────────────────────────────────────────────────────
 
 enum _Filter { hepsi, wellness, tarifler, yazilar }
 
 extension _FilterX on _Filter {
-  String get label => switch (this) {
-        _Filter.hepsi => 'Hepsi',
-        _Filter.wellness => 'Wellness',
-        _Filter.tarifler => 'Tarifler',
-        _Filter.yazilar => 'Yazılar',
-      };
+  String label(AppLocalizations l10n) => switch (this) {
+    _Filter.hepsi => l10n.exploreFilterAll,
+    _Filter.wellness => l10n.exploreFilterWellness,
+    _Filter.tarifler => l10n.exploreFilterRecipes,
+    _Filter.yazilar => l10n.exploreFilterArticles,
+  };
 
   bool matches(Article a) => switch (this) {
-        _Filter.hepsi => true,
-        _Filter.wellness => a.category == ArticleCategory.wellness,
-        _Filter.tarifler => a.category == ArticleCategory.tarif,
-        _Filter.yazilar => a.category == ArticleCategory.yazi,
-      };
+    _Filter.hepsi => true,
+    _Filter.wellness => a.category == ArticleCategory.wellness,
+    _Filter.tarifler => a.category == ArticleCategory.tarif,
+    _Filter.yazilar => a.category == ArticleCategory.yazi,
+  };
 }
 
 // ─── Story config ─────────────────────────────────────────────────────────────
@@ -40,6 +41,8 @@ class _Story {
   final Color color;
 }
 
+// Internal keys (used for matching, e.g. 'nefes' triggers breathing screen) —
+// display labels are resolved via l10n in _StoriesRow through _storyLabel().
 const _stories = [
   _Story('nefes', '🌬️', Color(0xFFB8A9FF)),
   _Story('uyku', '🌙', Color(0xFF9BB5FF)),
@@ -48,6 +51,25 @@ const _stories = [
   _Story('meditasyon', '✨', Color(0xFFFFB8D9)),
   _Story('öz-bakım', '🌸', Color(0xFFFFCBA4)),
 ];
+
+String _storyLabel(AppLocalizations l10n, String key) {
+  switch (key) {
+    case 'nefes':
+      return l10n.exploreStoryBreathing;
+    case 'uyku':
+      return l10n.exploreStorySleep;
+    case 'su':
+      return l10n.exploreStoryWater;
+    case 'hareket':
+      return l10n.exploreStoryMovement;
+    case 'meditasyon':
+      return l10n.exploreStoryMeditation;
+    case 'öz-bakım':
+      return l10n.exploreStorySelfCare;
+    default:
+      return key;
+  }
+}
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
 
@@ -70,8 +92,10 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           return FadeTransition(
             opacity: c,
             child: SlideTransition(
-              position: Tween(begin: const Offset(0, 0.05), end: Offset.zero)
-                  .animate(c),
+              position: Tween(
+                begin: const Offset(0, 0.05),
+                end: Offset.zero,
+              ).animate(c),
               child: child,
             ),
           );
@@ -83,12 +107,16 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
-    final _raw = ref.watch(articlesProvider).valueOrNull;
-    final allArticles = (_raw == null || _raw.isEmpty) ? kArticles : _raw;
+    final fetched = ref.watch(articlesProvider).valueOrNull;
+    final allArticles = (fetched == null || fetched.isEmpty)
+        ? kArticles
+        : fetched;
     final hero = allArticles.isNotEmpty ? allArticles.first : null;
-    final featured =
-        allArticles.length > 1 ? allArticles.sublist(1, allArticles.length.clamp(1, 4)) : <Article>[];
+    final featured = allArticles.length > 1
+        ? allArticles.sublist(1, allArticles.length.clamp(1, 4))
+        : <Article>[];
     final rest = allArticles.length > 4 ? allArticles.sublist(4) : <Article>[];
     final filtered = rest.where((a) => _selected.matches(a)).toList();
 
@@ -103,20 +131,32 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.screenPadding, 28, AppSpacing.screenPadding, 6),
+                    AppSpacing.screenPadding,
+                    28,
+                    AppSpacing.screenPadding,
+                    6,
+                  ),
                   child: Row(
                     children: [
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('keşfet.',
-                                style: AppTextStyles.display(
-                                    fontSize: 32, color: p.text)),
+                            Text(
+                              l10n.exploreTitle,
+                              style: AppTextStyles.display(
+                                fontSize: 32,
+                                color: p.text,
+                              ),
+                            ),
                             const SizedBox(height: 2),
-                            Text('iyi hissetmenin küçük adımları',
-                                style: AppTextStyles.body(
-                                    fontSize: 13, color: p.textMuted)),
+                            Text(
+                              l10n.exploreSubtitle,
+                              style: AppTextStyles.body(
+                                fontSize: 13,
+                                color: p.textMuted,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -136,7 +176,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     index: 0,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.screenPadding),
+                        horizontal: AppSpacing.screenPadding,
+                      ),
                       child: _HeroCard(article: hero, p: p, onTap: _open),
                     ),
                   ),
@@ -149,16 +190,28 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.screenPadding, 0, AppSpacing.screenPadding, 12),
+                      AppSpacing.screenPadding,
+                      0,
+                      AppSpacing.screenPadding,
+                      12,
+                    ),
                     child: Row(
                       children: [
-                        Text('ÖNE ÇIKANLAR',
-                            style: AppTextStyles.label(
-                                fontSize: 11, color: p.accent)),
+                        Text(
+                          l10n.exploreFeaturedLabel,
+                          style: AppTextStyles.label(
+                            fontSize: 11,
+                            color: p.accent,
+                          ),
+                        ),
                         const Spacer(),
-                        Text('hepsi →',
-                            style: AppTextStyles.body(
-                                fontSize: 12, color: p.textMuted)),
+                        Text(
+                          l10n.exploreSeeAllArrow,
+                          style: AppTextStyles.body(
+                            fontSize: 12,
+                            color: p.textMuted,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -169,13 +222,17 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.screenPadding),
+                        horizontal: AppSpacing.screenPadding,
+                      ),
                       itemCount: featured.length,
                       separatorBuilder: (ctx0, i0) => const SizedBox(width: 12),
                       itemBuilder: (context, i) => Entrance(
                         index: i + 1,
                         child: _FeaturedCard(
-                            article: featured[i], p: p, onTap: _open),
+                          article: featured[i],
+                          p: p,
+                          onTap: _open,
+                        ),
                       ),
                     ),
                   ),
@@ -189,7 +246,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   index: 3,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.screenPadding),
+                      horizontal: AppSpacing.screenPadding,
+                    ),
                     child: _QuoteBanner(p: p),
                   ),
                 ),
@@ -203,7 +261,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.screenPadding),
+                      horizontal: AppSpacing.screenPadding,
+                    ),
                     children: _Filter.values.map((f) {
                       final active = _selected == f;
                       return Padding(
@@ -214,27 +273,30 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             duration: const Duration(milliseconds: 180),
                             curve: Curves.easeOut,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
                             decoration: BoxDecoration(
                               color: active
                                   ? p.accent
                                   : p.surface.withValues(alpha: 0.8),
                               borderRadius: BorderRadius.circular(24),
                               border: Border.all(
-                                  color:
-                                      active ? p.accent : p.border,
-                                  width: 0.5),
+                                color: active ? p.accent : p.border,
+                                width: 0.5,
+                              ),
                             ),
                             child: Text(
-                              f.label,
-                              style: AppTextStyles.label(
-                                fontSize: 12,
-                                color: active ? p.onAccent : p.textMuted,
-                              ).copyWith(
-                                fontWeight: active
-                                    ? FontWeight.w600
-                                    : FontWeight.w400,
-                              ),
+                              f.label(l10n),
+                              style:
+                                  AppTextStyles.label(
+                                    fontSize: 12,
+                                    color: active ? p.onAccent : p.textMuted,
+                                  ).copyWith(
+                                    fontWeight: active
+                                        ? FontWeight.w600
+                                        : FontWeight.w400,
+                                  ),
                             ),
                           ),
                         ),
@@ -248,7 +310,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               // ── Feed ──────────────────────────────────────────────────────
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding, 0, AppSpacing.screenPadding, 40),
+                  AppSpacing.screenPadding,
+                  0,
+                  AppSpacing.screenPadding,
+                  40,
+                ),
                 sliver: filtered.isEmpty
                     ? const SliverToBoxAdapter(child: SizedBox.shrink())
                     : SliverList.separated(
@@ -259,7 +325,10 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                           index: i,
                           delayStep: const Duration(milliseconds: 60),
                           child: _FeedRow(
-                              article: filtered[i], p: p, onTap: _open),
+                            article: filtered[i],
+                            p: p,
+                            onTap: _open,
+                          ),
                         ),
                       ),
               ),
@@ -279,12 +348,14 @@ class _StoriesRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       height: 100,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.screenPadding),
+          horizontal: AppSpacing.screenPadding,
+        ),
         itemCount: _stories.length,
         separatorBuilder: (ctx0, i0) => const SizedBox(width: 12),
         itemBuilder: (context, i) {
@@ -297,12 +368,13 @@ class _StoriesRow extends StatelessWidget {
                     pageBuilder: (ctx, anim, _) => BreathScreen(p: p),
                     transitionsBuilder: (ctx, anim, _, child) {
                       final c = CurvedAnimation(
-                          parent: anim, curve: Curves.easeOutCubic);
+                        parent: anim,
+                        curve: Curves.easeOutCubic,
+                      );
                       return FadeTransition(
                         opacity: c,
                         child: ScaleTransition(
-                          scale:
-                              Tween(begin: 0.92, end: 1.0).animate(c),
+                          scale: Tween(begin: 0.92, end: 1.0).animate(c),
                           child: child,
                         ),
                       );
@@ -337,15 +409,16 @@ class _StoriesRow extends StatelessWidget {
                       ],
                     ),
                     child: Center(
-                      child: Text(s.emoji,
-                          style: const TextStyle(fontSize: 28)),
+                      child: Text(
+                        s.emoji,
+                        style: const TextStyle(fontSize: 28),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    s.label,
-                    style: AppTextStyles.body(
-                        fontSize: 11, color: p.textMuted),
+                    _storyLabel(l10n, s.label),
+                    style: AppTextStyles.body(fontSize: 11, color: p.textMuted),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
@@ -363,8 +436,11 @@ class _StoriesRow extends StatelessWidget {
 // ─── Hero card ────────────────────────────────────────────────────────────────
 
 class _HeroCard extends StatelessWidget {
-  const _HeroCard(
-      {required this.article, required this.p, required this.onTap});
+  const _HeroCard({
+    required this.article,
+    required this.p,
+    required this.onTap,
+  });
   final Article article;
   final AppPalette p;
   final void Function(Article) onTap;
@@ -382,8 +458,9 @@ class _HeroCard extends StatelessWidget {
             children: [
               // fotoğraf
               CoverImage(
-                  imageUrl: article.imageUrl,
-                  palette: article.category.palette),
+                imageUrl: article.imageUrl,
+                palette: article.category.palette,
+              ),
               // gradient overlay
               DecoratedBox(
                 decoration: BoxDecoration(
@@ -413,16 +490,21 @@ class _HeroCard extends StatelessWidget {
                         const Spacer(),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child: Text(article.readTime,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w500)),
+                          child: Text(
+                            article.readTime,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -467,8 +549,11 @@ class _HeroCard extends StatelessWidget {
 // ─── Featured card (horizontal scroll) ───────────────────────────────────────
 
 class _FeaturedCard extends StatelessWidget {
-  const _FeaturedCard(
-      {required this.article, required this.p, required this.onTap});
+  const _FeaturedCard({
+    required this.article,
+    required this.p,
+    required this.onTap,
+  });
   final Article article;
   final AppPalette p;
   final void Function(Article) onTap;
@@ -486,8 +571,9 @@ class _FeaturedCard extends StatelessWidget {
             fit: StackFit.expand,
             children: [
               CoverImage(
-                  imageUrl: article.imageUrl,
-                  palette: article.category.palette),
+                imageUrl: article.imageUrl,
+                palette: article.category.palette,
+              ),
               DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -551,6 +637,7 @@ class _QuoteBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -567,17 +654,22 @@ class _QuoteBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text('✨',
-              style: TextStyle(fontSize: 28, shadows: [
-                Shadow(color: p.accent.withValues(alpha: 0.4), blurRadius: 8)
-              ])),
+          Text(
+            '✨',
+            style: TextStyle(
+              fontSize: 28,
+              shadows: [
+                Shadow(color: p.accent.withValues(alpha: 0.4), blurRadius: 8),
+              ],
+            ),
+          ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'İyi hissetmek bir tesadüf değil, bir pratik.',
+                  l10n.exploreQuote,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -587,9 +679,12 @@ class _QuoteBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'her gün biraz, tutarlılıkla.',
-                  style:
-                      TextStyle(fontSize: 12, color: p.textMuted, height: 1.4),
+                  l10n.exploreQuoteSubtitle,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: p.textMuted,
+                    height: 1.4,
+                  ),
                 ),
               ],
             ),
@@ -607,10 +702,10 @@ class _CategoryChip extends StatelessWidget {
   final ArticleCategory category;
 
   Color get _color => switch (category) {
-        ArticleCategory.wellness => const Color(0xFF9B87F5),
-        ArticleCategory.tarif => const Color(0xFF34D399),
-        ArticleCategory.yazi => const Color(0xFFF472B6),
-      };
+    ArticleCategory.wellness => const Color(0xFF9B87F5),
+    ArticleCategory.tarif => const Color(0xFF34D399),
+    ArticleCategory.yazi => const Color(0xFFF472B6),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -636,8 +731,7 @@ class _CategoryChip extends StatelessWidget {
 // ─── Feed row ─────────────────────────────────────────────────────────────────
 
 class _FeedRow extends StatelessWidget {
-  const _FeedRow(
-      {required this.article, required this.p, required this.onTap});
+  const _FeedRow({required this.article, required this.p, required this.onTap});
   final Article article;
   final AppPalette p;
   final void Function(Article) onTap;
@@ -669,8 +763,9 @@ class _FeedRow extends StatelessWidget {
                 width: 72,
                 height: 72,
                 child: CoverImage(
-                    imageUrl: article.imageUrl,
-                    palette: article.category.palette),
+                  imageUrl: article.imageUrl,
+                  palette: article.category.palette,
+                ),
               ),
             ),
             const SizedBox(width: 14),
@@ -696,7 +791,10 @@ class _FeedRow extends StatelessWidget {
                   Text(
                     article.excerpt,
                     style: TextStyle(
-                        fontSize: 12, color: p.textMuted, height: 1.4),
+                      fontSize: 12,
+                      color: p.textMuted,
+                      height: 1.4,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -709,8 +807,7 @@ class _FeedRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Icon(Icons.arrow_forward_ios_rounded,
-                size: 14, color: p.textMuted),
+            Icon(Icons.arrow_forward_ios_rounded, size: 14, color: p.textMuted),
           ],
         ),
       ),

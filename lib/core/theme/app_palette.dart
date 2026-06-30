@@ -46,32 +46,32 @@ class AppPalette {
   // ── Gündüz · pastel wellness × gen-z ─────────────────────────────────────────
   static const light = AppPalette(
     isDark: false,
-    base: Color(0xFFF7F5FF),       // barely-lavender white
+    base: Color(0xFFF7F5FF), // barely-lavender white
     aura: [Color(0xFFF7F5FF), Color(0xFFF0ECFF), Color(0xFFF5F0FF)],
     surface: Color(0xFFFFFFFF),
     surfaceStrong: Color(0xFFEFECFF),
-    text: Color(0xFF1E1B2E),       // deep purple-black
-    textMuted: Color(0xFF8B85A0),  // dusty lilac-gray
-    border: Color(0xFFE4DFFF),     // lavender border
-    accent: Color(0xFF8B5CF6),     // violet-purple
+    text: Color(0xFF1E1B2E), // deep purple-black
+    textMuted: Color(0xFF8B85A0), // dusty lilac-gray
+    border: Color(0xFFE4DFFF), // lavender border
+    accent: Color(0xFF8B5CF6), // violet-purple
     accentSoft: Color(0xFFEDE9FF),
-    amber: Color(0xFFF472B6),      // blush pink pop
+    amber: Color(0xFFF472B6), // blush pink pop
     onAccent: Color(0xFFFFFFFF),
   );
 
   // ── Gece · deep purple luxe ───────────────────────────────────────────────────
   static const dark = AppPalette(
     isDark: true,
-    base: Color(0xFF0F0D1A),       // deep purple-black
+    base: Color(0xFF0F0D1A), // deep purple-black
     aura: [Color(0xFF120F1E), Color(0xFF1A1528), Color(0xFF0F0D1A)],
     surface: Color(0x18FFFFFF),
     surfaceStrong: Color(0xFF1E1A2E),
     text: Color(0xFFF0EEFF),
     textMuted: Color(0xFF9B94B8),
     border: Color(0x28FFFFFF),
-    accent: Color(0xFFA78BFA),     // lighter violet for dark mode
+    accent: Color(0xFFA78BFA), // lighter violet for dark mode
     accentSoft: Color(0xFF4C3B8A),
-    amber: Color(0xFFF9A8D4),      // soft pink
+    amber: Color(0xFFF9A8D4), // soft pink
     onAccent: Color(0xFF0F0D1A),
   );
 }
