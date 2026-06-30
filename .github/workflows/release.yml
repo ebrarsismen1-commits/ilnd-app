@@ -1,0 +1,88 @@
+name: Release (signed Android build)
+
+# Fires on version tags (v1.0.0, v1.0.1, ...). Produces a real, store-signed
+# .aab using the upload keystore — unlike ci.yml's build job, which is
+# debug-signed and only verifies the build compiles.
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+env:
+  FLUTTER_VERSION: "3.44.1"
+
+jobs:
+  build-signed:
+    name: Build signed App Bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate localizations
+        run: flutter gen-l10n
+
+      # Reconstructs android/key.properties + the upload keystore from repo
+      # secrets at build time. None of this is ever written to disk outside
+      # the ephemeral runner, and the keystore file is removed in the
+      # always-run cleanup step below regardless of build outcome.
+      #
+      # Required secrets (set these in repo Settings → Secrets → Actions —
+      # see android/KEYSTORE.md for how to generate the keystore itself):
+      #   ANDROID_KEYSTORE_BASE64   base64 of the .jks/.keystore file
+      #   ANDROID_KEY_ALIAS
+      #   ANDROID_KEY_PASSWORD
+      #   ANDROID_STORE_PASSWORD
+      - name: Check signing secrets are configured
+        id: signing
+        run: |
+          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fail early with a clear message if signing isn't configured
+        if: steps.signing.outputs.configured == 'false'
+        run: |
+          echo "::error::ANDROID_KEYSTORE_BASE64 (and the other ANDROID_* secrets) aren't set on this repo yet. See android/KEYSTORE.md to generate the upload keystore, then add it as a repo secret before pushing a release tag."
+          exit 1
+
+      - name: Reconstruct keystore and key.properties
+        working-directory: android
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > upload-keystore.jks
+          cat > key.properties <<EOF
+          storePassword=$ANDROID_STORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=$(pwd)/upload-keystore.jks
+          EOF
+
+      - name: Build signed App Bundle
+        run: flutter build appbundle --release
+
+      - name: Remove keystore from the runner
+        if: always()
+        working-directory: android
+        run: rm -f upload-keystore.jks key.properties
+
+      - name: Upload signed App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: ilnd-release-${{ github.ref_name }}
+          path: build/app/outputs/bundle/release/*.aab
+          retention-days: 90
