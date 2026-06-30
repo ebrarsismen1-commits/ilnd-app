@@ -46,6 +46,40 @@ abstract final class AppConfig {
     defaultValue: '',
   );
 
+  // ── RevenueCat ──────────────────────────────────────────────────────────────
+  static const revenueCatApiKey = String.fromEnvironment(
+    'REVENUECAT_API_KEY',
+    defaultValue: '',
+  );
+
+  // ── Auth köprüsü (Supabase JWT -> Firebase custom token) ──────────────────────
+  // functions/index.js'teki mintFirebaseToken endpoint'i. Deploy edilince
+  // https://<region>-<project-id>.cloudfunctions.net/mintFirebaseToken olur.
+  static const authBridgeUrl = String.fromEnvironment(
+    'AUTH_BRIDGE_URL',
+    defaultValue: '',
+  );
+
+  static bool get isAuthBridgeConfigured => authBridgeUrl.isNotEmpty;
+
+  // ── Diğer Cloud Functions ───────────────────────────────────────────────────
+  // Hepsi aynı projeye deploy edilir, bu yüzden authBridgeUrl'in tabanından
+  // (https://<region>-<project-id>.cloudfunctions.net/) türetilir — her
+  // fonksiyon için ayrı bir env değişkeni eklemeye gerek bırakmaz.
+  static String _siblingFunctionUrl(String functionName) {
+    if (authBridgeUrl.isEmpty) return '';
+    final lastSlash = authBridgeUrl.lastIndexOf('/');
+    if (lastSlash == -1) return '';
+    return '${authBridgeUrl.substring(0, lastSlash + 1)}$functionName';
+  }
+
+  static String get anthropicProxyUrl => _siblingFunctionUrl('anthropicProxy');
+  static String get redeemReferralCodeUrl =>
+      _siblingFunctionUrl('redeemReferralCode');
+  static String get deleteAccountUrl => _siblingFunctionUrl('deleteAccount');
+
+  static bool get isAnthropicProxyConfigured => anthropicProxyUrl.isNotEmpty;
+
   // ── Validation ──────────────────────────────────────────────────────────────
   static bool get isSupabaseConfigured =>
       supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;

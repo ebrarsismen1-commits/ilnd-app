@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:ilnd_app/core/ilnd/ilnd_character.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
+import 'package:ilnd_app/core/services/app_check_headers.dart';
+import 'package:ilnd_app/core/services/app_config.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// ILND'nin maliyet kademesi.
 ///
@@ -16,18 +20,6 @@ enum IlndTier {
 
   /// Derin koçluk, plan, çok adımlı muhakeme → güçlü model.
   deep,
-}
-
-extension on IlndTier {
-  String get model => switch (this) {
-        IlndTier.quick => 'claude-haiku-4-5',
-        IlndTier.deep => 'claude-sonnet-4-6',
-      };
-
-  int get maxTokens => switch (this) {
-        IlndTier.quick => 512,
-        IlndTier.deep => 1024,
-      };
 }
 
 /// Tek bir konuşma turu.
@@ -44,29 +36,50 @@ class IlndTurn {
 class IlndService {
   const IlndService();
 
-  static const _endpoint = 'https://api.anthropic.com/v1/messages';
-  // TODO: ship öncesi güvenli depolamaya / backend proxy'ye taşı.
-  static const _apiKey = String.fromEnvironment('ANTHROPIC_API_KEY');
+  /// functions/index.js'teki anthropicProxy: Anthropic API anahtarı sunucuda
+  /// tutulur, çağıran Firebase ID token ile doğrulanır, günlük kademe başı
+  /// kullanım sınırı sunucu tarafında uygulanır. Anahtar artık client
+  /// binary'sinde hiç bulunmaz.
+  Future<http.Response> _callProxy(
+    Map<String, dynamic> body,
+    AppLocalizations l10n,
+  ) async {
+    final idToken = await fb_auth.FirebaseAuth.instance.currentUser
+        ?.getIdToken();
+    if (idToken == null) {
+      throw IlndServiceException(l10n.ilndServiceSessionError);
+    }
+    return http.post(
+      Uri.parse(AppConfig.anthropicProxyUrl),
+      headers: {
+        'Authorization': 'Bearer $idToken',
+        'content-type': 'application/json',
+        ...await appCheckHeaders(),
+      },
+      body: jsonEncode(body),
+    );
+  }
 
   /// Serbest metin yanıtı üretir (sohbet, günlük yorumu, proaktif mesaj).
   ///
   /// [history] varsa çok turlu bağlam sağlar; [memory] ILND'nin kullanıcı
   /// bağlamıdır; [task] özelliğe özel kısa talimattır.
-  /// [fallback] verilirse — API anahtarı yoksa veya çağrı başarısız olursa —
-  /// hata fırlatmak yerine bu karakter-içi cevabı döndürür. Demoyu kurşun
-  /// geçirmez yapar: kullanıcı asla hata balonu görmez.
+  /// [fallback] verilirse — proxy yapılandırılmamışsa, günlük limit dolduysa
+  /// veya çağrı başarısız olursa — hata fırlatmak yerine bu karakter-içi
+  /// cevabı döndürür. Demoyu kurşun geçirmez yapar: kullanıcı asla hata
+  /// balonu görmez.
   Future<String> respond({
     required IlndMemory memory,
     required String userMessage,
+    required AppLocalizations l10n,
     List<IlndTurn> history = const [],
     String? task,
     IlndTier tier = IlndTier.quick,
     String? fallback,
   }) async {
-    // Anahtar yoksa canlı çağrıya hiç gitme; yedek varsa onu ver.
-    if (_apiKey.isEmpty) {
+    if (!AppConfig.isAnthropicProxyConfigured) {
       if (fallback != null) return fallback;
-      throw const IlndServiceException('ILND şu an yanıt veremiyor.');
+      throw IlndServiceException(l10n.ilndServiceUnavailable);
     }
 
     try {
@@ -76,31 +89,23 @@ class IlndService {
         {'role': 'user', 'content': userMessage},
       ];
 
-      final body = jsonEncode({
-        'model': tier.model,
-        'max_tokens': tier.maxTokens,
+      final response = await _callProxy({
+        'tier': tier.name,
         'system': IlndCharacter.systemPrompt(memory: memory, task: task),
         'messages': messages,
-      });
+      }, l10n);
 
-      final response = await http.post(
-        Uri.parse(_endpoint),
-        headers: const {
-          'x-api-key': _apiKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-        },
-        body: body,
-      );
-
+      if (response.statusCode == 429) {
+        throw IlndServiceException(l10n.ilndServiceDailyLimitReached);
+      }
       if (response.statusCode != 200) {
         throw IlndServiceException(
-          'ILND yanıt veremedi (${response.statusCode}).',
+          l10n.ilndServiceResponseFailed(response.statusCode),
         );
       }
 
-      final decoded = jsonDecode(utf8.decode(response.bodyBytes))
-          as Map<String, dynamic>;
+      final decoded =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       final content = decoded['content'] as List;
       return (content.first['text'] as String).trim();
     } catch (e) {
@@ -117,53 +122,55 @@ class IlndService {
   /// Çıkaracak kalıcı bir şey yoksa boş listeler döner.
   Future<({List<String> goals, List<String> facts})> extractMemory({
     required String text,
+    required AppLocalizations l10n,
     IlndMemory known = const IlndMemory(),
   }) async {
     final knownCtx = [
       if (known.goals.isNotEmpty) 'Bilinen hedefler: ${known.goals.join(', ')}',
-      if (known.facts.isNotEmpty) 'Bilinen gerçekler: ${known.facts.join('; ')}',
+      if (known.facts.isNotEmpty)
+        'Bilinen gerçekler: ${known.facts.join('; ')}',
     ].join('\n');
 
-    final body = jsonEncode({
-      'model': IlndTier.quick.model,
-      'max_tokens': 300,
-      'system':
-          'Bir metinden, bir kullanıcı hakkında UZUN VADELİ hatırlanmaya değer '
-          'kalıcı bilgileri çıkaran bir ayıklayıcısın. Sadece istikrarlı '
-          'gerçekleri (ör. beslenme tercihi, alerji, yaşam düzeni) ve gerçek '
-          'hedefleri al. Geçici ruh halini veya tek seferlik olayları ALMA. '
-          'Zaten bilinenleri tekrar etme. Türkçe, kısa maddeler. Emin değilsen '
-          'boş bırak.',
-      'messages': [
-        {
-          'role': 'user',
-          'content': '${knownCtx.isNotEmpty ? '$knownCtx\n\n' : ''}'
-              'Metin:\n$text\n\n'
-              'Yalnızca şu JSON yapısında yanıt ver, başka hiçbir şey yazma:\n'
-              '{"hedefler": ["..."], "gercekler": ["..."]}',
-        },
-        {'role': 'assistant', 'content': '{'},
-      ],
-    });
+    if (!AppConfig.isAnthropicProxyConfigured) {
+      return (goals: const <String>[], facts: const <String>[]);
+    }
 
-    final response = await http.post(
-      Uri.parse(_endpoint),
-      headers: const {
-        'x-api-key': _apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
-      body: body,
-    );
+    http.Response response;
+    try {
+      response = await _callProxy({
+        'tier': IlndTier.quick.name,
+        'system':
+            'Bir metinden, bir kullanıcı hakkında UZUN VADELİ hatırlanmaya değer '
+            'kalıcı bilgileri çıkaran bir ayıklayıcısın. Sadece istikrarlı '
+            'gerçekleri (ör. beslenme tercihi, alerji, yaşam düzeni) ve gerçek '
+            'hedefleri al. Geçici ruh halini veya tek seferlik olayları ALMA. '
+            'Zaten bilinenleri tekrar etme. Türkçe, kısa maddeler. Emin değilsen '
+            'boş bırak.',
+        'messages': [
+          {
+            'role': 'user',
+            'content':
+                '${knownCtx.isNotEmpty ? '$knownCtx\n\n' : ''}'
+                'Metin:\n$text\n\n'
+                'Yalnızca şu JSON yapısında yanıt ver, başka hiçbir şey yazma:\n'
+                '{"hedefler": ["..."], "gercekler": ["..."]}',
+          },
+          {'role': 'assistant', 'content': '{'},
+        ],
+      }, l10n);
+    } catch (_) {
+      return (goals: const <String>[], facts: const <String>[]);
+    }
 
     if (response.statusCode != 200) {
       return (goals: const <String>[], facts: const <String>[]);
     }
 
     try {
-      final decoded = jsonDecode(utf8.decode(response.bodyBytes))
-          as Map<String, dynamic>;
-      var raw = '{${(decoded['content'] as List).first['text'] as String}'.trim();
+      final decoded =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      var raw = '{${(decoded['content'] as List).first['text'] as String}'
+          .trim();
       final lastBrace = raw.lastIndexOf('}');
       if (lastBrace != -1) raw = raw.substring(0, lastBrace + 1);
       final parsed = jsonDecode(raw) as Map<String, dynamic>;
@@ -176,13 +183,13 @@ class IlndService {
     }
   }
 
-  /// Hata mesajlarını kullanıcı dostu Türkçeye çevirir.
-  static String friendlyError(Object error) {
+  /// Hata mesajlarını kullanıcı dostu, yerelleştirilmiş bir mesaja çevirir.
+  static String friendlyError(Object error, AppLocalizations l10n) {
     if (error is SocketException) {
-      return 'İnternet bağlantısı yok. Bağlantını kontrol et.';
+      return l10n.ilndServiceNoInternet;
     }
     if (error is IlndServiceException) return error.message;
-    return 'Bir şeyler ters gitti. Birazdan tekrar dener misin?';
+    return l10n.ilndServiceGenericError;
   }
 }
 

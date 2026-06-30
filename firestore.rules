@@ -12,5 +12,63 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false; // Admin SDK ile yazılır
     }
+
+    // Referral kodları — okuma tüm authenticated kullanıcılara açık (kod
+    // çözümleme ve sayaç/istatistik için). Yazma SADECE doküman sahibinin
+    // kendi başlangıç dokümanını (referral_code) oluşturmasına izin verir;
+    // founding_member / premium_access_until / referred_by_code alanları
+    // create sonrası ASLA client tarafından değiştirilemez — bunlar yalnızca
+    // functions/index.js'teki redeemReferralCode (Admin SDK, transaction)
+    // tarafından yazılır. Önceki sürümde bu kural `allow write: if true`
+    // idi ve herkes kendine sınırsız premium verebiliyordu (P0, kapatıldı).
+    match /user_growth/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.founding_member == false
+        && request.resource.data.premium_access_until == null
+        && request.resource.data.referred_by_code == null;
+      allow update, delete: if false;
+    }
+
+    // Append-only referral kayıtları — sadece redeemReferralCode (Admin SDK)
+    // yazar. İstatistik/sayaç amaçlı herkes (authenticated) okuyabilir.
+    match /referrals/{referralId} {
+      allow read: if request.auth != null;
+      allow create, update, delete: if false;
+    }
+
+    // Alışkanlıklar ve tamamlama kayıtları — top-level koleksiyonlar
+    // (users/{uid}/... değil), userId alanına göre sahiplik kontrolü.
+    // ÖNEMLİ: bu koleksiyonlar için önceden HİÇ rule yoktu — Firestore'un
+    // varsayılan deny-all'ı yüzünden takip ekranı production'da tamamen
+    // permission-denied veriyordu. Bu, Phase 1 audit sırasında keşfedilen
+    // ayrı bir fonksiyonel hataydı (bilinen güvenlik bulgularından biri
+    // değil), düzeltildi.
+    match /habits/{habitId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+    }
+
+    match /habit_completions/{completionId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // Sosyal kanıt sayacı için anonim, kullanıcı başına günde tek doküman.
+    // Toplam aktif kullanıcı sayısını saymak için herkes (authenticated)
+    // okuyabilir; her kullanıcı sadece kendi kaydını yazabilir.
+    match /daily_checkins/{checkinId} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+      allow delete: if false;
+    }
   }
 }

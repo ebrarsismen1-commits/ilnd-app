@@ -38,14 +38,14 @@ class FoodEntry {
   }
 
   Map<String, dynamic> toMap(String userId) => {
-        'userId': userId,
-        'yemekAdi': yemekAdi,
-        'kalori': kalori,
-        'protein': protein,
-        'karbonhidrat': karbonhidrat,
-        'yag': yag,
-        'createdAt': Timestamp.fromDate(createdAt),
-      };
+    'userId': userId,
+    'yemekAdi': yemekAdi,
+    'kalori': kalori,
+    'protein': protein,
+    'karbonhidrat': karbonhidrat,
+    'yag': yag,
+    'createdAt': Timestamp.fromDate(createdAt),
+  };
 }
 
 // ─── Makro toplamı (bugün) ────────────────────────────────────────────────────
@@ -63,11 +63,11 @@ class DailyMacros {
   final int yag;
 
   static DailyMacros fromEntries(List<FoodEntry> entries) => DailyMacros(
-        kalori: entries.fold(0, (s, e) => s + e.kalori),
-        protein: entries.fold(0, (s, e) => s + e.protein),
-        karbonhidrat: entries.fold(0, (s, e) => s + e.karbonhidrat),
-        yag: entries.fold(0, (s, e) => s + e.yag),
-      );
+    kalori: entries.fold(0, (s, e) => s + e.kalori),
+    protein: entries.fold(0, (s, e) => s + e.protein),
+    karbonhidrat: entries.fold(0, (s, e) => s + e.karbonhidrat),
+    yag: entries.fold(0, (s, e) => s + e.yag),
+  );
 }
 
 // ─── Repository ───────────────────────────────────────────────────────────────
@@ -77,7 +77,8 @@ class FoodRepository {
 
   final String _userId;
 
-  CollectionReference<Map<String, dynamic>> get _col => FirebaseService.firestore
+  CollectionReference<Map<String, dynamic>> get _col => FirebaseService
+      .firestore
       .collection('users')
       .doc(_userId)
       .collection('food_entries');
