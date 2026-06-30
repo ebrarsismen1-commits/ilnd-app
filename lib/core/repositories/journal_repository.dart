@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ilnd_app/core/repositories/checkin_repository.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 
@@ -29,11 +32,11 @@ class JournalEntry {
   }
 
   Map<String, dynamic> toMap(String userId) => {
-        'userId': userId,
-        'body': body,
-        'ilndReply': ilndReply,
-        'createdAt': Timestamp.fromDate(createdAt),
-      };
+    'userId': userId,
+    'body': body,
+    'ilndReply': ilndReply,
+    'createdAt': Timestamp.fromDate(createdAt),
+  };
 }
 
 // ─── Repository ───────────────────────────────────────────────────────────────
@@ -43,7 +46,8 @@ class JournalRepository {
 
   final String _userId;
 
-  CollectionReference<Map<String, dynamic>> get _col => FirebaseService.firestore
+  CollectionReference<Map<String, dynamic>> get _col => FirebaseService
+      .firestore
       .collection('users')
       .doc(_userId)
       .collection('journal_entries');
@@ -53,8 +57,10 @@ class JournalRepository {
       .snapshots()
       .map((snap) => snap.docs.map(JournalEntry.fromDoc).toList());
 
-  Future<void> add(JournalEntry entry) =>
-      _col.add(entry.toMap(_userId));
+  Future<void> add(JournalEntry entry) async {
+    await _col.add(entry.toMap(_userId));
+    unawaited(CheckinRepository.markActiveToday(_userId));
+  }
 }
 
 // ─── Provider ─────────────────────────────────────────────────────────────────

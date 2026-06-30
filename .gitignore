@@ -9,6 +9,16 @@ ios/Runner/GoogleService-Info.plist
 key.properties
 android/key.properties
 
+# ── Business / design documents — not part of source history
+*.pptx
+*.docx
+*.pdf
+concept.html
+
+# ── Flutter project tooling (IDE-local, changes too often to be useful)
+.metadata
+.flutter-plugins
+
 # ── Miscellaneous
 *.class
 *.log

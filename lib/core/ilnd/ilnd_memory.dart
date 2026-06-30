@@ -64,18 +64,18 @@ class IlndMemory {
   }
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'goals': goals,
-        'facts': facts,
-        'recentNotes': recentNotes,
-      };
+    'name': name,
+    'goals': goals,
+    'facts': facts,
+    'recentNotes': recentNotes,
+  };
 
   factory IlndMemory.fromJson(Map<String, dynamic> j) => IlndMemory(
-        name: (j['name'] as String?) ?? '',
-        goals: List<String>.from((j['goals'] as List?) ?? const []),
-        facts: List<String>.from((j['facts'] as List?) ?? const []),
-        recentNotes: List<String>.from((j['recentNotes'] as List?) ?? const []),
-      );
+    name: (j['name'] as String?) ?? '',
+    goals: List<String>.from((j['goals'] as List?) ?? const []),
+    facts: List<String>.from((j['facts'] as List?) ?? const []),
+    recentNotes: List<String>.from((j['recentNotes'] as List?) ?? const []),
+  );
 }
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
@@ -84,11 +84,11 @@ const _kIlndMemory = 'ilnd_memory';
 
 final ilndMemoryProvider =
     StateNotifierProvider<IlndMemoryNotifier, IlndMemory>((ref) {
-  final prefs = ref.watch(sharedPreferencesProvider);
-  // Onboarding'de girilen ad varsa hafızayı onunla tohumla.
-  final seedName = ref.watch(userNameProvider);
-  return IlndMemoryNotifier(prefs, seedName);
-});
+      final prefs = ref.watch(sharedPreferencesProvider);
+      // Onboarding'de girilen ad varsa hafızayı onunla tohumla.
+      final seedName = ref.watch(userNameProvider);
+      return IlndMemoryNotifier(prefs, seedName);
+    });
 
 class IlndMemoryNotifier extends StateNotifier<IlndMemory> {
   IlndMemoryNotifier(this._prefs, String seedName) : super(const IlndMemory()) {
@@ -146,11 +146,15 @@ class IlndMemoryNotifier extends StateNotifier<IlndMemory> {
   }
 
   /// Yeni bir etkileşim notu ekler; ücretsiz katmanda pencereyi kırpar.
-  Future<void> addNote(String note, {int limit = IlndMemory.freeRecentNotesLimit}) async {
+  Future<void> addNote(
+    String note, {
+    int limit = IlndMemory.freeRecentNotesLimit,
+  }) async {
     if (note.trim().isEmpty) return;
     final notes = [...state.recentNotes, note.trim()];
-    final trimmed =
-        notes.length > limit ? notes.sublist(notes.length - limit) : notes;
+    final trimmed = notes.length > limit
+        ? notes.sublist(notes.length - limit)
+        : notes;
     state = state.copyWith(recentNotes: trimmed);
     await _persist();
   }

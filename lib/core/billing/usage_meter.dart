@@ -37,19 +37,22 @@ class UsageState {
       (kFreeWeeklyLimits[kind] ?? 0) - countOf(kind);
 
   UsageState copyWith({String? weekKey, Map<UsageKind, int>? counts}) =>
-      UsageState(weekKey: weekKey ?? this.weekKey, counts: counts ?? this.counts);
+      UsageState(
+        weekKey: weekKey ?? this.weekKey,
+        counts: counts ?? this.counts,
+      );
 }
 
 const _kUsage = 'usage_meter';
 
 final usageMeterProvider =
     StateNotifierProvider<UsageMeterNotifier, UsageState>((ref) {
-  return UsageMeterNotifier(ref.watch(sharedPreferencesProvider));
-});
+      return UsageMeterNotifier(ref.watch(sharedPreferencesProvider));
+    });
 
 class UsageMeterNotifier extends StateNotifier<UsageState> {
   UsageMeterNotifier(this._prefs)
-      : super(UsageState(weekKey: _currentWeekKey())) {
+    : super(UsageState(weekKey: _currentWeekKey())) {
     _load();
   }
 
@@ -59,7 +62,8 @@ class UsageMeterNotifier extends StateNotifier<UsageState> {
     final now = DateTime.now();
     // ISO-8601 hafta numarası yaklaşığı: yılın gününü 7'ye böl.
     final dayOfYear = int.parse(
-        '${now.difference(DateTime(now.year, 1, 1)).inDays + 1}');
+      '${now.difference(DateTime(now.year, 1, 1)).inDays + 1}',
+    );
     final week = ((dayOfYear - now.weekday + 10) ~/ 7);
     return '${now.year}-W$week';
   }
@@ -97,9 +101,7 @@ class UsageMeterNotifier extends StateNotifier<UsageState> {
       _kUsage,
       jsonEncode({
         'weekKey': state.weekKey,
-        'counts': {
-          for (final e in state.counts.entries) e.key.name: e.value,
-        },
+        'counts': {for (final e in state.counts.entries) e.key.name: e.value},
       }),
     );
   }

@@ -8,13 +8,13 @@ abstract final class FirebaseService {
   static FirebaseApp? _app;
 
   static FirebaseOptions get _options => FirebaseOptions(
-        apiKey: AppConfig.firebaseApiKey,
-        authDomain: AppConfig.firebaseAuthDomain,
-        projectId: AppConfig.firebaseProjectId,
-        storageBucket: AppConfig.firebaseStorageBucket,
-        messagingSenderId: AppConfig.firebaseMessagingSenderId,
-        appId: AppConfig.firebaseAppId,
-      );
+    apiKey: AppConfig.firebaseApiKey,
+    authDomain: AppConfig.firebaseAuthDomain,
+    projectId: AppConfig.firebaseProjectId,
+    storageBucket: AppConfig.firebaseStorageBucket,
+    messagingSenderId: AppConfig.firebaseMessagingSenderId,
+    appId: AppConfig.firebaseAppId,
+  );
 
   static Future<void> initialize() async {
     if (_app != null) return;

@@ -38,10 +38,7 @@ Sınırların (çok önemli):
   /// Tam sistem prompt'unu kullanıcı hafızasıyla birlikte üretir.
   ///
   /// [task] her özelliğe özel kısa görev talimatıdır (ör. "yemek yorumu yap").
-  static String systemPrompt({
-    required IlndMemory memory,
-    String? task,
-  }) {
+  static String systemPrompt({required IlndMemory memory, String? task}) {
     final buffer = StringBuffer(_persona);
 
     final memo = memory.toPromptContext();

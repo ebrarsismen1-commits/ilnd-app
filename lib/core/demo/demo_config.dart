@@ -29,14 +29,8 @@ const IlndMemory kDemoMemory = IlndMemory(
 
 /// Sohbet ekranını "ilişki zaten sürüyor" hissiyle açan örnek diyalog.
 const List<({bool fromUser, String text})> kDemoChatOpening = [
-  (
-    fromUser: false,
-    text: 'günaydın Ela 🌿 dün akşam yürüyüşün nasıl geçti?',
-  ),
-  (
-    fromUser: true,
-    text: 'iyiydi aslında, kafam biraz dağıldı',
-  ),
+  (fromUser: false, text: 'günaydın Ela 🌿 dün akşam yürüyüşün nasıl geçti?'),
+  (fromUser: true, text: 'iyiydi aslında, kafam biraz dağıldı'),
   (
     fromUser: false,
     text:
