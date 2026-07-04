@@ -9,6 +9,20 @@ class CoverImage extends StatelessWidget {
   final String? imageUrl;
   final int palette;
 
+  /// "Renk arayüzden değil fotoğraftan gelir" (CLAUDE.md) — ama fotoğraf da
+  /// canlı/turist-Instagram doygunluğunda olmamalı, sessiz-editoryal bir
+  /// muted tona çekiliyor. Unsplash'ın CDN'i imgix tabanlı, bu yüzden
+  /// query param'larla (indirme gerekmeden) doygunluğu düşürebiliyoruz.
+  /// Unsplash dışı (örn. Firestore'a yüklenen) görsellerde no-op kalır.
+  static String _editorial(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null || !uri.host.contains('unsplash.com')) return url;
+    final params = Map<String, String>.from(uri.queryParameters)
+      ..['sat'] = '-35'
+      ..['con'] = '-6';
+    return uri.replace(queryParameters: params).toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final fallback = EditorialGradient(palette: palette);
@@ -16,7 +30,7 @@ class CoverImage extends StatelessWidget {
     if (url == null || url.isEmpty) return fallback;
 
     return Image.network(
-      url,
+      _editorial(url),
       fit: BoxFit.cover,
       gaplessPlayback: true,
       loadingBuilder: (context, child, progress) =>

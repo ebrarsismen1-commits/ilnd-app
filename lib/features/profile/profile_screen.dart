@@ -10,6 +10,7 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/auth/auth_error_l10n.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
@@ -833,7 +834,10 @@ class _SettingsSection extends ConsumerWidget {
     } catch (e) {
       if (!context.mounted) return;
       Navigator.of(context).pop(); // loading dialog
-      IlndToast.error(context, e.toString());
+      final message = e is AuthErrorCode
+          ? e.localized(l10n)
+          : l10n.authErrorDeleteFailed;
+      IlndToast.error(context, message);
     }
   }
 }

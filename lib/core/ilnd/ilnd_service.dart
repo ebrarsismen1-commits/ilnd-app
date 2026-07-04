@@ -49,15 +49,19 @@ class IlndService {
     if (idToken == null) {
       throw IlndServiceException(l10n.ilndServiceSessionError);
     }
-    return http.post(
-      Uri.parse(AppConfig.anthropicProxyUrl),
-      headers: {
-        'Authorization': 'Bearer $idToken',
-        'content-type': 'application/json',
-        ...await appCheckHeaders(),
-      },
-      body: jsonEncode(body),
-    );
+    return http
+        .post(
+          Uri.parse(AppConfig.anthropicProxyUrl),
+          headers: {
+            'Authorization': 'Bearer $idToken',
+            'content-type': 'application/json',
+            ...await appCheckHeaders(),
+          },
+          body: jsonEncode(body),
+        )
+        // LLM yanıtı yavaş olabilir ama sınırsız değil — timeout olmadan
+        // asılı kalan tek istek, sohbeti kalıcı 'sending' kilidinde bırakır.
+        .timeout(const Duration(seconds: 60));
   }
 
   /// Serbest metin yanıtı üretir (sohbet, günlük yorumu, proaktif mesaj).
@@ -91,7 +95,11 @@ class IlndService {
 
       final response = await _callProxy({
         'tier': tier.name,
-        'system': IlndCharacter.systemPrompt(memory: memory, task: task),
+        'system': IlndCharacter.systemPrompt(
+          memory: memory,
+          task: task,
+          languageCode: l10n.localeName.split('_').first,
+        ),
         'messages': messages,
       }, l10n);
 

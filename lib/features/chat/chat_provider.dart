@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/billing/usage_meter.dart';
+import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/core/demo/demo_config.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_learner.dart';
@@ -51,9 +52,17 @@ class ChatState {
   );
 }
 
-final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>(
-  (ref) => ChatNotifier(ref),
-);
+final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>((ref) {
+  // Hesap değişiminde sohbet sıfırlanır — önceki kullanıcının konuşması
+  // ekranda ya da AI bağlamında yeni kullanıcıya taşınmaz. select(uid)
+  // sayesinde token yenilemeleri (aynı uid) sohbeti sıfırlamaz.
+  ref.watch(
+    authNotifierProvider.select(
+      (s) => s is AuthAuthenticated ? s.user.id : null,
+    ),
+  );
+  return ChatNotifier(ref);
+});
 
 class ChatNotifier extends StateNotifier<ChatState> {
   ChatNotifier(this._ref) : super(_initialState());
@@ -131,6 +140,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
     } catch (e) {
       reply = IlndService.friendlyError(e, l10n);
     }
+
+    // Hesap değişimi bu notifier'ı istek uçuştayken dispose etmiş olabilir.
+    if (!mounted) return;
 
     final resolved = [...state.messages];
     final pendingIdx = resolved.lastIndexWhere((m) => m.pending);

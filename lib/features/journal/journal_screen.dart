@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_learner.dart';
+import 'package:ilnd_app/core/ilnd/crisis_guard.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
 import 'package:ilnd_app/core/repositories/journal_repository.dart';
@@ -364,6 +365,8 @@ class _WriteSheetState extends ConsumerState<_WriteSheet> {
 
     final l10n = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
+    // Kayıt akışı devam eder — destek dayatılmaz, sunulur.
+    if (CrisisGuard.matches(text)) showCrisisResourceSheet(context);
     setState(() => _phase = _WritePhase.reflecting);
 
     final memory = ref.read(ilndMemoryProvider);

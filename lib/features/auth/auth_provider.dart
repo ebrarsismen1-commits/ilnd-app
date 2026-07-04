@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
 
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/services/app_check_headers.dart';
@@ -34,11 +39,42 @@ class AuthUnauthenticated extends AuthState {
 }
 
 class AuthError extends AuthState {
-  const AuthError(this.message);
-  final String message;
+  const AuthError(this.code);
+  final AuthErrorCode code;
+}
+
+/// Locale-bağımsız hata kodları — UI katmanı bunları AppLocalizations ile
+/// kullanıcının dilinde metne çevirir (bkz. auth_error_l10n.dart).
+/// Provider katmanında hardcoded Türkçe metin bırakmak, İngilizce
+/// kullanıcıya Türkçe hata göstermek demekti.
+enum AuthErrorCode {
+  invalidCredentials,
+  emailInUse,
+  weakPassword,
+  userNotFound,
+  network,
+  invalidEmail,
+  generic,
+  confirmEmail,
+  signupFailed,
+  signOutFailed,
+  googleFailed,
+  appleFailed,
+  resetFailed,
+  deleteUnavailable,
+  deleteFailed,
 }
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
+
+/// Firestore kuralları Firebase'in kendi request.auth'una bakar; o oturum
+/// FirebaseAuthBridge tamamlanınca açılır. Kullanıcıya bağlı Firestore
+/// provider'ları bunu da izler: köprü bitmeden stream açıp permission-denied
+/// ile ölmek yerine (Firestore stream'i hatadan sonra kendini yenilemez),
+/// köprü girişi geldiğinde otomatik yeniden kurulurlar.
+final firebaseAuthUidProvider = StreamProvider<String?>(
+  (ref) => fb_auth.FirebaseAuth.instance.authStateChanges().map((u) => u?.uid),
+);
 
 final authNotifierProvider = StateNotifierProvider<AuthNotifier, AuthState>(
   (ref) => AuthNotifier(),
@@ -104,17 +140,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
       if (res.session != null) {
         state = AuthAuthenticated(res.user!);
       } else {
-        state = const AuthError(
-          'Giriş yapılamadı. E-posta onayı gerekiyor olabilir.',
-        );
+        state = const AuthError(AuthErrorCode.confirmEmail);
       }
     } on AuthException catch (e) {
       state = AuthError(_mapError(e));
     } catch (e) {
       debugPrint('[Auth] signIn error: $e');
-      state = const AuthError(
-        'Bağlantı hatası. İnternet bağlantınızı kontrol edin.',
-      );
+      state = const AuthError(AuthErrorCode.network);
     }
   }
 
@@ -141,15 +173,142 @@ class AuthNotifier extends StateNotifier<AuthState> {
         }
         // Her yeni kullanıcı kayıt anında bir referral koduna sahip olsun —
         // fire-and-forget, kayıt başarısını engellemesin.
-        unawaited(ReferralRepository(res.user!.id).ensureReferralCode());
+        unawaited(
+          ReferralRepository(res.user!.id).ensureReferralCode().catchError((e) {
+            debugPrint('[Auth] ensureReferralCode failed: $e');
+            return '';
+          }),
+        );
       }
       // signUp state'i auth stream'den otomatik gelir (AuthAuthenticated)
     } on AuthException catch (e) {
       state = AuthError(_mapError(e));
     } catch (e) {
       debugPrint('[Auth] signUp error: $e');
-      state = const AuthError('Kayıt oluşturulamadı. Lütfen tekrar deneyin.');
+      state = const AuthError(AuthErrorCode.signupFailed);
     }
+  }
+
+  /// Google ile giriş — native hesap seçici (google_sign_in), id_token'ı
+  /// Supabase'e devrederek oturum açar. Kullanıcı seçiciyi kapatırsa (iptal)
+  /// state sessizce [AuthUnauthenticated]'a döner, hata gösterilmez.
+  ///
+  /// Ön koşul: Supabase Authentication > Providers > Google aktif ve
+  /// AppConfig.googleServerClientId (Web OAuth client ID) dolu olmalı —
+  /// bkz. AppConfig.isGoogleSignInConfigured.
+  Future<void> signInWithGoogle() async {
+    state = const AuthLoading();
+    try {
+      final googleUser = await GoogleSignIn(
+        serverClientId: AppConfig.googleServerClientId,
+        scopes: const ['email'],
+      ).signIn();
+      if (googleUser == null) {
+        // Kullanıcı seçiciyi kapattı — hata değil, sadece geri dön.
+        state = const AuthUnauthenticated();
+        return;
+      }
+
+      final googleAuth = await googleUser.authentication;
+      final idToken = googleAuth.idToken;
+      if (idToken == null) {
+        state = const AuthError(AuthErrorCode.googleFailed);
+        return;
+      }
+
+      final res = await _client.auth
+          .signInWithIdToken(
+            provider: OAuthProvider.google,
+            idToken: idToken,
+            accessToken: googleAuth.accessToken,
+          )
+          .timeout(const Duration(seconds: 15));
+
+      if (res.user != null) {
+        unawaited(
+          ReferralRepository(res.user!.id).ensureReferralCode().catchError((e) {
+            debugPrint('[Auth] ensureReferralCode failed: $e');
+            return '';
+          }),
+        );
+      }
+      // Başarı state'i auth stream'den otomatik gelir (AuthAuthenticated).
+    } on AuthException catch (e) {
+      state = AuthError(_mapError(e));
+    } catch (e) {
+      debugPrint('[Auth] signInWithGoogle error: $e');
+      state = const AuthError(AuthErrorCode.googleFailed);
+    }
+  }
+
+  /// Apple ile giriş — Sign in with Apple, id_token'ı Supabase'e devreder.
+  /// Nonce, Apple'ın döndürdüğü id_token'ın bu istek için üretildiğini
+  /// doğrular (replay saldırılarına karşı) — Supabase dokümantasyonundaki
+  /// önerilen akış budur.
+  ///
+  /// Ön koşul: Supabase Authentication > Providers > Apple aktif olmalı,
+  /// iOS hedefinde "Sign in with Apple" capability eklenmiş olmalı.
+  Future<void> signInWithApple() async {
+    state = const AuthLoading();
+    try {
+      final rawNonce = _generateNonce();
+      final hashedNonce = sha256.convert(utf8.encode(rawNonce)).toString();
+
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: const [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: hashedNonce,
+      );
+
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        state = const AuthError(AuthErrorCode.appleFailed);
+        return;
+      }
+
+      final res = await _client.auth
+          .signInWithIdToken(
+            provider: OAuthProvider.apple,
+            idToken: idToken,
+            nonce: rawNonce,
+          )
+          .timeout(const Duration(seconds: 15));
+
+      if (res.user != null) {
+        unawaited(
+          ReferralRepository(res.user!.id).ensureReferralCode().catchError((e) {
+            debugPrint('[Auth] ensureReferralCode failed: $e');
+            return '';
+          }),
+        );
+      }
+      // Başarı state'i auth stream'den otomatik gelir (AuthAuthenticated).
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code == AuthorizationErrorCode.canceled) {
+        // Kullanıcı iptal etti — hata değil, sadece geri dön.
+        state = const AuthUnauthenticated();
+        return;
+      }
+      debugPrint('[Auth] signInWithApple authorization error: $e');
+      state = const AuthError(AuthErrorCode.appleFailed);
+    } on AuthException catch (e) {
+      state = AuthError(_mapError(e));
+    } catch (e) {
+      debugPrint('[Auth] signInWithApple error: $e');
+      state = const AuthError(AuthErrorCode.appleFailed);
+    }
+  }
+
+  String _generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(
+      length,
+      (_) => charset[random.nextInt(charset.length)],
+    ).join();
   }
 
   Future<void> signOut() async {
@@ -161,7 +320,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // Başarıyı taklit etme: gerçek oturum sunucuda hâlâ açık olabilir,
       // bunu AuthUnauthenticated'a çevirmek yeniden açılışta yanıltıcı
       // sessiz-yeniden-giriş'e yol açar.
-      state = const AuthError('Çıkış yapılamadı. Tekrar dener misin?');
+      state = const AuthError(AuthErrorCode.signOutFailed);
     }
   }
 
@@ -180,7 +339,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final idToken = await fb_auth.FirebaseAuth.instance.currentUser
           ?.getIdToken();
       if (idToken == null || !AppConfig.isAuthBridgeConfigured) {
-        throw 'Hesap silme servisi şu an kullanılamıyor.';
+        throw AuthErrorCode.deleteUnavailable;
       }
 
       final response = await http
@@ -194,7 +353,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           .timeout(const Duration(seconds: 30));
 
       if (response.statusCode != 200) {
-        throw 'Hesap silinemedi. Tekrar dener misin?';
+        throw AuthErrorCode.deleteFailed;
       }
 
       await _client.auth.signOut();
@@ -202,16 +361,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = const AuthUnauthenticated();
     } catch (e) {
       debugPrint('[Auth] deleteAccount error: $e');
-      final message = e is String ? e : 'Hesap silinemedi. Tekrar dener misin?';
+      final code = e is AuthErrorCode ? e : AuthErrorCode.deleteFailed;
       // Hata durumunda işlem öncesindeki authenticated state'e geri dön —
       // kullanıcı hâlâ giriş yapmış durumda, tekrar deneyebilmeli.
       state = previousState;
-      throw message;
+      throw code;
     }
   }
 
   /// Sends a password-reset e-mail via Supabase.
-  /// Throws a user-friendly Turkish string on failure.
+  /// Throws an [AuthErrorCode] on failure — UI localizes it.
   Future<void> resetPassword(String email) async {
     try {
       await _client.auth
@@ -220,34 +379,34 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } on AuthException catch (e) {
       throw _mapError(e);
     } catch (_) {
-      throw 'E-posta gönderilemedi. İnternet bağlantınızı kontrol edin.';
+      throw AuthErrorCode.resetFailed;
     }
   }
 
   // ── Error mapping ───────────────────────────────────────────────────────────
 
-  String _mapError(AuthException e) {
+  AuthErrorCode _mapError(AuthException e) {
     final msg = e.message.toLowerCase();
     if (msg.contains('invalid login') ||
         msg.contains('invalid email or password')) {
-      return 'E-posta veya şifre hatalı.';
+      return AuthErrorCode.invalidCredentials;
     }
     if (msg.contains('email already') || msg.contains('already registered')) {
-      return 'Bu e-posta adresi zaten kullanılıyor.';
+      return AuthErrorCode.emailInUse;
     }
     if (msg.contains('weak password') || msg.contains('at least 6')) {
-      return 'Şifre en az 6 karakter olmalıdır.';
+      return AuthErrorCode.weakPassword;
     }
     if (msg.contains('user not found')) {
-      return 'Bu e-posta ile kayıtlı kullanıcı bulunamadı.';
+      return AuthErrorCode.userNotFound;
     }
     if (msg.contains('network') || msg.contains('socket')) {
-      return 'Bağlantı hatası. İnternet bağlantınızı kontrol edin.';
+      return AuthErrorCode.network;
     }
     if (msg.contains('valid') && msg.contains('email')) {
-      return 'Geçerli bir e-posta adresi girin.';
+      return AuthErrorCode.invalidEmail;
     }
     debugPrint('[Auth] ${e.message}');
-    return 'Bir hata oluştu. Lütfen tekrar deneyin.';
+    return AuthErrorCode.generic;
   }
 }

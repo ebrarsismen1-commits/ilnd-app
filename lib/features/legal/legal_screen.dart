@@ -10,26 +10,29 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 /// Apple/Google App Privacy gereksinimleri için uygulama içinden erişilebilir
 /// olmaları zorunlu — bu ekran auth/onboarding durumundan bağımsız olarak
 /// `app_router.dart`'taki redirect mantığında özel olarak izinli.
+enum LegalDoc { privacy, terms }
+
 class LegalScreen extends ConsumerWidget {
-  const LegalScreen({super.key, required this.title, required this.body});
+  const LegalScreen({super.key, required this.doc});
 
-  final String title;
-  final String body;
+  final LegalDoc doc;
 
-  static const privacyPolicy = LegalScreen(
-    title: 'Gizlilik Politikası',
-    body: LegalContent.privacyPolicy,
-  );
-
-  static const termsOfService = LegalScreen(
-    title: 'Kullanım Şartları',
-    body: LegalContent.termsOfService,
-  );
+  static const privacyPolicy = LegalScreen(doc: LegalDoc.privacy);
+  static const termsOfService = LegalScreen(doc: LegalDoc.terms);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
+    // Başlıklar yerelleşti; gövde metni şimdilik Türkçe (hukuki çevirinin
+    // avukat onayı olmadan yayınlanması riskli — bilinçli olarak içerik
+    // görevi olarak bırakıldı, bkz. docs/ilnd_ekip_yol_haritasi.pdf).
+    final title = doc == LegalDoc.privacy
+        ? l10n.legalPrivacyTitle
+        : l10n.legalTermsTitle;
+    final body = doc == LegalDoc.privacy
+        ? LegalContent.privacyPolicy
+        : LegalContent.termsOfService;
 
     return Scaffold(
       backgroundColor: p.base,

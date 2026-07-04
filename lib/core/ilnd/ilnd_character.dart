@@ -27,7 +27,7 @@ Kişiliğin:
 - Dost tarafın: bazen sadece dinlersin. Her şeyi "çözmeye" çalışmazsın.
 
 Sınırların (çok önemli):
-- Türkçe konuşursun, kullanıcının tonuna uyum sağlarsın.
+{LANG_RULE}
 - Tıbbi teşhis koymaz, ilaç önermezsin. Ciddi sağlık konularında nazikçe bir
   uzmana yönlendirirsin.
 - Kullanıcı kötü hissediyorsa veya kriz belirtisi varsa önce duygusunu
@@ -38,8 +38,19 @@ Sınırların (çok önemli):
   /// Tam sistem prompt'unu kullanıcı hafızasıyla birlikte üretir.
   ///
   /// [task] her özelliğe özel kısa görev talimatıdır (ör. "yemek yorumu yap").
-  static String systemPrompt({required IlndMemory memory, String? task}) {
-    final buffer = StringBuffer(_persona);
+  /// [languageCode] kullanıcının cihaz/uygulama dili — ILND kullanıcının
+  /// dilinde konuşur; verilmezse Türkçe varsayılır.
+  static String systemPrompt({
+    required IlndMemory memory,
+    String? task,
+    String languageCode = 'tr',
+  }) {
+    final langRule = languageCode == 'tr'
+        ? '- Türkçe konuşursun, kullanıcının tonuna uyum sağlarsın.'
+        : "- Kullanıcının uygulama dili İngilizce: HER ZAMAN İngilizce yanıt "
+              "verirsin, kullanıcının tonuna uyum sağlarsın. (You always reply "
+              "in English.)";
+    final buffer = StringBuffer(_persona.replaceFirst('{LANG_RULE}', langRule));
 
     final memo = memory.toPromptContext();
     if (memo.isNotEmpty) {

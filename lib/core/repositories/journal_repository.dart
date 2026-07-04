@@ -22,7 +22,7 @@ class JournalEntry {
   final DateTime createdAt;
 
   factory JournalEntry.fromDoc(DocumentSnapshot doc) {
-    final data = doc.data()! as Map<String, dynamic>;
+    final data = doc.data() as Map<String, dynamic>? ?? const {};
     return JournalEntry(
       id: doc.id,
       body: data['body'] as String? ?? '',
@@ -66,6 +66,8 @@ class JournalRepository {
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 final journalRepositoryProvider = Provider<JournalRepository?>((ref) {
+  final fbUid = ref.watch(firebaseAuthUidProvider).valueOrNull;
+  if (fbUid == null) return null; // köprü girişi bekleniyor
   final auth = ref.watch(authNotifierProvider);
   if (auth is AuthAuthenticated) {
     return JournalRepository(auth.user.id);

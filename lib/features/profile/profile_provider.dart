@@ -32,6 +32,8 @@ class ProfileStats {
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 final profileStatsProvider = FutureProvider<ProfileStats>((ref) async {
+  final fbUid = ref.watch(firebaseAuthUidProvider).valueOrNull;
+  if (fbUid == null) return ProfileStats.zero; // köprü girişi bekleniyor
   final auth = ref.watch(authNotifierProvider);
   if (auth is! AuthAuthenticated) return ProfileStats.zero;
 

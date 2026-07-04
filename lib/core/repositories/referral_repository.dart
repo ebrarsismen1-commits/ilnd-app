@@ -26,7 +26,7 @@ class UserGrowthProfile {
   final DateTime? premiumAccessUntil;
 
   factory UserGrowthProfile.fromDoc(DocumentSnapshot doc) {
-    final data = doc.data()! as Map<String, dynamic>;
+    final data = doc.data() as Map<String, dynamic>? ?? const {};
     return UserGrowthProfile(
       referralCode: data['referral_code'] as String? ?? '',
       referredByCode: data['referred_by_code'] as String?,
@@ -131,6 +131,8 @@ class ReferralRepository {
 // ─── Providers ────────────────────────────────────────────────────────────────
 
 final referralRepositoryProvider = Provider<ReferralRepository?>((ref) {
+  final fbUid = ref.watch(firebaseAuthUidProvider).valueOrNull;
+  if (fbUid == null) return null; // köprü girişi bekleniyor
   final auth = ref.watch(authNotifierProvider);
   if (auth is AuthAuthenticated) {
     return ReferralRepository(auth.user.id);

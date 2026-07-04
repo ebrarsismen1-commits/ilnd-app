@@ -22,14 +22,4 @@ abstract final class FirebaseService {
   }
 
   static FirebaseFirestore get firestore => FirebaseFirestore.instance;
-
-  /// Bağlantıyı test eder — sadece geliştirme sırasında kullan.
-  static Future<bool> checkConnection() async {
-    try {
-      await firestore.collection('_health').limit(1).get();
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
 }

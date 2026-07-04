@@ -38,6 +38,117 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şifre sıfırlama bağlantısı e-postana gönderildi.';
 
   @override
+  String get authOrDivider => 'veya';
+
+  @override
+  String get authContinueWithGoogle => 'Google ile devam et';
+
+  @override
+  String get authContinueWithApple => 'Apple ile devam et';
+
+  @override
+  String get navHome => 'Ana Sayfa';
+
+  @override
+  String get navExplore => 'Keşfet';
+
+  @override
+  String get navTracking => 'Takip';
+
+  @override
+  String get navProfile => 'Profil';
+
+  @override
+  String socialProofWeekly(int count) {
+    return 'Bu hafta $count kişi kendine vakit ayırdı.';
+  }
+
+  @override
+  String get legalPrivacyTitle => 'Gizlilik Politikası';
+
+  @override
+  String get legalTermsTitle => 'Kullanım Şartları';
+
+  @override
+  String get startupFailedTitle => 'ilnd başlatılamadı';
+
+  @override
+  String get startupFailedBody =>
+      'İnternet bağlantını kontrol edip tekrar dene.';
+
+  @override
+  String get startupRetry => 'Tekrar dene';
+
+  @override
+  String get authErrorInvalidCredentials => 'E-posta veya şifre hatalı.';
+
+  @override
+  String get authErrorEmailInUse => 'Bu e-posta adresi zaten kullanılıyor.';
+
+  @override
+  String get authErrorWeakPassword => 'Şifre en az 6 karakter olmalıdır.';
+
+  @override
+  String get authErrorUserNotFound =>
+      'Bu e-posta ile kayıtlı kullanıcı bulunamadı.';
+
+  @override
+  String get authErrorNetwork =>
+      'Bağlantı hatası. İnternet bağlantınızı kontrol edin.';
+
+  @override
+  String get authErrorInvalidEmail => 'Geçerli bir e-posta adresi girin.';
+
+  @override
+  String get authErrorGeneric => 'Bir hata oluştu. Lütfen tekrar deneyin.';
+
+  @override
+  String get authErrorConfirmEmail =>
+      'Giriş yapılamadı. E-posta onayı gerekiyor olabilir.';
+
+  @override
+  String get authErrorSignupFailed =>
+      'Kayıt oluşturulamadı. Lütfen tekrar deneyin.';
+
+  @override
+  String get authErrorSignOutFailed => 'Çıkış yapılamadı. Tekrar dener misin?';
+
+  @override
+  String get authErrorGoogleFailed =>
+      'Google ile giriş yapılamadı. Tekrar dener misin?';
+
+  @override
+  String get authErrorAppleFailed =>
+      'Apple ile giriş yapılamadı. Tekrar dener misin?';
+
+  @override
+  String get authErrorResetFailed =>
+      'E-posta gönderilemedi. İnternet bağlantınızı kontrol edin.';
+
+  @override
+  String get authErrorDeleteUnavailable =>
+      'Hesap silme servisi şu an kullanılamıyor.';
+
+  @override
+  String get authErrorDeleteFailed => 'Hesap silinemedi. Tekrar dener misin?';
+
+  @override
+  String get crisisTitle => 'yanında gerçek biri olsun';
+
+  @override
+  String get crisisBody =>
+      'Zor bir andan geçiyor olabilirsin ve bunu paylaşman değerli. ILND bir yapay zekâ — böyle anlarda konuşabileceğin gerçek insanlar var:';
+
+  @override
+  String get crisisLine112 => '112 — Acil Yardım';
+
+  @override
+  String get crisisLine183 => '183 — Sosyal Destek Hattı (7/24, ücretsiz)';
+
+  @override
+  String get crisisDismiss => 'anladım';
+
+  @override
   String get registerTagline => 'hesap oluştur.';
 
   @override

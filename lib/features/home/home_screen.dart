@@ -291,7 +291,7 @@ class _StreakBanner extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         children: [
-          if (current > 0) Text('🔥 ', style: const TextStyle(fontSize: 13)),
+          if (current > 0) const _PulsingFlame(),
           Expanded(
             child: Text(
               line,
@@ -304,12 +304,52 @@ class _StreakBanner extends ConsumerWidget {
   }
 }
 
+/// A live, active streak deserves a heartbeat instead of a static emoji —
+/// slow enough (1.6s) to read as "alive", not as a loading spinner.
+class _PulsingFlame extends StatefulWidget {
+  const _PulsingFlame();
+
+  @override
+  State<_PulsingFlame> createState() => _PulsingFlameState();
+}
+
+class _PulsingFlameState extends State<_PulsingFlame>
+    with SingleTickerProviderStateMixin {
+  late final _ctrl = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1600),
+  )..repeat(reverse: true);
+  late final _scale = Tween(
+    begin: 0.92,
+    end: 1.12,
+  ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _scale,
+      child: const Text('🔥 ', style: TextStyle(fontSize: 13)),
+    );
+  }
+}
+
 // ─── Mood check-in ────────────────────────────────────────────────────────────
 
-class _MoodCheckIn extends StatelessWidget {
+class _MoodCheckIn extends StatefulWidget {
   const _MoodCheckIn({required this.p});
   final AppPalette p;
 
+  @override
+  State<_MoodCheckIn> createState() => _MoodCheckInState();
+}
+
+class _MoodCheckInState extends State<_MoodCheckIn> {
   static const _moods = [
     ('☾', 'calm'),
     ('◍', 'good'),
@@ -317,6 +357,8 @@ class _MoodCheckIn extends StatelessWidget {
     ('✦', 'tired'),
     ('☁', 'hard'),
   ];
+
+  int? _selected;
 
   String _moodLabel(AppLocalizations l10n, String key) {
     switch (key) {
@@ -335,9 +377,22 @@ class _MoodCheckIn extends StatelessWidget {
     }
   }
 
+  // Show the pick landing (fill + scale) before handing off to chat — a
+  // beat of acknowledgment instead of an instant, jarring navigation.
+  Future<void> _select(int index) async {
+    if (_selected != null) return;
+    setState(() => _selected = index);
+    await Future.delayed(const Duration(milliseconds: 320));
+    if (!mounted) return;
+    context.push(routeChat);
+    // Reset once the mood question is shown again on return.
+    setState(() => _selected = null);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final p = widget.p;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -348,29 +403,42 @@ class _MoodCheckIn extends StatelessWidget {
         const SizedBox(height: 12),
         Row(
           children: [
-            for (final m in _moods) ...[
+            for (final (index, m) in _moods.indexed) ...[
               Expanded(
                 child: Pressable(
-                  onTap: () => context.push(routeChat),
-                  child: Container(
+                  onTap: () => _select(index),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOut,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
-                      color: p.surface,
+                      color: _selected == index ? p.accentSoft : p.surface,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: p.border, width: 0.5),
+                      border: Border.all(
+                        color: _selected == index ? p.accent : p.border,
+                        width: _selected == index ? 1.5 : 0.5,
+                      ),
                     ),
                     child: Column(
                       children: [
-                        Text(
-                          m.$1,
-                          style: TextStyle(fontSize: 20, color: p.text),
+                        AnimatedScale(
+                          scale: _selected == index ? 1.2 : 1.0,
+                          duration: const Duration(milliseconds: 220),
+                          curve: Curves.easeOut,
+                          child: Text(
+                            m.$1,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: _selected == index ? p.accent : p.text,
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 5),
                         Text(
                           _moodLabel(l10n, m.$2),
                           style: AppTextStyles.body(
                             fontSize: 10,
-                            color: p.textMuted,
+                            color: _selected == index ? p.accent : p.textMuted,
                           ),
                         ),
                       ],
@@ -378,7 +446,7 @@ class _MoodCheckIn extends StatelessWidget {
                   ),
                 ),
               ),
-              if (m != _moods.last) const SizedBox(width: 8),
+              if (index != _moods.length - 1) const SizedBox(width: 8),
             ],
           ],
         ),
