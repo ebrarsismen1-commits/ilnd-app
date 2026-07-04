@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/demo/demo_config.dart';
+import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
 /// ILND'nin kullanıcı hakkında "hatırladıkları".
@@ -87,18 +88,41 @@ final ilndMemoryProvider =
       final prefs = ref.watch(sharedPreferencesProvider);
       // Onboarding'de girilen ad varsa hafızayı onunla tohumla.
       final seedName = ref.watch(userNameProvider);
-      return IlndMemoryNotifier(prefs, seedName);
+      // Hafıza kullanıcıya aittir: uid değişince (çıkış / farklı hesapla
+      // giriş) notifier yeniden kurulur ve o kullanıcının anahtarından okur —
+      // önceki kullanıcının hafızası yeni kullanıcının AI bağlamına sızmaz.
+      // select(uid) sayesinde token yenilemeleri (aynı uid) sıfırlamaz.
+      final uid = ref.watch(
+        authNotifierProvider.select(
+          (s) => s is AuthAuthenticated ? s.user.id : null,
+        ),
+      );
+      return IlndMemoryNotifier(prefs, seedName, uid);
     });
 
 class IlndMemoryNotifier extends StateNotifier<IlndMemory> {
-  IlndMemoryNotifier(this._prefs, String seedName) : super(const IlndMemory()) {
+  IlndMemoryNotifier(this._prefs, String seedName, String? uid)
+    : _key = uid == null ? _kIlndMemory : '${_kIlndMemory}_$uid',
+      super(const IlndMemory()) {
     _load(seedName);
   }
 
   final dynamic _prefs; // SharedPreferences
+  final String _key;
 
   void _load(String seedName) {
-    final raw = _prefs.getString(_kIlndMemory) as String?;
+    var raw = _prefs.getString(_key) as String?;
+    // Tek-anahtar dönemden geçiş: kullanıcıya özel kayıt yoksa eski global
+    // anahtardaki hafızayı bu kullanıcıya taşı (mevcut kullanıcılar
+    // güncellemede hafızalarını kaybetmesin), sonra global anahtarı sil.
+    if (raw == null && _key != _kIlndMemory) {
+      final legacy = _prefs.getString(_kIlndMemory) as String?;
+      if (legacy != null && legacy.isNotEmpty) {
+        raw = legacy;
+        _prefs.setString(_key, legacy);
+        _prefs.remove(_kIlndMemory);
+      }
+    }
 
     // Demo modu: kayıt yoksa zengin bir kişilikle tohumla ("seni tanıyor").
     if (kDemoMode && (raw == null || raw.isEmpty)) {
@@ -125,7 +149,7 @@ class IlndMemoryNotifier extends StateNotifier<IlndMemory> {
   }
 
   Future<void> _persist() async {
-    await _prefs.setString(_kIlndMemory, jsonEncode(state.toJson()));
+    await _prefs.setString(_key, jsonEncode(state.toJson()));
   }
 
   Future<void> setName(String name) async {

@@ -16,13 +16,13 @@ class Habit {
   final DateTime createdAt;
 
   factory Habit.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final d = doc.data()!;
+    final d = doc.data() ?? const <String, dynamic>{};
     return Habit(
       id: doc.id,
-      userId: d['userId'] as String,
-      name: d['name'] as String,
-      targetDaysPerWeek: (d['targetDaysPerWeek'] as num).toInt(),
-      createdAt: (d['createdAt'] as Timestamp).toDate(),
+      userId: d['userId'] as String? ?? '',
+      name: d['name'] as String? ?? '',
+      targetDaysPerWeek: (d['targetDaysPerWeek'] as num?)?.toInt() ?? 0,
+      createdAt: (d['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 

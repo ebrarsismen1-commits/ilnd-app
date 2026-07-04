@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/repositories/checkin_repository.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// Anonim, agregat sosyal kanıt rozeti: "Bu hafta N kişi kendine vakit
 /// ayırdı." Sayı yoksa veya sorgu başarısızsa hiçbir şey göstermez —
@@ -28,7 +29,7 @@ class SocialProofBadge extends ConsumerWidget {
           const Text('✦ ', style: TextStyle(fontSize: 12)),
           Expanded(
             child: Text(
-              'Bu hafta $count kişi kendine vakit ayırdı.',
+              AppLocalizations.of(context)!.socialProofWeekly(count),
               style: AppTextStyles.body(fontSize: 12, color: textColor),
             ),
           ),

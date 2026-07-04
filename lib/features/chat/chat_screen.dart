@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ilnd_app/core/ilnd/crisis_guard.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
@@ -33,6 +34,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     _controller.clear();
     final l10n = AppLocalizations.of(context)!;
     ref.read(chatProvider.notifier).send(text, l10n);
+    // Mesaj gönderilmeye devam eder — destek dayatılmaz, sunulur.
+    if (CrisisGuard.matches(text)) showCrisisResourceSheet(context);
     _scrollToBottomSoon();
   }
 

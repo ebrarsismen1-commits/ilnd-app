@@ -702,9 +702,9 @@ class _CategoryChip extends StatelessWidget {
   final ArticleCategory category;
 
   Color get _color => switch (category) {
-    ArticleCategory.wellness => const Color(0xFF9B87F5),
+    ArticleCategory.wellness => const Color(0xFF5B8C7B),
     ArticleCategory.tarif => const Color(0xFF34D399),
-    ArticleCategory.yazi => const Color(0xFFF472B6),
+    ArticleCategory.yazi => const Color(0xFFC17A63),
   };
 
   @override

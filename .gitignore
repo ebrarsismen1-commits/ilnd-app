@@ -64,3 +64,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local agent/session tooling
+.claude/

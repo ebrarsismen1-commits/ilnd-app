@@ -87,7 +87,9 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
           ],
         );
       },
-      child: widget.child,
+      // İçerik ayrı raster katmanında: gradyanlar her karede boyanırken
+      // (tasarım gereği "nefes") ekran içeriği yeniden rasterize edilmez.
+      child: widget.child == null ? null : RepaintBoundary(child: widget.child),
     );
   }
 }

@@ -25,7 +25,7 @@ class FoodEntry {
   final DateTime createdAt;
 
   factory FoodEntry.fromDoc(DocumentSnapshot doc) {
-    final d = doc.data()! as Map<String, dynamic>;
+    final d = doc.data() as Map<String, dynamic>? ?? const {};
     return FoodEntry(
       id: doc.id,
       yemekAdi: d['yemekAdi'] as String? ?? '',
@@ -101,6 +101,8 @@ class FoodRepository {
 // ─── Providers ────────────────────────────────────────────────────────────────
 
 final foodRepositoryProvider = Provider<FoodRepository?>((ref) {
+  final fbUid = ref.watch(firebaseAuthUidProvider).valueOrNull;
+  if (fbUid == null) return null; // köprü girişi bekleniyor
   final auth = ref.watch(authNotifierProvider);
   if (auth is AuthAuthenticated) return FoodRepository(auth.user.id);
   return null;

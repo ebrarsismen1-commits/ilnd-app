@@ -152,6 +152,204 @@ abstract class AppLocalizations {
   /// **'Şifre sıfırlama bağlantısı e-postana gönderildi.'**
   String get loginResetLinkSent;
 
+  /// Divider label between email form and social sign-in buttons
+  ///
+  /// In tr, this message translates to:
+  /// **'veya'**
+  String get authOrDivider;
+
+  /// Google sign-in button label
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile devam et'**
+  String get authContinueWithGoogle;
+
+  /// Apple sign-in button label
+  ///
+  /// In tr, this message translates to:
+  /// **'Apple ile devam et'**
+  String get authContinueWithApple;
+
+  /// Bottom nav: home tab
+  ///
+  /// In tr, this message translates to:
+  /// **'Ana Sayfa'**
+  String get navHome;
+
+  /// Bottom nav: explore tab
+  ///
+  /// In tr, this message translates to:
+  /// **'Keşfet'**
+  String get navExplore;
+
+  /// Bottom nav: tracking tab
+  ///
+  /// In tr, this message translates to:
+  /// **'Takip'**
+  String get navTracking;
+
+  /// Bottom nav: profile tab
+  ///
+  /// In tr, this message translates to:
+  /// **'Profil'**
+  String get navProfile;
+
+  /// Anonymous aggregate social proof badge
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu hafta {count} kişi kendine vakit ayırdı.'**
+  String socialProofWeekly(int count);
+
+  /// Privacy policy screen title
+  ///
+  /// In tr, this message translates to:
+  /// **'Gizlilik Politikası'**
+  String get legalPrivacyTitle;
+
+  /// Terms of service screen title
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanım Şartları'**
+  String get legalTermsTitle;
+
+  /// Shown when Supabase init fails at startup
+  ///
+  /// In tr, this message translates to:
+  /// **'ilnd başlatılamadı'**
+  String get startupFailedTitle;
+
+  /// Startup failure explanation
+  ///
+  /// In tr, this message translates to:
+  /// **'İnternet bağlantını kontrol edip tekrar dene.'**
+  String get startupFailedBody;
+
+  /// Startup failure retry button
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar dene'**
+  String get startupRetry;
+
+  /// Auth error: wrong email/password
+  ///
+  /// In tr, this message translates to:
+  /// **'E-posta veya şifre hatalı.'**
+  String get authErrorInvalidCredentials;
+
+  /// Auth error: email already registered
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu e-posta adresi zaten kullanılıyor.'**
+  String get authErrorEmailInUse;
+
+  /// Auth error: weak password
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre en az 6 karakter olmalıdır.'**
+  String get authErrorWeakPassword;
+
+  /// Auth error: user not found
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu e-posta ile kayıtlı kullanıcı bulunamadı.'**
+  String get authErrorUserNotFound;
+
+  /// Auth error: network problem
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantı hatası. İnternet bağlantınızı kontrol edin.'**
+  String get authErrorNetwork;
+
+  /// Auth error: invalid email format
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçerli bir e-posta adresi girin.'**
+  String get authErrorInvalidEmail;
+
+  /// Auth error: generic fallback
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir hata oluştu. Lütfen tekrar deneyin.'**
+  String get authErrorGeneric;
+
+  /// Auth error: sign-in returned no session
+  ///
+  /// In tr, this message translates to:
+  /// **'Giriş yapılamadı. E-posta onayı gerekiyor olabilir.'**
+  String get authErrorConfirmEmail;
+
+  /// Auth error: sign-up failed
+  ///
+  /// In tr, this message translates to:
+  /// **'Kayıt oluşturulamadı. Lütfen tekrar deneyin.'**
+  String get authErrorSignupFailed;
+
+  /// Auth error: sign-out failed
+  ///
+  /// In tr, this message translates to:
+  /// **'Çıkış yapılamadı. Tekrar dener misin?'**
+  String get authErrorSignOutFailed;
+
+  /// Auth error: Google sign-in failed
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile giriş yapılamadı. Tekrar dener misin?'**
+  String get authErrorGoogleFailed;
+
+  /// Auth error: Apple sign-in failed
+  ///
+  /// In tr, this message translates to:
+  /// **'Apple ile giriş yapılamadı. Tekrar dener misin?'**
+  String get authErrorAppleFailed;
+
+  /// Auth error: password reset email failed
+  ///
+  /// In tr, this message translates to:
+  /// **'E-posta gönderilemedi. İnternet bağlantınızı kontrol edin.'**
+  String get authErrorResetFailed;
+
+  /// Auth error: delete account service unavailable
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesap silme servisi şu an kullanılamıyor.'**
+  String get authErrorDeleteUnavailable;
+
+  /// Auth error: delete account failed
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesap silinemedi. Tekrar dener misin?'**
+  String get authErrorDeleteFailed;
+
+  /// Crisis resource sheet title
+  ///
+  /// In tr, this message translates to:
+  /// **'yanında gerçek biri olsun'**
+  String get crisisTitle;
+
+  /// Crisis resource sheet body
+  ///
+  /// In tr, this message translates to:
+  /// **'Zor bir andan geçiyor olabilirsin ve bunu paylaşman değerli. ILND bir yapay zekâ — böyle anlarda konuşabileceğin gerçek insanlar var:'**
+  String get crisisBody;
+
+  /// Emergency line
+  ///
+  /// In tr, this message translates to:
+  /// **'112 — Acil Yardım'**
+  String get crisisLine112;
+
+  /// Psychosocial support line
+  ///
+  /// In tr, this message translates to:
+  /// **'183 — Sosyal Destek Hattı (7/24, ücretsiz)'**
+  String get crisisLine183;
+
+  /// Crisis sheet dismiss button
+  ///
+  /// In tr, this message translates to:
+  /// **'anladım'**
+  String get crisisDismiss;
+
   /// Register screen tagline below the logo
   ///
   /// In tr, this message translates to:

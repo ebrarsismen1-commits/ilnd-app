@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 class AppShell extends ConsumerWidget {
   const AppShell({super.key, required this.navigationShell});
@@ -47,6 +48,7 @@ class _BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: p.isDark ? p.base : Colors.white.withValues(alpha: 0.85),
@@ -62,7 +64,7 @@ class _BottomNav extends StatelessWidget {
                 p: p,
                 icon: Icons.home_outlined,
                 activeIcon: Icons.home_rounded,
-                label: 'Ana Sayfa',
+                label: l10n.navHome,
                 active: currentIndex == 0,
                 onTap: () => onTap(0),
               ),
@@ -70,7 +72,7 @@ class _BottomNav extends StatelessWidget {
                 p: p,
                 icon: Icons.explore_outlined,
                 activeIcon: Icons.explore_rounded,
-                label: 'Keşfet',
+                label: l10n.navExplore,
                 active: currentIndex == 1,
                 onTap: () => onTap(1),
               ),
@@ -79,7 +81,7 @@ class _BottomNav extends StatelessWidget {
                 p: p,
                 icon: Icons.bar_chart_outlined,
                 activeIcon: Icons.bar_chart_rounded,
-                label: 'Takip',
+                label: l10n.navTracking,
                 active: currentIndex == 2,
                 onTap: () => onTap(2),
               ),
@@ -87,7 +89,7 @@ class _BottomNav extends StatelessWidget {
                 p: p,
                 icon: Icons.person_outline,
                 activeIcon: Icons.person_rounded,
-                label: 'Profil',
+                label: l10n.navProfile,
                 active: currentIndex == 3,
                 onTap: () => onTap(3),
               ),

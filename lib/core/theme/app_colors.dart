@@ -22,16 +22,16 @@ class AppColors {
 
   // ── Core palette — mirrors AppPalette.light, see class doc above ───────────
 
-  static const cream = Color(0xFFF7F5FF);
-  static const creamDark = Color(0xFFEFECFF);
-  static const sage = Color(0xFF8B5CF6);
-  static const sageLight = Color(0xFF6EE7B7);
-  static const amber = Color(0xFFF472B6);
-  static const amberLight = Color(0xFFFBBFE0);
-  static const charcoal = Color(0xFF1E1B2E);
-  static const muted = Color(0xFF8B85A0);
+  static const cream = Color(0xFFF5F4F1);
+  static const creamDark = Color(0xFFEBE8E1);
+  static const sage = Color(0xFF1F9D57);
+  static const sageLight = Color(0xFF7FCE9E);
+  static const amber = Color(0xFFE2611C);
+  static const amberLight = Color(0xFFF3B489);
+  static const charcoal = Color(0xFF111827);
+  static const muted = Color(0xFF6B7280);
   static const white = Color(0xFFFFFFFF);
-  static const border = Color(0xFFE4DFFF);
+  static const border = Color(0xFFE3E0D8);
 
   // ── Legacy aliases ────────────────────────────────────────────────────────
 

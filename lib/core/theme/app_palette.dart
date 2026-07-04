@@ -43,36 +43,36 @@ class AppPalette {
 
   final Color onAccent;
 
-  // ── Gündüz · pastel wellness × gen-z ─────────────────────────────────────────
+  // ── Gündüz · açık/havadar/gri-tonlu wellness ─────────────────────────────────
   static const light = AppPalette(
     isDark: false,
-    base: Color(0xFFF7F5FF), // barely-lavender white
-    aura: [Color(0xFFF7F5FF), Color(0xFFF0ECFF), Color(0xFFF5F0FF)],
+    base: Color(0xFFF5F4F1), // barely-there off-white
+    aura: [Color(0xFFF5F4F1), Color(0xFFEEEDE6), Color(0xFFF2F1EA)],
     surface: Color(0xFFFFFFFF),
-    surfaceStrong: Color(0xFFEFECFF),
-    text: Color(0xFF1E1B2E), // deep purple-black
-    textMuted: Color(0xFF8B85A0), // dusty lilac-gray
-    border: Color(0xFFE4DFFF), // lavender border
-    accent: Color(0xFF8B5CF6), // violet-purple
-    accentSoft: Color(0xFFEDE9FF),
-    amber: Color(0xFFF472B6), // blush pink pop
+    surfaceStrong: Color(0xFFEBE8E1),
+    text: Color(0xFF111827), // slate
+    textMuted: Color(0xFF6B7280),
+    border: Color(0xFFE3E0D8),
+    accent: Color(0xFF1F9D57), // ilnd.app green
+    accentSoft: Color(0xFFDCF3E4),
+    amber: Color(0xFFE2611C), // warm orange pop
     onAccent: Color(0xFFFFFFFF),
   );
 
-  // ── Gece · deep purple luxe ───────────────────────────────────────────────────
+  // ── Gece · soğuk kömür luxe ───────────────────────────────────────────────────
   static const dark = AppPalette(
     isDark: true,
-    base: Color(0xFF0F0D1A), // deep purple-black
-    aura: [Color(0xFF120F1E), Color(0xFF1A1528), Color(0xFF0F0D1A)],
+    base: Color(0xFF10120F), // cool near-black coal
+    aura: [Color(0xFF12140F), Color(0xFF181C16), Color(0xFF10120F)],
     surface: Color(0x18FFFFFF),
-    surfaceStrong: Color(0xFF1E1A2E),
-    text: Color(0xFFF0EEFF),
-    textMuted: Color(0xFF9B94B8),
+    surfaceStrong: Color(0xFF1C211C),
+    text: Color(0xFFF1F3EF),
+    textMuted: Color(0xFF9AA39A),
     border: Color(0x28FFFFFF),
-    accent: Color(0xFFA78BFA), // lighter violet for dark mode
-    accentSoft: Color(0xFF4C3B8A),
-    amber: Color(0xFFF9A8D4), // soft pink
-    onAccent: Color(0xFF0F0D1A),
+    accent: Color(0xFF34C77A), // brighter green for dark-mode contrast
+    accentSoft: Color(0xFF1E3A2A),
+    amber: Color(0xFFF2794A), // lighter orange for dark-mode contrast
+    onAccent: Color(0xFF0B140D),
   );
 }
 

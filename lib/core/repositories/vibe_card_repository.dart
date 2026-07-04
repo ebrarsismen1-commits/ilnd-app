@@ -28,6 +28,8 @@ class VibeCardData {
 // ─── Aggregation ──────────────────────────────────────────────────────────────
 
 final vibeCardDataProvider = FutureProvider<VibeCardData?>((ref) async {
+  final fbUid = ref.watch(firebaseAuthUidProvider).valueOrNull;
+  if (fbUid == null) return null; // köprü girişi bekleniyor
   final auth = ref.watch(authNotifierProvider);
   if (auth is! AuthAuthenticated) return null;
 

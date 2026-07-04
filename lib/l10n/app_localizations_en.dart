@@ -37,6 +37,122 @@ class AppLocalizationsEn extends AppLocalizations {
       'A password reset link has been sent to your email.';
 
   @override
+  String get authOrDivider => 'or';
+
+  @override
+  String get authContinueWithGoogle => 'Continue with Google';
+
+  @override
+  String get authContinueWithApple => 'Continue with Apple';
+
+  @override
+  String get navHome => 'Home';
+
+  @override
+  String get navExplore => 'Explore';
+
+  @override
+  String get navTracking => 'Tracking';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String socialProofWeekly(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people made time for themselves this week.',
+      one: '1 person made time for themselves this week.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get legalPrivacyTitle => 'Privacy Policy';
+
+  @override
+  String get legalTermsTitle => 'Terms of Service';
+
+  @override
+  String get startupFailedTitle => 'ilnd couldn\'t start';
+
+  @override
+  String get startupFailedBody =>
+      'Check your internet connection and try again.';
+
+  @override
+  String get startupRetry => 'Try again';
+
+  @override
+  String get authErrorInvalidCredentials => 'Incorrect email or password.';
+
+  @override
+  String get authErrorEmailInUse => 'This email address is already in use.';
+
+  @override
+  String get authErrorWeakPassword => 'Password must be at least 6 characters.';
+
+  @override
+  String get authErrorUserNotFound => 'No account found with this email.';
+
+  @override
+  String get authErrorNetwork =>
+      'Connection error. Check your internet connection.';
+
+  @override
+  String get authErrorInvalidEmail => 'Enter a valid email address.';
+
+  @override
+  String get authErrorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get authErrorConfirmEmail =>
+      'Couldn\'t sign in. You may need to confirm your email.';
+
+  @override
+  String get authErrorSignupFailed =>
+      'Couldn\'t create your account. Please try again.';
+
+  @override
+  String get authErrorSignOutFailed => 'Couldn\'t sign out. Try again?';
+
+  @override
+  String get authErrorGoogleFailed =>
+      'Couldn\'t sign in with Google. Try again?';
+
+  @override
+  String get authErrorAppleFailed => 'Couldn\'t sign in with Apple. Try again?';
+
+  @override
+  String get authErrorResetFailed =>
+      'Couldn\'t send the email. Check your internet connection.';
+
+  @override
+  String get authErrorDeleteUnavailable =>
+      'Account deletion is unavailable right now.';
+
+  @override
+  String get authErrorDeleteFailed =>
+      'Couldn\'t delete your account. Try again?';
+
+  @override
+  String get crisisTitle => 'you deserve real support';
+
+  @override
+  String get crisisBody =>
+      'It sounds like you might be going through a hard moment, and sharing that matters. ILND is an AI — there are real people you can talk to right now:';
+
+  @override
+  String get crisisLine112 => '112 — Emergency (Türkiye)';
+
+  @override
+  String get crisisLine183 => '183 — Social Support Line (24/7, free)';
+
+  @override
+  String get crisisDismiss => 'got it';
+
+  @override
   String get registerTagline => 'create an account.';
 
   @override

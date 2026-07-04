@@ -9,8 +9,10 @@ import 'package:ilnd_app/core/utils/validators.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/auth/auth_error_l10n.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/auth/shared_input_field.dart';
+import 'package:ilnd_app/features/auth/social_sign_in_button.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
@@ -93,9 +95,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     if (!mounted) return;
     final authState = ref.read(authNotifierProvider);
     if (authState is AuthError) {
-      IlndToast.error(context, authState.message);
+      IlndToast.error(context, authState.code.localized(l10n));
     } else if (authState is AuthAuthenticated) {
       IlndToast.success(context, l10n.registerSuccess);
+    }
+  }
+
+  Future<void> _signInWithGoogle(AppLocalizations l10n) async {
+    await ref.read(authNotifierProvider.notifier).signInWithGoogle();
+    if (!mounted) return;
+    final authState = ref.read(authNotifierProvider);
+    if (authState is AuthError) {
+      IlndToast.error(context, authState.code.localized(l10n));
+    }
+  }
+
+  Future<void> _signInWithApple(AppLocalizations l10n) async {
+    await ref.read(authNotifierProvider.notifier).signInWithApple();
+    if (!mounted) return;
+    final authState = ref.read(authNotifierProvider);
+    if (authState is AuthError) {
+      IlndToast.error(context, authState.code.localized(l10n));
     }
   }
 
@@ -295,6 +315,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                             ).copyWith(fontWeight: FontWeight.w600),
                           ),
                   ),
+                ),
+
+                const SizedBox(height: 24),
+                AuthDivider(label: l10n.authOrDivider),
+                const SizedBox(height: 24),
+
+                SocialSignInButton(
+                  provider: SocialProvider.google,
+                  label: l10n.authContinueWithGoogle,
+                  onTap: isLoading ? null : () => _signInWithGoogle(l10n),
+                ),
+                const SizedBox(height: 12),
+                SocialSignInButton(
+                  provider: SocialProvider.apple,
+                  label: l10n.authContinueWithApple,
+                  onTap: isLoading ? null : () => _signInWithApple(l10n),
                 ),
 
                 const SizedBox(height: 20),

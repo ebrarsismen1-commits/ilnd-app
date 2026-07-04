@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
@@ -47,6 +49,10 @@ abstract final class CheckinRepository {
 /// Haftalık aktif kullanıcı sayısı — ~1 saat client-side cache ile.
 /// Sorgu başarısız olursa eski cache değeri (varsa) gösterilir.
 final weeklyCheckinCountProvider = FutureProvider<int?>((ref) async {
+  // Provider autoDispose değil: TTL'in gerçekten işlemesi için kendini
+  // süre dolunca yeniden çalıştırır — yoksa sayı tüm oturum boyunca donar.
+  final refreshTimer = Timer(_cacheTtl, ref.invalidateSelf);
+  ref.onDispose(refreshTimer.cancel);
   final prefs = ref.watch(sharedPreferencesProvider);
   final cachedAt = prefs.getInt(_kWeeklyCheckinCacheAt);
   final cachedCount = prefs.getInt(_kWeeklyCheckinCacheCount);

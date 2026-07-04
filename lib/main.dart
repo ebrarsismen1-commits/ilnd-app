@@ -8,11 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
+import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
-import 'package:ilnd_app/core/repositories/explore_repository.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -71,15 +71,17 @@ void main() async {
       }
       return true;
     };
-    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
-      !kDebugMode,
-    );
-
-    unawaited(
-      ExploreRepository.seedIfEmpty().catchError(
-        (e) => debugPrint('[main] seedIfEmpty failed: $e'),
-      ),
-    );
+    try {
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+        !kDebugMode,
+      );
+    } catch (e, st) {
+      // Crashlytics web'de desteklenmiyor — bu satır kontrolsüz fırlarsa
+      // main() burada durur ve runApp() hiç çağrılmaz (kalıcı boş ekran).
+      debugPrint(
+        '[main] Crashlytics.setCrashlyticsCollectionEnabled failed: $e\n$st',
+      );
+    }
   } else {
     // Firebase hiç başlamadıysa Crashlytics de yok — en azından konsola yaz.
     FlutterError.onError = (details) {
@@ -138,33 +140,45 @@ class _StartupFailureApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.cloud_off, size: 48),
-                const SizedBox(height: 16),
-                const Text(
-                  'ilnd başlatılamadı',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: _StartupFailureBody(),
+    );
+  }
+}
+
+class _StartupFailureBody extends StatelessWidget {
+  const _StartupFailureBody();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.cloud_off, size: 48),
+              const SizedBox(height: 16),
+              Text(
+                l10n.startupFailedTitle,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(height: 8),
-                const Text(
-                  'İnternet bağlantını kontrol edip tekrar dene.',
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                FilledButton(
-                  onPressed: () => main(),
-                  child: const Text('Tekrar dene'),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 8),
+              Text(l10n.startupFailedBody, textAlign: TextAlign.center),
+              const SizedBox(height: 24),
+              FilledButton(
+                onPressed: () => main(),
+                child: Text(l10n.startupRetry),
+              ),
+            ],
           ),
         ),
       ),
@@ -209,10 +223,17 @@ class _IlndAppState extends ConsumerState<IlndApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
+    // Tema geçişi hem özel paleti hem Material bileşenlerini (dialog,
+    // bottom sheet, picker) birlikte karartsın — bkz. AppTheme.dark notu.
+    final brightness = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
       title: 'ilnd',
       theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: brightness == Brightness.dark
+          ? ThemeMode.dark
+          : ThemeMode.light,
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,

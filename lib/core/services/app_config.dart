@@ -46,6 +46,19 @@ abstract final class AppConfig {
     defaultValue: '',
   );
 
+  // ── Google Sign-In ──────────────────────────────────────────────────────────
+  // Google Cloud Console'daki "Web application" OAuth client ID'si — Supabase
+  // Authentication > Providers > Google'a da aynısı girilmeli. google_sign_in
+  // paketi, Android/iOS istemci ID'lerini google-services.json /
+  // GoogleService-Info.plist üzerinden otomatik okur; bu sadece Supabase'in
+  // id_token'ı doğrulayabilmesi için gereken "audience" değeridir.
+  static const googleServerClientId = String.fromEnvironment(
+    'GOOGLE_SERVER_CLIENT_ID',
+    defaultValue: '',
+  );
+
+  static bool get isGoogleSignInConfigured => googleServerClientId.isNotEmpty;
+
   // ── RevenueCat ──────────────────────────────────────────────────────────────
   static const revenueCatApiKey = String.fromEnvironment(
     'REVENUECAT_API_KEY',

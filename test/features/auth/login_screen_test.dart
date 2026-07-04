@@ -83,4 +83,30 @@ void main() {
     await tester.pump();
     expect(find.byIcon(Icons.visibility_outlined), findsOneWidget);
   });
+
+  testWidgets('renders fully in English under the en locale', (tester) async {
+    final prefs = await SharedPreferences.getInstance();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        child: const MaterialApp(
+          locale: Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: LoginScreen(),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+
+    final l10n = lookupAppLocalizations(const Locale('en'));
+    expect(find.text(l10n.loginSubmit), findsOneWidget); // "sign in"
+    expect(find.text(l10n.authContinueWithGoogle), findsOneWidget);
+
+    // English validation error surfaces on empty submit.
+    await tester.tap(find.text(l10n.loginSubmit));
+    await tester.pump();
+    expect(find.text(l10n.validatorEmailRequired), findsOneWidget);
+  });
 }

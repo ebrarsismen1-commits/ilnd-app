@@ -164,7 +164,9 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
                 'text':
                     'Yukarıdaki fotoğraftaki yemeği analiz et.\n\n'
                     'Kurallar:\n'
-                    '- "yemek_adi" yemeğin yaygın Türkçe adı olsun.\n'
+                    '- "yemek_adi" yemeğin yaygın '
+                    '${l10n.localeName.startsWith('tr') ? 'Türkçe' : 'İngilizce (English)'} '
+                    'adı olsun.\n'
                     '- "kalori" bir porsiyon için tam sayı (kcal) olsun.\n'
                     '- "protein", "karbonhidrat" ve "yag" gram cinsinden, '
                     'ondalıklı sayı olsun.\n'
@@ -188,15 +190,19 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         ],
       });
 
-      final response = await http.post(
-        Uri.parse(AppConfig.anthropicProxyUrl),
-        headers: {
-          'Authorization': 'Bearer $idToken',
-          'content-type': 'application/json',
-          ...await appCheckHeaders(),
-        },
-        body: body,
-      );
+      final response = await http
+          .post(
+            Uri.parse(AppConfig.anthropicProxyUrl),
+            headers: {
+              'Authorization': 'Bearer $idToken',
+              'content-type': 'application/json',
+              ...await appCheckHeaders(),
+            },
+            body: body,
+          )
+          // Görsel analizi yavaş olabilir ama sınırsız değil — timeout yoksa
+          // ekran sonsuza dek "analiz ediliyor"da kalır.
+          .timeout(const Duration(seconds: 60));
 
       if (response.statusCode == 429) {
         _setError(l10n.yemekEkleAnalysisFailed);

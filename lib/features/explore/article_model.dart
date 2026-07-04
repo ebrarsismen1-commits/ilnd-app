@@ -43,7 +43,7 @@ class Article {
   final int order;
 
   factory Article.fromDoc(DocumentSnapshot doc) {
-    final d = doc.data()! as Map<String, dynamic>;
+    final d = doc.data() as Map<String, dynamic>? ?? const {};
     return Article(
       id: doc.id,
       title: d['title'] as String? ?? '',
