@@ -5,7 +5,7 @@ description: Görsel/tasarım/tema işleri. Marka token'ları, editoryal dil kur
 
 # ui — Tasarım Sistemi ve Ekran Checklist'i
 
-## Token'lar (kaynak: app_palette.dart / pano kalibrasyonu docs/ilnd_tasarim_vizyonu.md §8)
+## Token'lar — TEK KAYNAK: docs/DESIGN_SYSTEM.md (aşağısı hızlı özet)
 - Gündüz: krem #F5F4F1 zemin · yeşil #1F9D57 vurgu · turuncu #E2611C pop
 - Gece: botanik siyah (#10120F ailesi) · parlak yeşil #34C77A — nötr gri koyu YASAK
 - Tipografi: Noto Serif (başlık, *italik kelime vurgusu* imzadır) · DM Sans (gövde) · Plex Mono (sayı)
