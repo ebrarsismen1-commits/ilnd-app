@@ -14,10 +14,20 @@
   "authContinueWithGoogle": "Continue with Google",
   "authContinueWithApple": "Continue with Apple",
 
-  "navHome": "Home",
+  "navHome": "Today",
   "navExplore": "Explore",
   "navTracking": "Tracking",
   "navProfile": "Profile",
+  "navCommunity": "Community",
+  "navYou": "You",
+  "navRing": "ilnd",
+  "a11yOpenChat": "Open chat with ILND",
+
+  "topulukTitle": "community.",
+  "topulukTagline": "in your city, by your side",
+  "topulukComingTitle": "the first meetup is on its way",
+  "topulukComingBody": "We're starting with small, warm gatherings in Istanbul — morning walks, workshops, conversations. The first event announcement will land right here.",
+  "topulukInviteCta": "invite a friend ahead of time",
 
   "socialProofWeekly": "{count, plural, =1{1 person made time for themselves this week.} other{{count} people made time for themselves this week.}}",
 

@@ -46,7 +46,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authContinueWithApple => 'Continue with Apple';
 
   @override
-  String get navHome => 'Home';
+  String get navHome => 'Today';
 
   @override
   String get navExplore => 'Explore';
@@ -56,6 +56,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navProfile => 'Profile';
+
+  @override
+  String get navCommunity => 'Community';
+
+  @override
+  String get navYou => 'You';
+
+  @override
+  String get navRing => 'ilnd';
+
+  @override
+  String get a11yOpenChat => 'Open chat with ILND';
+
+  @override
+  String get topulukTitle => 'community.';
+
+  @override
+  String get topulukTagline => 'in your city, by your side';
+
+  @override
+  String get topulukComingTitle => 'the first meetup is on its way';
+
+  @override
+  String get topulukComingBody =>
+      'We\'re starting with small, warm gatherings in Istanbul — morning walks, workshops, conversations. The first event announcement will land right here.';
+
+  @override
+  String get topulukInviteCta => 'invite a friend ahead of time';
 
   @override
   String socialProofWeekly(int count) {

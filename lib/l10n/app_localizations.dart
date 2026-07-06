@@ -173,7 +173,7 @@ abstract class AppLocalizations {
   /// Bottom nav: home tab
   ///
   /// In tr, this message translates to:
-  /// **'Ana Sayfa'**
+  /// **'Bugün'**
   String get navHome;
 
   /// Bottom nav: explore tab
@@ -193,6 +193,60 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Profil'**
   String get navProfile;
+
+  /// Bottom nav: community tab
+  ///
+  /// In tr, this message translates to:
+  /// **'Topluluk'**
+  String get navCommunity;
+
+  /// Bottom nav: you tab (profile+tracking)
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen'**
+  String get navYou;
+
+  /// Center breathing ring label
+  ///
+  /// In tr, this message translates to:
+  /// **'ilnd'**
+  String get navRing;
+
+  /// Accessibility label for the center ring
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND ile sohbeti aç'**
+  String get a11yOpenChat;
+
+  /// Community screen title
+  ///
+  /// In tr, this message translates to:
+  /// **'topluluk.'**
+  String get topulukTitle;
+
+  /// Community screen tagline
+  ///
+  /// In tr, this message translates to:
+  /// **'şehrinde, yanında'**
+  String get topulukTagline;
+
+  /// Community v1 coming-soon headline
+  ///
+  /// In tr, this message translates to:
+  /// **'ilk buluşma yolda'**
+  String get topulukComingTitle;
+
+  /// Community v1 coming-soon body
+  ///
+  /// In tr, this message translates to:
+  /// **'İstanbul\'da küçük, sıcak buluşmalarla başlıyoruz — sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.'**
+  String get topulukComingBody;
+
+  /// Community v1 CTA routing to referral
+  ///
+  /// In tr, this message translates to:
+  /// **'arkadaşını şimdiden davet et'**
+  String get topulukInviteCta;
 
   /// Anonymous aggregate social proof badge
   ///

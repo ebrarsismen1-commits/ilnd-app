@@ -11,6 +11,7 @@ import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
 import 'package:ilnd_app/features/home/home_provider.dart';
@@ -114,6 +115,24 @@ class _TopBar extends ConsumerWidget {
             style: AppTextStyles.display(fontSize: 22, color: p.text),
           ),
           const Spacer(),
+          Semantics(
+            button: true,
+            label: l10n.ekleTitle,
+            child: Pressable(
+              onTap: () => showEkleSheet(context),
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: p.surface,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: p.border, width: 0.5),
+                ),
+                child: Icon(Icons.add_rounded, size: 20, color: p.text),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
           Semantics(
             button: true,
             label: l10n.a11yToggleTheme,

@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
-import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
+/// Navigasyon v2 (docs/ilnd_tasarim_vizyonu.md §2):
+/// Bugün · Keşfet · [nefes halkası → sohbet] · Topluluk · Sen
+///
+/// Merkez, ürünün kalbi olan ILND sohbetine aittir — halka bir buton değil,
+/// markanın jestidir. Eski [+] (ekle sheet) Bugün ekranının üst çubuğuna
+/// taşındı; "Takip" sekmesi kaldırıldı, verisine Sen (profil) içinden
+/// erişilir (tam birleşme: roadmap NEXT-4 devamı).
 class AppShell extends ConsumerWidget {
   const AppShell({super.key, required this.navigationShell});
 
@@ -25,7 +33,6 @@ class AppShell extends ConsumerWidget {
           index,
           initialLocation: index == navigationShell.currentIndex,
         ),
-        onAddTap: () => showEkleSheet(context),
       ),
     );
   }
@@ -38,13 +45,11 @@ class _BottomNav extends StatelessWidget {
     required this.p,
     required this.currentIndex,
     required this.onTap,
-    required this.onAddTap,
   });
 
   final AppPalette p;
   final int currentIndex;
   final ValueChanged<int> onTap;
-  final VoidCallback onAddTap;
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +67,8 @@ class _BottomNav extends StatelessWidget {
             children: [
               _NavItem(
                 p: p,
-                icon: Icons.home_outlined,
-                activeIcon: Icons.home_rounded,
+                icon: Icons.wb_sunny_outlined,
+                activeIcon: Icons.wb_sunny_rounded,
                 label: l10n.navHome,
                 active: currentIndex == 0,
                 onTap: () => onTap(0),
@@ -76,12 +81,12 @@ class _BottomNav extends StatelessWidget {
                 active: currentIndex == 1,
                 onTap: () => onTap(1),
               ),
-              _AddButton(p: p, onTap: onAddTap),
+              _RingItem(p: p, l10n: l10n),
               _NavItem(
                 p: p,
-                icon: Icons.bar_chart_outlined,
-                activeIcon: Icons.bar_chart_rounded,
-                label: l10n.navTracking,
+                icon: Icons.people_outline_rounded,
+                activeIcon: Icons.people_rounded,
+                label: l10n.navCommunity,
                 active: currentIndex == 2,
                 onTap: () => onTap(2),
               ),
@@ -89,7 +94,7 @@ class _BottomNav extends StatelessWidget {
                 p: p,
                 icon: Icons.person_outline,
                 activeIcon: Icons.person_rounded,
-                label: l10n.navProfile,
+                label: l10n.navYou,
                 active: currentIndex == 3,
                 onTap: () => onTap(3),
               ),
@@ -101,36 +106,35 @@ class _BottomNav extends StatelessWidget {
   }
 }
 
-class _AddButton extends StatelessWidget {
-  const _AddButton({required this.p, required this.onTap});
+/// Merkez: sohbete açılan nefes halkası. Sekme değil — her sekmenin
+/// üzerinden erişilebilen, markanın kalbine giden kapı.
+class _RingItem extends StatelessWidget {
+  const _RingItem({required this.p, required this.l10n});
   final AppPalette p;
-  final VoidCallback onTap;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Pressable(
-        onTap: onTap,
+        onTap: () => context.push(routeChat),
         child: SizedBox(
           height: 64,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
+              Semantics(
+                button: true,
+                label: l10n.a11yOpenChat,
+                child: const BreathRing(size: 44),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                l10n.navRing,
+                style: AppTextStyles.body(
+                  fontSize: 9.5,
                   color: p.accent,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: p.accent.withValues(alpha: 0.30),
-                      blurRadius: 14,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Icon(Icons.add_rounded, color: p.onAccent, size: 22),
+                ).copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.2),
               ),
             ],
           ),
