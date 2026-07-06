@@ -47,7 +47,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get authContinueWithApple => 'Apple ile devam et';
 
   @override
-  String get navHome => 'Ana Sayfa';
+  String get navHome => 'Bugün';
 
   @override
   String get navExplore => 'Keşfet';
@@ -57,6 +57,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get navProfile => 'Profil';
+
+  @override
+  String get navCommunity => 'Topluluk';
+
+  @override
+  String get navYou => 'Sen';
+
+  @override
+  String get navRing => 'ilnd';
+
+  @override
+  String get a11yOpenChat => 'ILND ile sohbeti aç';
+
+  @override
+  String get topulukTitle => 'topluluk.';
+
+  @override
+  String get topulukTagline => 'şehrinde, yanında';
+
+  @override
+  String get topulukComingTitle => 'ilk buluşma yolda';
+
+  @override
+  String get topulukComingBody =>
+      'İstanbul\'da küçük, sıcak buluşmalarla başlıyoruz — sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.';
+
+  @override
+  String get topulukInviteCta => 'arkadaşını şimdiden davet et';
 
   @override
   String socialProofWeekly(int count) {

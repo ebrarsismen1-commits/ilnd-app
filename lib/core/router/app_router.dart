@@ -19,6 +19,7 @@ import 'package:ilnd_app/features/splash/splash_screen.dart';
 import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/features/referral/referral_screen.dart';
 import 'package:ilnd_app/features/takip/takip_screen.dart';
+import 'package:ilnd_app/features/topluluk/topluluk_screen.dart';
 import 'package:ilnd_app/features/vibe_card/vibe_card_screen.dart';
 
 const routeSplash = '/splash';
@@ -32,6 +33,7 @@ const routeChat = '/chat';
 const routeExplore = '/explore';
 const routeJournal = '/journal';
 const routeTakip = '/takip';
+const routeTopluluk = '/topluluk';
 const routeProfile = '/profile';
 const routeYemekEkle = '/yemek-ekle';
 const routeVibeCard = '/vibe-card';
@@ -152,6 +154,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => _fade(state, const ReferralScreen()),
       ),
       GoRoute(
+        // Takip sekmeden çıktı (nav v2) — Sen/profil içinden push edilir.
+        path: routeTakip,
+        pageBuilder: (context, state) => _fade(state, const TakipScreen()),
+      ),
+      GoRoute(
         path: routeVibeCard,
         pageBuilder: (context, state) => _fade(state, const VibeCardScreen()),
       ),
@@ -206,9 +213,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: routeTakip,
+                path: routeTopluluk,
                 pageBuilder: (context, state) =>
-                    _fade(state, const TakipScreen()),
+                    _fade(state, const TopulukScreen()),
               ),
             ],
           ),

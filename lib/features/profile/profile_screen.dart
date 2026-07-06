@@ -723,6 +723,17 @@ class _SettingsSection extends ConsumerWidget {
           style: AppTextStyles.sectionLabel(color: p.textMuted),
         ),
         const SizedBox(height: 10),
+        // Takip sekmeden çıktı (nav v2) — verisi Sen'in altında yaşıyor.
+        Pressable(
+          onTap: () => context.push(routeTakip),
+          child: _SettingsRow(
+            icon: Icons.bar_chart_rounded,
+            label: l10n.navTracking,
+            showChevron: true,
+            p: p,
+          ),
+        ),
+        const SizedBox(height: 8),
         Pressable(
           onTap: () => context.push(routeReferral),
           child: _SettingsRow(
