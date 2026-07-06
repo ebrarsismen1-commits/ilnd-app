@@ -87,6 +87,23 @@ class AppLocalizationsTr extends AppLocalizations {
   String get topulukInviteCta => 'arkadaşını şimdiden davet et';
 
   @override
+  String get topulukUpcomingLabel => 'YAKLAŞAN BULUŞMALAR';
+
+  @override
+  String get topulukRsvpJoin => 'Katıl';
+
+  @override
+  String get topulukRsvpGoing => 'Geliyorum';
+
+  @override
+  String topulukGoingCount(int count) {
+    return '$count kişi geliyor';
+  }
+
+  @override
+  String get topulukRsvpFailed => 'Kaydedilemedi. Tekrar dener misin?';
+
+  @override
   String socialProofWeekly(int count) {
     return 'Bu hafta $count kişi kendine vakit ayırdı.';
   }

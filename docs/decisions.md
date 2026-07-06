@@ -15,3 +15,4 @@ Format: tarih · karar · neden · alternatif · risk/ders.
 | 2026-07-04 | Skill tabanlı workflow sistemi kuruldu | Öğrenilen desenler oturumlar arası kayboluyordu | Tek büyük CLAUDE.md | Çekirdek ince + skill'ler talep-üzerine (context ekonomisi) |
 | 2026-07-04 | feature/analytics ayrı skill YAPILMADI | build ile çakışma; bağımsız iş akışı yok | 12 ayrı skill | İlke #10: kullanılmayan süreç borçtur |
 | 2026-07-04 | Nav v2 kodlandı: merkez halka + Topluluk sekmesi; NOW blokerleri beklerken NEXT öne çekildi | Owner kararı (tasarım momentum'u) | NOW'u beklemek | Takip tam birleşmesi ve gerçek etkinlik listesi (arch:L) sonraki fazlarda |
+| 2026-07-04 | Etkinlik+RSVP: kök events + rsvps/{uid} alt koleksiyonu (ADR-0002) | Idempotent RSVP, aggregate count, festival ölçeği | rsvpIds array | Yazma çekişmesi/1MB sınırı elendi |

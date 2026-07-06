@@ -64,6 +64,19 @@
   "@topulukComingBody": {"description": "Community v1 coming-soon body"},
   "topulukInviteCta": "arkadaşını şimdiden davet et",
   "@topulukInviteCta": {"description": "Community v1 CTA routing to referral"},
+  "topulukUpcomingLabel": "YAKLAŞAN BULUŞMALAR",
+  "@topulukUpcomingLabel": {"description": "Section label above event list"},
+  "topulukRsvpJoin": "Katıl",
+  "@topulukRsvpJoin": {"description": "RSVP button, not joined yet"},
+  "topulukRsvpGoing": "Geliyorum",
+  "@topulukRsvpGoing": {"description": "RSVP button, already joined"},
+  "topulukGoingCount": "{count} kişi geliyor",
+  "@topulukGoingCount": {
+    "description": "Attendee count under an event",
+    "placeholders": { "count": {"type": "int"} }
+  },
+  "topulukRsvpFailed": "Kaydedilemedi. Tekrar dener misin?",
+  "@topulukRsvpFailed": {"description": "RSVP write failed toast"},
 
   "socialProofWeekly": "Bu hafta {count} kişi kendine vakit ayırdı.",
   "@socialProofWeekly": {

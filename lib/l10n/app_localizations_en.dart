@@ -86,6 +86,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topulukInviteCta => 'invite a friend ahead of time';
 
   @override
+  String get topulukUpcomingLabel => 'UPCOMING MEETUPS';
+
+  @override
+  String get topulukRsvpJoin => 'Join';
+
+  @override
+  String get topulukRsvpGoing => 'I\'m going';
+
+  @override
+  String topulukGoingCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count people going',
+      one: '1 person going',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get topulukRsvpFailed => 'Couldn\'t save that. Try again?';
+
+  @override
   String socialProofWeekly(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

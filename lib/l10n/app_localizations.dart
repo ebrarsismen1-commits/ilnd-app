@@ -248,6 +248,36 @@ abstract class AppLocalizations {
   /// **'arkadaşını şimdiden davet et'**
   String get topulukInviteCta;
 
+  /// Section label above event list
+  ///
+  /// In tr, this message translates to:
+  /// **'YAKLAŞAN BULUŞMALAR'**
+  String get topulukUpcomingLabel;
+
+  /// RSVP button, not joined yet
+  ///
+  /// In tr, this message translates to:
+  /// **'Katıl'**
+  String get topulukRsvpJoin;
+
+  /// RSVP button, already joined
+  ///
+  /// In tr, this message translates to:
+  /// **'Geliyorum'**
+  String get topulukRsvpGoing;
+
+  /// Attendee count under an event
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} kişi geliyor'**
+  String topulukGoingCount(int count);
+
+  /// RSVP write failed toast
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilemedi. Tekrar dener misin?'**
+  String get topulukRsvpFailed;
+
   /// Anonymous aggregate social proof badge
   ///
   /// In tr, this message translates to:

@@ -61,6 +61,23 @@ service cloud.firestore {
         && resource.data.userId == request.auth.uid;
     }
 
+    // Etkinlikler (ADR-0002): içerik yalnız seed script'ten (Admin SDK)
+    // gelir — articles deseninin simetriği. RSVP: kullanıcı yalnız KENDİ
+    // kaydını (doc id == uid) oluşturur/siler; sayım aggregate count() ile.
+    match /events/{eventId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Admin SDK ile yazılır
+
+      match /rsvps/{userId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.resource.data.userId == userId;
+        allow delete: if request.auth != null && request.auth.uid == userId;
+        allow update: if false;
+      }
+    }
+
     // Sosyal kanıt sayacı için anonim, kullanıcı başına günde tek doküman.
     // Toplam aktif kullanıcı sayısını saymak için herkes (authenticated)
     // okuyabilir; her kullanıcı sadece kendi kaydını yazabilir.

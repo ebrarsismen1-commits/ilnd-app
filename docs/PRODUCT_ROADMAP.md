@@ -17,7 +17,7 @@ her sprint kapanışında güncellenir.
 
 ## NEXT — Yayın Sonrası İlk Çeyrek (retention + topluluk tohumları)
 1. **Push bildirim** (streak-koruma ile başla) — E · architecture:M
-2. **Topluluk sekmesi v1**: elle girilen İstanbul etkinlik listesi + RSVP — E · Blueprint §3 primitifleriyle · architecture:L(ADR)
+2. **Topluluk sekmesi v1**: etkinlik listesi + RSVP — E · ✅ kod hazır (ADR-0002); kalan: `firebase deploy --only firestore:rules` + `node functions/scripts/seedEvents.js`
 3. **İlk buluşma** (Sabah Rutini Yürüyüşü) + etkinlik-skinli vibe card — B(lojistik)+E(kod)+D(yüz)
 4. Navigasyon geçişi: Takip→Sen birleşimi + merkez halka — E · ui+refactor
 5. Analytics event sözlüğü + Beyza KPI panosu — E+B
