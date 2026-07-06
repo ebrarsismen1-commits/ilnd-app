@@ -28,6 +28,11 @@
   "topulukComingTitle": "the first meetup is on its way",
   "topulukComingBody": "We're starting with small, warm gatherings in Istanbul — morning walks, workshops, conversations. The first event announcement will land right here.",
   "topulukInviteCta": "invite a friend ahead of time",
+  "topulukUpcomingLabel": "UPCOMING MEETUPS",
+  "topulukRsvpJoin": "Join",
+  "topulukRsvpGoing": "I'm going",
+  "topulukGoingCount": "{count, plural, =1{1 person going} other{{count} people going}}",
+  "topulukRsvpFailed": "Couldn't save that. Try again?",
 
   "socialProofWeekly": "{count, plural, =1{1 person made time for themselves this week.} other{{count} people made time for themselves this week.}}",
 
