@@ -65,5 +65,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Local agent/session tooling
-.claude/
+# Local agent/session tooling (skills ARE versioned)
+.claude/launch.json
+.claude/settings.local.json
