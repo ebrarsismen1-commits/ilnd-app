@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/streak_copy.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
@@ -42,27 +43,29 @@ class HomeScreen extends ConsumerWidget {
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: _TopBar(name: name, p: p),
+                child: _HeroHeader(name: name, p: p),
               ),
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPadding,
-                  8,
+                  0,
                   AppSpacing.screenPadding,
                   32,
                 ),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate.fixed([
+                    // Mood kartı hero fotoğrafının üzerine biner (editoryal
+                    // katman) — translate görsel, layout slotu sabittir.
                     Entrance(
                       index: 0,
-                      child: _GreetingHero(name: name, memory: memory, p: p),
+                      child: Transform.translate(
+                        offset: const Offset(0, -26),
+                        child: _MoodCheckIn(p: p),
+                      ),
                     ),
-                    const SizedBox(height: 16),
                     Entrance(index: 1, child: _StreakBanner(p: p)),
                     Entrance(index: 2, child: SocialProofBadge(p: p)),
-                    const SizedBox(height: 22),
-                    Entrance(index: 3, child: _MoodCheckIn(p: p)),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 18),
                     Entrance(
                       index: 4,
                       child: _SectionTitle(l10n.homeTodaysReadTitle, p: p),
@@ -92,113 +95,25 @@ class HomeScreen extends ConsumerWidget {
 
 // ─── Top bar ─────────────────────────────────────────────────────────────────
 
-class _TopBar extends ConsumerWidget {
-  const _TopBar({required this.name, required this.p});
-  final String name;
-  final AppPalette p;
+const _uHero = 'https://images.unsplash.com/photo-';
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        AppSpacing.screenPadding,
-        16,
-        AppSpacing.screenPadding,
-        0,
-      ),
-      child: Row(
-        children: [
-          Text(
-            'ilnd',
-            style: AppTextStyles.display(fontSize: 22, color: p.text),
-          ),
-          const Spacer(),
-          Semantics(
-            button: true,
-            label: l10n.ekleTitle,
-            child: Pressable(
-              onTap: () => showEkleSheet(context),
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: p.surface,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: p.border, width: 0.5),
-                ),
-                child: Icon(Icons.add_rounded, size: 20, color: p.text),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Semantics(
-            button: true,
-            label: l10n.a11yToggleTheme,
-            child: Pressable(
-              onTap: () {
-                final mode = ref.read(themeModeProvider.notifier);
-                mode.state = p.isDark ? Brightness.light : Brightness.dark;
-              },
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: p.surface,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: p.border, width: 0.5),
-                ),
-                child: Icon(
-                  p.isDark
-                      ? Icons.wb_sunny_outlined
-                      : Icons.nightlight_outlined,
-                  size: 18,
-                  color: p.isDark ? p.amber : p.textMuted,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Semantics(
-            button: true,
-            label: l10n.a11yOpenProfile,
-            child: Pressable(
-              onTap: () => context.go(routeProfile),
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: p.accent,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  initial,
-                  style: AppTextStyles.body(
-                    fontSize: 15,
-                    color: p.onAccent,
-                  ).copyWith(fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+/// Saate göre seçilen, desature edilen (CoverImage) ambiyans fotoğrafı.
+/// Ağ yoksa EditorialGradient'e düşer — hero asla kırık görünmez.
+String _heroImageUrl(int hour) {
+  if (hour >= 6 && hour < 12) {
+    return '${_uHero}1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1200&q=70';
   }
+  if (hour >= 12 && hour < 18) {
+    return '${_uHero}1501854140801-50d01698950b?auto=format&fit=crop&w=1200&q=70';
+  }
+  return '${_uHero}1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1200&q=70';
 }
 
-// ─── Greeting hero — ILND speaks first ────────────────────────────────────────
-
-class _GreetingHero extends StatelessWidget {
-  const _GreetingHero({
-    required this.name,
-    required this.memory,
-    required this.p,
-  });
+/// Bugün v2 hero'su: fotoğraf zemin, selamlama fotoğrafın üzerinde yaşar
+/// (docs/DESIGN_SYSTEM.md §7 — renk fotoğraftan gelir).
+class _HeroHeader extends ConsumerWidget {
+  const _HeroHeader({required this.name, required this.p});
   final String name;
-  final IlndMemory memory;
   final AppPalette p;
 
   String _greeting(AppLocalizations l10n) {
@@ -209,79 +124,183 @@ class _GreetingHero extends StatelessWidget {
     return l10n.homeGreetingEvening;
   }
 
-  String _proactive(AppLocalizations l10n) {
-    if (memory.goals.isNotEmpty) {
-      return l10n.homeProactiveGoal(memory.goals.first);
-    }
-    if (memory.recentNotes.isNotEmpty) {
-      return l10n.homeProactiveRecentNotes;
-    }
-    return l10n.homeProactiveDefault;
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final streak = ref.watch(profileStatsProvider).valueOrNull?.streakDays ?? 0;
     final greeting = _greeting(l10n);
     final who = name.isNotEmpty
         ? l10n.homeGreetingWithName(greeting, name)
         : '$greeting.';
-    return Pressable(
-      onTap: () => context.push(routeChat),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final date = DateFormat(
+      'EEEE · d MMMM',
+      l10n.localeName,
+    ).format(DateTime.now()).toUpperCase();
+    final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
+
+    return SizedBox(
+      height: 272,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          Text(
-            who,
-            style: AppTextStyles.display(
-              fontSize: 40,
-              color: p.text,
-              height: 1.05,
+          CoverImage(imageUrl: _heroImageUrl(DateTime.now().hour), palette: 0),
+          // Üstte hafif, altta güçlü karartma — ikon/metin okunabilirliği.
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: 0.28),
+                  Colors.transparent,
+                  Colors.black.withValues(alpha: 0.55),
+                ],
+                stops: const [0.0, 0.45, 1.0],
+              ),
             ),
           ),
-          const SizedBox(height: 14),
-          // ILND's proactive, memory-aware line
-          Container(
-            padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
-            decoration: BoxDecoration(
-              color: p.surface,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: p.border, width: 0.5),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: p.accent,
-                    shape: BoxShape.circle,
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        'ilnd.',
+                        style: AppTextStyles.display(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Spacer(),
+                      if (streak > 0) ...[
+                        Semantics(
+                          label: l10n.profileStatStreak,
+                          child: Container(
+                            width: 34,
+                            height: 34,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.85),
+                                width: 1.6,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '$streak',
+                              style: AppTextStyles.body(
+                                fontSize: 12.5,
+                                color: Colors.white,
+                              ).copyWith(fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                      _HeroIconButton(
+                        icon: Icons.add_rounded,
+                        label: l10n.ekleTitle,
+                        onTap: () => showEkleSheet(context),
+                      ),
+                      const SizedBox(width: 8),
+                      _HeroIconButton(
+                        icon: p.isDark
+                            ? Icons.wb_sunny_outlined
+                            : Icons.nightlight_outlined,
+                        label: l10n.a11yToggleTheme,
+                        onTap: () {
+                          ref.read(themeModeProvider.notifier).state = p.isDark
+                              ? Brightness.light
+                              : Brightness.dark;
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      Semantics(
+                        button: true,
+                        label: l10n.a11yOpenProfile,
+                        child: Pressable(
+                          onTap: () => context.go(routeProfile),
+                          child: Container(
+                            width: 34,
+                            height: 34,
+                            decoration: BoxDecoration(
+                              color: p.accent,
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              initial,
+                              style: AppTextStyles.body(
+                                fontSize: 13,
+                                color: p.onAccent,
+                              ).copyWith(fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'i',
+                  const Spacer(),
+                  Text(
+                    date,
+                    style: AppTextStyles.label(
+                      fontSize: 10,
+                      color: Colors.white.withValues(alpha: 0.85),
+                    ).copyWith(letterSpacing: 2),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    who,
                     style: AppTextStyles.display(
-                      fontSize: 15,
-                      color: p.onAccent,
+                      fontSize: 30,
+                      color: Colors.white,
+                      height: 1.1,
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    _proactive(l10n),
-                    style: AppTextStyles.body(
-                      fontSize: 14,
-                      color: p.text,
-                      height: 1.4,
-                    ),
-                  ),
-                ),
-                Icon(Icons.arrow_forward_rounded, size: 18, color: p.textMuted),
-              ],
+                  const SizedBox(height: 44),
+                ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _HeroIconButton extends StatelessWidget {
+  const _HeroIconButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: label,
+      child: Pressable(
+        onTap: onTap,
+        child: Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.75),
+              width: 1.2,
+            ),
+          ),
+          child: Icon(icon, size: 17, color: Colors.white),
+        ),
       ),
     );
   }
@@ -412,64 +431,78 @@ class _MoodCheckInState extends State<_MoodCheckIn> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = widget.p;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.homeMoodQuestion,
-          style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            for (final (index, m) in _moods.indexed) ...[
-              Expanded(
-                child: Pressable(
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+      decoration: BoxDecoration(
+        color: p.surface,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: p.border, width: 0.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.homeMoodQuestion,
+            style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              for (final (index, m) in _moods.indexed)
+                Pressable(
                   onTap: () => _select(index),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 220),
-                    curve: Curves.easeOut,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: _selected == index ? p.accentSoft : p.surface,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: _selected == index ? p.accent : p.border,
-                        width: _selected == index ? 1.5 : 0.5,
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        AnimatedScale(
+                  child: Column(
+                    children: [
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 220),
+                        curve: Curves.easeOut,
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _selected == index ? p.accentSoft : p.base,
+                          border: Border.all(
+                            color: _selected == index ? p.accent : p.border,
+                            width: _selected == index ? 1.5 : 0.5,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        child: AnimatedScale(
                           scale: _selected == index ? 1.2 : 1.0,
                           duration: const Duration(milliseconds: 220),
                           curve: Curves.easeOut,
                           child: Text(
                             m.$1,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 17,
                               color: _selected == index ? p.accent : p.text,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          _moodLabel(l10n, m.$2),
-                          style: AppTextStyles.body(
-                            fontSize: 10,
-                            color: _selected == index ? p.accent : p.textMuted,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        _moodLabel(l10n, m.$2),
+                        style:
+                            AppTextStyles.body(
+                              fontSize: 9.5,
+                              color: _selected == index
+                                  ? p.accent
+                                  : p.textMuted,
+                            ).copyWith(
+                              fontWeight: _selected == index
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              if (index != _moods.length - 1) const SizedBox(width: 8),
             ],
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
