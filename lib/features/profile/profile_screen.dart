@@ -15,6 +15,7 @@ import 'package:ilnd_app/features/auth/auth_error_l10n.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
+import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
@@ -129,7 +130,7 @@ class ProfileScreen extends ConsumerWidget {
 
 // ─── Profile header ───────────────────────────────────────────────────────────
 
-class _ProfileHeader extends StatelessWidget {
+class _ProfileHeader extends ConsumerWidget {
   const _ProfileHeader({
     required this.name,
     required this.initial,
@@ -140,19 +141,39 @@ class _ProfileHeader extends StatelessWidget {
   final AppPalette p;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(color: p.accent, shape: BoxShape.circle),
-          alignment: Alignment.center,
-          child: Text(
-            initial,
-            style: AppTextStyles.display(fontSize: 26, color: p.onAccent),
+        Semantics(
+          button: true,
+          label: l10n.a11yEditPhoto,
+          child: Pressable(
+            onTap: () => showAvatarOptions(context, ref),
+            child: Stack(
+              children: [
+                UserAvatar(size: 60, initial: initial, p: p, fontSize: 26),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      color: p.accent,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: p.base, width: 2),
+                    ),
+                    child: Icon(
+                      Icons.camera_alt_rounded,
+                      size: 11,
+                      color: p.onAccent,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -717,17 +738,7 @@ class _SettingsSection extends ConsumerWidget {
           style: AppTextStyles.sectionLabel(color: p.textMuted),
         ),
         const SizedBox(height: 10),
-        // Takip sekmeden çıktı (nav v2) — verisi Sen'in altında yaşıyor.
-        Pressable(
-          onTap: () => context.push(routeTakip),
-          child: _SettingsRow(
-            icon: Icons.bar_chart_rounded,
-            label: l10n.navTracking,
-            showChevron: true,
-            p: p,
-          ),
-        ),
-        const SizedBox(height: 8),
+        // Takip ana sayfaya taşındı (Web Raporu madde 6) — buradan kaldırıldı.
         Pressable(
           onTap: () => context.push(routeReferral),
           child: _SettingsRow(

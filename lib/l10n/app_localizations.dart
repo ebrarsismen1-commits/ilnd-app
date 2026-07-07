@@ -584,6 +584,18 @@ abstract class AppLocalizations {
   /// **'başla'**
   String get welcomeStart;
 
+  /// Welcome screen: prompt before sign-in link
+  ///
+  /// In tr, this message translates to:
+  /// **'zaten hesabın var mı? '**
+  String get welcomeHaveAccount;
+
+  /// Welcome screen: sign-in link text
+  ///
+  /// In tr, this message translates to:
+  /// **'giriş yap'**
+  String get welcomeLoginLink;
+
   /// Quick setup screen title (Turkish)
   ///
   /// In tr, this message translates to:
@@ -650,6 +662,138 @@ abstract class AppLocalizations {
   /// **'ruh hali takibi'**
   String get quickSetupGoalMood;
 
+  /// Age/height/weight section title
+  ///
+  /// In tr, this message translates to:
+  /// **'birkaç rakam daha'**
+  String get quickSetupBodyTitle;
+
+  /// Age/height/weight section subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'önerileri sana göre ayarlamak için'**
+  String get quickSetupBodySubtitle;
+
+  /// Age field placeholder
+  ///
+  /// In tr, this message translates to:
+  /// **'yaş'**
+  String get quickSetupAgeHint;
+
+  /// Height field placeholder
+  ///
+  /// In tr, this message translates to:
+  /// **'boy (cm)'**
+  String get quickSetupHeightHint;
+
+  /// Weight field placeholder
+  ///
+  /// In tr, this message translates to:
+  /// **'kilo (kg)'**
+  String get quickSetupWeightHint;
+
+  /// Activity level section title
+  ///
+  /// In tr, this message translates to:
+  /// **'ne kadar hareketlisin?'**
+  String get quickSetupActivityTitle;
+
+  /// Activity level: sedentary
+  ///
+  /// In tr, this message translates to:
+  /// **'az hareketli'**
+  String get quickSetupActivitySedentary;
+
+  /// Activity level: moderate
+  ///
+  /// In tr, this message translates to:
+  /// **'orta'**
+  String get quickSetupActivityModerate;
+
+  /// Activity level: active
+  ///
+  /// In tr, this message translates to:
+  /// **'aktif'**
+  String get quickSetupActivityActive;
+
+  /// Diet preference section title
+  ///
+  /// In tr, this message translates to:
+  /// **'beslenme tercihin var mı?'**
+  String get quickSetupDietTitle;
+
+  /// Diet preference: none
+  ///
+  /// In tr, this message translates to:
+  /// **'yok'**
+  String get quickSetupDietNone;
+
+  /// Diet preference: vegetarian
+  ///
+  /// In tr, this message translates to:
+  /// **'vejetaryen'**
+  String get quickSetupDietVegetarian;
+
+  /// Diet preference: vegan
+  ///
+  /// In tr, this message translates to:
+  /// **'vegan'**
+  String get quickSetupDietVegan;
+
+  /// Diet preference: gluten-free
+  ///
+  /// In tr, this message translates to:
+  /// **'glütensiz'**
+  String get quickSetupDietGlutenFree;
+
+  /// Diet preference: lactose-free
+  ///
+  /// In tr, this message translates to:
+  /// **'laktozsuz'**
+  String get quickSetupDietLactoseFree;
+
+  /// Allergies section title
+  ///
+  /// In tr, this message translates to:
+  /// **'alerjin var mı?'**
+  String get quickSetupAllergiesTitle;
+
+  /// Allergies section subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'varsa seç, yoksa geç'**
+  String get quickSetupAllergiesSubtitle;
+
+  /// Allergy option: nuts
+  ///
+  /// In tr, this message translates to:
+  /// **'fındık/kabuklu yemiş'**
+  String get quickSetupAllergyNuts;
+
+  /// Allergy option: dairy
+  ///
+  /// In tr, this message translates to:
+  /// **'süt/laktoz'**
+  String get quickSetupAllergyDairy;
+
+  /// Allergy option: gluten
+  ///
+  /// In tr, this message translates to:
+  /// **'gluten'**
+  String get quickSetupAllergyGluten;
+
+  /// Allergy option: seafood
+  ///
+  /// In tr, this message translates to:
+  /// **'deniz ürünü'**
+  String get quickSetupAllergySeafood;
+
+  /// Allergy option: egg
+  ///
+  /// In tr, this message translates to:
+  /// **'yumurta'**
+  String get quickSetupAllergyEgg;
+
   /// Invite code section title
   ///
   /// In tr, this message translates to:
@@ -677,7 +821,7 @@ abstract class AppLocalizations {
   /// First entry screen header label
   ///
   /// In tr, this message translates to:
-  /// **'İLK GÜNLÜK'**
+  /// **'BAŞLAYALIM'**
   String get firstEntryHeader;
 
   /// Skip first entry
@@ -686,41 +830,23 @@ abstract class AppLocalizations {
   /// **'şimdi değil'**
   String get firstEntrySkip;
 
-  /// Continue button after ILND's response
+  /// First-entry needs picker prompt
   ///
   /// In tr, this message translates to:
-  /// **'hazırım'**
-  String get firstEntryReady;
+  /// **'neye ihtiyacın var?'**
+  String get firstEntryNeedsPrompt;
 
-  /// Save the first journal entry
+  /// Loading label while fetching AI-suggested needs
   ///
   /// In tr, this message translates to:
-  /// **'kaydet'**
-  String get firstEntrySave;
-
-  /// First entry writing prompt
-  ///
-  /// In tr, this message translates to:
-  /// **'bugün nasılsın?'**
-  String get firstEntryPrompt;
-
-  /// First entry text field hint
-  ///
-  /// In tr, this message translates to:
-  /// **'ne aklından geçiyorsa yaz...'**
-  String get firstEntryHint;
+  /// **'senin için birkaç öneri hazırlıyorum...'**
+  String get firstEntryNeedsLoading;
 
   /// Home screen section title for today's article
   ///
   /// In tr, this message translates to:
   /// **'BUGÜNÜN OKUMASI'**
   String get homeTodaysReadTitle;
-
-  /// Home screen section title for daily intention
-  ///
-  /// In tr, this message translates to:
-  /// **'BUGÜNKÜ NİYETİN'**
-  String get homeTodaysIntentionTitle;
 
   /// Greeting shown before 6am
   ///
@@ -806,29 +932,17 @@ abstract class AppLocalizations {
   /// **'zor'**
   String get homeMoodHard;
 
+  /// Shown instead of the mood question once already answered today
+  ///
+  /// In tr, this message translates to:
+  /// **'bugün: {mood}'**
+  String homeMoodAnsweredToday(String mood);
+
   /// Article read time with arrow; readTime already includes its own unit, e.g. '5 dk'
   ///
   /// In tr, this message translates to:
   /// **'{readTime} oku →'**
   String homeReadTimeArrow(String readTime);
-
-  /// Edit the daily intention
-  ///
-  /// In tr, this message translates to:
-  /// **'düzenle'**
-  String get homeIntentionEdit;
-
-  /// Daily intention input hint
-  ///
-  /// In tr, this message translates to:
-  /// **'bugün neye odaklanmak istiyorsun?'**
-  String get homeIntentionHint;
-
-  /// Save the daily intention
-  ///
-  /// In tr, this message translates to:
-  /// **'kaydet'**
-  String get homeIntentionSave;
 
   /// Journal screen title
   ///
@@ -925,6 +1039,42 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Kullanıcı'**
   String get profileDefaultUserName;
+
+  /// Avatar options: pick photo from gallery
+  ///
+  /// In tr, this message translates to:
+  /// **'galeriden seç'**
+  String get profilePhotoFromGallery;
+
+  /// Avatar options: remove profile photo
+  ///
+  /// In tr, this message translates to:
+  /// **'fotoğrafı kaldır'**
+  String get profilePhotoRemove;
+
+  /// Toast after saving a new profile photo
+  ///
+  /// In tr, this message translates to:
+  /// **'profil fotoğrafın güncellendi'**
+  String get profilePhotoUpdated;
+
+  /// Error when the chosen image is too large
+  ///
+  /// In tr, this message translates to:
+  /// **'bu resim çok büyük, daha küçük bir tane seç'**
+  String get profilePhotoTooLarge;
+
+  /// Error when saving the photo fails
+  ///
+  /// In tr, this message translates to:
+  /// **'fotoğraf yüklenemedi'**
+  String get profilePhotoFailed;
+
+  /// Screen-reader label for the editable profile avatar
+  ///
+  /// In tr, this message translates to:
+  /// **'Profil fotoğrafını değiştir'**
+  String get a11yEditPhoto;
 
   /// Memory card heading on profile
   ///
@@ -1754,6 +1904,30 @@ abstract class AppLocalizations {
   /// **'bir bardak ekle'**
   String get ekleWaterSubtitle;
 
+  /// ILND sheet subtitle under the ilnd. header
+  ///
+  /// In tr, this message translates to:
+  /// **'ne yapmak istersin?'**
+  String get ekleSheetSubtitle;
+
+  /// ILND sheet primary action: open chat with ILND
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND\'ye sor'**
+  String get ekleAskIlndTitle;
+
+  /// ILND sheet primary action subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'aklındakini konuş'**
+  String get ekleAskIlndSubtitle;
+
+  /// Home tracking card subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'adımların, öğünlerin, alışkanlıkların'**
+  String get homeTrackingCardSubtitle;
+
   /// Error when habit name is empty
   ///
   /// In tr, this message translates to:
@@ -2036,6 +2210,30 @@ abstract class AppLocalizations {
   /// **'keyifli görünüyor. suçluluk yok — küçük dokunuşlar yeter, baskı değil.'**
   String get ilndFallbackFood4;
 
+  /// First-entry fallback need option 1
+  ///
+  /// In tr, this message translates to:
+  /// **'kısa bir nefes molası'**
+  String get ilndFallbackNeed1;
+
+  /// First-entry fallback need option 2
+  ///
+  /// In tr, this message translates to:
+  /// **'güne uygun bir tarif'**
+  String get ilndFallbackNeed2;
+
+  /// First-entry fallback need option 3
+  ///
+  /// In tr, this message translates to:
+  /// **'cilt bakım rutini'**
+  String get ilndFallbackNeed3;
+
+  /// First-entry fallback need option 4
+  ///
+  /// In tr, this message translates to:
+  /// **'küçük bir hareket önerisi'**
+  String get ilndFallbackNeed4;
+
   /// Streak banner text for 30+ day streaks
   ///
   /// In tr, this message translates to:
@@ -2113,6 +2311,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Profili aç'**
   String get a11yOpenProfile;
+
+  /// Screen-reader label for the ILND breath-ring button in the home header
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND\'yi aç'**
+  String get a11yOpenIlnd;
 
   /// Screen-reader label for a back icon button
   ///
