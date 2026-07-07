@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -110,6 +111,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                       ),
                     ),
                   ),
+                  const Center(child: BreathRing(size: 52)),
+                  const SizedBox(height: 18),
                   if (widget.reason != null) ...[
                     Text(
                       widget.reason!,
@@ -336,10 +339,7 @@ class _Benefit extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.body(
-                    fontSize: 15,
-                    color: p.text,
-                  ).copyWith(fontWeight: FontWeight.w600),
+                  style: AppTextStyles.heading(fontSize: 15, color: p.text),
                 ),
                 const SizedBox(height: 2),
                 Text(
