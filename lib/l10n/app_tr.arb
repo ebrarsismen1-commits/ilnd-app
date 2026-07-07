@@ -541,6 +541,15 @@
   "exploreStorySelfCare": "öz-bakım",
   "@exploreStorySelfCare": {"description": "Story tile: self-care"},
 
+  "exploreRitualsLabel": "RİTÜELLER",
+  "@exploreRitualsLabel": {"description": "Section label above the rituals rail (replaces the old emoji stories row)"},
+  "exploreRitualBreathTitle": "2 dk nefes",
+  "@exploreRitualBreathTitle": {"description": "Breathing ritual card title"},
+  "exploreRitualSleepTitle": "gece ritüeli",
+  "@exploreRitualSleepTitle": {"description": "Sleep ritual card title — opens the matching article"},
+  "exploreRitualMovementTitle": "hareket molası",
+  "@exploreRitualMovementTitle": {"description": "Movement ritual card title — opens the matching article"},
+
   "exploreQuote": "\"Bugün küçük bir adım, yarının büyük farkı.\"",
   "@exploreQuote": {"description": "Daily quote on explore screen"},
 

@@ -4,6 +4,7 @@ import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_animation.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
@@ -30,45 +31,6 @@ extension _FilterX on _Filter {
     _Filter.tarifler => a.category == ArticleCategory.tarif,
     _Filter.yazilar => a.category == ArticleCategory.yazi,
   };
-}
-
-// ─── Story config ─────────────────────────────────────────────────────────────
-
-class _Story {
-  const _Story(this.label, this.emoji, this.color);
-  final String label;
-  final String emoji;
-  final Color color;
-}
-
-// Internal keys (used for matching, e.g. 'nefes' triggers breathing screen) —
-// display labels are resolved via l10n in _StoriesRow through _storyLabel().
-const _stories = [
-  _Story('nefes', '🌬️', Color(0xFFB8A9FF)),
-  _Story('uyku', '🌙', Color(0xFF9BB5FF)),
-  _Story('su', '💧', Color(0xFF93D5FF)),
-  _Story('hareket', '⚡', Color(0xFFA8EDCA)),
-  _Story('meditasyon', '✨', Color(0xFFFFB8D9)),
-  _Story('öz-bakım', '🌸', Color(0xFFFFCBA4)),
-];
-
-String _storyLabel(AppLocalizations l10n, String key) {
-  switch (key) {
-    case 'nefes':
-      return l10n.exploreStoryBreathing;
-    case 'uyku':
-      return l10n.exploreStorySleep;
-    case 'su':
-      return l10n.exploreStoryWater;
-    case 'hareket':
-      return l10n.exploreStoryMovement;
-    case 'meditasyon':
-      return l10n.exploreStoryMeditation;
-    case 'öz-bakım':
-      return l10n.exploreStorySelfCare;
-    default:
-      return key;
-  }
 }
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
@@ -165,8 +127,12 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 ),
               ),
 
-              // ── Stories ───────────────────────────────────────────────────
-              SliverToBoxAdapter(child: _StoriesRow(p: p)),
+              // ── Ritüeller (eski emoji "stories" şeridinin yerine — vizyon
+              // kararı: her kart gerçek bir deneyime açılır, dekoratif emoji
+              // dairesi değil) ────────────────────────────────────────────
+              SliverToBoxAdapter(
+                child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
+              ),
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
 
               // ── Hero card ─────────────────────────────────────────────────
@@ -340,94 +306,183 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   }
 }
 
-// ─── Stories ──────────────────────────────────────────────────────────────────
+// ─── Ritüeller ────────────────────────────────────────────────────────────────
 
-class _StoriesRow extends StatelessWidget {
-  const _StoriesRow({required this.p});
+/// Her kart gerçek bir deneyime açılır: nefes → interaktif nefes ekranı,
+/// diğerleri → içerik hattındaki (content/articles.json) eşleşen makale.
+/// Eşleşen makale yoksa (içerik henüz girilmemişse) kart sessizce gizlenir —
+/// asla ölü bir dokunma hedefi göstermeyiz.
+class _RitualsRow extends StatelessWidget {
+  const _RitualsRow({
+    required this.articles,
+    required this.p,
+    required this.onOpen,
+  });
+  final List<Article> articles;
   final AppPalette p;
+  final void Function(Article) onOpen;
+
+  Article? _byKeyword(String keyword) {
+    for (final a in articles) {
+      if (a.title.contains(keyword)) return a;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return SizedBox(
-      height: 100,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.screenPadding,
-        ),
-        itemCount: _stories.length,
-        separatorBuilder: (ctx0, i0) => const SizedBox(width: 12),
-        itemBuilder: (context, i) {
-          final s = _stories[i];
-          return Pressable(
-            onTap: () {
-              if (s.label == 'nefes') {
-                Navigator.of(context).push(
-                  PageRouteBuilder<void>(
-                    pageBuilder: (ctx, anim, _) => BreathScreen(p: p),
-                    transitionsBuilder: (ctx, anim, _, child) {
-                      final c = CurvedAnimation(
-                        parent: anim,
-                        curve: Curves.easeOutCubic,
-                      );
-                      return FadeTransition(
-                        opacity: c,
-                        child: ScaleTransition(
-                          scale: Tween(begin: 0.92, end: 1.0).animate(c),
-                          child: child,
-                        ),
-                      );
-                    },
-                    transitionDuration: const Duration(milliseconds: 350),
-                  ),
-                );
-              }
+    final sleepArticle = _byKeyword('uyku');
+    final movementArticle = _byKeyword('hareket');
+
+    final cards = <_RitualCard>[
+      _RitualCard(
+        title: l10n.exploreRitualBreathTitle,
+        fill: p.accent,
+        onLight: true,
+        trailing: const BreathRing(size: 22),
+        onTap: () => Navigator.of(context).push(
+          PageRouteBuilder<void>(
+            pageBuilder: (ctx, anim, _) => BreathScreen(p: p),
+            transitionsBuilder: (ctx, anim, _, child) {
+              final c = CurvedAnimation(
+                parent: anim,
+                curve: Curves.easeOutCubic,
+              );
+              return FadeTransition(
+                opacity: c,
+                child: ScaleTransition(
+                  scale: Tween(begin: 0.92, end: 1.0).animate(c),
+                  child: child,
+                ),
+              );
             },
-            child: SizedBox(
-              width: 70,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 68,
-                    height: 68,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: RadialGradient(
-                        colors: [
-                          s.color.withValues(alpha: 0.9),
-                          s.color.withValues(alpha: 0.5),
-                        ],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: s.color.withValues(alpha: 0.35),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        s.emoji,
-                        style: const TextStyle(fontSize: 28),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    _storyLabel(l10n, s.label),
-                    style: AppTextStyles.body(fontSize: 11, color: p.textMuted),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
+            transitionDuration: const Duration(milliseconds: 350),
+          ),
+        ),
+      ),
+      if (sleepArticle != null)
+        _RitualCard(
+          title: l10n.exploreRitualSleepTitle,
+          fill: p.surfaceStrong,
+          onLight: false,
+          onTap: () => onOpen(sleepArticle),
+        ),
+      if (movementArticle != null)
+        _RitualCard(
+          title: l10n.exploreRitualMovementTitle,
+          fill: p.amber,
+          onLight: true,
+          onTap: () => onOpen(movementArticle),
+        ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.screenPadding,
+          ),
+          child: Text(
+            l10n.exploreRitualsLabel,
+            style: AppTextStyles.label(fontSize: 11, color: p.accent),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 108,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
             ),
-          );
-        },
+            itemCount: cards.length,
+            separatorBuilder: (ctx0, i0) => const SizedBox(width: 8),
+            itemBuilder: (context, i) => cards[i],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RitualCard extends StatelessWidget {
+  const _RitualCard({
+    required this.title,
+    required this.fill,
+    required this.onLight,
+    required this.onTap,
+    this.trailing,
+  });
+  final String title;
+  final Color fill;
+  final bool onLight;
+  final VoidCallback onTap;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final textColor = onLight ? Colors.white : AppTextStyles.body().color!;
+    return Pressable(
+      onTap: onTap,
+      child: Container(
+        width: 118,
+        height: 108,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: fill,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        alignment: Alignment.topLeft,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _RitualTitle(title: title, color: textColor),
+            trailing ??
+                Icon(
+                  Icons.arrow_outward_rounded,
+                  size: 15,
+                  color: onLight
+                      ? Colors.white.withValues(alpha: 0.85)
+                      : textColor.withValues(alpha: 0.6),
+                ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// "2 dk nefes", "gece ritüeli" gibi iki kelimelik başlıkları serif +
+/// ikinci kelime italik olacak şekilde böler (DESIGN_SYSTEM §2 imzası) —
+/// bu üç başlık bizim kendi kopyamız olduğu için (dinamik makale değil)
+/// italik-kelime-vurgusu güvenle uygulanabilir.
+class _RitualTitle extends StatelessWidget {
+  const _RitualTitle({required this.title, required this.color});
+  final String title;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final words = title.split(' ');
+    if (words.length < 2) {
+      return Text(
+        title,
+        style: AppTextStyles.display(fontSize: 15, color: color, height: 1.15),
+      );
+    }
+    return Text.rich(
+      TextSpan(
+        style: AppTextStyles.display(fontSize: 15, color: color, height: 1.15),
+        children: [
+          TextSpan(text: '${words.sublist(0, words.length - 1).join(' ')} '),
+          TextSpan(
+            text: words.last,
+            style: const TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ],
       ),
     );
   }
@@ -514,12 +569,10 @@ class _HeroCard extends StatelessWidget {
                       children: [
                         Text(
                           article.title,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: AppTextStyles.display(
                             fontSize: 24,
-                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
                             height: 1.2,
-                            letterSpacing: -0.3,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -599,10 +652,9 @@ class _FeaturedCard extends StatelessWidget {
                       children: [
                         Text(
                           article.title,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: AppTextStyles.heading(
                             fontSize: 15,
-                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
                             height: 1.2,
                           ),
                           maxLines: 2,
@@ -778,9 +830,8 @@ class _FeedRow extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(
                     article.title,
-                    style: TextStyle(
+                    style: AppTextStyles.heading(
                       fontSize: 15,
-                      fontWeight: FontWeight.w700,
                       color: p.text,
                       height: 1.2,
                     ),

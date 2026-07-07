@@ -1208,6 +1208,30 @@ abstract class AppLocalizations {
   /// **'öz-bakım'**
   String get exploreStorySelfCare;
 
+  /// Section label above the rituals rail (replaces the old emoji stories row)
+  ///
+  /// In tr, this message translates to:
+  /// **'RİTÜELLER'**
+  String get exploreRitualsLabel;
+
+  /// Breathing ritual card title
+  ///
+  /// In tr, this message translates to:
+  /// **'2 dk nefes'**
+  String get exploreRitualBreathTitle;
+
+  /// Sleep ritual card title — opens the matching article
+  ///
+  /// In tr, this message translates to:
+  /// **'gece ritüeli'**
+  String get exploreRitualSleepTitle;
+
+  /// Movement ritual card title — opens the matching article
+  ///
+  /// In tr, this message translates to:
+  /// **'hareket molası'**
+  String get exploreRitualMovementTitle;
+
   /// Daily quote on explore screen
   ///
   /// In tr, this message translates to:
