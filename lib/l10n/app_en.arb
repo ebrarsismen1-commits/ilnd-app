@@ -219,6 +219,10 @@
   "exploreStoryMovement": "movement",
   "exploreStoryMeditation": "meditation",
   "exploreStorySelfCare": "self-care",
+  "exploreRitualsLabel": "RITUALS",
+  "exploreRitualBreathTitle": "2 min breath",
+  "exploreRitualSleepTitle": "night ritual",
+  "exploreRitualMovementTitle": "movement break",
   "exploreQuote": "\"A small step today, a big difference tomorrow.\"",
   "exploreQuoteSubtitle": "quote of the day",
 

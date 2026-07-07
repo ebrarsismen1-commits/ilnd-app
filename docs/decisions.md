@@ -17,3 +17,4 @@ Format: tarih · karar · neden · alternatif · risk/ders.
 | 2026-07-04 | Nav v2 kodlandı: merkez halka + Topluluk sekmesi; NOW blokerleri beklerken NEXT öne çekildi | Owner kararı (tasarım momentum'u) | NOW'u beklemek | Takip tam birleşmesi ve gerçek etkinlik listesi (arch:L) sonraki fazlarda |
 | 2026-07-04 | Etkinlik+RSVP: kök events + rsvps/{uid} alt koleksiyonu (ADR-0002) | Idempotent RSVP, aggregate count, festival ölçeği | rsvpIds array | Yazma çekişmesi/1MB sınırı elendi |
 | 2026-07-07 | Sohbet ekranı v2: halka başlıkta, ILND balonsuz+serif | Vizyon mockup'ı zaten bunu tasarlamıştı, sadece uygulandı | Balonu korumak | Marka jesti (halka) artık 2. ekranda da yaşıyor |
+| 2026-07-07 | Keşfet v2: emoji 'stories' şeridi öldürüldü → Ritüeller rafı (gerçek hedefli) | Vizyon: 'Instagram klişesi, dokunulduğunda derinliği yok' — 5/6 kart zaten ölü dokunmaydı | Emoji şeridini korumak | Eşleşen içerik yoksa kart hiç gösterilmez (asla sahte özellik) |

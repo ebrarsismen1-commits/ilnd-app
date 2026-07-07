@@ -593,6 +593,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exploreStorySelfCare => 'öz-bakım';
 
   @override
+  String get exploreRitualsLabel => 'RİTÜELLER';
+
+  @override
+  String get exploreRitualBreathTitle => '2 dk nefes';
+
+  @override
+  String get exploreRitualSleepTitle => 'gece ritüeli';
+
+  @override
+  String get exploreRitualMovementTitle => 'hareket molası';
+
+  @override
   String get exploreQuote => '\"Bugün küçük bir adım, yarının büyük farkı.\"';
 
   @override

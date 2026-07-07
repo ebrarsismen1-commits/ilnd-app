@@ -604,6 +604,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreStorySelfCare => 'self-care';
 
   @override
+  String get exploreRitualsLabel => 'RITUALS';
+
+  @override
+  String get exploreRitualBreathTitle => '2 min breath';
+
+  @override
+  String get exploreRitualSleepTitle => 'night ritual';
+
+  @override
+  String get exploreRitualMovementTitle => 'movement break';
+
+  @override
   String get exploreQuote =>
       '\"A small step today, a big difference tomorrow.\"';
 
