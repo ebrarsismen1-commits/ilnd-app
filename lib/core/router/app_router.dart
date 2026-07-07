@@ -11,6 +11,7 @@ import 'package:ilnd_app/features/explore/explore_screen.dart';
 import 'package:ilnd_app/features/home/home_screen.dart';
 import 'package:ilnd_app/features/legal/legal_screen.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
+import 'package:ilnd_app/features/onboarding/profile_sync.dart';
 import 'package:ilnd_app/features/onboarding/screens/first_entry_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/quick_setup_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/welcome_screen.dart';
@@ -56,6 +57,12 @@ class _RouterNotifier extends ChangeNotifier {
       firstEntryDoneProvider,
       (prev, next) => notifyListeners(),
     );
+    // Girişten sonra profil sunucudan hidratlanana kadar redirect'i bekletiriz;
+    // durum `done`'a döndüğünde router yeniden değerlendirilmeli (ADR-0003).
+    _ref.listen<ProfileHydrationStatus>(
+      profileHydrationProvider,
+      (prev, next) => notifyListeners(),
+    );
   }
 
   final Ref _ref;
@@ -85,31 +92,39 @@ class _RouterNotifier extends ChangeNotifier {
     final isOnAuthRoute = location == routeLogin || location == routeRegister;
     final isOnboarding = location.startsWith('/onboarding');
 
-    // Not onboarded → always push through onboarding (name/goals) first.
+    if (isAuthenticated) {
+      // Sunucu profili çözülene kadar bekle: yerel bayraklar (yeni cihaz/web'de
+      // boş) gerçeği yansıtmıyor olabilir; hidratlama bitmeden onboarding'e
+      // atmak "her seferinde baştan" bug'ının ta kendisiydi.
+      final hydration = _ref.read(profileHydrationProvider);
+      if (hydration != ProfileHydrationStatus.done) {
+        return location == routeSplash ? null : routeSplash;
+      }
+
+      // Hidratlama bitti — yerel bayraklar artık sunucu gerçeğini taşıyor.
+      if (!onboardingDone) {
+        if (isOnboarding) return null;
+        return routeWelcome;
+      }
+      if (!firstEntryDone) {
+        return location == routeFirstEntry ? null : routeFirstEntry;
+      }
+      // Auth/onboarding rotasında takılı kaldıysa → home.
+      if (isOnAuthRoute || location == routeFirstEntry || isOnboarding) {
+        return routeHome;
+      }
+      return null;
+    }
+
+    // Kimliksiz: giriş/kayıt rotalarına onboarding durumundan bağımsız izin ver —
+    // zaten kayıtlı bir kullanıcı (yeni cihaz) welcome'dan "giriş yap" ile
+    // login'e ulaşıp hidratlanabilsin.
+    if (isOnAuthRoute) return null;
     if (!onboardingDone) {
       if (isOnboarding) return null;
       return routeWelcome;
     }
-
-    // Onboarded but not authenticated → login (unless already there).
-    if (!isAuthenticated) {
-      if (isOnAuthRoute) return null;
-      return routeLogin;
-    }
-
-    // Authenticated but hasn't written/skipped the first journal entry yet —
-    // force the folded "first value" step before letting them reach home.
-    if (!firstEntryDone) {
-      if (location == routeFirstEntry) return null;
-      return routeFirstEntry;
-    }
-
-    // Authenticated, first entry done, but stuck on an auth/onboarding route → home.
-    if (isOnAuthRoute || location == routeFirstEntry) {
-      return routeHome;
-    }
-
-    return null;
+    return routeLogin;
   }
 }
 
@@ -142,7 +157,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       // ── ILND sohbet (tam ekran, shell dışı) ───────────────────────────────
       GoRoute(
         path: routeChat,
-        pageBuilder: (context, state) => _fade(state, const ChatScreen()),
+        // extra: ilk-giriş ekranından seçilen ihtiyaç metni (opsiyonel seed).
+        pageBuilder: (context, state) =>
+            _fade(state, ChatScreen(seedMessage: state.extra as String?)),
       ),
       GoRoute(
         path: routeYemekEkle,

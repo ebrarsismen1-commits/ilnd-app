@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
@@ -64,14 +65,18 @@ final vibeCardDataProvider = FutureProvider<VibeCardData?>((ref) async {
       .where('createdAt', isGreaterThanOrEqualTo: since60)
       .get();
 
+  // Her sorgu bağımsız dayanıklı: biri patlarsa (ör. deploy edilmemiş
+  // composite index → FAILED_PRECONDITION) tüm kart yerine yalnız o metrik
+  // 0 olur. Aksi halde tek bir alt-sorgu hatası kartı komple çökertip
+  // paylaş butonunu kalıcı pasif bırakıyordu (Web Raporu madde 7).
   final results = await Future.wait([
-    journalFuture,
-    habitFuture,
-    streakWindowFuture,
+    _safeDocs(journalFuture, 'journal'),
+    _safeDocs(habitFuture, 'habit_completions'),
+    _safeDocs(streakWindowFuture, 'streak_window'),
   ]);
-  final journalDocs = results[0].docs;
-  final habitDocs = results[1].docs;
-  final streakWindowDocs = results[2].docs;
+  final journalDocs = results[0];
+  final habitDocs = results[1];
+  final streakWindowDocs = results[2];
 
   final activeDays = streakWindowDocs
       .map((d) {
@@ -102,6 +107,20 @@ final vibeCardDataProvider = FutureProvider<VibeCardData?>((ref) async {
     weekEnd: today,
   );
 });
+
+/// Tek bir Firestore sorgusunu izole eder: hata olursa boş liste döner ki
+/// kartın geri kalanı yine üretilebilsin.
+Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> _safeDocs(
+  Future<QuerySnapshot<Map<String, dynamic>>> future,
+  String label,
+) async {
+  try {
+    return (await future).docs;
+  } catch (e) {
+    debugPrint('[VibeCard] $label query failed: $e');
+    return const [];
+  }
+}
 
 String _fmt(DateTime d) =>
     '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';

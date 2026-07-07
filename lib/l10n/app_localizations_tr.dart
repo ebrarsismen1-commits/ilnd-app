@@ -270,6 +270,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get welcomeStart => 'başla';
 
   @override
+  String get welcomeHaveAccount => 'zaten hesabın var mı? ';
+
+  @override
+  String get welcomeLoginLink => 'giriş yap';
+
+  @override
   String get quickSetupTitle => 'seni biraz tanıyalım';
 
   @override
@@ -303,6 +309,72 @@ class AppLocalizationsTr extends AppLocalizations {
   String get quickSetupGoalMood => 'ruh hali takibi';
 
   @override
+  String get quickSetupBodyTitle => 'birkaç rakam daha';
+
+  @override
+  String get quickSetupBodySubtitle => 'önerileri sana göre ayarlamak için';
+
+  @override
+  String get quickSetupAgeHint => 'yaş';
+
+  @override
+  String get quickSetupHeightHint => 'boy (cm)';
+
+  @override
+  String get quickSetupWeightHint => 'kilo (kg)';
+
+  @override
+  String get quickSetupActivityTitle => 'ne kadar hareketlisin?';
+
+  @override
+  String get quickSetupActivitySedentary => 'az hareketli';
+
+  @override
+  String get quickSetupActivityModerate => 'orta';
+
+  @override
+  String get quickSetupActivityActive => 'aktif';
+
+  @override
+  String get quickSetupDietTitle => 'beslenme tercihin var mı?';
+
+  @override
+  String get quickSetupDietNone => 'yok';
+
+  @override
+  String get quickSetupDietVegetarian => 'vejetaryen';
+
+  @override
+  String get quickSetupDietVegan => 'vegan';
+
+  @override
+  String get quickSetupDietGlutenFree => 'glütensiz';
+
+  @override
+  String get quickSetupDietLactoseFree => 'laktozsuz';
+
+  @override
+  String get quickSetupAllergiesTitle => 'alerjin var mı?';
+
+  @override
+  String get quickSetupAllergiesSubtitle => 'varsa seç, yoksa geç';
+
+  @override
+  String get quickSetupAllergyNuts => 'fındık/kabuklu yemiş';
+
+  @override
+  String get quickSetupAllergyDairy => 'süt/laktoz';
+
+  @override
+  String get quickSetupAllergyGluten => 'gluten';
+
+  @override
+  String get quickSetupAllergySeafood => 'deniz ürünü';
+
+  @override
+  String get quickSetupAllergyEgg => 'yumurta';
+
+  @override
   String get quickSetupInviteCodeTitle => 'davet kodun var mı?';
 
   @override
@@ -315,28 +387,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get quickSetupContinue => 'devam et';
 
   @override
-  String get firstEntryHeader => 'İLK GÜNLÜK';
+  String get firstEntryHeader => 'BAŞLAYALIM';
 
   @override
   String get firstEntrySkip => 'şimdi değil';
 
   @override
-  String get firstEntryReady => 'hazırım';
+  String get firstEntryNeedsPrompt => 'neye ihtiyacın var?';
 
   @override
-  String get firstEntrySave => 'kaydet';
-
-  @override
-  String get firstEntryPrompt => 'bugün nasılsın?';
-
-  @override
-  String get firstEntryHint => 'ne aklından geçiyorsa yaz...';
+  String get firstEntryNeedsLoading =>
+      'senin için birkaç öneri hazırlıyorum...';
 
   @override
   String get homeTodaysReadTitle => 'BUGÜNÜN OKUMASI';
-
-  @override
-  String get homeTodaysIntentionTitle => 'BUGÜNKÜ NİYETİN';
 
   @override
   String get homeGreetingNight => 'iyi geceler';
@@ -386,18 +450,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get homeMoodHard => 'zor';
 
   @override
-  String homeReadTimeArrow(String readTime) {
-    return '$readTime oku →';
+  String homeMoodAnsweredToday(String mood) {
+    return 'bugün: $mood';
   }
 
   @override
-  String get homeIntentionEdit => 'düzenle';
-
-  @override
-  String get homeIntentionHint => 'bugün neye odaklanmak istiyorsun?';
-
-  @override
-  String get homeIntentionSave => 'kaydet';
+  String homeReadTimeArrow(String readTime) {
+    return '$readTime oku →';
+  }
 
   @override
   String get journalTitle => 'günlük';
@@ -449,6 +509,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get profileDefaultUserName => 'Kullanıcı';
+
+  @override
+  String get profilePhotoFromGallery => 'galeriden seç';
+
+  @override
+  String get profilePhotoRemove => 'fotoğrafı kaldır';
+
+  @override
+  String get profilePhotoUpdated => 'profil fotoğrafın güncellendi';
+
+  @override
+  String get profilePhotoTooLarge =>
+      'bu resim çok büyük, daha küçük bir tane seç';
+
+  @override
+  String get profilePhotoFailed => 'fotoğraf yüklenemedi';
+
+  @override
+  String get a11yEditPhoto => 'Profil fotoğrafını değiştir';
 
   @override
   String get profileMemoryHeading => 'ILND seni hatırlıyor';
@@ -889,6 +968,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get ekleWaterSubtitle => 'bir bardak ekle';
 
   @override
+  String get ekleSheetSubtitle => 'ne yapmak istersin?';
+
+  @override
+  String get ekleAskIlndTitle => 'ILND\'ye sor';
+
+  @override
+  String get ekleAskIlndSubtitle => 'aklındakini konuş';
+
+  @override
+  String get homeTrackingCardSubtitle =>
+      'adımların, öğünlerin, alışkanlıkların';
+
+  @override
   String get gorevEkleNameEmpty => 'Önce alışkanlığa bir ad ver.';
 
   @override
@@ -1052,6 +1144,18 @@ class AppLocalizationsTr extends AppLocalizations {
       'keyifli görünüyor. suçluluk yok — küçük dokunuşlar yeter, baskı değil.';
 
   @override
+  String get ilndFallbackNeed1 => 'kısa bir nefes molası';
+
+  @override
+  String get ilndFallbackNeed2 => 'güne uygun bir tarif';
+
+  @override
+  String get ilndFallbackNeed3 => 'cilt bakım rutini';
+
+  @override
+  String get ilndFallbackNeed4 => 'küçük bir hareket önerisi';
+
+  @override
   String streakCopyLongStreak(int days) {
     return '$days gündür kendine sadıksın. bu bir alışkanlık artık.';
   }
@@ -1113,6 +1217,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get a11yOpenProfile => 'Profili aç';
+
+  @override
+  String get a11yOpenIlnd => 'ILND\'yi aç';
 
   @override
   String get a11yBack => 'Geri';

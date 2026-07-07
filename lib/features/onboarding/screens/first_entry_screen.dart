@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
-import 'package:ilnd_app/core/ilnd/ilnd_learner.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
-import 'package:ilnd_app/core/repositories/journal_repository.dart';
+import 'package:ilnd_app/core/repositories/profile_repository.dart';
 import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
@@ -15,15 +14,15 @@ import 'package:ilnd_app/core/services/onboarding_timer.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
-enum _Phase { writing, reflecting, response }
-
-/// Onboarding'in son adımı — auth'tan hemen sonra gösterilir. İlk günlük
-/// yazısını yakalar (time-to-first-value ölçümü burada biter). Asla zorunlu
-/// değil: "şimdi değil" ile atlanabilir.
+/// Onboarding'in son adımı — auth'tan hemen sonra gösterilir. "Neye ihtiyacın
+/// var?" sorusuna ILND'nin profile göre tahmin ettiği kısa şıkları sunar
+/// (düşük-token AI çağrısı, offline'da sabit fallback). Bir şık seçilince
+/// ILND sohbeti o ihtiyaçla açılır. Asla zorunlu değil: "şimdi değil" ile atlanır.
 class FirstEntryScreen extends ConsumerStatefulWidget {
   const FirstEntryScreen({super.key});
 
@@ -32,9 +31,8 @@ class FirstEntryScreen extends ConsumerStatefulWidget {
 }
 
 class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
-  final _controller = TextEditingController();
-  _Phase _phase = _Phase.writing;
-  String _ilndReply = '';
+  /// null → yükleniyor; sonra AI (veya fallback) şıkları.
+  List<String>? _options;
 
   @override
   void initState() {
@@ -46,12 +44,7 @@ class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
         'first_entry',
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadOptions());
   }
 
   Future<void> _redeemPendingReferralCode() async {
@@ -67,92 +60,71 @@ class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
     await ref.read(referralCodeInputProvider.notifier).clear();
   }
 
-  Future<void> _finish() async {
+  Future<void> _loadOptions() async {
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final memory = ref.read(ilndMemoryProvider);
+    final service = ref.read(ilndServiceProvider);
+
+    List<String> opts;
+    try {
+      opts = await service.suggestNeeds(memory: memory, l10n: l10n);
+    } catch (_) {
+      opts = const [];
+    }
+    // AI boş/başarısız → güvenli sabit şıklara düş.
+    if (opts.isEmpty) opts = IlndFallbacks.needs(l10n);
+    if (mounted) setState(() => _options = opts);
+  }
+
+  /// İlk-giriş adımını tamamlandı işaretler + sunucuya yazar (ADR-0003) +
+  /// time-to-first-value ölçümünü kapatır.
+  Future<void> _complete() async {
     await ref.read(firstEntryDoneProvider.notifier).setDone();
+    unawaited(
+      ref.read(profileRepositoryProvider)?.updateFields({
+            'onboarding_done': true,
+            'first_entry_done': true,
+          }) ??
+          Future<void>.value(),
+    );
     ref.read(currentOnboardingStepProvider.notifier).state = null;
     final elapsed = OnboardingTimer.elapsed();
     if (elapsed != null) {
       unawaited(AnalyticsService.logTimeToFirstValue(elapsed));
     }
     OnboardingTimer.reset();
-    if (mounted) context.go(routeHome);
   }
 
   Future<void> _skip() async {
     unawaited(AnalyticsService.logEvent('onboarding_first_entry_skipped'));
-    await _finish();
+    await _complete();
+    if (mounted) context.go(routeHome);
   }
 
-  Future<void> _save() async {
-    final text = _controller.text.trim();
-    if (text.isEmpty) {
-      await _skip();
-      return;
-    }
-
-    final l10n = AppLocalizations.of(context)!;
-    FocusScope.of(context).unfocus();
-    setState(() => _phase = _Phase.reflecting);
-
-    final memory = ref.read(ilndMemoryProvider);
-    final service = ref.read(ilndServiceProvider);
-
-    String reply;
-    try {
-      reply = await service.respond(
-        memory: memory,
-        userMessage: 'Günlüğüme şunu yazdım:\n$text',
-        task:
-            'Kullanıcının ilk günlük yazısına yargısız, sıcak ve kısa bir karşılık ver. '
-            'Önce duygusunu karşıla, sonra düşünmeye davet eden tek nazik bir '
-            'soru sor. Liste yapma, 2-3 cümleyi geçme.',
-        tier: IlndTier.deep,
-        fallback: IlndFallbacks.journal(l10n),
-        l10n: l10n,
-      );
-    } catch (e) {
-      reply = IlndService.friendlyError(e, l10n);
-    }
-
-    final repo = ref.read(journalRepositoryProvider);
-    if (repo != null) {
-      unawaited(
-        repo.add(
-          JournalEntry(
-            id: '',
-            body: text,
-            ilndReply: reply,
-            createdAt: DateTime.now(),
-          ),
-        ),
-      );
-    }
-
-    await ref
-        .read(ilndMemoryProvider.notifier)
-        .addNote(
-          'Günlük: ${text.length > 80 ? '${text.substring(0, 80)}…' : text}',
-        );
-    unawaited(ref.read(ilndLearnerProvider).learnFrom(text, l10n));
-
-    if (mounted) {
-      setState(() {
-        _ilndReply = reply;
-        _phase = _Phase.response;
-      });
-    }
+  Future<void> _pick(String need) async {
+    unawaited(AnalyticsService.logEvent('onboarding_first_need_picked'));
+    await _complete();
+    if (!mounted) return;
+    // Home'u tabana koy, sohbeti seçilen ihtiyaçla üstüne aç — sohbet
+    // kapanınca kullanıcı home'a düşer.
+    context.go(routeHome);
+    context.push(routeChat, extra: need);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
+    final options = _options;
+
     return Scaffold(
       backgroundColor: p.base,
       body: AnimatedBackground(
         palette: p,
         child: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(32, 24, 32, 0),
@@ -163,65 +135,41 @@ class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
                       l10n.firstEntryHeader,
                       style: AppTextStyles.sectionLabel(color: p.textMuted),
                     ),
-                    if (_phase == _Phase.writing)
-                      Pressable(
-                        onTap: _skip,
-                        child: Text(
-                          l10n.firstEntrySkip,
-                          style: AppTextStyles.body(
-                            fontSize: 13,
-                            color: p.textMuted,
-                          ).copyWith(decoration: TextDecoration.underline),
-                        ),
+                    Pressable(
+                      onTap: _skip,
+                      child: Text(
+                        l10n.firstEntrySkip,
+                        style: AppTextStyles.body(
+                          fontSize: 13,
+                          color: p.textMuted,
+                        ).copyWith(decoration: TextDecoration.underline),
                       ),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: _phase == _Phase.response
-                    ? _ResponseView(
-                        reply: _ilndReply,
-                        entry: _controller.text,
-                        p: p,
-                      )
-                    : _WritingView(controller: _controller, p: p),
-              ),
+              const SizedBox(height: 24),
               Padding(
-                padding: const EdgeInsets.fromLTRB(32, 0, 32, 40),
-                child: Pressable(
-                  onTap: _phase == _Phase.reflecting
-                      ? null
-                      : (_phase == _Phase.response ? _finish : _save),
-                  child: Container(
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: _phase == _Phase.reflecting
-                          ? p.accent.withValues(alpha: 0.5)
-                          : p.accent,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    alignment: Alignment.center,
-                    child: _phase == _Phase.reflecting
-                        ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: p.onAccent,
-                            ),
-                          )
-                        : Text(
-                            _phase == _Phase.response
-                                ? l10n.firstEntryReady
-                                : l10n.firstEntrySave,
-                            style: AppTextStyles.body(
-                              fontSize: 15,
-                              color: p.onAccent,
-                            ).copyWith(fontWeight: FontWeight.w600),
-                          ),
-                  ),
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Text(
+                  l10n.firstEntryNeedsPrompt,
+                  style: AppTextStyles.display(fontSize: 30, color: p.text),
                 ),
+              ),
+              const SizedBox(height: 24),
+              Expanded(
+                child: options == null
+                    ? _LoadingOptions(p: p, label: l10n.firstEntryNeedsLoading)
+                    : ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
+                        itemCount: options.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 12),
+                        itemBuilder: (context, i) => _NeedOption(
+                          label: options[i],
+                          p: p,
+                          onTap: () => _pick(options[i]),
+                        ),
+                      ),
               ),
             ],
           ),
@@ -231,50 +179,22 @@ class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
   }
 }
 
-class _WritingView extends StatelessWidget {
-  const _WritingView({required this.controller, required this.p});
-  final TextEditingController controller;
+class _LoadingOptions extends StatelessWidget {
+  const _LoadingOptions({required this.p, required this.label});
   final AppPalette p;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
+    return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
+          const BreathRing(size: 48),
+          const SizedBox(height: 16),
           Text(
-            l10n.firstEntryPrompt,
-            style: AppTextStyles.display(fontSize: 26, color: p.text),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              autofocus: true,
-              maxLines: null,
-              expands: true,
-              textCapitalization: TextCapitalization.sentences,
-              style: AppTextStyles.display(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-                color: p.text,
-                height: 1.55,
-              ),
-              decoration: InputDecoration(
-                hintText: l10n.firstEntryHint,
-                hintStyle: AppTextStyles.display(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                  color: p.textMuted.withValues(alpha: 0.7),
-                  height: 1.55,
-                ),
-                border: InputBorder.none,
-                filled: false,
-                contentPadding: EdgeInsets.zero,
-              ),
-            ),
+            label,
+            style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
           ),
         ],
       ),
@@ -282,76 +202,41 @@ class _WritingView extends StatelessWidget {
   }
 }
 
-class _ResponseView extends StatelessWidget {
-  const _ResponseView({
-    required this.reply,
-    required this.entry,
+class _NeedOption extends StatelessWidget {
+  const _NeedOption({
+    required this.label,
     required this.p,
+    required this.onTap,
   });
-  final String reply;
-  final String entry;
+  final String label;
   final AppPalette p;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            entry,
-            style: AppTextStyles.display(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: p.textMuted,
-              height: 1.5,
+    return Pressable(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
+        decoration: BoxDecoration(
+          color: p.surface,
+          borderRadius: BorderRadius.circular(AppSpacing.radius),
+          border: Border.all(color: p.border, width: 0.5),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                style: AppTextStyles.body(
+                  fontSize: 16,
+                  color: p.text,
+                ).copyWith(fontWeight: FontWeight.w500),
+              ),
             ),
-            maxLines: 4,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: p.surface,
-              borderRadius: BorderRadius.circular(AppSpacing.radius),
-              border: Border.all(color: p.border, width: 0.5),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 30,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: p.accent,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    'i',
-                    style: AppTextStyles.display(
-                      fontSize: 15,
-                      color: p.onAccent,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    reply,
-                    style: AppTextStyles.body(
-                      fontSize: 15,
-                      height: 1.5,
-                      color: p.text,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+            Icon(Icons.arrow_forward_rounded, size: 18, color: p.accent),
+          ],
+        ),
       ),
     );
   }

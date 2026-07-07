@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/ekle/gorev_ekle_sheet.dart';
 import 'package:ilnd_app/features/ekle/su_ekle_sheet.dart';
@@ -58,14 +61,85 @@ class _EkleSheet extends ConsumerWidget {
                 ),
               ),
 
-              // Title
+              // Title — ILND-merkezli: bu yüzey artık "ekle"den çok ILND'nin
+              // giriş kapısı (nef­es halkası + ILND'ye sor birincil aksiyon).
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.screenPadding,
                 ),
-                child: Text(
-                  l10n.ekleTitle,
-                  style: AppTextStyles.display(fontSize: 28, color: p.text),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'ilnd.',
+                      style: AppTextStyles.display(fontSize: 28, color: p.text),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      l10n.ekleSheetSubtitle,
+                      style: AppTextStyles.body(
+                        fontSize: 13,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Birincil aksiyon: ILND'ye sor (sohbet) — marka jesti öne çıkar.
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Pressable(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    context.push(routeChat);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    decoration: BoxDecoration(
+                      color: p.surface,
+                      borderRadius: BorderRadius.circular(AppSpacing.radius),
+                      border: Border.all(color: p.accent, width: 1),
+                    ),
+                    child: Row(
+                      children: [
+                        const BreathRing(size: 34),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.ekleAskIlndTitle,
+                                style: AppTextStyles.body(
+                                  fontSize: 15,
+                                  color: p.text,
+                                ).copyWith(fontWeight: FontWeight.w600),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                l10n.ekleAskIlndSubtitle,
+                                style: AppTextStyles.body(
+                                  fontSize: 12,
+                                  color: p.textMuted,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          size: 20,
+                          color: p.textMuted,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
 

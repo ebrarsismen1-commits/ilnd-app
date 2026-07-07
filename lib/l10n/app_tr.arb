@@ -213,6 +213,12 @@
   "welcomeStart": "başla",
   "@welcomeStart": {"description": "Welcome screen start button"},
 
+  "welcomeHaveAccount": "zaten hesabın var mı? ",
+  "@welcomeHaveAccount": {"description": "Welcome screen: prompt before sign-in link"},
+
+  "welcomeLoginLink": "giriş yap",
+  "@welcomeLoginLink": {"description": "Welcome screen: sign-in link text"},
+
   "quickSetupTitle": "seni biraz tanıyalım",
   "@quickSetupTitle": {"description": "Quick setup screen title (Turkish)"},
 
@@ -246,6 +252,72 @@
   "quickSetupGoalMood": "ruh hali takibi",
   "@quickSetupGoalMood": {"description": "Goal option: mood tracking"},
 
+  "quickSetupBodyTitle": "birkaç rakam daha",
+  "@quickSetupBodyTitle": {"description": "Age/height/weight section title"},
+
+  "quickSetupBodySubtitle": "önerileri sana göre ayarlamak için",
+  "@quickSetupBodySubtitle": {"description": "Age/height/weight section subtitle"},
+
+  "quickSetupAgeHint": "yaş",
+  "@quickSetupAgeHint": {"description": "Age field placeholder"},
+
+  "quickSetupHeightHint": "boy (cm)",
+  "@quickSetupHeightHint": {"description": "Height field placeholder"},
+
+  "quickSetupWeightHint": "kilo (kg)",
+  "@quickSetupWeightHint": {"description": "Weight field placeholder"},
+
+  "quickSetupActivityTitle": "ne kadar hareketlisin?",
+  "@quickSetupActivityTitle": {"description": "Activity level section title"},
+
+  "quickSetupActivitySedentary": "az hareketli",
+  "@quickSetupActivitySedentary": {"description": "Activity level: sedentary"},
+
+  "quickSetupActivityModerate": "orta",
+  "@quickSetupActivityModerate": {"description": "Activity level: moderate"},
+
+  "quickSetupActivityActive": "aktif",
+  "@quickSetupActivityActive": {"description": "Activity level: active"},
+
+  "quickSetupDietTitle": "beslenme tercihin var mı?",
+  "@quickSetupDietTitle": {"description": "Diet preference section title"},
+
+  "quickSetupDietNone": "yok",
+  "@quickSetupDietNone": {"description": "Diet preference: none"},
+
+  "quickSetupDietVegetarian": "vejetaryen",
+  "@quickSetupDietVegetarian": {"description": "Diet preference: vegetarian"},
+
+  "quickSetupDietVegan": "vegan",
+  "@quickSetupDietVegan": {"description": "Diet preference: vegan"},
+
+  "quickSetupDietGlutenFree": "glütensiz",
+  "@quickSetupDietGlutenFree": {"description": "Diet preference: gluten-free"},
+
+  "quickSetupDietLactoseFree": "laktozsuz",
+  "@quickSetupDietLactoseFree": {"description": "Diet preference: lactose-free"},
+
+  "quickSetupAllergiesTitle": "alerjin var mı?",
+  "@quickSetupAllergiesTitle": {"description": "Allergies section title"},
+
+  "quickSetupAllergiesSubtitle": "varsa seç, yoksa geç",
+  "@quickSetupAllergiesSubtitle": {"description": "Allergies section subtitle"},
+
+  "quickSetupAllergyNuts": "fındık/kabuklu yemiş",
+  "@quickSetupAllergyNuts": {"description": "Allergy option: nuts"},
+
+  "quickSetupAllergyDairy": "süt/laktoz",
+  "@quickSetupAllergyDairy": {"description": "Allergy option: dairy"},
+
+  "quickSetupAllergyGluten": "gluten",
+  "@quickSetupAllergyGluten": {"description": "Allergy option: gluten"},
+
+  "quickSetupAllergySeafood": "deniz ürünü",
+  "@quickSetupAllergySeafood": {"description": "Allergy option: seafood"},
+
+  "quickSetupAllergyEgg": "yumurta",
+  "@quickSetupAllergyEgg": {"description": "Allergy option: egg"},
+
   "quickSetupInviteCodeTitle": "davet kodun var mı?",
   "@quickSetupInviteCodeTitle": {"description": "Invite code section title"},
 
@@ -258,29 +330,20 @@
   "quickSetupContinue": "devam et",
   "@quickSetupContinue": {"description": "Quick setup continue button"},
 
-  "firstEntryHeader": "İLK GÜNLÜK",
+  "firstEntryHeader": "BAŞLAYALIM",
   "@firstEntryHeader": {"description": "First entry screen header label"},
 
   "firstEntrySkip": "şimdi değil",
   "@firstEntrySkip": {"description": "Skip first entry"},
 
-  "firstEntryReady": "hazırım",
-  "@firstEntryReady": {"description": "Continue button after ILND's response"},
+  "firstEntryNeedsPrompt": "neye ihtiyacın var?",
+  "@firstEntryNeedsPrompt": {"description": "First-entry needs picker prompt"},
 
-  "firstEntrySave": "kaydet",
-  "@firstEntrySave": {"description": "Save the first journal entry"},
-
-  "firstEntryPrompt": "bugün nasılsın?",
-  "@firstEntryPrompt": {"description": "First entry writing prompt"},
-
-  "firstEntryHint": "ne aklından geçiyorsa yaz...",
-  "@firstEntryHint": {"description": "First entry text field hint"},
+  "firstEntryNeedsLoading": "senin için birkaç öneri hazırlıyorum...",
+  "@firstEntryNeedsLoading": {"description": "Loading label while fetching AI-suggested needs"},
 
   "homeTodaysReadTitle": "BUGÜNÜN OKUMASI",
   "@homeTodaysReadTitle": {"description": "Home screen section title for today's article"},
-
-  "homeTodaysIntentionTitle": "BUGÜNKÜ NİYETİN",
-  "@homeTodaysIntentionTitle": {"description": "Home screen section title for daily intention"},
 
   "homeGreetingNight": "iyi geceler",
   "@homeGreetingNight": {"description": "Greeting shown before 6am"},
@@ -335,6 +398,12 @@
   "homeMoodHard": "zor",
   "@homeMoodHard": {"description": "Mood option: hard"},
 
+  "homeMoodAnsweredToday": "bugün: {mood}",
+  "@homeMoodAnsweredToday": {
+    "description": "Shown instead of the mood question once already answered today",
+    "placeholders": {"mood": {"type": "String"}}
+  },
+
   "homeReadTimeArrow": "{readTime} oku →",
   "@homeReadTimeArrow": {
     "description": "Article read time with arrow; readTime already includes its own unit, e.g. '5 dk'",
@@ -342,15 +411,6 @@
       "readTime": {"type": "String"}
     }
   },
-
-  "homeIntentionEdit": "düzenle",
-  "@homeIntentionEdit": {"description": "Edit the daily intention"},
-
-  "homeIntentionHint": "bugün neye odaklanmak istiyorsun?",
-  "@homeIntentionHint": {"description": "Daily intention input hint"},
-
-  "homeIntentionSave": "kaydet",
-  "@homeIntentionSave": {"description": "Save the daily intention"},
 
   "journalTitle": "günlük",
   "@journalTitle": {"description": "Journal screen title"},
@@ -399,6 +459,24 @@
 
   "profileDefaultUserName": "Kullanıcı",
   "@profileDefaultUserName": {"description": "Fallback display name when none is set"},
+
+  "profilePhotoFromGallery": "galeriden seç",
+  "@profilePhotoFromGallery": {"description": "Avatar options: pick photo from gallery"},
+
+  "profilePhotoRemove": "fotoğrafı kaldır",
+  "@profilePhotoRemove": {"description": "Avatar options: remove profile photo"},
+
+  "profilePhotoUpdated": "profil fotoğrafın güncellendi",
+  "@profilePhotoUpdated": {"description": "Toast after saving a new profile photo"},
+
+  "profilePhotoTooLarge": "bu resim çok büyük, daha küçük bir tane seç",
+  "@profilePhotoTooLarge": {"description": "Error when the chosen image is too large"},
+
+  "profilePhotoFailed": "fotoğraf yüklenemedi",
+  "@profilePhotoFailed": {"description": "Error when saving the photo fails"},
+
+  "a11yEditPhoto": "Profil fotoğrafını değiştir",
+  "@a11yEditPhoto": {"description": "Screen-reader label for the editable profile avatar"},
 
   "profileMemoryHeading": "ILND seni hatırlıyor",
   "@profileMemoryHeading": {"description": "Memory card heading on profile"},
@@ -847,6 +925,18 @@
   "ekleWaterSubtitle": "bir bardak ekle",
   "@ekleWaterSubtitle": {"description": "Add-sheet action subtitle: water"},
 
+  "ekleSheetSubtitle": "ne yapmak istersin?",
+  "@ekleSheetSubtitle": {"description": "ILND sheet subtitle under the ilnd. header"},
+
+  "ekleAskIlndTitle": "ILND'ye sor",
+  "@ekleAskIlndTitle": {"description": "ILND sheet primary action: open chat with ILND"},
+
+  "ekleAskIlndSubtitle": "aklındakini konuş",
+  "@ekleAskIlndSubtitle": {"description": "ILND sheet primary action subtitle"},
+
+  "homeTrackingCardSubtitle": "adımların, öğünlerin, alışkanlıkların",
+  "@homeTrackingCardSubtitle": {"description": "Home tracking card subtitle"},
+
   "gorevEkleNameEmpty": "Önce alışkanlığa bir ad ver.",
   "@gorevEkleNameEmpty": {"description": "Error when habit name is empty"},
 
@@ -1009,6 +1099,18 @@
   "ilndFallbackFood4": "keyifli görünüyor. suçluluk yok — küçük dokunuşlar yeter, baskı değil.",
   "@ilndFallbackFood4": {"description": "ILND offline food-comment fallback 4"},
 
+  "ilndFallbackNeed1": "kısa bir nefes molası",
+  "@ilndFallbackNeed1": {"description": "First-entry fallback need option 1"},
+
+  "ilndFallbackNeed2": "güne uygun bir tarif",
+  "@ilndFallbackNeed2": {"description": "First-entry fallback need option 2"},
+
+  "ilndFallbackNeed3": "cilt bakım rutini",
+  "@ilndFallbackNeed3": {"description": "First-entry fallback need option 3"},
+
+  "ilndFallbackNeed4": "küçük bir hareket önerisi",
+  "@ilndFallbackNeed4": {"description": "First-entry fallback need option 4"},
+
   "streakCopyLongStreak": "{days} gündür kendine sadıksın. bu bir alışkanlık artık.",
   "@streakCopyLongStreak": {
     "description": "Streak banner text for 30+ day streaks",
@@ -1066,6 +1168,9 @@
 
   "a11yOpenProfile": "Profili aç",
   "@a11yOpenProfile": {"description": "Screen-reader label for the profile avatar icon button"},
+
+  "a11yOpenIlnd": "ILND'yi aç",
+  "@a11yOpenIlnd": {"description": "Screen-reader label for the ILND breath-ring button in the home header"},
 
   "a11yBack": "Geri",
   "@a11yBack": {"description": "Screen-reader label for a back icon button"},

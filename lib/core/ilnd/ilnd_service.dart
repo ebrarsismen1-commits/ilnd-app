@@ -191,6 +191,66 @@ class IlndService {
     }
   }
 
+  /// İlk-giriş ekranı için: kullanıcının profiline göre ŞU AN ihtiyaç
+  /// duyabileceği 3-4 kısa, tıklanabilir öneri (ör. "yeni tarif",
+  /// "cilt bakım rutini"). Ucuz kademe + minik çıktı (düşük token). Çağrı
+  /// yapılandırılmamışsa/başarısızsa boş liste döner — UI fallback şıklara düşer.
+  Future<List<String>> suggestNeeds({
+    required IlndMemory memory,
+    required AppLocalizations l10n,
+  }) async {
+    if (!AppConfig.isAnthropicProxyConfigured) return const [];
+
+    http.Response response;
+    try {
+      response = await _callProxy({
+        'tier': IlndTier.quick.name,
+        'system':
+            'Bir wellness & lifestyle uygulamasında ILND karakterisin. '
+            'Kullanıcının profiline göre ŞU AN ihtiyaç duyabileceği 3 kısa, '
+            'somut öneri üret — her biri 2-4 kelimelik, tıklanabilir bir şık '
+            'gibi (ör. "yeni tarif", "cilt bakım rutini", "kısa nefes molası"). '
+            'Genel geçer değil, profile özel ol. '
+            'Kullanıcının dili: ${l10n.localeName.split('_').first} — '
+            'şıkları bu dilde yaz.',
+        'messages': [
+          {
+            'role': 'user',
+            'content':
+                '${memory.toPromptContext()}\n\n'
+                'Yalnızca şu JSON yapısında yanıt ver, başka hiçbir şey yazma:\n'
+                '{"secenekler": ["...", "...", "..."]}',
+          },
+          {'role': 'assistant', 'content': '{'},
+        ],
+      }, l10n);
+    } catch (_) {
+      return const [];
+    }
+
+    if (response.statusCode != 200) return const [];
+
+    try {
+      final decoded =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      var raw = '{${(decoded['content'] as List).first['text'] as String}'
+          .trim();
+      final lastBrace = raw.lastIndexOf('}');
+      if (lastBrace != -1) raw = raw.substring(0, lastBrace + 1);
+      final parsed = jsonDecode(raw) as Map<String, dynamic>;
+      final list = List<String>.from(
+        (parsed['secenekler'] as List?) ?? const [],
+      );
+      return list
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty)
+          .take(4)
+          .toList();
+    } catch (_) {
+      return const [];
+    }
+  }
+
   /// Hata mesajlarını kullanıcı dostu, yerelleştirilmiş bir mesaja çevirir.
   static String friendlyError(Object error, AppLocalizations l10n) {
     if (error is SocketException) {

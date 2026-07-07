@@ -280,6 +280,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeStart => 'start';
 
   @override
+  String get welcomeHaveAccount => 'already have an account? ';
+
+  @override
+  String get welcomeLoginLink => 'sign in';
+
+  @override
   String get quickSetupTitle => 'let\'s get to know you';
 
   @override
@@ -313,6 +319,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quickSetupGoalMood => 'mood tracking';
 
   @override
+  String get quickSetupBodyTitle => 'a few more numbers';
+
+  @override
+  String get quickSetupBodySubtitle => 'to tailor suggestions to you';
+
+  @override
+  String get quickSetupAgeHint => 'age';
+
+  @override
+  String get quickSetupHeightHint => 'height (cm)';
+
+  @override
+  String get quickSetupWeightHint => 'weight (kg)';
+
+  @override
+  String get quickSetupActivityTitle => 'how active are you?';
+
+  @override
+  String get quickSetupActivitySedentary => 'sedentary';
+
+  @override
+  String get quickSetupActivityModerate => 'moderate';
+
+  @override
+  String get quickSetupActivityActive => 'active';
+
+  @override
+  String get quickSetupDietTitle => 'any dietary preference?';
+
+  @override
+  String get quickSetupDietNone => 'none';
+
+  @override
+  String get quickSetupDietVegetarian => 'vegetarian';
+
+  @override
+  String get quickSetupDietVegan => 'vegan';
+
+  @override
+  String get quickSetupDietGlutenFree => 'gluten-free';
+
+  @override
+  String get quickSetupDietLactoseFree => 'lactose-free';
+
+  @override
+  String get quickSetupAllergiesTitle => 'any allergies?';
+
+  @override
+  String get quickSetupAllergiesSubtitle => 'pick if any, skip if not';
+
+  @override
+  String get quickSetupAllergyNuts => 'nuts';
+
+  @override
+  String get quickSetupAllergyDairy => 'dairy/lactose';
+
+  @override
+  String get quickSetupAllergyGluten => 'gluten';
+
+  @override
+  String get quickSetupAllergySeafood => 'seafood';
+
+  @override
+  String get quickSetupAllergyEgg => 'egg';
+
+  @override
   String get quickSetupInviteCodeTitle => 'have an invite code?';
 
   @override
@@ -325,28 +397,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quickSetupContinue => 'continue';
 
   @override
-  String get firstEntryHeader => 'FIRST JOURNAL ENTRY';
+  String get firstEntryHeader => 'LET\'S BEGIN';
 
   @override
   String get firstEntrySkip => 'not now';
 
   @override
-  String get firstEntryReady => 'ready';
+  String get firstEntryNeedsPrompt => 'what do you need?';
 
   @override
-  String get firstEntrySave => 'save';
-
-  @override
-  String get firstEntryPrompt => 'how are you today?';
-
-  @override
-  String get firstEntryHint => 'write whatever\'s on your mind...';
+  String get firstEntryNeedsLoading => 'getting a few ideas ready for you...';
 
   @override
   String get homeTodaysReadTitle => 'TODAY\'S READ';
-
-  @override
-  String get homeTodaysIntentionTitle => 'TODAY\'S INTENTION';
 
   @override
   String get homeGreetingNight => 'good night';
@@ -396,18 +459,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeMoodHard => 'hard';
 
   @override
-  String homeReadTimeArrow(String readTime) {
-    return '$readTime read →';
+  String homeMoodAnsweredToday(String mood) {
+    return 'today: $mood';
   }
 
   @override
-  String get homeIntentionEdit => 'edit';
-
-  @override
-  String get homeIntentionHint => 'what do you want to focus on today?';
-
-  @override
-  String get homeIntentionSave => 'save';
+  String homeReadTimeArrow(String readTime) {
+    return '$readTime read →';
+  }
 
   @override
   String get journalTitle => 'journal';
@@ -459,6 +518,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileDefaultUserName => 'User';
+
+  @override
+  String get profilePhotoFromGallery => 'choose from gallery';
+
+  @override
+  String get profilePhotoRemove => 'remove photo';
+
+  @override
+  String get profilePhotoUpdated => 'your profile photo is updated';
+
+  @override
+  String get profilePhotoTooLarge =>
+      'that image is too large, pick a smaller one';
+
+  @override
+  String get profilePhotoFailed => 'couldn\'t upload the photo';
+
+  @override
+  String get a11yEditPhoto => 'Change profile photo';
 
   @override
   String get profileMemoryHeading => 'ILND remembers you';
@@ -901,6 +979,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ekleWaterSubtitle => 'add a glass';
 
   @override
+  String get ekleSheetSubtitle => 'what would you like to do?';
+
+  @override
+  String get ekleAskIlndTitle => 'ask ILND';
+
+  @override
+  String get ekleAskIlndSubtitle => 'talk it through';
+
+  @override
+  String get homeTrackingCardSubtitle => 'your steps, meals, habits';
+
+  @override
   String get gorevEkleNameEmpty => 'Give the habit a name first.';
 
   @override
@@ -1062,6 +1152,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'looks lovely. no guilt here — small touches are enough, no pressure.';
 
   @override
+  String get ilndFallbackNeed1 => 'a short breathing break';
+
+  @override
+  String get ilndFallbackNeed2 => 'a recipe for today';
+
+  @override
+  String get ilndFallbackNeed3 => 'a skincare routine';
+
+  @override
+  String get ilndFallbackNeed4 => 'a small movement idea';
+
+  @override
   String streakCopyLongStreak(int days) {
     return '$days days of showing up for yourself. that\'s a habit now.';
   }
@@ -1127,6 +1229,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get a11yOpenProfile => 'Open profile';
+
+  @override
+  String get a11yOpenIlnd => 'Open ILND';
 
   @override
   String get a11yBack => 'Back';

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -9,14 +11,15 @@ import 'package:ilnd_app/core/services/streak_tracker.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
-import 'package:ilnd_app/features/home/home_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
+import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/features/social_proof/social_proof_badge.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -75,13 +78,9 @@ class HomeScreen extends ConsumerWidget {
                       index: 5,
                       child: _DailyReadCard(article: read, p: p),
                     ),
-                    const SizedBox(height: 32),
-                    Entrance(
-                      index: 6,
-                      child: _SectionTitle(l10n.homeTodaysIntentionTitle, p: p),
-                    ),
-                    const SizedBox(height: 12),
-                    Entrance(index: 7, child: _DailyIntentionSection()),
+                    const SizedBox(height: 24),
+                    // Takip artık ana sayfada (Ayarlar'dan çıkarıldı).
+                    Entrance(index: 6, child: _TrackingCard(p: p)),
                   ]),
                 ),
               ),
@@ -201,9 +200,11 @@ class _HeroHeader extends ConsumerWidget {
                         ),
                         const SizedBox(width: 8),
                       ],
-                      _HeroIconButton(
-                        icon: Icons.add_rounded,
-                        label: l10n.ekleTitle,
+                      // Tek merkezli ILND girişi: eski "+" yerine marka jesti.
+                      // Dokununca ILND yüzeyi açılır (ILND'ye sor + ekle-aksiyonları).
+                      BreathRing(
+                        size: 34,
+                        semanticLabel: l10n.a11yOpenIlnd,
                         onTap: () => showEkleSheet(context),
                       ),
                       const SizedBox(width: 8),
@@ -224,21 +225,11 @@ class _HeroHeader extends ConsumerWidget {
                         label: l10n.a11yOpenProfile,
                         child: Pressable(
                           onTap: () => context.go(routeProfile),
-                          child: Container(
-                            width: 34,
-                            height: 34,
-                            decoration: BoxDecoration(
-                              color: p.accent,
-                              shape: BoxShape.circle,
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              initial,
-                              style: AppTextStyles.body(
-                                fontSize: 13,
-                                color: p.onAccent,
-                              ).copyWith(fontWeight: FontWeight.w700),
-                            ),
+                          child: UserAvatar(
+                            size: 34,
+                            initial: initial,
+                            p: p,
+                            fontSize: 13,
                           ),
                         ),
                       ),
@@ -379,15 +370,15 @@ class _PulsingFlameState extends State<_PulsingFlame>
 
 // ─── Mood check-in ────────────────────────────────────────────────────────────
 
-class _MoodCheckIn extends StatefulWidget {
+class _MoodCheckIn extends ConsumerStatefulWidget {
   const _MoodCheckIn({required this.p});
   final AppPalette p;
 
   @override
-  State<_MoodCheckIn> createState() => _MoodCheckInState();
+  ConsumerState<_MoodCheckIn> createState() => _MoodCheckInState();
 }
 
-class _MoodCheckInState extends State<_MoodCheckIn> {
+class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
   static const _moods = [
     ('☾', 'calm'),
     ('◍', 'good'),
@@ -417,20 +408,55 @@ class _MoodCheckInState extends State<_MoodCheckIn> {
 
   // Show the pick landing (fill + scale) before handing off to chat — a
   // beat of acknowledgment instead of an instant, jarring navigation.
-  Future<void> _select(int index) async {
+  // Bir kez cevaplanınca günün geri kalanında tekrar sorulmaz (todaysMoodProvider).
+  Future<void> _select(int index, AppLocalizations l10n) async {
     if (_selected != null) return;
     setState(() => _selected = index);
+    final moodKey = _moods[index].$2;
+    await ref.read(todaysMoodProvider.notifier).record(moodKey);
+    unawaited(
+      ref
+          .read(ilndMemoryProvider.notifier)
+          .addNote('Bugünkü ruh hali: ${_moodLabel(l10n, moodKey)}'),
+    );
     await Future.delayed(const Duration(milliseconds: 320));
     if (!mounted) return;
     context.push(routeChat);
-    // Reset once the mood question is shown again on return.
-    setState(() => _selected = null);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = widget.p;
+    final todaysMood = ref.watch(todaysMoodProvider);
+
+    if (todaysMood != null) {
+      final moodEntry = _moods.firstWhere(
+        (m) => m.$2 == todaysMood,
+        orElse: () => _moods.first,
+      );
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: p.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: p.border, width: 0.5),
+        ),
+        child: Row(
+          children: [
+            Text(moodEntry.$1, style: TextStyle(fontSize: 18, color: p.accent)),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                l10n.homeMoodAnsweredToday(_moodLabel(l10n, todaysMood)),
+                style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
       decoration: BoxDecoration(
@@ -451,7 +477,7 @@ class _MoodCheckInState extends State<_MoodCheckIn> {
             children: [
               for (final (index, m) in _moods.indexed)
                 Pressable(
-                  onTap: () => _select(index),
+                  onTap: () => _select(index, l10n),
                   child: Column(
                     children: [
                       AnimatedContainer(
@@ -625,120 +651,51 @@ class _DailyReadCard extends StatelessWidget {
   }
 }
 
-// ─── Daily intention section ──────────────────────────────────────────────────
+// ─── Tracking card — Takip artık ana sayfada (Ayarlar'dan taşındı) ────────────
 
-class _DailyIntentionSection extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_DailyIntentionSection> createState() =>
-      _DailyIntentionSectionState();
-}
-
-class _DailyIntentionSectionState
-    extends ConsumerState<_DailyIntentionSection> {
-  final _controller = TextEditingController();
-  bool _editing = false;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    final text = _controller.text.trim();
-    if (text.isEmpty) return;
-    await ref.read(dailyIntentionProvider.notifier).save(text);
-    if (!mounted) return;
-    _controller.clear();
-    setState(() => _editing = false);
-    FocusScope.of(context).unfocus();
-  }
-
-  void _startEditing(String? current) {
-    _controller.text = current ?? '';
-    setState(() => _editing = true);
-  }
+class _TrackingCard extends StatelessWidget {
+  const _TrackingCard({required this.p});
+  final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final p = ref.watch(paletteProvider);
-    final intention = ref.watch(dailyIntentionProvider);
-    final hasIntention = intention != null && intention.isNotEmpty;
-
-    if (hasIntention && !_editing) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            intention,
-            style: AppTextStyles.display(
-              fontSize: 20,
-              color: p.text,
-              fontWeight: FontWeight.w500,
-              height: 1.3,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Pressable(
-            onTap: () => _startEditing(intention),
-            child: Text(
-              l10n.homeIntentionEdit,
-              style: AppTextStyles.body(
-                fontSize: 12,
-                color: p.accent,
-              ).copyWith(fontWeight: FontWeight.w500),
-            ),
-          ),
-        ],
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: p.surface,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: _editing ? p.accent : p.border,
-              width: _editing ? 1 : 0.5,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          child: TextField(
-            controller: _controller,
-            autofocus: _editing,
-            textCapitalization: TextCapitalization.sentences,
-            maxLines: null,
-            style: AppTextStyles.body(fontSize: 16, height: 1.5, color: p.text),
-            decoration: InputDecoration(
-              hintText: l10n.homeIntentionHint,
-              hintStyle: AppTextStyles.display(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                color: p.textMuted,
+    return Pressable(
+      onTap: () => context.push(routeTakip),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: p.surface,
+          borderRadius: BorderRadius.circular(AppSpacing.radius),
+          border: Border.all(color: p.border, width: 0.5),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.bar_chart_rounded, size: 22, color: p.accent),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.navTracking,
+                    style: AppTextStyles.body(
+                      fontSize: 15,
+                      color: p.text,
+                    ).copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    l10n.homeTrackingCardSubtitle,
+                    style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+                  ),
+                ],
               ),
-              border: InputBorder.none,
-              isDense: true,
-              contentPadding: const EdgeInsets.symmetric(vertical: 14),
             ),
-            onSubmitted: (_) => _submit(),
-          ),
+            Icon(Icons.chevron_right_rounded, size: 20, color: p.textMuted),
+          ],
         ),
-        const SizedBox(height: 10),
-        Pressable(
-          onTap: _submit,
-          child: Text(
-            l10n.homeIntentionSave,
-            style: AppTextStyles.label(
-              fontSize: 13,
-              color: p.accent,
-            ).copyWith(letterSpacing: 0.2),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
