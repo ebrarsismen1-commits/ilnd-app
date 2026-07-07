@@ -87,7 +87,13 @@ final upcomingEventsProvider = StreamProvider<List<CommunityEvent>>((ref) {
 });
 
 /// Etkinlik başına RSVP durumum (canlı) — family ile etkinliğe bağlanır.
-final myRsvpProvider = StreamProvider.family<bool, String>((ref, eventId) {
+/// autoDispose: kart ekrandan kalkınca Firestore dinleyicisi kapanır —
+/// aksi halde her görülen etkinliğin dinleyicisi oturum boyunca açık kalır
+/// (sızıntı; etkinlik sayısı arttıkça birikir).
+final myRsvpProvider = StreamProvider.autoDispose.family<bool, String>((
+  ref,
+  eventId,
+) {
   final repo = ref.watch(eventsRepositoryProvider);
   if (repo == null) return Stream.value(false);
   return repo.myRsvpStream(eventId);
@@ -95,7 +101,10 @@ final myRsvpProvider = StreamProvider.family<bool, String>((ref, eventId) {
 
 /// Etkinlik başına katılımcı sayısı. RSVP durumum değişince yenilenir
 /// (kendi katılımım sayıya anında yansısın diye myRsvpProvider izlenir).
-final rsvpCountProvider = FutureProvider.family<int, String>((ref, eventId) {
+final rsvpCountProvider = FutureProvider.autoDispose.family<int, String>((
+  ref,
+  eventId,
+) {
   ref.watch(myRsvpProvider(eventId));
   final repo = ref.watch(eventsRepositoryProvider);
   if (repo == null) return Future.value(0);

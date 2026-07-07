@@ -666,6 +666,8 @@
   "@chatEmptyPrompt": {"description": "Chat empty state prompt"},
 
   "chatComposerHint": "bir şey yaz...",
+  "chatListening": "ilnd · seni dinliyor",
+  "@chatListening": {"description": "Chat header subtitle under the breath ring"},
   "@chatComposerHint": {"description": "Chat message composer hint"},
 
   "redeemCodeSuccess": "Davet kodu kullanıldı! 🎉",

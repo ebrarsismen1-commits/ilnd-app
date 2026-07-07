@@ -1442,6 +1442,12 @@ abstract class AppLocalizations {
   /// **'bir şey yaz...'**
   String get chatComposerHint;
 
+  /// Chat header subtitle under the breath ring
+  ///
+  /// In tr, this message translates to:
+  /// **'ilnd · seni dinliyor'**
+  String get chatListening;
+
   /// Toast shown when a referral code is redeemed successfully
   ///
   /// In tr, this message translates to:

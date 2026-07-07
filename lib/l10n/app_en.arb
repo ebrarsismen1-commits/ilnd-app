@@ -273,6 +273,7 @@
   },
   "chatEmptyPrompt": "what's on your mind? I'm here with you.",
   "chatComposerHint": "write something...",
+  "chatListening": "ilnd · listening",
 
   "redeemCodeSuccess": "Invite code redeemed! 🎉",
   "redeemCodeInvalid": "Invalid code, or it's already been used.",

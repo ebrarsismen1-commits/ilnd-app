@@ -731,6 +731,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatComposerHint => 'write something...';
 
   @override
+  String get chatListening => 'ilnd · listening';
+
+  @override
   String get redeemCodeSuccess => 'Invite code redeemed! 🎉';
 
   @override
