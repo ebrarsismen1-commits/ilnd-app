@@ -7,6 +7,11 @@ const _kOnboardingGoals = 'onboarding_goals';
 const _kOnboardingFrequency = 'onboarding_frequency';
 const _kFirstEntryDone = 'first_entry_done';
 const _kPendingReferralCode = 'pending_referral_code';
+const _kOnboardingAge = 'onboarding_age';
+const _kOnboardingHeight = 'onboarding_height';
+const _kOnboardingWeight = 'onboarding_weight';
+const _kOnboardingDiet = 'onboarding_diet';
+const _kOnboardingAllergies = 'onboarding_allergies';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Override this provider with the real instance');
@@ -68,6 +73,12 @@ class OnboardingGoalsNotifier extends StateNotifier<List<String>> {
     state = updated;
     await _prefs.setStringList(_kOnboardingGoals, updated);
   }
+
+  /// Sunucudan hidratlama için tüm listeyi bir kerede yazar (ADR-0003).
+  Future<void> setAll(List<String> goals) async {
+    state = List<String>.from(goals);
+    await _prefs.setStringList(_kOnboardingGoals, state);
+  }
 }
 
 final onboardingFrequencyProvider =
@@ -84,6 +95,100 @@ class OnboardingFrequencyNotifier extends StateNotifier<String?> {
   Future<void> select(String value) async {
     state = value;
     await _prefs.setString(_kOnboardingFrequency, value);
+  }
+}
+
+// ── Yaş / boy / kilo (nullable — kullanıcı boş bırakabilir) ───────────────────
+
+final onboardingAgeProvider = StateNotifierProvider<_NullableIntNotifier, int?>(
+  (ref) {
+    return _NullableIntNotifier(
+      ref.watch(sharedPreferencesProvider),
+      _kOnboardingAge,
+    );
+  },
+);
+
+final onboardingHeightProvider =
+    StateNotifierProvider<_NullableIntNotifier, int?>((ref) {
+      return _NullableIntNotifier(
+        ref.watch(sharedPreferencesProvider),
+        _kOnboardingHeight,
+      );
+    });
+
+final onboardingWeightProvider =
+    StateNotifierProvider<_NullableIntNotifier, int?>((ref) {
+      return _NullableIntNotifier(
+        ref.watch(sharedPreferencesProvider),
+        _kOnboardingWeight,
+      );
+    });
+
+class _NullableIntNotifier extends StateNotifier<int?> {
+  _NullableIntNotifier(this._prefs, this._key) : super(_prefs.getInt(_key));
+
+  final SharedPreferences _prefs;
+  final String _key;
+
+  Future<void> save(int? value) async {
+    state = value;
+    if (value == null) {
+      await _prefs.remove(_key);
+    } else {
+      await _prefs.setInt(_key, value);
+    }
+  }
+}
+
+// ── Beslenme tercihi (tekil seçim) ─────────────────────────────────────────────
+
+final onboardingDietProvider =
+    StateNotifierProvider<OnboardingDietNotifier, String?>((ref) {
+      return OnboardingDietNotifier(ref.watch(sharedPreferencesProvider));
+    });
+
+class OnboardingDietNotifier extends StateNotifier<String?> {
+  OnboardingDietNotifier(this._prefs)
+    : super(_prefs.getString(_kOnboardingDiet));
+
+  final SharedPreferences _prefs;
+
+  Future<void> select(String? value) async {
+    state = value;
+    if (value == null) {
+      await _prefs.remove(_kOnboardingDiet);
+    } else {
+      await _prefs.setString(_kOnboardingDiet, value);
+    }
+  }
+}
+
+// ── Alerjiler (çoklu seçim) ─────────────────────────────────────────────────────
+
+final onboardingAllergiesProvider =
+    StateNotifierProvider<OnboardingAllergiesNotifier, List<String>>((ref) {
+      return OnboardingAllergiesNotifier(ref.watch(sharedPreferencesProvider));
+    });
+
+class OnboardingAllergiesNotifier extends StateNotifier<List<String>> {
+  OnboardingAllergiesNotifier(this._prefs)
+    : super(_prefs.getStringList(_kOnboardingAllergies) ?? []);
+
+  final SharedPreferences _prefs;
+
+  Future<void> toggle(String allergy) async {
+    final updated = state.contains(allergy)
+        ? state.where((a) => a != allergy).toList()
+        : [...state, allergy];
+    state = updated;
+    await _prefs.setStringList(_kOnboardingAllergies, updated);
+  }
+
+  /// Sunucudan hidratlama için tüm listeyi bir kerede yazar (ADR-0003).
+  Future<void> setAll(List<String> allergies) async {
+    state = List<String>.from(allergies);
+    await _prefs.setStringList(_kOnboardingAllergies, state);
   }
 }
 
@@ -132,6 +237,42 @@ class ReferralCodeInputNotifier extends StateNotifier<String?> {
   Future<void> clear() async {
     state = null;
     await _prefs.remove(_kPendingReferralCode);
+  }
+}
+
+// ── Günlük ruh hali check-in'i (Home ekranı) ──────────────────────────────────
+
+const _kMoodCheckInDate = 'mood_checkin_date';
+const _kMoodCheckInValue = 'mood_checkin_value';
+
+/// Bugün zaten cevaplandıysa seçilen mood key'ini, cevaplanmadıysa null döner.
+/// Tarih karşılaştırması yerel cihaz saatine göre (yyyy-MM-dd).
+final todaysMoodProvider = StateNotifierProvider<TodaysMoodNotifier, String?>((
+  ref,
+) {
+  return TodaysMoodNotifier(ref.watch(sharedPreferencesProvider));
+});
+
+class TodaysMoodNotifier extends StateNotifier<String?> {
+  TodaysMoodNotifier(this._prefs) : super(_readIfToday(_prefs));
+
+  final SharedPreferences _prefs;
+
+  static String _today() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  }
+
+  static String? _readIfToday(SharedPreferences prefs) {
+    final savedDate = prefs.getString(_kMoodCheckInDate);
+    if (savedDate != _today()) return null;
+    return prefs.getString(_kMoodCheckInValue);
+  }
+
+  Future<void> record(String moodKey) async {
+    state = moodKey;
+    await _prefs.setString(_kMoodCheckInDate, _today());
+    await _prefs.setString(_kMoodCheckInValue, moodKey);
   }
 }
 

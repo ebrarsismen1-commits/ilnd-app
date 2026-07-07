@@ -29,6 +29,15 @@ class IlndFallbacks {
     l10n.ilndFallbackJournal3,
   ]);
 
+  /// İlk-giriş "neye ihtiyacın var?" şıkları — AI çalışmadığında gösterilen
+  /// sabit, güvenli seçenekler (tümü döner, rastgele seçilmez).
+  static List<String> needs(AppLocalizations l10n) => [
+    l10n.ilndFallbackNeed1,
+    l10n.ilndFallbackNeed2,
+    l10n.ilndFallbackNeed3,
+    l10n.ilndFallbackNeed4,
+  ];
+
   /// Yemek analizine diyetisyen-dost yorumu.
   static String food(AppLocalizations l10n) => _pick([
     l10n.ilndFallbackFood1,

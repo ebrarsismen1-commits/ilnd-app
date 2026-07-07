@@ -12,7 +12,11 @@ import 'package:ilnd_app/features/premium/paywall_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({super.key, this.seedMessage});
+
+  /// Verilirse sohbet bu mesajla açılır (ör. ilk-giriş ekranında seçilen
+  /// "neye ihtiyacın var?" şıkkı) — ekran görünür görünmez otomatik gönderilir.
+  final String? seedMessage;
 
   @override
   ConsumerState<ChatScreen> createState() => _ChatScreenState();
@@ -21,6 +25,20 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    final seed = widget.seedMessage?.trim();
+    if (seed != null && seed.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final l10n = AppLocalizations.of(context)!;
+        ref.read(chatProvider.notifier).send(seed, l10n);
+        _scrollToBottomSoon();
+      });
+    }
+  }
 
   @override
   void dispose() {
