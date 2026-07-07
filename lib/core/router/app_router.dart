@@ -31,7 +31,6 @@ const routeRegister = '/register';
 const routeHome = '/home';
 const routeChat = '/chat';
 const routeExplore = '/explore';
-const routeJournal = '/journal';
 const routeTakip = '/takip';
 const routeTopluluk = '/topluluk';
 const routeProfile = '/profile';
