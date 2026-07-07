@@ -242,18 +242,10 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 52,
+                  // AppTheme.dark artık MaterialApp'e bağlı (main.dart) —
+                  // ElevatedButtonThemeData zaten aktif moda göre doğru
+                  // rengi (disabled dahil) veriyor, manuel override gerekmiyor.
                   child: ElevatedButton(
-                    // See welcome_screen.dart: ElevatedButtonThemeData is
-                    // always light-mode, so the active palette must be
-                    // applied explicitly here too.
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: p.accent,
-                      foregroundColor: p.onAccent,
-                      disabledBackgroundColor: p.accent.withValues(alpha: 0.3),
-                      disabledForegroundColor: p.onAccent.withValues(
-                        alpha: 0.7,
-                      ),
-                    ),
                     onPressed: _canProceed ? _proceed : null,
                     child: Text(l10n.quickSetupContinue),
                   ),
