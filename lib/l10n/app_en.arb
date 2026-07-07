@@ -92,6 +92,8 @@
   "welcomeTagline": "journal, track your mood, talk to ILND.",
   "welcomeTaglineEn": "journal, track your mood, talk to ILND.",
   "welcomeStart": "start",
+  "welcomeHaveAccount": "already have an account? ",
+  "welcomeLoginLink": "sign in",
 
   "quickSetupTitle": "let's get to know you",
   "quickSetupTitleEn": "let's get to know you a little",
@@ -104,20 +106,39 @@
   "quickSetupGoalWaterSleep": "water/sleep tracking",
   "quickSetupGoalHabit": "building habits",
   "quickSetupGoalMood": "mood tracking",
+  "quickSetupBodyTitle": "a few more numbers",
+  "quickSetupBodySubtitle": "to tailor suggestions to you",
+  "quickSetupAgeHint": "age",
+  "quickSetupHeightHint": "height (cm)",
+  "quickSetupWeightHint": "weight (kg)",
+  "quickSetupActivityTitle": "how active are you?",
+  "quickSetupActivitySedentary": "sedentary",
+  "quickSetupActivityModerate": "moderate",
+  "quickSetupActivityActive": "active",
+  "quickSetupDietTitle": "any dietary preference?",
+  "quickSetupDietNone": "none",
+  "quickSetupDietVegetarian": "vegetarian",
+  "quickSetupDietVegan": "vegan",
+  "quickSetupDietGlutenFree": "gluten-free",
+  "quickSetupDietLactoseFree": "lactose-free",
+  "quickSetupAllergiesTitle": "any allergies?",
+  "quickSetupAllergiesSubtitle": "pick if any, skip if not",
+  "quickSetupAllergyNuts": "nuts",
+  "quickSetupAllergyDairy": "dairy/lactose",
+  "quickSetupAllergyGluten": "gluten",
+  "quickSetupAllergySeafood": "seafood",
+  "quickSetupAllergyEgg": "egg",
   "quickSetupInviteCodeTitle": "have an invite code?",
   "quickSetupInviteCodeHint": "invite code",
   "quickSetupHaveInviteCode": "I have an invite code",
   "quickSetupContinue": "continue",
 
-  "firstEntryHeader": "FIRST JOURNAL ENTRY",
+  "firstEntryHeader": "LET'S BEGIN",
   "firstEntrySkip": "not now",
-  "firstEntryReady": "ready",
-  "firstEntrySave": "save",
-  "firstEntryPrompt": "how are you today?",
-  "firstEntryHint": "write whatever's on your mind...",
+  "firstEntryNeedsPrompt": "what do you need?",
+  "firstEntryNeedsLoading": "getting a few ideas ready for you...",
 
   "homeTodaysReadTitle": "TODAY'S READ",
-  "homeTodaysIntentionTitle": "TODAY'S INTENTION",
   "homeGreetingNight": "good night",
   "homeGreetingMorning": "good morning",
   "homeGreetingDay": "good day",
@@ -143,15 +164,16 @@
   "homeMoodOkay": "okay",
   "homeMoodTired": "tired",
   "homeMoodHard": "hard",
+  "homeMoodAnsweredToday": "today: {mood}",
+  "@homeMoodAnsweredToday": {
+    "placeholders": {"mood": {"type": "String"}}
+  },
   "homeReadTimeArrow": "{readTime} read →",
   "@homeReadTimeArrow": {
     "placeholders": {
       "readTime": {"type": "String"}
     }
   },
-  "homeIntentionEdit": "edit",
-  "homeIntentionHint": "what do you want to focus on today?",
-  "homeIntentionSave": "save",
 
   "journalTitle": "journal",
   "journalConnectionError": "connection issue",
@@ -170,6 +192,12 @@
 
   "profileShareWeeklySummary": "share your weekly summary",
   "profileDefaultUserName": "User",
+  "profilePhotoFromGallery": "choose from gallery",
+  "profilePhotoRemove": "remove photo",
+  "profilePhotoUpdated": "your profile photo is updated",
+  "profilePhotoTooLarge": "that image is too large, pick a smaller one",
+  "profilePhotoFailed": "couldn't upload the photo",
+  "a11yEditPhoto": "Change profile photo",
   "profileMemoryHeading": "ILND remembers you",
   "profileGoalsLabel": "YOUR GOALS",
   "profileAboutYouLabel": "ABOUT YOU",
@@ -357,6 +385,10 @@
   "ekleHabitSubtitle": "add a new goal",
   "ekleWaterTitle": "water",
   "ekleWaterSubtitle": "add a glass",
+  "ekleSheetSubtitle": "what would you like to do?",
+  "ekleAskIlndTitle": "ask ILND",
+  "ekleAskIlndSubtitle": "talk it through",
+  "homeTrackingCardSubtitle": "your steps, meals, habits",
 
   "gorevEkleNameEmpty": "Give the habit a name first.",
   "gorevEkleSuccess": "Habit added!",
@@ -432,6 +464,10 @@
   "ilndFallbackFood2": "looks good. don't forget to drink plenty of water, it'll do you good.",
   "ilndFallbackFood3": "a balanced meal. protein's solid — try adding some fiber next meal.",
   "ilndFallbackFood4": "looks lovely. no guilt here — small touches are enough, no pressure.",
+  "ilndFallbackNeed1": "a short breathing break",
+  "ilndFallbackNeed2": "a recipe for today",
+  "ilndFallbackNeed3": "a skincare routine",
+  "ilndFallbackNeed4": "a small movement idea",
 
   "streakCopyLongStreak": "{days} days of showing up for yourself. that's a habit now.",
   "@streakCopyLongStreak": {
@@ -467,6 +503,7 @@
 
   "a11yToggleTheme": "Toggle light/dark theme",
   "a11yOpenProfile": "Open profile",
+  "a11yOpenIlnd": "Open ILND",
   "a11yBack": "Back",
   "a11yClose": "Close"
 }

@@ -9,6 +9,7 @@ import 'package:ilnd_app/core/services/onboarding_timer.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
+import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/social_proof/social_proof_badge.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -80,6 +81,37 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                   child: ElevatedButton(
                     onPressed: () => context.push(routeQuickSetup),
                     child: Text(l10n.welcomeStart),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                // Zaten kayıtlı kullanıcı (yeni cihaz/web) doğrudan giriş yapıp
+                // profilini hidratlayabilsin — onboarding'i tekrar etmeden.
+                Center(
+                  child: Pressable(
+                    onTap: () => context.push(routeLogin),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: l10n.welcomeHaveAccount,
+                              style: AppTextStyles.body(
+                                fontSize: 13,
+                                color: p.textMuted,
+                              ),
+                            ),
+                            TextSpan(
+                              text: l10n.welcomeLoginLink,
+                              style: AppTextStyles.body(
+                                fontSize: 13,
+                                color: p.accent,
+                              ).copyWith(fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 40),
