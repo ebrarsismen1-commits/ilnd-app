@@ -719,6 +719,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get chatComposerHint => 'bir şey yaz...';
 
   @override
+  String get chatListening => 'ilnd · seni dinliyor';
+
+  @override
   String get redeemCodeSuccess => 'Davet kodu kullanıldı! 🎉';
 
   @override

@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/chat/chat_provider.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
@@ -73,7 +74,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              _Header(p: p),
+              _Header(p: p, l10n: l10n),
               Expanded(
                 child: state.messages.isEmpty
                     ? _EmptyState(name: name, p: p, l10n: l10n)
@@ -104,43 +105,44 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 }
 
-// ─── Header ──────────────────────────────────────────────────────────────────
+// ─── Header — nefes halkası burada da yaşar (marka jesti tek yerde değil) ─────
 
 class _Header extends StatelessWidget {
-  const _Header({required this.p});
+  const _Header({required this.p, required this.l10n});
   final AppPalette p;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, AppSpacing.screenPadding, 8),
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(4, 10, 4, 6),
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          Pressable(
-            onTap: () => Navigator.of(context).maybePop(),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                Icons.arrow_back_ios_rounded,
-                size: 18,
-                color: p.text,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Pressable(
+              onTap: () => Navigator.of(context).maybePop(),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 24,
+                  color: p.textMuted,
+                ),
               ),
             ),
           ),
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(color: p.accent, shape: BoxShape.circle),
-            alignment: Alignment.center,
-            child: Text(
-              'i',
-              style: AppTextStyles.display(fontSize: 18, color: p.onAccent),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            'ilnd',
-            style: AppTextStyles.display(fontSize: 20, color: p.text),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const BreathRing(size: 40),
+              const SizedBox(height: 6),
+              Text(
+                l10n.chatListening,
+                style: AppTextStyles.body(fontSize: 10.5, color: p.textMuted),
+              ),
+            ],
           ),
         ],
       ),
@@ -197,34 +199,51 @@ class _Bubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUser = message.fromUser;
+
+    // ILND balonsuz + serif konuşur (editoryal ses); kullanıcı yeşil balonda —
+    // "kim konuşuyor" hiyerarşisi renkten önce tipografiyle hissedilir.
+    if (!isUser) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 14, right: 24),
+        child: message.pending
+            ? _TypingDots(p: p)
+            : Text(
+                message.text,
+                style: AppTextStyles.display(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: p.text,
+                  height: 1.45,
+                ),
+              ),
+      );
+    }
+
     return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: Alignment.centerRight,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 14),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
         constraints: BoxConstraints(
           maxWidth: MediaQuery.sizeOf(context).width * 0.78,
         ),
         decoration: BoxDecoration(
-          color: isUser ? p.accent : p.surfaceStrong,
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(18),
-            topRight: const Radius.circular(18),
-            bottomLeft: Radius.circular(isUser ? 18 : 4),
-            bottomRight: Radius.circular(isUser ? 4 : 18),
+          color: p.accent,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(18),
+            topRight: Radius.circular(18),
+            bottomLeft: Radius.circular(18),
+            bottomRight: Radius.circular(4),
           ),
-          border: isUser ? null : Border.all(color: p.border, width: 0.5),
         ),
-        child: message.pending
-            ? _TypingDots(p: p)
-            : Text(
-                message.text,
-                style: AppTextStyles.body(
-                  fontSize: 15,
-                  height: 1.45,
-                  color: isUser ? p.onAccent : p.text,
-                ),
-              ),
+        child: Text(
+          message.text,
+          style: AppTextStyles.body(
+            fontSize: 15,
+            height: 1.45,
+            color: p.onAccent,
+          ),
+        ),
       ),
     );
   }
