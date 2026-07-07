@@ -74,16 +74,10 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 52,
+                  // AppTheme.dark artık MaterialApp'e bağlı (main.dart) —
+                  // ElevatedButtonThemeData zaten aktif moda göre doğru
+                  // rengi veriyor, manuel override'a gerek yok.
                   child: ElevatedButton(
-                    // ElevatedButtonThemeData in app_theme.dart is always
-                    // light-mode (MaterialApp only ever applies AppTheme.light
-                    // — dark mode is handled by the custom AppPalette system,
-                    // not a ThemeData.dark()), so it needs an explicit
-                    // override here to follow the active palette.
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: p.accent,
-                      foregroundColor: p.onAccent,
-                    ),
                     onPressed: () => context.push(routeQuickSetup),
                     child: Text(l10n.welcomeStart),
                   ),
