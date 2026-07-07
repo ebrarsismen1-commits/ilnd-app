@@ -8,6 +8,7 @@ import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/auth/auth_error_l10n.dart';
@@ -145,21 +146,26 @@ class _ProfileHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 56,
-          height: 56,
+          width: 60,
+          height: 60,
           decoration: BoxDecoration(color: p.accent, shape: BoxShape.circle),
           alignment: Alignment.center,
           child: Text(
             initial,
-            style: AppTextStyles.heading(fontSize: 24, color: p.onAccent),
+            style: AppTextStyles.display(fontSize: 26, color: p.onAccent),
           ),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
+        // Ölçek zıtlığı: bu ekranın tek büyük anı — kişinin adı, serif.
         Text(
           name.isNotEmpty ? name : l10n.profileDefaultUserName,
-          style: AppTextStyles.heading(fontSize: 22, color: p.text),
+          style: AppTextStyles.display(
+            fontSize: 30,
+            color: p.text,
+            height: 1.05,
+          ),
         ),
-        const SizedBox(height: 3),
+        const SizedBox(height: 4),
         Text(
           '@${name.toLowerCase().replaceAll(' ', '_')}_ilnd',
           style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
@@ -196,19 +202,7 @@ class _MemoryCard extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: p.accent,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  'i',
-                  style: AppTextStyles.display(fontSize: 14, color: p.onAccent),
-                ),
-              ),
+              const BreathRing(size: 28),
               const SizedBox(width: 10),
               Text(
                 l10n.profileMemoryHeading,

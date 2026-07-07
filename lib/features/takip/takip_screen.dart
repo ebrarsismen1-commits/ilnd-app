@@ -38,15 +38,32 @@ class TakipScreen extends ConsumerWidget {
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    28,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  child: Text(
-                    l10n.takipTitle,
-                    style: AppTextStyles.display(fontSize: 32, color: p.text),
+                  padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
+                  child: Row(
+                    children: [
+                      // Bu ekran nav v2'de sekmeden çıkıp Sen'den push edilen
+                      // bir rotaya döndü (bkz. app_shell.dart) — geri butonu
+                      // olmadan iOS'ta çıkış yolu yoktu. Gerçek bug, düzeltildi.
+                      Pressable(
+                        onTap: () => Navigator.of(context).maybePop(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Icon(
+                            Icons.arrow_back_ios_rounded,
+                            size: 18,
+                            color: p.text,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        l10n.takipTitle,
+                        style: AppTextStyles.display(
+                          fontSize: 28,
+                          color: p.text,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
