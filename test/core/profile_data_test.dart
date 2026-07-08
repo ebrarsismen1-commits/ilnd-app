@@ -17,13 +17,16 @@ void main() {
       expect(d.weight, isNull);
     });
 
-    test('row missing onboarding columns (migration not yet run) → defaults', () {
-      // Yalnız eski şema (name) döndüğünde crash yok, yeni alanlar default.
-      final d = ProfileData.fromRow({'id': 'u1', 'name': 'Ada'});
-      expect(d.name, 'Ada');
-      expect(d.onboardingDone, isFalse);
-      expect(d.goals, isEmpty);
-    });
+    test(
+      'row missing onboarding columns (migration not yet run) → defaults',
+      () {
+        // Yalnız eski şema (name) döndüğünde crash yok, yeni alanlar default.
+        final d = ProfileData.fromRow({'id': 'u1', 'name': 'Ada'});
+        expect(d.name, 'Ada');
+        expect(d.onboardingDone, isFalse);
+        expect(d.goals, isEmpty);
+      },
+    );
 
     test('empty-string name is normalized to null', () {
       expect(ProfileData.fromRow({'name': ''}).name, isNull);

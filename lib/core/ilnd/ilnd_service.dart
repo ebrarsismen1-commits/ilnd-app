@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:ilnd_app/core/ilnd/ai_json.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_character.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/services/app_check_headers.dart';
@@ -163,7 +164,8 @@ class IlndService {
                 'Yalnızca şu JSON yapısında yanıt ver, başka hiçbir şey yazma:\n'
                 '{"hedefler": ["..."], "gercekler": ["..."]}',
           },
-          {'role': 'assistant', 'content': '{'},
+          // Not: assistant-prefill ('{' ile başlatma) Claude 4.6+ modellerde
+          // 400 döndürür — JSON, yanıt metninden extractJsonObject ile ayıklanır.
         ],
       }, l10n);
     } catch (_) {
@@ -177,10 +179,12 @@ class IlndService {
     try {
       final decoded =
           jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      var raw = '{${(decoded['content'] as List).first['text'] as String}'
-          .trim();
-      final lastBrace = raw.lastIndexOf('}');
-      if (lastBrace != -1) raw = raw.substring(0, lastBrace + 1);
+      final raw = extractJsonObject(
+        (decoded['content'] as List).first['text'] as String,
+      );
+      if (raw == null) {
+        return (goals: const <String>[], facts: const <String>[]);
+      }
       final parsed = jsonDecode(raw) as Map<String, dynamic>;
       return (
         goals: List<String>.from((parsed['hedefler'] as List?) ?? const []),
@@ -221,7 +225,8 @@ class IlndService {
                 'Yalnızca şu JSON yapısında yanıt ver, başka hiçbir şey yazma:\n'
                 '{"secenekler": ["...", "...", "..."]}',
           },
-          {'role': 'assistant', 'content': '{'},
+          // Not: assistant-prefill ('{' ile başlatma) Claude 4.6+ modellerde
+          // 400 döndürür — JSON, yanıt metninden extractJsonObject ile ayıklanır.
         ],
       }, l10n);
     } catch (_) {
@@ -233,10 +238,10 @@ class IlndService {
     try {
       final decoded =
           jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      var raw = '{${(decoded['content'] as List).first['text'] as String}'
-          .trim();
-      final lastBrace = raw.lastIndexOf('}');
-      if (lastBrace != -1) raw = raw.substring(0, lastBrace + 1);
+      final raw = extractJsonObject(
+        (decoded['content'] as List).first['text'] as String,
+      );
+      if (raw == null) return const [];
       final parsed = jsonDecode(raw) as Map<String, dynamic>;
       final list = List<String>.from(
         (parsed['secenekler'] as List?) ?? const [],

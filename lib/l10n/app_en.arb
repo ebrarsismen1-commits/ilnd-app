@@ -426,6 +426,8 @@
   "yemekEklePaywallReason": "you've used today's food scans 🌿",
   "yemekEklePhotoAccessError": "Couldn't access the photo. Try again.",
   "yemekEkleAnalysisFailed": "Analysis failed. Want to try again?",
+  "yemekEkleUnsupportedImage": "This image format isn't supported. Try a JPEG or PNG photo?",
+  "yemekEklePhotoTooLarge": "The photo is too large. Try a smaller one?",
   "yemekEkleAnalysisFailedStatus": "Analysis failed ({statusCode}).",
   "@yemekEkleAnalysisFailedStatus": {
     "placeholders": {
