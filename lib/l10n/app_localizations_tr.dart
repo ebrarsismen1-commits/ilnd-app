@@ -1042,6 +1042,14 @@ class AppLocalizationsTr extends AppLocalizations {
       'Analiz başarısız oldu. Tekrar dener misin?';
 
   @override
+  String get yemekEkleUnsupportedImage =>
+      'Bu görsel biçimi desteklenmiyor. JPEG veya PNG bir fotoğraf dener misin?';
+
+  @override
+  String get yemekEklePhotoTooLarge =>
+      'Fotoğraf çok büyük. Daha küçük bir fotoğraf dener misin?';
+
+  @override
   String yemekEkleAnalysisFailedStatus(int statusCode) {
     return 'Analiz başarısız oldu ($statusCode).';
   }

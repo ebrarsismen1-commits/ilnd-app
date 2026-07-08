@@ -1,5 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
+// SocketException web'de hiç fırlatılmaz ama mobilde ağ hatasını yakalamak
+// için gerekli. `File` bilerek import edilmiyor: dart:io File web'de çalışmaz,
+// fotoğraf XFile.readAsBytes ile platformdan bağımsız okunur (bkz. avatar_edit).
+import 'dart:io' show SocketException;
+import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/material.dart';
@@ -7,7 +11,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:ilnd_app/core/billing/usage_meter.dart';
+import 'package:ilnd_app/core/ilnd/ai_json.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
+import 'package:ilnd_app/core/ilnd/image_media_type.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
 import 'package:ilnd_app/core/services/app_check_headers.dart';
@@ -66,7 +72,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
   final _picker = ImagePicker();
 
   _Phase _phase = _Phase.picker;
-  File? _photo;
+  Uint8List? _photoBytes;
   _FoodResult? _result;
   String _errorMsg = '';
   String? _comment;
@@ -87,8 +93,12 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         maxWidth: 1280,
       );
       if (xFile == null) return;
+      // XFile.readAsBytes her platformda çalışır (web dahil); dart:io File
+      // web'de UnsupportedError fırlatır.
+      final bytes = await xFile.readAsBytes();
+      if (!mounted) return;
       setState(() {
-        _photo = File(xFile.path);
+        _photoBytes = bytes;
         _phase = _Phase.loading;
       });
       await _analyse(l10n);
@@ -116,9 +126,23 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       return;
     }
 
+    // media_type görüntünün GERÇEK biçiminden gelmek zorunda: picker web'de
+    // PNG/WebP döndürebilir ve yanlış bildirim Anthropic'ten 400 döndürür
+    // ("media type mismatch" — 2026-07-08'de üretimde yaşandı).
+    final mediaType = detectImageMediaType(_photoBytes!);
+    if (mediaType == null) {
+      _setError(l10n.yemekEkleUnsupportedImage);
+      return;
+    }
+    // Anthropic görsel sınırı 5MB; web'de picker'ın maxWidth küçültmesi
+    // garanti değil, bu yüzden istemci tarafında da koru.
+    if (_photoBytes!.length > 4 * 1024 * 1024) {
+      _setError(l10n.yemekEklePhotoTooLarge);
+      return;
+    }
+
     try {
-      final bytes = await _photo!.readAsBytes();
-      final base64Image = base64Encode(bytes);
+      final base64Image = base64Encode(_photoBytes!);
 
       final idToken = await fb_auth.FirebaseAuth.instance.currentUser
           ?.getIdToken();
@@ -129,8 +153,9 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
 
       // Prompt structured per Anthropic's enterprise prompt-engineering guide:
       // (1) task + role in the system prompt, (2) background/image, (3) detailed
-      // rules, (4) a few-shot example, (5) output format, and an assistant
-      // prefill that forces clean JSON without markdown fences.
+      // rules, (4) a few-shot example, (5) output format. Assistant-prefill
+      // bilerek YOK: Claude 4.6+ modeller prefill'i 400 ile reddeder — JSON,
+      // yanıt metninden extractJsonObject ile ayıklanır.
       // Tier 'deep' (Sonnet) balances vision quality, cost and low latency
       // for this high-throughput, user-facing scan (guide, Stage 2). The
       // request goes through functions/index.js's anthropicProxy, which
@@ -152,7 +177,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
                 'type': 'image',
                 'source': {
                   'type': 'base64',
-                  'media_type': 'image/jpeg',
+                  'media_type': mediaType,
                   'data': base64Image,
                 },
               },
@@ -184,9 +209,6 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
               },
             ],
           },
-          // 7 — Assistant response prefill: forces the model to continue valid
-          // JSON, eliminating markdown fences and preamble.
-          {'role': 'assistant', 'content': '{'},
         ],
       });
 
@@ -213,15 +235,14 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         return;
       }
 
-      final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+      final decoded =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       final text = (decoded['content'] as List).first['text'] as String;
 
-      // The assistant reply continues from the prefilled '{', so prepend it
-      // back and trim anything after the closing brace as a safety net.
-      var jsonStr = '{$text'.trim();
-      final lastBrace = jsonStr.lastIndexOf('}');
-      if (lastBrace != -1) {
-        jsonStr = jsonStr.substring(0, lastBrace + 1);
+      final jsonStr = extractJsonObject(text);
+      if (jsonStr == null) {
+        _setError(l10n.yemekEkleAnalysisFailed);
+        return;
       }
 
       final foodJson = jsonDecode(jsonStr) as Map<String, dynamic>;
@@ -338,7 +359,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
 
   void _retry() {
     setState(() {
-      _photo = null;
+      _photoBytes = null;
       _result = null;
       _comment = null;
       _errorMsg = '';
@@ -394,12 +415,12 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
                     l10n: l10n,
                   ),
                   _Phase.loading => _LoadingView(
-                    photo: _photo!,
+                    photo: _photoBytes!,
                     p: p,
                     l10n: l10n,
                   ),
                   _Phase.result => _ResultView(
-                    photo: _photo!,
+                    photo: _photoBytes!,
                     result: _result!,
                     comment: _comment,
                     onRetry: _retry,
@@ -496,7 +517,7 @@ class _LoadingView extends StatelessWidget {
     required this.p,
     required this.l10n,
   });
-  final File photo;
+  final Uint8List photo;
   final AppPalette p;
   final AppLocalizations l10n;
 
@@ -509,7 +530,7 @@ class _LoadingView extends StatelessWidget {
           const Spacer(flex: 2),
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.file(
+            child: Image.memory(
               photo,
               width: double.infinity,
               height: 280,
@@ -550,7 +571,7 @@ class _ResultView extends StatelessWidget {
     required this.l10n,
   });
 
-  final File photo;
+  final Uint8List photo;
   final _FoodResult result;
   final String? comment;
   final VoidCallback onRetry;
@@ -573,7 +594,7 @@ class _ResultView extends StatelessWidget {
           // Photo
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
-            child: Image.file(
+            child: Image.memory(
               photo,
               width: double.infinity,
               height: 220,

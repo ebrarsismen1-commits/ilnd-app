@@ -80,7 +80,9 @@ exports.mintFirebaseToken = onRequest({cors: true}, async (req, res) => {
 
     res.status(200).json({firebaseToken});
   } catch (err) {
-    console.error("mintFirebaseToken failed:", err);
+    // Geçici: teşhis için hata mesajını ayrı alanla logla (Cloud Logging
+    // CLI görüntüleyicisi bazen ham Error objesini boş gösteriyor).
+    console.error("mintFirebaseToken failed:", err.message || err, err.name);
     res.status(401).json({error: "Invalid Supabase token"});
   }
 });
@@ -105,8 +107,11 @@ async function requireFirebaseAuth(req) {
 
 // ─── AI proxy ───────────────────────────────────────────────────────────────
 
+// quick eskiden claude-haiku-4-5 idi; Haiku'nun Türkçesi kullanıcıya "bozuk /
+// anlamsız" gelecek kadar zayıftı (2026-07-08 owner geri bildirimi). Sonnet'in
+// maliyeti ~3x ama sohbet ürünün kalbi — kalite burada ucuzlatılmaz.
 const TIER_CONFIG = {
-  quick: {model: "claude-haiku-4-5", maxTokens: 512, dailyLimit: 300},
+  quick: {model: "claude-sonnet-4-6", maxTokens: 512, dailyLimit: 300},
   deep: {model: "claude-sonnet-4-6", maxTokens: 1024, dailyLimit: 60},
 };
 
@@ -146,8 +151,12 @@ async function checkAndIncrementUsage(uid, tier) {
  * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
  * Body: { "tier": "quick"|"deep", "system": "...", "messages": [...] }
  */
+// GEÇİCİ: enforceAppCheck kapalı — debug cihazının App Check token'ı
+// Firebase Console'a kayıtlı değil. Production'a çıkmadan ÖNCE debug
+// token'ı kaydedip enforceAppCheck: true'ya geri dön (bkz. 2026-07-07
+// decisions.md notu).
 exports.anthropicProxy = onRequest(
-    {cors: true, secrets: [ANTHROPIC_API_KEY], enforceAppCheck: true},
+    {cors: true, secrets: [ANTHROPIC_API_KEY]},
     async (req, res) => {
       if (req.method !== "POST") {
         res.status(405).json({error: "Method Not Allowed"});
@@ -223,8 +232,9 @@ const REFERRAL_REWARD_DAYS = 7;
  * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
  * Body: { "code": "ABC123" }
  */
+// GEÇİCİ: enforceAppCheck kapalı — bkz. anthropicProxy üstündeki not.
 exports.redeemReferralCode = onRequest(
-    {cors: true, enforceAppCheck: true},
+    {cors: true},
     async (req, res) => {
   if (req.method !== "POST") {
     res.status(405).json({error: "Method Not Allowed"});
@@ -337,8 +347,9 @@ async function deleteFirestoreSubtree(docRef) {
  *
  * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
  */
+// GEÇİCİ: enforceAppCheck kapalı — bkz. anthropicProxy üstündeki not.
 exports.deleteAccount = onRequest(
-    {cors: true, secrets: [SUPABASE_SERVICE_ROLE_KEY], enforceAppCheck: true},
+    {cors: true, secrets: [SUPABASE_SERVICE_ROLE_KEY]},
     async (req, res) => {
       if (req.method !== "POST") {
         res.status(405).json({error: "Method Not Allowed"});

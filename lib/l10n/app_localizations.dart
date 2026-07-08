@@ -2036,6 +2036,18 @@ abstract class AppLocalizations {
   /// **'Analiz başarısız oldu. Tekrar dener misin?'**
   String get yemekEkleAnalysisFailed;
 
+  /// Picked image format is not supported by the AI vision API
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu görsel biçimi desteklenmiyor. JPEG veya PNG bir fotoğraf dener misin?'**
+  String get yemekEkleUnsupportedImage;
+
+  /// Picked image exceeds the AI vision API size limit
+  ///
+  /// In tr, this message translates to:
+  /// **'Fotoğraf çok büyük. Daha küçük bir fotoğraf dener misin?'**
+  String get yemekEklePhotoTooLarge;
+
   /// Food analysis failure with HTTP status code
   ///
   /// In tr, this message translates to:

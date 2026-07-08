@@ -1007,6 +1007,12 @@
   "yemekEkleAnalysisFailed": "Analiz başarısız oldu. Tekrar dener misin?",
   "@yemekEkleAnalysisFailed": {"description": "Generic food analysis failure"},
 
+  "yemekEkleUnsupportedImage": "Bu görsel biçimi desteklenmiyor. JPEG veya PNG bir fotoğraf dener misin?",
+  "@yemekEkleUnsupportedImage": {"description": "Picked image format is not supported by the AI vision API"},
+
+  "yemekEklePhotoTooLarge": "Fotoğraf çok büyük. Daha küçük bir fotoğraf dener misin?",
+  "@yemekEklePhotoTooLarge": {"description": "Picked image exceeds the AI vision API size limit"},
+
   "yemekEkleAnalysisFailedStatus": "Analiz başarısız oldu ({statusCode}).",
   "@yemekEkleAnalysisFailedStatus": {
     "description": "Food analysis failure with HTTP status code",

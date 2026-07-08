@@ -1052,6 +1052,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yemekEkleAnalysisFailed => 'Analysis failed. Want to try again?';
 
   @override
+  String get yemekEkleUnsupportedImage =>
+      'This image format isn\'t supported. Try a JPEG or PNG photo?';
+
+  @override
+  String get yemekEklePhotoTooLarge =>
+      'The photo is too large. Try a smaller one?';
+
+  @override
   String yemekEkleAnalysisFailedStatus(int statusCode) {
     return 'Analysis failed ($statusCode).';
   }
