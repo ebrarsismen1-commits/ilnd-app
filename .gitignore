@@ -68,3 +68,4 @@ app.*.map.json
 # Local agent/session tooling (skills ARE versioned)
 .claude/launch.json
 .claude/settings.local.json
+.firebase/
