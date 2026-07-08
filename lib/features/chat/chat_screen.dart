@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/ilnd/crisis_guard.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
@@ -361,23 +362,38 @@ class _Composer extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: p.border, width: 0.5),
               ),
-              child: TextField(
-                controller: controller,
-                minLines: 1,
-                maxLines: 5,
-                textCapitalization: TextCapitalization.sentences,
-                style: AppTextStyles.body(fontSize: 15, color: p.text),
-                decoration: InputDecoration(
-                  hintText: l10n.chatComposerHint,
-                  hintStyle: AppTextStyles.body(
-                    fontSize: 15,
-                    color: p.textMuted,
+              // Çok satırlı TextField'da Enter varsayılan olarak yeni satır
+              // ekler ve onSubmitted hiç tetiklenmez (web/masaüstü klavye).
+              // Enter = gönder, Shift+Enter = yeni satır.
+              child: Focus(
+                onKeyEvent: (node, event) {
+                  final isEnter =
+                      event.logicalKey == LogicalKeyboardKey.enter ||
+                      event.logicalKey == LogicalKeyboardKey.numpadEnter;
+                  if (!isEnter || HardwareKeyboard.instance.isShiftPressed) {
+                    return KeyEventResult.ignored;
+                  }
+                  if (event is KeyDownEvent && !sending) onSend();
+                  return KeyEventResult.handled;
+                },
+                child: TextField(
+                  controller: controller,
+                  minLines: 1,
+                  maxLines: 5,
+                  textCapitalization: TextCapitalization.sentences,
+                  style: AppTextStyles.body(fontSize: 15, color: p.text),
+                  decoration: InputDecoration(
+                    hintText: l10n.chatComposerHint,
+                    hintStyle: AppTextStyles.body(
+                      fontSize: 15,
+                      color: p.textMuted,
+                    ),
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  border: InputBorder.none,
-                  isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                  onSubmitted: (_) => onSend(),
                 ),
-                onSubmitted: (_) => onSend(),
               ),
             ),
           ),

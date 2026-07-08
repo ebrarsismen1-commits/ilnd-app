@@ -71,61 +71,79 @@ class _RouterNotifier extends ChangeNotifier {
     // Demo modu: auth/onboarding duvarı yok — doğrudan dolu uygulamaya in.
     if (kDemoMode) return null;
 
-    final authState = _ref.read(authNotifierProvider);
-    final onboardingDone = _ref.read(onboardingDoneProvider);
-    final firstEntryDone = _ref.read(firstEntryDoneProvider);
-    final location = state.matchedLocation;
+    return resolveRedirect(
+      authState: _ref.read(authNotifierProvider),
+      hydration: _ref.read(profileHydrationProvider),
+      onboardingDone: _ref.read(onboardingDoneProvider),
+      firstEntryDone: _ref.read(firstEntryDoneProvider),
+      location: state.matchedLocation,
+    );
+  }
+}
 
-    // Gizlilik Politikası / Kullanım Şartları her zaman erişilebilir olmalı —
-    // App Store/Play Store gereksinimi, kayıt formundan (henüz auth yok) ya
-    // da ayarlardan açılabilir. Auth/onboarding durumundan bağımsız.
-    if (location == routePrivacyPolicy || location == routeTermsOfService) {
-      return null;
-    }
+/// Router redirect kararının saf hâli — provider'sız test edilebilsin diye
+/// ayrık (bkz. test/core/router_redirect_test.dart).
+@visibleForTesting
+String? resolveRedirect({
+  required AuthState authState,
+  required ProfileHydrationStatus hydration,
+  required bool onboardingDone,
+  required bool firstEntryDone,
+  required String location,
+}) {
+  // Gizlilik Politikası / Kullanım Şartları her zaman erişilebilir olmalı —
+  // App Store/Play Store gereksinimi, kayıt formundan (henüz auth yok) ya
+  // da ayarlardan açılabilir. Auth/onboarding durumundan bağımsız.
+  if (location == routePrivacyPolicy || location == routeTermsOfService) {
+    return null;
+  }
 
-    // Still resolving — show splash screen.
-    if (authState is AuthInitial) {
+  // Still resolving — show splash screen.
+  if (authState is AuthInitial) {
+    return location == routeSplash ? null : routeSplash;
+  }
+
+  final isAuthenticated = authState is AuthAuthenticated;
+  final isOnAuthRoute = location == routeLogin || location == routeRegister;
+  final isOnboarding = location.startsWith('/onboarding');
+
+  if (isAuthenticated) {
+    // Sunucu profili çözülene kadar bekle: yerel bayraklar (yeni cihaz/web'de
+    // boş) gerçeği yansıtmıyor olabilir; hidratlama bitmeden onboarding'e
+    // atmak "her seferinde baştan" bug'ının ta kendisiydi.
+    if (hydration != ProfileHydrationStatus.done) {
       return location == routeSplash ? null : routeSplash;
     }
 
-    final isAuthenticated = authState is AuthAuthenticated;
-    final isOnAuthRoute = location == routeLogin || location == routeRegister;
-    final isOnboarding = location.startsWith('/onboarding');
-
-    if (isAuthenticated) {
-      // Sunucu profili çözülene kadar bekle: yerel bayraklar (yeni cihaz/web'de
-      // boş) gerçeği yansıtmıyor olabilir; hidratlama bitmeden onboarding'e
-      // atmak "her seferinde baştan" bug'ının ta kendisiydi.
-      final hydration = _ref.read(profileHydrationProvider);
-      if (hydration != ProfileHydrationStatus.done) {
-        return location == routeSplash ? null : routeSplash;
-      }
-
-      // Hidratlama bitti — yerel bayraklar artık sunucu gerçeğini taşıyor.
-      if (!onboardingDone) {
-        if (isOnboarding) return null;
-        return routeWelcome;
-      }
-      if (!firstEntryDone) {
-        return location == routeFirstEntry ? null : routeFirstEntry;
-      }
-      // Auth/onboarding rotasında takılı kaldıysa → home.
-      if (isOnAuthRoute || location == routeFirstEntry || isOnboarding) {
-        return routeHome;
-      }
-      return null;
-    }
-
-    // Kimliksiz: giriş/kayıt rotalarına onboarding durumundan bağımsız izin ver —
-    // zaten kayıtlı bir kullanıcı (yeni cihaz) welcome'dan "giriş yap" ile
-    // login'e ulaşıp hidratlanabilsin.
-    if (isOnAuthRoute) return null;
+    // Hidratlama bitti — yerel bayraklar artık sunucu gerçeğini taşıyor.
     if (!onboardingDone) {
       if (isOnboarding) return null;
       return routeWelcome;
     }
-    return routeLogin;
+    if (!firstEntryDone) {
+      return location == routeFirstEntry ? null : routeFirstEntry;
+    }
+    // Splash/auth/onboarding rotasında takılı kaldıysa → home. Splash burada
+    // kritik: hidratlama sırasında herkes /splash'e çekilir; bitince home'a
+    // itilmezse kullanıcı sonsuza dek splash'te kalır (yaşandı — web/telefon).
+    if (location == routeSplash ||
+        isOnAuthRoute ||
+        location == routeFirstEntry ||
+        isOnboarding) {
+      return routeHome;
+    }
+    return null;
   }
+
+  // Kimliksiz: giriş/kayıt rotalarına onboarding durumundan bağımsız izin ver —
+  // zaten kayıtlı bir kullanıcı (yeni cihaz) welcome'dan "giriş yap" ile
+  // login'e ulaşıp hidratlanabilsin.
+  if (isOnAuthRoute) return null;
+  if (!onboardingDone) {
+    if (isOnboarding) return null;
+    return routeWelcome;
+  }
+  return routeLogin;
 }
 
 // ─── Router provider ──────────────────────────────────────────────────────────

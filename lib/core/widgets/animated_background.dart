@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 
@@ -8,10 +9,21 @@ import 'package:ilnd_app/core/theme/app_palette.dart';
 /// Gündüz: pastel aura degradesi yumuşakça döner. Gece: mürekkep zeminde
 /// sage ışıltısı dolaşır. Görsel asset olmadan ekrana hayat katar.
 class AnimatedBackground extends StatefulWidget {
-  const AnimatedBackground({super.key, required this.palette, this.child});
+  const AnimatedBackground({
+    super.key,
+    required this.palette,
+    this.child,
+    this.lowPower,
+  });
 
   final AppPalette palette;
   final Widget? child;
+
+  /// Web'de her karede 3 tam ekran gradyan boyamak (60fps) yazılım-render'lı
+  /// tarayıcılarda ekranı donduruyordu — lowPower animasyonu ~12fps'e
+  /// kuantalar; 18 sn'lik süzülme bu hızda da akıcı görünür.
+  /// null = platforma göre otomatik (web'de açık).
+  final bool? lowPower;
 
   @override
   State<AnimatedBackground> createState() => _AnimatedBackgroundState();
@@ -19,13 +31,35 @@ class AnimatedBackground extends StatefulWidget {
 
 class _AnimatedBackgroundState extends State<AnimatedBackground>
     with SingleTickerProviderStateMixin {
+  static const _cycle = Duration(seconds: 18);
+  static const _lowPowerFps = 12;
+
   late final AnimationController _c = AnimationController(
     vsync: this,
-    duration: const Duration(seconds: 18),
+    duration: _cycle,
   )..repeat();
+
+  /// lowPower modunda boyamayı tetikleyen kuantalanmış değer — yalnız
+  /// 1/12 sn'lik adım değişince güncellenir, aradaki tick'ler boyama üretmez.
+  late final ValueNotifier<double> _quantized = ValueNotifier(_c.value);
+
+  bool get _lowPower => widget.lowPower ?? kIsWeb;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_lowPower) _c.addListener(_onTick);
+  }
+
+  void _onTick() {
+    final steps = _cycle.inSeconds * _lowPowerFps;
+    final q = (_c.value * steps).floorToDouble() / steps;
+    if (q != _quantized.value) _quantized.value = q;
+  }
 
   @override
   void dispose() {
+    _quantized.dispose();
     _c.dispose();
     super.dispose();
   }
@@ -34,9 +68,10 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
   Widget build(BuildContext context) {
     final p = widget.palette;
     return AnimatedBuilder(
-      animation: _c,
+      animation: _lowPower ? _quantized : _c,
       builder: (context, child) {
-        final t = _c.value * 2 * math.pi;
+        final value = _lowPower ? _quantized.value : _c.value;
+        final t = value * 2 * math.pi;
         // Degradenin yönü yavaşça döner.
         final begin = Alignment(math.cos(t) * 0.8, math.sin(t) * 0.8);
         final end = Alignment(-math.cos(t) * 0.8, -math.sin(t) * 0.8);
