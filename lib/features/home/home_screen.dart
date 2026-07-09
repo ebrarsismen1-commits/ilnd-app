@@ -51,21 +51,17 @@ class HomeScreen extends ConsumerWidget {
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPadding,
-                  0,
+                  16,
                   AppSpacing.screenPadding,
                   32,
                 ),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                    // Mood kartı hero fotoğrafının üzerine biner (editoryal
-                    // katman) — translate görsel, layout slotu sabittir.
-                    Entrance(
-                      index: 0,
-                      child: Transform.translate(
-                        offset: const Offset(0, -26),
-                        child: _MoodCheckIn(p: p),
-                      ),
-                    ),
+                    // Mood kartı hero'nun ALTINDA yaşar — üzerine bindirme
+                    // (Transform.translate) web'de selamlamayla çakışıyordu:
+                    // translate layout'u etkilemez, fontlar geç yüklenip metin
+                    // sarınca kart selamlamanın üstüne oturuyordu.
+                    Entrance(index: 0, child: _MoodCheckIn(p: p)),
                     Entrance(index: 1, child: _StreakBanner(p: p)),
                     Entrance(index: 2, child: SocialProofBadge(p: p)),
                     const SizedBox(height: 18),
