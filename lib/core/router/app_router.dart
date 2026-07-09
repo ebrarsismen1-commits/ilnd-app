@@ -16,6 +16,7 @@ import 'package:ilnd_app/features/onboarding/screens/first_entry_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/quick_setup_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/welcome_screen.dart';
 import 'package:ilnd_app/features/ekle/yemek_ekle_screen.dart';
+import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_screen.dart';
 import 'package:ilnd_app/features/splash/splash_screen.dart';
 import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/features/referral/referral_screen.dart';
@@ -37,6 +38,7 @@ const routeTopluluk = '/topluluk';
 const routeProfile = '/profile';
 const routeYemekEkle = '/yemek-ekle';
 const routeVibeCard = '/vibe-card';
+const routeSleepRitual = '/sleep-ritual';
 const routeReferral = '/referral';
 const routePrivacyPolicy = '/legal/privacy';
 const routeTermsOfService = '/legal/terms';
@@ -195,6 +197,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: routeVibeCard,
         pageBuilder: (context, state) => _fade(state, const VibeCardScreen()),
+      ),
+      GoRoute(
+        // Gece ritüeli tam ekran deneyim — shell dışı (chat gibi).
+        path: routeSleepRitual,
+        pageBuilder: (context, state) =>
+            _fade(state, const SleepRitualScreen()),
       ),
       GoRoute(
         path: routePrivacyPolicy,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
@@ -332,7 +334,6 @@ class _RitualsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final sleepArticle = _byKeyword('uyku');
     final movementArticle = _byKeyword('hareket');
 
     final cards = <_RitualCard>[
@@ -361,13 +362,14 @@ class _RitualsRow extends StatelessWidget {
           ),
         ),
       ),
-      if (sleepArticle != null)
-        _RitualCard(
-          title: l10n.exploreRitualSleepTitle,
-          fill: p.surfaceStrong,
-          onLight: false,
-          onTap: () => onOpen(sleepArticle),
-        ),
+      // Gece ritüeli artık makale değil, interaktif adım adım deneyim —
+      // içerikten bağımsız olduğu için her zaman görünür.
+      _RitualCard(
+        title: l10n.exploreRitualSleepTitle,
+        fill: p.surfaceStrong,
+        onLight: false,
+        onTap: () => context.push(routeSleepRitual),
+      ),
       if (movementArticle != null)
         _RitualCard(
           title: l10n.exploreRitualMovementTitle,

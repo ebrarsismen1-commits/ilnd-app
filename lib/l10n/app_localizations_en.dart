@@ -698,6 +698,106 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreRitualMovementTitle => 'movement break';
 
   @override
+  String get sleepRitualTitle => 'sleep ritual';
+
+  @override
+  String get sleepRitualPickerHeading => 'which steps would feel good tonight?';
+
+  @override
+  String get sleepRitualPickerClosingNote => 'the closing is always included';
+
+  @override
+  String get sleepRitualStartButton => 'begin';
+
+  @override
+  String get sleepRitualContinueButton => 'continue';
+
+  @override
+  String get sleepRitualSkipButton => 'skip';
+
+  @override
+  String get sleepRitualFinishButton => 'goodnight';
+
+  @override
+  String sleepRitualStepProgress(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get sleepRitualStepPrepTitle => 'getting ready';
+
+  @override
+  String get sleepRitualStepPrepSubtitle =>
+      'soften the room, let your body know';
+
+  @override
+  String get sleepRitualStepBreathTitle => 'two minutes of breath';
+
+  @override
+  String get sleepRitualStepBreathSubtitle =>
+      'slow down with the 4 · 4 · 6 rhythm';
+
+  @override
+  String get sleepRitualStepUnloadTitle => 'unload the day';
+
+  @override
+  String get sleepRitualStepUnloadSubtitle =>
+      'set down the thought that lingers';
+
+  @override
+  String get sleepRitualStepGratitudeTitle => 'a good moment';
+
+  @override
+  String get sleepRitualStepGratitudeSubtitle =>
+      'one kind thing that stayed with you';
+
+  @override
+  String get sleepRitualPrepItemLights => 'dim the lights';
+
+  @override
+  String get sleepRitualPrepItemPhone => 'silence your phone';
+
+  @override
+  String get sleepRitualPrepItemBed => 'get your bed ready';
+
+  @override
+  String get sleepRitualUnloadPrompt =>
+      'leave tomorrow\'s lingering thought here';
+
+  @override
+  String get sleepRitualUnloadHint => 'one sentence is enough…';
+
+  @override
+  String get sleepRitualGratitudePrompt =>
+      'a good moment that stayed with you today';
+
+  @override
+  String get sleepRitualGratitudeHint => 'something small counts…';
+
+  @override
+  String get sleepRitualClosing1 =>
+      'you showed up today, and that is enough. sleep well.';
+
+  @override
+  String get sleepRitualClosing2 =>
+      'the day is done, you set it down. now it is time to rest.';
+
+  @override
+  String get sleepRitualClosing3 =>
+      'tomorrow is a fresh page. tonight, just sleep.';
+
+  @override
+  String get sleepRitualClosing4 =>
+      'thank you for making this space for yourself. goodnight.';
+
+  @override
+  String get sleepRitualHomeCardTitle => 'ready for your night ritual?';
+
+  @override
+  String get sleepRitualHomeCardSubtitle =>
+      'a few minutes of gentle winding down';
+
+  @override
   String get exploreQuote =>
       '\"A small step today, a big difference tomorrow.\"';
 

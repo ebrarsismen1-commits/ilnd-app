@@ -1388,6 +1388,180 @@ abstract class AppLocalizations {
   /// **'hareket molası'**
   String get exploreRitualMovementTitle;
 
+  /// Sleep ritual screen app bar title
+  ///
+  /// In tr, this message translates to:
+  /// **'uyku ritüeli'**
+  String get sleepRitualTitle;
+
+  /// Sleep ritual step picker heading
+  ///
+  /// In tr, this message translates to:
+  /// **'bu gece hangi adımlar iyi gelir?'**
+  String get sleepRitualPickerHeading;
+
+  /// Note under the picker: closing step is always included
+  ///
+  /// In tr, this message translates to:
+  /// **'kapanış her zaman dahil'**
+  String get sleepRitualPickerClosingNote;
+
+  /// Start button on the sleep ritual picker
+  ///
+  /// In tr, this message translates to:
+  /// **'başla'**
+  String get sleepRitualStartButton;
+
+  /// Advance to the next ritual step
+  ///
+  /// In tr, this message translates to:
+  /// **'devam'**
+  String get sleepRitualContinueButton;
+
+  /// Muted skip link on the breath step
+  ///
+  /// In tr, this message translates to:
+  /// **'geç'**
+  String get sleepRitualSkipButton;
+
+  /// Finish button on the closing step
+  ///
+  /// In tr, this message translates to:
+  /// **'iyi geceler'**
+  String get sleepRitualFinishButton;
+
+  /// Step progress label, e.g. 2 / 4
+  ///
+  /// In tr, this message translates to:
+  /// **'{current} / {total}'**
+  String sleepRitualStepProgress(int current, int total);
+
+  /// Prep step title
+  ///
+  /// In tr, this message translates to:
+  /// **'hazırlık'**
+  String get sleepRitualStepPrepTitle;
+
+  /// Prep step subtitle on the picker card
+  ///
+  /// In tr, this message translates to:
+  /// **'ortamı yumuşat, bedenin anlasın'**
+  String get sleepRitualStepPrepSubtitle;
+
+  /// Breath step title
+  ///
+  /// In tr, this message translates to:
+  /// **'iki dakika nefes'**
+  String get sleepRitualStepBreathTitle;
+
+  /// Breath step subtitle on the picker card
+  ///
+  /// In tr, this message translates to:
+  /// **'4 · 4 · 6 ritmiyle yavaşla'**
+  String get sleepRitualStepBreathSubtitle;
+
+  /// Unload step title
+  ///
+  /// In tr, this message translates to:
+  /// **'günü boşalt'**
+  String get sleepRitualStepUnloadTitle;
+
+  /// Unload step subtitle on the picker card
+  ///
+  /// In tr, this message translates to:
+  /// **'yarına kalan düşünceyi bırak'**
+  String get sleepRitualStepUnloadSubtitle;
+
+  /// Gratitude step title
+  ///
+  /// In tr, this message translates to:
+  /// **'güzel an'**
+  String get sleepRitualStepGratitudeTitle;
+
+  /// Gratitude step subtitle on the picker card
+  ///
+  /// In tr, this message translates to:
+  /// **'bugünden aklında kalan bir iyilik'**
+  String get sleepRitualStepGratitudeSubtitle;
+
+  /// Prep checklist item: dim the lights
+  ///
+  /// In tr, this message translates to:
+  /// **'ışıkları kıs'**
+  String get sleepRitualPrepItemLights;
+
+  /// Prep checklist item: silence the phone
+  ///
+  /// In tr, this message translates to:
+  /// **'telefonu sessize al'**
+  String get sleepRitualPrepItemPhone;
+
+  /// Prep checklist item: make the bed ready
+  ///
+  /// In tr, this message translates to:
+  /// **'yatağını hazırla'**
+  String get sleepRitualPrepItemBed;
+
+  /// Unload step prompt above the text field
+  ///
+  /// In tr, this message translates to:
+  /// **'yarına kalan bir düşünceyi buraya bırak'**
+  String get sleepRitualUnloadPrompt;
+
+  /// Unload step text field hint
+  ///
+  /// In tr, this message translates to:
+  /// **'aklındakini tek cümleyle yaz…'**
+  String get sleepRitualUnloadHint;
+
+  /// Gratitude step prompt above the text field
+  ///
+  /// In tr, this message translates to:
+  /// **'bugünden aklında kalan güzel bir an'**
+  String get sleepRitualGratitudePrompt;
+
+  /// Gratitude step text field hint
+  ///
+  /// In tr, this message translates to:
+  /// **'küçük bir şey de olur…'**
+  String get sleepRitualGratitudeHint;
+
+  /// Closing goodnight message 1
+  ///
+  /// In tr, this message translates to:
+  /// **'bugün buradaydın, bu yeter. iyi uykular.'**
+  String get sleepRitualClosing1;
+
+  /// Closing goodnight message 2
+  ///
+  /// In tr, this message translates to:
+  /// **'gün bitti, yükünü bıraktın. şimdi dinlenme zamanı.'**
+  String get sleepRitualClosing2;
+
+  /// Closing goodnight message 3
+  ///
+  /// In tr, this message translates to:
+  /// **'yarın yeni bir sayfa. bu gece sadece uyu.'**
+  String get sleepRitualClosing3;
+
+  /// Closing goodnight message 4
+  ///
+  /// In tr, this message translates to:
+  /// **'kendine bu alanı açtığın için teşekkürler. iyi geceler.'**
+  String get sleepRitualClosing4;
+
+  /// Evening invitation card title on home
+  ///
+  /// In tr, this message translates to:
+  /// **'gece ritüeline hazır mısın?'**
+  String get sleepRitualHomeCardTitle;
+
+  /// Evening invitation card subtitle on home
+  ///
+  /// In tr, this message translates to:
+  /// **'birkaç dakikalık yumuşak bir kapanış'**
+  String get sleepRitualHomeCardSubtitle;
+
   /// Daily quote on explore screen
   ///
   /// In tr, this message translates to:

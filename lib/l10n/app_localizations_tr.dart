@@ -688,6 +688,101 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exploreRitualMovementTitle => 'hareket molası';
 
   @override
+  String get sleepRitualTitle => 'uyku ritüeli';
+
+  @override
+  String get sleepRitualPickerHeading => 'bu gece hangi adımlar iyi gelir?';
+
+  @override
+  String get sleepRitualPickerClosingNote => 'kapanış her zaman dahil';
+
+  @override
+  String get sleepRitualStartButton => 'başla';
+
+  @override
+  String get sleepRitualContinueButton => 'devam';
+
+  @override
+  String get sleepRitualSkipButton => 'geç';
+
+  @override
+  String get sleepRitualFinishButton => 'iyi geceler';
+
+  @override
+  String sleepRitualStepProgress(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get sleepRitualStepPrepTitle => 'hazırlık';
+
+  @override
+  String get sleepRitualStepPrepSubtitle => 'ortamı yumuşat, bedenin anlasın';
+
+  @override
+  String get sleepRitualStepBreathTitle => 'iki dakika nefes';
+
+  @override
+  String get sleepRitualStepBreathSubtitle => '4 · 4 · 6 ritmiyle yavaşla';
+
+  @override
+  String get sleepRitualStepUnloadTitle => 'günü boşalt';
+
+  @override
+  String get sleepRitualStepUnloadSubtitle => 'yarına kalan düşünceyi bırak';
+
+  @override
+  String get sleepRitualStepGratitudeTitle => 'güzel an';
+
+  @override
+  String get sleepRitualStepGratitudeSubtitle =>
+      'bugünden aklında kalan bir iyilik';
+
+  @override
+  String get sleepRitualPrepItemLights => 'ışıkları kıs';
+
+  @override
+  String get sleepRitualPrepItemPhone => 'telefonu sessize al';
+
+  @override
+  String get sleepRitualPrepItemBed => 'yatağını hazırla';
+
+  @override
+  String get sleepRitualUnloadPrompt =>
+      'yarına kalan bir düşünceyi buraya bırak';
+
+  @override
+  String get sleepRitualUnloadHint => 'aklındakini tek cümleyle yaz…';
+
+  @override
+  String get sleepRitualGratitudePrompt =>
+      'bugünden aklında kalan güzel bir an';
+
+  @override
+  String get sleepRitualGratitudeHint => 'küçük bir şey de olur…';
+
+  @override
+  String get sleepRitualClosing1 => 'bugün buradaydın, bu yeter. iyi uykular.';
+
+  @override
+  String get sleepRitualClosing2 =>
+      'gün bitti, yükünü bıraktın. şimdi dinlenme zamanı.';
+
+  @override
+  String get sleepRitualClosing3 => 'yarın yeni bir sayfa. bu gece sadece uyu.';
+
+  @override
+  String get sleepRitualClosing4 =>
+      'kendine bu alanı açtığın için teşekkürler. iyi geceler.';
+
+  @override
+  String get sleepRitualHomeCardTitle => 'gece ritüeline hazır mısın?';
+
+  @override
+  String get sleepRitualHomeCardSubtitle =>
+      'birkaç dakikalık yumuşak bir kapanış';
+
+  @override
   String get exploreQuote => '\"Bugün küçük bir adım, yarının büyük farkı.\"';
 
   @override

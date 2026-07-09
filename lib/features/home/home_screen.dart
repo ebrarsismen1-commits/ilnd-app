@@ -21,11 +21,15 @@ import 'package:ilnd_app/features/explore/article_model.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
+import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_provider.dart';
 import 'package:ilnd_app/features/social_proof/social_proof_badge.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.hourOverride});
+
+  /// Saat testte enjekte edilir; null'sa cihaz saati (gece ritüeli daveti).
+  final int? hourOverride;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -63,7 +67,14 @@ class HomeScreen extends ConsumerWidget {
                     // sarınca kart selamlamanın üstüne oturuyordu.
                     Entrance(index: 0, child: _MoodCheckIn(p: p)),
                     Entrance(index: 1, child: _StreakBanner(p: p)),
-                    Entrance(index: 2, child: SocialProofBadge(p: p)),
+                    Entrance(
+                      index: 2,
+                      child: _SleepRitualCard(
+                        p: p,
+                        hour: hourOverride ?? DateTime.now().hour,
+                      ),
+                    ),
+                    Entrance(index: 3, child: SocialProofBadge(p: p)),
                     const SizedBox(height: 18),
                     Entrance(
                       index: 4,
@@ -360,6 +371,67 @@ class _PulsingFlameState extends State<_PulsingFlame>
     return ScaleTransition(
       scale: _scale,
       child: const Text('🔥 ', style: TextStyle(fontSize: 13)),
+    );
+  }
+}
+
+// ─── Gece ritüeli daveti ──────────────────────────────────────────────────────
+
+/// Akşam saatlerinde (bkz. isSleepRitualWindow) görünen nazik davet; bu gece
+/// tamamlandıysa gizlenir. Saat parametreyle gelir — test edilebilirlik
+/// (_heroImageUrl deseninin aynısı).
+class _SleepRitualCard extends ConsumerWidget {
+  const _SleepRitualCard({required this.p, required this.hour});
+  final AppPalette p;
+  final int hour;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final doneTonight = ref.watch(sleepRitualDoneTonightProvider);
+    if (!isSleepRitualWindow(hour) || doneTonight) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Pressable(
+        onTap: () => context.push(routeSleepRitual),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: p.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: p.border, width: 0.5),
+          ),
+          child: Row(
+            children: [
+              Text('🌙', style: TextStyle(fontSize: 20, color: p.amber)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.sleepRitualHomeCardTitle,
+                      style: AppTextStyles.heading(fontSize: 15, color: p.text),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      l10n.sleepRitualHomeCardSubtitle,
+                      style: AppTextStyles.body(
+                        fontSize: 12.5,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right_rounded, size: 20, color: p.textMuted),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

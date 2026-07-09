@@ -631,6 +631,93 @@
   "exploreRitualMovementTitle": "hareket molası",
   "@exploreRitualMovementTitle": {"description": "Movement ritual card title — opens the matching article"},
 
+  "sleepRitualTitle": "uyku ritüeli",
+  "@sleepRitualTitle": {"description": "Sleep ritual screen app bar title"},
+
+  "sleepRitualPickerHeading": "bu gece hangi adımlar iyi gelir?",
+  "@sleepRitualPickerHeading": {"description": "Sleep ritual step picker heading"},
+
+  "sleepRitualPickerClosingNote": "kapanış her zaman dahil",
+  "@sleepRitualPickerClosingNote": {"description": "Note under the picker: closing step is always included"},
+
+  "sleepRitualStartButton": "başla",
+  "@sleepRitualStartButton": {"description": "Start button on the sleep ritual picker"},
+
+  "sleepRitualContinueButton": "devam",
+  "@sleepRitualContinueButton": {"description": "Advance to the next ritual step"},
+
+  "sleepRitualSkipButton": "geç",
+  "@sleepRitualSkipButton": {"description": "Muted skip link on the breath step"},
+
+  "sleepRitualFinishButton": "iyi geceler",
+  "@sleepRitualFinishButton": {"description": "Finish button on the closing step"},
+
+  "sleepRitualStepProgress": "{current} / {total}",
+  "@sleepRitualStepProgress": {"description": "Step progress label, e.g. 2 / 4", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+
+  "sleepRitualStepPrepTitle": "hazırlık",
+  "@sleepRitualStepPrepTitle": {"description": "Prep step title"},
+
+  "sleepRitualStepPrepSubtitle": "ortamı yumuşat, bedenin anlasın",
+  "@sleepRitualStepPrepSubtitle": {"description": "Prep step subtitle on the picker card"},
+
+  "sleepRitualStepBreathTitle": "iki dakika nefes",
+  "@sleepRitualStepBreathTitle": {"description": "Breath step title"},
+
+  "sleepRitualStepBreathSubtitle": "4 · 4 · 6 ritmiyle yavaşla",
+  "@sleepRitualStepBreathSubtitle": {"description": "Breath step subtitle on the picker card"},
+
+  "sleepRitualStepUnloadTitle": "günü boşalt",
+  "@sleepRitualStepUnloadTitle": {"description": "Unload step title"},
+
+  "sleepRitualStepUnloadSubtitle": "yarına kalan düşünceyi bırak",
+  "@sleepRitualStepUnloadSubtitle": {"description": "Unload step subtitle on the picker card"},
+
+  "sleepRitualStepGratitudeTitle": "güzel an",
+  "@sleepRitualStepGratitudeTitle": {"description": "Gratitude step title"},
+
+  "sleepRitualStepGratitudeSubtitle": "bugünden aklında kalan bir iyilik",
+  "@sleepRitualStepGratitudeSubtitle": {"description": "Gratitude step subtitle on the picker card"},
+
+  "sleepRitualPrepItemLights": "ışıkları kıs",
+  "@sleepRitualPrepItemLights": {"description": "Prep checklist item: dim the lights"},
+
+  "sleepRitualPrepItemPhone": "telefonu sessize al",
+  "@sleepRitualPrepItemPhone": {"description": "Prep checklist item: silence the phone"},
+
+  "sleepRitualPrepItemBed": "yatağını hazırla",
+  "@sleepRitualPrepItemBed": {"description": "Prep checklist item: make the bed ready"},
+
+  "sleepRitualUnloadPrompt": "yarına kalan bir düşünceyi buraya bırak",
+  "@sleepRitualUnloadPrompt": {"description": "Unload step prompt above the text field"},
+
+  "sleepRitualUnloadHint": "aklındakini tek cümleyle yaz…",
+  "@sleepRitualUnloadHint": {"description": "Unload step text field hint"},
+
+  "sleepRitualGratitudePrompt": "bugünden aklında kalan güzel bir an",
+  "@sleepRitualGratitudePrompt": {"description": "Gratitude step prompt above the text field"},
+
+  "sleepRitualGratitudeHint": "küçük bir şey de olur…",
+  "@sleepRitualGratitudeHint": {"description": "Gratitude step text field hint"},
+
+  "sleepRitualClosing1": "bugün buradaydın, bu yeter. iyi uykular.",
+  "@sleepRitualClosing1": {"description": "Closing goodnight message 1"},
+
+  "sleepRitualClosing2": "gün bitti, yükünü bıraktın. şimdi dinlenme zamanı.",
+  "@sleepRitualClosing2": {"description": "Closing goodnight message 2"},
+
+  "sleepRitualClosing3": "yarın yeni bir sayfa. bu gece sadece uyu.",
+  "@sleepRitualClosing3": {"description": "Closing goodnight message 3"},
+
+  "sleepRitualClosing4": "kendine bu alanı açtığın için teşekkürler. iyi geceler.",
+  "@sleepRitualClosing4": {"description": "Closing goodnight message 4"},
+
+  "sleepRitualHomeCardTitle": "gece ritüeline hazır mısın?",
+  "@sleepRitualHomeCardTitle": {"description": "Evening invitation card title on home"},
+
+  "sleepRitualHomeCardSubtitle": "birkaç dakikalık yumuşak bir kapanış",
+  "@sleepRitualHomeCardSubtitle": {"description": "Evening invitation card subtitle on home"},
+
   "exploreQuote": "\"Bugün küçük bir adım, yarının büyük farkı.\"",
   "@exploreQuote": {"description": "Daily quote on explore screen"},
 
