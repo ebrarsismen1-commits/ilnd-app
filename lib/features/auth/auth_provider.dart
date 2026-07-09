@@ -38,6 +38,14 @@ class AuthUnauthenticated extends AuthState {
   const AuthUnauthenticated();
 }
 
+/// Kayıt başarılı ama oturum yok: Supabase "Confirm email" açıkken kullanıcı
+/// mailindeki bağlantıyı onaylayana kadar giriş yapamaz. UI bu durumda
+/// "onay maili gönderildi" mesajı gösterir — bu bir hata değildir.
+class AuthConfirmEmailPending extends AuthState {
+  const AuthConfirmEmailPending(this.email);
+  final String email;
+}
+
 class AuthError extends AuthState {
   const AuthError(this.code);
   final AuthErrorCode code;
@@ -160,6 +168,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
             data: {'name': name.trim()},
           )
           .timeout(const Duration(seconds: 15));
+      // Confirm email açıkken kullanıcı yaratılır ama oturum verilmez —
+      // stream hiç tetiklenmez ve state AuthLoading'de asılı kalırdı.
+      // UI'a "onay maili gönderildi" durumunu açıkça bildir.
+      if (res.user != null && res.session == null) {
+        state = AuthConfirmEmailPending(email.trim());
+        return;
+      }
       // profiles tablosu opsiyonel — hata verse bile kayıt başarılı sayılır
       if (res.user != null) {
         try {
@@ -383,30 +398,38 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  // ── Error mapping ───────────────────────────────────────────────────────────
+  AuthErrorCode _mapError(AuthException e) => mapSupabaseAuthError(e);
+}
 
-  AuthErrorCode _mapError(AuthException e) {
-    final msg = e.message.toLowerCase();
-    if (msg.contains('invalid login') ||
-        msg.contains('invalid email or password')) {
-      return AuthErrorCode.invalidCredentials;
-    }
-    if (msg.contains('email already') || msg.contains('already registered')) {
-      return AuthErrorCode.emailInUse;
-    }
-    if (msg.contains('weak password') || msg.contains('at least 6')) {
-      return AuthErrorCode.weakPassword;
-    }
-    if (msg.contains('user not found')) {
-      return AuthErrorCode.userNotFound;
-    }
-    if (msg.contains('network') || msg.contains('socket')) {
-      return AuthErrorCode.network;
-    }
-    if (msg.contains('valid') && msg.contains('email')) {
-      return AuthErrorCode.invalidEmail;
-    }
-    debugPrint('[Auth] ${e.message}');
-    return AuthErrorCode.generic;
+// ── Error mapping ─────────────────────────────────────────────────────────────
+
+/// Supabase auth hatasını locale-bağımsız koda çevirir. Notifier dışında,
+/// saf fonksiyon olarak durur ki testlenebilsin (Supabase init gerektirmez).
+AuthErrorCode mapSupabaseAuthError(AuthException e) {
+  final msg = e.message.toLowerCase();
+  if (msg.contains('not confirmed')) {
+    // "Email not confirmed" — Confirm email açıkken onaysız girişte döner.
+    return AuthErrorCode.confirmEmail;
   }
+  if (msg.contains('invalid login') ||
+      msg.contains('invalid email or password')) {
+    return AuthErrorCode.invalidCredentials;
+  }
+  if (msg.contains('email already') || msg.contains('already registered')) {
+    return AuthErrorCode.emailInUse;
+  }
+  if (msg.contains('weak password') || msg.contains('at least 6')) {
+    return AuthErrorCode.weakPassword;
+  }
+  if (msg.contains('user not found')) {
+    return AuthErrorCode.userNotFound;
+  }
+  if (msg.contains('network') || msg.contains('socket')) {
+    return AuthErrorCode.network;
+  }
+  if (msg.contains('valid') && msg.contains('email')) {
+    return AuthErrorCode.invalidEmail;
+  }
+  debugPrint('[Auth] ${e.message}');
+  return AuthErrorCode.generic;
 }

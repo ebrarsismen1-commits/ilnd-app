@@ -79,6 +79,7 @@
   "registerHaveAccount": "already have an account? ",
   "registerLoginLink": "sign in",
   "registerSuccess": "Your account has been created! Welcome 🌿",
+  "registerConfirmEmailSent": "We sent a confirmation link to your email. Check your inbox (and spam folder), then sign in.",
 
   "validatorEmailRequired": "Email address is required.",
   "validatorEmailInvalid": "Enter a valid email address.",

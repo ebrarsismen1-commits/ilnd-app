@@ -180,6 +180,9 @@
   "registerSuccess": "Hesabın oluşturuldu! Hoş geldin 🌿",
   "@registerSuccess": {"description": "Shown after successful registration"},
 
+  "registerConfirmEmailSent": "Onay bağlantısı e-postana gönderildi. Kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.",
+  "@registerConfirmEmailSent": {"description": "Shown after sign-up when email confirmation is required before first sign-in"},
+
   "validatorEmailRequired": "E-posta adresi gerekli.",
   "@validatorEmailRequired": {"description": "Email validation: empty"},
 

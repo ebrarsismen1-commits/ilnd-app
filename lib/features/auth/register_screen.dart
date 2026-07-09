@@ -96,6 +96,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final authState = ref.read(authNotifierProvider);
     if (authState is AuthError) {
       IlndToast.error(context, authState.code.localized(l10n));
+    } else if (authState is AuthConfirmEmailPending) {
+      // Confirm email açık: hesap yaratıldı, giriş için mail onayı şart.
+      IlndToast.success(context, l10n.registerConfirmEmailSent);
+      context.go(routeLogin);
     } else if (authState is AuthAuthenticated) {
       IlndToast.success(context, l10n.registerSuccess);
     }

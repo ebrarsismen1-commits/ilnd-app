@@ -518,6 +518,12 @@ abstract class AppLocalizations {
   /// **'Hesabın oluşturuldu! Hoş geldin 🌿'**
   String get registerSuccess;
 
+  /// Shown after sign-up when email confirmation is required before first sign-in
+  ///
+  /// In tr, this message translates to:
+  /// **'Onay bağlantısı e-postana gönderildi. Kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.'**
+  String get registerConfirmEmailSent;
+
   /// Email validation: empty
   ///
   /// In tr, this message translates to:

@@ -236,6 +236,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get registerSuccess => 'Hesabın oluşturuldu! Hoş geldin 🌿';
 
   @override
+  String get registerConfirmEmailSent =>
+      'Onay bağlantısı e-postana gönderildi. Kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.';
+
+  @override
   String get validatorEmailRequired => 'E-posta adresi gerekli.';
 
   @override

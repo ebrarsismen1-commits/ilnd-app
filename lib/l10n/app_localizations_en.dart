@@ -246,6 +246,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerSuccess => 'Your account has been created! Welcome 🌿';
 
   @override
+  String get registerConfirmEmailSent =>
+      'We sent a confirmation link to your email. Check your inbox (and spam folder), then sign in.';
+
+  @override
   String get validatorEmailRequired => 'Email address is required.';
 
   @override
