@@ -7,24 +7,35 @@ import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_animation.dart';
-import 'package:ilnd_app/core/widgets/entrance.dart';
+import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_models.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
-/// Adım adım gece ritüeli: seçim ekranı → seçilen adımlar → kapanış.
-class SleepRitualScreen extends ConsumerWidget {
-  const SleepRitualScreen({
-    super.key,
-    this.breathDuration = const Duration(seconds: 112), // 8 × 14sn döngü
-  });
-
-  /// Nefes adımının süresi — testte kısa süre enjekte edilir.
-  final Duration breathDuration;
+/// ILND'nin bu geceye özel kurduğu adım adım gece ritüeli.
+class SleepRitualScreen extends ConsumerStatefulWidget {
+  const SleepRitualScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SleepRitualScreen> createState() => _SleepRitualScreenState();
+}
+
+class _SleepRitualScreenState extends ConsumerState<SleepRitualScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // l10n için context gerekir — ilk kare sonrası planı ILND'ye kurdur.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ref
+          .read(sleepRitualFlowProvider.notifier)
+          .prepare(AppLocalizations.of(context)!);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final flow = ref.watch(sleepRitualFlowProvider);
@@ -49,16 +60,15 @@ class SleepRitualScreen extends ConsumerWidget {
         ),
         centerTitle: true,
       ),
-      extendBodyBehindAppBar: false,
       body: AnimatedBackground(
         palette: p,
         child: SafeArea(
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 320),
             switchInCurve: Curves.easeOut,
-            child: flow.phase == SleepRitualPhase.picker
-                ? _PickerPhase(p: p)
-                : _RunnerPhase(p: p, breathDuration: breathDuration),
+            child: flow.phase == SleepRitualPhase.running
+                ? _RunnerPhase(p: p)
+                : _PreparingView(p: p),
           ),
         ),
       ),
@@ -66,151 +76,26 @@ class SleepRitualScreen extends ConsumerWidget {
   }
 }
 
-// ─── Seçim ekranı ─────────────────────────────────────────────────────────────
+// ─── Hazırlanıyor ─────────────────────────────────────────────────────────────
 
-class _PickerPhase extends ConsumerWidget {
-  const _PickerPhase({required this.p});
+class _PreparingView extends StatelessWidget {
+  const _PreparingView({required this.p});
   final AppPalette p;
-
-  (String, String) _copy(AppLocalizations l10n, SleepRitualStep s) =>
-      switch (s) {
-        SleepRitualStep.prep => (
-          l10n.sleepRitualStepPrepTitle,
-          l10n.sleepRitualStepPrepSubtitle,
-        ),
-        SleepRitualStep.breath => (
-          l10n.sleepRitualStepBreathTitle,
-          l10n.sleepRitualStepBreathSubtitle,
-        ),
-        SleepRitualStep.unload => (
-          l10n.sleepRitualStepUnloadTitle,
-          l10n.sleepRitualStepUnloadSubtitle,
-        ),
-        SleepRitualStep.gratitude => (
-          l10n.sleepRitualStepGratitudeTitle,
-          l10n.sleepRitualStepGratitudeSubtitle,
-        ),
-        SleepRitualStep.closing => ('', ''),
-      };
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final flow = ref.watch(sleepRitualFlowProvider);
-    final notifier = ref.read(sleepRitualFlowProvider.notifier);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-          Entrance(
-            index: 0,
-            child: Text(
-              l10n.sleepRitualPickerHeading,
-              style: AppTextStyles.display(fontSize: 26, color: p.text),
-            ),
-          ),
-          const SizedBox(height: 20),
-          for (final (i, step) in kSleepRitualSelectableSteps.indexed) ...[
-            Entrance(
-              index: i + 1,
-              child: _PickerCard(
-                p: p,
-                title: _copy(l10n, step).$1,
-                subtitle: _copy(l10n, step).$2,
-                selected: flow.selected.contains(step),
-                onTap: () => notifier.toggleStep(step),
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
-          const SizedBox(height: 4),
-          Entrance(
-            index: 5,
-            child: Text(
-              l10n.sleepRitualPickerClosingNote,
-              style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
-            ),
-          ),
-          const Spacer(),
-          Entrance(
-            index: 6,
-            child: _PrimaryButton(
-              p: p,
-              label: l10n.sleepRitualStartButton,
-              enabled: flow.canStart,
-              onTap: notifier.start,
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-}
-
-class _PickerCard extends StatelessWidget {
-  const _PickerCard({
-    required this.p,
-    required this.title,
-    required this.subtitle,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final AppPalette p;
-  final String title;
-  final String subtitle;
-  final bool selected;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Pressable(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 320),
-        curve: Curves.easeOut,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: selected ? p.accent : p.border,
-            width: selected ? 1.4 : 0.5,
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const BreathRing(size: 56),
+          const SizedBox(height: 24),
+          Text(
+            l10n.sleepRitualPreparing,
+            style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
           ),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              selected ? Icons.check_circle_rounded : Icons.circle_outlined,
-              size: 20,
-              color: selected ? p.accent : p.textMuted,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.heading(fontSize: 15, color: p.text),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: AppTextStyles.body(
-                      fontSize: 12.5,
-                      color: p.textMuted,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -219,9 +104,8 @@ class _PickerCard extends StatelessWidget {
 // ─── Koşucu ───────────────────────────────────────────────────────────────────
 
 class _RunnerPhase extends ConsumerWidget {
-  const _RunnerPhase({required this.p, required this.breathDuration});
+  const _RunnerPhase({required this.p});
   final AppPalette p;
-  final Duration breathDuration;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -233,36 +117,32 @@ class _RunnerPhase extends ConsumerWidget {
 
     Future<void> advance() => notifier.advance();
 
-    final Widget body = switch (step) {
-      SleepRitualStep.prep => _PrepStep(p: p, onContinue: advance),
-      SleepRitualStep.breath => _BreathStep(
+    final Widget body = switch (step.type) {
+      SleepRitualStepType.checklist => _ChecklistStep(
         p: p,
-        duration: breathDuration,
+        spec: step,
         onContinue: advance,
       ),
-      SleepRitualStep.unload => _TextStep(
-        key: const ValueKey('unload'),
+      SleepRitualStepType.breath => _BreathStep(
         p: p,
-        icon: Icons.edit_note_rounded,
-        prompt: l10n.sleepRitualUnloadPrompt,
-        hint: l10n.sleepRitualUnloadHint,
-        initialText: flow.unloadText,
-        onChanged: notifier.setUnloadText,
+        duration: Duration(seconds: step.breathSeconds),
         onContinue: advance,
       ),
-      SleepRitualStep.gratitude => _TextStep(
-        key: const ValueKey('gratitude'),
+      SleepRitualStepType.text => _TextStep(
         p: p,
-        icon: Icons.favorite_border_rounded,
-        prompt: l10n.sleepRitualGratitudePrompt,
-        hint: l10n.sleepRitualGratitudeHint,
-        initialText: flow.gratitudeText,
-        onChanged: notifier.setGratitudeText,
+        spec: step,
+        initialText: flow.answers[flow.index] ?? '',
+        onChanged: notifier.setAnswer,
         onContinue: advance,
       ),
-      SleepRitualStep.closing => _ClosingStep(
+      SleepRitualStepType.message => _MessageStep(
         p: p,
-        closingIndex: flow.closingIndex,
+        text: step.message,
+        onContinue: advance,
+      ),
+      SleepRitualStepType.closing => _ClosingStep(
+        p: p,
+        text: step.message,
         onFinish: () async {
           await advance();
           if (context.mounted) Navigator.of(context).pop();
@@ -284,7 +164,7 @@ class _RunnerPhase extends ConsumerWidget {
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 320),
               switchInCurve: Curves.easeOut,
-              child: KeyedSubtree(key: ValueKey(step), child: body),
+              child: KeyedSubtree(key: ValueKey(flow.index), child: body),
             ),
           ),
         ],
@@ -357,25 +237,25 @@ class _StepIconSceneState extends State<_StepIconScene>
   }
 }
 
-// ─── Adım: hazırlık ───────────────────────────────────────────────────────────
+// ─── Adım: kontrol listesi ────────────────────────────────────────────────────
 
-class _PrepStep extends ConsumerWidget {
-  const _PrepStep({required this.p, required this.onContinue});
+class _ChecklistStep extends ConsumerWidget {
+  const _ChecklistStep({
+    required this.p,
+    required this.spec,
+    required this.onContinue,
+  });
+
   final AppPalette p;
+  final SleepRitualStepSpec spec;
   final VoidCallback onContinue;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final checked = ref.watch(
-      sleepRitualFlowProvider.select((s) => s.prepChecked),
-    );
+    final flow = ref.watch(sleepRitualFlowProvider);
+    final checked = flow.checkedByStep[flow.index] ?? const <int>{};
     final notifier = ref.read(sleepRitualFlowProvider.notifier);
-    final items = [
-      l10n.sleepRitualPrepItemLights,
-      l10n.sleepRitualPrepItemPhone,
-      l10n.sleepRitualPrepItemBed,
-    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -390,13 +270,13 @@ class _PrepStep extends ConsumerWidget {
         ),
         const SizedBox(height: 24),
         Text(
-          l10n.sleepRitualStepPrepTitle,
+          spec.title.isNotEmpty ? spec.title : l10n.sleepRitualStepPrepTitle,
           style: AppTextStyles.display(fontSize: 24, color: p.text),
         ),
         const SizedBox(height: 20),
-        for (final (i, label) in items.indexed) ...[
+        for (final (i, label) in spec.items.indexed)
           Pressable(
-            onTap: () => notifier.togglePrepItem(i),
+            onTap: () => notifier.toggleChecklistItem(i),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
@@ -409,15 +289,16 @@ class _PrepStep extends ConsumerWidget {
                     color: checked.contains(i) ? p.accent : p.textMuted,
                   ),
                   const SizedBox(width: 12),
-                  Text(
-                    label,
-                    style: AppTextStyles.body(fontSize: 15, color: p.text),
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: AppTextStyles.body(fontSize: 15, color: p.text),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-        ],
         const Spacer(),
         _PrimaryButton(
           p: p,
@@ -526,24 +407,19 @@ class _BreathStepState extends State<_BreathStep> {
   }
 }
 
-// ─── Adım: yazı (günü boşalt / güzel an) ──────────────────────────────────────
+// ─── Adım: yazı ───────────────────────────────────────────────────────────────
 
 class _TextStep extends StatefulWidget {
   const _TextStep({
-    super.key,
     required this.p,
-    required this.icon,
-    required this.prompt,
-    required this.hint,
+    required this.spec,
     required this.initialText,
     required this.onChanged,
     required this.onContinue,
   });
 
   final AppPalette p;
-  final IconData icon;
-  final String prompt;
-  final String hint;
+  final SleepRitualStepSpec spec;
   final String initialText;
   final ValueChanged<String> onChanged;
   final VoidCallback onContinue;
@@ -572,14 +448,14 @@ class _TextStepState extends State<_TextStep> {
         const SizedBox(height: 8),
         Center(
           child: _StepIconScene(
-            icon: widget.icon,
+            icon: Icons.edit_note_rounded,
             fill: p.accentSoft,
             iconColor: p.accent,
           ),
         ),
         const SizedBox(height: 24),
         Text(
-          widget.prompt,
+          widget.spec.prompt,
           style: AppTextStyles.display(fontSize: 22, color: p.text),
         ),
         const SizedBox(height: 20),
@@ -596,7 +472,9 @@ class _TextStepState extends State<_TextStep> {
             textInputAction: TextInputAction.done,
             style: AppTextStyles.body(fontSize: 15, color: p.text),
             decoration: InputDecoration(
-              hintText: widget.hint,
+              hintText: widget.spec.hint.isNotEmpty
+                  ? widget.spec.hint
+                  : l10n.sleepRitualUnloadHint,
               hintStyle: AppTextStyles.body(fontSize: 15, color: p.textMuted),
               border: InputBorder.none,
             ),
@@ -617,25 +495,70 @@ class _TextStepState extends State<_TextStep> {
   }
 }
 
+// ─── Adım: ILND'den mesaj ─────────────────────────────────────────────────────
+
+class _MessageStep extends StatelessWidget {
+  const _MessageStep({
+    required this.p,
+    required this.text,
+    required this.onContinue,
+  });
+
+  final AppPalette p;
+  final String text;
+  final VoidCallback onContinue;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      children: [
+        const Spacer(),
+        _StepIconScene(
+          icon: Icons.favorite_border_rounded,
+          fill: p.accentSoft,
+          iconColor: p.accent,
+        ),
+        const SizedBox(height: 24),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.display(
+              fontSize: 21,
+              fontWeight: FontWeight.w400,
+              color: p.text,
+              height: 1.4,
+            ),
+          ),
+        ),
+        const Spacer(),
+        _PrimaryButton(
+          p: p,
+          label: l10n.sleepRitualContinueButton,
+          enabled: true,
+          onTap: onContinue,
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+}
+
 // ─── Adım: kapanış ────────────────────────────────────────────────────────────
 
 class _ClosingStep extends StatelessWidget {
   const _ClosingStep({
     required this.p,
-    required this.closingIndex,
+    required this.text,
     required this.onFinish,
   });
 
   final AppPalette p;
-  final int closingIndex;
+  final String text;
   final VoidCallback onFinish;
-
-  String _message(AppLocalizations l10n) => switch (closingIndex % 4) {
-    0 => l10n.sleepRitualClosing1,
-    1 => l10n.sleepRitualClosing2,
-    2 => l10n.sleepRitualClosing3,
-    _ => l10n.sleepRitualClosing4,
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -653,7 +576,7 @@ class _ClosingStep extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            _message(l10n),
+            text,
             textAlign: TextAlign.center,
             style: AppTextStyles.display(
               fontSize: 22,

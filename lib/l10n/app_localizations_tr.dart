@@ -691,13 +691,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sleepRitualTitle => 'uyku ritüeli';
 
   @override
-  String get sleepRitualPickerHeading => 'bu gece hangi adımlar iyi gelir?';
-
-  @override
-  String get sleepRitualPickerClosingNote => 'kapanış her zaman dahil';
-
-  @override
-  String get sleepRitualStartButton => 'başla';
+  String get sleepRitualPreparing => 'ilnd bu geceni hazırlıyor…';
 
   @override
   String get sleepRitualContinueButton => 'devam';
@@ -715,28 +709,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get sleepRitualStepPrepTitle => 'hazırlık';
-
-  @override
-  String get sleepRitualStepPrepSubtitle => 'ortamı yumuşat, bedenin anlasın';
-
-  @override
-  String get sleepRitualStepBreathTitle => 'iki dakika nefes';
-
-  @override
-  String get sleepRitualStepBreathSubtitle => '4 · 4 · 6 ritmiyle yavaşla';
-
-  @override
-  String get sleepRitualStepUnloadTitle => 'günü boşalt';
-
-  @override
-  String get sleepRitualStepUnloadSubtitle => 'yarına kalan düşünceyi bırak';
-
-  @override
-  String get sleepRitualStepGratitudeTitle => 'güzel an';
-
-  @override
-  String get sleepRitualStepGratitudeSubtitle =>
-      'bugünden aklında kalan bir iyilik';
 
   @override
   String get sleepRitualPrepItemLights => 'ışıkları kıs';

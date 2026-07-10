@@ -701,13 +701,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepRitualTitle => 'sleep ritual';
 
   @override
-  String get sleepRitualPickerHeading => 'which steps would feel good tonight?';
-
-  @override
-  String get sleepRitualPickerClosingNote => 'the closing is always included';
-
-  @override
-  String get sleepRitualStartButton => 'begin';
+  String get sleepRitualPreparing => 'ilnd is shaping your night…';
 
   @override
   String get sleepRitualContinueButton => 'continue';
@@ -725,31 +719,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sleepRitualStepPrepTitle => 'getting ready';
-
-  @override
-  String get sleepRitualStepPrepSubtitle =>
-      'soften the room, let your body know';
-
-  @override
-  String get sleepRitualStepBreathTitle => 'two minutes of breath';
-
-  @override
-  String get sleepRitualStepBreathSubtitle =>
-      'slow down with the 4 · 4 · 6 rhythm';
-
-  @override
-  String get sleepRitualStepUnloadTitle => 'unload the day';
-
-  @override
-  String get sleepRitualStepUnloadSubtitle =>
-      'set down the thought that lingers';
-
-  @override
-  String get sleepRitualStepGratitudeTitle => 'a good moment';
-
-  @override
-  String get sleepRitualStepGratitudeSubtitle =>
-      'one kind thing that stayed with you';
 
   @override
   String get sleepRitualPrepItemLights => 'dim the lights';

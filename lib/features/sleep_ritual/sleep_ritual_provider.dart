@@ -1,11 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
+import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_models.dart';
+import 'package:ilnd_app/l10n/app_localizations.dart';
 
 // ─── Akşam penceresi ──────────────────────────────────────────────────────────
 
@@ -53,7 +53,7 @@ class SleepRitualDoneTonightNotifier extends StateNotifier<bool> {
 // ─── Akış state machine'i ─────────────────────────────────────────────────────
 
 /// autoDispose: ekran kapanınca akış sıfırlanır — yarıda bırakmak hiçbir şey
-/// kaydetmez, sonraki açılış temiz seçim ekranından başlar (suçluluk yok).
+/// kaydetmez, sonraki açılışta ILND geceyi yeniden kurar (suçluluk yok).
 final sleepRitualFlowProvider =
     StateNotifierProvider.autoDispose<
       SleepRitualFlowNotifier,
@@ -61,47 +61,87 @@ final sleepRitualFlowProvider =
     >((ref) => SleepRitualFlowNotifier(ref));
 
 class SleepRitualFlowNotifier extends StateNotifier<SleepRitualFlowState> {
-  SleepRitualFlowNotifier(this._ref, {Random? random})
-    : _random = random ?? Random(),
-      super(const SleepRitualFlowState());
+  SleepRitualFlowNotifier(this._ref) : super(const SleepRitualFlowState());
 
   final Ref _ref;
-  final Random _random;
 
-  void toggleStep(SleepRitualStep step) {
-    if (step == SleepRitualStep.closing) return; // kapanış hep dahil
-    final next = {...state.selected};
-    next.contains(step) ? next.remove(step) : next.add(step);
-    state = state.copyWith(selected: next);
-  }
+  /// Bu geceye özel planı ILND'ye kurdurur; başarısızlıkta (çevrimdışı,
+  /// limit, bozuk yanıt) sabit yedek plana düşer — kullanıcı hata görmez.
+  /// Chat deseninde olduğu gibi l10n UI'dan gelir (Sert Kural #1).
+  Future<void> prepare(AppLocalizations l10n) async {
+    if (state.phase != SleepRitualPhase.idle) return;
+    state = state.copyWith(phase: SleepRitualPhase.preparing);
 
-  void togglePrepItem(int i) {
-    final next = {...state.prepChecked};
-    next.contains(i) ? next.remove(i) : next.add(i);
-    state = state.copyWith(prepChecked: next);
-  }
+    SleepRitualPlan? plan;
+    try {
+      final raw = await _ref
+          .read(ilndServiceProvider)
+          .respond(
+            memory: _ref.read(ilndMemoryProvider),
+            l10n: l10n,
+            tier: IlndTier.quick,
+            task:
+                'Kullanıcı gece ritüelini açtı: bu geceye özel, adım adım '
+                'kısa bir uyku ritüeli kuruyorsun.',
+            userMessage:
+                'Bu geceye özel 3 ila 5 adımlık bir uyku ritüeli kur. '
+                'Hakkımda bildiklerini ve bugünkü notları kullanarak adım '
+                'içeriklerini KİŞİSELLEŞTİR; genel geçer olma.\n'
+                'Adım tipleri:\n'
+                '- "kontrol": 2-4 maddelik hazırlık listesi (baslik + maddeler)\n'
+                '- "nefes": rehberli nefes (sure_sn: 60-120)\n'
+                '- "yazi": tek cümleyle cevaplanacak sıcak bir soru (soru + ipucu)\n'
+                '- "mesaj": bana özel 1-2 cümlelik sıcak bir ara mesaj (metin)\n'
+                'Kurallar: en fazla 1 nefes, en fazla 2 yazi; metinler kısa, '
+                'küçük harfle, şefkatli; kapanis 1-2 cümlelik iyi geceler '
+                'mesajı.\n'
+                'Yalnızca şu JSON yapısında yanıt ver, başka hiçbir şey '
+                'yazma:\n'
+                '{"adimlar":[{"tip":"kontrol","baslik":"...","maddeler":["..."]},'
+                '{"tip":"nefes","sure_sn":90},'
+                '{"tip":"yazi","soru":"...","ipucu":"..."},'
+                '{"tip":"mesaj","metin":"..."}],"kapanis":"..."}',
+          );
+      if (!mounted) return;
+      plan = parseSleepRitualPlan(raw);
+    } catch (_) {
+      // Sessiz düş: yedek plan aşağıda devreye girer.
+    }
+    if (!mounted) return;
 
-  void setUnloadText(String s) => state = state.copyWith(unloadText: s);
+    plan ??= SleepRitualPlan.fallback(l10n);
+    final closing = plan.closing.isNotEmpty
+        ? plan.closing
+        : sleepRitualClosingFromPool(l10n, DateTime.now().millisecond);
 
-  void setGratitudeText(String s) => state = state.copyWith(gratitudeText: s);
-
-  void start() {
-    if (!state.canStart) return;
-    final queue = [
-      for (final s in kSleepRitualSelectableSteps)
-        if (state.selected.contains(s)) s,
-      SleepRitualStep.closing,
-    ];
     state = state.copyWith(
       phase: SleepRitualPhase.running,
-      queue: queue,
+      queue: [
+        ...plan.steps,
+        SleepRitualStepSpec(
+          type: SleepRitualStepType.closing,
+          message: closing,
+        ),
+      ],
       index: 0,
-      closingIndex: _random.nextInt(kSleepRitualClosingCount),
     );
   }
 
+  void toggleChecklistItem(int item) {
+    final step = state.index;
+    final next = {for (final e in state.checkedByStep.entries) e.key: e.value};
+    final set = {...(next[step] ?? const <int>{})};
+    set.contains(item) ? set.remove(item) : set.add(item);
+    next[step] = set;
+    state = state.copyWith(checkedByStep: next);
+  }
+
+  void setAnswer(String text) {
+    state = state.copyWith(answers: {...state.answers, state.index: text});
+  }
+
   /// Sıradaki adıma geçer; kapanıştan sonra akışı bitirir: bayrak kaydedilir,
-  /// yazı girdileri AI hafızasına not düşer.
+  /// yazı cevapları AI hafızasına not düşer.
   Future<void> advance() async {
     if (state.phase != SleepRitualPhase.running) return;
     if (state.index + 1 < state.queue.length) {
@@ -109,20 +149,20 @@ class SleepRitualFlowNotifier extends StateNotifier<SleepRitualFlowState> {
       return;
     }
 
-    final unload = state.unloadText.trim();
-    final gratitude = state.gratitudeText.trim();
+    final notes = <String>[
+      for (final e in state.answers.entries)
+        if (e.value.trim().isNotEmpty && e.key < state.queue.length)
+          'Gece ritüelinde (${state.queue[e.key].prompt}) cevabı: '
+              '${e.value.trim()}',
+    ];
     state = state.copyWith(phase: SleepRitualPhase.done);
 
     await _ref.read(sleepRitualDoneTonightProvider.notifier).record();
     if (!mounted) return;
     // AI-görünür notlar kanonik TR (desen: mood check-in notu, profile_sync).
     final memory = _ref.read(ilndMemoryProvider.notifier);
-    if (unload.isNotEmpty) {
-      await memory.addNote('Gece ritüelinde yarına bıraktığı not: $unload');
-      if (!mounted) return;
-    }
-    if (gratitude.isNotEmpty) {
-      await memory.addNote('Gece ritüelinde günün güzel anı: $gratitude');
+    for (final note in notes) {
+      await memory.addNote(note);
       if (!mounted) return;
     }
   }

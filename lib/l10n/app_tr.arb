@@ -634,14 +634,8 @@
   "sleepRitualTitle": "uyku ritüeli",
   "@sleepRitualTitle": {"description": "Sleep ritual screen app bar title"},
 
-  "sleepRitualPickerHeading": "bu gece hangi adımlar iyi gelir?",
-  "@sleepRitualPickerHeading": {"description": "Sleep ritual step picker heading"},
-
-  "sleepRitualPickerClosingNote": "kapanış her zaman dahil",
-  "@sleepRitualPickerClosingNote": {"description": "Note under the picker: closing step is always included"},
-
-  "sleepRitualStartButton": "başla",
-  "@sleepRitualStartButton": {"description": "Start button on the sleep ritual picker"},
+  "sleepRitualPreparing": "ilnd bu geceni hazırlıyor…",
+  "@sleepRitualPreparing": {"description": "Shown while ILND builds tonight's personalized ritual"},
 
   "sleepRitualContinueButton": "devam",
   "@sleepRitualContinueButton": {"description": "Advance to the next ritual step"},
@@ -656,28 +650,7 @@
   "@sleepRitualStepProgress": {"description": "Step progress label, e.g. 2 / 4", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
 
   "sleepRitualStepPrepTitle": "hazırlık",
-  "@sleepRitualStepPrepTitle": {"description": "Prep step title"},
-
-  "sleepRitualStepPrepSubtitle": "ortamı yumuşat, bedenin anlasın",
-  "@sleepRitualStepPrepSubtitle": {"description": "Prep step subtitle on the picker card"},
-
-  "sleepRitualStepBreathTitle": "iki dakika nefes",
-  "@sleepRitualStepBreathTitle": {"description": "Breath step title"},
-
-  "sleepRitualStepBreathSubtitle": "4 · 4 · 6 ritmiyle yavaşla",
-  "@sleepRitualStepBreathSubtitle": {"description": "Breath step subtitle on the picker card"},
-
-  "sleepRitualStepUnloadTitle": "günü boşalt",
-  "@sleepRitualStepUnloadTitle": {"description": "Unload step title"},
-
-  "sleepRitualStepUnloadSubtitle": "yarına kalan düşünceyi bırak",
-  "@sleepRitualStepUnloadSubtitle": {"description": "Unload step subtitle on the picker card"},
-
-  "sleepRitualStepGratitudeTitle": "güzel an",
-  "@sleepRitualStepGratitudeTitle": {"description": "Gratitude step title"},
-
-  "sleepRitualStepGratitudeSubtitle": "bugünden aklında kalan bir iyilik",
-  "@sleepRitualStepGratitudeSubtitle": {"description": "Gratitude step subtitle on the picker card"},
+  "@sleepRitualStepPrepTitle": {"description": "Fallback checklist step title"},
 
   "sleepRitualPrepItemLights": "ışıkları kıs",
   "@sleepRitualPrepItemLights": {"description": "Prep checklist item: dim the lights"},

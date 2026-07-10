@@ -203,7 +203,20 @@ exports.anthropicProxy = onRequest(
           body: JSON.stringify({
             model: config.model,
             max_tokens: config.maxTokens,
-            system: typeof system === "string" ? system : undefined,
+            // Çok turlu konuşmalarda (sohbet) system prompt'u (kişilik +
+            // hafıza, ~600-800 token) her mesajda tam fiyattan gitmesin:
+            // prompt caching ile takip mesajlarında %90 indirimli okunur.
+            // Tek atımlık çağrılarda (ritüel, öneri) cache yazma primi
+            // (%25) boşa gider — o yüzden yalnız messages.length > 1 iken.
+            system: typeof system === "string" ?
+              (Array.isArray(messages) && messages.length > 1 ?
+                [{
+                  type: "text",
+                  text: system,
+                  cache_control: {type: "ephemeral"},
+                }] :
+                system) :
+              undefined,
             messages,
           }),
         });

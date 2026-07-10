@@ -1394,23 +1394,11 @@ abstract class AppLocalizations {
   /// **'uyku ritüeli'**
   String get sleepRitualTitle;
 
-  /// Sleep ritual step picker heading
+  /// Shown while ILND builds tonight's personalized ritual
   ///
   /// In tr, this message translates to:
-  /// **'bu gece hangi adımlar iyi gelir?'**
-  String get sleepRitualPickerHeading;
-
-  /// Note under the picker: closing step is always included
-  ///
-  /// In tr, this message translates to:
-  /// **'kapanış her zaman dahil'**
-  String get sleepRitualPickerClosingNote;
-
-  /// Start button on the sleep ritual picker
-  ///
-  /// In tr, this message translates to:
-  /// **'başla'**
-  String get sleepRitualStartButton;
+  /// **'ilnd bu geceni hazırlıyor…'**
+  String get sleepRitualPreparing;
 
   /// Advance to the next ritual step
   ///
@@ -1436,53 +1424,11 @@ abstract class AppLocalizations {
   /// **'{current} / {total}'**
   String sleepRitualStepProgress(int current, int total);
 
-  /// Prep step title
+  /// Fallback checklist step title
   ///
   /// In tr, this message translates to:
   /// **'hazırlık'**
   String get sleepRitualStepPrepTitle;
-
-  /// Prep step subtitle on the picker card
-  ///
-  /// In tr, this message translates to:
-  /// **'ortamı yumuşat, bedenin anlasın'**
-  String get sleepRitualStepPrepSubtitle;
-
-  /// Breath step title
-  ///
-  /// In tr, this message translates to:
-  /// **'iki dakika nefes'**
-  String get sleepRitualStepBreathTitle;
-
-  /// Breath step subtitle on the picker card
-  ///
-  /// In tr, this message translates to:
-  /// **'4 · 4 · 6 ritmiyle yavaşla'**
-  String get sleepRitualStepBreathSubtitle;
-
-  /// Unload step title
-  ///
-  /// In tr, this message translates to:
-  /// **'günü boşalt'**
-  String get sleepRitualStepUnloadTitle;
-
-  /// Unload step subtitle on the picker card
-  ///
-  /// In tr, this message translates to:
-  /// **'yarına kalan düşünceyi bırak'**
-  String get sleepRitualStepUnloadSubtitle;
-
-  /// Gratitude step title
-  ///
-  /// In tr, this message translates to:
-  /// **'güzel an'**
-  String get sleepRitualStepGratitudeTitle;
-
-  /// Gratitude step subtitle on the picker card
-  ///
-  /// In tr, this message translates to:
-  /// **'bugünden aklında kalan bir iyilik'**
-  String get sleepRitualStepGratitudeSubtitle;
 
   /// Prep checklist item: dim the lights
   ///
