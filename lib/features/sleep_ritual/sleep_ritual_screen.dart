@@ -243,6 +243,7 @@ class _RunnerPhase extends ConsumerWidget {
       SleepRitualStep.unload => _TextStep(
         key: const ValueKey('unload'),
         p: p,
+        icon: Icons.edit_note_rounded,
         prompt: l10n.sleepRitualUnloadPrompt,
         hint: l10n.sleepRitualUnloadHint,
         initialText: flow.unloadText,
@@ -252,6 +253,7 @@ class _RunnerPhase extends ConsumerWidget {
       SleepRitualStep.gratitude => _TextStep(
         key: const ValueKey('gratitude'),
         p: p,
+        icon: Icons.favorite_border_rounded,
         prompt: l10n.sleepRitualGratitudePrompt,
         hint: l10n.sleepRitualGratitudeHint,
         initialText: flow.gratitudeText,
@@ -291,6 +293,70 @@ class _RunnerPhase extends ConsumerWidget {
   }
 }
 
+// ─── Nefes alan ikon sahnesi ──────────────────────────────────────────────────
+
+/// Her adımın merkezindeki büyük ikon halkası — marka "nefes" ritmiyle
+/// (4sn büyür / 6sn küçülür, BreathRing ile aynı dil) yumuşakça yaşar.
+class _StepIconScene extends StatefulWidget {
+  const _StepIconScene({
+    required this.icon,
+    required this.fill,
+    required this.iconColor,
+  });
+
+  final IconData icon;
+  final Color fill;
+  final Color iconColor;
+
+  @override
+  State<_StepIconScene> createState() => _StepIconSceneState();
+}
+
+class _StepIconSceneState extends State<_StepIconScene>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 10),
+  )..repeat();
+
+  late final Animation<double> _scale = TweenSequence<double>([
+    TweenSequenceItem(
+      tween: Tween(
+        begin: 0.94,
+        end: 1.06,
+      ).chain(CurveTween(curve: Curves.easeInOut)),
+      weight: 4,
+    ),
+    TweenSequenceItem(
+      tween: Tween(
+        begin: 1.06,
+        end: 0.94,
+      ).chain(CurveTween(curve: Curves.easeInOut)),
+      weight: 6,
+    ),
+  ]).animate(_c);
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _scale,
+      child: Container(
+        width: 104,
+        height: 104,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: widget.fill),
+        alignment: Alignment.center,
+        child: Icon(widget.icon, size: 42, color: widget.iconColor),
+      ),
+    );
+  }
+}
+
 // ─── Adım: hazırlık ───────────────────────────────────────────────────────────
 
 class _PrepStep extends ConsumerWidget {
@@ -314,6 +380,15 @@ class _PrepStep extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 8),
+        Center(
+          child: _StepIconScene(
+            icon: Icons.self_improvement_rounded,
+            fill: p.accentSoft,
+            iconColor: p.accent,
+          ),
+        ),
+        const SizedBox(height: 24),
         Text(
           l10n.sleepRitualStepPrepTitle,
           style: AppTextStyles.display(fontSize: 24, color: p.text),
@@ -457,6 +532,7 @@ class _TextStep extends StatefulWidget {
   const _TextStep({
     super.key,
     required this.p,
+    required this.icon,
     required this.prompt,
     required this.hint,
     required this.initialText,
@@ -465,6 +541,7 @@ class _TextStep extends StatefulWidget {
   });
 
   final AppPalette p;
+  final IconData icon;
   final String prompt;
   final String hint;
   final String initialText;
@@ -492,6 +569,15 @@ class _TextStepState extends State<_TextStep> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 8),
+        Center(
+          child: _StepIconScene(
+            icon: widget.icon,
+            fill: p.accentSoft,
+            iconColor: p.accent,
+          ),
+        ),
+        const SizedBox(height: 24),
         Text(
           widget.prompt,
           style: AppTextStyles.display(fontSize: 22, color: p.text),
@@ -558,8 +644,12 @@ class _ClosingStep extends StatelessWidget {
     return Column(
       children: [
         const Spacer(),
-        Text('🌙', style: TextStyle(fontSize: 34, color: p.amber)),
-        const SizedBox(height: 20),
+        _StepIconScene(
+          icon: Icons.nightlight_round,
+          fill: p.amber.withValues(alpha: 0.16),
+          iconColor: p.amber,
+        ),
+        const SizedBox(height: 24),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
