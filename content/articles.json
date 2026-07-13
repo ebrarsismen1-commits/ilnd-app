@@ -1,144 +1,152 @@
 [
   {
-    "id": "sabah-altin-saatini-cal",
+    "id": "bacaklar-duvara",
     "order": 0,
-    "title": "sabah altin saatini cal",
+    "title": "bacaklar duvara",
     "category": "wellness",
-    "readTime": "5 dk",
-    "excerpt": "Ilk 30 dakikan — telefon yok, bildirim yok. Sadece sen ve sessizlik.",
-    "imageUrl": "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?auto=format&fit=crop&w=1200&q=80",
+    "readTime": "4 dk",
+    "excerpt": "Sıfır efor, beş dakika: sinir sistemini dinlenme moduna alan poz.",
+    "imageUrl": "https://images.unsplash.com/photo-1537094082840-dcbbfa99385f?auto=format&fit=crop&w=1200&q=80",
     "body": [
-      "Sabah alarmin caldığında beynin \"varsayılan mod ağı\" hala aktif — yani sezgisel, yaratıcı, sessiz. Bu pencere yaklasık 30 dakika suruyor. Telefonuna uzandığında o pencereyi kapatıyorsun.",
-      "Dene: Gozlerin acılır acılmaz telefona bakma. Once bir bardak su. Sonra uc derin nefes. Bugün ne hissettirmesini istiyorsun? Bir kelime bile yeterli: sakin, odaklı, hafif.",
-      "Bu alıskanlıgı uc gun ust uste yaptığında fark edeceksin: gun daha senin gibi hissettiriyor. Cunku ilk dusuncen bir bildirim değil, kendi sesin oldu.",
-      "Mukemmel olmak zorunda değil. Sadece bir sabah. Sonra bir tane daha."
+      "Gün boyu ayaktasın, oturuyorsun, koşturuyorsun. Bedenin sürekli \"devam\" modunda. Legs up the wall, yani bacakları duvara dayama pozu, bu modu kapatmanın en zahmetsiz yolu: sırt üstü uzan, bacaklarını duvara yasla, kolların yanda gevşesin.",
+      "Beş dakika böyle kalmak dolaşımı tersine çevirir, gün boyu ayaklarda biriken sıvı yumuşakça geri döner. Ama asıl sihir sinir sisteminde: bu poz bedenine \"tehlike yok, dinlenebilirsin\" sinyali gönderir. Kalp atışın yavaşlar, nefesin derinleşir.",
+      "Dene: akşam eve gelince ya da uyumadan önce, telefonu uzağa koy ve beş dakikalığına bacaklarını duvara uzat. Zamanlayıcı kur, gözlerini kapat. Hiçbir şey yapman gerekmiyor — bu pozun bütün olayı hiçbir şey yapmamak.",
+      "Regl döneminde, uçuş sonrasında ya da yoğun bir antrenman gününde özellikle iyi gelir. Araç gerektirmez, beceri gerektirmez. Sadece bir duvar ve beş dakikan."
     ]
   },
   {
-    "id": "matcha-latte",
+    "id": "uykuyu-simart",
     "order": 1,
-    "title": "matcha latte",
+    "title": "uykuyu şımart",
+    "category": "wellness",
+    "readTime": "5 dk",
+    "excerpt": "Uyku bir lüks değil, bakım. Onu ciddiye alanların küçük sırları.",
+    "imageUrl": "https://images.unsplash.com/photo-1601276174812-63280a55656e?auto=format&fit=crop&w=1200&q=80",
+    "body": [
+      "Uykunu iyileştirmek için hayatını değiştirmen gerekmiyor; akşamına birkaç küçük dokunuş eklemen yeterli. Buna son zamanlarda \"sleepmaxxing\" deniyor ama özü çok eski: uykuya, önemli bir misafire hazırlanır gibi hazırlanmak.",
+      "En etkili üçlü şu: yatmadan bir saat önce büyük ışıkları kıs ve sıcak, loş bir ışığa geç. Ekranı erkenden bırak, illa bakacaksan gece modunda tut. Ve odanı serin tut — beden uykuya geçerken ısısını düşürür, serin oda bu geçişi kolaylaştırır.",
+      "Üstüne koymak istersen: karartma perdesi ya da uyku bandı, bir fincan papatya veya melisa çayı, yatmadan hafif bir esneme. Magnezyum takviyesi de çok konuşuluyor; merak ediyorsan önce doktoruna ya da eczacına danış.",
+      "Hepsini birden yapmak zorunda değilsin. Bu akşam sadece ışıkları kıs. Yarın bir çay ekle. Uyku şımartıldıkça güzelleşir."
+    ]
+  },
+  {
+    "id": "yorgun-uyanmak-potasyum",
+    "order": 2,
+    "title": "yorgun mu uyandın?",
+    "category": "wellness",
+    "readTime": "4 dk",
+    "excerpt": "Sekiz saat uyuyup yine yorgunsan, mesele uyku olmayabilir.",
+    "imageUrl": "https://images.unsplash.com/photo-1609889132698-1625aefc7f6b?auto=format&fit=crop&w=1200&q=80",
+    "body": [
+      "Yeterince uyuduğun hâlde sabah kendini ağır hissediyorsan, tabağına bakmanın zamanı gelmiş olabilir. Kaslarının ve sinirlerinin düzgün çalışması için potasyuma ihtiyacı var; eksikliği kendini en çok bitkinlik ve hâlsizlik olarak gösterir.",
+      "İyi haber: potasyum takviye rafında değil, manavda. Muz klasik ama tek seçenek değil — ıspanak, brokoli ve tatlı patates en zenginlerinden. Kivi ve portakal hem potasyum hem C vitamini taşır, avokado da sessiz bir şampiyondur.",
+      "Dene: bu hafta her güne bir potasyum kaynağı serpiştir. Sabah yulafına muz dilimle, öğlene bir avuç ıspanağı salatana kat, ara öğünde bir kivi. Takip etmesi kolay, etkisi birkaç günde hissedilir.",
+      "Not: sürekli ve açıklayamadığın bir yorgunluk varsa bunu yalnız beslenmeyle çözmeye çalışma — bir kan tahlili çok şey anlatır, doktorunla konuş."
+    ]
+  },
+  {
+    "id": "glow-suyu",
+    "order": 3,
+    "title": "glow suyu",
     "category": "tarif",
     "readTime": "3 dk",
-    "excerpt": "Kafein olmadan enerji. Anksiyete olmadan odaklanma.",
-    "imageUrl": "https://images.unsplash.com/photo-1536256263959-49fc93bb0d7e?auto=format&fit=crop&w=900&q=75",
+    "excerpt": "Havuç, limon, zencefil. Cildin içten aydınlanır.",
+    "imageUrl": "https://images.unsplash.com/photo-1618046364546-81e9d03d39a6?auto=format&fit=crop&w=1200&q=80",
     "body": [
-      "Matcha icindeki L-theanine, kafeini yavaslatar. Kahve gibi ani bir yukselis ve dusus yerine, 4-6 saat boyunca duz ve sakin bir enerji hissi verir.",
-      "Malzemeler: 1 cay kasigi ceremony grade matcha, 60 ml sicak su (70 derece), 200 ml yulaf sutu. Once matcha ve suyu cirpin. Kopurtulmus yulaf sutunu ustune ekleyin.",
-      "Ipucu: Icine bir tutam tarcin ve bir damla vanilya ekle. Sonuca surüp yapilmis gibi bakacaksın."
+      "Cilt bakımı sadece krem kavanozlarında olmuyor; bardakta da başlıyor. Bu üç malzemeli içecek, panolarda \"glow skin juice\" diye dolaşan tarifin sade hâli: havucun beta karoteni, limonun C vitamini, zencefilin canlandıran keskinliği.",
+      "Tarif: 3 orta boy havuç, yarım limonun suyu, küçük bir parmak taze zencefil. Katı meyve sıkacağın varsa hepsini sıkıver. Yoksa blender da olur: havucu ve zencefili az suyla çek, ince süzgeçten geçir, limonu en sonda ekle.",
+      "En iyi zamanı sabah, kahvaltıdan hemen önce ya da öğleden sonraki enerji düşüşünde. Soğuk servis et; buzlu haliyle neredeyse limonata kadar içimlik.",
+      "Küçük bir gerçeklik notu: hiçbir içecek tek başına cilt değiştirmez. Ama düzenli sebze-meyve, su ve uyku üçlüsüne eklenen bu bardak, toplamın parlayan parçası olur."
     ]
   },
   {
-    "id": "dopamin-menusu",
-    "order": 2,
-    "title": "dopamin menusu",
-    "category": "yazi",
-    "readTime": "6 dk",
-    "excerpt": "Scrolling degil — gercekten iyi hissettiren seylerin listesi.",
-    "imageUrl": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=900&q=75",
-    "body": [
-      "Beynin her zaman dopamin arar. Mesele kotu dopamine, iyi dopamine demek degil — her ikisi de odul hissettiriyor. Mesele hangisinin ardindan daha iyi hissettirdigini bilmek.",
-      "\"Dopamin menusu\" basit bir fikir: iyi hissettiren, ama sonrasinda da iyi hissettiren seylerin kisa listesi. Scroll, yiyecek, alisveris gibi anlik tatmin degil — hareket, baglanti, yaratma gibi kalici tatmin.",
-      "Ornek bir menu: sabah gunesi (5 dk, balkon ya da pencere), favori sarki ile dans (1 sarki yeterli), bir arkadasa sesli mesaj, elle bir seyler pisirmek, 20 dakika yuruyu.",
-      "Kendi menunu cikar. Kagida yaz. Duvara as. Bir dahaki sikildim aninda telefona uzanmadan once o listeye bak."
-    ]
-  },
-  {
-    "id": "smoothie-kasesi",
-    "order": 3,
-    "title": "smoothie kasesi",
+    "id": "matcha-ritueli",
+    "order": 4,
+    "title": "matcha ritüeli",
     "category": "tarif",
     "readTime": "4 dk",
-    "excerpt": "Gercekten lezzetli. Hazırlanması 5 dakika.",
-    "imageUrl": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=75",
+    "excerpt": "Bir içecekten fazlası: iki dakikalık zorunlu yavaşlama.",
+    "imageUrl": "https://images.unsplash.com/photo-1589698272390-0501a07619bb?auto=format&fit=crop&w=1200&q=80",
     "body": [
-      "Smoothie kasesi sadece guzel gorunduğu icin değil, doyurucu oldugu icin isliyor. Icindeki lif ve protein, kan sekerinizi saatlerce dengede tutuyor.",
-      "Kase tabani: 1 dondurulmus muz, yarim bardak dondurulmus bogurtlen, 3 yemek kasigi yogurt, cok az sut (cok sivi olmasın). Blenderdan koyu kıvamda gecir.",
-      "Uzeri: granola, taze cilek, muz dilimleri, bir tutam keten tohumu, biraz fistik ezmesi. Simetrik mi dizersen daha lezzetli mi oluyor? Hayir. Ama daha iyi hissettiriyor."
+      "Matchayı özel yapan şey sadece içeriği değil, hazırlanışı. Kahve makinesi düğmeye basınca çalışır; matcha ise senden iki dakika ister. Toz ölçülür, su ısınır, çırpılır. Bu küçük tören, günün ortasında zorunlu bir yavaşlama anı yaratır.",
+      "İçerik tarafı da güçlü: matchadaki L-theanine, kafeinin etkisini yumuşatır. Kahvenin ani yükseliş ve çöküşü yerine saatlere yayılan sakin bir odak verir. \"Uyanık ama gergin değil\" hissinin içeceği budur.",
+      "Tarif: 1 çay kaşığı matcha, 60 ml sıcak su (kaynar değil, 70-80 derece — yakarsan acılaşır). Çırpıcıyla ya da küçük bir telle W çizerek köpürene kadar çırp. Sade iç ya da üzerine köpürtülmüş yulaf sütü ekleyip latte yap.",
+      "İpucu: ilk denemede tadı otsu gelirse azalt, yarım kaşıkla başla. Matcha alışılan değil, zamanla sevilen bir tat — tıpkı yavaşlamak gibi."
     ]
   },
   {
-    "id": "nefes-ve-sakinlik",
-    "order": 4,
-    "title": "nefes & sakinlik",
+    "id": "dikkatle-hareket",
+    "order": 5,
+    "title": "dikkatle hareket",
     "category": "wellness",
     "readTime": "4 dk",
-    "excerpt": "Zihnini yavaslatamanin en hizli yolu, en yavas seyden gecer.",
-    "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=70",
+    "excerpt": "Mesele çok hareket değil — hareket ederken orada olmak.",
+    "imageUrl": "https://images.unsplash.com/photo-1552650272-b8a34e21bc4b?auto=format&fit=crop&w=1200&q=80",
     "body": [
-      "Gun icerisinde fark etmeden tuttuğumuz nefes, zihnimizin en sadik aynasıdır. Stresliyken sig ve hizli, sakinken derin ve yavas nefes aliriz. Bu iliski cift yonlu — nefesi bilinçli yavaslatirsak, zihin de onu takip eder.",
-      "Bugün denemen icin bir ritueli: 4 saniye burnundan al, 4 saniye tut, 6 saniye agzindan ver. Sadece uc kez. Vermeyi almaktan uzun tutmak, bedenine guvendesin mesaji gonderir.",
-      "Sabah uyaninca, bir toplanti oncesi ya da gece yatmadan. Gunde bir dakika bile yeterli. Mukemmel olmak zorunda degilsin — sadece bir nefes, sonra bir tane daha."
+      "\"Moving with attention\" diye bir fikir dolaşıyor wellness dünyasında ve çok haklı bir fikir: bedenini hızlı yormak yerine, yaptığın harekete gerçekten dikkat vermek. Podcast dinleyerek yürümek de güzel; ama bazen sadece adımlarını hissederek yürümek başka bir şey veriyor.",
+      "Bilim de destekliyor: dikkatle yapılan hareket, aynı egzersizi dalgın yapmaktan daha çok stres azaltıyor. Çünkü zihin geleceği kurcalamayı bırakıp bedene dönüyor — meditasyonun hareketli hâli.",
+      "Dene: bugün 10 dakikalık bir hareket molası ver. Kulaklık yok, ekran yok. Omuzlarını geriye yuvarla, boynunu iki yana uzat, ellerini yukarı süzdür. Her esnemede nefesinin nereye gittiğini izle.",
+      "Bu yaklaşımın en güzel yanı çıtayı düşürmesi: spor salonuna gitmek zorunda değilsin. Odadan odaya dikkatle yürümek bile sayılır. Bedenin taşınmak değil, fark edilmek istiyor."
     ]
   },
   {
-    "id": "uyku-ritueli",
-    "order": 5,
-    "title": "uyku ritueli",
+    "id": "regl-gunlerinde-sefkat",
+    "order": 6,
+    "title": "regl günlerinde şefkat",
     "category": "wellness",
     "readTime": "5 dk",
-    "excerpt": "Uyumadan onceki 1 saat, ertesi gunu baslatir.",
-    "imageUrl": "https://images.unsplash.com/photo-1631049307264-da0d7539e0b7?auto=format&fit=crop&w=900&q=75",
+    "excerpt": "O günlerde bedenin farklı bir tempo istiyor. Ona kulak ver.",
+    "imageUrl": "https://images.unsplash.com/photo-1552206735-e18f41fe76de?auto=format&fit=crop&w=1200&q=80",
     "body": [
-      "Uyku kaliteni belirleyen, kac saat uyudugundan cok nasil uyuduğundur. Ve nasil kismi buyuk olcude yatmadan onceki 60 dakikada sekilleniyor.",
-      "Basit bir wind-down rutini: yatmadan 1 saat once buyuk ekranlar kapanir. Isiklar kisılır. Bir seyler yaz — yarin ne yapacagin, bugün iyi gecen bir sey. Yazarak kafandan cikar.",
-      "Bonus: magnezyum (glisinatlı form) uyku kalitesini ciddi artirdiği icin en cok arastırılan takviyelerden biri. Bir bardak papatya cayiyla da ayni etki."
+      "Regl döneminde kendini yorgun, şişkin ya da hassas hissetmek zayıflık değil, biyoloji. O günlerde kortizol yükselmeye daha yatkın; bedenin yüksek tempolu antrenman değil, nazik hareket istiyor. Ona bunu vermek tembellik değil, akıllıca bir ayarlama.",
+      "Ne iyi gelir: onarıcı yoga ya da yumuşak esneme, derin nefesli çok hafif squat'lar, öne eğilip bırakma pozları, kısa ve yavaş bir yürüyüş. Ve tabii bacakları duvara uzatmak — kramplara ve şişkinliğe birebir.",
+      "Kuru fırçalama da bu dönemin sevilen bakımı: duştan önce, ayaklardan kalbe doğru uzun ve hafif fırça darbeleri. Dolaşımı canlandırır, o ağır hissi hafifletir. Sert bastırma, ipeksi bir dokunuş yeterli.",
+      "En önemlisi ölçüyü kendinden alman: bugün ne kaldırabiliyorsan o kadar. Döngünle savaşmak yerine ona uyum sağlamak, ay boyunca daha dengeli hissettirir."
     ]
   },
   {
-    "id": "avokadolu-yumurta",
-    "order": 6,
-    "title": "avokadolu yumurta",
-    "category": "tarif",
-    "readTime": "2 dk",
-    "excerpt": "10 dakikada, 4 malzemeyle haftanın en iyi kahvaltısı.",
-    "imageUrl": "https://images.unsplash.com/photo-1482049016688-2d3e1b311543?auto=format&fit=crop&w=900&q=75",
-    "body": [
-      "Sabah protein ve saglikli yag ile baslamak, kahve olmadan da odaklanmanı saglar. Bu tarif gercekten bes dakika.",
-      "Malzemeler: 2 yumurta (pose ya da cilbir), yarim avokado, bir dilim tam tahilli ekmek, kirmizi pul biber, tuz, limon suyu.",
-      "Firinda da pisirebiirsin: dort bolunmus avokadolarin icine birer yumurta kir, 180 derecede 12 dakika. Bagimsiz hissettiriyor, kolay temizleniyor."
-    ]
-  },
-  {
-    "id": "sinir-koymak",
+    "id": "sinir-sistemin-gunun-tonu",
     "order": 7,
-    "title": "sinir koymak",
+    "title": "günün tonunu sinir sistemin belirler",
     "category": "yazi",
-    "readTime": "7 dk",
-    "excerpt": "\"Hayir\" demek, iliskilerini degil; enerjini korur.",
-    "imageUrl": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=75",
+    "readTime": "5 dk",
+    "excerpt": "Sabah ilk yarım saatte verdiğin sinyaller, bütün güne yayılır.",
+    "imageUrl": "https://images.unsplash.com/photo-1468581264429-2548ef9eb732?auto=format&fit=crop&w=1200&q=80",
     "body": [
-      "Cogumuz hayir demeyi ogrenemedik. Onaylanmak, sevilmek, catismadan kacınmak isteriz. Ama her evet, aslinda baska bir seye soylenmus sessiz bir hayir dir — cogu zaman kendine.",
-      "Sinir koymak bencillik degil. Tam tersine, iliskilerini daha donust kilar. Insanlar gercekten ne istedigini bildiklerinde, seninle daha net bir bag kurar.",
-      "Kucuk basla. Bu hafta sadece bir kez, normalde otomatik evet diyecegin bir seye su an musait degilim de. Suculluk hissetmen normal — bu, eski bir aliskanligin direnci. Gecer."
+      "Gün aynı gün, ama bazı günler her şey üstüne geliyor, bazı günler aynı yük hafif geliyor. Fark çoğu zaman olaylarda değil, sinir sisteminin hangi modda olduğunda: tetikte mi, güvende mi?",
+      "Sinir sistemin gün boyu ortamdan sinyal toplar ve tonunu ona göre kurar. Sabah gözünü açar açmaz haberlere ve bildirimlere bakmak \"tehlike var\" sinyalidir. Gün ışığına bakmak, yavaş bir nefes, sıcak bir duş ise \"güvendesin\" der.",
+      "Pratik bir sabah üçlüsü: uyanınca önce pencereye git, iki dakika gün ışığına bak. Sonra üç yavaş nefes — verirken almandan uzun olsun. Sonra su. Telefon bunlardan sonra gelsin; haber değeri kaybolmaz, sen kazanırsın.",
+      "Gün içinde tonu düzeltmek de mümkün: omuzlar kulaklara yaklaştıysa uzun bir nefes ver, çeneni gevşet, ayaklarını yere bas. Sinir sistemin dev jestler istemez; küçük ve tekrarlı güven sinyalleriyle yumuşar."
     ]
   },
   {
-    "id": "hareket-ilac",
+    "id": "noroestetik",
     "order": 8,
-    "title": "hareket = ilac",
-    "category": "wellness",
-    "readTime": "4 dk",
-    "excerpt": "Gym degil. Bedenini gunde bir kez tasimak yeterli.",
-    "imageUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=900&q=75",
+    "title": "nöroestetik: güzellik iyi geliyor",
+    "category": "yazi",
+    "readTime": "5 dk",
+    "excerpt": "Beynin, baktığı şeyden etkileniyor. Ortamını ona göre kur.",
+    "imageUrl": "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80",
     "body": [
-      "Egzersiz deyince akla spor salonu ve ter geliyor. Ama arastirmalar farkli bir sey soyluyor: gunde 20 dakika orta yogunlukta hareket, depresyon uzerinde ilacla kiyaslanabilir etki birakiryor.",
-      "Yogun bir antrenman degil. Hizli bir yuruyu, muzikle dans, merdiven tirmanma, esneme. Beyin icin onemli olan hareketin kendisi — kalp atisinin biraz hızlanması yetiyor.",
-      "Bugun icin gorev: ev icinde 10 dakika yuru. Gercekten. Sadece 10 dakika, kulaklikla, odadan odaya. Gulunc geliyor mu? Evet. Ise yariyor mu? Kesinlikle."
+      "Neden bazı mekânlarda içimiz açılıyor da bazılarında daralıyor? Nöroestetik tam bunu araştırıyor: güzelliğin beyindeki karşılığını. Ve bulgular net — baktığımız şey, hissettiğimizi değiştiriyor. Yumuşak ışık, doğal dokular ve düzen, stres tepkisini ölçülebilir şekilde azaltıyor.",
+      "Bunun için ev yenilemeye gerek yok. Beynin en çok üç şeye tepki veriyor: ışık, düzen ve doğa. Gün ışığı alan bir köşe, toplanmış bir masa, bir saksı yeşillik — üçü birden küçük bir sığınak yaratır.",
+      "Dene: en çok vakit geçirdiğin köşeye bak. Oradan gözüne ilk çarpan üç şey ne? Kablo yığını ve kâğıt kalabalığıysa, beş dakikalık bir toplama bile o köşenin sana verdiği hissi değiştirir. Bir bitki ya da sevdiğin tek bir obje ekle — fazlası gürültü.",
+      "Güzellik lüks değil, düzenleyici. Kendine güzel bir köşe kurmak boş bir estetik merakı değil; sinir sistemine günde yüz kez iyi sinyal gönderen sessiz bir bakım."
     ]
   },
   {
-    "id": "dijital-detoks",
+    "id": "rutin-degil-rituel",
     "order": 9,
-    "title": "dijital detoks",
+    "title": "rutin değil, ritüel",
     "category": "yazi",
-    "readTime": "6 dk",
-    "excerpt": "Telefonu birakmak degil mesele — dikkatini geri almak.",
-    "imageUrl": "https://images.unsplash.com/photo-1544367571-8b0a8c9eb5a9?auto=format&fit=crop&w=900&q=75",
+    "readTime": "4 dk",
+    "excerpt": "Aynı hareket, iki farklı his. Fark, niyette.",
+    "imageUrl": "https://images.unsplash.com/photo-1603135732005-33be5acd8f92?auto=format&fit=crop&w=1200&q=80",
     "body": [
-      "Dijital detoks denince akla telefonu bir kenara firlatmak gelir. Ama mesele cihazi suclamamak; dikkatinin nereye aktığini fark etmek. Ekran kotu degil — dikkatin daginik olmasi yorucu.",
-      "Kucuk bir deney yap: uyandindan sonraki ilk 30 dakika telefona bakma. Onun yerine pencereden disari bak, su ic, bir esneme yap. Gunun ilk dusuncesi bir bildirim degil, kendi dusuncen olsun.",
-      "Aksam da benzer bir sinir koy: yatmadan bir saat once ekranlar kapanir. Ilk birkac gun zor gelebilir — beynin o kucuk dopamin durtusu ne alisıms. Ama bir hafta sonra uykunun derinlestigini fark edeceksin."
+      "Rutin ve ritüel aynı şeyi yapıyor gibi görünür: her gün tekrarlanan hareketler. Ama rutin \"bitirmek için\" yapılır, ritüel \"yaşamak için\". Dişini fırçalarken aklın toplantıdaysa o bir rutin; suyun sesini duyuyorsan, o an oradaysan, ritüele dönüşmüş demektir.",
+      "Hayatını romantize et sözü tam bunu anlatıyor aslında: yeni şeyler eklemek değil, var olanları özenle yapmak. Kahveni güzel bir fincana koymak, akşam çayını pencerenin önünde içmek, krem sürerken acele etmemek. Küçük özenler, sıradan anı değerli kılar.",
+      "Bunun pratik bir karşılığı da var: ritüeller kalıcıdır. Zorla sürdürülen alışkanlıklar irade bitince biter; keyif veren ritüeller kendi kendini taşır. Tutarlılığın sırrı disiplin değil, sevmek.",
+      "Dene: bugün zaten yaptığın tek bir şeyi seç ve onu ritüelleştir. Daha yavaş, daha güzel, daha senin. Hayat büyük anlardan değil, özenle yaşanmış küçük anlardan doku tutuyor."
     ]
   }
 ]

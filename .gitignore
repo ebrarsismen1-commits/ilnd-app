@@ -69,3 +69,6 @@ app.*.map.json
 .claude/launch.json
 .claude/settings.local.json
 .firebase/
+
+# Admin SDK anahtari — asla commit edilmez
+functions/serviceAccountKey.json

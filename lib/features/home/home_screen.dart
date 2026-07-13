@@ -107,12 +107,15 @@ const _uHero = 'https://images.unsplash.com/photo-';
 /// Ağ yoksa EditorialGradient'e düşer — hero asla kırık görünmez.
 String _heroImageUrl(int hour) {
   if (hour >= 6 && hour < 12) {
-    return '${_uHero}1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1200&q=70';
+    // Sisli gün doğumu — sabah.
+    return '${_uHero}1517071893752-c61373ceb5f4?auto=format&fit=crop&w=1200&q=70';
   }
   if (hour >= 12 && hour < 18) {
-    return '${_uHero}1501854140801-50d01698950b?auto=format&fit=crop&w=1200&q=70';
+    // Işık alan orman — gündüz.
+    return '${_uHero}1425913397330-cf8af2ff40a1?auto=format&fit=crop&w=1200&q=70';
   }
-  return '${_uHero}1419242902214-272b3f66ee7a?auto=format&fit=crop&w=1200&q=70';
+  // Yıldızlı gece — akşam.
+  return '${_uHero}1628498188904-036f5e25e93e?auto=format&fit=crop&w=1200&q=70';
 }
 
 /// Bugün v2 hero'su: fotoğraf zemin, selamlama fotoğrafın üzerinde yaşar
