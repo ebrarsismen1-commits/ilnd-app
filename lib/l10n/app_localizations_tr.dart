@@ -694,6 +694,32 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sleepRitualPreparing => 'ilnd bu geceni hazırlıyor…';
 
   @override
+  String get breathScreenTitle => 'nefes';
+
+  @override
+  String breathMinutesChip(int minutes) {
+    return '$minutes dk';
+  }
+
+  @override
+  String get breathPhaseInhale => 'al';
+
+  @override
+  String get breathPhaseHold => 'tut';
+
+  @override
+  String get breathPhaseExhale => 'ver';
+
+  @override
+  String get breathDoneTitle => 'güzel nefes aldın.';
+
+  @override
+  String get breathAgainButton => 'bir tur daha';
+
+  @override
+  String get breathCloseButton => 'kapat';
+
+  @override
   String get sleepRitualContinueButton => 'devam';
 
   @override

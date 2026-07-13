@@ -637,6 +637,30 @@
   "sleepRitualPreparing": "ilnd bu geceni hazırlıyor…",
   "@sleepRitualPreparing": {"description": "Shown while ILND builds tonight's personalized ritual"},
 
+  "breathScreenTitle": "nefes",
+  "@breathScreenTitle": {"description": "Breath exercise screen app bar title"},
+
+  "breathMinutesChip": "{minutes} dk",
+  "@breathMinutesChip": {"description": "Session duration chip, e.g. 2 dk", "placeholders": {"minutes": {"type": "int"}}},
+
+  "breathPhaseInhale": "al",
+  "@breathPhaseInhale": {"description": "Breath phase label: inhale"},
+
+  "breathPhaseHold": "tut",
+  "@breathPhaseHold": {"description": "Breath phase label: hold"},
+
+  "breathPhaseExhale": "ver",
+  "@breathPhaseExhale": {"description": "Breath phase label: exhale"},
+
+  "breathDoneTitle": "güzel nefes aldın.",
+  "@breathDoneTitle": {"description": "Shown when the breath session completes"},
+
+  "breathAgainButton": "bir tur daha",
+  "@breathAgainButton": {"description": "Restart the breath session"},
+
+  "breathCloseButton": "kapat",
+  "@breathCloseButton": {"description": "Close the breath screen after completion"},
+
   "sleepRitualContinueButton": "devam",
   "@sleepRitualContinueButton": {"description": "Advance to the next ritual step"},
 

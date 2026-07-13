@@ -367,7 +367,12 @@ class _BreathStepState extends State<_BreathStep> {
     return Column(
       children: [
         const Spacer(),
-        BreathAnimation(p: p),
+        BreathAnimation(
+          p: p,
+          inhaleLabel: l10n.breathPhaseInhale,
+          holdLabel: l10n.breathPhaseHold,
+          exhaleLabel: l10n.breathPhaseExhale,
+        ),
         const SizedBox(height: 32),
         Text(
           done ? '· · ·' : '$mm:$ss',

@@ -1400,6 +1400,54 @@ abstract class AppLocalizations {
   /// **'ilnd bu geceni hazırlıyor…'**
   String get sleepRitualPreparing;
 
+  /// Breath exercise screen app bar title
+  ///
+  /// In tr, this message translates to:
+  /// **'nefes'**
+  String get breathScreenTitle;
+
+  /// Session duration chip, e.g. 2 dk
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dk'**
+  String breathMinutesChip(int minutes);
+
+  /// Breath phase label: inhale
+  ///
+  /// In tr, this message translates to:
+  /// **'al'**
+  String get breathPhaseInhale;
+
+  /// Breath phase label: hold
+  ///
+  /// In tr, this message translates to:
+  /// **'tut'**
+  String get breathPhaseHold;
+
+  /// Breath phase label: exhale
+  ///
+  /// In tr, this message translates to:
+  /// **'ver'**
+  String get breathPhaseExhale;
+
+  /// Shown when the breath session completes
+  ///
+  /// In tr, this message translates to:
+  /// **'güzel nefes aldın.'**
+  String get breathDoneTitle;
+
+  /// Restart the breath session
+  ///
+  /// In tr, this message translates to:
+  /// **'bir tur daha'**
+  String get breathAgainButton;
+
+  /// Close the breath screen after completion
+  ///
+  /// In tr, this message translates to:
+  /// **'kapat'**
+  String get breathCloseButton;
+
   /// Advance to the next ritual step
   ///
   /// In tr, this message translates to:
