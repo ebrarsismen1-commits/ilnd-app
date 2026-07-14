@@ -652,6 +652,9 @@
   "breathPhaseExhale": "ver",
   "@breathPhaseExhale": {"description": "Breath phase label: exhale"},
 
+  "breathCycleProgress": "nefes {current} / {total}",
+  "@breathCycleProgress": {"description": "Breath cycle counter, e.g. nefes 3 / 8", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+
   "breathDoneTitle": "güzel nefes aldın.",
   "@breathDoneTitle": {"description": "Shown when the breath session completes"},
 

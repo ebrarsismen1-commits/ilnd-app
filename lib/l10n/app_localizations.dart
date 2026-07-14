@@ -1430,6 +1430,12 @@ abstract class AppLocalizations {
   /// **'ver'**
   String get breathPhaseExhale;
 
+  /// Breath cycle counter, e.g. nefes 3 / 8
+  ///
+  /// In tr, this message translates to:
+  /// **'nefes {current} / {total}'**
+  String breathCycleProgress(int current, int total);
+
   /// Shown when the breath session completes
   ///
   /// In tr, this message translates to:

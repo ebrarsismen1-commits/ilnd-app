@@ -711,6 +711,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get breathPhaseExhale => 'ver';
 
   @override
+  String breathCycleProgress(int current, int total) {
+    return 'nefes $current / $total';
+  }
+
+  @override
   String get breathDoneTitle => 'güzel nefes aldın.';
 
   @override

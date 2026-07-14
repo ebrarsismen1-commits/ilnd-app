@@ -260,6 +260,8 @@
   "breathPhaseInhale": "in",
   "breathPhaseHold": "hold",
   "breathPhaseExhale": "out",
+  "breathCycleProgress": "breath {current} / {total}",
+  "@breathCycleProgress": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
   "breathDoneTitle": "that was a good breath.",
   "breathAgainButton": "one more round",
   "breathCloseButton": "close",

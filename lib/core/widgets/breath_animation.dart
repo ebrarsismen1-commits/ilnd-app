@@ -100,6 +100,16 @@ class _BreathAnimationState extends State<BreathAnimation>
     super.dispose();
   }
 
+  /// 14 sn'lik döngü içindeki faz ilerlemesi: alırken 0→1 dolar, tutarken
+  /// dolu kalır, verirken 1→0 boşalır. Etraftaki yay bunu çizer — göz,
+  /// nefesle birlikte hareket eder.
+  double get _phaseProgress {
+    final t = _ctrl.value * _total;
+    if (t < _inhale) return t / _inhale;
+    if (t < _inhale + _hold) return 1.0;
+    return 1.0 - (t - _inhale - _hold) / _exhale;
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = widget.p;
@@ -109,6 +119,15 @@ class _BreathAnimationState extends State<BreathAnimation>
         return Stack(
           alignment: Alignment.center,
           children: [
+            // Faz yayı: nefesin kendisini çizen halka (al=dolar, ver=boşalır).
+            CustomPaint(
+              size: const Size(252, 252),
+              painter: BreathPhaseArcPainter(
+                progress: _phaseProgress,
+                track: p.accent.withValues(alpha: 0.15),
+                fill: p.accent,
+              ),
+            ),
             // Dış halka (daha yavaş, soluk)
             Transform.scale(
               scale: _scale.value * 1.3,
@@ -176,6 +195,49 @@ class _BreathAnimationState extends State<BreathAnimation>
   }
 }
 
+/// Nefes fazını çizen yay: al fazında saat 12'den dolar, tut boyunca dolu
+/// bekler, ver fazında geri boşalır. Nefesle senkron tek görsel rehber.
+class BreathPhaseArcPainter extends CustomPainter {
+  const BreathPhaseArcPainter({
+    required this.progress,
+    required this.track,
+    required this.fill,
+  });
+
+  final double progress;
+  final Color track;
+  final Color fill;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2 - 3;
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2
+        ..color = track,
+    );
+    canvas.drawArc(
+      Rect.fromCircle(center: center, radius: radius),
+      -math.pi / 2,
+      2 * math.pi * progress.clamp(0.0, 1.0),
+      false,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 4
+        ..strokeCap = StrokeCap.round
+        ..color = fill,
+    );
+  }
+
+  @override
+  bool shouldRepaint(BreathPhaseArcPainter old) =>
+      old.progress != progress || old.fill != fill || old.track != track;
+}
+
 /// Tam ekran nefes egzersizi — süreli seans (1/2/3 dk), seans ilerlemesini
 /// gösteren halka ve yumuşak bir bitiş anı. Sonsuz döngü değil: her seansın
 /// bir sonu ve "tamamladım" hissi vardır.
@@ -238,7 +300,12 @@ class _BreathScreenState extends State<BreathScreen> {
     final l10n = AppLocalizations.of(context)!;
     final p = widget.p;
     final total = _minutes * 60;
-    final progress = total == 0 ? 0.0 : (total - _remaining) / total;
+    // Seans, 14 sn'lik nefes döngüleri olarak gösterilir: "nefes 3 / 8".
+    final totalCycles = (total / 14).floor().clamp(1, 99);
+    final currentCycle = (((total - _remaining) ~/ 14) + 1).clamp(
+      1,
+      totalCycles,
+    );
     final mm = (_remaining ~/ 60).toString();
     final ss = (_remaining % 60).toString().padLeft(2, '0');
 
@@ -291,56 +358,52 @@ class _BreathScreenState extends State<BreathScreen> {
                     ],
                   ),
                   const Spacer(),
-                  // Nefes halkası + etrafında seans ilerleme yayı.
-                  SizedBox(
-                    width: 280,
-                    height: 280,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        CustomPaint(
-                          size: const Size(280, 280),
-                          painter: _SessionArcPainter(
-                            progress: progress,
-                            track: p.border,
-                            fill: p.accent,
-                          ),
-                        ),
-                        BreathAnimation(
-                          p: p,
-                          inhaleLabel: l10n.breathPhaseInhale,
-                          holdLabel: l10n.breathPhaseHold,
-                          exhaleLabel: l10n.breathPhaseExhale,
-                        ),
-                      ],
-                    ),
+                  // Nefes halkası — faz yayı artık halkanın kendi parçası:
+                  // alırken dolar, tutarken bekler, verirken boşalır.
+                  BreathAnimation(
+                    p: p,
+                    inhaleLabel: l10n.breathPhaseInhale,
+                    holdLabel: l10n.breathPhaseHold,
+                    exhaleLabel: l10n.breathPhaseExhale,
                   ),
                   const SizedBox(height: 36),
+                  // Döngü ilerlemesi: her tamamlanan nefes bir nokta doldurur.
                   Text(
-                    '$mm:$ss',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: p.text,
-                      letterSpacing: 2,
-                      fontFeatures: const [FontFeature.tabularFigures()],
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    '4 · 4 · 6',
+                    l10n.breathCycleProgress(currentCycle, totalCycles),
                     style: TextStyle(
                       fontSize: 13,
-                      color: p.textMuted,
-                      letterSpacing: 3,
+                      color: p.text,
+                      letterSpacing: 1.5,
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      for (var i = 0; i < totalCycles; i++) ...[
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 320),
+                          width: i < currentCycle ? 9 : 7,
+                          height: i < currentCycle ? 9 : 7,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: i < currentCycle
+                                ? p.accent
+                                : p.accent.withValues(alpha: 0.2),
+                          ),
+                        ),
+                        if (i < totalCycles - 1) const SizedBox(width: 7),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 14),
                   Text(
-                    '${l10n.breathPhaseInhale} · ${l10n.breathPhaseHold} · '
-                    '${l10n.breathPhaseExhale}',
+                    '$mm:$ss  ·  4 · 4 · 6',
                     style: TextStyle(
                       fontSize: 12,
-                      color: p.textMuted.withValues(alpha: 0.6),
+                      color: p.textMuted.withValues(alpha: 0.7),
                       letterSpacing: 2,
+                      fontFeatures: const [FontFeature.tabularFigures()],
                     ),
                   ),
                   const Spacer(),
@@ -390,48 +453,6 @@ class _MinuteChip extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Nefes halkasının etrafında, seansın ne kadarının bittiğini gösteren ince
-/// yay — saat 12'den başlar, dolunca seans biter.
-class _SessionArcPainter extends CustomPainter {
-  const _SessionArcPainter({
-    required this.progress,
-    required this.track,
-    required this.fill,
-  });
-
-  final double progress;
-  final Color track;
-  final Color fill;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2 - 3;
-    final trackPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..color = track;
-    final fillPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..strokeCap = StrokeCap.round
-      ..color = fill;
-
-    canvas.drawCircle(center, radius, trackPaint);
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -math.pi / 2,
-      2 * math.pi * progress.clamp(0.0, 1.0),
-      false,
-      fillPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(_SessionArcPainter old) =>
-      old.progress != progress || old.fill != fill || old.track != track;
 }
 
 /// Seans bitti: yumuşak tamamlama anı — kapat ya da bir tur daha.

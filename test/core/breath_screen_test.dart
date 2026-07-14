@@ -23,17 +23,23 @@ void main() {
     );
   }
 
-  testWidgets('varsayılan 2 dk seans geri sayımla başlar', (tester) async {
+  testWidgets('varsayılan 2 dk seans geri sayım ve döngü sayacıyla başlar', (
+    tester,
+  ) async {
     await pumpScreen(tester);
     await tester.pump();
 
-    expect(find.text('2:00'), findsOneWidget);
+    expect(find.textContaining('2:00'), findsOneWidget);
+    // 120 sn / 14 sn'lik döngü = 8 nefes.
+    expect(find.text(l10n.breathCycleProgress(1, 8)), findsOneWidget);
     expect(find.text(l10n.breathMinutesChip(1)), findsOneWidget);
     expect(find.text(l10n.breathMinutesChip(3)), findsOneWidget);
 
-    // Geri sayım gerçekten akıyor.
+    // Geri sayım akıyor; ilk döngü (14 sn) bitince sayaç ilerliyor.
     await tester.pump(const Duration(seconds: 2));
-    expect(find.text('1:58'), findsOneWidget);
+    expect(find.textContaining('1:58'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 13));
+    expect(find.text(l10n.breathCycleProgress(2, 8)), findsOneWidget);
   });
 
   testWidgets('süre çipi seçimi geri sayımı yeniden başlatır', (tester) async {
@@ -42,7 +48,7 @@ void main() {
 
     await tester.tap(find.text(l10n.breathMinutesChip(1)));
     await tester.pump();
-    expect(find.text('1:00'), findsOneWidget);
+    expect(find.textContaining('1:00'), findsOneWidget);
   });
 
   testWidgets('seans bitince tamamlanma ekranı; bir tur daha çalışır', (
@@ -65,6 +71,6 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     await tester.pump(const Duration(milliseconds: 100));
-    expect(find.text('1:00'), findsOneWidget);
+    expect(find.textContaining('1:00'), findsOneWidget);
   });
 }
