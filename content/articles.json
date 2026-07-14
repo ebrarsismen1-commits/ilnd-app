@@ -57,6 +57,17 @@
       "Tarif: 3 orta boy havuç, yarım limonun suyu ve küçük bir parmak taze zencefil. Katı meyve sıkacağın varsa hepsini sırayla sık. Yoksa blender da iş görür: havucu ve zencefili az suyla çek, ince süzgeçten geçir, limonu en sonda ekle.",
       "En iyi zamanı sabah, kahvaltıdan hemen önce. Öğleden sonraki enerji düşüşünde de çok iyi gelir. Soğuk servis et; buzlu hâliyle neredeyse limonata kadar içimlik.",
       "Küçük bir gerçeklik notu: hiçbir içecek tek başına cildi değiştirmez. Ama düzenli sebze, yeterli su ve iyi uykudan oluşan tabloya eklenen bu bardak, toplamın parlayan parçası olur."
+    ],
+    "ingredients": [
+      "3 orta boy havuç",
+      "yarım limonun suyu",
+      "küçük bir parmak taze zencefil"
+    ],
+    "steps": [
+      "Havuçları yıka ve uçlarını kes. Zencefilin kabuğunu bir kaşıkla sıyır.",
+      "Katı meyve sıkacağın varsa havuç ve zencefili sırayla sık. Blender kullanıyorsan az suyla pürüzsüz olana kadar çek.",
+      "Blender kullandıysan karışımı ince bir süzgeçten geçir.",
+      "Limon suyunu ekle, karıştır ve buzla soğuk servis et."
     ]
   },
   {
@@ -72,6 +83,17 @@
       "İçerik tarafı da güçlü. Matchadaki L-theanine, kafeinin etkisini yumuşatır. Kahvenin ani yükselişi ve çöküşü yerine saatlere yayılan sakin bir odak verir. Uyanık ama gergin olmama hissinin içeceği budur.",
       "Tarif: 1 çay kaşığı matcha ve 60 ml sıcak su. Su kaynar olmasın, 70 ila 80 derece idealdir; daha sıcağı tozu acılaştırır. Çırpıcıyla ya da küçük bir telle, W çizerek köpürene kadar çırp. Sade içebilir ya da üzerine köpürtülmüş yulaf sütü ekleyip latte yapabilirsin.",
       "İpucu: ilk denemede tadı otsu gelirse miktarı azalt, yarım kaşıkla başla. Matcha alışılan değil, zamanla sevilen bir tattır. Tıpkı yavaşlamak gibi."
+    ],
+    "ingredients": [
+      "1 çay kaşığı matcha",
+      "60 ml sıcak su (70 ila 80 derece)",
+      "istersen: 200 ml yulaf sütü"
+    ],
+    "steps": [
+      "Suyu ısıt ama kaynatma. 70 ila 80 derece idealdir; daha sıcağı matchayı acılaştırır.",
+      "Matchayı kaseye koy, sıcak suyu üzerine yavaşça dök.",
+      "Çırpıcıyla W çizerek, yüzeyde ince bir köpük oluşana kadar çırp.",
+      "Sade iç ya da köpürttüğün yulaf sütünü üzerine ekleyip latte yap."
     ]
   },
   {
@@ -207,6 +229,19 @@
       "Pratikte üç ilkeye iner. Bir: mümkün olduğunca bütün gıda; paketin içindekiler listesi kısaldıkça beden mutlu olur. İki: renk çeşitliliği; tabaktaki her renk farklı bir besin ailesi demektir. Üç: yavaş yemek; sindirim çiğnemeyle başlar, ekran karşısında aceleyle değil.",
       "Kolay bir başlangıç tabağı: bir avuç yeşillik, bir tahıl (bulgur ya da kinoa), bir protein (nohut, yumurta ya da balık), bir sağlıklı yağ (zeytinyağı ya da avokado) ve üzerine limon. Beş bileşen, on dakika, tam bir öğün.",
       "Kendine şu soruyu sormayı alışkanlık yap: bu yemekten bir saat sonra nasıl hissediyorum? Cevaplar birikince, kimsenin listesine ihtiyaç duymadan kendi beslenme pusulan oluşur."
+    ],
+    "ingredients": [
+      "bir avuç yeşillik (roka, ıspanak ya da marul)",
+      "yarım su bardağı haşlanmış bulgur ya da kinoa",
+      "bir protein: nohut, yumurta ya da balık",
+      "zeytinyağı ya da çeyrek avokado",
+      "limon ve tuz"
+    ],
+    "steps": [
+      "Tahılını haşla; hazırda varsa hafifçe ısıt.",
+      "Kaseye önce yeşillikleri, üzerine tahılı yerleştir.",
+      "Proteinini hazırla: nohutu tavada birkaç dakika kızart, yumurtayı haşla ya da balığını pişir ve kaseye ekle.",
+      "Zeytinyağı ve limonla tatlandır, tuzu serp. Ekrandan uzakta, yavaş ye."
     ]
   },
   {
@@ -237,6 +272,82 @@
       "Küçük adımların gücü matematikten gelir. Her gün yüzde bir iyileşme, yıl sonunda katlanarak büyür. Ama asıl sihri psikolojik: küçük adım irade istemez, bahane üretmez ve her tamamlandığında beynine küçük bir başarı sinyali gönderir.",
       "Ölçüyü gülünç derecede küçük tut. Kitap okumak istiyorsan hedef bir sayfa olsun. Hareket istiyorsan beş dakikalık yürüyüş. Su içmeyi unutuyorsan sabah tek bardak. Devamı çoğu gün kendiliğinden gelir; gelmediği gün de hedef zaten tutmuştur.",
       "Bir ay sonra dönüp baktığında görkemli bir dönüşüm görmeyeceksin. Sessizce yerleşmiş, artık düşünmeden yaptığın birkaç iyi alışkanlık göreceksin. Kalıcı değişim böyle görünür."
+    ]
+  },
+  {
+    "id": "gece-sutu",
+    "order": 16,
+    "title": "gece sütü",
+    "category": "tarif",
+    "readTime": "3 dk",
+    "excerpt": "Uykudan önce sıcak bir fincan sakinlik. Beş dakikada hazır.",
+    "imageUrl": "https://images.unsplash.com/photo-1669219695489-9163d12a2611?auto=format&fit=crop&w=1200&q=80",
+    "body": [
+      "Gece sütü, panolarda moon milk adıyla dolaşan akşam içeceğinin sade hâli. Sıcak süt zaten kendi başına bir uyku sinyalidir; tarçın ve bal eklenince ortaya yatmadan önce içilen küçük bir ritüel çıkar.",
+      "Asıl işi içindekiler kadar zamanlaması yapar. Uyumadan yarım saat önce, ışıkları kısmışken, telefonsuz içilen sıcak bir fincan bedenine günün bittiğini söyler. Tarif bahane, yavaşlamak asıl."
+    ],
+    "ingredients": [
+      "1 su bardağı süt ya da badem sütü",
+      "yarım çay kaşığı tarçın",
+      "çeyrek çay kaşığı zerdeçal (istersen)",
+      "1 çay kaşığı bal"
+    ],
+    "steps": [
+      "Sütü küçük bir tencerede kısık ateşte ısıt; kaynatma, buhar tütmeye başlaması yeterli.",
+      "Tarçını ve istersen zerdeçalı ekleyip telle karıştır.",
+      "Ocaktan al, bir dakika soğumasını bekle ve balı ekle. Bal kaynar süte girmesin; aroması kaybolur.",
+      "Sevdiğin fincana koy, ışıkları kıs ve yavaş yudumlarla iç."
+    ]
+  },
+  {
+    "id": "yesil-glow-smoothie",
+    "order": 17,
+    "title": "yeşil glow smoothie",
+    "category": "tarif",
+    "readTime": "3 dk",
+    "excerpt": "Panolardaki o yeşil bardak. Tadı göründüğünden çok daha iyi.",
+    "imageUrl": "https://images.unsplash.com/photo-1610622930110-3c076902312a?auto=format&fit=crop&w=1200&q=80",
+    "body": [
+      "Elinde yeşil bir bardakla güne başlayan o insanlar bir şey biliyor: bu karışım hem doyuruyor hem de sabaha temiz bir başlangıç hissi veriyor. Ispanağın tadı muzun arkasında tamamen kaybolur; içtiğin şey tatlı ve kremamsı bir kahvaltıdır.",
+      "Avokado bu tarifin sessiz kahramanı. Kıvamı ipeksi yapar ve sağlıklı yağıyla seni öğlene kadar tok tutar. Muzun dondurulmuş olması ise smoothieyi milkshake kıvamına taşır."
+    ],
+    "ingredients": [
+      "1 muz (dondurulmuş olursa daha iyi)",
+      "bir avuç taze ıspanak",
+      "çeyrek avokado",
+      "1 su bardağı yulaf sütü",
+      "istersen: 1 çay kaşığı bal"
+    ],
+    "steps": [
+      "Tüm malzemeleri blendera koy; önce sıvıyı, sonra yeşillikleri, en üste muzu.",
+      "Pürüzsüz ve akışkan olana kadar çek. Çok koyuysa biraz daha süt ekle.",
+      "Tadına bak; tatlılık istersen balı şimdi ekleyip bir tur daha çek.",
+      "Uzun bir bardağa koy ve bekletmeden iç; yeşil karışımlar taze içildiğinde en iyisidir."
+    ]
+  },
+  {
+    "id": "hurma-lokmalari",
+    "order": 18,
+    "title": "hurma lokmaları",
+    "category": "tarif",
+    "readTime": "4 dk",
+    "excerpt": "Tatlı krizine şefkatli cevap: üç malzeme, sıfır fırın.",
+    "imageUrl": "https://images.unsplash.com/photo-1596723455658-72ebb0d12edd?auto=format&fit=crop&w=1200&q=80",
+    "body": [
+      "Akşam tatlı krizi geldiğinde iki yol var: dolaptaki hazır tatlıya uzanmak ya da beş dakikada kendi lokmalarını yuvarlamak. Bu tarif ikinci yolu o kadar kolaylaştırıyor ki birincisine gerek kalmıyor.",
+      "Hurma doğal şekeriyle tatlı ihtiyacını karşılar, fıstık ezmesi ve yulaf ise kan şekerini dengede tutar. Yani bu lokmalar hem tatlı hem tok tutan cinsten; bir kavanoza dizip buzdolabında hafta boyu saklayabilirsin."
+    ],
+    "ingredients": [
+      "10 yumuşak hurma (çekirdeksiz)",
+      "2 yemek kaşığı fıstık ezmesi",
+      "yarım su bardağı yulaf",
+      "üzeri için: kakao ya da hindistan cevizi"
+    ],
+    "steps": [
+      "Hurmaları mutfak robotunda macun kıvamına gelene kadar çek. Robot yoksa ince kıyıp çatalla ez.",
+      "Fıstık ezmesi ve yulafı ekleyip karışım top olacak kıvama gelene kadar tekrar çek.",
+      "Karışımdan ceviz büyüklüğünde parçalar al ve avucunda yuvarla.",
+      "Topları kakao ya da hindistan cevizinde gezdir. Buzdolabında yarım saat dinlendir; kavanozda bir hafta dayanır."
     ]
   }
 ]

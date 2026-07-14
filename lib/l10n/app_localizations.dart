@@ -1400,6 +1400,36 @@ abstract class AppLocalizations {
   /// **'ilnd bu geceni hazırlıyor…'**
   String get sleepRitualPreparing;
 
+  /// Recipe ingredients section label
+  ///
+  /// In tr, this message translates to:
+  /// **'malzemeler'**
+  String get recipeIngredientsTitle;
+
+  /// Button that opens step-by-step cooking mode
+  ///
+  /// In tr, this message translates to:
+  /// **'pişirmeye başla'**
+  String get recipeStartCooking;
+
+  /// Cooking mode step counter
+  ///
+  /// In tr, this message translates to:
+  /// **'adım {current} / {total}'**
+  String recipeStepProgress(int current, int total);
+
+  /// Advance to next cooking step
+  ///
+  /// In tr, this message translates to:
+  /// **'sonraki adım'**
+  String get recipeNextButton;
+
+  /// Finish button on the last cooking step
+  ///
+  /// In tr, this message translates to:
+  /// **'afiyet olsun'**
+  String get recipeFinishButton;
+
   /// Breath exercise screen app bar title
   ///
   /// In tr, this message translates to:

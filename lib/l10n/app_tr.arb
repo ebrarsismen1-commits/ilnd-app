@@ -637,6 +637,21 @@
   "sleepRitualPreparing": "ilnd bu geceni hazırlıyor…",
   "@sleepRitualPreparing": {"description": "Shown while ILND builds tonight's personalized ritual"},
 
+  "recipeIngredientsTitle": "malzemeler",
+  "@recipeIngredientsTitle": {"description": "Recipe ingredients section label"},
+
+  "recipeStartCooking": "pişirmeye başla",
+  "@recipeStartCooking": {"description": "Button that opens step-by-step cooking mode"},
+
+  "recipeStepProgress": "adım {current} / {total}",
+  "@recipeStepProgress": {"description": "Cooking mode step counter", "placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+
+  "recipeNextButton": "sonraki adım",
+  "@recipeNextButton": {"description": "Advance to next cooking step"},
+
+  "recipeFinishButton": "afiyet olsun",
+  "@recipeFinishButton": {"description": "Finish button on the last cooking step"},
+
   "breathScreenTitle": "nefes",
   "@breathScreenTitle": {"description": "Breath exercise screen app bar title"},
 

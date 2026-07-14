@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/features/explore/cooking_mode_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// Editoryal okuma sayfası — kapak fotoğrafı + başlık + gövde.
@@ -139,6 +140,12 @@ class ArticleDetailScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 18),
                 ],
+                // Tarif makaleleri interaktiftir: tik'lenebilir malzeme
+                // listesi + adım adım pişirme modu.
+                if (article.isRecipe) ...[
+                  const SizedBox(height: 8),
+                  _RecipeSection(article: article, p: p),
+                ],
                 const SizedBox(height: 12),
                 // Soft sign-off
                 Center(
@@ -155,6 +162,117 @@ class ArticleDetailScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─── Tarif bölümü ─────────────────────────────────────────────────────────────
+
+/// Malzemeler tik'lenerek toplanır (yerel durum, kaydedilmez); ardından
+/// tam ekran pişirme moduna geçilir.
+class _RecipeSection extends StatefulWidget {
+  const _RecipeSection({required this.article, required this.p});
+
+  final Article article;
+  final AppPalette p;
+
+  @override
+  State<_RecipeSection> createState() => _RecipeSectionState();
+}
+
+class _RecipeSectionState extends State<_RecipeSection> {
+  final _checked = <int>{};
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final p = widget.p;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.recipeIngredientsTitle,
+          style: AppTextStyles.label(fontSize: 11, color: p.accent),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: p.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: p.border, width: 0.5),
+          ),
+          child: Column(
+            children: [
+              for (final (i, item) in widget.article.ingredients.indexed)
+                Pressable(
+                  onTap: () => setState(() {
+                    _checked.contains(i) ? _checked.remove(i) : _checked.add(i);
+                  }),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 9),
+                    child: Row(
+                      children: [
+                        Icon(
+                          _checked.contains(i)
+                              ? Icons.check_circle_rounded
+                              : Icons.circle_outlined,
+                          size: 20,
+                          color: _checked.contains(i) ? p.accent : p.textMuted,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            item,
+                            style: AppTextStyles.body(
+                              fontSize: 15,
+                              color: _checked.contains(i)
+                                  ? p.textMuted
+                                  : p.text,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        Pressable(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => CookingModeScreen(article: widget.article),
+            ),
+          ),
+          child: Container(
+            height: 52,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: p.accent,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.play_arrow_rounded, size: 22, color: p.onAccent),
+                const SizedBox(width: 6),
+                Text(
+                  l10n.recipeStartCooking,
+                  style: AppTextStyles.body(
+                    fontSize: 15,
+                    color: p.onAccent,
+                  ).copyWith(fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+      ],
     );
   }
 }

@@ -704,6 +704,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepRitualPreparing => 'ilnd is shaping your night…';
 
   @override
+  String get recipeIngredientsTitle => 'ingredients';
+
+  @override
+  String get recipeStartCooking => 'start cooking';
+
+  @override
+  String recipeStepProgress(int current, int total) {
+    return 'step $current / $total';
+  }
+
+  @override
+  String get recipeNextButton => 'next step';
+
+  @override
+  String get recipeFinishButton => 'enjoy';
+
+  @override
   String get breathScreenTitle => 'breath';
 
   @override
