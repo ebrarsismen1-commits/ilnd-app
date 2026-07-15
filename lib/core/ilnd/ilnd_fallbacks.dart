@@ -14,6 +14,13 @@ class IlndFallbacks {
 
   static String _pick(List<String> pool) => pool[_rng.nextInt(pool.length)];
 
+  /// Sohbeti ILND'nin açtığı karşılama mesajı (AI erişilemezse).
+  static String greeting(AppLocalizations l10n) => _pick([
+    l10n.ilndFallbackGreeting1,
+    l10n.ilndFallbackGreeting2,
+    l10n.ilndFallbackGreeting3,
+  ]);
+
   /// Genel sohbet karşılığı.
   static String chat(AppLocalizations l10n) => _pick([
     l10n.ilndFallbackChat1,

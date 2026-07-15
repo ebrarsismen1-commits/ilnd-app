@@ -1239,6 +1239,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get legalBackTooltip => 'Back';
 
   @override
+  String get ilndFallbackGreeting1 =>
+      'glad you\'re here. how is your day going?';
+
+  @override
+  String get ilndFallbackGreeting2 =>
+      'I\'m here. anything on your mind, or shall we just sit quietly for a bit?';
+
+  @override
+  String get ilndFallbackGreeting3 =>
+      'hey. how are you treating yourself today?';
+
+  @override
   String get ilndFallbackChat1 => 'I\'m listening. want to tell me more?';
 
   @override

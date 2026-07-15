@@ -492,6 +492,9 @@
 
   "legalBackTooltip": "Back",
 
+  "ilndFallbackGreeting1": "glad you're here. how is your day going?",
+  "ilndFallbackGreeting2": "I'm here. anything on your mind, or shall we just sit quietly for a bit?",
+  "ilndFallbackGreeting3": "hey. how are you treating yourself today?",
   "ilndFallbackChat1": "I'm listening. want to tell me more?",
   "ilndFallbackChat2": "thanks for sharing that. where do you feel it in your body right now?",
   "ilndFallbackChat3": "I'm here. what touched you most today?",

@@ -1177,6 +1177,15 @@
   "legalBackTooltip": "Geri",
   "@legalBackTooltip": {"description": "Back button tooltip on legal screens"},
 
+  "ilndFallbackGreeting1": "iyi ki geldin. bugün nasıl geçiyor?",
+  "@ilndFallbackGreeting1": {"description": "ILND-initiated greeting fallback 1"},
+
+  "ilndFallbackGreeting2": "buradayım. anlatmak istediğin bir şey var mı, yoksa biraz sessizce mi takılalım?",
+  "@ilndFallbackGreeting2": {"description": "ILND-initiated greeting fallback 2"},
+
+  "ilndFallbackGreeting3": "selam. bugün kendine nasıl davranıyorsun?",
+  "@ilndFallbackGreeting3": {"description": "ILND-initiated greeting fallback 3"},
+
   "ilndFallbackChat1": "seni dinliyorum. biraz daha anlatmak ister misin?",
   "@ilndFallbackChat1": {"description": "ILND offline chat fallback reply 1"},
 

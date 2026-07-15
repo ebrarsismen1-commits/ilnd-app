@@ -2366,6 +2366,24 @@ abstract class AppLocalizations {
   /// **'Geri'**
   String get legalBackTooltip;
 
+  /// ILND-initiated greeting fallback 1
+  ///
+  /// In tr, this message translates to:
+  /// **'iyi ki geldin. bugün nasıl geçiyor?'**
+  String get ilndFallbackGreeting1;
+
+  /// ILND-initiated greeting fallback 2
+  ///
+  /// In tr, this message translates to:
+  /// **'buradayım. anlatmak istediğin bir şey var mı, yoksa biraz sessizce mi takılalım?'**
+  String get ilndFallbackGreeting2;
+
+  /// ILND-initiated greeting fallback 3
+  ///
+  /// In tr, this message translates to:
+  /// **'selam. bugün kendine nasıl davranıyorsun?'**
+  String get ilndFallbackGreeting3;
+
   /// ILND offline chat fallback reply 1
   ///
   /// In tr, this message translates to:

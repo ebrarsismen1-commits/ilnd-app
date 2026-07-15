@@ -91,6 +91,53 @@ class ChatNotifier extends StateNotifier<ChatState> {
     if (state.limitReached) state = state.copyWith(limitReached: false);
   }
 
+  bool _greeted = false;
+
+  /// Sohbeti ILND açar: kullanıcı boş sohbete girdiğinde, hafızadaki son
+  /// izlerden (mood, ritüel cevapları) beslenen kişisel tek bir karşılama
+  /// mesajı gelir. "Seni tanıyan arkadaş" önce yazan taraftır. Oturumda bir
+  /// kez ve yalnız boş sohbette çalışır; kota saymaz, hafızaya not düşmez.
+  Future<void> greetIfNeeded(AppLocalizations l10n) async {
+    if (kDemoMode) return;
+    if (_greeted || state.sending || state.messages.isNotEmpty) return;
+    _greeted = true;
+
+    state = state.copyWith(
+      messages: [const ChatMessage(fromUser: false, text: '', pending: true)],
+      sending: true,
+    );
+
+    final memory = _ref.read(ilndMemoryProvider);
+    final service = _ref.read(ilndServiceProvider);
+
+    String reply;
+    try {
+      reply = await service.respond(
+        memory: memory,
+        l10n: l10n,
+        task:
+            'Sohbeti SEN başlatıyorsun: kullanıcı ekranı yeni açtı ve henüz '
+            'bir şey yazmadı.',
+        userMessage:
+            'Beni kişisel tek bir mesajla karşıla. Hakkımda bildiklerini ve '
+            'son notlarını (ruh hâli, gece ritüeli cevapları, hedefler) '
+            'kullan; genel geçer bir selam verme. 1-2 kısa cümle, sonunda '
+            'sohbeti açan sıcak bir soru olsun.',
+        fallback: IlndFallbacks.greeting(l10n),
+      );
+    } catch (e) {
+      reply = IlndFallbacks.greeting(l10n);
+    }
+
+    if (!mounted) return;
+    final resolved = [...state.messages];
+    final pendingIdx = resolved.lastIndexWhere((m) => m.pending);
+    if (pendingIdx != -1) {
+      resolved[pendingIdx] = ChatMessage(fromUser: false, text: reply);
+    }
+    state = state.copyWith(messages: resolved, sending: false);
+  }
+
   Future<void> send(String text, AppLocalizations l10n) async {
     final trimmed = text.trim();
     if (trimmed.isEmpty || state.sending) return;

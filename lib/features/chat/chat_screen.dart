@@ -31,6 +31,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void initState() {
     super.initState();
     final seed = widget.seedMessage?.trim();
+    if (seed == null || seed.isEmpty) {
+      // Seed yoksa sohbeti ILND açar: kişisel karşılama mesajı.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ref
+            .read(chatProvider.notifier)
+            .greetIfNeeded(AppLocalizations.of(context)!);
+      });
+    }
     if (seed != null && seed.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;

@@ -1227,6 +1227,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get legalBackTooltip => 'Geri';
 
   @override
+  String get ilndFallbackGreeting1 => 'iyi ki geldin. bugün nasıl geçiyor?';
+
+  @override
+  String get ilndFallbackGreeting2 =>
+      'buradayım. anlatmak istediğin bir şey var mı, yoksa biraz sessizce mi takılalım?';
+
+  @override
+  String get ilndFallbackGreeting3 =>
+      'selam. bugün kendine nasıl davranıyorsun?';
+
+  @override
   String get ilndFallbackChat1 =>
       'seni dinliyorum. biraz daha anlatmak ister misin?';
 
