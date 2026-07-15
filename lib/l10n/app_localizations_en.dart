@@ -1036,7 +1036,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takipActivityLabel => 'ACTIVITY';
 
   @override
-  String get takipSteps => 'STEPS';
+  String get takipHabitsDoneLabel => 'HABITS DONE';
 
   @override
   String takipWaterGoal(int ml) {

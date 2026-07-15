@@ -393,7 +393,7 @@
     }
   },
   "takipActivityLabel": "ACTIVITY",
-  "takipSteps": "STEPS",
+  "takipHabitsDoneLabel": "HABITS DONE",
   "takipWaterGoal": "goal: {ml}ml",
   "@takipWaterGoal": {
     "placeholders": {

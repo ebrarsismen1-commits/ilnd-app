@@ -1023,7 +1023,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get takipActivityLabel => 'AKTİVİTE';
 
   @override
-  String get takipSteps => 'ADIM';
+  String get takipHabitsDoneLabel => 'ALIŞKANLIK TAMAM';
 
   @override
   String takipWaterGoal(int ml) {

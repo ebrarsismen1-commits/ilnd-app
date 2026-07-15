@@ -2000,11 +2000,11 @@ abstract class AppLocalizations {
   /// **'AKTİVİTE'**
   String get takipActivityLabel;
 
-  /// Steps stat label
+  /// Today's habit completion stat label
   ///
   /// In tr, this message translates to:
-  /// **'ADIM'**
-  String get takipSteps;
+  /// **'ALIŞKANLIK TAMAM'**
+  String get takipHabitsDoneLabel;
 
   /// Water intake goal
   ///

@@ -495,7 +495,7 @@ class _AddMealRow extends StatelessWidget {
   }
 }
 
-// ─── SECTION 3: Activity (steps hardcoded, water real) ───────────────────────
+// ─── SECTION 3: Activity (alışkanlık + su — ikisi de gerçek veri) ────────────
 
 class _ActivitySection extends ConsumerWidget {
   const _ActivitySection({required this.p, required this.l10n});
@@ -506,6 +506,15 @@ class _ActivitySection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final waterMl = ref.watch(waterTodayProvider);
     final waterPct = (waterMl / _kSuHedef).clamp(0.0, 1.0);
+    // Sahte "4.2k adım" yer tutucusu kaldırıldı — adım verisi ancak sensör
+    // entegrasyonuyla gelir (post-MVP). Yerine elimizde GERÇEKTEN olan
+    // metrik: bugünkü alışkanlık tamamlama sayısı.
+    final habitCount = ref.watch(habitsProvider).valueOrNull?.length ?? 0;
+    final doneCount = ref
+        .watch(todayCompletionsProvider)
+        .valueOrNull
+        ?.length
+        .clamp(0, habitCount);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -513,7 +522,6 @@ class _ActivitySection extends ConsumerWidget {
         _SectionLabel(l10n.takipActivityLabel, color: p.textMuted),
         Row(
           children: [
-            // Steps (placeholder — sensor entegrasyonu post-MVP)
             Expanded(
               child: _Card(
                 p: p,
@@ -521,7 +529,7 @@ class _ActivitySection extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '4.2k',
+                      '${doneCount ?? 0} / $habitCount',
                       style: AppTextStyles.mono(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
@@ -530,7 +538,7 @@ class _ActivitySection extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      l10n.takipSteps,
+                      l10n.takipHabitsDoneLabel,
                       style: AppTextStyles.label(
                         fontSize: 11,
                         color: p.textMuted,

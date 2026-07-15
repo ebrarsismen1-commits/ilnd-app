@@ -963,8 +963,8 @@
   "takipActivityLabel": "AKTİVİTE",
   "@takipActivityLabel": {"description": "Activity section label"},
 
-  "takipSteps": "ADIM",
-  "@takipSteps": {"description": "Steps stat label"},
+  "takipHabitsDoneLabel": "ALIŞKANLIK TAMAM",
+  "@takipHabitsDoneLabel": {"description": "Today's habit completion stat label"},
 
   "takipWaterGoal": "hedef: {ml}ml",
   "@takipWaterGoal": {
