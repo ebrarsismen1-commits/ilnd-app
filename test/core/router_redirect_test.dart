@@ -85,6 +85,26 @@ void main() {
     expect(redirect(location: routeWelcome), routeHome);
   });
 
+  test('şifre kurtarma: kullanıcı yeni-şifre ekranına kilitlenir', () {
+    // Sıfırlama linkinden gelen kullanıcı, yeni şifre belirlemeden
+    // uygulamada gezinememeli — nereye giderse gitsin yeni-şifreye döner.
+    expect(
+      redirect(authState: AuthPasswordRecovery(user), location: routeHome),
+      routeNewPassword,
+    );
+    expect(
+      redirect(authState: AuthPasswordRecovery(user), location: routeLogin),
+      routeNewPassword,
+    );
+    expect(
+      redirect(
+        authState: AuthPasswordRecovery(user),
+        location: routeNewPassword,
+      ),
+      isNull,
+    );
+  });
+
   test('yasal sayfalar her durumda erişilebilir', () {
     expect(
       redirect(

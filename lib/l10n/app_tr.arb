@@ -112,6 +112,27 @@
   "@authErrorGeneric": {"description": "Auth error: generic fallback"},
   "authErrorConfirmEmail": "Giriş yapılamadı. E-posta onayı gerekiyor olabilir.",
   "@authErrorConfirmEmail": {"description": "Auth error: sign-in returned no session"},
+
+  "authErrorUpdatePasswordFailed": "Şifre güncellenemedi. Tekrar dener misin?",
+  "@authErrorUpdatePasswordFailed": {"description": "Auth error: updating password after recovery failed"},
+
+  "newPasswordTitle": "yeni şifreni belirle",
+  "@newPasswordTitle": {"description": "New-password screen heading (after reset link)"},
+
+  "newPasswordSubtitle": "sıfırlama bağlantısı doğrulandı. şimdi yeni bir şifre seç.",
+  "@newPasswordSubtitle": {"description": "New-password screen subtitle"},
+
+  "newPasswordHint": "yeni şifre",
+  "@newPasswordHint": {"description": "New password field hint"},
+
+  "newPasswordConfirmHint": "yeni şifre (tekrar)",
+  "@newPasswordConfirmHint": {"description": "New password confirmation field hint"},
+
+  "newPasswordSubmit": "şifreyi güncelle",
+  "@newPasswordSubmit": {"description": "Save new password button"},
+
+  "newPasswordSuccess": "Şifren güncellendi. Hoş geldin 🌿",
+  "@newPasswordSuccess": {"description": "Toast after password successfully updated"},
   "authErrorSignupFailed": "Kayıt oluşturulamadı. Lütfen tekrar deneyin.",
   "@authErrorSignupFailed": {"description": "Auth error: sign-up failed"},
   "authErrorSignOutFailed": "Çıkış yapılamadı. Tekrar dener misin?",

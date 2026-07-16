@@ -46,6 +46,15 @@ class AuthConfirmEmailPending extends AuthState {
   final String email;
 }
 
+/// Kullanıcı şifre sıfırlama linkinden geldi: oturum recovery token'ıyla
+/// açık ama önce YENİ ŞİFRE belirlenmeli. Router bu durumda kullanıcıyı
+/// yeni-şifre ekranına kilitler; updatePassword başarılı olunca
+/// [AuthAuthenticated]'a geçilir.
+class AuthPasswordRecovery extends AuthState {
+  const AuthPasswordRecovery(this.user);
+  final User user;
+}
+
 class AuthError extends AuthState {
   const AuthError(this.code);
   final AuthErrorCode code;
@@ -69,6 +78,7 @@ enum AuthErrorCode {
   googleFailed,
   appleFailed,
   resetFailed,
+  updatePasswordFailed,
   deleteUnavailable,
   deleteFailed,
 }
@@ -111,13 +121,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
     // Stay in sync with token refresh, sign-out from other tabs, etc.
     _sub = _client.auth.onAuthStateChange
-        .map<AuthState>(
-          (data) => data.session != null
+        .map<AuthState>((data) {
+          // Şifre sıfırlama linki: oturum var ama önce yeni şifre belirlenmeli
+          // — router kullanıcıyı yeni-şifre ekranına kilitler.
+          if (data.event == AuthChangeEvent.passwordRecovery &&
+              data.session != null) {
+            return AuthPasswordRecovery(data.session!.user);
+          }
+          return data.session != null
               ? AuthAuthenticated(data.session!.user)
-              : const AuthUnauthenticated(),
-        )
+              : const AuthUnauthenticated();
+        })
         .listen((s) {
           if (!mounted) return;
+          // Recovery akışı sürerken sonradan gelen tokenRefreshed/signedIn
+          // olayları kullanıcıyı yeni-şifre ekranından koparmasın; akış
+          // updatePassword ile kapanır.
+          if (state is AuthPasswordRecovery && s is AuthAuthenticated) return;
           state = s;
           // Supabase oturumu her (yeniden) kurulduğunda Firebase Auth'u da
           // senkronize tut — request.auth Firestore kurallarında kullanılabilsin.
@@ -166,6 +186,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
             email: email.trim(),
             password: password,
             data: {'name': name.trim()},
+            // Onay linki de panel Site URL'inden bağımsız uygulamaya dönsün.
+            emailRedirectTo: _emailRedirect,
           )
           .timeout(const Duration(seconds: 15));
       // Confirm email açıkken kullanıcı yaratılır ama oturum verilmez —
@@ -384,17 +406,41 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Web'de link dönüş adresi uygulamanın kendi origin'idir — Supabase
+  /// panelindeki Site URL yanlış kalsa bile link asla localhost'a gitmez
+  /// (yaşandı: sıfırlama ve onay linkleri localhost:3000'e düşüyordu).
+  static String? get _emailRedirect => kIsWeb ? Uri.base.origin : null;
+
   /// Sends a password-reset e-mail via Supabase.
   /// Throws an [AuthErrorCode] on failure — UI localizes it.
   Future<void> resetPassword(String email) async {
     try {
       await _client.auth
-          .resetPasswordForEmail(email.trim())
+          .resetPasswordForEmail(email.trim(), redirectTo: _emailRedirect)
           .timeout(const Duration(seconds: 15));
     } on AuthException catch (e) {
       throw _mapError(e);
     } catch (_) {
       throw AuthErrorCode.resetFailed;
+    }
+  }
+
+  /// Recovery oturumundayken yeni şifreyi kaydeder; başarılıysa akış
+  /// [AuthAuthenticated]'a kapanır. Hata UI'da lokalize edilir.
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      final res = await _client.auth
+          .updateUser(UserAttributes(password: newPassword))
+          .timeout(const Duration(seconds: 15));
+      final user = res.user;
+      if (user == null) throw AuthErrorCode.updatePasswordFailed;
+      state = AuthAuthenticated(user);
+    } on AuthErrorCode {
+      rethrow;
+    } on AuthException catch (e) {
+      throw _mapError(e);
+    } catch (_) {
+      throw AuthErrorCode.updatePasswordFailed;
     }
   }
 

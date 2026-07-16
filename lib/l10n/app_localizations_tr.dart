@@ -152,6 +152,29 @@ class AppLocalizationsTr extends AppLocalizations {
       'Giriş yapılamadı. E-posta onayı gerekiyor olabilir.';
 
   @override
+  String get authErrorUpdatePasswordFailed =>
+      'Şifre güncellenemedi. Tekrar dener misin?';
+
+  @override
+  String get newPasswordTitle => 'yeni şifreni belirle';
+
+  @override
+  String get newPasswordSubtitle =>
+      'sıfırlama bağlantısı doğrulandı. şimdi yeni bir şifre seç.';
+
+  @override
+  String get newPasswordHint => 'yeni şifre';
+
+  @override
+  String get newPasswordConfirmHint => 'yeni şifre (tekrar)';
+
+  @override
+  String get newPasswordSubmit => 'şifreyi güncelle';
+
+  @override
+  String get newPasswordSuccess => 'Şifren güncellendi. Hoş geldin 🌿';
+
+  @override
   String get authErrorSignupFailed =>
       'Kayıt oluşturulamadı. Lütfen tekrar deneyin.';
 

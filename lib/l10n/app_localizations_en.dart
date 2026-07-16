@@ -162,6 +162,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t sign in. You may need to confirm your email.';
 
   @override
+  String get authErrorUpdatePasswordFailed =>
+      'Couldn\'t update the password. Try again?';
+
+  @override
+  String get newPasswordTitle => 'set your new password';
+
+  @override
+  String get newPasswordSubtitle =>
+      'your reset link is verified. now pick a new password.';
+
+  @override
+  String get newPasswordHint => 'new password';
+
+  @override
+  String get newPasswordConfirmHint => 'new password (again)';
+
+  @override
+  String get newPasswordSubmit => 'update password';
+
+  @override
+  String get newPasswordSuccess => 'Your password is updated. Welcome back 🌿';
+
+  @override
   String get authErrorSignupFailed =>
       'Couldn\'t create your account. Please try again.';
 

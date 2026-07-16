@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/demo/demo_config.dart';
 import 'package:ilnd_app/core/shell/app_shell.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/auth/login_screen.dart';
+import 'package:ilnd_app/features/auth/new_password_screen.dart';
 import 'package:ilnd_app/features/auth/register_screen.dart';
 import 'package:ilnd_app/features/chat/chat_screen.dart';
 import 'package:ilnd_app/features/explore/explore_screen.dart';
@@ -39,6 +40,7 @@ const routeProfile = '/profile';
 const routeYemekEkle = '/yemek-ekle';
 const routeVibeCard = '/vibe-card';
 const routeSleepRitual = '/sleep-ritual';
+const routeNewPassword = '/yeni-sifre';
 const routeReferral = '/referral';
 const routePrivacyPolicy = '/legal/privacy';
 const routeTermsOfService = '/legal/terms';
@@ -103,6 +105,12 @@ String? resolveRedirect({
   // Still resolving — show splash screen.
   if (authState is AuthInitial) {
     return location == routeSplash ? null : routeSplash;
+  }
+
+  // Şifre sıfırlama linkinden gelindi: yeni şifre belirlenmeden uygulamada
+  // gezinilemez — kullanıcı yeni-şifre ekranına kilitlenir.
+  if (authState is AuthPasswordRecovery) {
+    return location == routeNewPassword ? null : routeNewPassword;
   }
 
   final isAuthenticated = authState is AuthAuthenticated;
@@ -172,6 +180,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: routeRegister,
         pageBuilder: (context, state) => _fade(state, const RegisterScreen()),
+      ),
+      GoRoute(
+        // Şifre sıfırlama linkinden gelen kullanıcının yeni şifre ekranı.
+        path: routeNewPassword,
+        pageBuilder: (context, state) =>
+            _fade(state, const NewPasswordScreen()),
       ),
 
       // ── ILND sohbet (tam ekran, shell dışı) ───────────────────────────────

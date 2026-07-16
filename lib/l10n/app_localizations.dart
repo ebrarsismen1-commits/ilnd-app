@@ -362,6 +362,48 @@ abstract class AppLocalizations {
   /// **'Giriş yapılamadı. E-posta onayı gerekiyor olabilir.'**
   String get authErrorConfirmEmail;
 
+  /// Auth error: updating password after recovery failed
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre güncellenemedi. Tekrar dener misin?'**
+  String get authErrorUpdatePasswordFailed;
+
+  /// New-password screen heading (after reset link)
+  ///
+  /// In tr, this message translates to:
+  /// **'yeni şifreni belirle'**
+  String get newPasswordTitle;
+
+  /// New-password screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'sıfırlama bağlantısı doğrulandı. şimdi yeni bir şifre seç.'**
+  String get newPasswordSubtitle;
+
+  /// New password field hint
+  ///
+  /// In tr, this message translates to:
+  /// **'yeni şifre'**
+  String get newPasswordHint;
+
+  /// New password confirmation field hint
+  ///
+  /// In tr, this message translates to:
+  /// **'yeni şifre (tekrar)'**
+  String get newPasswordConfirmHint;
+
+  /// Save new password button
+  ///
+  /// In tr, this message translates to:
+  /// **'şifreyi güncelle'**
+  String get newPasswordSubmit;
+
+  /// Toast after password successfully updated
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifren güncellendi. Hoş geldin 🌿'**
+  String get newPasswordSuccess;
+
   /// Auth error: sign-up failed
   ///
   /// In tr, this message translates to:
