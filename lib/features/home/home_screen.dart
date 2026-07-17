@@ -39,8 +39,10 @@ class HomeScreen extends ConsumerWidget {
     final memory = ref.watch(ilndMemoryProvider);
     final name = onboardingName.isNotEmpty ? onboardingName : memory.name;
 
-    // Günün düzenli ama kişiye özel "okuması".
-    final read = kArticles[DateTime.now().day % kArticles.length];
+    // Günün düzenli ama kişiye özel "okuması" — uygulama dilinde.
+    final read = kArticles[DateTime.now().day % kArticles.length].forLocale(
+      l10n.localeName,
+    );
 
     return Scaffold(
       backgroundColor: p.base,

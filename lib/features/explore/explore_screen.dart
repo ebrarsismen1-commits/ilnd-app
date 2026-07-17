@@ -74,9 +74,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final fetched = ref.watch(articlesProvider).valueOrNull;
-    final allArticles = (fetched == null || fetched.isEmpty)
-        ? kArticles
-        : fetched;
+    // Uygulama diline göre sürüm seç (EN çevirisi olmayan alan TR'ye düşer).
+    final allArticles =
+        ((fetched == null || fetched.isEmpty) ? kArticles : fetched)
+            .map((a) => a.forLocale(l10n.localeName))
+            .toList();
     final hero = allArticles.isNotEmpty ? allArticles.first : null;
     final featured = allArticles.length > 1
         ? allArticles.sublist(1, allArticles.length.clamp(1, 4))
@@ -324,9 +326,11 @@ class _RitualsRow extends StatelessWidget {
   final AppPalette p;
   final void Function(Article) onOpen;
 
+  /// Anahtar kelime BAŞLIKTA değil ID'de aranır — id'ler dil değişse de
+  /// sabittir (EN kullanıcıda 'hareket' başlığı çevrilince kart kaybolmasın).
   Article? _byKeyword(String keyword) {
     for (final a in articles) {
-      if (a.title.contains(keyword)) return a;
+      if (a.id.contains(keyword)) return a;
     }
     return null;
   }
