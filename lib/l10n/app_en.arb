@@ -334,6 +334,8 @@
   "referralEnterCode": "enter invite code",
 
   "vibeCardShareText": "sharing my mood on ilnd 🌿",
+  "vibeCardShareTextWithCode": "sharing my mood on ilnd 🌿 my invite code: {code}",
+  "vibeCardInviteCode": "my invite code: {code}",
   "vibeCardError": "couldn't generate the card.",
   "vibeCardShare": "share",
   "vibeCardShareFailed": "Couldn't share. Try again.",

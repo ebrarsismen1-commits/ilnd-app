@@ -917,6 +917,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get vibeCardShareText => 'ilnd\'deki ruh halimi paylaşıyorum 🌿';
 
   @override
+  String vibeCardShareTextWithCode(String code) {
+    return 'ilnd\'deki ruh halimi paylaşıyorum 🌿 davet kodum: $code';
+  }
+
+  @override
+  String vibeCardInviteCode(String code) {
+    return 'davet kodum: $code';
+  }
+
+  @override
   String get vibeCardError => 'kart oluşturulamadı.';
 
   @override

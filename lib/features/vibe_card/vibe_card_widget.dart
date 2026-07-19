@@ -14,11 +14,16 @@ class VibeCardWidget extends StatelessWidget {
     required this.data,
     required this.userName,
     required this.p,
+    this.referralCode = '',
   });
 
   final VibeCardData data;
   final String userName;
   final AppPalette p;
+
+  /// Boş değilse kartın altına küçük bir davet kodu rozeti basılır — her
+  /// paylaşılan kart aynı zamanda bir davetiyedir (viral döngünün girişi).
+  final String referralCode;
 
   @override
   Widget build(BuildContext context) {
@@ -80,34 +85,68 @@ class VibeCardWidget extends StatelessWidget {
               ),
             ),
             const Spacer(flex: 4),
+            // Pill'ler Expanded: dar kart genişliklerinde (küçük ekran /
+            // test viewport'u) satır taşmasın — genişlik eşit bölüşülür.
             Row(
               children: [
-                _StatPill(
-                  label: l10n.vibeCardStatStreak,
-                  value: '${data.streakDays}',
-                  p: p,
+                Expanded(
+                  child: _StatPill(
+                    label: l10n.vibeCardStatStreak,
+                    value: '${data.streakDays}',
+                    p: p,
+                  ),
                 ),
                 const SizedBox(width: 10),
-                _StatPill(
-                  label: l10n.vibeCardStatJournal,
-                  value: '${data.journalCount}',
-                  p: p,
+                Expanded(
+                  child: _StatPill(
+                    label: l10n.vibeCardStatJournal,
+                    value: '${data.journalCount}',
+                    p: p,
+                  ),
                 ),
                 const SizedBox(width: 10),
-                _StatPill(
-                  label: l10n.vibeCardStatHabit,
-                  value: '${data.habitCompletionCount}',
-                  p: p,
+                Expanded(
+                  child: _StatPill(
+                    label: l10n.vibeCardStatHabit,
+                    value: '${data.habitCompletionCount}',
+                    p: p,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            Text(
-              userName.isEmpty ? 'ilnd.app' : '$userName · ilnd.app',
-              style: AppTextStyles.label(
-                fontSize: 10,
-                color: p.textMuted,
-              ).copyWith(letterSpacing: 0.4),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    userName.isEmpty ? 'ilnd.app' : '$userName · ilnd.app',
+                    style: AppTextStyles.label(
+                      fontSize: 10,
+                      color: p.textMuted,
+                    ).copyWith(letterSpacing: 0.4),
+                  ),
+                ),
+                if (referralCode.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: p.surface.withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: p.border, width: 0.5),
+                    ),
+                    child: Text(
+                      l10n.vibeCardInviteCode(referralCode),
+                      style: AppTextStyles.mono(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: p.text,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ],
         ),

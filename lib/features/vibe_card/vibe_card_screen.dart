@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
+import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/repositories/vibe_card_repository.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
@@ -33,6 +34,13 @@ class _VibeCardScreenState extends ConsumerState<VibeCardScreen> {
     if (_sharing) return;
     setState(() => _sharing = true);
     try {
+      // Kod varsa paylaşım metniyle de gitsin — görsel kırpılsa bile davet
+      // kodu mesajda yaşar.
+      final code =
+          ref.read(myGrowthProfileProvider).valueOrNull?.referralCode ?? '';
+      final shareText = code.isEmpty
+          ? l10n.vibeCardShareText
+          : l10n.vibeCardShareTextWithCode(code);
       final boundary =
           _captureKey.currentContext?.findRenderObject()
               as RenderRepaintBoundary?;
@@ -45,7 +53,7 @@ class _VibeCardScreenState extends ConsumerState<VibeCardScreen> {
 
       await Share.shareXFiles([
         XFile.fromData(bytes, mimeType: 'image/png', name: 'vibe-card.png'),
-      ], text: l10n.vibeCardShareText);
+      ], text: shareText);
 
       unawaited(AnalyticsService.logVibeCardShared('share_sheet'));
     } catch (_) {
@@ -60,6 +68,8 @@ class _VibeCardScreenState extends ConsumerState<VibeCardScreen> {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final dataAsync = ref.watch(vibeCardDataProvider);
+    final referralCode =
+        ref.watch(myGrowthProfileProvider).valueOrNull?.referralCode ?? '';
     final onboardingName = ref.watch(userNameProvider);
     final name = onboardingName.isNotEmpty
         ? onboardingName
@@ -120,6 +130,7 @@ class _VibeCardScreenState extends ConsumerState<VibeCardScreen> {
                               data: data,
                               userName: name,
                               p: p,
+                              referralCode: referralCode,
                             ),
                           ),
                         ),

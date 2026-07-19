@@ -1802,6 +1802,18 @@ abstract class AppLocalizations {
   /// **'ilnd\'deki ruh halimi paylaşıyorum 🌿'**
   String get vibeCardShareText;
 
+  /// Share sheet text when the user has a referral code — the code rides along with every share
+  ///
+  /// In tr, this message translates to:
+  /// **'ilnd\'deki ruh halimi paylaşıyorum 🌿 davet kodum: {code}'**
+  String vibeCardShareTextWithCode(String code);
+
+  /// Small referral code chip printed on the shareable card image
+  ///
+  /// In tr, this message translates to:
+  /// **'davet kodum: {code}'**
+  String vibeCardInviteCode(String code);
+
   /// Vibe card error state
   ///
   /// In tr, this message translates to:

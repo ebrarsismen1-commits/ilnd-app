@@ -930,6 +930,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vibeCardShareText => 'sharing my mood on ilnd 🌿';
 
   @override
+  String vibeCardShareTextWithCode(String code) {
+    return 'sharing my mood on ilnd 🌿 my invite code: $code';
+  }
+
+  @override
+  String vibeCardInviteCode(String code) {
+    return 'my invite code: $code';
+  }
+
+  @override
   String get vibeCardError => 'couldn\'t generate the card.';
 
   @override

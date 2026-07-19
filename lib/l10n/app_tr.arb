@@ -843,6 +843,22 @@
   "vibeCardShareText": "ilnd'deki ruh halimi paylaşıyorum 🌿",
   "@vibeCardShareText": {"description": "Share sheet text when sharing the vibe card"},
 
+  "vibeCardShareTextWithCode": "ilnd'deki ruh halimi paylaşıyorum 🌿 davet kodum: {code}",
+  "@vibeCardShareTextWithCode": {
+    "description": "Share sheet text when the user has a referral code — the code rides along with every share",
+    "placeholders": {
+      "code": {"type": "String"}
+    }
+  },
+
+  "vibeCardInviteCode": "davet kodum: {code}",
+  "@vibeCardInviteCode": {
+    "description": "Small referral code chip printed on the shareable card image",
+    "placeholders": {
+      "code": {"type": "String"}
+    }
+  },
+
   "vibeCardError": "kart oluşturulamadı.",
   "@vibeCardError": {"description": "Vibe card error state"},
 
