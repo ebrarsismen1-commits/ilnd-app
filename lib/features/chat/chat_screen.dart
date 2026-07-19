@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ilnd_app/core/ilnd/crisis_guard.dart';
+import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
@@ -231,18 +233,49 @@ class _Bubble extends StatelessWidget {
     // ILND balonsuz + serif konuşur (editoryal ses); kullanıcı yeşil balonda —
     // "kim konuşuyor" hiyerarşisi renkten önce tipografiyle hissedilir.
     if (!isUser) {
+      final l10n = AppLocalizations.of(context)!;
       return Padding(
         padding: const EdgeInsets.only(bottom: 14, right: 24),
         child: message.pending
             ? _TypingDots(p: p)
-            : Text(
-                message.text,
-                style: AppTextStyles.display(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: p.text,
-                  height: 1.45,
-                ),
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    message.text,
+                    style: AppTextStyles.display(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: p.text,
+                      height: 1.45,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  // "ILND bana ne dedi" paylaşım kapısı: cümleyi karta çevir.
+                  // Çok sessiz bir dokunuş — editoryal akışı bozmaz.
+                  Pressable(
+                    onTap: () =>
+                        context.push(routeQuoteCard, extra: message.text),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.crop_portrait_rounded,
+                          size: 13,
+                          color: p.textMuted,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          l10n.chatQuoteCardButton,
+                          style: AppTextStyles.label(
+                            fontSize: 10.5,
+                            color: p.textMuted,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
       );
     }

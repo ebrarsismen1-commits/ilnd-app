@@ -922,6 +922,17 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get chatQuoteCardButton => 'Karta çevir';
+
+  @override
+  String get quoteCardShareText => 'ilnd bugün bana bunu dedi 🌙';
+
+  @override
+  String quoteCardShareTextWithCode(String code) {
+    return 'ilnd bugün bana bunu dedi 🌙 davet kodum: $code';
+  }
+
+  @override
   String vibeCardInviteCode(String code) {
     return 'davet kodum: $code';
   }

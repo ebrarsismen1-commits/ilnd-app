@@ -851,6 +851,20 @@
     }
   },
 
+  "chatQuoteCardButton": "Karta çevir",
+  "@chatQuoteCardButton": {"description": "Tiny action under an ILND chat line that turns the sentence into a shareable quote card"},
+
+  "quoteCardShareText": "ilnd bugün bana bunu dedi 🌙",
+  "@quoteCardShareText": {"description": "Share sheet text when sharing a quote card"},
+
+  "quoteCardShareTextWithCode": "ilnd bugün bana bunu dedi 🌙 davet kodum: {code}",
+  "@quoteCardShareTextWithCode": {
+    "description": "Quote card share text carrying the user's referral code",
+    "placeholders": {
+      "code": {"type": "String"}
+    }
+  },
+
   "vibeCardInviteCode": "davet kodum: {code}",
   "@vibeCardInviteCode": {
     "description": "Small referral code chip printed on the shareable card image",

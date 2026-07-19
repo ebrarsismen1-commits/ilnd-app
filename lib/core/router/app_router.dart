@@ -23,6 +23,7 @@ import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/features/referral/referral_screen.dart';
 import 'package:ilnd_app/features/takip/takip_screen.dart';
 import 'package:ilnd_app/features/topluluk/topluluk_screen.dart';
+import 'package:ilnd_app/features/vibe_card/quote_card_screen.dart';
 import 'package:ilnd_app/features/vibe_card/vibe_card_screen.dart';
 
 const routeSplash = '/splash';
@@ -39,6 +40,7 @@ const routeTopluluk = '/topluluk';
 const routeProfile = '/profile';
 const routeYemekEkle = '/yemek-ekle';
 const routeVibeCard = '/vibe-card';
+const routeQuoteCard = '/quote-card';
 const routeSleepRitual = '/sleep-ritual';
 const routeNewPassword = '/yeni-sifre';
 const routeReferral = '/referral';
@@ -211,6 +213,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: routeVibeCard,
         pageBuilder: (context, state) => _fade(state, const VibeCardScreen()),
+      ),
+      GoRoute(
+        // Sohbetten gelen ILND cümlesinin kart hâli; extra: alıntı metni.
+        path: routeQuoteCard,
+        pageBuilder: (context, state) =>
+            _fade(state, QuoteCardScreen(quote: state.extra as String? ?? '')),
       ),
       GoRoute(
         // Gece ritüeli tam ekran deneyim — shell dışı (chat gibi).

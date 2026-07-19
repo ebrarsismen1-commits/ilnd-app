@@ -935,6 +935,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get chatQuoteCardButton => 'Make it a card';
+
+  @override
+  String get quoteCardShareText => 'ilnd told me this today 🌙';
+
+  @override
+  String quoteCardShareTextWithCode(String code) {
+    return 'ilnd told me this today 🌙 my invite code: $code';
+  }
+
+  @override
   String vibeCardInviteCode(String code) {
     return 'my invite code: $code';
   }

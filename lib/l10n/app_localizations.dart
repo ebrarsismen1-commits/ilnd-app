@@ -1808,6 +1808,24 @@ abstract class AppLocalizations {
   /// **'ilnd\'deki ruh halimi paylaşıyorum 🌿 davet kodum: {code}'**
   String vibeCardShareTextWithCode(String code);
 
+  /// Tiny action under an ILND chat line that turns the sentence into a shareable quote card
+  ///
+  /// In tr, this message translates to:
+  /// **'Karta çevir'**
+  String get chatQuoteCardButton;
+
+  /// Share sheet text when sharing a quote card
+  ///
+  /// In tr, this message translates to:
+  /// **'ilnd bugün bana bunu dedi 🌙'**
+  String get quoteCardShareText;
+
+  /// Quote card share text carrying the user's referral code
+  ///
+  /// In tr, this message translates to:
+  /// **'ilnd bugün bana bunu dedi 🌙 davet kodum: {code}'**
+  String quoteCardShareTextWithCode(String code);
+
   /// Small referral code chip printed on the shareable card image
   ///
   /// In tr, this message translates to:
