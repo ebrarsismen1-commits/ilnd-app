@@ -110,6 +110,18 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final memory = _ref.read(ilndMemoryProvider);
     final service = _ref.read(ilndServiceProvider);
 
+    // Garantili geri-referans: "seni hatırlıyorum" anı şansa bırakılmaz.
+    // Son not sistem bağlamında zaten var ama modelden ona değinmesini
+    // AÇIKÇA istemezsek çoğu zaman genel bir selamla geçiştiriyor.
+    final lastNote = memory.recentNotes.isNotEmpty
+        ? memory.recentNotes.last
+        : null;
+    final callback = lastNote == null
+        ? ''
+        : ' Hafızandaki en son not şu: "$lastNote". Karşılamanda bu nota '
+              'mutlaka doğal bir cümleyle değin — birebir alıntılama, kendi '
+              'sözlerinle hatırladığını göster.';
+
     String reply;
     try {
       reply = await service.respond(
@@ -117,7 +129,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
         l10n: l10n,
         task:
             'Sohbeti SEN başlatıyorsun: kullanıcı ekranı yeni açtı ve henüz '
-            'bir şey yazmadı.',
+            'bir şey yazmadı.$callback',
         userMessage:
             'Beni kişisel tek bir mesajla karşıla. Hakkımda bildiklerini ve '
             'son notlarını (ruh hâli, gece ritüeli cevapları, hedefler) '

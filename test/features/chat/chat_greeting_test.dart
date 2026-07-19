@@ -11,9 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// ILND artık sohbeti kendisi açar: boş sohbete girildiğinde hafızadan
 /// beslenen kişisel bir karşılama gelir; hata durumunda sıcak yedek mesaj.
 class _FakeIlndService extends IlndService {
-  const _FakeIlndService({this.reply, this.throws = false});
+  _FakeIlndService({this.reply, this.throws = false});
   final String? reply;
   final bool throws;
+
+  /// Son respond çağrısında gelen task — geri-referans garantisi doğrulanır.
+  String? capturedTask;
 
   @override
   Future<String> respond({
@@ -25,6 +28,7 @@ class _FakeIlndService extends IlndService {
     IlndTier tier = IlndTier.quick,
     String? fallback,
   }) async {
+    capturedTask = task;
     if (throws) {
       if (fallback != null) return fallback;
       throw const IlndServiceException('offline');
@@ -60,7 +64,7 @@ void main() {
 
   test('boş sohbette ILND kişisel karşılamayla açar', () async {
     final container = await makeContainer(
-      service: const _FakeIlndService(reply: 'dün yorgundun, bu sabah nasıl?'),
+      service: _FakeIlndService(reply: 'dün yorgundun, bu sabah nasıl?'),
     );
     final notifier = container.read(chatProvider.notifier);
 
@@ -75,7 +79,7 @@ void main() {
 
   test('karşılama oturumda bir kez — ikinci çağrı mesaj eklemez', () async {
     final container = await makeContainer(
-      service: const _FakeIlndService(reply: 'selam sana'),
+      service: _FakeIlndService(reply: 'selam sana'),
     );
     final notifier = container.read(chatProvider.notifier);
 
@@ -85,11 +89,46 @@ void main() {
     expect(container.read(chatProvider).messages, hasLength(1));
   });
 
+  test('hafızada not varsa karşılama görevi son notu zorunlu kılar', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final service = _FakeIlndService(reply: 'dün yorgundum demiştin — bugün?');
+    final container = ProviderContainer(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        ilndMemoryProvider.overrideWith(
+          (ref) => IlndMemoryNotifier(prefs, '', null),
+        ),
+        ilndServiceProvider.overrideWithValue(service),
+        chatProvider.overrideWith((ref) => ChatNotifier(ref)),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    await container
+        .read(ilndMemoryProvider.notifier)
+        .addNote('Bugünkü ruh hali: yorgun');
+    await container.read(chatProvider.notifier).greetIfNeeded(l10n);
+
+    // Son not göreve birebir gömülür — geri-referans modele rica değil şarttır.
+    expect(service.capturedTask, contains('Bugünkü ruh hali: yorgun'));
+    expect(service.capturedTask, contains('mutlaka'));
+  });
+
+  test('hafıza boşken karşılama görevi not referansı içermez', () async {
+    final service = _FakeIlndService(reply: 'selam');
+    final container = await makeContainer(service: service);
+
+    await container.read(chatProvider.notifier).greetIfNeeded(l10n);
+
+    expect(service.capturedTask, isNot(contains('en son not')));
+  });
+
   test(
     'servis çökerse sıcak yedek karşılama gelir, hata balonu gelmez',
     () async {
       final container = await makeContainer(
-        service: const _FakeIlndService(throws: true),
+        service: _FakeIlndService(throws: true),
       );
       final notifier = container.read(chatProvider.notifier);
 
