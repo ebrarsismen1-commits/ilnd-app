@@ -17,6 +17,7 @@ import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/daily_trio/daily_trio_section.dart';
 import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
@@ -96,18 +97,20 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     Entrance(index: 4, child: SocialProofBadge(p: p)),
                     const SizedBox(height: 18),
+                    Entrance(index: 5, child: DailyTrioSection(p: p)),
+                    const SizedBox(height: 18),
                     Entrance(
-                      index: 5,
+                      index: 6,
                       child: _SectionTitle(l10n.homeTodaysReadTitle, p: p),
                     ),
                     const SizedBox(height: 12),
                     Entrance(
-                      index: 6,
+                      index: 7,
                       child: _DailyReadCard(article: read, p: p),
                     ),
                     const SizedBox(height: 24),
                     // Takip artık ana sayfada (Ayarlar'dan çıkarıldı).
-                    Entrance(index: 7, child: _TrackingCard(p: p)),
+                    Entrance(index: 8, child: _TrackingCard(p: p)),
                   ]),
                 ),
               ),

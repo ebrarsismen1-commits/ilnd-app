@@ -922,6 +922,32 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get trioSectionTitle => 'Bugünün Üçlüsü';
+
+  @override
+  String get trioMoveTitle => 'Hareket';
+
+  @override
+  String get trioPlateTitle => 'Tabak';
+
+  @override
+  String get trioMindTitle => 'Kafa';
+
+  @override
+  String trioMinutes(int m) {
+    return '$m dk';
+  }
+
+  @override
+  String get trioMindPending => 'Akşam check-in\'i seni bekliyor';
+
+  @override
+  String get trioMindDone => 'Bugün kendine döndün';
+
+  @override
+  String get trioMarkDone => 'Tamamlandı olarak işaretle';
+
+  @override
   String get streakCardHeadlineWeek =>
       'Bir haftadır her gün kendine dönüyorsun.';
 

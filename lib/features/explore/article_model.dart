@@ -72,6 +72,8 @@ class Article {
     this.ingredients = const [],
     this.steps = const [],
     this.videoUrl,
+    this.allergens = const [],
+    this.diets = const [],
     this.en,
   });
 
@@ -91,6 +93,15 @@ class Article {
 
   /// İleride tarif videosu için ayrılmış alan; şu an oynatıcı yok.
   final String? videoUrl;
+
+  /// İçerdiği alerjenler — onboarding alerji anahtarlarıyla aynı sözlük
+  /// (findik_kabuklu, sut_laktoz, gluten, deniz_urunu, yumurta). Kural:
+  /// şüpheli/opsiyonel malzeme bile ETİKETLENİR (tutucu güvenlik).
+  final List<String> allergens;
+
+  /// Uygun olduğu beslenme tercihleri — onboarding diet anahtarları
+  /// (vejetaryen, vegan, glutensiz, laktozsuz). Boş = yalnız 'yok' tercihine.
+  final List<String> diets;
 
   /// İngilizce çeviri — yoksa EN kullanıcı Türkçesini görür (asla boş ekran).
   final ArticleTranslation? en;
@@ -114,6 +125,8 @@ class Article {
       ingredients: t.ingredients.isNotEmpty ? t.ingredients : ingredients,
       steps: t.steps.isNotEmpty ? t.steps : steps,
       videoUrl: videoUrl,
+      allergens: allergens,
+      diets: diets,
       en: t,
     );
   }
@@ -132,6 +145,8 @@ class Article {
       ingredients: List<String>.from(d['ingredients'] as List? ?? []),
       steps: List<String>.from(d['steps'] as List? ?? []),
       videoUrl: d['videoUrl'] as String?,
+      allergens: List<String>.from(d['allergens'] as List? ?? []),
+      diets: List<String>.from(d['diets'] as List? ?? []),
       en: d['en'] is Map
           ? ArticleTranslation.fromMap(
               Map<String, dynamic>.from(d['en'] as Map),
@@ -151,6 +166,8 @@ class Article {
     'ingredients': ingredients,
     'steps': steps,
     'videoUrl': videoUrl,
+    'allergens': allergens,
+    'diets': diets,
     if (en != null) 'en': en!.toMap(),
   };
 }
@@ -256,6 +273,8 @@ const kArticles = <Article>[
     id: '',
     order: 3,
     title: 'glow suyu',
+    diets: ['vejetaryen', 'vegan', 'glutensiz', 'laktozsuz'],
+    allergens: [],
     category: ArticleCategory.tarif,
     readTime: '3 dk',
     excerpt: 'Havuç, limon, zencefil. Cilt bakımı bardakta başlar.',
@@ -304,6 +323,8 @@ const kArticles = <Article>[
     id: '',
     order: 4,
     title: 'matcha ritüeli',
+    diets: ['vejetaryen', 'vegan', 'laktozsuz'],
+    allergens: ['gluten'],
     category: ArticleCategory.tarif,
     readTime: '4 dk',
     excerpt: 'Bir içecekten fazlası: günün ortasında iki dakikalık yavaşlama.',
@@ -570,6 +591,8 @@ const kArticles = <Article>[
     id: '',
     order: 13,
     title: 'yemek ilaçtır',
+    diets: ['vejetaryen'],
+    allergens: ['gluten', 'yumurta', 'deniz_urunu'],
     category: ArticleCategory.tarif,
     readTime: '5 dk',
     excerpt: 'Bütünsel beslenme karmaşık değil: tabağına bütün hâlinde bak.',
@@ -675,6 +698,8 @@ const kArticles = <Article>[
     id: '',
     order: 16,
     title: 'gece sütü',
+    diets: ['vejetaryen', 'glutensiz'],
+    allergens: ['sut_laktoz', 'findik_kabuklu'],
     category: ArticleCategory.tarif,
     readTime: '3 dk',
     excerpt: 'Uykudan önce sıcak bir fincan sakinlik. Beş dakikada hazır.',
@@ -721,6 +746,8 @@ const kArticles = <Article>[
     id: '',
     order: 17,
     title: 'yeşil glow smoothie',
+    diets: ['vejetaryen', 'vegan', 'laktozsuz'],
+    allergens: ['gluten'],
     category: ArticleCategory.tarif,
     readTime: '3 dk',
     excerpt: 'Panolardaki o yeşil bardak. Tadı göründüğünden çok daha iyi.',
@@ -770,6 +797,8 @@ const kArticles = <Article>[
     id: '',
     order: 18,
     title: 'hurma lokmaları',
+    diets: ['vejetaryen', 'vegan', 'laktozsuz'],
+    allergens: ['findik_kabuklu', 'gluten'],
     category: ArticleCategory.tarif,
     readTime: '4 dk',
     excerpt: 'Tatlı krizine şefkatli cevap: üç malzeme, sıfır fırın.',
@@ -810,6 +839,109 @@ const kArticles = <Article>[
         'Add the peanut butter and oats and blitz again until the mixture holds together.',
         'Take walnut-sized pieces and roll them in your palm.',
         'Roll the balls in cocoa or coconut. Rest in the fridge for half an hour; they keep a week in a jar.',
+      ],
+    ),
+  ),
+  Article(
+    id: '',
+    order: 19,
+    title: 'tek tava menemen',
+    category: ArticleCategory.tarif,
+    diets: ['vejetaryen', 'glutensiz', 'laktozsuz'],
+    allergens: ['yumurta'],
+    readTime: '15 dk',
+    excerpt: 'Öğrenci bütçesinin klasiği: üç malzeme, tek tava, sıfır ustalık.',
+    imageUrl: '$_u-1510693206972-df098062cb71?auto=format&fit=crop&w=1200&q=80',
+    body: [
+      'Menemen, "yemek yapamam" cümlesini çürüten tariftir. Üç ana malzeme, tek tava ve on beş dakika. Akşam eve yorgun geldiğin, kartta az bakiye kaldığı günlerin yemeği — ve iyi yapıldığında hâlâ sofranın yıldızı.',
+      'Sır, acele etmemekte: domates suyunu salıp toplanmadan yumurta eklersen sulu ve dağınık olur. Domatesi biraz çektir, sonra yumurtayı kır. Bir de ekmeği hazır et — menemen beklemez.',
+    ],
+    ingredients: [
+      '2 olgun domates (rendelenmiş)',
+      '1 sivri biber, ince doğranmış',
+      '2 yumurta',
+      '2 yemek kaşığı zeytinyağı',
+      'tuz, pul biber',
+    ],
+    steps: [
+      'Zeytinyağını tavada ısıt, biberi 2 dakika yumuşayana kadar kavur.',
+      'Rendelenmiş domatesi ekle; orta ateşte suyunu çekene kadar 6-8 dakika pişir. Tuzunu at.',
+      'Yumurtaları tavaya kır. İster karıştır (klasik), ister göz göz bırak — kapağı kapatıp 2-3 dakika pişir.',
+      'Ateşten alır almaz pul biber serp ve tavayla servis et. Menemen tavadan yenir.',
+    ],
+    en: ArticleTranslation(
+      title: 'one-pan menemen',
+      readTime: '15 min',
+      excerpt:
+          'The student-budget classic: three ingredients, one pan, zero skill required.',
+      body: [
+        'Menemen is the recipe that disproves "I can\'t cook." Three main ingredients, one pan, fifteen minutes. It\'s the meal for nights you come home tired with little left on the card — and done right, it\'s still the star of the table.',
+        'The secret is patience: add the eggs before the tomatoes cook down and it turns watery. Let the tomatoes reduce, then crack the eggs. And have the bread ready — menemen doesn\'t wait.',
+      ],
+      ingredients: [
+        '2 ripe tomatoes, grated',
+        '1 green pepper, finely chopped',
+        '2 eggs',
+        '2 tbsp olive oil',
+        'salt, red pepper flakes',
+      ],
+      steps: [
+        'Heat the olive oil in a pan and sauté the pepper for 2 minutes until soft.',
+        'Add the grated tomato; simmer over medium heat for 6-8 minutes until reduced. Season with salt.',
+        'Crack the eggs into the pan. Stir for classic style, or leave them sunny — cover and cook 2-3 minutes.',
+        'Sprinkle red pepper flakes right off the heat and serve in the pan. Menemen is eaten from the pan.',
+      ],
+    ),
+  ),
+  Article(
+    id: '',
+    order: 20,
+    title: 'kırmızı mercimek çorbası',
+    category: ArticleCategory.tarif,
+    diets: ['vejetaryen', 'vegan', 'glutensiz', 'laktozsuz'],
+    allergens: [],
+    readTime: '25 dk',
+    excerpt: 'Bir tencere rahatlık: dört malzeme, iki günlük yemek çıkarır.',
+    imageUrl: '$_u-1547592166-23ac45744acd?auto=format&fit=crop&w=1200&q=80',
+    body: [
+      'Mercimek çorbası bu coğrafyanın öz-bakım yemeğidir: ucuz, doyurucu ve yapması neredeyse imkânsız derecede kolay. Bir tencere kaynatırsın, iki gün boyunca "bugün ne yesem" sorusu çözülür.',
+      'Blender yoksa dert değil — tel çırpıcıyla ezerek de pürüzsüze yakın olur. Üzerine limon sıkmayı unutma; çorbayı çorba yapan odur.',
+    ],
+    ingredients: [
+      '1 su bardağı kırmızı mercimek (yıkanmış)',
+      '1 soğan, kabaca doğranmış',
+      '1 havuç, kabaca doğranmış',
+      '1 yemek kaşığı salça',
+      '2 yemek kaşığı zeytinyağı',
+      '5 su bardağı sıcak su, tuz, kimyon',
+    ],
+    steps: [
+      'Zeytinyağında soğanı 3-4 dakika, sonra havucu 2 dakika kavur. Salçayı ekleyip kokusu çıkana kadar çevir.',
+      'Mercimek ve sıcak suyu ekle. Kaynayınca kısık ateşte 20 dakika, mercimekler dağılana kadar pişir.',
+      'Blenderdan geçir (ya da çırpıcıyla ez). Tuz ve kimyonla tatlandır; koyuysa su ekle.',
+      'Limonla servis et. Buzdolabında 3 gün, dondurucuda 1 ay durur.',
+    ],
+    en: ArticleTranslation(
+      title: 'red lentil soup',
+      readTime: '25 min',
+      excerpt: 'A pot of comfort: four ingredients, feeds you for two days.',
+      body: [
+        'Lentil soup is this region\'s original self-care meal: cheap, filling, and almost impossible to get wrong. Boil one pot and the "what do I eat today" question is solved for two days.',
+        'No blender? No problem — mashing with a whisk gets you close to smooth. And don\'t skip the lemon; that\'s what makes the soup.',
+      ],
+      ingredients: [
+        '1 cup red lentils, rinsed',
+        '1 onion, roughly chopped',
+        '1 carrot, roughly chopped',
+        '1 tbsp tomato paste',
+        '2 tbsp olive oil',
+        '5 cups hot water, salt, cumin',
+      ],
+      steps: [
+        'Sauté the onion in olive oil for 3-4 minutes, then the carrot for 2. Add the tomato paste and stir until fragrant.',
+        'Add the lentils and hot water. Once boiling, simmer on low for 20 minutes until the lentils fall apart.',
+        'Blend (or mash with a whisk). Season with salt and cumin; thin with water if needed.',
+        'Serve with lemon. Keeps 3 days in the fridge, a month in the freezer.',
       ],
     ),
   ),

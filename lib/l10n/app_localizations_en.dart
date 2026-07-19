@@ -935,6 +935,32 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get trioSectionTitle => 'Today\'s Three';
+
+  @override
+  String get trioMoveTitle => 'Move';
+
+  @override
+  String get trioPlateTitle => 'Plate';
+
+  @override
+  String get trioMindTitle => 'Mind';
+
+  @override
+  String trioMinutes(int m) {
+    return '$m min';
+  }
+
+  @override
+  String get trioMindPending => 'Your evening check-in is waiting';
+
+  @override
+  String get trioMindDone => 'You came back to yourself today';
+
+  @override
+  String get trioMarkDone => 'Mark as done';
+
+  @override
   String get streakCardHeadlineWeek =>
       'A week of showing up for yourself, every day.';
 

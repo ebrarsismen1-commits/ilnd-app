@@ -123,7 +123,14 @@
         "If you used a blender, strain the mixture through a fine sieve.",
         "Add the lemon juice, stir, and serve cold over ice."
       ]
-    }
+    },
+    "diets": [
+      "vejetaryen",
+      "vegan",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
   },
   {
     "id": "matcha-ritueli",
@@ -171,7 +178,15 @@
         "Whisk in a W motion until a fine foam forms on the surface.",
         "Drink it straight, or pour frothed oat milk on top for a latte."
       ]
-    }
+    },
+    "diets": [
+      "vejetaryen",
+      "vegan",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "gluten"
+    ]
   },
   {
     "id": "dikkatle-hareket",
@@ -431,7 +446,15 @@
         "Prepare your protein: pan-toast the chickpeas for a few minutes, boil the egg or cook your fish, and add it to the bowl.",
         "Dress with olive oil and lemon, sprinkle the salt. Eat slowly, away from screens."
       ]
-    }
+    },
+    "diets": [
+      "vejetaryen"
+    ],
+    "allergens": [
+      "gluten",
+      "yumurta",
+      "deniz_urunu"
+    ]
   },
   {
     "id": "azi-cokluk",
@@ -529,7 +552,15 @@
         "Take it off the heat, wait a minute and add the honey. Honey should not hit boiling milk; the aroma fades.",
         "Pour into your favourite cup, dim the lights and sip slowly."
       ]
-    }
+    },
+    "diets": [
+      "vejetaryen",
+      "glutensiz"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "findik_kabuklu"
+    ]
   },
   {
     "id": "yesil-glow-smoothie",
@@ -577,7 +608,15 @@
         "Taste it; if you want sweetness, add the honey now and blend once more.",
         "Pour into a tall glass and drink right away; green blends are at their best fresh."
       ]
-    }
+    },
+    "diets": [
+      "vejetaryen",
+      "vegan",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "gluten"
+    ]
   },
   {
     "id": "hurma-lokmalari",
@@ -622,6 +661,128 @@
         "Add the peanut butter and oats and blitz again until the mixture holds together.",
         "Take walnut-sized pieces and roll them in your palm.",
         "Roll the balls in cocoa or coconut. Rest in the fridge for half an hour; they keep a week in a jar."
+      ]
+    },
+    "diets": [
+      "vejetaryen",
+      "vegan",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "findik_kabuklu",
+      "gluten"
+    ]
+  },
+  {
+    "id": "tek-tava-menemen",
+    "order": 19,
+    "title": "tek tava menemen",
+    "category": "tarif",
+    "diets": [
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "yumurta"
+    ],
+    "readTime": "15 dk",
+    "excerpt": "Öğrenci bütçesinin klasiği: üç malzeme, tek tava, sıfır ustalık.",
+    "imageUrl": "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=1200&q=80",
+    "body": [
+      "Menemen, \"yemek yapamam\" cümlesini çürüten tariftir. Üç ana malzeme, tek tava ve on beş dakika. Akşam eve yorgun geldiğin, kartta az bakiye kaldığı günlerin yemeği — ve iyi yapıldığında hâlâ sofranın yıldızı.",
+      "Sır, acele etmemekte: domates suyunu salıp toplanmadan yumurta eklersen sulu ve dağınık olur. Domatesi biraz çektir, sonra yumurtayı kır. Bir de ekmeği hazır et — menemen beklemez."
+    ],
+    "ingredients": [
+      "2 olgun domates (rendelenmiş)",
+      "1 sivri biber, ince doğranmış",
+      "2 yumurta",
+      "2 yemek kaşığı zeytinyağı",
+      "tuz, pul biber"
+    ],
+    "steps": [
+      "Zeytinyağını tavada ısıt, biberi 2 dakika yumuşayana kadar kavur.",
+      "Rendelenmiş domatesi ekle; orta ateşte suyunu çekene kadar 6-8 dakika pişir. Tuzunu at.",
+      "Yumurtaları tavaya kır. İster karıştır (klasik), ister göz göz bırak — kapağı kapatıp 2-3 dakika pişir.",
+      "Ateşten alır almaz pul biber serp ve tavayla servis et. Menemen tavadan yenir."
+    ],
+    "en": {
+      "title": "one-pan menemen",
+      "readTime": "15 min",
+      "excerpt": "The student-budget classic: three ingredients, one pan, zero skill required.",
+      "body": [
+        "Menemen is the recipe that disproves \"I can't cook.\" Three main ingredients, one pan, fifteen minutes. It's the meal for nights you come home tired with little left on the card — and done right, it's still the star of the table.",
+        "The secret is patience: add the eggs before the tomatoes cook down and it turns watery. Let the tomatoes reduce, then crack the eggs. And have the bread ready — menemen doesn't wait."
+      ],
+      "ingredients": [
+        "2 ripe tomatoes, grated",
+        "1 green pepper, finely chopped",
+        "2 eggs",
+        "2 tbsp olive oil",
+        "salt, red pepper flakes"
+      ],
+      "steps": [
+        "Heat the olive oil in a pan and sauté the pepper for 2 minutes until soft.",
+        "Add the grated tomato; simmer over medium heat for 6-8 minutes until reduced. Season with salt.",
+        "Crack the eggs into the pan. Stir for classic style, or leave them sunny — cover and cook 2-3 minutes.",
+        "Sprinkle red pepper flakes right off the heat and serve in the pan. Menemen is eaten from the pan."
+      ]
+    }
+  },
+  {
+    "id": "kirmizi-mercimek-corbasi",
+    "order": 20,
+    "title": "kırmızı mercimek çorbası",
+    "category": "tarif",
+    "diets": [
+      "vejetaryen",
+      "vegan",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [],
+    "readTime": "25 dk",
+    "excerpt": "Bir tencere rahatlık: dört malzeme, iki günlük yemek çıkarır.",
+    "imageUrl": "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200&q=80",
+    "body": [
+      "Mercimek çorbası bu coğrafyanın öz-bakım yemeğidir: ucuz, doyurucu ve yapması neredeyse imkânsız derecede kolay. Bir tencere kaynatırsın, iki gün boyunca \"bugün ne yesem\" sorusu çözülür.",
+      "Blender yoksa dert değil — tel çırpıcıyla ezerek de pürüzsüze yakın olur. Üzerine limon sıkmayı unutma; çorbayı çorba yapan odur."
+    ],
+    "ingredients": [
+      "1 su bardağı kırmızı mercimek (yıkanmış)",
+      "1 soğan, kabaca doğranmış",
+      "1 havuç, kabaca doğranmış",
+      "1 yemek kaşığı salça",
+      "2 yemek kaşığı zeytinyağı",
+      "5 su bardağı sıcak su, tuz, kimyon"
+    ],
+    "steps": [
+      "Zeytinyağında soğanı 3-4 dakika, sonra havucu 2 dakika kavur. Salçayı ekleyip kokusu çıkana kadar çevir.",
+      "Mercimek ve sıcak suyu ekle. Kaynayınca kısık ateşte 20 dakika, mercimekler dağılana kadar pişir.",
+      "Blenderdan geçir (ya da çırpıcıyla ez). Tuz ve kimyonla tatlandır; koyuysa su ekle.",
+      "Limonla servis et. Buzdolabında 3 gün, dondurucuda 1 ay durur."
+    ],
+    "en": {
+      "title": "red lentil soup",
+      "readTime": "25 min",
+      "excerpt": "A pot of comfort: four ingredients, feeds you for two days.",
+      "body": [
+        "Lentil soup is this region's original self-care meal: cheap, filling, and almost impossible to get wrong. Boil one pot and the \"what do I eat today\" question is solved for two days.",
+        "No blender? No problem — mashing with a whisk gets you close to smooth. And don't skip the lemon; that's what makes the soup."
+      ],
+      "ingredients": [
+        "1 cup red lentils, rinsed",
+        "1 onion, roughly chopped",
+        "1 carrot, roughly chopped",
+        "1 tbsp tomato paste",
+        "2 tbsp olive oil",
+        "5 cups hot water, salt, cumin"
+      ],
+      "steps": [
+        "Sauté the onion in olive oil for 3-4 minutes, then the carrot for 2. Add the tomato paste and stir until fragrant.",
+        "Add the lentils and hot water. Once boiling, simmer on low for 20 minutes until the lentils fall apart.",
+        "Blend (or mash with a whisk). Season with salt and cumin; thin with water if needed.",
+        "Serve with lemon. Keeps 3 days in the fridge, a month in the freezer."
       ]
     }
   }

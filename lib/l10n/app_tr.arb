@@ -851,6 +851,35 @@
     }
   },
 
+  "trioSectionTitle": "Bugünün Üçlüsü",
+  "@trioSectionTitle": {"description": "Home section title: the three daily cards ILND prepares (move/plate/mind)"},
+
+  "trioMoveTitle": "Hareket",
+  "@trioMoveTitle": {"description": "Daily trio card title: movement"},
+
+  "trioPlateTitle": "Tabak",
+  "@trioPlateTitle": {"description": "Daily trio card title: today's recipe"},
+
+  "trioMindTitle": "Kafa",
+  "@trioMindTitle": {"description": "Daily trio card title: evening check-in / mind"},
+
+  "trioMinutes": "{m} dk",
+  "@trioMinutes": {
+    "description": "Duration chip on trio cards, minutes",
+    "placeholders": {
+      "m": {"type": "int"}
+    }
+  },
+
+  "trioMindPending": "Akşam check-in'i seni bekliyor",
+  "@trioMindPending": {"description": "Mind card subtitle when today's check-in is not done yet"},
+
+  "trioMindDone": "Bugün kendine döndün",
+  "@trioMindDone": {"description": "Mind card subtitle when today's check-in or ritual is done"},
+
+  "trioMarkDone": "Tamamlandı olarak işaretle",
+  "@trioMarkDone": {"description": "Semantics label for the trio card completion tick"},
+
   "streakCardHeadlineWeek": "Bir haftadır her gün kendine dönüyorsun.",
   "@streakCardHeadlineWeek": {"description": "Streak milestone card headline for a 7+ day streak"},
 
