@@ -922,6 +922,30 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get streakCardHeadlineWeek =>
+      'Bir haftadır her gün kendine dönüyorsun.';
+
+  @override
+  String get streakCardHeadlineMonth =>
+      'Bir aydır her gün buradasın. Bunu az insan yapar.';
+
+  @override
+  String get streakCardHeadlineHundred => '100 gün. Sessizce, istikrarla.';
+
+  @override
+  String get streakCardDaysLabel => 'gün üst üste';
+
+  @override
+  String streakCardShareText(int days) {
+    return 'ilnd\'de $days gündür buradayım 🔥';
+  }
+
+  @override
+  String streakCardShareTextWithCode(int days, String code) {
+    return 'ilnd\'de $days gündür buradayım 🔥 davet kodum: $code';
+  }
+
+  @override
   String get chatQuoteCardButton => 'Karta çevir';
 
   @override

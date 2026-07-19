@@ -1808,6 +1808,42 @@ abstract class AppLocalizations {
   /// **'ilnd\'deki ruh halimi paylaşıyorum 🌿 davet kodum: {code}'**
   String vibeCardShareTextWithCode(String code);
 
+  /// Streak milestone card headline for a 7+ day streak
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir haftadır her gün kendine dönüyorsun.'**
+  String get streakCardHeadlineWeek;
+
+  /// Streak milestone card headline for a 30+ day streak
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir aydır her gün buradasın. Bunu az insan yapar.'**
+  String get streakCardHeadlineMonth;
+
+  /// Streak milestone card headline for a 100+ day streak
+  ///
+  /// In tr, this message translates to:
+  /// **'100 gün. Sessizce, istikrarla.'**
+  String get streakCardHeadlineHundred;
+
+  /// Label under the big day count on the streak card
+  ///
+  /// In tr, this message translates to:
+  /// **'gün üst üste'**
+  String get streakCardDaysLabel;
+
+  /// Share sheet text for the streak card
+  ///
+  /// In tr, this message translates to:
+  /// **'ilnd\'de {days} gündür buradayım 🔥'**
+  String streakCardShareText(int days);
+
+  /// Streak card share text carrying the user's referral code
+  ///
+  /// In tr, this message translates to:
+  /// **'ilnd\'de {days} gündür buradayım 🔥 davet kodum: {code}'**
+  String streakCardShareTextWithCode(int days, String code);
+
   /// Tiny action under an ILND chat line that turns the sentence into a shareable quote card
   ///
   /// In tr, this message translates to:

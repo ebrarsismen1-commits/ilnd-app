@@ -346,19 +346,27 @@ class _StreakBanner extends ConsumerWidget {
     );
     if (line == null) return const SizedBox.shrink();
 
+    // 7+ günde satır dokunulabilir: eşik kartı (paylaşılabilir gurur anı).
+    final hasMilestone = current >= 7;
+    final row = Row(
+      children: [
+        if (current > 0) const _PulsingFlame(),
+        Expanded(
+          child: Text(
+            line,
+            style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+          ),
+        ),
+        if (hasMilestone)
+          Icon(Icons.ios_share_rounded, size: 14, color: p.textMuted),
+      ],
+    );
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        children: [
-          if (current > 0) const _PulsingFlame(),
-          Expanded(
-            child: Text(
-              line,
-              style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-            ),
-          ),
-        ],
-      ),
+      child: hasMilestone
+          ? Pressable(onTap: () => context.push(routeStreakCard), child: row)
+          : row,
     );
   }
 }

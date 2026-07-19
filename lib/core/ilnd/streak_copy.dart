@@ -14,4 +14,16 @@ abstract final class StreakCopy {
     if (longest > 0) return l10n.streakCopyRestart;
     return null; // henüz hiç seri yok — gürültü yapma
   }
+
+  /// Eşik kartı (7+/30+/100+ gün) başlığı — "bunu az insan yapar" gururu.
+  /// 7 günün altında kart yok: erken paylaşım baskı üretir, gurur üretmez.
+  static String? milestoneHeadline({
+    required int days,
+    required AppLocalizations l10n,
+  }) {
+    if (days >= 100) return l10n.streakCardHeadlineHundred;
+    if (days >= 30) return l10n.streakCardHeadlineMonth;
+    if (days >= 7) return l10n.streakCardHeadlineWeek;
+    return null;
+  }
 }

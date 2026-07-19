@@ -1,10 +1,7 @@
 import 'dart:async';
-import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/repositories/vibe_card_repository.dart';
@@ -15,6 +12,7 @@ import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
+import 'package:ilnd_app/features/vibe_card/card_capture.dart';
 import 'package:ilnd_app/features/vibe_card/vibe_card_widget.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
@@ -38,24 +36,18 @@ class _VibeCardScreenState extends ConsumerState<VibeCardScreen> {
       // kodu mesajda yaşar.
       final code =
           ref.read(myGrowthProfileProvider).valueOrNull?.referralCode ?? '';
-      final shareText = code.isEmpty
-          ? l10n.vibeCardShareText
-          : l10n.vibeCardShareTextWithCode(code);
-      final boundary =
-          _captureKey.currentContext?.findRenderObject()
-              as RenderRepaintBoundary?;
-      if (boundary == null) return;
-
-      final image = await boundary.toImage(pixelRatio: 3.0);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData == null) return;
-      final bytes = byteData.buffer.asUint8List();
-
-      await Share.shareXFiles([
-        XFile.fromData(bytes, mimeType: 'image/png', name: 'vibe-card.png'),
-      ], text: shareText);
-
-      unawaited(AnalyticsService.logVibeCardShared('share_sheet'));
+      final ok = await shareCardCapture(
+        captureKey: _captureKey,
+        text: code.isEmpty
+            ? l10n.vibeCardShareText
+            : l10n.vibeCardShareTextWithCode(code),
+        fileName: 'vibe-card.png',
+      );
+      if (ok) {
+        unawaited(AnalyticsService.logVibeCardShared('share_sheet'));
+      } else if (mounted) {
+        _showError(context, l10n);
+      }
     } catch (_) {
       if (mounted) _showError(context, l10n);
     } finally {

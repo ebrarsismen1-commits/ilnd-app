@@ -851,6 +851,35 @@
     }
   },
 
+  "streakCardHeadlineWeek": "Bir haftadır her gün kendine dönüyorsun.",
+  "@streakCardHeadlineWeek": {"description": "Streak milestone card headline for a 7+ day streak"},
+
+  "streakCardHeadlineMonth": "Bir aydır her gün buradasın. Bunu az insan yapar.",
+  "@streakCardHeadlineMonth": {"description": "Streak milestone card headline for a 30+ day streak"},
+
+  "streakCardHeadlineHundred": "100 gün. Sessizce, istikrarla.",
+  "@streakCardHeadlineHundred": {"description": "Streak milestone card headline for a 100+ day streak"},
+
+  "streakCardDaysLabel": "gün üst üste",
+  "@streakCardDaysLabel": {"description": "Label under the big day count on the streak card"},
+
+  "streakCardShareText": "ilnd'de {days} gündür buradayım 🔥",
+  "@streakCardShareText": {
+    "description": "Share sheet text for the streak card",
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+
+  "streakCardShareTextWithCode": "ilnd'de {days} gündür buradayım 🔥 davet kodum: {code}",
+  "@streakCardShareTextWithCode": {
+    "description": "Streak card share text carrying the user's referral code",
+    "placeholders": {
+      "days": {"type": "int"},
+      "code": {"type": "String"}
+    }
+  },
+
   "chatQuoteCardButton": "Karta çevir",
   "@chatQuoteCardButton": {"description": "Tiny action under an ILND chat line that turns the sentence into a shareable quote card"},
 

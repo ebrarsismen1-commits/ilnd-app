@@ -935,6 +935,30 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get streakCardHeadlineWeek =>
+      'A week of showing up for yourself, every day.';
+
+  @override
+  String get streakCardHeadlineMonth =>
+      'A month of being here, every day. Few people do this.';
+
+  @override
+  String get streakCardHeadlineHundred => '100 days. Quietly, steadily.';
+
+  @override
+  String get streakCardDaysLabel => 'days in a row';
+
+  @override
+  String streakCardShareText(int days) {
+    return '$days days in a row on ilnd 🔥';
+  }
+
+  @override
+  String streakCardShareTextWithCode(int days, String code) {
+    return '$days days in a row on ilnd 🔥 my invite code: $code';
+  }
+
+  @override
   String get chatQuoteCardButton => 'Make it a card';
 
   @override

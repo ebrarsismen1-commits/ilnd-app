@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ilnd_app/core/ilnd/vibe_card_copy.dart';
 import 'package:ilnd_app/core/repositories/vibe_card_repository.dart';
+import 'package:ilnd_app/features/vibe_card/card_footer.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -115,39 +116,7 @@ class VibeCardWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    userName.isEmpty ? 'ilnd.app' : '$userName · ilnd.app',
-                    style: AppTextStyles.label(
-                      fontSize: 10,
-                      color: p.textMuted,
-                    ).copyWith(letterSpacing: 0.4),
-                  ),
-                ),
-                if (referralCode.isNotEmpty)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: p.surface.withValues(alpha: 0.7),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: p.border, width: 0.5),
-                    ),
-                    child: Text(
-                      l10n.vibeCardInviteCode(referralCode),
-                      style: AppTextStyles.mono(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: p.text,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+            CardFooter(userName: userName, p: p, referralCode: referralCode),
           ],
         ),
       ),
