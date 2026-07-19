@@ -99,16 +99,21 @@ class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
   Future<void> _skip() async {
     unawaited(AnalyticsService.logEvent('onboarding_first_entry_skipped'));
     await _complete();
-    if (mounted) context.go(routeHome);
+    if (!mounted) return;
+    // Atlasa bile ilk kartını alır — onboarding'in ilk "paylaşılabilir an"ı.
+    context.go(routeHome);
+    context.push(routeVibeCard);
   }
 
   Future<void> _pick(String need) async {
     unawaited(AnalyticsService.logEvent('onboarding_first_need_picked'));
     await _complete();
     if (!mounted) return;
-    // Home'u tabana koy, sohbeti seçilen ihtiyaçla üstüne aç — sohbet
-    // kapanınca kullanıcı home'a düşer.
+    // Yığın: home < vibe card < sohbet. Sohbet kapanınca kullanıcıyı ilk
+    // vibe card'ı karşılar ("ilk kartın hazır" anı), onu kapatınca home.
+    // Kart ekranı altta beklerken verisini yükler — sohbet bitene kadar hazır.
     context.go(routeHome);
+    context.push(routeVibeCard);
     context.push(routeChat, extra: need);
   }
 
