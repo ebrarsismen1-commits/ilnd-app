@@ -556,5 +556,17 @@
   "a11yOpenProfile": "Open profile",
   "a11yOpenIlnd": "Open ILND",
   "a11yBack": "Back",
-  "a11yClose": "Close"
+  "a11yClose": "Close",
+
+  "reminderSettingLabel": "Daily reminder",
+  "reminderSettingSubtitle": "A gentle nudge before the day slips by",
+  "reminderTimeLabel": "Time: {time}",
+  "reminderNotificationTitle": "Make a little room for yourself",
+  "reminderNotificationBody": "A small moment is enough today. One sentence, one breath — ILND is here.",
+  "reminderPermissionDenied": "Notification permission was declined. Allow it in device settings and I can remind you.",
+
+  "homeReminderInviteTitle": "Want me to write to you in the evenings?",
+  "homeReminderInviteBody": "Once a day, gently. You can change the time in settings whenever you like.",
+  "homeReminderInviteAccept": "Sure, remind me",
+  "homeReminderInviteLater": "Not now"
 }

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/streak_copy.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
+import 'package:ilnd_app/core/services/reminder_provider.dart';
 import 'package:ilnd_app/core/services/streak_tracker.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
@@ -14,6 +15,7 @@ import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
+import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
@@ -38,6 +40,21 @@ class HomeScreen extends ConsumerWidget {
     final onboardingName = ref.watch(userNameProvider);
     final memory = ref.watch(ilndMemoryProvider);
     final name = onboardingName.isNotEmpty ? onboardingName : memory.name;
+
+    // Bildirim penceresini taze tut: 7 gün ileri kayar, bugün check-in
+    // yapıldıysa bugünün bildirimi düşer. Metinler l10n'den geçer (Sert
+    // Kural #1); sync oturum içinde aynı durum için no-op, her build ucuz.
+    final hasActivityToday = ref.watch(todaysMoodProvider) != null;
+    unawaited(
+      ref
+          .read(reminderProvider.notifier)
+          .sync(
+            title: l10n.reminderNotificationTitle,
+            body: l10n.reminderNotificationBody,
+            channelName: l10n.reminderSettingLabel,
+            hasActivityToday: hasActivityToday,
+          ),
+    );
 
     // Günün düzenli ama kişiye özel "okuması" — uygulama dilinde.
     final read = kArticles[DateTime.now().day % kArticles.length].forLocale(
@@ -69,27 +86,28 @@ class HomeScreen extends ConsumerWidget {
                     // sarınca kart selamlamanın üstüne oturuyordu.
                     Entrance(index: 0, child: _MoodCheckIn(p: p)),
                     Entrance(index: 1, child: _StreakBanner(p: p)),
+                    Entrance(index: 2, child: _ReminderInviteCard(p: p)),
                     Entrance(
-                      index: 2,
+                      index: 3,
                       child: _SleepRitualCard(
                         p: p,
                         hour: hourOverride ?? DateTime.now().hour,
                       ),
                     ),
-                    Entrance(index: 3, child: SocialProofBadge(p: p)),
+                    Entrance(index: 4, child: SocialProofBadge(p: p)),
                     const SizedBox(height: 18),
                     Entrance(
-                      index: 4,
+                      index: 5,
                       child: _SectionTitle(l10n.homeTodaysReadTitle, p: p),
                     ),
                     const SizedBox(height: 12),
                     Entrance(
-                      index: 5,
+                      index: 6,
                       child: _DailyReadCard(article: read, p: p),
                     ),
                     const SizedBox(height: 24),
                     // Takip artık ana sayfada (Ayarlar'dan çıkarıldı).
-                    Entrance(index: 6, child: _TrackingCard(p: p)),
+                    Entrance(index: 7, child: _TrackingCard(p: p)),
                   ]),
                 ),
               ),
@@ -381,6 +399,119 @@ class _PulsingFlameState extends State<_PulsingFlame>
 }
 
 // ─── Gece ritüeli daveti ──────────────────────────────────────────────────────
+
+// ─── Hatırlatma daveti ────────────────────────────────────────────────────────
+
+/// Tek seferlik davet: ILND akşamları yazsın mı? İzin, değer görüldükten
+/// sonra ve bağlam içinde istenir (soğuk sistem dialoğu ilk açılışta değil).
+/// Cevap ne olursa olsun kart bir daha görünmez; toggle ayarlarda yaşar.
+class _ReminderInviteCard extends ConsumerWidget {
+  const _ReminderInviteCard({required this.p});
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final settings = ref.watch(reminderProvider);
+    final inviteDone = ref.watch(reminderInviteDoneProvider);
+    if (settings.enabled || inviteDone) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: p.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: p.border, width: 0.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text('🔔', style: TextStyle(fontSize: 20, color: p.amber)),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    l10n.homeReminderInviteTitle,
+                    style: AppTextStyles.heading(fontSize: 15, color: p.text),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              l10n.homeReminderInviteBody,
+              style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: Pressable(
+                    onTap: () => _accept(context, ref),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: p.accent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        l10n.homeReminderInviteAccept,
+                        style: AppTextStyles.body(
+                          fontSize: 13.5,
+                          color: p.onAccent,
+                        ).copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Pressable(
+                  onTap: () =>
+                      ref.read(reminderInviteDoneProvider.notifier).setDone(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    child: Text(
+                      l10n.homeReminderInviteLater,
+                      style: AppTextStyles.body(
+                        fontSize: 13.5,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _accept(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final hasActivityToday = ref.read(todaysMoodProvider) != null;
+    // Önce daveti kapat: izin reddedilse bile soru tekrarlanmaz.
+    await ref.read(reminderInviteDoneProvider.notifier).setDone();
+    final granted = await ref
+        .read(reminderProvider.notifier)
+        .enable(
+          title: l10n.reminderNotificationTitle,
+          body: l10n.reminderNotificationBody,
+          channelName: l10n.reminderSettingLabel,
+          hasActivityToday: hasActivityToday,
+        );
+    if (!granted && context.mounted) {
+      IlndToast.info(context, l10n.reminderPermissionDenied);
+    }
+  }
+}
 
 /// Akşam saatlerinde (bkz. isSleepRitualWindow) görünen nazik davet; bu gece
 /// tamamlandıysa gizlenir. Saat parametreyle gelir — test edilebilirlik

@@ -2611,6 +2611,66 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Kapat'**
   String get a11yClose;
+
+  /// Settings row label for the daily streak-protection reminder toggle
+  ///
+  /// In tr, this message translates to:
+  /// **'Günlük hatırlatma'**
+  String get reminderSettingLabel;
+
+  /// Settings row subtitle explaining the gentle daily reminder
+  ///
+  /// In tr, this message translates to:
+  /// **'Günü kaçırmadan önce nazik bir dokunuş'**
+  String get reminderSettingSubtitle;
+
+  /// Row showing the selected reminder time; opens a time picker
+  ///
+  /// In tr, this message translates to:
+  /// **'Saat: {time}'**
+  String reminderTimeLabel(String time);
+
+  /// Local notification title for the daily reminder — warm, non-preachy
+  ///
+  /// In tr, this message translates to:
+  /// **'Kendine bir alan aç'**
+  String get reminderNotificationTitle;
+
+  /// Local notification body for the daily reminder — invitation, never guilt
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün için küçük bir an yeter. Bir cümle, bir nefes — ILND burada.'**
+  String get reminderNotificationBody;
+
+  /// Toast shown when the notification permission is declined
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.'**
+  String get reminderPermissionDenied;
+
+  /// One-time home card inviting the user to enable the daily reminder — ILND's voice
+  ///
+  /// In tr, this message translates to:
+  /// **'Akşamları sana yazayım mı?'**
+  String get homeReminderInviteTitle;
+
+  /// Body of the one-time reminder invite card — once a day, no pressure
+  ///
+  /// In tr, this message translates to:
+  /// **'Günde bir kez, nazikçe. Saatini istediğin zaman ayarlardan değiştirebilirsin.'**
+  String get homeReminderInviteBody;
+
+  /// Accept button on the reminder invite card; triggers the permission request
+  ///
+  /// In tr, this message translates to:
+  /// **'Olur, hatırlat'**
+  String get homeReminderInviteAccept;
+
+  /// Decline button on the reminder invite card; dismisses it permanently
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi değil'**
+  String get homeReminderInviteLater;
 }
 
 class _AppLocalizationsDelegate

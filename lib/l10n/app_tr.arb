@@ -1317,5 +1317,40 @@
   "@a11yBack": {"description": "Screen-reader label for a back icon button"},
 
   "a11yClose": "Kapat",
-  "@a11yClose": {"description": "Screen-reader label for a close icon button"}
+  "@a11yClose": {"description": "Screen-reader label for a close icon button"},
+
+  "reminderSettingLabel": "Günlük hatırlatma",
+  "@reminderSettingLabel": {"description": "Settings row label for the daily streak-protection reminder toggle"},
+
+  "reminderSettingSubtitle": "Günü kaçırmadan önce nazik bir dokunuş",
+  "@reminderSettingSubtitle": {"description": "Settings row subtitle explaining the gentle daily reminder"},
+
+  "reminderTimeLabel": "Saat: {time}",
+  "@reminderTimeLabel": {
+    "description": "Row showing the selected reminder time; opens a time picker",
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+
+  "reminderNotificationTitle": "Kendine bir alan aç",
+  "@reminderNotificationTitle": {"description": "Local notification title for the daily reminder — warm, non-preachy"},
+
+  "reminderNotificationBody": "Bugün için küçük bir an yeter. Bir cümle, bir nefes — ILND burada.",
+  "@reminderNotificationBody": {"description": "Local notification body for the daily reminder — invitation, never guilt"},
+
+  "reminderPermissionDenied": "Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.",
+  "@reminderPermissionDenied": {"description": "Toast shown when the notification permission is declined"},
+
+  "homeReminderInviteTitle": "Akşamları sana yazayım mı?",
+  "@homeReminderInviteTitle": {"description": "One-time home card inviting the user to enable the daily reminder — ILND's voice"},
+
+  "homeReminderInviteBody": "Günde bir kez, nazikçe. Saatini istediğin zaman ayarlardan değiştirebilirsin.",
+  "@homeReminderInviteBody": {"description": "Body of the one-time reminder invite card — once a day, no pressure"},
+
+  "homeReminderInviteAccept": "Olur, hatırlat",
+  "@homeReminderInviteAccept": {"description": "Accept button on the reminder invite card; triggers the permission request"},
+
+  "homeReminderInviteLater": "Şimdi değil",
+  "@homeReminderInviteLater": {"description": "Decline button on the reminder invite card; dismisses it permanently"}
 }

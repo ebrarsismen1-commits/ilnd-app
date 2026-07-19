@@ -1387,4 +1387,40 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get a11yClose => 'Kapat';
+
+  @override
+  String get reminderSettingLabel => 'Günlük hatırlatma';
+
+  @override
+  String get reminderSettingSubtitle =>
+      'Günü kaçırmadan önce nazik bir dokunuş';
+
+  @override
+  String reminderTimeLabel(String time) {
+    return 'Saat: $time';
+  }
+
+  @override
+  String get reminderNotificationTitle => 'Kendine bir alan aç';
+
+  @override
+  String get reminderNotificationBody =>
+      'Bugün için küçük bir an yeter. Bir cümle, bir nefes — ILND burada.';
+
+  @override
+  String get reminderPermissionDenied =>
+      'Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.';
+
+  @override
+  String get homeReminderInviteTitle => 'Akşamları sana yazayım mı?';
+
+  @override
+  String get homeReminderInviteBody =>
+      'Günde bir kez, nazikçe. Saatini istediğin zaman ayarlardan değiştirebilirsin.';
+
+  @override
+  String get homeReminderInviteAccept => 'Olur, hatırlat';
+
+  @override
+  String get homeReminderInviteLater => 'Şimdi değil';
 }

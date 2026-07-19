@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ilnd_app/core/billing/entitlement.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
+import 'package:ilnd_app/core/services/reminder_provider.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
@@ -749,6 +750,8 @@ class _SettingsSection extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
+        _ReminderSettingRow(p: p),
+        const SizedBox(height: 8),
         Pressable(
           onTap: () {},
           child: _SettingsRow(
@@ -855,6 +858,132 @@ class _SettingsSection extends ConsumerWidget {
           : l10n.authErrorDeleteFailed;
       IlndToast.error(context, message);
     }
+  }
+}
+
+/// Günlük hatırlatma ayarı: toggle + (açıkken) saat satırı.
+/// Toggle açılırken bildirim izni istenir; reddedilirse kapalı kalır ve
+/// kullanıcıya cihaz ayarları yolu gösterilir. Metinler l10n'den (Kural #1).
+class _ReminderSettingRow extends ConsumerWidget {
+  const _ReminderSettingRow({required this.p});
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final settings = ref.watch(reminderProvider);
+    final time = TimeOfDay(
+      hour: settings.hour,
+      minute: settings.minute,
+    ).format(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: p.surface,
+        borderRadius: BorderRadius.circular(AppSpacing.radius),
+        border: Border.all(color: p.border, width: 0.5),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.notifications_none_rounded,
+                size: 20,
+                color: p.textMuted,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.reminderSettingLabel,
+                      style: AppTextStyles.body(
+                        fontSize: 15,
+                        color: p.text,
+                      ).copyWith(fontWeight: FontWeight.w500),
+                    ),
+                    Text(
+                      l10n.reminderSettingSubtitle,
+                      style: AppTextStyles.body(
+                        fontSize: 12,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Switch.adaptive(
+                value: settings.enabled,
+                activeThumbColor: p.accent,
+                onChanged: (on) => _toggle(context, ref, on),
+              ),
+            ],
+          ),
+          if (settings.enabled)
+            Pressable(
+              onTap: () => _pickTime(context, ref),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 32, bottom: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.reminderTimeLabel(time),
+                        style: AppTextStyles.body(
+                          fontSize: 13,
+                          color: p.accent,
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.edit_outlined, size: 16, color: p.textMuted),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _toggle(BuildContext context, WidgetRef ref, bool on) async {
+    final l10n = AppLocalizations.of(context)!;
+    final notifier = ref.read(reminderProvider.notifier);
+    if (!on) {
+      await notifier.disable();
+      return;
+    }
+    final granted = await notifier.enable(
+      title: l10n.reminderNotificationTitle,
+      body: l10n.reminderNotificationBody,
+      channelName: l10n.reminderSettingLabel,
+      hasActivityToday: ref.read(todaysMoodProvider) != null,
+    );
+    if (!granted && context.mounted) {
+      IlndToast.info(context, l10n.reminderPermissionDenied);
+    }
+  }
+
+  Future<void> _pickTime(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final settings = ref.read(reminderProvider);
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: settings.hour, minute: settings.minute),
+    );
+    if (picked == null || !context.mounted) return;
+    await ref
+        .read(reminderProvider.notifier)
+        .setTime(
+          hour: picked.hour,
+          minute: picked.minute,
+          title: l10n.reminderNotificationTitle,
+          body: l10n.reminderNotificationBody,
+          channelName: l10n.reminderSettingLabel,
+          hasActivityToday: ref.read(todaysMoodProvider) != null,
+        );
   }
 }
 

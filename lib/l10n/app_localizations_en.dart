@@ -1402,4 +1402,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get a11yClose => 'Close';
+
+  @override
+  String get reminderSettingLabel => 'Daily reminder';
+
+  @override
+  String get reminderSettingSubtitle =>
+      'A gentle nudge before the day slips by';
+
+  @override
+  String reminderTimeLabel(String time) {
+    return 'Time: $time';
+  }
+
+  @override
+  String get reminderNotificationTitle => 'Make a little room for yourself';
+
+  @override
+  String get reminderNotificationBody =>
+      'A small moment is enough today. One sentence, one breath — ILND is here.';
+
+  @override
+  String get reminderPermissionDenied =>
+      'Notification permission was declined. Allow it in device settings and I can remind you.';
+
+  @override
+  String get homeReminderInviteTitle =>
+      'Want me to write to you in the evenings?';
+
+  @override
+  String get homeReminderInviteBody =>
+      'Once a day, gently. You can change the time in settings whenever you like.';
+
+  @override
+  String get homeReminderInviteAccept => 'Sure, remind me';
+
+  @override
+  String get homeReminderInviteLater => 'Not now';
 }
