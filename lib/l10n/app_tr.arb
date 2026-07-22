@@ -974,8 +974,20 @@
   "redeemCodeSuccess": "Davet kodu kullanıldı! 🎉",
   "@redeemCodeSuccess": {"description": "Toast shown when a referral code is redeemed successfully"},
 
-  "redeemCodeInvalid": "Geçersiz kod ya da zaten kullanılmış.",
-  "@redeemCodeInvalid": {"description": "Toast shown when a referral code can't be redeemed"},
+  "redeemCodeInvalid": "Böyle bir davet kodu yok. Tekrar bak.",
+  "@redeemCodeInvalid": {"description": "Toast: the entered referral code does not exist"},
+
+  "redeemCodeSelfReferral": "Bu senin kendi kodun 🙂 Bir arkadaşının kodunu dene.",
+  "@redeemCodeSelfReferral": {"description": "Toast: user tried to redeem their own referral code"},
+
+  "redeemCodeAlreadyUsed": "Zaten bir davet kodu kullanmışsın.",
+  "@redeemCodeAlreadyUsed": {"description": "Toast: user already redeemed a referral code before"},
+
+  "redeemCodeNotReady": "Hesabın daha hazırlanıyor. Birkaç saniye sonra tekrar dene.",
+  "@redeemCodeNotReady": {"description": "Toast: auth bridge/session not ready yet, retry shortly"},
+
+  "redeemCodeNetworkError": "Bağlanamadık. İnternetini kontrol edip tekrar dene.",
+  "@redeemCodeNetworkError": {"description": "Toast: network or server error while redeeming"},
 
   "redeemCodeTitle": "davet kodun var mı?",
   "@redeemCodeTitle": {"description": "Redeem code bottom sheet title"},

@@ -373,7 +373,11 @@
   "chatListening": "ilnd · listening",
 
   "redeemCodeSuccess": "Invite code redeemed! 🎉",
-  "redeemCodeInvalid": "Invalid code, or it's already been used.",
+  "redeemCodeInvalid": "No such invite code. Double-check it.",
+  "redeemCodeSelfReferral": "That's your own code 🙂 Try a friend's code.",
+  "redeemCodeAlreadyUsed": "You've already redeemed an invite code.",
+  "redeemCodeNotReady": "Your account is still getting ready. Try again in a few seconds.",
+  "redeemCodeNetworkError": "Couldn't connect. Check your internet and try again.",
   "redeemCodeTitle": "have an invite code?",
   "redeemCodeHint": "invite code",
   "redeemCodeConfirm": "redeem",

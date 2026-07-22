@@ -8,6 +8,7 @@ import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
 import 'package:ilnd_app/core/repositories/profile_repository.dart';
 import 'package:ilnd_app/core/repositories/referral_repository.dart';
+import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/services/onboarding_timer.dart';
@@ -50,14 +51,44 @@ class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
   Future<void> _redeemPendingReferralCode() async {
     final code = ref.read(referralCodeInputProvider);
     if (code == null || code.isEmpty) return;
-    final repo = ref.read(referralRepositoryProvider);
-    if (repo == null) return;
-    final redeemed = await repo.redeemCode(code);
-    if (redeemed) {
+
+    // Firebase köprüsü kayıt sonrası birkaç saniye gecikebilir. Hazır olana
+    // kadar bekle (bounded); beklemezsek repo null gelir ve kod boşa giderdi.
+    var repo = ref.read(referralRepositoryProvider);
+    if (repo == null) {
+      final uid = await _awaitFirebaseUid();
+      if (!mounted || uid == null) return; // köprü gecikti → kodu SAKLA
+      repo = ref.read(referralRepositoryProvider);
+    }
+
+    final result = repo == null
+        ? RedeemResult.notReady
+        : await repo.redeemCode(code);
+    if (result == RedeemResult.success) {
       unawaited(AnalyticsService.logReferralSignupCompleted());
       unawaited(AnalyticsService.logReferralRewardClaimed());
     }
-    await ref.read(referralCodeInputProvider.notifier).clear();
+    // Yalnız terminal sonuçta temizle; notReady/failed'de kod korunur ki
+    // başarısız redeem kalıcı kod kaybına yol açmasın.
+    if (result.isTerminal) {
+      await ref.read(referralCodeInputProvider.notifier).clear();
+    }
+  }
+
+  /// Firebase uid'sini bounded bekler (köprü kayıt sonrası gecikebilir).
+  /// listenManual provider'ı canlı tutar → stream gerçekten emit eder;
+  /// zaman aşımında null döner (kod silinmez, sonra tekrar denenir).
+  Future<String?> _awaitFirebaseUid() {
+    final existing = ref.read(firebaseAuthUidProvider).valueOrNull;
+    if (existing != null) return Future.value(existing);
+    final completer = Completer<String?>();
+    final sub = ref.listenManual(firebaseAuthUidProvider, (prev, next) {
+      final uid = next.valueOrNull;
+      if (uid != null && !completer.isCompleted) completer.complete(uid);
+    });
+    return completer.future
+        .timeout(const Duration(seconds: 8), onTimeout: () => null)
+        .whenComplete(sub.close);
   }
 
   Future<void> _loadOptions() async {

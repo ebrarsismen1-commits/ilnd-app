@@ -10,6 +10,33 @@ import 'package:ilnd_app/core/services/app_config.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 
+// ─── Redeem sonucu ────────────────────────────────────────────────────────────
+
+/// Davet kodu redeem denemesinin sonucu — kullanıcı metni TAŞIMAZ (Sert
+/// Kural #1); UI her durumu kendi l10n mesajına çevirir. Sunucunun döndürdüğü
+/// `reason` bilgisini tek bir `bool false`'a indirmemek için var: "kendi
+/// kodun", "zaten kullandın", "böyle kod yok" ve "bağlanamadık" birbirinden
+/// ayrılamazsa alan "çalışmıyor" gibi görünür (yaşandı).
+enum RedeemResult {
+  success,
+  selfReferral,
+  alreadyRedeemed,
+  invalidCode,
+
+  /// Köprü/oturum henüz hazır değil ya da ağ/sunucu hatası — kod GEÇERSİZ
+  /// değildir, sonra tekrar denenmelidir (pending kod silinmemeli).
+  notReady,
+  failed;
+
+  /// Terminal sonuçlar tekrar denemekle değişmez → bekleyen kod temizlenir.
+  /// notReady/failed geçicidir → kod korunur, ileride yeniden denenir.
+  bool get isTerminal =>
+      this == success ||
+      this == selfReferral ||
+      this == alreadyRedeemed ||
+      this == invalidCode;
+}
+
 // ─── Model ────────────────────────────────────────────────────────────────────
 
 class UserGrowthProfile {
@@ -95,28 +122,47 @@ class ReferralRepository {
   /// redeemReferralCode, Admin SDK + transaction) yapılır — Firestore rules
   /// client'ın founding_member/premium_access_until alanlarını yazmasına izin
   /// vermiyor, bu yüzden client artık ödülü kendisi hesaplayıp yazamaz.
-  Future<bool> redeemCode(String code) async {
-    if (!AppConfig.isAuthBridgeConfigured) return false;
+  Future<RedeemResult> redeemCode(String code) async {
+    // Köprü kapalı / oturum yok → kod geçersiz DEĞİL, henüz hazır değil.
+    if (!AppConfig.isAuthBridgeConfigured) return RedeemResult.notReady;
 
     final idToken = await fb_auth.FirebaseAuth.instance.currentUser
         ?.getIdToken();
-    if (idToken == null) return false;
+    if (idToken == null) return RedeemResult.notReady;
 
-    final response = await http
-        .post(
-          Uri.parse(AppConfig.redeemReferralCodeUrl),
-          headers: {
-            'Authorization': 'Bearer $idToken',
-            'content-type': 'application/json',
-            ...await appCheckHeaders(),
-          },
-          body: jsonEncode({'code': code.trim().toUpperCase()}),
-        )
-        .timeout(const Duration(seconds: 15));
+    try {
+      final response = await http
+          .post(
+            Uri.parse(AppConfig.redeemReferralCodeUrl),
+            headers: {
+              'Authorization': 'Bearer $idToken',
+              'content-type': 'application/json',
+              ...await appCheckHeaders(),
+            },
+            body: jsonEncode({'code': code.trim().toUpperCase()}),
+          )
+          .timeout(const Duration(seconds: 15));
 
-    if (response.statusCode != 200) return false;
-    final data = jsonDecode(response.body) as Map<String, dynamic>;
-    return data['redeemed'] == true;
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>? ?? {};
+        if (data['redeemed'] == true) return RedeemResult.success;
+        // Sunucu iş-kuralı reddi: nedeni koru (UI ayrı mesaj gösterir).
+        return switch (data['reason']) {
+          'self-referral' => RedeemResult.selfReferral,
+          'already-redeemed' => RedeemResult.alreadyRedeemed,
+          'invalid-code' => RedeemResult.invalidCode,
+          _ => RedeemResult.failed,
+        };
+      }
+      // 400 = kod boş/bozuk → geçersiz; 401 = token reddedildi → hazır değil;
+      // diğer 4xx/5xx → sunucu hatası, tekrar denenebilir.
+      if (response.statusCode == 400) return RedeemResult.invalidCode;
+      if (response.statusCode == 401) return RedeemResult.notReady;
+      return RedeemResult.failed;
+    } catch (_) {
+      // Ağ/timeout/parse — geçici, kod korunmalı.
+      return RedeemResult.failed;
+    }
   }
 
   static String _generateCode() {

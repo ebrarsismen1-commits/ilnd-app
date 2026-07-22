@@ -1042,7 +1042,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get redeemCodeSuccess => 'Invite code redeemed! 🎉';
 
   @override
-  String get redeemCodeInvalid => 'Invalid code, or it\'s already been used.';
+  String get redeemCodeInvalid => 'No such invite code. Double-check it.';
+
+  @override
+  String get redeemCodeSelfReferral =>
+      'That\'s your own code 🙂 Try a friend\'s code.';
+
+  @override
+  String get redeemCodeAlreadyUsed =>
+      'You\'ve already redeemed an invite code.';
+
+  @override
+  String get redeemCodeNotReady =>
+      'Your account is still getting ready. Try again in a few seconds.';
+
+  @override
+  String get redeemCodeNetworkError =>
+      'Couldn\'t connect. Check your internet and try again.';
 
   @override
   String get redeemCodeTitle => 'have an invite code?';

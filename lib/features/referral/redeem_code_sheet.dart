@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
+import 'package:ilnd_app/features/referral/redeem_result_l10n.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
@@ -33,25 +34,25 @@ class _RedeemCodeSheetState extends ConsumerState<RedeemCodeSheet> {
 
     setState(() => _loading = true);
 
-    bool success = false;
-    try {
-      final repo = ref.read(referralRepositoryProvider);
-      success = repo != null && await repo.redeemCode(code);
-    } catch (_) {
-      success = false;
-    }
+    final repo = ref.read(referralRepositoryProvider);
+    // repo null = Firebase köprüsü henüz hazır değil → notReady (geçersiz değil).
+    final result = repo == null
+        ? RedeemResult.notReady
+        : await repo.redeemCode(code);
 
     if (!mounted) return;
     setState(() => _loading = false);
 
-    if (success) {
+    if (result == RedeemResult.success) {
       unawaited(AnalyticsService.logReferralSignupCompleted());
       unawaited(AnalyticsService.logReferralRewardClaimed());
       ref.invalidate(myGrowthProfileProvider);
       Navigator.of(context).pop();
       IlndToast.success(context, l10n.redeemCodeSuccess);
     } else {
-      IlndToast.error(context, l10n.redeemCodeInvalid);
+      // Her başarısızlık kendi mesajını gösterir — "kendi kodun", "zaten
+      // kullandın", "böyle kod yok", "bağlanamadık" ayrı ayrı.
+      IlndToast.error(context, result.localizedError(l10n));
     }
   }
 

@@ -1994,11 +1994,35 @@ abstract class AppLocalizations {
   /// **'Davet kodu kullanıldı! 🎉'**
   String get redeemCodeSuccess;
 
-  /// Toast shown when a referral code can't be redeemed
+  /// Toast: the entered referral code does not exist
   ///
   /// In tr, this message translates to:
-  /// **'Geçersiz kod ya da zaten kullanılmış.'**
+  /// **'Böyle bir davet kodu yok. Tekrar bak.'**
   String get redeemCodeInvalid;
+
+  /// Toast: user tried to redeem their own referral code
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu senin kendi kodun 🙂 Bir arkadaşının kodunu dene.'**
+  String get redeemCodeSelfReferral;
+
+  /// Toast: user already redeemed a referral code before
+  ///
+  /// In tr, this message translates to:
+  /// **'Zaten bir davet kodu kullanmışsın.'**
+  String get redeemCodeAlreadyUsed;
+
+  /// Toast: auth bridge/session not ready yet, retry shortly
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabın daha hazırlanıyor. Birkaç saniye sonra tekrar dene.'**
+  String get redeemCodeNotReady;
+
+  /// Toast: network or server error while redeeming
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlanamadık. İnternetini kontrol edip tekrar dene.'**
+  String get redeemCodeNetworkError;
 
   /// Redeem code bottom sheet title
   ///

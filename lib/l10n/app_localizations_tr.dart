@@ -1029,7 +1029,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get redeemCodeSuccess => 'Davet kodu kullanıldı! 🎉';
 
   @override
-  String get redeemCodeInvalid => 'Geçersiz kod ya da zaten kullanılmış.';
+  String get redeemCodeInvalid => 'Böyle bir davet kodu yok. Tekrar bak.';
+
+  @override
+  String get redeemCodeSelfReferral =>
+      'Bu senin kendi kodun 🙂 Bir arkadaşının kodunu dene.';
+
+  @override
+  String get redeemCodeAlreadyUsed => 'Zaten bir davet kodu kullanmışsın.';
+
+  @override
+  String get redeemCodeNotReady =>
+      'Hesabın daha hazırlanıyor. Birkaç saniye sonra tekrar dene.';
+
+  @override
+  String get redeemCodeNetworkError =>
+      'Bağlanamadık. İnternetini kontrol edip tekrar dene.';
 
   @override
   String get redeemCodeTitle => 'davet kodun var mı?';
