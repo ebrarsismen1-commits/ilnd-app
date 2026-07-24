@@ -9,7 +9,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get loginTagline => 'hoş geldin geri.';
+  String get loginTagline => 'tekrar hoş geldin.';
 
   @override
   String get loginEmailHint => 'e-posta';

@@ -1,7 +1,7 @@
 {
   "@@locale": "tr",
 
-  "loginTagline": "hoş geldin geri.",
+  "loginTagline": "tekrar hoş geldin.",
   "@loginTagline": {"description": "Login screen tagline below the logo"},
 
   "loginEmailHint": "e-posta",

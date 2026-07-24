@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// Login screen tagline below the logo
   ///
   /// In tr, this message translates to:
-  /// **'hoş geldin geri.'**
+  /// **'tekrar hoş geldin.'**
   String get loginTagline;
 
   /// Login email field placeholder
