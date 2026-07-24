@@ -515,6 +515,8 @@
   "yemekEkleCarbs": "CARBS",
   "yemekEkleFat": "FAT",
   "yemekEkleIngredients": "INGREDIENTS",
+  "yemekEklePortionQuestion": "How much was on the plate?",
+  "yemekEklePortionHint": "If the estimate is off, adjust here — the values update.",
   "yemekEkleSaveButton": "save",
   "yemekEkleRetryButton": "try again",
   "yemekEkleErrorTitle": "something went wrong",

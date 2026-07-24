@@ -77,6 +77,11 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
   String _errorMsg = '';
   String? _comment;
 
+  /// Kullanıcının porsiyon düzeltmesi. Görsel analiz miktarı kesin bilemez;
+  /// kullanıcı ½/1/1½/2 ile AI tahminini ölçekler, kaydedilen değerler buna
+  /// göre çarpılır. Her yeni analizde 1.0'a döner.
+  double _portion = 1.0;
+
   // ── Image selection ────────────────────────────────────────────────────────
 
   Future<void> _pick(ImageSource source, AppLocalizations l10n) async {
@@ -119,6 +124,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       if (!mounted) return;
       setState(() {
         _result = demo;
+        _portion = 1.0;
         _phase = _Phase.result;
       });
       await ref.read(usageGateProvider).record(UsageKind.food);
@@ -165,9 +171,14 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         'tier': 'deep',
         // 1 — Task + role
         'system':
-            'Sen bir beslenme analiz uzmanısın. Görevin, bir yemek fotoğrafına '
-            'bakarak yemeği tanımlamak ve makro besin değerlerini bir porsiyon '
-            'için tahmin etmek. Yalnızca istenen JSON formatında yanıt ver.',
+            'Sen dikkatli, dürüst bir beslenme analiz uzmanısın. Bir yemek '
+            'fotoğrafına bakarak yemeği tanımlar ve makroları FOTOĞRAFTA '
+            'GÖRÜNEN GERÇEK MİKTAR için tahmin edersin — standart bir porsiyon '
+            'DEĞİL. Tabağın ne kadar dolu olduğuna, yarım/az kalmış olup '
+            'olmadığına, çatal-kaşık-tabak gibi ölçek ipuçlarına bak. Yalnızca '
+            'gözünle GÖRDÜĞÜN malzemeleri yaz; görmediğin bir eti/tavuğu/'
+            'malzemeyi VARSAYMA. Emin değilsen abartma, düşük-orta tahmin yap. '
+            'Yalnızca istenen JSON formatında yanıt ver.',
         'messages': [
           {
             'role': 'user',
@@ -192,12 +203,16 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
                     '- "yemek_adi" yemeğin yaygın '
                     '${l10n.localeName.startsWith('tr') ? 'Türkçe' : 'İngilizce (English)'} '
                     'adı olsun.\n'
-                    '- "kalori" bir porsiyon için tam sayı (kcal) olsun.\n'
+                    '- "kalori" FOTOĞRAFTA GÖRÜNEN miktar için tam sayı (kcal) '
+                    'olsun — standart porsiyon değil. Tabak yarımsa yarım '
+                    'miktarı hesapla.\n'
                     '- "protein", "karbonhidrat" ve "yag" gram cinsinden, '
-                    'ondalıklı sayı olsun.\n'
-                    '- "malzemeler" fotoğrafta görünen ana malzemeleri içersin '
-                    '(3-6 adet).\n'
-                    '- Emin değilsen makul bir tahmin yap; asla boş bırakma.\n\n'
+                    'ondalıklı sayı olsun ve yine GÖRÜNEN miktara göre.\n'
+                    '- "malzemeler" yalnızca fotoğrafta GERÇEKTEN GÖRDÜĞÜN ana '
+                    'malzemeleri içersin (2-6 adet). Görmediğin bir '
+                    'et/tavuk/malzeme EKLEME.\n'
+                    '- Emin olamadığın bir malzemeyi uydurmaktansa listeye '
+                    'katma; miktarda kararsızsan düşük-orta tahmin yap.\n\n'
                     'Örnek (mercimek çorbası için):\n'
                     '{"yemek_adi": "Mercimek Çorbası", "kalori": 180, '
                     '"protein": 9.0, "karbonhidrat": 27.0, "yag": 4.5, '
@@ -251,6 +266,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       if (mounted) {
         setState(() {
           _result = result;
+          _portion = 1.0;
           _phase = _Phase.result;
         });
       }
@@ -341,14 +357,15 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
     if (result != null) {
       final repo = ref.read(foodRepositoryProvider);
       if (repo != null) {
+        // Kaydedilen değerler kullanıcının porsiyon düzeltmesiyle ölçeklenir.
         repo.add(
           FoodEntry(
             id: '',
             yemekAdi: result.yemekAdi,
-            kalori: result.kalori,
-            protein: result.protein.round(),
-            karbonhidrat: result.karbonhidrat.round(),
-            yag: result.yag.round(),
+            kalori: (result.kalori * _portion).round(),
+            protein: (result.protein * _portion).round(),
+            karbonhidrat: (result.karbonhidrat * _portion).round(),
+            yag: (result.yag * _portion).round(),
             createdAt: DateTime.now(),
           ),
         );
@@ -361,6 +378,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
     setState(() {
       _photoBytes = null;
       _result = null;
+      _portion = 1.0;
       _comment = null;
       _errorMsg = '';
       _phase = _Phase.picker;
@@ -423,6 +441,8 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
                     photo: _photoBytes!,
                     result: _result!,
                     comment: _comment,
+                    portion: _portion,
+                    onPortion: (v) => setState(() => _portion = v),
                     onRetry: _retry,
                     onSave: () => _saveAndPop(context),
                     p: p,
@@ -565,6 +585,8 @@ class _ResultView extends StatelessWidget {
     required this.photo,
     required this.result,
     required this.comment,
+    required this.portion,
+    required this.onPortion,
     required this.onRetry,
     required this.onSave,
     required this.p,
@@ -574,6 +596,8 @@ class _ResultView extends StatelessWidget {
   final Uint8List photo;
   final _FoodResult result;
   final String? comment;
+  final double portion;
+  final ValueChanged<double> onPortion;
   final VoidCallback onRetry;
   final VoidCallback onSave;
   final AppPalette p;
@@ -614,12 +638,21 @@ class _ResultView extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // Macro cards
+          // Porsiyon düzeltici — AI miktarı kesin bilemez, kullanıcı ayarlar.
+          _PortionSelector(
+            portion: portion,
+            onPortion: onPortion,
+            p: p,
+            l10n: l10n,
+          ),
+          const SizedBox(height: 16),
+
+          // Macro cards — porsiyon çarpanıyla ölçeklenir.
           Row(
             children: [
               _MacroCard(
                 label: l10n.yemekEkleCalories,
-                value: '${result.kalori}',
+                value: '${(result.kalori * portion).round()}',
                 unit: 'kcal',
                 color: p.amber,
                 p: p,
@@ -627,7 +660,7 @@ class _ResultView extends StatelessWidget {
               const SizedBox(width: 10),
               _MacroCard(
                 label: l10n.yemekEkleProtein,
-                value: result.protein.toStringAsFixed(1),
+                value: (result.protein * portion).toStringAsFixed(1),
                 unit: 'g',
                 color: p.accent,
                 p: p,
@@ -639,7 +672,7 @@ class _ResultView extends StatelessWidget {
             children: [
               _MacroCard(
                 label: l10n.yemekEkleCarbs,
-                value: result.karbonhidrat.toStringAsFixed(1),
+                value: (result.karbonhidrat * portion).toStringAsFixed(1),
                 unit: 'g',
                 color: p.accentSoft,
                 p: p,
@@ -647,7 +680,7 @@ class _ResultView extends StatelessWidget {
               const SizedBox(width: 10),
               _MacroCard(
                 label: l10n.yemekEkleFat,
-                value: result.yag.toStringAsFixed(1),
+                value: (result.yag * portion).toStringAsFixed(1),
                 unit: 'g',
                 color: p.amber.withValues(alpha: 0.7),
                 p: p,
@@ -714,6 +747,80 @@ class _ResultView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─── Porsiyon düzeltici ──────────────────────────────────────────────────────
+
+/// AI'nın miktar tahminini kullanıcının düzeltmesi için ½/1/1½/2 çarpanları.
+class _PortionSelector extends StatelessWidget {
+  const _PortionSelector({
+    required this.portion,
+    required this.onPortion,
+    required this.p,
+    required this.l10n,
+  });
+
+  final double portion;
+  final ValueChanged<double> onPortion;
+  final AppPalette p;
+  final AppLocalizations l10n;
+
+  static const _options = <(double, String)>[
+    (0.5, '½×'),
+    (1.0, '1×'),
+    (1.5, '1½×'),
+    (2.0, '2×'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.yemekEklePortionQuestion,
+          style: AppTextStyles.sectionLabel(color: p.accent),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          l10n.yemekEklePortionHint,
+          style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            for (final (value, label) in _options) ...[
+              Expanded(
+                child: Pressable(
+                  onTap: () => onPortion(value),
+                  child: Container(
+                    height: 44,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: portion == value ? p.accent : p.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: portion == value ? p.accent : p.border,
+                        width: 0.5,
+                      ),
+                    ),
+                    child: Text(
+                      label,
+                      style: AppTextStyles.body(
+                        fontSize: 15,
+                        color: portion == value ? p.onAccent : p.text,
+                      ).copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ),
+              if (value != _options.last.$1) const SizedBox(width: 8),
+            ],
+          ],
+        ),
+      ],
     );
   }
 }

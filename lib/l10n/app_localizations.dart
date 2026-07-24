@@ -2516,6 +2516,18 @@ abstract class AppLocalizations {
   /// **'MALZEMELER'**
   String get yemekEkleIngredients;
 
+  /// Label above the portion multiplier chips — lets the user correct the AI's amount estimate
+  ///
+  /// In tr, this message translates to:
+  /// **'Tabakta ne kadar vardı?'**
+  String get yemekEklePortionQuestion;
+
+  /// Subtitle explaining the portion multiplier corrects the estimate
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahmin yanlışsa buradan ayarla — değerler güncellenir.'**
+  String get yemekEklePortionHint;
+
   /// Save food entry button
   ///
   /// In tr, this message translates to:

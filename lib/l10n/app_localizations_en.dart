@@ -1334,6 +1334,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yemekEkleIngredients => 'INGREDIENTS';
 
   @override
+  String get yemekEklePortionQuestion => 'How much was on the plate?';
+
+  @override
+  String get yemekEklePortionHint =>
+      'If the estimate is off, adjust here — the values update.';
+
+  @override
   String get yemekEkleSaveButton => 'save';
 
   @override

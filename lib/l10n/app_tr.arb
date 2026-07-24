@@ -1283,6 +1283,12 @@
   "yemekEkleIngredients": "MALZEMELER",
   "@yemekEkleIngredients": {"description": "Ingredients section label"},
 
+  "yemekEklePortionQuestion": "Tabakta ne kadar vardı?",
+  "@yemekEklePortionQuestion": {"description": "Label above the portion multiplier chips — lets the user correct the AI's amount estimate"},
+
+  "yemekEklePortionHint": "Tahmin yanlışsa buradan ayarla — değerler güncellenir.",
+  "@yemekEklePortionHint": {"description": "Subtitle explaining the portion multiplier corrects the estimate"},
+
   "yemekEkleSaveButton": "kaydet",
   "@yemekEkleSaveButton": {"description": "Save food entry button"},
 

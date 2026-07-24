@@ -1321,6 +1321,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get yemekEkleIngredients => 'MALZEMELER';
 
   @override
+  String get yemekEklePortionQuestion => 'Tabakta ne kadar vardı?';
+
+  @override
+  String get yemekEklePortionHint =>
+      'Tahmin yanlışsa buradan ayarla — değerler güncellenir.';
+
+  @override
   String get yemekEkleSaveButton => 'kaydet';
 
   @override
