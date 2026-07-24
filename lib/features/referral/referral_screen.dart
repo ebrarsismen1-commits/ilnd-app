@@ -27,15 +27,35 @@ class _ReferralScreenState extends ConsumerState<ReferralScreen> {
   @override
   void initState() {
     super.initState();
-    // Ödülü olan davet eden kullanıcı uygulamayı açtığında lokal premium
-    // entitlement'ı senkronize et — sunucu taraflı bir doğrulama yok (P0),
-    // bu yüzden sadece bu cihazda görünür olur.
-    Future.microtask(() async {
-      final profile = await ref.read(myGrowthProfileProvider.future);
-      if (profile != null && profile.hasActivePremiumReward && mounted) {
-        await ref.read(isPremiumProvider.notifier).setPremium(true);
+    Future.microtask(_syncOnOpen);
+  }
+
+  /// Ekran açılışında: (1) kendi davet kodunu garanti et — kayıt anındaki
+  /// ensureReferralCode fire-and-forget'ti ve köprü yarışında sessizce
+  /// başarısız olabiliyordu, o zaman kullanıcı kendi kodunu hiç göremiyordu.
+  /// ensureReferralCode idempotent; kod yoksa üretir (rules create'e izin
+  /// verir), varsa dokunmaz. (2) Ödüllü davet eden için lokal premium'u eşle.
+  Future<void> _syncOnOpen() async {
+    final repo = ref.read(referralRepositoryProvider);
+    if (repo == null) return; // köprü hazır değil — retry butonu devrede
+
+    var profile = await ref.read(myGrowthProfileProvider.future);
+    if (profile == null || profile.referralCode.isEmpty) {
+      try {
+        await repo.ensureReferralCode();
+        if (!mounted) return;
+        ref.invalidate(myGrowthProfileProvider);
+        profile = await ref.read(myGrowthProfileProvider.future);
+      } catch (_) {
+        // Doküman redeem'le oluşmuş olabilir (update rules'ta yasak) → kart
+        // yine "······" gösterir; kök çözüm sunucu tarafı (rapora yazıldı).
+        return;
       }
-    });
+    }
+
+    if (profile != null && profile.hasActivePremiumReward && mounted) {
+      await ref.read(isPremiumProvider.notifier).setPremium(true);
+    }
   }
 
   @override
