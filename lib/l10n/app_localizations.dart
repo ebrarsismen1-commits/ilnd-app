@@ -188,12 +188,6 @@ abstract class AppLocalizations {
   /// **'Takip'**
   String get navTracking;
 
-  /// Bottom nav: profile tab
-  ///
-  /// In tr, this message translates to:
-  /// **'Profil'**
-  String get navProfile;
-
   /// Bottom nav: community tab
   ///
   /// In tr, this message translates to:
@@ -926,24 +920,6 @@ abstract class AppLocalizations {
   /// **'{greeting}, {name}'**
   String homeGreetingWithName(String greeting, String name);
 
-  /// Proactive line referencing the user's first goal
-  ///
-  /// In tr, this message translates to:
-  /// **'\"{goal}\" hedefin için buradayım.'**
-  String homeProactiveGoal(String goal);
-
-  /// Proactive line when the user has recent notes but no goal
-  ///
-  /// In tr, this message translates to:
-  /// **'son yazdıklarını okudum, konuşmak ister misin?'**
-  String get homeProactiveRecentNotes;
-
-  /// Default proactive line when no memory exists yet
-  ///
-  /// In tr, this message translates to:
-  /// **'bugün nasıl geçiyor?'**
-  String get homeProactiveDefault;
-
   /// Mood check-in question
   ///
   /// In tr, this message translates to:
@@ -1369,42 +1345,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'hepsi →'**
   String get exploreSeeAllArrow;
-
-  /// Story tile: breathing
-  ///
-  /// In tr, this message translates to:
-  /// **'nefes'**
-  String get exploreStoryBreathing;
-
-  /// Story tile: sleep
-  ///
-  /// In tr, this message translates to:
-  /// **'uyku'**
-  String get exploreStorySleep;
-
-  /// Story tile: water
-  ///
-  /// In tr, this message translates to:
-  /// **'su'**
-  String get exploreStoryWater;
-
-  /// Story tile: movement
-  ///
-  /// In tr, this message translates to:
-  /// **'hareket'**
-  String get exploreStoryMovement;
-
-  /// Story tile: meditation
-  ///
-  /// In tr, this message translates to:
-  /// **'meditasyon'**
-  String get exploreStoryMeditation;
-
-  /// Story tile: self-care
-  ///
-  /// In tr, this message translates to:
-  /// **'öz-bakım'**
-  String get exploreStorySelfCare;
 
   /// Section label above the rituals rail (replaces the old emoji stories row)
   ///
@@ -2239,12 +2179,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bir şeyler ters gitti. Birazdan tekrar dener misin?'**
   String get ilndServiceGenericError;
-
-  /// Add-sheet title
-  ///
-  /// In tr, this message translates to:
-  /// **'ekle.'**
-  String get ekleTitle;
 
   /// Add-sheet action: food
   ///

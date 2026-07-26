@@ -751,16 +751,9 @@ class _SettingsSection extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         _ReminderSettingRow(p: p),
-        const SizedBox(height: 8),
-        Pressable(
-          onTap: () {},
-          child: _SettingsRow(
-            icon: Icons.settings_outlined,
-            label: l10n.profileSettingsRow,
-            showChevron: true,
-            p: p,
-          ),
-        ),
+        // "Ayarlar" satırı kaldırıldı: chevron'la tıklanabilir görünüyordu
+        // ama hiçbir yere gitmiyordu (sahte özellik). Gerçek ayar olan
+        // günlük hatırlatma zaten yukarıda satır içi yaşıyor.
         const SizedBox(height: 8),
         Pressable(
           onTap: () => context.push(routePrivacyPolicy),

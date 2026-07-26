@@ -17,7 +17,6 @@
   "navHome": "Today",
   "navExplore": "Explore",
   "navTracking": "Tracking",
-  "navProfile": "Profile",
   "navCommunity": "Community",
   "navYou": "You",
   "navRing": "ilnd",
@@ -158,14 +157,6 @@
       "name": {"type": "String"}
     }
   },
-  "homeProactiveGoal": "I'm here for your \"{goal}\" goal.",
-  "@homeProactiveGoal": {
-    "placeholders": {
-      "goal": {"type": "String"}
-    }
-  },
-  "homeProactiveRecentNotes": "I read what you wrote recently — want to talk?",
-  "homeProactiveDefault": "how's today going?",
   "homeMoodQuestion": "how are you right now?",
   "homeMoodCalm": "calm",
   "homeMoodGood": "good",
@@ -249,12 +240,6 @@
   "exploreFilterArticles": "articles",
   "exploreFeaturedLabel": "FEATURED",
   "exploreSeeAllArrow": "see all →",
-  "exploreStoryBreathing": "breathing",
-  "exploreStorySleep": "sleep",
-  "exploreStoryWater": "water",
-  "exploreStoryMovement": "movement",
-  "exploreStoryMeditation": "meditation",
-  "exploreStorySelfCare": "self-care",
   "exploreRitualsLabel": "RITUALS",
   "exploreRitualBreathTitle": "2 min breath",
   "exploreRitualSleepTitle": "night ritual",
@@ -445,7 +430,6 @@
   "ilndServiceNoInternet": "No internet connection. Check your connection.",
   "ilndServiceGenericError": "Something went wrong. Want to try again in a bit?",
 
-  "ekleTitle": "add.",
   "ekleFoodTitle": "food",
   "ekleFoodSubtitle": "snap a photo, analyze it",
   "ekleJournalTitle": "journal",

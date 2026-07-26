@@ -55,9 +55,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navTracking => 'Tracking';
 
   @override
-  String get navProfile => 'Profile';
-
-  @override
   String get navCommunity => 'Community';
 
   @override
@@ -456,18 +453,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String homeProactiveGoal(String goal) {
-    return 'I\'m here for your \"$goal\" goal.';
-  }
-
-  @override
-  String get homeProactiveRecentNotes =>
-      'I read what you wrote recently — want to talk?';
-
-  @override
-  String get homeProactiveDefault => 'how\'s today going?';
-
-  @override
   String get homeMoodQuestion => 'how are you right now?';
 
   @override
@@ -689,24 +674,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exploreSeeAllArrow => 'see all →';
-
-  @override
-  String get exploreStoryBreathing => 'breathing';
-
-  @override
-  String get exploreStorySleep => 'sleep';
-
-  @override
-  String get exploreStoryWater => 'water';
-
-  @override
-  String get exploreStoryMovement => 'movement';
-
-  @override
-  String get exploreStoryMeditation => 'meditation';
-
-  @override
-  String get exploreStorySelfCare => 'self-care';
 
   @override
   String get exploreRitualsLabel => 'RITUALS';
@@ -1181,9 +1148,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get ilndServiceGenericError =>
       'Something went wrong. Want to try again in a bit?';
-
-  @override
-  String get ekleTitle => 'add.';
 
   @override
   String get ekleFoodTitle => 'food';

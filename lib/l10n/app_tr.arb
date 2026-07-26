@@ -43,8 +43,6 @@
   "@navExplore": {"description": "Bottom nav: explore tab"},
   "navTracking": "Takip",
   "@navTracking": {"description": "Bottom nav: tracking tab"},
-  "navProfile": "Profil",
-  "@navProfile": {"description": "Bottom nav: profile tab"},
   "navCommunity": "Topluluk",
   "@navCommunity": {"description": "Bottom nav: community tab"},
   "navYou": "Sen",
@@ -390,20 +388,6 @@
     }
   },
 
-  "homeProactiveGoal": "\"{goal}\" hedefin için buradayım.",
-  "@homeProactiveGoal": {
-    "description": "Proactive line referencing the user's first goal",
-    "placeholders": {
-      "goal": {"type": "String"}
-    }
-  },
-
-  "homeProactiveRecentNotes": "son yazdıklarını okudum, konuşmak ister misin?",
-  "@homeProactiveRecentNotes": {"description": "Proactive line when the user has recent notes but no goal"},
-
-  "homeProactiveDefault": "bugün nasıl geçiyor?",
-  "@homeProactiveDefault": {"description": "Default proactive line when no memory exists yet"},
-
   "homeMoodQuestion": "şu an nasılsın?",
   "@homeMoodQuestion": {"description": "Mood check-in question"},
 
@@ -624,24 +608,6 @@
 
   "exploreSeeAllArrow": "hepsi →",
   "@exploreSeeAllArrow": {"description": "See-all link with arrow"},
-
-  "exploreStoryBreathing": "nefes",
-  "@exploreStoryBreathing": {"description": "Story tile: breathing"},
-
-  "exploreStorySleep": "uyku",
-  "@exploreStorySleep": {"description": "Story tile: sleep"},
-
-  "exploreStoryWater": "su",
-  "@exploreStoryWater": {"description": "Story tile: water"},
-
-  "exploreStoryMovement": "hareket",
-  "@exploreStoryMovement": {"description": "Story tile: movement"},
-
-  "exploreStoryMeditation": "meditasyon",
-  "@exploreStoryMeditation": {"description": "Story tile: meditation"},
-
-  "exploreStorySelfCare": "öz-bakım",
-  "@exploreStorySelfCare": {"description": "Story tile: self-care"},
 
   "exploreRitualsLabel": "RİTÜELLER",
   "@exploreRitualsLabel": {"description": "Section label above the rituals rail (replaces the old emoji stories row)"},
@@ -1123,9 +1089,6 @@
 
   "ilndServiceGenericError": "Bir şeyler ters gitti. Birazdan tekrar dener misin?",
   "@ilndServiceGenericError": {"description": "Generic fallback error message"},
-
-  "ekleTitle": "ekle.",
-  "@ekleTitle": {"description": "Add-sheet title"},
 
   "ekleFoodTitle": "yemek",
   "@ekleFoodTitle": {"description": "Add-sheet action: food"},

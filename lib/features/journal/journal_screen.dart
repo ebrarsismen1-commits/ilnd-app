@@ -258,49 +258,48 @@ class _EntryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Pressable(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.cardPadding),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              _formatDate(entry.createdAt, l10n),
-              style: AppTextStyles.sectionLabel(color: p.textMuted),
+    // Kart bilerek tıklanabilir DEĞİL: boş onTap'li Pressable basma efekti
+    // verip hiçbir şey yapmıyordu (yanıltıcı dokunma hedefi).
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.cardPadding),
+      decoration: BoxDecoration(
+        color: p.surface,
+        borderRadius: BorderRadius.circular(AppSpacing.radius),
+        border: Border.all(color: p.border, width: 0.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            _formatDate(entry.createdAt, l10n),
+            style: AppTextStyles.sectionLabel(color: p.textMuted),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            entry.body,
+            style: AppTextStyles.heading(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              height: 1.3,
+              color: p.text,
             ),
-            const SizedBox(height: 6),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          if (entry.ilndReply.isNotEmpty) ...[
+            const SizedBox(height: 5),
             Text(
-              entry.body,
-              style: AppTextStyles.heading(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                height: 1.3,
-                color: p.text,
+              entry.ilndReply,
+              style: AppTextStyles.body(
+                fontSize: 13,
+                color: p.textMuted,
+                height: 1.5,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            if (entry.ilndReply.isNotEmpty) ...[
-              const SizedBox(height: 5),
-              Text(
-                entry.ilndReply,
-                style: AppTextStyles.body(
-                  fontSize: 13,
-                  color: p.textMuted,
-                  height: 1.5,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
           ],
-        ),
+        ],
       ),
     );
   }

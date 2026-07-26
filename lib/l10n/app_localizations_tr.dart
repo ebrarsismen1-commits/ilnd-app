@@ -56,9 +56,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navTracking => 'Takip';
 
   @override
-  String get navProfile => 'Profil';
-
-  @override
   String get navCommunity => 'Topluluk';
 
   @override
@@ -447,18 +444,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String homeProactiveGoal(String goal) {
-    return '\"$goal\" hedefin için buradayım.';
-  }
-
-  @override
-  String get homeProactiveRecentNotes =>
-      'son yazdıklarını okudum, konuşmak ister misin?';
-
-  @override
-  String get homeProactiveDefault => 'bugün nasıl geçiyor?';
-
-  @override
   String get homeMoodQuestion => 'şu an nasılsın?';
 
   @override
@@ -679,24 +664,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get exploreSeeAllArrow => 'hepsi →';
-
-  @override
-  String get exploreStoryBreathing => 'nefes';
-
-  @override
-  String get exploreStorySleep => 'uyku';
-
-  @override
-  String get exploreStoryWater => 'su';
-
-  @override
-  String get exploreStoryMovement => 'hareket';
-
-  @override
-  String get exploreStoryMeditation => 'meditasyon';
-
-  @override
-  String get exploreStorySelfCare => 'öz-bakım';
 
   @override
   String get exploreRitualsLabel => 'RİTÜELLER';
@@ -1167,9 +1134,6 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get ilndServiceGenericError =>
       'Bir şeyler ters gitti. Birazdan tekrar dener misin?';
-
-  @override
-  String get ekleTitle => 'ekle.';
 
   @override
   String get ekleFoodTitle => 'yemek';
