@@ -47,6 +47,12 @@ void main() async {
         appleProvider: kDebugMode
             ? AppleProvider.debug
             : AppleProvider.appAttest,
+        // Web'de sağlayıcı YOKSA geçerli token üretilemez. Anahtar .env'e
+        // eklenene kadar null kalır; fonksiyonlarda enforcement bu yüzden
+        // hâlâ kapalı (açılırsa web kilitlenir — bkz. AppConfig).
+        webProvider: AppConfig.isWebAppCheckConfigured
+            ? ReCaptchaV3Provider(AppConfig.recaptchaSiteKey)
+            : null,
       );
     } catch (e, st) {
       debugPrint('[main] FirebaseAppCheck.activate failed: $e\n$st');

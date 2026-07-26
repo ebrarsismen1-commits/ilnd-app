@@ -65,6 +65,20 @@ abstract final class AppConfig {
     defaultValue: '',
   );
 
+  // ── App Check (web) ─────────────────────────────────────────────────────────
+  // reCAPTCHA v3 site anahtarı. Android/iOS'ta Play Integrity/App Attest
+  // otomatik çalışır ama WEB için bu anahtar şart — boşken web'de geçerli
+  // App Check token'ı üretilemez, dolayısıyla fonksiyonlarda enforcement
+  // AÇILAMAZ (açılırsa web kullanıcıları tamamen kilitlenir). Anahtar Firebase
+  // Console → App Check → Web'den alınır ve .env'e RECAPTCHA_SITE_KEY olarak
+  // eklenir.
+  static const recaptchaSiteKey = String.fromEnvironment(
+    'RECAPTCHA_SITE_KEY',
+    defaultValue: '',
+  );
+
+  static bool get isWebAppCheckConfigured => recaptchaSiteKey.isNotEmpty;
+
   // ── Auth köprüsü (Supabase JWT -> Firebase custom token) ──────────────────────
   // functions/index.js'teki mintFirebaseToken endpoint'i. Deploy edilince
   // https://<region>-<project-id>.cloudfunctions.net/mintFirebaseToken olur.

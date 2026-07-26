@@ -142,6 +142,57 @@ async function checkAndIncrementUsage(uid, tier) {
   });
 }
 
+// Girdi tavanları. Metin ve görsel AYRI sınırlanır çünkü maliyetleri çok
+// farklı: 1MB metin ~250k token (pahalı), 1MB görsel ~1.6k token (ucuz).
+// Tek bir "gövde boyutu" sınırı ya fotoğrafı bloklar ya metni serbest bırakır.
+const MAX_BODY_BYTES = 8 * 1024 * 1024; // fotoğraf (istemci 4MB'a kırpar) + pay
+const MAX_MESSAGES = 30; // sohbet penceresi 8 tur; 30 fazlasıyla yeterli
+const MAX_TEXT_CHARS = 100000; // ~25k token → çağrı başı girdi maliyeti sınırlı
+const MAX_IMAGES = 2;
+
+/**
+ * Rejects oversized payloads before they reach Anthropic. Returns null when
+ * the request is fine, or `{status, error}` describing the violation.
+ * @param {import("firebase-functions/v2/https").Request} req incoming request
+ * @param {unknown} system system prompt from the body (may be absent)
+ * @param {Array<unknown>} messages the messages array from the body
+ * @return {{status: number, error: string}|null} violation, or null if OK
+ */
+function validateInputSize(req, system, messages) {
+  const bytes = req.rawBody ?
+    req.rawBody.length :
+    Buffer.byteLength(JSON.stringify(req.body || {}));
+  if (bytes > MAX_BODY_BYTES) {
+    return {status: 413, error: "Payload too large"};
+  }
+  if (messages.length > MAX_MESSAGES) {
+    return {status: 400, error: "Too many messages"};
+  }
+
+  let textChars = typeof system === "string" ? system.length : 0;
+  let images = 0;
+  for (const msg of messages) {
+    const content = msg && msg.content;
+    if (typeof content === "string") {
+      textChars += content.length;
+      continue;
+    }
+    if (!Array.isArray(content)) continue;
+    for (const block of content) {
+      if (!block || typeof block !== "object") continue;
+      if (block.type === "image") images++;
+      if (typeof block.text === "string") textChars += block.text.length;
+    }
+  }
+  if (textChars > MAX_TEXT_CHARS) {
+    return {status: 400, error: "Input text too long"};
+  }
+  if (images > MAX_IMAGES) {
+    return {status: 400, error: "Too many images"};
+  }
+  return null;
+}
+
 /**
  * Server-side proxy for Anthropic's Messages API. Holds the API key,
  * authenticates the caller via Firebase ID token, and enforces a daily
@@ -176,6 +227,15 @@ exports.anthropicProxy = onRequest(
       const config = TIER_CONFIG[tier];
       if (!config || !Array.isArray(messages) || messages.length === 0) {
         res.status(400).json({error: "Invalid request body"});
+        return;
+      }
+
+      // Girdi sınırları — max_tokens yalnız ÇIKTIYI sınırlar. Bu olmadan
+      // geçerli bir hesap günlük çağrı hakkını devasa bağlamlarla harcayıp
+      // ciddi fatura çıkarabilir (denetim bulgusu, 2026-07-24).
+      const sizeErr = validateInputSize(req, system, messages);
+      if (sizeErr) {
+        res.status(sizeErr.status).json({error: sizeErr.error});
         return;
       }
 

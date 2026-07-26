@@ -93,8 +93,83 @@ describe("anthropicProxy", () => {
         ([url]) => url.includes("api.anthropic.com"),
     );
     const forwardedBody = JSON.parse(fetchOptions.body);
-    expect(forwardedBody.model).toBe("claude-haiku-4-5");
+    // quick tier 2026-07-08'de Haiku'dan Sonnet'e geçti (Türkçe kalitesi);
+    // bu assert güncellenmemişti — denetimde yakalandı (2026-07-24).
+    expect(forwardedBody.model).toBe("claude-sonnet-4-6");
     expect(forwardedBody.max_tokens).toBe(512);
+  });
+
+  // ── Girdi sınırları (denetim bulgusu 2026-07-24) ─────────────────────────
+  // max_tokens yalnız ÇIKTIYI sınırlar. Bu testler, geçerli bir hesabın
+  // devasa girdilerle fatura şişirmesini engelleyen tavanları kilitler.
+  describe("girdi sınırları", () => {
+    test("çok uzun metni reddeder (fatura koruması)", async () => {
+      const idToken = await getIdTokenForUid("ai-limit-1");
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        messages: [{role: "user", content: "x".repeat(100001)}],
+      });
+      expect(res.statusCode).toBe(400);
+      expect(global.fetch).not.toHaveBeenCalledWith(
+          expect.stringContaining("api.anthropic.com"),
+          expect.anything(),
+      );
+    });
+
+    test("system prompt'u da metin bütçesine sayar", async () => {
+      const idToken = await getIdTokenForUid("ai-limit-2");
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        system: "y".repeat(99000),
+        messages: [{role: "user", content: "z".repeat(2000)}],
+      });
+      expect(res.statusCode).toBe(400);
+    });
+
+    test("çok fazla mesajı reddeder", async () => {
+      const idToken = await getIdTokenForUid("ai-limit-3");
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        messages: Array.from({length: 31}, () => ({role: "user", content: "hi"})),
+      });
+      expect(res.statusCode).toBe(400);
+    });
+
+    test("çok fazla görseli reddeder", async () => {
+      const idToken = await getIdTokenForUid("ai-limit-4");
+      const img = {
+        type: "image",
+        source: {type: "base64", media_type: "image/jpeg", data: "AAAA"},
+      };
+      const res = await callProxy(idToken, {
+        tier: "deep",
+        messages: [{role: "user", content: [img, img, img]}],
+      });
+      expect(res.statusCode).toBe(400);
+    });
+
+    test("gerçek yemek fotoğrafı akışı (tek görsel + kısa metin) GEÇER", async () => {
+      const idToken = await getIdTokenForUid("ai-limit-5");
+      const res = await callProxy(idToken, {
+        tier: "deep",
+        messages: [{
+          role: "user",
+          content: [
+            {
+              type: "image",
+              source: {
+                type: "base64",
+                media_type: "image/jpeg",
+                // ~1MB base64 görsel — istemcinin ürettiğine yakın boyut.
+                data: "A".repeat(1024 * 1024),
+              },
+            },
+            {type: "text", text: "Yukarıdaki fotoğraftaki yemeği analiz et."},
+          ],
+        }],
+      });
+      expect(res.statusCode).toBe(200);
+    });
   });
 
   test("enforces the per-tier daily usage cap server-side", async () => {

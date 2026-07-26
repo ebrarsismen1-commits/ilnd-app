@@ -21,8 +21,14 @@ service cloud.firestore {
     // functions/index.js'teki redeemReferralCode (Admin SDK, transaction)
     // tarafından yazılır. Önceki sürümde bu kural `allow write: if true`
     // idi ve herkes kendine sınırsız premium verebiliyordu (P0, kapatıldı).
+    // Okuma SADECE kendi dokümanın: eskiden tüm girişli kullanıcılar bütün
+    // koleksiyonu okuyabiliyordu — herkesin davet kodu ve "kimi kim davet
+    // etti" grafiği dışarı sızıyordu (denetim bulgusu, 2026-07-24). Kod
+    // çakışma kontrolü için gereken koleksiyon-geneli sorgu kaldırıldı;
+    // yerine daha uzun (8 karakter) kod üretiliyor — bkz.
+    // referral_repository.ensureReferralCode.
     match /user_growth/{userId} {
-      allow read: if request.auth != null;
+      allow read: if request.auth != null && request.auth.uid == userId;
       allow create: if request.auth != null
         && request.auth.uid == userId
         && request.resource.data.founding_member == false
@@ -32,9 +38,11 @@ service cloud.firestore {
     }
 
     // Append-only referral kayıtları — sadece redeemReferralCode (Admin SDK)
-    // yazar. İstatistik/sayaç amaçlı herkes (authenticated) okuyabilir.
+    // yazar VE okur. İstemciye kapalı: hiçbir ekran bu koleksiyonu okumuyor,
+    // açık bırakmak yalnızca sosyal grafiği (kim kimi davet etti) sızdırıyordu
+    // (denetim bulgusu, 2026-07-24). Admin SDK kuralları baypas eder.
     match /referrals/{referralId} {
-      allow read: if request.auth != null;
+      allow read: if false;
       allow create, update, delete: if false;
     }
 
@@ -81,10 +89,15 @@ service cloud.firestore {
     // Sosyal kanıt sayacı için anonim, kullanıcı başına günde tek doküman.
     // Toplam aktif kullanıcı sayısını saymak için herkes (authenticated)
     // okuyabilir; her kullanıcı sadece kendi kaydını yazabilir.
+    // Doküman kimliği ZORUNLU olarak "{uid}_{tarih}" — eskiden yalnız userId
+    // alanına bakılıyordu, bu yüzden herhangi bir kullanıcı istediği id'yle
+    // sınırsız kayıt üretip sayacı şişirebiliyordu (denetim bulgusu,
+    // 2026-07-24). Kimlik sabitlenince kullanıcı-gün başına tek kayıt kalır.
     match /daily_checkins/{checkinId} {
       allow read: if request.auth != null;
       allow create, update: if request.auth != null
-        && request.resource.data.userId == request.auth.uid;
+        && request.resource.data.userId == request.auth.uid
+        && checkinId == request.auth.uid + '_' + request.resource.data.date;
       allow delete: if false;
     }
   }

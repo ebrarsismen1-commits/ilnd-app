@@ -76,7 +76,12 @@ class ReferralRepository {
 
   static const _codeChars =
       'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 0/O, 1/I/L hariç
-  static const _codeLength = 6;
+  // 8 karakter = 32^8 ≈ 1.1 trilyon kombinasyon. Uzunluk 6'dan 8'e çıktı
+  // çünkü çakışma kontrolü kaldırıldı: o kontrol koleksiyon-geneli okuma
+  // gerektiriyordu ve bu, herkesin davet kodunu görünür kılıyordu (güvenlik
+  // denetimi 2026-07-24). 8 karakterde 100 bin kullanıcıda bile çakışma
+  // olasılığı binde 5'in altında. Mevcut 6 karakterli kodlar geçerli kalır.
+  static const _codeLength = 8;
 
   CollectionReference<Map<String, dynamic>> get _userGrowthCol =>
       FirebaseService.firestore.collection('user_growth');
@@ -89,15 +94,10 @@ class ReferralRepository {
     final existingCode = existing.data()?['referral_code'] as String?;
     if (existingCode != null && existingCode.isNotEmpty) return existingCode;
 
-    String code = _generateCode();
-    for (var attempt = 0; attempt < 5; attempt++) {
-      final clash = await _userGrowthCol
-          .where('referral_code', isEqualTo: code)
-          .limit(1)
-          .get();
-      if (clash.docs.isEmpty) break;
-      code = _generateCode();
-    }
+    // Çakışma sorgusu bilerek YOK: koleksiyon-geneli okuma gerektiriyordu,
+    // o da tüm kullanıcıların davet kodunu okunabilir yapıyordu. Kod uzunluğu
+    // 8'e çıkarılarak çakışma olasılığı ihmal edilebilir seviyeye indirildi.
+    final code = _generateCode();
 
     await _userGrowthCol.doc(_userId).set({
       'referral_code': code,
