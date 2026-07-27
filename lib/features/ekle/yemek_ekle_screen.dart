@@ -127,7 +127,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         _portion = 1.0;
         _phase = _Phase.result;
       });
-      await ref.read(usageGateProvider).record(UsageKind.food);
+      ref.read(usageGateProvider).record(UsageKind.food);
       await _addIlndComment(demo, l10n);
       return;
     }
@@ -169,6 +169,8 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       // client binary.
       final body = jsonEncode({
         'tier': 'deep',
+        // Hesabın haftalık ücretsiz katman kotasından düşsün (sunucuda).
+        'kind': 'food',
         // 1 — Task + role
         'system':
             'Sen dikkatli, dürüst bir beslenme analiz uzmanısın. Bir yemek '
@@ -242,6 +244,22 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
           .timeout(const Duration(seconds: 60));
 
       if (response.statusCode == 429) {
+        // Haftalık ücretsiz hak dolduysa bu bir hata değil, paywall anıdır —
+        // hak başka bir cihazda harcanmış olabileceği için yerel sayaç bunu
+        // önceden bilemez.
+        if (isFreeWeeklyLimit(response)) {
+          ref.read(usageGateProvider).markExhausted(UsageKind.food);
+          if (!mounted) return;
+          setState(() {
+            _photoBytes = null;
+            _phase = _Phase.picker;
+          });
+          await PaywallScreen.show(
+            context,
+            reason: l10n.yemekEklePaywallReason,
+          );
+          return;
+        }
         _setError(l10n.yemekEkleAnalysisFailed);
         return;
       }
@@ -272,7 +290,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       }
 
       // Başarılı analizi say (premium'da sayılmaz).
-      await ref.read(usageGateProvider).record(UsageKind.food);
+      ref.read(usageGateProvider).record(UsageKind.food);
 
       // ILND'nin diyetisyen-dost yorumu (sayaç değil, karşılık).
       await _addIlndComment(result, l10n);

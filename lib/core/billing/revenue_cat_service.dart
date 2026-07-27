@@ -20,6 +20,33 @@ class RevenueCatService {
     await Purchases.configure(PurchasesConfiguration(apiKey));
   }
 
+  /// Aboneliği ILND hesabına bağlar (RevenueCat app_user_id = Firebase uid).
+  ///
+  /// İki nedenle şart: (1) kullanıcı telefonda aldığı aboneliği web'de de
+  /// görsün — anonim id'de abonelik cihazda kalır; (2) sunucu
+  /// (functions/index.js → hasRevenueCatPremium) hesabın abone olup
+  /// olmadığını uid ile sorabilsin, aksi halde gerçek aboneler ücretsiz
+  /// katman kotasına takılır.
+  static Future<void> identify(String uid) async {
+    if (uid.isEmpty) return;
+    try {
+      await Purchases.logIn(uid);
+    } catch (e) {
+      // Yapılandırılmamış (dev) veya desteklenmeyen platform — akışı kırma.
+      debugPrint('[RevenueCat] identify error: $e');
+    }
+  }
+
+  /// Çıkışta anonim kimliğe döner; sonraki kullanıcı öncekinin hakkını
+  /// görmesin.
+  static Future<void> forget() async {
+    try {
+      await Purchases.logOut();
+    } catch (e) {
+      debugPrint('[RevenueCat] forget error: $e');
+    }
+  }
+
   /// Returns true if the current user has an active premium entitlement.
   static Future<bool> isPremium() async {
     try {

@@ -67,7 +67,11 @@ describe("deleteAccount", () => {
     expect(growthDoc.exists).toBe(false);
 
     await expect(admin.auth().getUser(uid)).rejects.toThrow();
-  });
+    // Testteki en ağır akış: alt koleksiyonlu subtree + user_growth +
+    // referrals + ai_usage + Storage + Auth silme. Yavaş bir makinede
+    // jest'in 5 sn varsayılanını aşıyordu — bu bir performans hatası değil,
+    // varsayılanın dar olması (anthropicProxy testlerindeki desen).
+  }, 30000);
 
   test("removes referrals where the deleted user was the referred party", async () => {
     const uid = "to-delete-2";

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:ilnd_app/core/billing/usage_meter.dart';
 import 'package:ilnd_app/core/ilnd/ai_json.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_character.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
@@ -73,6 +74,10 @@ class IlndService {
   /// veya çağrı başarısız olursa — hata fırlatmak yerine bu karakter-içi
   /// cevabı döndürür. Demoyu kurşun geçirmez yapar: kullanıcı asla hata
   /// balonu görmez.
+  /// [meterAs] verilirse çağrı, hesabın haftalık ücretsiz katman kotasından
+  /// düşer (sunucuda; bkz. functions/index.js). Verilmezse çağrı "system"
+  /// sayılır: karşılama, hafıza çıkarımı, öneri gibi kullanıcının bilerek
+  /// başlatmadığı yardımcı çağrılar kotadan düşmez.
   Future<String> respond({
     required IlndMemory memory,
     required String userMessage,
@@ -81,6 +86,7 @@ class IlndService {
     String? task,
     IlndTier tier = IlndTier.quick,
     String? fallback,
+    UsageKind? meterAs,
   }) async {
     if (!AppConfig.isAnthropicProxyConfigured) {
       if (fallback != null) return fallback;
@@ -96,6 +102,7 @@ class IlndService {
 
       final response = await _callProxy({
         'tier': tier.name,
+        if (meterAs != null) 'kind': meterAs.name,
         'system': IlndCharacter.systemPrompt(
           memory: memory,
           task: task,
@@ -105,6 +112,9 @@ class IlndService {
       }, l10n);
 
       if (response.statusCode == 429) {
+        if (meterAs != null && isFreeWeeklyLimit(response)) {
+          throw IlndFreeLimitException(meterAs);
+        }
         throw IlndServiceException(l10n.ilndServiceDailyLimitReached);
       }
       if (response.statusCode != 200) {
@@ -117,6 +127,10 @@ class IlndService {
           jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       final content = decoded['content'] as List;
       return (content.first['text'] as String).trim();
+    } on IlndFreeLimitException {
+      // Kota duvarı karakter-içi bir cevapla gizlenemez: kullanıcıya paywall
+      // gösterilmesi gerekiyor, fallback'e düşülürse bunu hiç öğrenemez.
+      rethrow;
     } catch (e) {
       if (fallback != null) return fallback;
       rethrow;
@@ -271,6 +285,28 @@ class IlndServiceException implements Exception {
   final String message;
   @override
   String toString() => message;
+}
+
+/// Hesabın haftalık ücretsiz katman kotası doldu (sunucu 429 +
+/// `reason: free-weekly-limit`). Hata değil, paywall sinyalidir: mesaj
+/// taşımaz, çünkü kullanıcıya gösterilecek metin ekranın kendisine aittir.
+class IlndFreeLimitException implements Exception {
+  const IlndFreeLimitException(this.kind);
+  final UsageKind kind;
+  @override
+  String toString() => 'IlndFreeLimitException(${kind.name})';
+}
+
+/// 429 yanıtının, hesabın ücretsiz katman kotasından mı (paywall) yoksa
+/// günlük kötüye-kullanım tavanından mı (yarın tekrar dene) geldiğini söyler.
+bool isFreeWeeklyLimit(http.Response response) {
+  try {
+    final body =
+        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+    return body['reason'] == 'free-weekly-limit';
+  } catch (_) {
+    return false;
+  }
 }
 
 final ilndServiceProvider = Provider<IlndService>((ref) => const IlndService());

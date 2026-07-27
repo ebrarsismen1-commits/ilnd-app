@@ -2,8 +2,20 @@ const {execSync} = require("child_process");
 const path = require("path");
 const admin = require("firebase-admin");
 
+// Diğer test dosyaları ../index'i import ettiği için initializeApp() orada
+// çalışıyor; bu dosya yalnız seed SCRIPT'ini test ediyor ve index'e hiç
+// dokunmuyor. Jest her test dosyasına ayrı bir modül kaydı verdiğinden
+// varsayılan app burada hiç oluşmuyordu ve suite "The default Firebase app
+// does not exist" ile daha ilk satırda düşüyordu.
+if (admin.apps.length === 0) admin.initializeApp();
+
 const db = admin.firestore();
 const SCRIPT_PATH = path.join(__dirname, "..", "scripts", "seedArticles.js");
+
+// Her vaka seed script'ini AYRI bir node süreci olarak (bazıları iki kez)
+// çalıştırıyor; süreç başlatma + emülatöre yazma jest'in 5 sn varsayılanına
+// sığmıyor. Yavaşlık testin değil, kurulumun doğası.
+jest.setTimeout(30000);
 
 /**
  * @param {string[]} args extra CLI args, e.g. ["--prune"].

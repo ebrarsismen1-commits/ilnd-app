@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
+import 'package:ilnd_app/core/billing/usage_meter.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_models.dart';
@@ -24,6 +25,7 @@ class _FakeIlndService extends IlndService {
     String? task,
     IlndTier tier = IlndTier.quick,
     String? fallback,
+    UsageKind? meterAs,
   }) async {
     if (throws) throw const IlndServiceException('offline');
     return reply!;

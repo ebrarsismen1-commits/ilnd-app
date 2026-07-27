@@ -35,6 +35,9 @@ Before tagging `v1.0.0`, all of the following must pass:
 ### Firebase
 1. `firebase deploy --only functions` — deploys all Cloud Functions
 2. `firebase deploy --only firestore` — deploys rules + indexes
+   (the `ai_usage` rule is required for the app to show remaining free-tier
+   quota; without it the counter reads permission-denied and the paywall only
+   appears after the server's 429)
 3. Verify Crashlytics is enabled in Firebase console for the project
 4. Verify App Check is configured (Play Integrity / App Attest) in console
 5. Register debug App Check token for CI (`FIREBASE_APP_CHECK_TEST_APP_ID`)
@@ -51,6 +54,13 @@ npm run seed:articles   # populates Firestore 'articles' collection
 2. Set up RevenueCat entitlements matching `kIlndPlusPremium` (or update the
    offering ID in `revenue_cat_service.dart`)
 3. Add RevenueCat API key to `.env` (`REVENUECAT_API_KEY`)
+4. **Add the RevenueCat *secret* key to `functions/.env`
+   (`REVENUECAT_SECRET_KEY`) before selling subscriptions.** The weekly free
+   tier is enforced server-side per account (`anthropicProxy`); without this
+   key the server cannot see store subscriptions, so paying subscribers would
+   hit the free-tier wall. The client binds the subscription to the account
+   via `Purchases.logIn(uid)` (`RevenueCatService.identify`), which is what
+   makes the server-side lookup by uid possible.
 
 ---
 

@@ -187,6 +187,183 @@ describe("anthropicProxy", () => {
     expect(capped.statusCode).toBe(429);
   }, 30000);
 
+  // ── Hesap bazlı haftalık ücretsiz kota ───────────────────────────────────
+  // Kota eskiden istemcide (SharedPreferences) tutuluyordu: kullanıcı web'e
+  // geçince, uygulamayı silip kurunca veya depolamayı temizleyince sıfırdan
+  // başlıyordu. Bu testler sayacın hesaba (uid) bağlı olduğunu kilitler —
+  // istemciden gelen HİÇBİR durum sayaca dokunmaz.
+  describe("haftalık ücretsiz kota", () => {
+    const weekKey = () => `W${Math.floor((Math.floor(Date.now() / 86400000) + 3) / 7)}`;
+
+    test("sohbet mesajını haftalık kotadan düşer ve 20'de duvara çarpar", async () => {
+      const uid = "week-user-1";
+      const idToken = await getIdTokenForUid(uid);
+      const body = {tier: "quick", kind: "message", messages: [{role: "user", content: "hi"}]};
+
+      for (let i = 0; i < 20; i++) {
+        const res = await callProxy(idToken, body);
+        expect(res.statusCode).toBe(200);
+      }
+
+      const capped = await callProxy(idToken, body);
+      expect(capped.statusCode).toBe(429);
+      expect(capped.body.reason).toBe("free-weekly-limit");
+      expect(capped.body.limit).toBe(20);
+    }, 30000);
+
+    test("sayaç cihaza değil hesaba yazılır", async () => {
+      const uid = "week-user-2";
+      const idToken = await getIdTokenForUid(uid);
+      await callProxy(idToken, {
+        tier: "quick",
+        kind: "message",
+        messages: [{role: "user", content: "hi"}],
+      });
+
+      const doc = await db.collection("ai_usage").doc(`${uid}_${weekKey()}`).get();
+      expect(doc.exists).toBe(true);
+      expect(doc.data().counts).toEqual({message: 1});
+      expect(doc.data().uid).toBe(uid);
+    });
+
+    test("başka bir cihazdan gelen taze istek de aynı sayaca takılır", async () => {
+      const uid = "week-user-3";
+      // Kotanın dolduğu durumu doğrudan sayaç dokümanına yaz: yeni cihazın
+      // yerel durumu boş olsa bile sunucu aynı hesabı sınırda görmeli.
+      await db.collection("ai_usage").doc(`${uid}_${weekKey()}`).set({
+        uid,
+        period: weekKey(),
+        counts: {food: 5},
+      });
+
+      const freshDeviceToken = await getIdTokenForUid(uid);
+      const res = await callProxy(freshDeviceToken, {
+        tier: "deep",
+        kind: "food",
+        messages: [{role: "user", content: "photo"}],
+      });
+
+      expect(res.statusCode).toBe(429);
+      expect(res.body.reason).toBe("free-weekly-limit");
+    });
+
+    test("yardımcı (system) çağrılar kotadan düşmez", async () => {
+      const uid = "week-user-4";
+      const idToken = await getIdTokenForUid(uid);
+      // kind yok = karşılama/hafıza/öneri gibi kullanıcının saymadığı çağrı.
+      await callProxy(idToken, {tier: "quick", messages: [{role: "user", content: "hi"}]});
+
+      const doc = await db.collection("ai_usage").doc(`${uid}_${weekKey()}`).get();
+      expect(doc.exists).toBe(false);
+    });
+
+    test("tanınmayan kind'i reddeder", async () => {
+      const idToken = await getIdTokenForUid("week-user-5");
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        kind: "unlimited",
+        messages: [{role: "user", content: "hi"}],
+      });
+      expect(res.statusCode).toBe(400);
+    });
+
+    test("türler birbirinin kotasını yemez", async () => {
+      const uid = "week-user-6";
+      const idToken = await getIdTokenForUid(uid);
+      await db.collection("ai_usage").doc(`${uid}_${weekKey()}`).set({
+        uid,
+        period: weekKey(),
+        counts: {food: 5},
+      });
+
+      // Yemek hakkı bitti ama sohbet hakkı duruyor.
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        kind: "message",
+        messages: [{role: "user", content: "hi"}],
+      });
+      expect(res.statusCode).toBe(200);
+    });
+
+    test("premium hesap haftalık kotadan muaf", async () => {
+      const uid = "week-premium-1";
+      const idToken = await getIdTokenForUid(uid);
+      await db.collection("ai_usage").doc(`${uid}_${weekKey()}`).set({
+        uid,
+        period: weekKey(),
+        counts: {message: 20},
+      });
+      // Sunucunun kendi yazdığı ödül premium'u (redeemReferralCode deseni).
+      await db.collection("user_growth").doc(uid).set({
+        referral_code: "PREMIUM1",
+        founding_member: true,
+        premium_access_until: admin.firestore.Timestamp.fromDate(
+            new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        ),
+        referred_by_code: null,
+      });
+
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        kind: "message",
+        messages: [{role: "user", content: "hi"}],
+      });
+      expect(res.statusCode).toBe(200);
+
+      // Muafiyet sayacı da şişirmemeli — premium'un kullanımı kotaya yazılmaz.
+      const doc = await db.collection("ai_usage").doc(`${uid}_${weekKey()}`).get();
+      expect(doc.data().counts.message).toBe(20);
+
+      await db.collection("user_growth").doc(uid).delete();
+    });
+
+    test("süresi geçmiş ödül premium'u muafiyet vermez", async () => {
+      const uid = "week-premium-2";
+      const idToken = await getIdTokenForUid(uid);
+      await db.collection("ai_usage").doc(`${uid}_${weekKey()}`).set({
+        uid,
+        period: weekKey(),
+        counts: {message: 20},
+      });
+      await db.collection("user_growth").doc(uid).set({
+        referral_code: "EXPIRED1",
+        founding_member: true,
+        premium_access_until: admin.firestore.Timestamp.fromDate(
+            new Date(Date.now() - 24 * 60 * 60 * 1000),
+        ),
+        referred_by_code: null,
+      });
+
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        kind: "message",
+        messages: [{role: "user", content: "hi"}],
+      });
+      expect(res.statusCode).toBe(429);
+
+      await db.collection("user_growth").doc(uid).delete();
+    });
+
+    test("istemcinin 'premium' beyanı sayacı deldiremez", async () => {
+      const uid = "week-user-7";
+      const idToken = await getIdTokenForUid(uid);
+      await db.collection("ai_usage").doc(`${uid}_${weekKey()}`).set({
+        uid,
+        period: weekKey(),
+        counts: {message: 20},
+      });
+
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        kind: "message",
+        premium: true,
+        isPremium: true,
+        messages: [{role: "user", content: "hi"}],
+      });
+      expect(res.statusCode).toBe(429);
+    });
+  });
+
   test("tracks quick/deep usage independently per user", async () => {
     const idToken = await getIdTokenForUid("ai-user-5");
     await callProxy(idToken, {tier: "quick", messages: [{role: "user", content: "hi"}]});

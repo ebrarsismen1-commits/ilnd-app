@@ -21,6 +21,16 @@ const JWKS = SUPABASE_URL ?
 const ANTHROPIC_API_KEY = defineSecret("ANTHROPIC_API_KEY");
 const SUPABASE_SERVICE_ROLE_KEY = defineSecret("SUPABASE_SERVICE_ROLE_KEY");
 
+// RevenueCat "secret" (v1) API anahtarı — hesabın gerçekten abone olup
+// olmadığını SUNUCUDAN doğrulamak için. functions/.env üzerinden gelir
+// (SUPABASE_URL ile aynı mekanizma) ve İSTEĞE BAĞLIDIR: yoksa abonelik
+// doğrulanamaz, yalnız sunucunun kendi yazdığı ödül-premium'u (referral)
+// bilinir. Mağaza aboneliği canlıya alınmadan ÖNCE bu anahtar girilmeli,
+// yoksa gerçek aboneler ücretsiz katman sınırına takılır.
+const REVENUECAT_SECRET_KEY = process.env.REVENUECAT_SECRET_KEY || "";
+// lib/core/billing/revenue_cat_service.dart'taki _kEntitlement ile aynı.
+const REVENUECAT_ENTITLEMENT = "premium";
+
 /**
  * Supabase oturum JWT'sini doğrulayıp aynı user id (uid) ile bir Firebase
  * custom token üretir. ILND auth Supabase üzerinden yapılıyor ama Firestore
@@ -115,31 +125,200 @@ const TIER_CONFIG = {
   deep: {model: "claude-sonnet-4-6", maxTokens: 1024, dailyLimit: 60},
 };
 
+// ─── Hesap bazlı ücretsiz katman kotası ─────────────────────────────────────
+
+// Ücretsiz katmanın HAFTALIK sınırları. lib/core/billing/usage_meter.dart'taki
+// kFreeWeeklyLimits ile birebir aynı olmalı: istemci bu değerleri yalnız
+// paywall'ı ne zaman göstereceğini bilmek için kullanır, gerçek karar burada
+// verilir.
+const FREE_WEEKLY_LIMITS = {message: 20, food: 5};
+
+// Kotadan düşen (kullanıcının bilerek başlattığı) eylem türleri. Bunun
+// dışındaki her çağrı "system" sayılır: karşılama mesajı, hafıza çıkarımı,
+// öneri üretimi gibi kullanıcının saymadığı yardımcı çağrılar — bunlar
+// haftalık kotadan düşmez, yalnız aşağıdaki günlük kademe tavanına tabidir.
+const METERED_KINDS = ["message", "food"];
+const KNOWN_KINDS = ["system", ...METERED_KINDS];
+
+// Doğrulanmış premium sonucu bu kadar süre önbelleklenir. Yalnız POZİTİF
+// sonuç önbelleklenir: "premium değil" saklansaydı, aboneliği yeni satın
+// alan kullanıcı saatlerce sınırda kalırdı.
+const PREMIUM_CACHE_MS = 6 * 60 * 60 * 1000;
+
 /**
- * Checks and atomically increments the caller's daily AI usage counter for
- * [tier]. Storing the cap server-side (keyed on Firebase uid, not a client
- * value) is what makes this unbypassable by clearing local app storage.
+ * UTC tabanlı, PAZARTESİ başlayan hafta kovası (ör. "W2951").
+ *
+ * lib/core/billing/usage_meter.dart'taki `usageWeekKey` ile BİREBİR aynı
+ * formül: farklı olurlarsa istemci sunucunun yazdığından başka bir dokümanı
+ * okur ve kalan hak yanlış görünür. Epoch günü 0 = 1 Ocak 1970 Perşembe,
+ * bu yüzden +3 kaydırma kovaları pazartesiye hizalar. Yerel saat dilimi
+ * bilerek kullanılmaz — kullanıcı uçakta saat dilimi değiştirince haftası
+ * sıfırlanmamalı.
+ * @param {number} [nowMs] epoch milisaniye (test için)
+ * @return {string} hafta anahtarı
+ */
+function currentWeekKey(nowMs = Date.now()) {
+  const days = Math.floor(nowMs / 86400000);
+  return `W${Math.floor((days + 3) / 7)}`;
+}
+
+/**
+ * Checks and atomically increments the caller's usage counters. Two caps are
+ * enforced in one transaction:
+ *   1. günlük kademe tavanı (kötüye kullanım/fatura koruması, her kullanıcı),
+ *   2. haftalık ücretsiz katman kotası (yalnız [kind] ölçülen bir türse ve
+ *      kullanıcı premium değilse).
+ *
+ * Her iki sayaç da Firebase uid'ine bağlıdır — cihaza değil. Kullanıcı web'e
+ * geçse, uygulamayı silip kursa ya da yerel depolamayı temizlese de aynı
+ * sayaç devam eder (bu, sayacın SharedPreferences'ta tutulduğu sürümde
+ * yaşanan hataydı: her cihaz kendi kotasını sıfırdan başlatıyordu).
  * @param {string} uid Firebase uid of the caller
  * @param {string} tier "quick" or "deep"
- * @return {Promise<boolean>} true if the call is allowed, false if capped
+ * @param {string} kind "message" | "food" | "system"
+ * @param {boolean} freeQuotaApplies false = premium (haftalık kota atlanır)
+ * @return {Promise<{allowed: boolean, reason?: string, used?: number,
+ *   limit?: number}>} karar
  */
-async function checkAndIncrementUsage(uid, tier) {
+async function checkAndIncrementUsage(uid, tier, kind, freeQuotaApplies) {
   const day = new Date().toISOString().slice(0, 10);
-  const ref = db.collection("ai_usage").doc(`${uid}_${day}`);
+  const week = currentWeekKey();
+  const dayRef = db.collection("ai_usage").doc(`${uid}_${day}`);
+  const weekRef = db.collection("ai_usage").doc(`${uid}_${week}`);
+  const metered = freeQuotaApplies && METERED_KINDS.includes(kind);
+
   return db.runTransaction(async (tx) => {
-    const snap = await tx.get(ref);
-    const counts = snap.exists ? (snap.data().counts || {}) : {};
-    const used = counts[tier] || 0;
-    if (used >= TIER_CONFIG[tier].dailyLimit) return false;
-    counts[tier] = used + 1;
-    tx.set(ref, {
+    // Firestore transaction'ında TÜM okumalar yazmalardan önce gelmeli.
+    const daySnap = await tx.get(dayRef);
+    const weekSnap = metered ? await tx.get(weekRef) : null;
+
+    const dayCounts = daySnap.exists ? (daySnap.data().counts || {}) : {};
+    const dayUsed = dayCounts[tier] || 0;
+    if (dayUsed >= TIER_CONFIG[tier].dailyLimit) {
+      return {allowed: false, reason: "daily-tier-limit"};
+    }
+
+    if (metered) {
+      const weekCounts = weekSnap.exists ? (weekSnap.data().counts || {}) : {};
+      const used = weekCounts[kind] || 0;
+      const limit = FREE_WEEKLY_LIMITS[kind];
+      if (used >= limit) {
+        return {allowed: false, reason: "free-weekly-limit", used, limit};
+      }
+      weekCounts[kind] = used + 1;
+      tx.set(weekRef, {
+        uid,
+        period: week,
+        counts: weekCounts,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      }, {merge: true});
+    }
+
+    dayCounts[tier] = dayUsed + 1;
+    tx.set(dayRef, {
       uid,
       day,
-      counts,
+      counts: dayCounts,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     }, {merge: true});
-    return true;
+    return {allowed: true};
   });
+}
+
+/**
+ * Whether the server can prove this account is premium. İki kaynak:
+ *   1. user_growth.premium_access_until — referral ödülü, zaten yalnız
+ *      redeemReferralCode (Admin SDK) yazabiliyor, dolayısıyla güvenilir.
+ *   2. RevenueCat aboneliği — anahtar yapılandırıldıysa REST ile doğrulanır.
+ *
+ * İstemcinin "ben premium'um" beyanına BİLEREK bakılmaz: bakılsaydı sayacı
+ * sunucuya taşımanın anlamı kalmazdı, herkes o bayrağı gönderebilirdi.
+ * @param {string} uid Firebase uid
+ * @return {Promise<boolean>} true if premium
+ */
+async function resolvePremium(uid) {
+  const cacheRef = db.collection("ai_usage").doc(`${uid}_premium`);
+  try {
+    const snap = await cacheRef.get();
+    const data = snap.exists ? (snap.data() || {}) : {};
+    if (data.premium === true &&
+        typeof data.checkedAt === "number" &&
+        Date.now() - data.checkedAt < PREMIUM_CACHE_MS) {
+      return true;
+    }
+  } catch (err) {
+    console.warn("resolvePremium cache read failed:", err.message || err);
+  }
+
+  const premium =
+    (await hasReferralPremium(uid)) || (await hasRevenueCatPremium(uid));
+
+  if (premium) {
+    try {
+      await cacheRef.set({
+        uid,
+        premium: true,
+        checkedAt: Date.now(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      }, {merge: true});
+    } catch (err) {
+      console.warn("resolvePremium cache write failed:", err.message || err);
+    }
+  }
+  return premium;
+}
+
+/**
+ * Referral ödülüyle gelen süreli premium (redeemReferralCode yazar).
+ * @param {string} uid Firebase uid
+ * @return {Promise<boolean>} true if the reward window is still open
+ */
+async function hasReferralPremium(uid) {
+  try {
+    const snap = await db.collection("user_growth").doc(uid).get();
+    const data = snap.exists ? (snap.data() || {}) : {};
+    const until = data.premium_access_until;
+    return Boolean(until && typeof until.toMillis === "function" &&
+      until.toMillis() > Date.now());
+  } catch (err) {
+    console.error("hasReferralPremium failed:", err.message || err);
+    return false;
+  }
+}
+
+/**
+ * RevenueCat aboneliğini sunucudan doğrular. Bunun çalışması için istemcinin
+ * `Purchases.logIn(uid)` çağırmış olması şart (bkz. RevenueCatService.identify)
+ * — aksi halde abonelik anonim bir app_user_id'ye bağlanır ve uid ile
+ * bulunamaz. Anahtar yoksa sessizce false döner.
+ * @param {string} uid Firebase uid (= RevenueCat app_user_id)
+ * @return {Promise<boolean>} true if an active premium entitlement exists
+ */
+async function hasRevenueCatPremium(uid) {
+  if (!REVENUECAT_SECRET_KEY) return false;
+  try {
+    const res = await fetch(
+        `https://api.revenuecat.com/v1/subscribers/${encodeURIComponent(uid)}`,
+        {
+          headers: {
+            "Authorization": `Bearer ${REVENUECAT_SECRET_KEY}`,
+            "content-type": "application/json",
+          },
+          signal: AbortSignal.timeout(10000),
+        },
+    );
+    if (!res.ok) return false;
+    const data = await res.json();
+    const subscriber = data.subscriber || {};
+    const ent = (subscriber.entitlements || {})[REVENUECAT_ENTITLEMENT];
+    if (!ent) return false;
+    // expires_date null = süresiz (lifetime) hak.
+    if (!ent.expires_date) return true;
+    return new Date(ent.expires_date).getTime() > Date.now();
+  } catch (err) {
+    console.warn("hasRevenueCatPremium failed:", err.message || err);
+    return false;
+  }
 }
 
 // Girdi tavanları. Metin ve görsel AYRI sınırlanır çünkü maliyetleri çok
@@ -230,6 +409,16 @@ exports.anthropicProxy = onRequest(
         return;
       }
 
+      // kind = ücretsiz katman kotasından düşecek eylem türü. Belirtilmezse
+      // "system" (yardımcı çağrı) sayılır — kotadan düşmez.
+      const kind = typeof (req.body || {}).kind === "string" ?
+        req.body.kind :
+        "system";
+      if (!KNOWN_KINDS.includes(kind)) {
+        res.status(400).json({error: "Invalid usage kind"});
+        return;
+      }
+
       // Girdi sınırları — max_tokens yalnız ÇIKTIYI sınırlar. Bu olmadan
       // geçerli bir hesap günlük çağrı hakkını devasa bağlamlarla harcayıp
       // ciddi fatura çıkarabilir (denetim bulgusu, 2026-07-24).
@@ -239,16 +428,35 @@ exports.anthropicProxy = onRequest(
         return;
       }
 
-      let allowed;
+      let quota;
       try {
-        allowed = await checkAndIncrementUsage(uid, tier);
+        quota = await checkAndIncrementUsage(uid, tier, kind, true);
+        // Haftalık ücretsiz kota doldu — premium hesaplar bundan muaf. Bu
+        // kontrol bilerek sona bırakıldı: premium doğrulaması (Firestore +
+        // RevenueCat) yalnız sınıra DAYANAN çağrıda çalışır, her mesajda
+        // değil.
+        if (!quota.allowed && quota.reason === "free-weekly-limit") {
+          if (await resolvePremium(uid)) {
+            quota = await checkAndIncrementUsage(uid, tier, kind, false);
+          }
+        }
       } catch (err) {
         console.error("anthropicProxy usage check failed:", err);
         res.status(500).json({error: "Internal error"});
         return;
       }
-      if (!allowed) {
-        res.status(429).json({error: "Daily AI usage limit reached"});
+      if (!quota.allowed) {
+        res.status(429).json({
+          error: quota.reason === "free-weekly-limit" ?
+            "Free weekly usage limit reached" :
+            "Daily AI usage limit reached",
+          // İstemci bu alana bakıp paywall mı yoksa "yarın tekrar dene"
+          // mesajı mı göstereceğine karar verir.
+          reason: quota.reason,
+          kind,
+          used: quota.used,
+          limit: quota.limit,
+        });
         return;
       }
 
@@ -445,6 +653,12 @@ exports.deleteAccount = onRequest(
         const referredSnap = await db.collection("referrals")
             .where("referred_id", "==", uid).get();
         await Promise.all(referredSnap.docs.map((d) => d.ref.delete()));
+
+        // Kullanım sayaçları da hesaba bağlı kişisel veridir — hesapla
+        // birlikte gider (gün/hafta dokümanları + premium önbelleği).
+        const usageSnap = await db.collection("ai_usage")
+            .where("uid", "==", uid).get();
+        await Promise.all(usageSnap.docs.map((d) => d.ref.delete()));
 
         try {
           const bucket = admin.storage().bucket();

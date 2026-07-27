@@ -195,7 +195,23 @@ class ChatNotifier extends StateNotifier<ChatState> {
         history: priorTurns,
         fallback: IlndFallbacks.chat(l10n),
         l10n: l10n,
+        meterAs: UsageKind.message,
       );
+    } on IlndFreeLimitException {
+      // Sunucu son sözü söyler: hak başka bir cihazda harcanmış olabilir,
+      // yerel sayaç geride kalmış. Mesajı geri al, sayacı doluya çek ve
+      // paywall'ı aç.
+      if (!mounted) return;
+      gate.markExhausted(UsageKind.message);
+      final withoutAttempt = state.messages
+          .where((m) => !m.pending && !identical(m, userMsg))
+          .toList();
+      state = state.copyWith(
+        messages: withoutAttempt,
+        sending: false,
+        limitReached: true,
+      );
+      return;
     } catch (e) {
       reply = IlndService.friendlyError(e, l10n);
     }
@@ -210,8 +226,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
     }
     state = state.copyWith(messages: resolved, sending: false);
 
-    // Kullanımı say (premium'da sayılmaz).
-    await gate.record(UsageKind.message);
+    // Kullanımı say (premium'da sayılmaz). Gerçek sayaç sunucuda arttı;
+    // bu, snapshot gelene kadar arayüzün doğru kalması için.
+    gate.record(UsageKind.message);
 
     // Hafızaya kısa bir iz bırak (ILND'nin "hatırlaması" için).
     await _ref.read(ilndMemoryProvider.notifier).addNote('Kullanıcı: $trimmed');

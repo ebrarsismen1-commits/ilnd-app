@@ -86,6 +86,26 @@ service cloud.firestore {
       }
     }
 
+    // AI kullanım sayaçları (günlük kademe tavanı + haftalık ücretsiz kota).
+    // YAZMA HERKESE KAPALI: bu dokümanları yalnız functions/index.js'teki
+    // anthropicProxy (Admin SDK, kurallardan muaf) yazar. Sayaç hesap bazlı
+    // olduğu için (uid'e bağlı, cihaza değil) istemcinin yazabilmesi tüm
+    // sınırı anlamsız kılardı — kullanıcı kendi sayacını sıfırlardı.
+    // OKUMA yalnız kendi dokümanların: uygulama kalan hakkı gösterebilsin ve
+    // limit dolduğunda çağrı yapmadan paywall açabilsin diye. ÖNEMLİ: bu
+    // koleksiyon users/{uid} ALTINDA DEĞİL — orası sahibine tam yazma izni
+    // veriyor ve Firestore'da daha dar bir kural geniş olanı geçersiz kılmaz.
+    // `resource == null` şartı ŞART: haftanın ilk çağrısı yapılmadan sayaç
+    // dokümanı yoktur ve var-olmayan dokümanda resource.data okumak kuralı
+    // hataya düşürüp permission-denied verir. Dinleyici o hatadan sonra
+    // kendini yenilemez (bkz. Bilinen Tuzaklar) — yani sayaç tüm hafta boyu
+    // sessizce ölü kalırdı. Boş doküman okumak hiçbir şey sızdırmaz.
+    match /ai_usage/{usageId} {
+      allow read: if request.auth != null
+        && (resource == null || resource.data.uid == request.auth.uid);
+      allow write: if false;
+    }
+
     // Sosyal kanıt sayacı için anonim, kullanıcı başına günde tek doküman.
     // Toplam aktif kullanıcı sayısını saymak için herkes (authenticated)
     // okuyabilir; her kullanıcı sadece kendi kaydını yazabilir.

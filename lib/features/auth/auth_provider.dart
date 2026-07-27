@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
 import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
@@ -117,6 +118,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         : const AuthUnauthenticated();
     if (session != null) {
       unawaited(FirebaseAuthBridge.syncFromSupabase(session.accessToken));
+      unawaited(RevenueCatService.identify(session.user.id));
     }
 
     // Stay in sync with token refresh, sign-out from other tabs, etc.
@@ -144,8 +146,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
           final token = _client.auth.currentSession?.accessToken;
           if (s is AuthAuthenticated && token != null) {
             unawaited(FirebaseAuthBridge.syncFromSupabase(token));
+            // Abonelik hesaba bağlansın: cihaz değişince de aynı hak, aynı
+            // kullanım sınırı geçerli olsun.
+            unawaited(RevenueCatService.identify(s.user.id));
           } else if (s is AuthUnauthenticated) {
             unawaited(FirebaseAuthBridge.signOut());
+            unawaited(RevenueCatService.forget());
           }
         });
   }
