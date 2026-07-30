@@ -1480,4 +1480,70 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get homeReminderInviteLater => 'Şimdi değil';
+
+  @override
+  String get movementShelfLabel => 'HAREKET PROGRAMLARI';
+
+  @override
+  String get movementLevelEasy => 'yumuşak';
+
+  @override
+  String get movementLevelMedium => 'orta';
+
+  @override
+  String get movementLevelStrong => 'güçlü';
+
+  @override
+  String movementSessionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count seans',
+      one: '1 seans',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String movementMinutes(int m) {
+    return '$m dk';
+  }
+
+  @override
+  String movementProgress(int done, int total) {
+    return '$done/$total seans';
+  }
+
+  @override
+  String get movementStart => 'Başla';
+
+  @override
+  String get movementContinue => 'Devam et';
+
+  @override
+  String get movementReplay => 'Yeniden izle';
+
+  @override
+  String get movementAllDone => 'programı tamamladın 🌿';
+
+  @override
+  String get movementSessionDone => 'tamamlandı';
+
+  @override
+  String get movementPlayerError => 'Video şu an açılamadı';
+
+  @override
+  String get movementPlayerRetry => 'Tekrar dene';
+
+  @override
+  String get movementPaywallReason => 'bu program ILND+ üyelerine özel 🌿';
+
+  @override
+  String get movementPremiumBadge => 'ILND+';
+
+  @override
+  String get a11yMovementPlay => 'Videoyu oynat';
+
+  @override
+  String get a11yMovementPause => 'Videoyu duraklat';
 }

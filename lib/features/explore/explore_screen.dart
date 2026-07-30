@@ -11,8 +11,11 @@ import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/repositories/explore_repository.dart';
+import 'package:ilnd_app/core/repositories/movement_repository.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/features/movement/movement_program.dart';
+import 'package:ilnd_app/features/movement/movement_program_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 // ─── Filter ───────────────────────────────────────────────────────────────────
@@ -85,6 +88,13 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         : <Article>[];
     final rest = allArticles.length > 4 ? allArticles.sublist(4) : <Article>[];
     final filtered = rest.where((a) => _selected.matches(a)).toList();
+    // Yalnız oynatılabilir seansı olan programlar (ADR-0004). Makalelerdeki
+    // kArticles gibi bir offline yedeği YOK: video içeriğinin yerel karşılığı
+    // olamaz, içerik gelmeden raf da olmaz.
+    final movementPrograms = ref
+        .watch(publishableMovementProgramsProvider)
+        .map((m) => m.forLocale(l10n.localeName))
+        .toList();
 
     return Scaffold(
       backgroundColor: p.base,
@@ -138,6 +148,17 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
+
+              // ── Hareket programları (ADR-0004) — vizyonun "grid'e yeni
+              // içerik tipleri raf olarak girer" maddesi. Yayınlanabilir
+              // program yoksa raf HİÇ çizilmez: boş bir raf, olmayan bir
+              // özelliğin sözünü vermek olurdu ────────────────────────────
+              if (movementPrograms.isNotEmpty) ...[
+                SliverToBoxAdapter(
+                  child: _MovementShelf(programs: movementPrograms, p: p),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 28)),
+              ],
 
               // ── Hero card ─────────────────────────────────────────────────
               if (hero != null) ...[
@@ -304,6 +325,168 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Hareket programları ──────────────────────────────────────────────────────
+
+/// Video programlarının yatay rafı (ADR-0004). Kart dokunuşu program detayına
+/// gider; kilitli programda paywall'ı detay ekranı açar (tek kapı).
+class _MovementShelf extends StatelessWidget {
+  const _MovementShelf({required this.programs, required this.p});
+
+  final List<MovementProgram> programs;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.screenPadding,
+          ),
+          child: Text(
+            l10n.movementShelfLabel,
+            style: AppTextStyles.label(fontSize: 11, color: p.accent),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 176,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenPadding,
+            ),
+            itemCount: programs.length,
+            separatorBuilder: (ctx0, i0) => const SizedBox(width: 12),
+            itemBuilder: (context, i) => Entrance(
+              index: i,
+              child: _MovementCard(program: programs[i], p: p, l10n: l10n),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MovementCard extends StatelessWidget {
+  const _MovementCard({
+    required this.program,
+    required this.p,
+    required this.l10n,
+  });
+
+  final MovementProgram program;
+  final AppPalette p;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    return Pressable(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (_) => MovementProgramScreen(program: program),
+        ),
+      ),
+      child: SizedBox(
+        // Genişlik sabit değil, viewport'a göre kırpılır: dar ekranda kart
+        // taşmasın (Sert Kural #14'ün öğrettiği esneklik).
+        width: (MediaQuery.sizeOf(context).width * 0.62).clamp(200.0, 260.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppSpacing.radius),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    CoverImage(imageUrl: program.coverUrl, palette: 0),
+                    const DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.transparent, Colors.black54],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 12,
+                      right: 12,
+                      bottom: 10,
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.play_circle_outline_rounded,
+                            size: 18,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              l10n.movementSessionCount(
+                                program.playableSessions.length,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTextStyles.label(
+                                fontSize: 10,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          if (program.premium)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: p.accent,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                l10n.movementPremiumBadge,
+                                style: AppTextStyles.label(
+                                  fontSize: 9,
+                                  color: p.onAccent,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              program.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.body(fontSize: 14, color: p.text),
+            ),
+            Text(
+              [
+                MovementProgramScreen.levelLabel(program.level, l10n),
+                if (program.totalMinutes > 0)
+                  l10n.movementMinutes(program.totalMinutes),
+              ].join(' · '),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.body(fontSize: 11, color: p.textMuted),
+            ),
+          ],
         ),
       ),
     );

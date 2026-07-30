@@ -577,5 +577,40 @@
   "homeReminderInviteTitle": "Want me to write to you in the evenings?",
   "homeReminderInviteBody": "Once a day, gently. You can change the time in settings whenever you like.",
   "homeReminderInviteAccept": "Sure, remind me",
-  "homeReminderInviteLater": "Not now"
+  "homeReminderInviteLater": "Not now",
+
+  "movementShelfLabel": "MOVEMENT PROGRAMS",
+  "movementLevelEasy": "gentle",
+  "movementLevelMedium": "medium",
+  "movementLevelStrong": "strong",
+  "movementSessionCount": "{count, plural, =1{1 session} other{{count} sessions}}",
+  "@movementSessionCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "movementMinutes": "{m} min",
+  "@movementMinutes": {
+    "placeholders": {
+      "m": {"type": "int"}
+    }
+  },
+  "movementProgress": "{done}/{total} sessions",
+  "@movementProgress": {
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "movementStart": "Start",
+  "movementContinue": "Continue",
+  "movementReplay": "Watch again",
+  "movementAllDone": "you finished the program 🌿",
+  "movementSessionDone": "done",
+  "movementPlayerError": "The video could not be opened",
+  "movementPlayerRetry": "Try again",
+  "movementPaywallReason": "this program is for ILND+ members 🌿",
+  "movementPremiumBadge": "ILND+",
+  "a11yMovementPlay": "Play the video",
+  "a11yMovementPause": "Pause the video"
 }

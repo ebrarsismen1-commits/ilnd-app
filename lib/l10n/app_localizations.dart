@@ -2755,6 +2755,114 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Şimdi değil'**
   String get homeReminderInviteLater;
+
+  /// Explore shelf label above the movement program row
+  ///
+  /// In tr, this message translates to:
+  /// **'HAREKET PROGRAMLARI'**
+  String get movementShelfLabel;
+
+  /// Movement program difficulty: gentle/easy
+  ///
+  /// In tr, this message translates to:
+  /// **'yumuşak'**
+  String get movementLevelEasy;
+
+  /// Movement program difficulty: medium
+  ///
+  /// In tr, this message translates to:
+  /// **'orta'**
+  String get movementLevelMedium;
+
+  /// Movement program difficulty: strong/advanced
+  ///
+  /// In tr, this message translates to:
+  /// **'güçlü'**
+  String get movementLevelStrong;
+
+  /// Number of sessions in a movement program
+  ///
+  /// In tr, this message translates to:
+  /// **'{count, plural, =1{1 seans} other{{count} seans}}'**
+  String movementSessionCount(int count);
+
+  /// Duration in minutes for a program or session
+  ///
+  /// In tr, this message translates to:
+  /// **'{m} dk'**
+  String movementMinutes(int m);
+
+  /// How many sessions of a program the user has completed
+  ///
+  /// In tr, this message translates to:
+  /// **'{done}/{total} seans'**
+  String movementProgress(int done, int total);
+
+  /// Button that opens the first session of a program
+  ///
+  /// In tr, this message translates to:
+  /// **'Başla'**
+  String get movementStart;
+
+  /// Button that opens the next unfinished session of a program
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam et'**
+  String get movementContinue;
+
+  /// Button shown when every session of the program is done
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeniden izle'**
+  String get movementReplay;
+
+  /// Line shown on a program whose sessions are all completed
+  ///
+  /// In tr, this message translates to:
+  /// **'programı tamamladın 🌿'**
+  String get movementAllDone;
+
+  /// Badge on a finished session row
+  ///
+  /// In tr, this message translates to:
+  /// **'tamamlandı'**
+  String get movementSessionDone;
+
+  /// Shown when the video fails to load or play
+  ///
+  /// In tr, this message translates to:
+  /// **'Video şu an açılamadı'**
+  String get movementPlayerError;
+
+  /// Retry button on the video player error state
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar dene'**
+  String get movementPlayerRetry;
+
+  /// Context shown on the paywall when a premium program is opened
+  ///
+  /// In tr, this message translates to:
+  /// **'bu program ILND+ üyelerine özel 🌿'**
+  String get movementPaywallReason;
+
+  /// Badge on a program card that requires a subscription
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND+'**
+  String get movementPremiumBadge;
+
+  /// Accessibility label for the play button
+  ///
+  /// In tr, this message translates to:
+  /// **'Videoyu oynat'**
+  String get a11yMovementPlay;
+
+  /// Accessibility label for the pause button
+  ///
+  /// In tr, this message translates to:
+  /// **'Videoyu duraklat'**
+  String get a11yMovementPause;
 }
 
 class _AppLocalizationsDelegate

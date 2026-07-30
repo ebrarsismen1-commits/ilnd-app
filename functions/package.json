@@ -10,7 +10,8 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "test": "jest --runInBand",
-    "seed:articles": "node scripts/seedArticles.js"
+    "seed:articles": "node scripts/seedArticles.js",
+    "seed:movement": "node scripts/seedMovementPrograms.js"
   },
   "dependencies": {
     "firebase-admin": "^12.1.0",

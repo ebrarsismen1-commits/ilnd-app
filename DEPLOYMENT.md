@@ -47,7 +47,14 @@ Before tagging `v1.0.0`, all of the following must pass:
 cd functions
 npm install
 npm run seed:articles   # populates Firestore 'articles' collection
+npm run seed:movement   # populates Firestore 'movement_programs' collection
 ```
+Movement programs (ADR-0004) are optional: `content/movementPrograms.json`
+ships empty on purpose, and the Explore shelf stays hidden until at least one
+program has a session with a `videoUrl`. Videos belong in Firebase Storage
+under `movement/{programId}/{sessionId}.mp4`; put that object's download URL
+in the JSON. The schema is documented at the top of
+`functions/scripts/seedMovementPrograms.js`.
 
 ### RevenueCat
 1. Create products in App Store Connect + Google Play Console

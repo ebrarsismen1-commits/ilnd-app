@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
+import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
 // SharedPreferences key — fallback when RevenueCat is not configured
@@ -37,3 +38,16 @@ class EntitlementNotifier extends StateNotifier<bool> {
     await _prefs.setBool(_kIsPremium, value);
   }
 }
+
+/// Hesap düzeyinde premium erişimi: bu cihazdaki mağaza hakkı VEYA hesaba
+/// bağlı ödül premium'u (referral, `user_growth.premium_access_until`).
+///
+/// Tek karar noktası: kullanım kapısı da kilitli içerik de burayı okur.
+/// İkinci kaynak şart, çünkü [isPremiumProvider] cihaz-yereldir — daveti
+/// ödüllenmiş kullanıcı ikinci cihazında kilitli içerik görürdü, sunucu onu
+/// premium sayarken.
+final hasPremiumAccessProvider = Provider<bool>((ref) {
+  if (ref.watch(isPremiumProvider)) return true;
+  final growth = ref.watch(myGrowthProfileProvider).valueOrNull;
+  return growth?.hasActivePremiumReward ?? false;
+});

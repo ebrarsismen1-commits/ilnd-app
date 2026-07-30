@@ -1421,5 +1421,75 @@
   "@homeReminderInviteAccept": {"description": "Accept button on the reminder invite card; triggers the permission request"},
 
   "homeReminderInviteLater": "Şimdi değil",
-  "@homeReminderInviteLater": {"description": "Decline button on the reminder invite card; dismisses it permanently"}
+  "@homeReminderInviteLater": {"description": "Decline button on the reminder invite card; dismisses it permanently"},
+
+  "movementShelfLabel": "HAREKET PROGRAMLARI",
+  "@movementShelfLabel": {"description": "Explore shelf label above the movement program row"},
+
+  "movementLevelEasy": "yumuşak",
+  "@movementLevelEasy": {"description": "Movement program difficulty: gentle/easy"},
+
+  "movementLevelMedium": "orta",
+  "@movementLevelMedium": {"description": "Movement program difficulty: medium"},
+
+  "movementLevelStrong": "güçlü",
+  "@movementLevelStrong": {"description": "Movement program difficulty: strong/advanced"},
+
+  "movementSessionCount": "{count, plural, =1{1 seans} other{{count} seans}}",
+  "@movementSessionCount": {
+    "description": "Number of sessions in a movement program",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "movementMinutes": "{m} dk",
+  "@movementMinutes": {
+    "description": "Duration in minutes for a program or session",
+    "placeholders": {
+      "m": {"type": "int"}
+    }
+  },
+
+  "movementProgress": "{done}/{total} seans",
+  "@movementProgress": {
+    "description": "How many sessions of a program the user has completed",
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+
+  "movementStart": "Başla",
+  "@movementStart": {"description": "Button that opens the first session of a program"},
+
+  "movementContinue": "Devam et",
+  "@movementContinue": {"description": "Button that opens the next unfinished session of a program"},
+
+  "movementReplay": "Yeniden izle",
+  "@movementReplay": {"description": "Button shown when every session of the program is done"},
+
+  "movementAllDone": "programı tamamladın 🌿",
+  "@movementAllDone": {"description": "Line shown on a program whose sessions are all completed"},
+
+  "movementSessionDone": "tamamlandı",
+  "@movementSessionDone": {"description": "Badge on a finished session row"},
+
+  "movementPlayerError": "Video şu an açılamadı",
+  "@movementPlayerError": {"description": "Shown when the video fails to load or play"},
+
+  "movementPlayerRetry": "Tekrar dene",
+  "@movementPlayerRetry": {"description": "Retry button on the video player error state"},
+
+  "movementPaywallReason": "bu program ILND+ üyelerine özel 🌿",
+  "@movementPaywallReason": {"description": "Context shown on the paywall when a premium program is opened"},
+
+  "movementPremiumBadge": "ILND+",
+  "@movementPremiumBadge": {"description": "Badge on a program card that requires a subscription"},
+
+  "a11yMovementPlay": "Videoyu oynat",
+  "@a11yMovementPlay": {"description": "Accessibility label for the play button"},
+
+  "a11yMovementPause": "Videoyu duraklat",
+  "@a11yMovementPause": {"description": "Accessibility label for the pause button"}
 }

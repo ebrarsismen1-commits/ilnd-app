@@ -3,7 +3,6 @@ import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/billing/entitlement.dart';
-import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 
@@ -185,14 +184,9 @@ class UsageGate {
   UsageGate(this._ref);
   final Ref _ref;
 
-  /// Cihaz-yerel mağaza hakkı VEYA hesaba bağlı ödül premium'u. İkincisi
-  /// olmadan, daveti kabul edilmiş bir kullanıcı ikinci cihazında ücretsiz
-  /// katman sınırına takılırdı — sunucu onu premium sayarken.
-  bool get _isPremium {
-    if (_ref.read(isPremiumProvider)) return true;
-    final growth = _ref.read(myGrowthProfileProvider).valueOrNull;
-    return growth?.hasActivePremiumReward ?? false;
-  }
+  /// Cihaz-yerel mağaza hakkı VEYA hesaba bağlı ödül premium'u — kilitli
+  /// içerikle aynı kaynak (bkz. entitlement.dart).
+  bool get _isPremium => _ref.read(hasPremiumAccessProvider);
 
   bool isAllowed(UsageKind kind) {
     if (_isPremium) return true;

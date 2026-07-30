@@ -1497,4 +1497,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeReminderInviteLater => 'Not now';
+
+  @override
+  String get movementShelfLabel => 'MOVEMENT PROGRAMS';
+
+  @override
+  String get movementLevelEasy => 'gentle';
+
+  @override
+  String get movementLevelMedium => 'medium';
+
+  @override
+  String get movementLevelStrong => 'strong';
+
+  @override
+  String movementSessionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sessions',
+      one: '1 session',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String movementMinutes(int m) {
+    return '$m min';
+  }
+
+  @override
+  String movementProgress(int done, int total) {
+    return '$done/$total sessions';
+  }
+
+  @override
+  String get movementStart => 'Start';
+
+  @override
+  String get movementContinue => 'Continue';
+
+  @override
+  String get movementReplay => 'Watch again';
+
+  @override
+  String get movementAllDone => 'you finished the program 🌿';
+
+  @override
+  String get movementSessionDone => 'done';
+
+  @override
+  String get movementPlayerError => 'The video could not be opened';
+
+  @override
+  String get movementPlayerRetry => 'Try again';
+
+  @override
+  String get movementPaywallReason => 'this program is for ILND+ members 🌿';
+
+  @override
+  String get movementPremiumBadge => 'ILND+';
+
+  @override
+  String get a11yMovementPlay => 'Play the video';
+
+  @override
+  String get a11yMovementPause => 'Pause the video';
 }
