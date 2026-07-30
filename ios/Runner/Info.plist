@@ -16,6 +16,23 @@
 		<string>6.0</string>
 		<key>CFBundleName</key>
 		<string>ilnd</string>
+		<!-- Supabase e-posta bağlantıları (şifre sıfırlama, hesap onayı)
+		     uygulamaya dönsün. Şema authDeepLinkScheme ile aynı olmalı
+		     (lib/features/auth/auth_provider.dart) — tutarlılığı
+		     test/features/auth/deep_link_config_test.dart kilitler. -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>ilnd-auth-callback</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.ilnd.app</string>
+				</array>
+			</dict>
+		</array>
 		<key>NSCameraUsageDescription</key>
 		<string>Yemek fotoğrafı çekip analiz etmek için kamera erişimi gerekiyor.</string>
 		<key>NSPhotoLibraryUsageDescription</key>

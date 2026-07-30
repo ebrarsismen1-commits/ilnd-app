@@ -16,6 +16,24 @@ import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
 import 'package:ilnd_app/core/services/firebase_auth_bridge.dart';
 
+// ─── Deep link ────────────────────────────────────────────────────────────────
+
+/// E-posta bağlantılarının (şifre sıfırlama, hesap onayı) mobilde uygulamaya
+/// dönmesini sağlayan özel URL şeması.
+///
+/// Bu üç sabit AndroidManifest.xml intent-filter'ı ve ios/Runner/Info.plist
+/// CFBundleURLSchemes girdisiyle BİREBİR aynı olmalı; üçünün tutarlılığını
+/// test/features/auth/deep_link_config_test.dart kilitler.
+///
+/// Şema neden applicationId değil: Android applicationId'si `com.ilnd.ilnd_app`
+/// alt çizgi taşıyor, RFC 3986 ise şemada alt çizgiye izin vermiyor. iOS bundle
+/// id'si (`com.ilnd.ilndApp`) de Android'inkinden farklı — tek bir `redirectTo`
+/// iki platformda da çalışmak zorunda olduğu için platformdan bağımsız,
+/// ters-DNS bir şema seçildi.
+const authDeepLinkScheme = 'com.ilnd.app';
+const authDeepLinkHost = 'login-callback';
+const authDeepLinkRedirect = '$authDeepLinkScheme://$authDeepLinkHost';
+
 // ─── State ────────────────────────────────────────────────────────────────────
 
 sealed class AuthState {
@@ -153,7 +171,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
             unawaited(FirebaseAuthBridge.signOut());
             unawaited(RevenueCatService.forget());
           }
-        });
+        }, onError: _onAuthStreamError);
+  }
+
+  /// E-posta linkinden (sıfırlama/onay) dönen oturum kurulamazsa gotrue hatayı
+  /// veri değil **stream hatası** olarak yayar. onError yoksa hata zone'a kaçar
+  /// ve release'de fatal Crashlytics kaydına dönüşürdü; kullanıcı ise sessizce
+  /// giriş ekranında kalırdı. Hata yutulmaz: durum kimliksize çekilir ki router
+  /// kullanıcıyı yarım bir recovery ekranında bırakmasın.
+  void _onAuthStreamError(Object error, StackTrace stackTrace) {
+    debugPrint('[Auth] onAuthStateChange error: $error\n$stackTrace');
+    if (!mounted) return;
+    if (state is AuthPasswordRecovery) {
+      state = const AuthError(AuthErrorCode.resetFailed);
+    }
   }
 
   @override
@@ -412,10 +443,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  /// Web'de link dönüş adresi uygulamanın kendi origin'idir — Supabase
-  /// panelindeki Site URL yanlış kalsa bile link asla localhost'a gitmez
-  /// (yaşandı: sıfırlama ve onay linkleri localhost:3000'e düşüyordu).
-  static String? get _emailRedirect => kIsWeb ? Uri.base.origin : null;
+  /// E-posta bağlantılarının (şifre sıfırlama, hesap onayı) dönüş adresi:
+  /// web'de uygulamanın kendi origin'i, mobilde [authDeepLinkRedirect] özel
+  /// şeması. Mobilde bunu göndermek şart — `null` bırakılırsa Supabase panel
+  /// Site URL'ini kullanır, link tarayıcıda açılır ve PKCE code verifier
+  /// uygulamanın deposunda kaldığı için oturum hiç kurulamaz.
+  ///
+  /// DİKKAT — bunu göndermek tek başına YETMEZ: Supabase, allowlist'te
+  /// olmayan bir `redirect_to` gelirse onu sessizce yok sayıp panel Site
+  /// URL'ine düşürür. Bu yüzden sıfırlama ve onay linkleri localhost:3000'e
+  /// gidiyordu (iki kez yaşandı). Hem web origin'leri hem de
+  /// `$authDeepLinkRedirect` Supabase panelinde Authentication → URL
+  /// Configuration → Redirect URLs listesinde kayıtlı olmalı; aksi hâlde
+  /// buradaki değer hiç kullanılmaz.
+  static String? get _emailRedirect =>
+      kIsWeb ? Uri.base.origin : authDeepLinkRedirect;
 
   /// Sends a password-reset e-mail via Supabase.
   /// Throws an [AuthErrorCode] on failure — UI localizes it.
