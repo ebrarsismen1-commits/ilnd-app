@@ -77,7 +77,7 @@ void main() {
     expect(find.text(l10n.movementMinutes(10)), findsOneWidget);
   });
 
-  testWidgets('hiç başlanmamış programda "Başla" gösterir', (tester) async {
+  testWidgets('hiç başlanmamış programda "başla" gösterir', (tester) async {
     await pump(tester);
     final l10n = lookupAppLocalizations(const Locale('tr'));
 

@@ -280,11 +280,16 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                   l10n.quickSetupTitle,
                   style: AppTextStyles.display(fontSize: 28, color: p.text),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  l10n.quickSetupTitleEn,
-                  style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
-                ),
+                // Bkz. welcome_screen: iki dilli başlık yalnız Türkçede.
+                // Boşluk da koşula dahil, yoksa İngilizcede sarkan bir
+                // aralık kalır.
+                if (l10n.localeName.startsWith('tr')) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.quickSetupTitleEn,
+                    style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+                  ),
+                ],
                 const SizedBox(height: 24),
                 SizedBox(
                   height: 52,

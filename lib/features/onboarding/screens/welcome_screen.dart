@@ -62,13 +62,17 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                     color: p.textMuted,
                   ).copyWith(letterSpacing: 0.2),
                 ),
-                Text(
-                  l10n.welcomeTaglineEn,
-                  style: AppTextStyles.body(
-                    fontSize: 14,
-                    color: p.textMuted.withValues(alpha: 0.7),
-                  ).copyWith(letterSpacing: 0.2),
-                ),
+                // İki dilli marka dokunuşu: Türkçe satırın altında soluk
+                // İngilizcesi. İngilizce cihazda ikisi de aynı cümle olur ve
+                // sloganı iki kez yazardık — o yüzden yalnız Türkçede çizilir.
+                if (l10n.localeName.startsWith('tr'))
+                  Text(
+                    l10n.welcomeTaglineEn,
+                    style: AppTextStyles.body(
+                      fontSize: 14,
+                      color: p.textMuted.withValues(alpha: 0.7),
+                    ).copyWith(letterSpacing: 0.2),
+                  ),
                 const Spacer(flex: 4),
                 const SocialProofBadge(),
                 const SizedBox(height: 12),

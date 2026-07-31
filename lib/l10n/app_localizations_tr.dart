@@ -128,25 +128,24 @@ class AppLocalizationsTr extends AppLocalizations {
   String get authErrorEmailInUse => 'Bu e-posta adresi zaten kullanılıyor.';
 
   @override
-  String get authErrorWeakPassword => 'Şifre en az 6 karakter olmalıdır.';
+  String get authErrorWeakPassword => 'Şifre en az 6 karakter olmalı.';
 
   @override
-  String get authErrorUserNotFound =>
-      'Bu e-posta ile kayıtlı kullanıcı bulunamadı.';
+  String get authErrorUserNotFound => 'Bu e-postayla kayıtlı bir hesap yok.';
 
   @override
   String get authErrorNetwork =>
-      'Bağlantı hatası. İnternet bağlantınızı kontrol edin.';
+      'Bağlantı hatası. İnternet bağlantını kontrol et.';
 
   @override
-  String get authErrorInvalidEmail => 'Geçerli bir e-posta adresi girin.';
+  String get authErrorInvalidEmail => 'Geçerli bir e-posta adresi gir.';
 
   @override
-  String get authErrorGeneric => 'Bir hata oluştu. Lütfen tekrar deneyin.';
+  String get authErrorGeneric => 'Bir şeyler ters gitti. Tekrar dener misin?';
 
   @override
   String get authErrorConfirmEmail =>
-      'Giriş yapılamadı. E-posta onayı gerekiyor olabilir.';
+      'Giriş yapılamadı. Önce e-postanı onaylaman gerekiyor olabilir.';
 
   @override
   String get authErrorUpdatePasswordFailed =>
@@ -169,11 +168,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newPasswordSubmit => 'şifreyi güncelle';
 
   @override
-  String get newPasswordSuccess => 'Şifren güncellendi. Hoş geldin 🌿';
+  String get newPasswordSuccess => 'Şifren güncellendi. Tekrar hoş geldin 🌿';
 
   @override
   String get authErrorSignupFailed =>
-      'Kayıt oluşturulamadı. Lütfen tekrar deneyin.';
+      'Hesabın oluşturulamadı. Tekrar dener misin?';
 
   @override
   String get authErrorSignOutFailed => 'Çıkış yapılamadı. Tekrar dener misin?';
@@ -188,11 +187,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get authErrorResetFailed =>
-      'E-posta gönderilemedi. İnternet bağlantınızı kontrol edin.';
+      'E-posta gönderilemedi. İnternet bağlantını kontrol et.';
 
   @override
-  String get authErrorDeleteUnavailable =>
-      'Hesap silme servisi şu an kullanılamıyor.';
+  String get authErrorDeleteUnavailable => 'Hesap silme şu an kullanılamıyor.';
 
   @override
   String get authErrorDeleteFailed => 'Hesap silinemedi. Tekrar dener misin?';
@@ -257,7 +255,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get registerConfirmEmailSent =>
-      'Onay bağlantısı e-postana gönderildi. Kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.';
+      'Onay bağlantısı e-postana gönderildi. Gelen kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.';
 
   @override
   String get validatorEmailRequired => 'E-posta adresi gerekli.';
@@ -489,7 +487,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get journalEmptyBody =>
-      'bugün nasıl hissettiğini, ya da aklından geçeni yaz. ILND seninle düşünür.';
+      'bugün nasıl hissettiğini ya da aklından geçeni yaz. ILND seninle düşünür.';
 
   @override
   String get journalWriteFirst => 'ilk yazını yaz';
@@ -566,13 +564,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileBadgeFirstStep => 'ilk adım';
 
   @override
-  String get profileBadgeSevenDays => '7 günlük';
+  String get profileBadgeSevenDays => '7 gün';
 
   @override
   String get profileBadgeReader => 'okur';
 
   @override
-  String get profileBadgeThirtyDays => '30 günlük';
+  String get profileBadgeThirtyDays => '30 gün';
 
   @override
   String get profileWeekdaysShort => 'Pt,Sa,Ça,Pe,Cu,Ct,Pa';
@@ -587,7 +585,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileMealsAdded => 'yemek eklendi';
 
   @override
-  String get profileDayStreak => 'günlük seri';
+  String get profileDayStreak => 'gün serisi';
 
   @override
   String get profileJournalEntriesWritten => 'günlük yazıldı';
@@ -599,7 +597,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profilePremiumMember => 'ILND+ üyesisin';
 
   @override
-  String get profileGoPremium => 'ILND+’a geç';
+  String get profileGoPremium => 'ILND+\'a geç';
 
   @override
   String get profileSettingsLabel => 'AYARLAR';
@@ -639,7 +637,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileDeleteAccountConfirm => 'Hesabımı sil';
 
   @override
-  String get profileAccountDeleted => 'Hesabın silindi. İyi günler 👋';
+  String get profileAccountDeleted => 'Hesabın silindi. Kendine iyi bak 👋';
 
   @override
   String get exploreTitle => 'keşfet.';
@@ -889,7 +887,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get trioSectionTitle => 'Bugünün Üçlüsü';
+  String get trioSectionTitle => 'BUGÜNÜN ÜÇLÜSÜ';
 
   @override
   String get trioMoveTitle => 'Hareket';
@@ -1037,7 +1035,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String referralShareText(String code) {
-    return 'ilnd\'e benimle katıl! davet kodum: $code';
+    return 'benimle ilnd\'e katıl! davet kodum: $code';
   }
 
   @override
@@ -1151,7 +1149,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get ekleHabitTitle => 'alışkanlık';
 
   @override
-  String get ekleHabitSubtitle => 'yeni hedef ekle';
+  String get ekleHabitSubtitle => 'yeni alışkanlık ekle';
 
   @override
   String get ekleWaterTitle => 'su';
@@ -1359,7 +1357,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ilndFallbackFood4 =>
-      'keyifli görünüyor. suçluluk yok — küçük dokunuşlar yeter, baskı değil.';
+      'keyifli görünüyor. suçluluk yok. küçük dokunuşlar yeter, baskı değil.';
 
   @override
   String get ilndFallbackNeed1 => 'kısa bir nefes molası';
@@ -1424,8 +1422,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count alışkanlığı tamamladın',
-      one: '1 alışkanlığı tamamladın',
+      other: '$count alışkanlık tamamladın',
+      one: '1 alışkanlık tamamladın',
     );
     return '$_temp0';
   }
@@ -1449,8 +1447,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reminderSettingLabel => 'Günlük hatırlatma';
 
   @override
-  String get reminderSettingSubtitle =>
-      'Günü kaçırmadan önce nazik bir dokunuş';
+  String get reminderSettingSubtitle => 'Gün geçip gitmeden nazik bir dokunuş';
 
   @override
   String reminderTimeLabel(String time) {
@@ -1515,13 +1512,13 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get movementStart => 'Başla';
+  String get movementStart => 'başla';
 
   @override
-  String get movementContinue => 'Devam et';
+  String get movementContinue => 'devam et';
 
   @override
-  String get movementReplay => 'Yeniden izle';
+  String get movementReplay => 'yeniden izle';
 
   @override
   String get movementAllDone => 'programı tamamladın 🌿';
@@ -1530,10 +1527,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get movementSessionDone => 'tamamlandı';
 
   @override
-  String get movementPlayerError => 'Video şu an açılamadı';
+  String get movementPlayerError => 'video şu an açılamadı';
 
   @override
-  String get movementPlayerRetry => 'Tekrar dene';
+  String get movementPlayerRetry => 'tekrar dene';
 
   @override
   String get movementPaywallReason => 'bu program ILND+ üyelerine özel 🌿';

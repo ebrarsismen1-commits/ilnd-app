@@ -902,7 +902,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get trioSectionTitle => 'Today\'s Three';
+  String get trioSectionTitle => 'TODAY\'S THREE';
 
   @override
   String get trioMoveTitle => 'Move';
@@ -1165,7 +1165,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ekleHabitTitle => 'habit';
 
   @override
-  String get ekleHabitSubtitle => 'add a new goal';
+  String get ekleHabitSubtitle => 'add a new habit';
 
   @override
   String get ekleWaterTitle => 'water';
@@ -1367,11 +1367,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ilndFallbackFood3 =>
-      'a balanced meal. protein\'s solid — try adding some fiber next meal.';
+      'a balanced meal. protein\'s solid, try adding some fiber next meal.';
 
   @override
   String get ilndFallbackFood4 =>
-      'looks lovely. no guilt here — small touches are enough, no pressure.';
+      'looks lovely. no guilt here. small touches are enough, no pressure.';
 
   @override
   String get ilndFallbackNeed1 => 'a short breathing break';
@@ -1532,13 +1532,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get movementStart => 'Start';
+  String get movementStart => 'start';
 
   @override
-  String get movementContinue => 'Continue';
+  String get movementContinue => 'continue';
 
   @override
-  String get movementReplay => 'Watch again';
+  String get movementReplay => 'watch again';
 
   @override
   String get movementAllDone => 'you finished the program 🌿';
@@ -1547,10 +1547,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movementSessionDone => 'done';
 
   @override
-  String get movementPlayerError => 'The video could not be opened';
+  String get movementPlayerError => 'couldn\'t open the video';
 
   @override
-  String get movementPlayerRetry => 'Try again';
+  String get movementPlayerRetry => 'try again';
 
   @override
   String get movementPaywallReason => 'this program is for ILND+ members 🌿';

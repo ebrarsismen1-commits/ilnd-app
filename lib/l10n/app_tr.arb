@@ -98,17 +98,17 @@
   "@authErrorInvalidCredentials": {"description": "Auth error: wrong email/password"},
   "authErrorEmailInUse": "Bu e-posta adresi zaten kullanılıyor.",
   "@authErrorEmailInUse": {"description": "Auth error: email already registered"},
-  "authErrorWeakPassword": "Şifre en az 6 karakter olmalıdır.",
+  "authErrorWeakPassword": "Şifre en az 6 karakter olmalı.",
   "@authErrorWeakPassword": {"description": "Auth error: weak password"},
-  "authErrorUserNotFound": "Bu e-posta ile kayıtlı kullanıcı bulunamadı.",
+  "authErrorUserNotFound": "Bu e-postayla kayıtlı bir hesap yok.",
   "@authErrorUserNotFound": {"description": "Auth error: user not found"},
-  "authErrorNetwork": "Bağlantı hatası. İnternet bağlantınızı kontrol edin.",
+  "authErrorNetwork": "Bağlantı hatası. İnternet bağlantını kontrol et.",
   "@authErrorNetwork": {"description": "Auth error: network problem"},
-  "authErrorInvalidEmail": "Geçerli bir e-posta adresi girin.",
+  "authErrorInvalidEmail": "Geçerli bir e-posta adresi gir.",
   "@authErrorInvalidEmail": {"description": "Auth error: invalid email format"},
-  "authErrorGeneric": "Bir hata oluştu. Lütfen tekrar deneyin.",
+  "authErrorGeneric": "Bir şeyler ters gitti. Tekrar dener misin?",
   "@authErrorGeneric": {"description": "Auth error: generic fallback"},
-  "authErrorConfirmEmail": "Giriş yapılamadı. E-posta onayı gerekiyor olabilir.",
+  "authErrorConfirmEmail": "Giriş yapılamadı. Önce e-postanı onaylaman gerekiyor olabilir.",
   "@authErrorConfirmEmail": {"description": "Auth error: sign-in returned no session"},
 
   "authErrorUpdatePasswordFailed": "Şifre güncellenemedi. Tekrar dener misin?",
@@ -129,9 +129,9 @@
   "newPasswordSubmit": "şifreyi güncelle",
   "@newPasswordSubmit": {"description": "Save new password button"},
 
-  "newPasswordSuccess": "Şifren güncellendi. Hoş geldin 🌿",
+  "newPasswordSuccess": "Şifren güncellendi. Tekrar hoş geldin 🌿",
   "@newPasswordSuccess": {"description": "Toast after password successfully updated"},
-  "authErrorSignupFailed": "Kayıt oluşturulamadı. Lütfen tekrar deneyin.",
+  "authErrorSignupFailed": "Hesabın oluşturulamadı. Tekrar dener misin?",
   "@authErrorSignupFailed": {"description": "Auth error: sign-up failed"},
   "authErrorSignOutFailed": "Çıkış yapılamadı. Tekrar dener misin?",
   "@authErrorSignOutFailed": {"description": "Auth error: sign-out failed"},
@@ -139,9 +139,9 @@
   "@authErrorGoogleFailed": {"description": "Auth error: Google sign-in failed"},
   "authErrorAppleFailed": "Apple ile giriş yapılamadı. Tekrar dener misin?",
   "@authErrorAppleFailed": {"description": "Auth error: Apple sign-in failed"},
-  "authErrorResetFailed": "E-posta gönderilemedi. İnternet bağlantınızı kontrol edin.",
+  "authErrorResetFailed": "E-posta gönderilemedi. İnternet bağlantını kontrol et.",
   "@authErrorResetFailed": {"description": "Auth error: password reset email failed"},
-  "authErrorDeleteUnavailable": "Hesap silme servisi şu an kullanılamıyor.",
+  "authErrorDeleteUnavailable": "Hesap silme şu an kullanılamıyor.",
   "@authErrorDeleteUnavailable": {"description": "Auth error: delete account service unavailable"},
   "authErrorDeleteFailed": "Hesap silinemedi. Tekrar dener misin?",
   "@authErrorDeleteFailed": {"description": "Auth error: delete account failed"},
@@ -199,7 +199,7 @@
   "registerSuccess": "Hesabın oluşturuldu! Hoş geldin 🌿",
   "@registerSuccess": {"description": "Shown after successful registration"},
 
-  "registerConfirmEmailSent": "Onay bağlantısı e-postana gönderildi. Kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.",
+  "registerConfirmEmailSent": "Onay bağlantısı e-postana gönderildi. Gelen kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.",
   "@registerConfirmEmailSent": {"description": "Shown after sign-up when email confirmation is required before first sign-in"},
 
   "validatorEmailRequired": "E-posta adresi gerekli.",
@@ -435,7 +435,7 @@
   "journalEmptyTitle": "henüz bir şey yazmadın",
   "@journalEmptyTitle": {"description": "Journal empty state title"},
 
-  "journalEmptyBody": "bugün nasıl hissettiğini, ya da aklından geçeni yaz. ILND seninle düşünür.",
+  "journalEmptyBody": "bugün nasıl hissettiğini ya da aklından geçeni yaz. ILND seninle düşünür.",
   "@journalEmptyBody": {"description": "Journal empty state body"},
 
   "journalWriteFirst": "ilk yazını yaz",
@@ -510,13 +510,13 @@
   "profileBadgeFirstStep": "ilk adım",
   "@profileBadgeFirstStep": {"description": "First-entry badge label"},
 
-  "profileBadgeSevenDays": "7 günlük",
+  "profileBadgeSevenDays": "7 gün",
   "@profileBadgeSevenDays": {"description": "7-day streak badge label"},
 
   "profileBadgeReader": "okur",
   "@profileBadgeReader": {"description": "Reader badge label"},
 
-  "profileBadgeThirtyDays": "30 günlük",
+  "profileBadgeThirtyDays": "30 gün",
   "@profileBadgeThirtyDays": {"description": "30-day streak badge label"},
 
   "profileWeekdaysShort": "Pt,Sa,Ça,Pe,Cu,Ct,Pa",
@@ -531,7 +531,7 @@
   "profileMealsAdded": "yemek eklendi",
   "@profileMealsAdded": {"description": "Weekly summary: meals added stat label"},
 
-  "profileDayStreak": "günlük seri",
+  "profileDayStreak": "gün serisi",
   "@profileDayStreak": {"description": "Weekly summary: day streak stat label"},
 
   "profileJournalEntriesWritten": "günlük yazıldı",
@@ -543,7 +543,7 @@
   "profilePremiumMember": "ILND+ üyesisin",
   "@profilePremiumMember": {"description": "Shown when the user already has premium"},
 
-  "profileGoPremium": "ILND+’a geç",
+  "profileGoPremium": "ILND+'a geç",
   "@profileGoPremium": {"description": "CTA to upgrade to premium"},
 
   "profileSettingsLabel": "AYARLAR",
@@ -582,7 +582,7 @@
   "profileDeleteAccountConfirm": "Hesabımı sil",
   "@profileDeleteAccountConfirm": {"description": "Delete account dialog confirm button"},
 
-  "profileAccountDeleted": "Hesabın silindi. İyi günler 👋",
+  "profileAccountDeleted": "Hesabın silindi. Kendine iyi bak 👋",
   "@profileAccountDeleted": {"description": "Toast shown after successful account deletion"},
 
   "exploreTitle": "keşfet.",
@@ -817,7 +817,7 @@
     }
   },
 
-  "trioSectionTitle": "Bugünün Üçlüsü",
+  "trioSectionTitle": "BUGÜNÜN ÜÇLÜSÜ",
   "@trioSectionTitle": {"description": "Home section title: the three daily cards ILND prepares (move/plate/mind)"},
 
   "trioMoveTitle": "Hareket",
@@ -976,7 +976,7 @@
   "referralCodeCopied": "Kod kopyalandı!",
   "@referralCodeCopied": {"description": "Toast shown when the referral code is copied"},
 
-  "referralShareText": "ilnd'e benimle katıl! davet kodum: {code}",
+  "referralShareText": "benimle ilnd'e katıl! davet kodum: {code}",
   "@referralShareText": {
     "description": "Share sheet text when sharing the referral code",
     "placeholders": {
@@ -1105,7 +1105,7 @@
   "ekleHabitTitle": "alışkanlık",
   "@ekleHabitTitle": {"description": "Add-sheet action: habit"},
 
-  "ekleHabitSubtitle": "yeni hedef ekle",
+  "ekleHabitSubtitle": "yeni alışkanlık ekle",
   "@ekleHabitSubtitle": {"description": "Add-sheet action subtitle: habit"},
 
   "ekleWaterTitle": "su",
@@ -1306,7 +1306,7 @@
   "ilndFallbackFood3": "dengeli bir öğün. protein iyi, sonraki öğünde lif eklemeyi deneyebilirsin.",
   "@ilndFallbackFood3": {"description": "ILND offline food-comment fallback 3"},
 
-  "ilndFallbackFood4": "keyifli görünüyor. suçluluk yok — küçük dokunuşlar yeter, baskı değil.",
+  "ilndFallbackFood4": "keyifli görünüyor. suçluluk yok. küçük dokunuşlar yeter, baskı değil.",
   "@ilndFallbackFood4": {"description": "ILND offline food-comment fallback 4"},
 
   "ilndFallbackNeed1": "kısa bir nefes molası",
@@ -1365,7 +1365,7 @@
     }
   },
 
-  "vibeCardSublineHabitCount": "{count, plural, =1{1 alışkanlığı tamamladın} other{{count} alışkanlığı tamamladın}}",
+  "vibeCardSublineHabitCount": "{count, plural, =1{1 alışkanlık tamamladın} other{{count} alışkanlık tamamladın}}",
   "@vibeCardSublineHabitCount": {
     "description": "Vibe card subline fragment: completed habit count",
     "placeholders": {
@@ -1391,7 +1391,7 @@
   "reminderSettingLabel": "Günlük hatırlatma",
   "@reminderSettingLabel": {"description": "Settings row label for the daily streak-protection reminder toggle"},
 
-  "reminderSettingSubtitle": "Günü kaçırmadan önce nazik bir dokunuş",
+  "reminderSettingSubtitle": "Gün geçip gitmeden nazik bir dokunuş",
   "@reminderSettingSubtitle": {"description": "Settings row subtitle explaining the gentle daily reminder"},
 
   "reminderTimeLabel": "Saat: {time}",
@@ -1460,13 +1460,13 @@
     }
   },
 
-  "movementStart": "Başla",
+  "movementStart": "başla",
   "@movementStart": {"description": "Button that opens the first session of a program"},
 
-  "movementContinue": "Devam et",
+  "movementContinue": "devam et",
   "@movementContinue": {"description": "Button that opens the next unfinished session of a program"},
 
-  "movementReplay": "Yeniden izle",
+  "movementReplay": "yeniden izle",
   "@movementReplay": {"description": "Button shown when every session of the program is done"},
 
   "movementAllDone": "programı tamamladın 🌿",
@@ -1475,10 +1475,10 @@
   "movementSessionDone": "tamamlandı",
   "@movementSessionDone": {"description": "Badge on a finished session row"},
 
-  "movementPlayerError": "Video şu an açılamadı",
+  "movementPlayerError": "video şu an açılamadı",
   "@movementPlayerError": {"description": "Shown when the video fails to load or play"},
 
-  "movementPlayerRetry": "Tekrar dene",
+  "movementPlayerRetry": "tekrar dene",
   "@movementPlayerRetry": {"description": "Retry button on the video player error state"},
 
   "movementPaywallReason": "bu program ILND+ üyelerine özel 🌿",

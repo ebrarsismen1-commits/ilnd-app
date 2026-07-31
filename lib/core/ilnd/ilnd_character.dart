@@ -44,6 +44,35 @@ Sınırların (çok önemli):
 - Kullanıcının eklediği öğünün porsiyon ve içeriğini doğrudan fotoğrafta ne görünüyorsa ona göre yorumlarsın.
 ''';
 
+  /// Türkçe dil kuralı.
+  ///
+  /// Neden bu kadar ayrıntılı: eskiden tek satırdı ("Türkçe konuşursun") ve
+  /// model İngilizce kurduğu cümleyi Türkçe kelimelerle diziyordu — kullanıcı
+  /// "welcome back" karşılığı olarak "hoş geldin geri" gördü. Tek çağrı noktası
+  /// (ilnd_service.dart) tüm AI yüzeylerini beslediği için bu tek satırlık
+  /// zayıflık sohbette, günlük yorumunda, yemek analizinde ve gece ritüelinde
+  /// aynı anda görünüyordu. Kural kısaltılırsa o his geri gelir.
+  static const String _turkishRule = '''
+- Türkçe konuşursun ve kullanıcının tonuna uyum sağlarsın. Cümleyi Türkçe
+  kurarsın: aklından İngilizce bir cümle geçirip onu çevirmezsin, baştan Türkçe
+  düşünürsün. En sık yaptığın hata İngilizce kalıbı Türkçe kelimelerle dizmek
+  ("welcome back" için "hoş geldin geri" demek gibi); bunun yerine Türkçenin
+  kendi karşılığını kullanırsın ("tekrar hoş geldin").
+- Türkçenin doğal söz dizimini korursun: yüklem cümlenin sonuna gelir, iyelik ve
+  hâl ekleri eksiksizdir, özne gerekmiyorsa düşer ("sen bugün nasılsın" değil
+  "bugün nasılsın").
+- Kullanıcıya her zaman "sen" diye hitap edersin. "Siz", "yapınız", "lütfen
+  deneyiniz" gibi resmî kalıpları hiç kullanmazsın.
+- Türkçesi doğal biçimde varken İngilizce kelime kullanmazsın: journal yerine
+  günlük, mood yerine ruh hali, mindful yerine farkında dersin.''';
+
+  /// İngilizce dil kuralı. Türkçe şablon dil olduğu için model varsayılan
+  /// olarak Türkçeye kayabiliyor; bu yüzden vurgulu.
+  static const String _englishRule =
+      '- Kullanıcının uygulama dili İngilizce: HER ZAMAN İngilizce yanıt '
+      'verirsin, kullanıcının tonuna uyum sağlarsın. (You always reply '
+      'in English.)';
+
   /// Tam sistem prompt'unu kullanıcı hafızasıyla birlikte üretir.
   ///
   /// [task] her özelliğe özel kısa görev talimatıdır (ör. "yemek yorumu yap").
@@ -54,11 +83,7 @@ Sınırların (çok önemli):
     String? task,
     String languageCode = 'tr',
   }) {
-    final langRule = languageCode == 'tr'
-        ? '- Türkçe konuşursun, kullanıcının tonuna uyum sağlarsın.'
-        : "- Kullanıcının uygulama dili İngilizce: HER ZAMAN İngilizce yanıt "
-              "verirsin, kullanıcının tonuna uyum sağlarsın. (You always reply "
-              "in English.)";
+    final langRule = languageCode == 'tr' ? _turkishRule : _englishRule;
     final buffer = StringBuffer(_persona.replaceFirst('{LANG_RULE}', langRule));
 
     final memo = memory.toPromptContext();
