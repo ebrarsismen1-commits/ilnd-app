@@ -13,8 +13,9 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 ///
 /// Merkez, ürünün kalbi olan ILND sohbetine aittir — halka bir buton değil,
 /// markanın jestidir. Eski [+] (ekle sheet) Bugün ekranının üst çubuğuna
-/// taşındı; "Takip" sekmesi kaldırıldı, verisine Sen (profil) içinden
-/// erişilir (tam birleşme: roadmap NEXT-4 devamı).
+/// taşındı; "Takip" sekmesi kaldırıldı, verisine **Bugün ekranındaki takip
+/// kartından** erişilir (roadmap NEXT-4 devamı). Profildeki eski giriş de
+/// kaldırıldı — takibin tek kapısı Bugün'dür, ikinci bir giriş açılmaz.
 class AppShell extends ConsumerWidget {
   const AppShell({super.key, required this.navigationShell});
 

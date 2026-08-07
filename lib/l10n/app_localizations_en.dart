@@ -1186,6 +1186,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTrackingCardSubtitle => 'your steps, meals, habits';
 
   @override
+  String homeTrackingCardSummary(int kcal, int water, int habits) {
+    return '$kcal kcal · $water ml · $habits habits';
+  }
+
+  @override
   String get gorevEkleNameEmpty => 'Give the habit a name first.';
 
   @override
@@ -1497,6 +1502,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeReminderInviteLater => 'Not now';
+
+  @override
+  String get planShelfLabel => 'PLANS';
+
+  @override
+  String planDayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String planProgress(int done, int total) {
+    return '$done/$total days';
+  }
+
+  @override
+  String get planStart => 'start';
+
+  @override
+  String planContinue(int day) {
+    return 'continue with day $day';
+  }
+
+  @override
+  String get planRestart => 'start over';
+
+  @override
+  String get planAllDone => 'you finished the plan 🌿';
+
+  @override
+  String get planDayDone => 'done';
+
+  @override
+  String planDayLabel(int day) {
+    return 'day $day';
+  }
+
+  @override
+  String get planDayComplete => 'complete today';
+
+  @override
+  String get planDayRead => 'today\'s read';
+
+  @override
+  String get planDayAction => 'today\'s step';
+
+  @override
+  String get planActionBreath => 'take a breath';
+
+  @override
+  String get planActionMove => 'move';
+
+  @override
+  String get planActionWater => 'drink water';
+
+  @override
+  String get planActionJournal => 'write in your journal';
+
+  @override
+  String get planPaywallReason => 'this plan is for ILND+ members 🌿';
+
+  @override
+  String get planPremiumBadge => 'ILND+';
+
+  @override
+  String get planSwitchTitle => 'You have a plan in progress';
+
+  @override
+  String planSwitchBody(String title) {
+    return '$title will pause, your progress stays. Switch to the new plan?';
+  }
+
+  @override
+  String get planSwitchConfirm => 'switch';
+
+  @override
+  String get planSwitchCancel => 'never mind';
+
+  @override
+  String get homeActivePlanLabel => 'YOUR PLAN';
 
   @override
   String get movementShelfLabel => 'MOVEMENT PROGRAMS';

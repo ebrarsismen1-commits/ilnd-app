@@ -1126,6 +1126,16 @@
   "homeTrackingCardSubtitle": "adımların, öğünlerin, alışkanlıkların",
   "@homeTrackingCardSubtitle": {"description": "Home tracking card subtitle"},
 
+  "homeTrackingCardSummary": "{kcal} kcal · {water} ml · {habits} alışkanlık",
+  "@homeTrackingCardSummary": {
+    "description": "Home tracking card live summary of today's totals",
+    "placeholders": {
+      "kcal": {"type": "int"},
+      "water": {"type": "int"},
+      "habits": {"type": "int"}
+    }
+  },
+
   "gorevEkleNameEmpty": "Önce alışkanlığa bir ad ver.",
   "@gorevEkleNameEmpty": {"description": "Error when habit name is empty"},
 
@@ -1422,6 +1432,101 @@
 
   "homeReminderInviteLater": "Şimdi değil",
   "@homeReminderInviteLater": {"description": "Decline button on the reminder invite card; dismisses it permanently"},
+
+  "planShelfLabel": "PLANLAR",
+  "@planShelfLabel": {"description": "Explore shelf label above the guided plans row"},
+
+  "planDayCount": "{count, plural, =1{1 gün} other{{count} gün}}",
+  "@planDayCount": {
+    "description": "Length of a guided plan in days",
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+
+  "planProgress": "{done}/{total} gün",
+  "@planProgress": {
+    "description": "How many days of a plan the user has completed",
+    "placeholders": {
+      "done": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+
+  "planStart": "başla",
+  "@planStart": {"description": "Button that starts a plan from its first day"},
+
+  "planContinue": "{day}. güne devam et",
+  "@planContinue": {
+    "description": "Button that opens the next unfinished day of a plan",
+    "placeholders": {
+      "day": {"type": "int"}
+    }
+  },
+
+  "planRestart": "yeniden başla",
+  "@planRestart": {"description": "Button shown on a plan whose days are all completed"},
+
+  "planAllDone": "planı tamamladın 🌿",
+  "@planAllDone": {"description": "Line shown on a plan whose days are all completed"},
+
+  "planDayDone": "tamamlandı",
+  "@planDayDone": {"description": "Badge on a finished day row"},
+
+  "planDayLabel": "{day}. gün",
+  "@planDayLabel": {
+    "description": "Title prefix for a single day of a plan",
+    "placeholders": {
+      "day": {"type": "int"}
+    }
+  },
+
+  "planDayComplete": "bugünü tamamla",
+  "@planDayComplete": {"description": "Button that marks the current plan day as done"},
+
+  "planDayRead": "günün okuması",
+  "@planDayRead": {"description": "Section label above the article attached to a plan day"},
+
+  "planDayAction": "günün adımı",
+  "@planDayAction": {"description": "Section label above the action attached to a plan day"},
+
+  "planActionBreath": "nefes al",
+  "@planActionBreath": {"description": "Plan day action: breathing"},
+
+  "planActionMove": "hareket et",
+  "@planActionMove": {"description": "Plan day action: movement"},
+
+  "planActionWater": "su iç",
+  "@planActionWater": {"description": "Plan day action: drink water"},
+
+  "planActionJournal": "günlüğüne yaz",
+  "@planActionJournal": {"description": "Plan day action: write in the journal"},
+
+  "planPaywallReason": "bu plan ILND+ üyelerine özel 🌿",
+  "@planPaywallReason": {"description": "Context shown on the paywall when a premium plan is opened"},
+
+  "planPremiumBadge": "ILND+",
+  "@planPremiumBadge": {"description": "Badge on a plan card that requires a subscription"},
+
+  "planSwitchTitle": "Devam eden planın var",
+  "@planSwitchTitle": {"description": "Dialog title when starting a plan while another is active"},
+
+  "planSwitchBody": "{title} planı duraklar, ilerlemen kaybolmaz. Yeni plana geçilsin mi?",
+  "@planSwitchBody": {
+    "description": "Dialog body explaining that the active plan will be paused",
+    "placeholders": {
+      "title": {"type": "String"}
+    }
+  },
+
+  "planSwitchConfirm": "geç",
+  "@planSwitchConfirm": {"description": "Confirm button on the plan switch dialog"},
+
+  "planSwitchCancel": "vazgeç",
+  "@planSwitchCancel": {"description": "Cancel button on the plan switch dialog"},
+
+  "homeActivePlanLabel": "PLANIN",
+  "@homeActivePlanLabel": {"description": "Section label above the active plan row on the home screen"},
 
   "movementShelfLabel": "HAREKET PROGRAMLARI",
   "@movementShelfLabel": {"description": "Explore shelf label above the movement program row"},

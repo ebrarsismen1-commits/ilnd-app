@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ILND — Mimari Şemalar</title>
+<style>
+  :root{
+    --cream:#F5F4F1; --creamDark:#EBE8E1; --white:#fff; --border:#E3E0D8;
+    --sage:#1F9D57; --sageLight:#7FCE9E; --amber:#E2611C; --amberLight:#F3B489;
+    --charcoal:#111827; --muted:#6B7280;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--cream); color:var(--charcoal);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:32px 20px 64px}
+  header.top{margin-bottom:28px}
+  h1{font-family:Georgia,"Times New Roman",serif; font-size:30px; margin:0 0 6px; font-weight:600}
+  .sub{color:var(--muted); font-size:14px; margin:0}
+  .stats{display:flex; flex-wrap:wrap; gap:10px; margin:20px 0 0}
+  .stat{background:var(--white); border:1px solid var(--border); border-radius:10px; padding:8px 14px}
+  .stat b{display:block; font-size:17px; font-family:Georgia,serif}
+  .stat span{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em}
+  section{background:var(--white); border:1px solid var(--border); border-radius:16px; padding:24px; margin:22px 0}
+  h2{font-family:Georgia,serif; font-size:20px; margin:0 0 4px; font-weight:600}
+  .lead{color:var(--muted); font-size:13.5px; margin:0 0 18px}
+  svg{width:100%; height:auto; display:block}
+  .note{
+    background:#FDF3EC; border:1px solid var(--amberLight); border-left:4px solid var(--amber);
+    border-radius:8px; padding:12px 16px; font-size:13.5px; margin-top:16px;
+  }
+  .note b{color:var(--amber)}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px}
+  .card{border:1px solid var(--border); border-radius:12px; padding:14px 16px; background:var(--cream)}
+  .card h3{margin:0 0 4px; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--sage)}
+  .card.server h3{color:var(--amber)}
+  .card p{margin:0 0 10px; font-size:12px; color:var(--muted)}
+  .card ul{margin:0; padding-left:0; list-style:none}
+  .card li{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12.5px; padding:3px 0; border-top:1px solid var(--border)}
+  .card li:first-child{border-top:none}
+  footer{color:var(--muted); font-size:12.5px; text-align:center; margin-top:30px}
+  @media print{
+    body{background:#fff} section{break-inside:avoid; page-break-inside:avoid; box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>ILND — Mimari Şemalar</h1>
+  <p class="sub">Teknik görüşme sunum seti · 31 Temmuz 2026 · kaynak: uygulamanın kendi kodu (firestore.rules, functions/index.js, lib/core)</p>
+  <div class="stats">
+    <div class="stat"><b>3</b><span>platform, tek kod</span></div>
+    <div class="stat"><b>~28.500</b><span>satır Dart</span></div>
+    <div class="stat"><b>43</b><span>test dosyası</span></div>
+    <div class="stat"><b>4</b><span>cloud function</span></div>
+    <div class="stat"><b>12</b><span>veri koleksiyonu</span></div>
+    <div class="stat"><b>4</b><span>mimari karar kaydı</span></div>
+  </div>
+</header>
+
+<!-- ============ 1 ============ -->
+<section>
+  <h2>1 · Sistemin haritası</h2>
+  <p class="lead">Uygulama nerede çalışıyor, dışarıda hangi servislere bağlı.</p>
+
+  <svg viewBox="0 0 1000 560" role="img" aria-label="Sistem mimarisi şeması">
+    <defs>
+      <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#6B7280"/>
+      </marker>
+    </defs>
+
+    <!-- istemci -->
+    <rect x="40" y="24" width="920" height="140" rx="14" fill="#F5F4F1" stroke="#E3E0D8"/>
+    <text x="62" y="54" font-size="15" font-weight="700" fill="#111827">İSTEMCİ — Flutter (tek kod tabanı)</text>
+    <rect x="672" y="36" width="88" height="26" rx="13" fill="#fff" stroke="#E3E0D8"/>
+    <text x="716" y="53" font-size="12" fill="#6B7280" text-anchor="middle">Android</text>
+    <rect x="768" y="36" width="70" height="26" rx="13" fill="#fff" stroke="#E3E0D8"/>
+    <text x="803" y="53" font-size="12" fill="#6B7280" text-anchor="middle">iOS</text>
+    <rect x="846" y="36" width="70" height="26" rx="13" fill="#fff" stroke="#E3E0D8"/>
+    <text x="881" y="53" font-size="12" fill="#6B7280" text-anchor="middle">Web</text>
+
+    <rect x="62" y="76" width="426" height="70" rx="10" fill="#fff" stroke="#E3E0D8"/>
+    <text x="80" y="100" font-size="13" font-weight="700" fill="#111827">lib/features/ — ekranlar</text>
+    <text x="80" y="120" font-size="11.5" fill="#6B7280">home · chat · journal · habits · takip · explore</text>
+    <text x="80" y="136" font-size="11.5" fill="#6B7280">topluluk · movement · premium · onboarding · auth …</text>
+
+    <rect x="512" y="76" width="426" height="70" rx="10" fill="#fff" stroke="#E3E0D8"/>
+    <text x="530" y="100" font-size="13" font-weight="700" fill="#111827">lib/core/ — paylaşılan katman</text>
+    <text x="530" y="120" font-size="11.5" fill="#6B7280">services · repositories · ilnd (AI karakteri)</text>
+    <text x="530" y="136" font-size="11.5" fill="#6B7280">billing · router · theme · widgets</text>
+
+    <!-- oklar -->
+    <line x1="145" y1="164" x2="145" y2="256" stroke="#6B7280" stroke-width="1.5" marker-end="url(#a1)"/>
+    <line x1="385" y1="164" x2="385" y2="256" stroke="#6B7280" stroke-width="1.5" marker-end="url(#a1)"/>
+    <line x1="625" y1="164" x2="625" y2="256" stroke="#6B7280" stroke-width="1.5" marker-end="url(#a1)"/>
+    <line x1="860" y1="164" x2="860" y2="256" stroke="#6B7280" stroke-width="1.5" marker-end="url(#a1)"/>
+
+    <!-- servisler -->
+    <rect x="40" y="258" width="210" height="150" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <text x="60" y="286" font-size="13.5" font-weight="700" fill="#1F9D57">SUPABASE</text>
+    <text x="60" y="310" font-size="12" fill="#111827">Kimlik / giriş (Auth)</text>
+    <text x="60" y="330" font-size="11.5" fill="#6B7280">e-posta · Google · Apple</text>
+    <text x="60" y="352" font-size="12" fill="#111827">profiles tablosu</text>
+    <text x="60" y="372" font-size="11.5" fill="#6B7280">onboarding + profil kalıcılığı</text>
+    <text x="60" y="392" font-size="11.5" fill="#6B7280">(ADR-0003)</text>
+
+    <rect x="280" y="258" width="210" height="150" rx="12" fill="#fff" stroke="#1F9D57" stroke-width="2"/>
+    <text x="300" y="286" font-size="13.5" font-weight="700" fill="#1F9D57">CLOUD FUNCTIONS</text>
+    <text x="300" y="304" font-size="11" fill="#6B7280">bizim sunucu tarafımız</text>
+    <text x="300" y="328" font-size="11.5" fill="#111827">anthropicProxy</text>
+    <text x="300" y="348" font-size="11.5" fill="#111827">mintFirebaseToken</text>
+    <text x="300" y="368" font-size="11.5" fill="#111827">redeemReferralCode</text>
+    <text x="300" y="388" font-size="11.5" fill="#111827">deleteAccount</text>
+
+    <rect x="520" y="258" width="210" height="150" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <text x="540" y="286" font-size="13.5" font-weight="700" fill="#1F9D57">FIRESTORE</text>
+    <text x="540" y="310" font-size="12" fill="#111827">Kullanıcı verisi</text>
+    <text x="540" y="330" font-size="11.5" fill="#6B7280">12 koleksiyon (bkz. §4)</text>
+    <text x="540" y="352" font-size="12" fill="#111827">Güvenlik kuralları</text>
+    <text x="540" y="372" font-size="11.5" fill="#6B7280">herkes yalnız kendi verisine</text>
+    <text x="540" y="392" font-size="11.5" fill="#6B7280">erişebilir</text>
+
+    <rect x="760" y="258" width="200" height="150" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <text x="780" y="286" font-size="13.5" font-weight="700" fill="#1F9D57">DESTEK SERVİSLERİ</text>
+    <text x="780" y="310" font-size="12" fill="#111827">RevenueCat</text>
+    <text x="780" y="328" font-size="11.5" fill="#6B7280">abonelik / premium</text>
+    <text x="780" y="352" font-size="12" fill="#111827">Firebase Analytics</text>
+    <text x="780" y="370" font-size="12" fill="#111827">Crashlytics</text>
+    <text x="780" y="388" font-size="11.5" fill="#6B7280">çökme takibi</text>
+
+    <!-- anthropic -->
+    <line x1="385" y1="408" x2="385" y2="452" stroke="#6B7280" stroke-width="1.5" marker-end="url(#a1)"/>
+    <rect x="280" y="454" width="210" height="72" rx="12" fill="#FDF3EC" stroke="#E2611C" stroke-width="1.5"/>
+    <text x="300" y="482" font-size="13.5" font-weight="700" fill="#E2611C">ANTHROPIC API</text>
+    <text x="300" y="504" font-size="12" fill="#111827">Claude Sonnet 4.6</text>
+
+    <text x="512" y="480" font-size="12.5" font-weight="700" fill="#E2611C">API anahtarı yalnızca burada — sunucuda.</text>
+    <text x="512" y="500" font-size="12" fill="#6B7280">Uygulamanın içinde hiçbir anahtar taşınmıyor;</text>
+    <text x="512" y="518" font-size="12" fill="#6B7280">telefon doğrudan Anthropic'e hiç bağlanmıyor.</text>
+  </svg>
+</section>
+
+<!-- ============ 2 ============ -->
+<section>
+  <h2>2 · Giriş akışı — iki kimlik sistemi neden var?</h2>
+  <p class="lead">Dışarıdan gelen en zor sorunun cevabı. Kimlik Supabase'de, veri Firestore'da; ikisini bir köprü bağlıyor.</p>
+
+  <svg viewBox="0 0 1000 300" role="img" aria-label="Giriş akışı şeması">
+    <defs>
+      <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#1F9D57"/>
+      </marker>
+    </defs>
+
+    <!-- 1 -->
+    <rect x="20" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <circle cx="42" cy="46" r="15" fill="#1F9D57"/><text x="42" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+    <text x="38" y="90" font-size="13" font-weight="700" fill="#111827">Kullanıcı girişi</text>
+    <text x="38" y="112" font-size="11.5" fill="#6B7280">e-posta + şifre,</text>
+    <text x="38" y="128" font-size="11.5" fill="#6B7280">Google veya Apple</text>
+    <text x="38" y="148" font-size="11.5" fill="#6B7280">hesabıyla</text>
+
+    <!-- 2 -->
+    <rect x="218" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <circle cx="240" cy="46" r="15" fill="#1F9D57"/><text x="240" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+    <text x="236" y="90" font-size="13" font-weight="700" fill="#111827">Supabase Auth</text>
+    <text x="236" y="112" font-size="11.5" fill="#6B7280">kimliği doğrular,</text>
+    <text x="236" y="128" font-size="11.5" fill="#6B7280">oturum jetonu verir</text>
+
+    <!-- 3 -->
+    <rect x="416" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#1F9D57" stroke-width="2"/>
+    <circle cx="438" cy="46" r="15" fill="#1F9D57"/><text x="438" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+    <text x="434" y="88" font-size="13" font-weight="700" fill="#111827">KÖPRÜ</text>
+    <text x="434" y="106" font-size="11.5" fill="#111827">mintFirebaseToken</text>
+    <text x="434" y="126" font-size="11.5" fill="#6B7280">sunucu, Supabase</text>
+    <text x="434" y="142" font-size="11.5" fill="#6B7280">jetonunu doğrular</text>
+
+    <!-- 4 -->
+    <rect x="614" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <circle cx="636" cy="46" r="15" fill="#1F9D57"/><text x="636" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+    <text x="632" y="90" font-size="13" font-weight="700" fill="#111827">Firebase oturumu</text>
+    <text x="632" y="112" font-size="11.5" fill="#6B7280">aynı kullanıcı için</text>
+    <text x="632" y="128" font-size="11.5" fill="#6B7280">özel jeton üretilir</text>
+
+    <!-- 5 -->
+    <rect x="812" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <circle cx="834" cy="46" r="15" fill="#1F9D57"/><text x="834" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">5</text>
+    <text x="830" y="90" font-size="13" font-weight="700" fill="#111827">Veri açılır</text>
+    <text x="830" y="112" font-size="11.5" fill="#6B7280">kurallar kimliği görür,</text>
+    <text x="830" y="128" font-size="11.5" fill="#6B7280">Firestore okunabilir</text>
+
+    <line x1="190" y1="106" x2="214" y2="106" stroke="#1F9D57" stroke-width="2" marker-end="url(#a2)"/>
+    <line x1="388" y1="106" x2="412" y2="106" stroke="#1F9D57" stroke-width="2" marker-end="url(#a2)"/>
+    <line x1="586" y1="106" x2="610" y2="106" stroke="#1F9D57" stroke-width="2" marker-end="url(#a2)"/>
+    <line x1="784" y1="106" x2="808" y2="106" stroke="#1F9D57" stroke-width="2" marker-end="url(#a2)"/>
+
+    <text x="20" y="212" font-size="12.5" fill="#6B7280">Köprü kurulmadan Firestore'a giden her istek reddedilir. Bu yüzden kullanıcıya bağlı her veri kaynağı iki kimliği birden izlemek zorunda —</text>
+    <text x="20" y="232" font-size="12.5" fill="#6B7280">bu, kod tabanının 2 numaralı sert kuralı ve testle kilitli. Kararın gerekçesi ve ne zaman değişeceği: <tspan font-weight="700" fill="#111827">ADR-0001</tspan>.</text>
+    <text x="20" y="262" font-size="12.5" fill="#E2611C" font-weight="700">Değişim tetikleyicisi: aylık aktif kullanıcı 50 bini geçerse tek kimlik sistemine geçiş yeniden değerlendirilir.</text>
+  </svg>
+</section>
+
+<!-- ============ 3 ============ -->
+<section>
+  <h2>3 · Yapay zekâ çağrısı ve maliyet kontrolü</h2>
+  <p class="lead">"Anahtar güvende mi, maliyet patlar mı" sorusunun cevabı tek şemada.</p>
+
+  <svg viewBox="0 0 1000 300" role="img" aria-label="AI çağrı akışı şeması">
+    <defs>
+      <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#E2611C"/>
+      </marker>
+    </defs>
+
+    <rect x="20" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <circle cx="42" cy="46" r="15" fill="#E2611C"/><text x="42" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+    <text x="38" y="90" font-size="13" font-weight="700" fill="#111827">Kullanıcı isteği</text>
+    <text x="38" y="112" font-size="11.5" fill="#6B7280">sohbet, günlük yorumu,</text>
+    <text x="38" y="128" font-size="11.5" fill="#6B7280">yemek fotoğrafı analizi</text>
+
+    <rect x="218" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <circle cx="240" cy="46" r="15" fill="#E2611C"/><text x="240" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+    <text x="236" y="90" font-size="13" font-weight="700" fill="#111827">IlndService</text>
+    <text x="236" y="112" font-size="11.5" fill="#6B7280">uygulamadaki tüm AI</text>
+    <text x="236" y="128" font-size="11.5" fill="#6B7280">çağrıları tek kapıdan</text>
+    <text x="236" y="144" font-size="11.5" fill="#6B7280">geçer</text>
+
+    <rect x="416" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E2611C" stroke-width="2"/>
+    <circle cx="438" cy="46" r="15" fill="#E2611C"/><text x="438" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+    <text x="434" y="88" font-size="13" font-weight="700" fill="#111827">anthropicProxy</text>
+    <text x="434" y="108" font-size="11.5" fill="#6B7280">kimlik doğrulanır</text>
+    <text x="434" y="126" font-size="11.5" fill="#6B7280">kota kontrol edilir</text>
+    <text x="434" y="144" font-size="11.5" fill="#6B7280">premium muafiyeti</text>
+
+    <rect x="614" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <circle cx="636" cy="46" r="15" fill="#E2611C"/><text x="636" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+    <text x="632" y="90" font-size="13" font-weight="700" fill="#111827">Claude Sonnet 4.6</text>
+    <text x="632" y="112" font-size="11.5" fill="#6B7280">hızlı: 512 token / 300 gün</text>
+    <text x="632" y="128" font-size="11.5" fill="#6B7280">derin: 1024 token / 60 gün</text>
+    <text x="632" y="146" font-size="11.5" fill="#6B7280">60 sn zaman aşımı</text>
+
+    <rect x="812" y="46" width="168" height="120" rx="12" fill="#fff" stroke="#E3E0D8"/>
+    <circle cx="834" cy="46" r="15" fill="#E2611C"/><text x="834" y="51" font-size="13" font-weight="700" fill="#fff" text-anchor="middle">5</text>
+    <text x="830" y="90" font-size="13" font-weight="700" fill="#111827">Yanıt + sayaç</text>
+    <text x="830" y="112" font-size="11.5" fill="#6B7280">kullanım sayacını</text>
+    <text x="830" y="128" font-size="11.5" fill="#6B7280">yalnız sunucu yazar,</text>
+    <text x="830" y="144" font-size="11.5" fill="#6B7280">uygulama sadece okur</text>
+
+    <line x1="190" y1="106" x2="214" y2="106" stroke="#E2611C" stroke-width="2" marker-end="url(#a3)"/>
+    <line x1="388" y1="106" x2="412" y2="106" stroke="#E2611C" stroke-width="2" marker-end="url(#a3)"/>
+    <line x1="586" y1="106" x2="610" y2="106" stroke="#E2611C" stroke-width="2" marker-end="url(#a3)"/>
+    <line x1="784" y1="106" x2="808" y2="106" stroke="#E2611C" stroke-width="2" marker-end="url(#a3)"/>
+
+    <text x="20" y="212" font-size="12.5" fill="#6B7280">Kota önce telefonda tutuluyordu; kullanıcı uygulamayı silip kurunca sıfırlanıyordu. Temmuz 2026'da sayaç cihazdan hesaba taşındı:</text>
+    <text x="20" y="232" font-size="12.5" fill="#6B7280">artık <tspan font-family="ui-monospace,Menlo,Consolas,monospace" fill="#111827">ai_usage/{uid}_{hafta}</tspan> kaydında, yazma yetkisi yalnız sunucuda.</text>
+    <text x="20" y="262" font-size="12.5" fill="#E2611C" font-weight="700">Kural: kullanıcının yazabildiği yerde sınır yoktur.</text>
+  </svg>
+</section>
+
+<!-- ============ 4 ============ -->
+<section>
+  <h2>4 · Veri modeli — hangi veri nerede</h2>
+  <p class="lead">Firestore'daki 12 koleksiyon, erişim yetkisine göre gruplanmış. Yetkiler <code>firestore.rules</code> dosyasında tanımlı.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Kullanıcının kendi verisi</h3>
+      <p>Yalnızca sahibi okuyabilir ve yazabilir.</p>
+      <ul>
+        <li>users</li>
+        <li>habits</li>
+        <li>habit_completions</li>
+        <li>daily_checkins</li>
+        <li>referrals</li>
+        <li>user_growth</li>
+      </ul>
+    </div>
+
+    <div class="card server">
+      <h3>Yalnız sunucu yazar</h3>
+      <p>Uygulama okuyabilir, yazamaz. Limitin kullanıcı tarafından sıfırlanmasını engeller.</p>
+      <ul>
+        <li>ai_usage</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Ortak içerik</h3>
+      <p>Herkese okunur, uygulamadan yazılamaz; içerik ayrı bir betikle yüklenir.</p>
+      <ul>
+        <li>articles</li>
+        <li>movement_programs</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Topluluk / etkinlik</h3>
+      <p>Katılımlar alt koleksiyon olarak tutulur — dizi olsaydı doküman boyutu ve yazma çakışması sorun olurdu (ADR-0002).</p>
+      <ul>
+        <li>events</li>
+        <li>events/{id}/rsvps/{uid}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>Hesap silme gerçek bir işlem.</b> <code>deleteAccount</code> fonksiyonu kullanıcının verisini
+    sunucu tarafında siliyor — hem mağaza şartı hem KVKK açısından gerekli, hazır durumda.
+  </div>
+</section>
+
+<footer>
+  Şemalar uygulamanın kendi kodundan üretildi · detaylı karar kayıtları: <code>docs/adr/</code> ve <code>docs/decisions.md</code>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,556 +1,678 @@
 [
   {
-    "id": "bacaklar-duvara",
+    "id": "klasik-sporcu-icecegi",
     "order": 0,
-    "title": "bacaklar duvara",
-    "category": "wellness",
-    "readTime": "4 dk",
-    "excerpt": "Sıfır efor, beş dakika. Sinir sistemini dinlenme moduna alan poz.",
-    "imageUrl": "https://images.unsplash.com/photo-1695764062553-032bb346f524?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Gün boyu ayaktasın, oturuyorsun, koşturuyorsun. Bedenin saatlerdir aynı modda: devam et. Bacakları duvara dayama pozu, bu modu kapatmanın en zahmetsiz yolu. Sırt üstü uzanıyorsun, bacaklarını duvara yaslıyorsun, kollarını yanına bırakıyorsun. Hepsi bu.",
-      "Beş dakika böyle kalmak dolaşımı tersine çevirir. Gün boyu ayaklarda biriken sıvı yumuşakça geri döner. Asıl güzellik ise sinir sisteminde yaşanır: bu poz bedenine güvende olduğunu söyler. Kalp atışın yavaşlar, nefesin kendiliğinden derinleşir.",
-      "Dene: akşam eve gelince ya da uyumadan önce telefonu uzağa koy, beş dakikalık bir zamanlayıcı kur ve bacaklarını duvara uzat. Gözlerini kapat. Hiçbir şey yapman gerekmiyor, çünkü bu pozun bütün amacı hiçbir şey yapmamak.",
-      "Regl döneminde, uzun bir yolculuğun ardından ya da yoğun bir antrenman gününde özellikle iyi gelir. Araç istemez, beceri istemez. Sana bir duvar ve beş dakika yeter."
-    ],
-    "en": {
-      "title": "legs up the wall",
-      "readTime": "4 min",
-      "excerpt": "Zero effort, five minutes. The pose that switches your nervous system into rest mode.",
-      "body": [
-        "You have been on your feet, sitting, rushing all day. Your body has been stuck in the same mode for hours: keep going. Legs up the wall is the most effortless way to switch that mode off. You lie on your back, rest your legs against the wall, and let your arms fall to your sides. That is all.",
-        "Staying like this for five minutes reverses circulation, and the fluid that gathered in your feet all day gently flows back. The real magic happens in your nervous system: this pose tells your body it is safe. Your heart rate slows and your breath deepens on its own.",
-        "Try it: when you get home in the evening or before bed, put your phone far away, set a five minute timer and put your legs up the wall. Close your eyes. You do not have to do anything, because the whole point of this pose is doing nothing.",
-        "It feels especially good during your period, after a long trip or on a heavy workout day. No tools, no skill required. All you need is a wall and five minutes."
-      ]
-    }
-  },
-  {
-    "id": "uykuyu-simart",
-    "order": 1,
-    "title": "uykuyu şımart",
-    "category": "wellness",
-    "readTime": "5 dk",
-    "excerpt": "Uyku bir lüks değil, bakımın ta kendisi. Küçük dokunuşlarla başla.",
-    "imageUrl": "https://images.unsplash.com/photo-1614045959735-6f9dc28cb994?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Uykunu iyileştirmek için hayatını değiştirmen gerekmiyor. Akşamına birkaç küçük dokunuş eklemen yeterli. Bu yaklaşımın yeni bir adı var, sleepmaxxing deniyor, ama özü çok eski: uykuya değerli bir misafire hazırlanır gibi hazırlanmak.",
-      "En etkili üç adım şunlar. Yatmadan bir saat önce büyük ışıkları kapatıp sıcak ve loş bir ışığa geç. Ekranı erkenden bırak. Odanı serin tut, çünkü beden uykuya geçerken ısısını düşürür ve serin bir oda bu geçişi kolaylaştırır.",
-      "Üzerine koymak istersen seçenekler hazır: karartma perdesi ya da yumuşak bir uyku bandı, bir fincan papatya veya melisa çayı, yatmadan önce hafif bir esneme. Magnezyum takviyesini de çok duyacaksın; denemeden önce doktoruna ya da eczacına sormak en doğrusu.",
-      "Hepsini birden yapmak zorunda değilsin. Bu akşam sadece ışıkları kıs. Yarın bir fincan çay ekle. Uyku, şımartıldıkça güzelleşen bir alışkanlıktır."
-    ],
-    "en": {
-      "title": "spoil your sleep",
-      "readTime": "5 min",
-      "excerpt": "Sleep is not a luxury, it is care itself. Start with small touches.",
-      "body": [
-        "You do not need to change your life to improve your sleep. Adding a few small touches to your evening is enough. This approach has a new name, sleepmaxxing, but its essence is ancient: preparing for sleep the way you would prepare for a treasured guest.",
-        "The three most effective steps are these. An hour before bed, turn off the big lights and switch to warm, dim lighting. Put the screen away early. Keep your room cool, because your body lowers its temperature as it drifts off, and a cool room makes that transition easier.",
-        "If you want to go further, the options are ready: blackout curtains or a soft sleep mask, a cup of chamomile or lemon balm tea, a gentle stretch before bed. You will hear a lot about magnesium supplements too; asking your doctor or pharmacist first is the wise move.",
-        "You do not have to do everything at once. Tonight, just dim the lights. Tomorrow, add a cup of tea. Sleep is a habit that gets lovelier the more you spoil it."
-      ]
-    }
-  },
-  {
-    "id": "yorgun-uyanmak-potasyum",
-    "order": 2,
-    "title": "yorgun mu uyandın?",
-    "category": "wellness",
-    "readTime": "4 dk",
-    "excerpt": "Sekiz saat uyuyup yine yorgunsan, cevap tabağında olabilir.",
-    "imageUrl": "https://images.unsplash.com/photo-1623588689947-d276f8821d6e?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Yeterince uyuduğun hâlde sabah kendini ağır hissediyorsan, tabağına bakmanın zamanı gelmiş olabilir. Kasların ve sinirlerin düzgün çalışmak için potasyuma ihtiyaç duyar. Eksikliği kendini en çok bitkinlik ve hâlsizlik olarak gösterir.",
-      "İyi haber şu: potasyum takviye rafında değil, manavda. Muz en bilineni ama tek seçenek değil. Ispanak, brokoli ve tatlı patates en zengin kaynaklardan. Kivi ile portakal hem potasyum hem C vitamini taşır. Avokado ise bu listenin sessiz şampiyonudur.",
-      "Dene: bu hafta her güne bir potasyum kaynağı serpiştir. Sabah yulafına muz dilimle. Öğlen salatana bir avuç ıspanak kat. Ara öğünde bir kivi ye. Takip etmesi kolay bir plan ve etkisi birkaç günde hissedilir.",
-      "Küçük bir not: sürekli ve açıklayamadığın bir yorgunluk varsa bunu yalnızca beslenmeyle çözmeye çalışma. Basit bir kan tahlili çok şey anlatır, doktorunla konuşmaktan çekinme."
-    ],
-    "en": {
-      "title": "woke up tired?",
-      "readTime": "4 min",
-      "excerpt": "If eight hours of sleep still leaves you tired, the answer may be on your plate.",
-      "body": [
-        "If you feel heavy in the morning despite sleeping enough, it may be time to look at your plate. Your muscles and nerves need potassium to work properly, and a shortage shows up mostly as fatigue and sluggishness.",
-        "The good news: potassium is not on the supplement shelf, it is at the market. Bananas are the famous one but far from the only option. Spinach, broccoli and sweet potatoes are among the richest sources. Kiwi and oranges carry both potassium and vitamin C. Avocado is the quiet champion of this list.",
-        "Try it: sprinkle one potassium source into every day this week. Slice a banana into your morning oats. Add a handful of spinach to your lunch salad. Have a kiwi as a snack. It is an easy plan to follow, and you can feel the difference within days.",
-        "One small note: if your tiredness is constant and unexplained, do not try to fix it with food alone. A simple blood test says a lot, so do not hesitate to talk to your doctor."
-      ]
-    }
-  },
-  {
-    "id": "glow-suyu",
-    "order": 3,
-    "title": "glow suyu",
+    "title": "uzun kardiyolar için klasik sporcu içeceği",
     "category": "tarif",
-    "readTime": "3 dk",
-    "excerpt": "Havuç, limon, zencefil. Cilt bakımı bardakta başlar.",
-    "imageUrl": "https://images.unsplash.com/photo-1593954952271-ce947ed893cb?auto=format&fit=crop&w=1200&q=80",
+    "readTime": "2 dk",
+    "excerpt": "Su, şeker, tuz ve bir tutam turunçgil. Rafta aradığın şey mutfağında.",
+    "imageUrl": "",
     "body": [
-      "Cilt bakımı sadece krem kavanozlarında olmuyor, bardakta da başlıyor. Bu üç malzemeli içecek, panolarda glow skin juice adıyla dolaşan tarifin sade hâli. Havuç beta karoten getiriyor, limon C vitamini, zencefil ise canlandıran keskinliğini.",
-      "Tarif: 3 orta boy havuç, yarım limonun suyu ve küçük bir parmak taze zencefil. Katı meyve sıkacağın varsa hepsini sırayla sık. Yoksa blender da iş görür: havucu ve zencefili az suyla çek, ince süzgeçten geçir, limonu en sonda ekle.",
-      "En iyi zamanı sabah, kahvaltıdan hemen önce. Öğleden sonraki enerji düşüşünde de çok iyi gelir. Soğuk servis et; buzlu hâliyle neredeyse limonata kadar içimlik.",
-      "Küçük bir gerçeklik notu: hiçbir içecek tek başına cildi değiştirmez. Ama düzenli sebze, yeterli su ve iyi uykudan oluşan tabloya eklenen bu bardak, toplamın parlayan parçası olur."
+      "Bütün sporcu içeceklerinin atası bu. Şeker burada tat için değil: sodyumla birlikte çalışıp suyu bağırsaktan kana çeken şey o. Turunçgil suyu ise içeceği içilebilir kılıyor — tuzlu şekerli su tek başına kimsenin boğazından geçmez.",
+      "Bir saati aşan kardiyoda, sıcakta ve çok terlediğin günlerde işini görür. Tek seferde bitirme; on beş dakikada bir birkaç yudum mideyi zorlamaz ve daha iyi emilir."
     ],
     "ingredients": [
-      "3 orta boy havuç",
-      "yarım limonun suyu",
-      "küçük bir parmak taze zencefil"
+      "1 litre su",
+      "50 g şeker (yaklaşık çeyrek su bardağı)",
+      "çeyrek çay kaşığı tuz",
+      "60 ml portakal suyu",
+      "30 ml limon suyu"
     ],
     "steps": [
-      "Havuçları yıka ve uçlarını kes. Zencefilin kabuğunu bir kaşıkla sıyır.",
-      "Katı meyve sıkacağın varsa havuç ve zencefili sırayla sık. Blender kullanıyorsan az suyla pürüzsüz olana kadar çek.",
-      "Blender kullandıysan karışımı ince bir süzgeçten geçir.",
-      "Limon suyunu ekle, karıştır ve buzla soğuk servis et."
+      "Şekeri az miktarda ılık suda çözdür — soğuk suda dibe çöker ve orada kalır.",
+      "Tuzu ekleyip karıştır.",
+      "Portakal ve limon suyunu ekle, kalan suyla bir litreye tamamla.",
+      "Buzdolabında soğut. Antrenman boyunca on beş dakikada bir birkaç yudum iç."
     ],
     "en": {
-      "title": "glow juice",
-      "readTime": "3 min",
-      "excerpt": "Carrot, lemon, ginger. Skincare starts in the glass.",
+      "title": "the classic sports drink for long cardio",
+      "readTime": "2 min",
+      "excerpt": "Water, sugar, salt and a hint of citrus. What you look for on the shelf is in your kitchen.",
       "body": [
-        "Skincare does not only happen in cream jars, it starts in the glass too. This three ingredient drink is the simple version of the glow skin juice you see on every board. Carrot brings beta carotene, lemon brings vitamin C, and ginger brings its wake-up sharpness.",
-        "The recipe: 3 medium carrots, juice of half a lemon and a thumb of fresh ginger. If you have a juicer, run everything through it. A blender works too: blend the carrot and ginger with a little water, strain through a fine sieve, add the lemon at the end.",
-        "The best time is morning, right before breakfast. It also works wonders during the afternoon energy dip. Serve it cold; over ice it drinks almost like lemonade.",
-        "A small reality note: no drink changes your skin on its own. But added to the trio of regular vegetables, enough water and good sleep, this glass becomes the shining part of the total."
+        "This is the ancestor of every sports drink. The sugar is not there for taste: together with sodium it is what pulls water from your gut into your blood. The citrus makes it drinkable — salty sugar water alone goes down nobody's throat.",
+        "It earns its place in cardio past an hour, in the heat, and on days you sweat hard. Do not down it in one go; a few sips every fifteen minutes sit easier and absorb better."
       ],
       "ingredients": [
-        "3 medium carrots",
-        "juice of half a lemon",
-        "a thumb of fresh ginger"
+        "1 litre of water",
+        "50 g sugar (about a quarter cup)",
+        "a quarter teaspoon of salt",
+        "60 ml orange juice",
+        "30 ml lemon juice"
       ],
       "steps": [
-        "Wash the carrots and trim the ends. Scrape the ginger skin off with a spoon.",
-        "If you have a juicer, run the carrot and ginger through it. If you are using a blender, blend with a little water until smooth.",
-        "If you used a blender, strain the mixture through a fine sieve.",
-        "Add the lemon juice, stir, and serve cold over ice."
+        "Dissolve the sugar in a little warm water — in cold water it sinks and stays there.",
+        "Add the salt and stir.",
+        "Add the orange and lemon juice, top up to a litre with the rest of the water.",
+        "Chill it. Sip a few mouthfuls every fifteen minutes through your session."
       ]
     },
     "diets": [
-      "vejetaryen",
       "vegan",
+      "vejetaryen",
       "glutensiz",
       "laktozsuz"
     ],
     "allergens": []
   },
   {
-    "id": "matcha-ritueli",
-    "order": 4,
-    "title": "matcha ritüeli",
+    "id": "akcaagacli-elektrolit",
+    "order": 1,
+    "title": "hassas mideler için akçaağaçlı içecek",
     "category": "tarif",
-    "readTime": "4 dk",
-    "excerpt": "Bir içecekten fazlası: günün ortasında iki dakikalık yavaşlama.",
-    "imageUrl": "https://images.unsplash.com/photo-1624893578106-a98840591afc?auto=format&fit=crop&w=1200&q=80",
+    "readTime": "2 dk",
+    "excerpt": "Rafine şeker yerine akçaağaç: daha yavaş, daha yumuşak bir enerji.",
+    "imageUrl": "",
     "body": [
-      "Matchayı özel yapan şey sadece içeriği değil, hazırlanışı. Kahve makinesi düğmeye basınca çalışır; matcha ise senden iki dakika ister. Toz ölçülür, su ısınır, çırpılır. Bu küçük tören, günün ortasında zorunlu ve tatlı bir yavaşlama anı yaratır.",
-      "İçerik tarafı da güçlü. Matchadaki L-theanine, kafeinin etkisini yumuşatır. Kahvenin ani yükselişi ve çöküşü yerine saatlere yayılan sakin bir odak verir. Uyanık ama gergin olmama hissinin içeceği budur.",
-      "Tarif: 1 çay kaşığı matcha ve 60 ml sıcak su. Su kaynar olmasın, 70 ila 80 derece idealdir; daha sıcağı tozu acılaştırır. Çırpıcıyla ya da küçük bir telle, W çizerek köpürene kadar çırp. Sade içebilir ya da üzerine köpürtülmüş yulaf sütü ekleyip latte yapabilirsin.",
-      "İpucu: ilk denemede tadı otsu gelirse miktarı azalt, yarım kaşıkla başla. Matcha alışılan değil, zamanla sevilen bir tattır. Tıpkı yavaşlamak gibi."
+      "Akçaağaç şurubu buraya yalnız şeker olarak değil, yanında getirdiği manganez ve çinkoyla giriyor. Rafine şekere göre daha yavaş, daha yumuşak bir eğri çiziyor — hassas mideler için fark yaratan şey bu.",
+      "Uzun ve düşük tempolu antrenmanlar bunu sever. Sabah yapılan hafif kardiyoda da iyi gider: az ama sürekli enerji."
     ],
     "ingredients": [
-      "1 çay kaşığı matcha",
-      "60 ml sıcak su (70 ila 80 derece)",
-      "istersen: 200 ml yulaf sütü"
+      "750 ml su",
+      "1 yemek kaşığı akçaağaç şurubu",
+      "1 tutam deniz tuzu",
+      "2 yemek kaşığı limon suyu"
     ],
     "steps": [
-      "Suyu ısıt ama kaynatma. 70 ila 80 derece idealdir; daha sıcağı matchayı acılaştırır.",
-      "Matchayı kaseye koy, sıcak suyu üzerine yavaşça dök.",
-      "Çırpıcıyla W çizerek, yüzeyde ince bir köpük oluşana kadar çırp.",
-      "Sade iç ya da köpürttüğün yulaf sütünü üzerine ekleyip latte yap."
+      "Akçaağaç şurubunu az suyla karıştırıp iyice çözdür.",
+      "Deniz tuzunu ekle.",
+      "Limon suyunu ve kalan suyu ekleyip çalkala.",
+      "Soğuk servis et, antrenman boyunca azar azar iç."
     ],
     "en": {
-      "title": "the matcha ritual",
-      "readTime": "4 min",
-      "excerpt": "More than a drink: two minutes of slowing down in the middle of the day.",
+      "title": "a maple drink for sensitive stomachs",
+      "readTime": "2 min",
+      "excerpt": "Maple instead of refined sugar: a slower, softer energy.",
       "body": [
-        "What makes matcha special is not only what is in it, but how it is made. A coffee machine works at the push of a button; matcha asks you for two minutes. The powder is measured, the water is warmed, the whisk moves. This little ceremony creates a mandatory, sweet moment of slowness in the middle of your day.",
-        "The contents are strong too. The L-theanine in matcha softens the effect of caffeine. Instead of coffee's sharp rise and crash, it gives a calm focus spread over hours. This is the drink of feeling awake without feeling tense.",
-        "The recipe: 1 teaspoon of matcha and 60 ml of hot water. Not boiling; 70 to 80 degrees is ideal, hotter makes the powder bitter. Whisk in a W motion until a foam forms. Drink it straight, or pour frothed oat milk over it for a latte.",
-        "A tip: if the first sip tastes grassy, use less and start with half a teaspoon. Matcha is not a taste you are used to, it is a taste you grow to love. Just like slowing down."
+        "Maple syrup comes in here not just as sugar but with the manganese and zinc it carries. Against refined sugar it draws a slower, gentler curve — which is what makes the difference for a sensitive stomach.",
+        "Long, low-tempo sessions like this one. It also works for easy morning cardio: a little energy, continuously."
       ],
       "ingredients": [
-        "1 teaspoon of matcha",
-        "60 ml hot water (70 to 80 degrees)",
-        "optional: 200 ml oat milk"
+        "750 ml water",
+        "1 tablespoon maple syrup",
+        "a pinch of sea salt",
+        "2 tablespoons lemon juice"
       ],
       "steps": [
-        "Heat the water but do not boil it. 70 to 80 degrees is ideal; hotter turns the matcha bitter.",
-        "Put the matcha in a bowl and slowly pour the hot water over it.",
-        "Whisk in a W motion until a fine foam forms on the surface.",
-        "Drink it straight, or pour frothed oat milk on top for a latte."
+        "Stir the maple syrup into a little water until fully dissolved.",
+        "Add the sea salt.",
+        "Add the lemon juice and the rest of the water, then shake.",
+        "Serve cold and sip through your session."
+      ]
+    },
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "hizli-hidrasyon",
+    "order": 2,
+    "title": "kısa ve sert seanslar için ballı hidrasyon içeceği",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "Az karbonhidrat, yeterli sodyum. Terle gideni en kısa yoldan geri koyar.",
+    "imageUrl": "",
+    "body": [
+      "Bu tarif enerji için değil, sıvı için. Az karbonhidrat kasten: içeceğin yoğunluğu düştükçe mideden çıkışı hızlanır, yani su sana daha çabuk ulaşır. Tuz da o suyu bedende tutar.",
+      "Kısa ve sert seanslardan sonra, terlediğin ama enerjiye ihtiyacın olmadığı günlerde. Sıcakta antrenmandan önce içmek de işe yarar — susamadan başlamak, susadıktan sonra yetişmeye çalışmaktan iyidir."
+    ],
+    "ingredients": [
+      "500 ml su",
+      "1 yemek kaşığı bal",
+      "1 tutam tuz",
+      "1 yemek kaşığı limon suyu"
+    ],
+    "steps": [
+      "Balı bir miktar ılık suda çözdür; kaynar suya koyma, aroması kaybolur.",
+      "Tuzu ekleyip karıştır.",
+      "Limon suyunu ve kalan suyu ekle.",
+      "Oda sıcaklığında ya da hafif soğuk iç."
+    ],
+    "en": {
+      "title": "a honey hydration drink for short hard sessions",
+      "readTime": "2 min",
+      "excerpt": "Low carbohydrate, enough sodium. The shortest route back to what you sweated out.",
+      "body": [
+        "This one is for fluid, not fuel. The low carbohydrate is deliberate: the thinner the drink, the faster it leaves your stomach, so the water reaches you sooner. The salt then keeps it in you.",
+        "For short hard sessions, on days you sweat but do not need energy. Drinking it before training in the heat works too — starting before you are thirsty beats chasing thirst afterwards."
+      ],
+      "ingredients": [
+        "500 ml water",
+        "1 tablespoon honey",
+        "a pinch of salt",
+        "1 tablespoon lemon juice"
+      ],
+      "steps": [
+        "Dissolve the honey in a little warm water; never boiling, the aroma is lost.",
+        "Add the salt and stir.",
+        "Add the lemon juice and the rest of the water.",
+        "Drink at room temperature or lightly chilled."
       ]
     },
     "diets": [
       "vejetaryen",
-      "vegan",
+      "glutensiz",
       "laktozsuz"
     ],
-    "allergens": [
-      "gluten"
-    ]
+    "allergens": []
   },
   {
-    "id": "dikkatle-hareket",
-    "order": 5,
-    "title": "dikkatle hareket",
-    "category": "wellness",
-    "readTime": "4 dk",
-    "excerpt": "Mesele çok hareket etmek değil, hareket ederken orada olmak.",
-    "imageUrl": "https://images.unsplash.com/photo-1747239069226-55382c570116?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Wellness dünyasında güzel bir fikir dolaşıyor: bedenini hızla yormak yerine, yaptığın harekete gerçekten dikkat vermek. Podcast dinleyerek yürümek de güzeldir elbette. Ama bazen sadece adımlarını hissederek yürümek bambaşka bir şey verir.",
-      "Bilim de bunu destekliyor. Dikkatle yapılan hareket, aynı egzersizi dalgın yapmaktan daha fazla stres azaltıyor. Çünkü zihin geleceği kurcalamayı bırakıp bedene dönüyor. Buna meditasyonun hareketli hâli demek hiç abartı olmaz.",
-      "Dene: bugün kendine on dakikalık bir hareket molası ver. Kulaklık yok, ekran yok. Omuzlarını geriye yuvarla, boynunu iki yana uzat, ellerini yukarı süzdür. Her esnemede nefesinin nereye gittiğini izle.",
-      "Bu yaklaşımın en güzel yanı çıtayı düşürmesi. Spor salonuna gitmek zorunda değilsin; odadan odaya dikkatle yürümek bile sayılır. Bedenin taşınmak değil, fark edilmek istiyor."
-    ],
-    "en": {
-      "title": "moving with attention",
-      "readTime": "4 min",
-      "excerpt": "The point is not moving a lot, it is being there while you move.",
-      "body": [
-        "A lovely idea is circulating in the wellness world: instead of tiring your body fast, give real attention to the movement you are doing. Walking with a podcast is nice, of course. But sometimes walking while actually feeling your steps gives you something entirely different.",
-        "Science backs this up. Movement done with attention reduces stress more than the same exercise done absent-mindedly. Because the mind stops poking at the future and returns to the body. Calling it meditation in motion is no exaggeration.",
-        "Try it: give yourself a ten minute movement break today. No headphones, no screen. Roll your shoulders back, stretch your neck to each side, let your hands float upward. In every stretch, watch where your breath goes.",
-        "The best part of this approach is that it lowers the bar. You do not have to go to a gym; walking from room to room with attention counts. Your body does not want to be transported, it wants to be noticed."
-      ]
-    }
-  },
-  {
-    "id": "regl-gunlerinde-sefkat",
-    "order": 6,
-    "title": "regl günlerinde şefkat",
-    "category": "wellness",
-    "readTime": "5 dk",
-    "excerpt": "O günlerde bedenin farklı bir tempo ister. Ona kulak ver.",
-    "imageUrl": "https://images.unsplash.com/photo-1621850204256-a84f9acbc5e9?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Regl döneminde kendini yorgun, şişkin ya da hassas hissetmek zayıflık değil, biyoloji. O günlerde stres hormonu yükselmeye daha yatkındır ve beden yüksek tempolu antrenman yerine nazik hareket ister. Ona bunu vermek tembellik değil, akıllıca bir ayarlamadır.",
-      "Peki ne iyi gelir? Onarıcı yoga ya da yumuşak esneme. Derin nefes eşliğinde yapılan çok hafif hareketler. Öne eğilip bırakma pozları. Kısa ve yavaş bir yürüyüş. Ve tabii bacakları duvara uzatmak; kramplara ve şişkinliğe birebirdir.",
-      "Kuru fırçalama da bu dönemin sevilen bakımlarından. Duştan önce, ayaklardan kalbe doğru uzun ve hafif fırça darbeleri uygula. Dolaşımı canlandırır, o ağır hissi hafifletir. Sert bastırmana gerek yok, ipeksi bir dokunuş yeterli.",
-      "En önemlisi ölçüyü kendinden alman. Bugün ne kaldırabiliyorsan o kadar. Döngünle savaşmak yerine ona uyum sağlamak, ayın tamamında daha dengeli hissettirir."
-    ],
-    "en": {
-      "title": "kindness on period days",
-      "readTime": "5 min",
-      "excerpt": "On those days your body asks for a different tempo. Listen to it.",
-      "body": [
-        "Feeling tired, bloated or sensitive during your period is not weakness, it is biology. Stress hormones rise more easily on those days, and your body asks for gentle movement instead of high tempo workouts. Giving it that is not laziness, it is a smart adjustment.",
-        "So what helps? Restorative yoga or soft stretching. Very light movements with deep breathing. Forward folds where you simply let go. A short, slow walk. And of course legs up the wall; it works wonders for cramps and bloating.",
-        "Dry brushing is another favourite of these days. Before your shower, sweep the brush in long, light strokes from your feet toward your heart. It wakes up circulation and lifts that heavy feeling. No hard pressing needed, a silky touch is enough.",
-        "Most importantly, take the measure from yourself. Whatever you can carry today, that much. Adapting to your cycle instead of fighting it leaves you more balanced through the whole month."
-      ]
-    }
-  },
-  {
-    "id": "sinir-sistemin-gunun-tonu",
-    "order": 7,
-    "title": "günün tonunu sinir sistemin belirler",
-    "category": "yazi",
-    "readTime": "5 dk",
-    "excerpt": "Sabahın ilk yarım saatinde verdiğin sinyaller bütün güne yayılır.",
-    "imageUrl": "https://images.unsplash.com/photo-1545386673-7723f55e5490?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Gün aynı gün. Ama bazı günler her şey üstüne gelir, bazı günler aynı yük hafif gelir. Fark çoğu zaman olaylarda değil, sinir sisteminin hangi modda olduğundadır. Tetikte mi, güvende mi?",
-      "Sinir sistemin gün boyu ortamdan sinyal toplar ve tonunu ona göre kurar. Sabah gözünü açar açmaz haberlere ve bildirimlere bakmak ona tehlike sinyali gönderir. Gün ışığına bakmak, yavaş bir nefes almak, sıcak bir duş ise güvende olduğunu söyler.",
-      "Sana pratik bir sabah üçlüsü: uyanınca önce pencereye git ve iki dakika gün ışığına bak. Sonra üç yavaş nefes al; verişin, alışından uzun sürsün. Ardından bir bardak su iç. Telefon bunlardan sonra gelsin. Haberler kaçmaz, sen kazanırsın.",
-      "Gün içinde tonu düzeltmek de mümkün. Omuzların kulaklarına yaklaştıysa uzun bir nefes ver, çeneni gevşet, ayaklarını yere bas. Sinir sistemin büyük jestler istemez; küçük ve tekrarlı güven sinyalleriyle yumuşar."
-    ],
-    "en": {
-      "title": "your nervous system sets the tone",
-      "readTime": "5 min",
-      "excerpt": "The signals you send in the first half hour of the morning spread across the whole day.",
-      "body": [
-        "The day is the same day. But on some days everything piles on top of you, and on others the same load feels light. The difference is usually not in the events, but in which mode your nervous system is in. On alert, or at ease?",
-        "Your nervous system collects signals from your surroundings all day and sets its tone accordingly. Checking the news and notifications the second you open your eyes sends it a danger signal. Looking at daylight, taking a slow breath, a warm shower says you are safe.",
-        "Here is a practical morning trio: when you wake up, go to the window first and look at the daylight for two minutes. Then three slow breaths; make the exhale longer than the inhale. Then a glass of water. The phone comes after these. The news will keep, and you will gain.",
-        "You can also correct the tone during the day. If your shoulders have crept toward your ears, breathe out long, soften your jaw, plant your feet on the floor. Your nervous system does not want grand gestures; it softens with small, repeated signals of safety."
-      ]
-    }
-  },
-  {
-    "id": "noroestetik",
-    "order": 8,
-    "title": "nöroestetik: güzellik iyi geliyor",
-    "category": "yazi",
-    "readTime": "5 dk",
-    "excerpt": "Beynin, baktığı şeyden etkilenir. Ortamını ona göre kur.",
-    "imageUrl": "https://images.unsplash.com/photo-1617214922084-5db8d3c3df5a?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Neden bazı mekânlarda içimiz açılır da bazılarında daralır? Nöroestetik tam olarak bunu araştırıyor: güzelliğin beyindeki karşılığını. Bulgular net. Baktığımız şey, hissettiğimizi değiştiriyor. Yumuşak ışık, doğal dokular ve düzen, stres tepkisini ölçülebilir biçimde azaltıyor.",
-      "Bunun için evini yenilemene gerek yok. Beyin en çok üç şeye tepki veriyor: ışık, düzen ve doğa. Gün ışığı alan bir köşe, toplanmış bir masa ve bir saksı yeşillik bir araya geldiğinde küçük bir sığınak doğuyor.",
-      "Dene: en çok vakit geçirdiğin köşeye bir bak. Gözüne ilk çarpan üç şey ne? Kablo yığını ve kâğıt kalabalığıysa, beş dakikalık bir toplama bile o köşenin sana verdiği hissi değiştirir. Sonra bir bitki ya da sevdiğin tek bir obje ekle. Fazlası gürültü olur.",
-      "Güzellik lüks değil, düzenleyicidir. Kendine güzel bir köşe kurmak boş bir estetik merakı değil; sinir sistemine günde yüz kez iyi sinyal gönderen sessiz bir bakımdır."
-    ],
-    "en": {
-      "title": "neuroaesthetics: beauty does you good",
-      "readTime": "5 min",
-      "excerpt": "Your brain is shaped by what it looks at. Arrange your space accordingly.",
-      "body": [
-        "Why do some places open us up while others close us in? Neuroaesthetics studies exactly this: what beauty does inside the brain. And the findings are clear. What we look at changes what we feel. Soft light, natural textures and order measurably lower the stress response.",
-        "You do not need to renovate your home for this. The brain responds most to three things: light, order and nature. A corner that gets daylight, a cleared desk and a pot of green together create a small sanctuary.",
-        "Try it: look at the corner where you spend the most time. What are the first three things that catch your eye? If it is a pile of cables and paper, even a five minute tidy-up changes what that corner gives you. Then add a plant or a single object you love. More would be noise.",
-        "Beauty is not a luxury, it is a regulator. Building yourself a beautiful corner is not idle aesthetics; it is a quiet form of care that sends your nervous system a hundred good signals a day."
-      ]
-    }
-  },
-  {
-    "id": "rutin-degil-rituel",
-    "order": 9,
-    "title": "rutin değil, ritüel",
-    "category": "yazi",
-    "readTime": "4 dk",
-    "excerpt": "Aynı hareket, iki farklı his. Farkı yaratan şey niyet.",
-    "imageUrl": "https://images.unsplash.com/photo-1697029749544-ffa7f15f9dd0?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Rutin ve ritüel dışarıdan aynı görünür: her gün tekrarlanan hareketler. Ama rutin bitirmek için yapılır, ritüel yaşamak için. Dişini fırçalarken aklın toplantıdaysa o bir rutindir. Suyun sesini duyuyorsan ve o an oradaysan, aynı hareket ritüele dönüşmüştür.",
-      "Hayatını romantize et sözü de aslında bunu anlatıyor. Yeni şeyler eklemek değil, var olanları özenle yapmak. Kahveni sevdiğin fincana koymak, akşam çayını pencerenin önünde içmek, krem sürerken acele etmemek. Küçük özenler sıradan anı değerli kılar.",
-      "Bunun pratik bir karşılığı da var: ritüeller kalıcıdır. Zorla sürdürülen alışkanlıklar irade tükenince biter. Keyif veren ritüeller ise kendi kendini taşır. Tutarlılığın sırrı disiplin değil, sevmektir.",
-      "Dene: bugün zaten yaptığın tek bir şeyi seç ve onu ritüelleştir. Daha yavaş, daha güzel, daha senin olsun. Hayat büyük anlardan değil, özenle yaşanmış küçük anlardan dokunur."
-    ],
-    "en": {
-      "title": "not routine, ritual",
-      "readTime": "4 min",
-      "excerpt": "Same act, two different feelings. What makes the difference is intention.",
-      "body": [
-        "Routine and ritual look the same from the outside: acts repeated every day. But routine is done to finish, ritual is done to live. If your mind is in a meeting while you brush your teeth, that is a routine. If you hear the water and you are actually there, the same act has become a ritual.",
-        "The phrase romanticize your life is really about this. Not adding new things, but doing the existing ones with care. Pouring your coffee into your favourite cup, drinking your evening tea by the window, not rushing while applying cream. Small acts of care make an ordinary moment precious.",
-        "There is a practical payoff too: rituals last. Habits sustained by force end when willpower runs out. Rituals that bring joy carry themselves. The secret of consistency is not discipline, it is love.",
-        "Try it: pick one thing you already do today and turn it into a ritual. Slower, more beautiful, more yours. Life is woven not from grand moments but from small ones lived with care."
-      ]
-    }
-  },
-  {
-    "id": "haftalik-sifirlama",
-    "order": 10,
-    "title": "haftalık sıfırlama",
-    "category": "yazi",
-    "readTime": "5 dk",
-    "excerpt": "Pazar akşamı bir saat: haftaya yorgun değil, hazır başla.",
-    "imageUrl": "https://images.unsplash.com/photo-1562878274-ad7a29ea8cdd?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Pazartesi sabahlarının ağırlığı çoğu zaman pazartesiden gelmez. Kapanmamış bir haftanın üzerine yenisini başlatmaktan gelir. Haftalık sıfırlama tam bu yüzden var: haftada bir saatlik küçük bir tören ile biteni kapatmak ve geleni hafifçe karşılamak.",
-      "Basit bir akış şöyle olabilir. Önce ortamı topla; masa, çanta ve telefon galerisi dahil. Sonra zihni boşalt: yarım kalanları, aklında dönenleri ve ertelediklerini tek bir listeye dök. Kağıda inen düşünce, gece üçte seni uyandırmaz.",
-      "Ardından haftaya nazikçe bak. Takvimden üç önemli şeyi seç ve yalnızca onlara söz ver. Yedi güne yirmi hedef sığdırmak sıfırlama değil, yeni bir yorgunluk hazırlığıdır. Az söz, tam tutmak: denge burada.",
-      "Kapanışı güzelleştir. Bir duş, sevdiğin bir çay, erken bir uyku. Sıfırlamanın amacı mükemmel bir hafta planlamak değil, kendine düzenli bir yumuşak başlangıç hediye etmek."
-    ],
-    "en": {
-      "title": "the weekly reset",
-      "readTime": "5 min",
-      "excerpt": "One hour on Sunday evening: start the week ready, not tired.",
-      "body": [
-        "The heaviness of Monday mornings rarely comes from Monday. It comes from starting a new week on top of an unclosed one. That is exactly why the weekly reset exists: a small one hour ceremony, once a week, to close what ended and gently greet what comes.",
-        "A simple flow could look like this. First tidy the environment; desk, bag, even the phone gallery. Then empty the mind: pour the unfinished, the circling and the postponed into a single list. A thought that lands on paper does not wake you at three in the morning.",
-        "Then look at the week kindly. Pick three important things from the calendar and promise yourself only those. Cramming twenty goals into seven days is not a reset, it is preparing a new exhaustion. Few promises, fully kept: that is the balance.",
-        "Make the closing beautiful. A shower, a tea you love, an early night. The point of the reset is not planning a perfect week, but gifting yourself a soft beginning, regularly."
-      ]
-    }
-  },
-  {
-    "id": "sukranin-bilimi",
-    "order": 11,
-    "title": "şükranın bilimi",
-    "category": "yazi",
-    "readTime": "4 dk",
-    "excerpt": "Teşekkür etmek duygusallık değil; beynini yeniden şekillendiren bir egzersiz.",
-    "imageUrl": "https://images.unsplash.com/photo-1681396059172-7532b1ef8b47?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Şükran pratiği kulağa fazla yumuşak gelebilir, ama nörobilim aynı fikirde değil. Düzenli olarak iyi şeyleri fark etmek, beynin ödül ve bağ kurma devrelerini güçlendiriyor. Araştırmalar bunu stres hormonlarında düşüş ve ruh hâlinde ölçülebilir bir iyileşme olarak görüyor.",
-      "Mekanizması sade: beynin neye odaklanırsan onu büyütür. Gün boyu eksikleri tararsan eksik bulma konusunda ustalaşırsın. İyi olanı taramaya başladığında ise aynı yetenek bu kez senin lehine çalışır.",
-      "Pratik de bir o kadar sade. Akşam, uyumadan önce günün içinden üç iyi şey seç ve yaz. Büyük olmaları gerekmiyor; sıcak bir duş, güzel bir mesaj, pencereden vuran ışık. Önemli olan hatırlarken o anı bir saniye yeniden hissetmen.",
-      "İki hafta üst üste dene. Değişen şey hayatın değil, hayatına bakan gözün olacak. Ve o göz, günün tonunu sandığından çok belirliyor."
-    ],
-    "en": {
-      "title": "the science of gratitude",
-      "readTime": "4 min",
-      "excerpt": "Saying thanks is not sentimentality; it is an exercise that reshapes your brain.",
-      "body": [
-        "A gratitude practice can sound too soft, but neuroscience disagrees. Regularly noticing good things strengthens the brain's reward and bonding circuits. Research sees this as a drop in stress hormones and a measurable lift in mood.",
-        "The mechanism is simple: your brain grows whatever you focus on. If you scan for what is missing all day, you become an expert at finding lack. When you start scanning for what is good, the same skill starts working in your favour.",
-        "The practice is just as simple. In the evening, before sleep, pick three good things from your day and write them down. They do not need to be big; a warm shower, a kind message, light falling through the window. What matters is re-feeling that moment for one second as you recall it.",
-        "Try it for two weeks straight. What changes will not be your life, but the eyes looking at it. And those eyes set the tone of your day more than you think."
-      ]
-    }
-  },
-  {
-    "id": "vucut-saatinle-baris",
-    "order": 12,
-    "title": "vücut saatinle barış",
-    "category": "wellness",
-    "readTime": "5 dk",
-    "excerpt": "Uykunun sırrı gecede değil, sabahın ilk ışığında saklı.",
-    "imageUrl": "https://images.unsplash.com/photo-1582220876602-9b12ee97659b?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "İçinde, sen hiç uğraşmadan çalışan bir saat var. Sirkadiyen ritim denen bu iç saat ne zaman uyanacağını, ne zaman acıkacağını ve ne zaman uykunun geleceğini ayarlıyor. Uyku sorunlarının birçoğu aslında saat ile hayatın birbirinden kopmasından doğuyor.",
-      "Saati kuran en güçlü sinyal ışık. Sabah ilk saatte gördüğün gün ışığı, iç saatine güne başladığını söyler ve akşam melatoninin tam zamanında salgılanmasını kolaylaştırır. Yani gece iyi uyumak, aslında sabah pencereye gitmekle başlar.",
-      "Dene: uyandıktan sonraki bir saat içinde en az beş dakika gün ışığı gör. Balkon, pencere önü ya da kısa bir yürüyüş fark etmez. Akşam ise tersini yap; ışıkları kıs ve parlak ekranı azalt. Saatine iki net sinyal: gündüz gündüz, gece gece.",
-      "Bir de tutarlılık meselesi var. Her gün aşağı yukarı aynı saatte yatıp kalkmak, saatini hafta sonu dahil sabit tutar. Vücut saatiyle savaşan kaybeder; onunla barışan sabahları çalar saate küsmeden uyanır."
-    ],
-    "en": {
-      "title": "make peace with your body clock",
-      "readTime": "5 min",
-      "excerpt": "The secret of sleep is not hidden in the night, but in the first light of morning.",
-      "body": [
-        "There is a clock inside you that runs without any effort on your part. This inner clock, the circadian rhythm, sets when you wake, when you get hungry and when sleep arrives. Many sleep problems are really the clock and the life drifting apart.",
-        "The strongest signal that sets the clock is light. The daylight you see in the first hour of the morning tells your inner clock the day has begun, and makes it easier for melatonin to release right on time at night. In other words, sleeping well at night actually starts with walking to the window in the morning.",
-        "Try it: see at least five minutes of daylight within an hour of waking. Balcony, window or a short walk, it does not matter. In the evening, do the opposite; dim the lights and cut the bright screens. Two clear signals for your clock: day is day, night is night.",
-        "Then there is consistency. Going to bed and waking at roughly the same time, weekend included, keeps your clock steady. Whoever fights the body clock loses; whoever makes peace with it wakes up without resenting the alarm."
-      ]
-    }
-  },
-  {
-    "id": "yemek-ilactir",
-    "order": 13,
-    "title": "yemek ilaçtır",
+    "id": "hindistan-cevizi-turuncgil",
+    "order": 3,
+    "title": "antrenman sonrası için hindistan cevizli içecek",
     "category": "tarif",
-    "readTime": "5 dk",
-    "excerpt": "Bütünsel beslenme karmaşık değil: tabağına bütün hâlinde bak.",
-    "imageUrl": "https://images.unsplash.com/photo-1772453609632-2f4aa857f56e?auto=format&fit=crop&w=1200&q=80",
+    "readTime": "2 dk",
+    "excerpt": "Potasyumu yüksek, serinletici. Bitişten sonraki ilk saatin içeceği.",
+    "imageUrl": "",
     "body": [
-      "Bütünsel beslenme, kalori saymanın ve yasak listelerinin tersidir. Soru şudur: bu yediğim şey bedenime, zihnime ve enerjime bütün olarak ne yapıyor? Yemek yalnızca yakıt değil; ruh hâlini, uykuyu ve odaklanmayı her gün yeniden yazan bir bilgi kaynağıdır.",
-      "Pratikte üç ilkeye iner. Bir: mümkün olduğunca bütün gıda; paketin içindekiler listesi kısaldıkça beden mutlu olur. İki: renk çeşitliliği; tabaktaki her renk farklı bir besin ailesi demektir. Üç: yavaş yemek; sindirim çiğnemeyle başlar, ekran karşısında aceleyle değil.",
-      "Kolay bir başlangıç tabağı: bir avuç yeşillik, bir tahıl (bulgur ya da kinoa), bir protein (nohut, yumurta ya da balık), bir sağlıklı yağ (zeytinyağı ya da avokado) ve üzerine limon. Beş bileşen, on dakika, tam bir öğün.",
-      "Kendine şu soruyu sormayı alışkanlık yap: bu yemekten bir saat sonra nasıl hissediyorum? Cevaplar birikince, kimsenin listesine ihtiyaç duymadan kendi beslenme pusulan oluşur."
+      "Hindistan cevizi suyu doğal olarak potasyum taşır; terle kaybettiğin ikinci önemli mineral odur. Tek başına içildiğinde sodyumu yetersiz kalır, o yüzden buraya küçük bir tutam tuz girer — ikisi birlikte daha iyi çalışır.",
+      "Bitişten sonraki ilk saat bunun zamanı. Yaz sıcağında yapılan her seansın ardından serinletici bir toparlanma."
     ],
     "ingredients": [
-      "bir avuç yeşillik (roka, ıspanak ya da marul)",
-      "yarım su bardağı haşlanmış bulgur ya da kinoa",
-      "bir protein: nohut, yumurta ya da balık",
-      "zeytinyağı ya da çeyrek avokado",
-      "limon ve tuz"
+      "250 ml hindistan cevizi suyu",
+      "250 ml su",
+      "100 ml ananas-portakal suyu",
+      "1/8 çay kaşığı tuz"
     ],
     "steps": [
-      "Tahılını haşla; hazırda varsa hafifçe ısıt.",
-      "Kaseye önce yeşillikleri, üzerine tahılı yerleştir.",
-      "Proteinini hazırla: nohutu tavada birkaç dakika kızart, yumurtayı haşla ya da balığını pişir ve kaseye ekle.",
-      "Zeytinyağı ve limonla tatlandır, tuzu serp. Ekrandan uzakta, yavaş ye."
+      "Hindistan cevizi suyunu ve suyu bir sürahide birleştir.",
+      "Meyve suyunu ekle.",
+      "Tuzu ekleyip iyice karıştır.",
+      "Buzla soğuk servis et."
     ],
     "en": {
-      "title": "food is medicine",
-      "readTime": "5 min",
-      "excerpt": "Holistic nutrition is not complicated: look at your plate as a whole.",
+      "title": "a coconut drink for after training",
+      "readTime": "2 min",
+      "excerpt": "High in potassium, cooling. The drink for the first hour after you stop.",
       "body": [
-        "Holistic nutrition is the opposite of calorie counting and forbidden lists. The question is: what does this thing I am eating do to my body, my mind and my energy as a whole? Food is not just fuel; it is information that rewrites your mood, sleep and focus every day.",
-        "In practice it comes down to three principles. One: whole foods as much as possible; the shorter the ingredient list on the package, the happier the body. Two: colour variety; every colour on the plate is a different family of nutrients. Three: eating slowly; digestion starts with chewing, not with rushing in front of a screen.",
-        "An easy starter bowl: a handful of greens, one grain (bulgur or quinoa), one protein (chickpeas, egg or fish), one healthy fat (olive oil or avocado) and lemon on top. Five components, ten minutes, a complete meal.",
-        "Make a habit of asking yourself: how do I feel an hour after this meal? As the answers accumulate, you build your own nutrition compass without needing anyone's list."
+        "Coconut water carries potassium naturally; that is the second mineral you lose in sweat. On its own its sodium falls short, so a small pinch of salt joins in — the two work better together.",
+        "The first hour after you stop is its moment. A cooling recovery after any session done in summer heat."
       ],
       "ingredients": [
-        "a handful of greens (arugula, spinach or lettuce)",
-        "half a cup of cooked bulgur or quinoa",
-        "one protein: chickpeas, egg or fish",
-        "olive oil or a quarter avocado",
-        "lemon and salt"
+        "250 ml coconut water",
+        "250 ml water",
+        "100 ml pineapple-orange juice",
+        "1/8 teaspoon salt"
       ],
       "steps": [
-        "Cook your grain; if you have some ready, warm it gently.",
-        "Layer the bowl: greens first, grain on top.",
-        "Prepare your protein: pan-toast the chickpeas for a few minutes, boil the egg or cook your fish, and add it to the bowl.",
-        "Dress with olive oil and lemon, sprinkle the salt. Eat slowly, away from screens."
+        "Combine the coconut water and water in a jug.",
+        "Add the fruit juice.",
+        "Add the salt and stir well.",
+        "Serve cold over ice."
       ]
     },
     "diets": [
-      "vejetaryen"
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "salatalik-lime",
+    "order": 4,
+    "title": "sıcak günler için salatalıklı lime içeceği",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "Salatalık, lime, nane. Enerji değil, sıcakta kaybettiğini geri koymak için.",
+    "imageUrl": "",
+    "body": [
+      "Salatalık neredeyse tamamen sudan oluşur ve yanında potasyum getirir; nane ise serinlik hissini yalnız ağızda değil bedende yaratır. Bu içeceğin işi enerji vermek değil, sıcakta kaybettiğini geri koymak.",
+      "Bekletmek şart: yarım saatte tat suya geçer. Hemen içersen yalnızca tuzlu su içmiş olursun."
+    ],
+    "ingredients": [
+      "500 ml su",
+      "4 ince salatalık dilimi",
+      "1 yemek kaşığı lime suyu",
+      "1 tatlı kaşığı bal",
+      "1 tutam tuz",
+      "birkaç nane yaprağı"
+    ],
+    "steps": [
+      "Salatalık dilimlerini ve naneyi sürahiye koy, hafifçe ez.",
+      "Balı az ılık suda çözdürüp ekle.",
+      "Lime suyunu ve tuzu ekle.",
+      "Kalan suyu doldur, buzdolabında en az yarım saat beklet."
+    ],
+    "en": {
+      "title": "a cucumber lime cooler for hot days",
+      "readTime": "2 min",
+      "excerpt": "Cucumber, lime, mint. Not for fuel — for replacing what the heat took.",
+      "body": [
+        "Cucumber is almost entirely water and brings potassium with it; the mint creates its coolness in your body, not just your mouth. This drink is not here to fuel you but to replace what the heat took.",
+        "The waiting matters: half an hour is how long the flavour needs to move into the water. Drink it straight away and you have only had salty water."
+      ],
+      "ingredients": [
+        "500 ml water",
+        "4 thin cucumber slices",
+        "1 tablespoon lime juice",
+        "1 teaspoon honey",
+        "a pinch of salt",
+        "a few mint leaves"
+      ],
+      "steps": [
+        "Put the cucumber slices and mint in a jug and press them lightly.",
+        "Dissolve the honey in a little warm water and add it.",
+        "Add the lime juice and salt.",
+        "Top up with the rest of the water and rest it in the fridge for at least half an hour."
+      ]
+    },
+    "diets": [
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "portakal-zencefil",
+    "order": 5,
+    "title": "uzun mesafe koşuları için portakallı zencefil içeceği",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "Portakal suyu enerjiyi, zencefil mideyi taşır. Saatler süren tempolarda.",
+    "imageUrl": "",
+    "body": [
+      "Portakal suyu buraya hem karbonhidrat hem potasyum getiriyor; zencefil ise mide bulantısını yatıştırdığı için uzun eforlarda kendine yer buluyor. Saatler süren koşularda mide, bacaklardan önce pes eder — zencefil o riski düşürür.",
+      "Antrenman boyunca on beş dakikada bir birkaç yudum. Sıcak günlerde buzlu, serin havada oda sıcaklığında iç; soğuk sıvı yorgun bir midede daha zor durur."
+    ],
+    "ingredients": [
+      "300 ml portakal suyu",
+      "300 ml su",
+      "1 çay kaşığı rendelenmiş zencefil",
+      "1 tutam tuz"
+    ],
+    "steps": [
+      "Zencefili rendele, üzerine az miktarda sıcak su dök ve beş dakika demlensin.",
+      "Süzerek portakal suyuna ekle.",
+      "Tuzu ve kalan suyu ekleyip karıştır.",
+      "Soğutup şişeye al, antrenman boyunca azar azar iç."
+    ],
+    "en": {
+      "title": "an orange ginger drink for long runs",
+      "readTime": "2 min",
+      "excerpt": "Orange juice carries the energy, ginger carries your stomach. For the hours-long efforts.",
+      "body": [
+        "Orange juice brings both carbohydrate and potassium; ginger earns its place in long efforts because it settles nausea. On runs that last hours the stomach gives out before the legs do — ginger lowers that risk.",
+        "A few sips every fifteen minutes. Iced on hot days, room temperature in cool weather; cold liquid is harder for a tired stomach to hold."
+      ],
+      "ingredients": [
+        "300 ml orange juice",
+        "300 ml water",
+        "1 teaspoon grated ginger",
+        "a pinch of salt"
+      ],
+      "steps": [
+        "Grate the ginger, pour a little hot water over it and let it steep for five minutes.",
+        "Strain it into the orange juice.",
+        "Add the salt and the rest of the water, then stir.",
+        "Chill, bottle it, and sip through your session."
+      ]
+    },
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "karpuzlu-potasyum",
+    "order": 6,
+    "title": "yaz antrenmanları için karpuzlu potasyum içeceği",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "Karpuz, bal, bir tutam tuz. Sıcakta terleyerek kaybettiğinin karşılığı.",
+    "imageUrl": "",
+    "body": [
+      "Karpuz neredeyse tamamen sudan oluşuyor ve yanında potasyumla sitrülin getiriyor — sitrülin kan akışını destekleyen bir amino asit, bu yüzden yaz antrenmanlarının sevilen meyvesi. Bal hızlı karbonhidratı, tuz ise terle giden sodyumu tamamlıyor.",
+      "Antrenman sırasında da sonrasında da içilir. Sıcakta yapılan her seansta bu üçlü, sade sudan daha iyi iş görür."
+    ],
+    "ingredients": [
+      "1 su bardağı karpuz",
+      "300 ml soğuk su",
+      "1 çay kaşığı bal",
+      "1 tutam tuz"
+    ],
+    "steps": [
+      "Karpuzu blenderdan geçir.",
+      "İnce süzgeçten süzerek posasını ayır.",
+      "Balı, tuzu ve soğuk suyu ekleyip karıştır.",
+      "Buzla servis et; en iyi ilk yarım saatte içilir."
+    ],
+    "en": {
+      "title": "a watermelon potassium drink for summer training",
+      "readTime": "2 min",
+      "excerpt": "Watermelon, honey, a pinch of salt. The answer to what the heat takes.",
+      "body": [
+        "Watermelon is almost entirely water and brings potassium and citrulline with it — citrulline is an amino acid that supports blood flow, which is why it is the beloved fruit of summer training. Honey covers the fast carbohydrate, salt the sodium you sweat out.",
+        "Drink it during or after. In any session done in the heat, these three do better than plain water."
+      ],
+      "ingredients": [
+        "1 cup watermelon",
+        "300 ml cold water",
+        "1 teaspoon honey",
+        "a pinch of salt"
+      ],
+      "steps": [
+        "Blend the watermelon.",
+        "Strain it through a fine sieve to remove the pulp.",
+        "Add the honey, salt and cold water, then stir.",
+        "Serve over ice; it is best within the first half hour."
+      ]
+    },
+    "diets": [
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "uzum-limon",
+    "order": 7,
+    "title": "hızlı enerji için üzüm limon içeceği",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "Üzüm suyu, limon, tuz. Kana en çabuk karışan karbonhidrat.",
+    "imageUrl": "",
+    "body": [
+      "Üzüm suyundaki glikoz, bedenin ek bir işlem yapmadan doğrudan kullanabildiği şeker türü — yani en hızlı ulaşan enerji. Limon hem tadı dengeliyor hem C vitamini taşıyor, tuz da suyu yerinde tutuyor.",
+      "Tempo koşusu, bisiklet, uzun antrenmanların ortası. Enerjinin düştüğünü hissettiğin anda birkaç yudum; hepsini birden içmek kan şekerini önce yukarı, sonra sert biçimde aşağı taşır."
+    ],
+    "ingredients": [
+      "200 ml üzüm suyu",
+      "400 ml su",
+      "1 yemek kaşığı limon suyu",
+      "1 tutam tuz"
+    ],
+    "steps": [
+      "Üzüm suyunu ve suyu bir şişede birleştir.",
+      "Limon suyunu ekle.",
+      "Tuzu ekleyip iyice çalkala.",
+      "Serin sakla, antrenmanın ortasında birkaç yudum al."
+    ],
+    "en": {
+      "title": "a grape lemon drink for fast energy",
+      "readTime": "2 min",
+      "excerpt": "Grape juice, lemon, salt. The carbohydrate that reaches your blood soonest.",
+      "body": [
+        "The glucose in grape juice is the kind of sugar your body can use without an extra step — the fastest energy there is. Lemon balances the taste and carries vitamin C; the salt keeps the water where it belongs.",
+        "Tempo runs, cycling, the middle of long sessions. A few sips the moment you feel energy dip; drinking it all at once takes your blood sugar up and then sharply down."
+      ],
+      "ingredients": [
+        "200 ml grape juice",
+        "400 ml water",
+        "1 tablespoon lemon juice",
+        "a pinch of salt"
+      ],
+      "steps": [
+        "Combine the grape juice and water in a bottle.",
+        "Add the lemon juice.",
+        "Add the salt and shake well.",
+        "Keep it cool and take a few sips mid-session."
+      ]
+    },
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "hurmali-kakao",
+    "order": 8,
+    "title": "dayanıklılık için hurmalı kakao içeceği",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "İki hurma, bir kaşık kakao, tuz. Doğal şeker ve magnezyum bir arada.",
+    "imageUrl": "",
+    "body": [
+      "Hurma doğal şekerini lifle birlikte taşıdığı için enerjiyi daha dengeli bırakıyor; kakao ise magnezyum getiriyor, kaslarda kramp eşiğini yukarı çeken mineral o. İkisi bir arada, uzun seanslarda hem yakıt hem mineral demek.",
+      "Antrenmandan yarım saat önce ya da uzun bir seansın ortasında. Kıvamı diğerlerinden yoğun — mide hassassa suyunu artır."
+    ],
+    "ingredients": [
+      "2 çekirdeksiz hurma",
+      "400 ml su",
+      "1 çay kaşığı kakao",
+      "1 tutam tuz"
+    ],
+    "steps": [
+      "Hurmaları on dakika sıcak suda beklet, yumuşasınlar.",
+      "Suyuyla birlikte blenderdan geçir.",
+      "Kakaoyu ve tuzu ekleyip tekrar çek.",
+      "İstersen süzerek iç; soğuk servis daha iyi gider."
+    ],
+    "en": {
+      "title": "a date and cocoa drink for endurance",
+      "readTime": "2 min",
+      "excerpt": "Two dates, a spoon of cocoa, salt. Natural sugar and magnesium together.",
+      "body": [
+        "Dates carry their natural sugar alongside fibre, so the energy lands more evenly; cocoa brings magnesium, the mineral that raises your cramp threshold. Together they mean fuel and minerals in one glass for long sessions.",
+        "Half an hour before training, or in the middle of a long session. It is thicker than the others — add water if your stomach is sensitive."
+      ],
+      "ingredients": [
+        "2 pitted dates",
+        "400 ml water",
+        "1 teaspoon cocoa",
+        "a pinch of salt"
+      ],
+      "steps": [
+        "Soak the dates in hot water for ten minutes until soft.",
+        "Blend them together with their water.",
+        "Add the cocoa and salt and blend again.",
+        "Strain it if you like; it goes down better cold."
+      ]
+    },
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "yesil-cay-sporcu",
+    "order": 9,
+    "title": "hafif kafein için yeşil çay içeceği",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "Soğuk demlenmiş yeşil çay, bal, limon. Sert bir kafein değil, yumuşak bir uyanış.",
+    "imageUrl": "",
+    "body": [
+      "Yeşil çayın kafeini kahveninkinden daha yumuşak iniyor; yanındaki L-teanin, kafeinin getirdiği tetikte olma hâlini gerginliğe çevirmeden dengeliyor. Katekinler ise antioksidan tarafı — egzersizin ürettiği serbest radikallere karşı çalışıyorlar.",
+      "Sabah antrenmanlarından önce ya da öğleden sonraki seanslarda. Akşam saatlerinde içme; kafein uykuya kadar tam olarak çıkmaz."
+    ],
+    "ingredients": [
+      "250 ml demlenmiş soğuk yeşil çay",
+      "250 ml su",
+      "1 tatlı kaşığı bal",
+      "1 limon dilimi"
+    ],
+    "steps": [
+      "Yeşil çayı normalden kısa demle — uzun demleme acılık verir.",
+      "Soğuduktan sonra suyla seyrelt.",
+      "Balı az ılık suda çözdürüp ekle.",
+      "Limon dilimini son anda at, buzla iç."
+    ],
+    "en": {
+      "title": "a green tea drink for a light lift of caffeine",
+      "readTime": "2 min",
+      "excerpt": "Cold-brewed green tea, honey, lemon. Not a hard caffeine hit — a softer waking up.",
+      "body": [
+        "Green tea's caffeine lands more gently than coffee's; the L-theanine alongside it balances the alertness without tipping it into jitters. The catechins are the antioxidant side, working against the free radicals exercise produces.",
+        "Before morning sessions or for afternoon training. Not in the evening; caffeine does not fully clear before sleep."
+      ],
+      "ingredients": [
+        "250 ml cold-brewed green tea",
+        "250 ml water",
+        "1 teaspoon honey",
+        "1 lemon slice"
+      ],
+      "steps": [
+        "Brew the tea shorter than usual — long steeping turns it bitter.",
+        "Once cool, dilute it with the water.",
+        "Dissolve the honey in a little warm water and add it.",
+        "Drop in the lemon slice at the last moment and drink over ice."
+      ]
+    },
+    "diets": [
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "cilekli-kefir",
+    "order": 10,
+    "title": "ağırlık antrenmanı sonrası çilekli kefir içeceği",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "Çilek, kefir, bal. Protein ve karbonhidrat aynı bardakta.",
+    "imageUrl": "",
+    "body": [
+      "Ağırlık çalışmasından sonra kasların iki şeye ihtiyacı olur: onarım için protein, boşalan depoyu doldurmak için karbonhidrat. Kefir proteini ve probiyotikleri, çilek karbonhidratı ve C vitaminini getiriyor — C vitamini bağ dokusunun onarımında doğrudan rol oynuyor.",
+      "Bitişten sonraki ilk saat en verimli pencere. Kefiri çalkalamadan kullan, köpürünce kıvamı bozulur."
+    ],
+    "ingredients": [
+      "150 g çilek",
+      "200 ml kefir",
+      "1 tatlı kaşığı bal"
+    ],
+    "steps": [
+      "Çilekleri yıka ve saplarını ayır.",
+      "Kefirle birlikte blenderdan kısa süre geçir — uzun çekmek kefiri sulandırır.",
+      "Balı ekleyip bir kez daha karıştır.",
+      "Hemen iç; beklerse ayrışır."
+    ],
+    "en": {
+      "title": "a strawberry kefir drink for after lifting",
+      "readTime": "2 min",
+      "excerpt": "Strawberry, kefir, honey. Protein and carbohydrate in the same glass.",
+      "body": [
+        "After lifting, muscles need two things: protein to repair, carbohydrate to refill what they emptied. Kefir brings the protein and the probiotics, strawberry the carbohydrate and vitamin C — and vitamin C plays a direct part in repairing connective tissue.",
+        "The first hour after you stop is the most useful window. Use the kefir unshaken; frothed up, the texture goes."
+      ],
+      "ingredients": [
+        "150 g strawberries",
+        "200 ml kefir",
+        "1 teaspoon honey"
+      ],
+      "steps": [
+        "Wash the strawberries and remove the stems.",
+        "Blend briefly with the kefir — long blending thins the kefir out.",
+        "Add the honey and blend once more.",
+        "Drink straight away; it separates if it waits."
+      ]
+    },
+    "diets": [
+      "vejetaryen",
+      "glutensiz"
     ],
     "allergens": [
-      "gluten",
-      "yumurta",
-      "deniz_urunu"
+      "sut_laktoz"
     ]
   },
   {
-    "id": "azi-cokluk",
-    "order": 14,
-    "title": "azı çokluk: minimalist bakım",
-    "category": "yazi",
-    "readTime": "4 dk",
-    "excerpt": "Wellness bir yapılacaklar listesi değil. Azalt, derinleş.",
-    "imageUrl": "https://images.unsplash.com/photo-1652517209166-f17a2742a5fe?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Bir yerden sonra kendine iyi bakmak bile yorucu bir listeye dönüşebiliyor: on adımlı cilt bakımı, beş takviye, üç uygulama, iki rutin. Minimalist wellness buna karşı sade bir soru soruyor: bunların hangisi gerçekten iyi geliyor?",
-      "Kural basit. Az şey, tam yapılmış hâliyle, çok şeyin yarım hâlinden daha iyi hissettirir. Günde on dakikalık tek bir gerçek mola, aceleyle geçilen beş sözde ritüelden daha çok şey verir.",
-      "Dene: bu hafta kendi bakım envanterini çıkar. Yaptığın her şeyi yaz ve her birine tek soru sor: bunu bitirince gerçekten daha iyi hissediyor muyum, yoksa sadece listeden mi siliyorum? İkinci gruba girenleri gönül rahatlığıyla bırak.",
-      "Geriye kalan birkaç şeyi ise koru ve derinleştir. Sadelik bir eksiklik değil; neyin işe yaradığını bilecek kadar kendini tanımaktır."
-    ],
-    "en": {
-      "title": "less is more: minimalist care",
-      "readTime": "4 min",
-      "excerpt": "Wellness is not a to-do list. Reduce, and go deeper.",
-      "body": [
-        "At some point even taking care of yourself can turn into an exhausting list: a ten step skincare routine, five supplements, three apps, two rituals. Minimalist wellness asks a simple question against all this: which of these actually does me good?",
-        "The rule is simple. Few things, done fully, feel better than many things done halfway. One real ten minute pause a day gives more than five so-called rituals rushed through.",
-        "Try it: take stock of your own care this week. Write down everything you do and ask each one a single question: do I actually feel better after this, or am I just crossing it off a list? Whatever falls into the second group, let it go with a clear conscience.",
-        "Protect and deepen the few things that remain. Simplicity is not a lack; it is knowing yourself well enough to know what works."
-      ]
-    }
-  },
-  {
-    "id": "kucuk-adimlar-buyuk-fark",
-    "order": 15,
-    "title": "küçük adımlar, büyük fark",
-    "category": "yazi",
-    "readTime": "4 dk",
-    "excerpt": "Hayat bir gecede değişmez. Her gün yüzde bir değişir.",
-    "imageUrl": "https://images.unsplash.com/photo-1677846092922-5b685ba0afb2?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Büyük değişim kararları heyecan verir: yarından itibaren her sabah koşacağım, şekeri tamamen bırakıyorum, her gün kitap bitireceğim. Ve çoğu, üçüncü günün akşamında sessizce rafa kalkar. Sorun sende değil, adımın boyutunda.",
-      "Küçük adımların gücü matematikten gelir. Her gün yüzde bir iyileşme, yıl sonunda katlanarak büyür. Ama asıl sihri psikolojik: küçük adım irade istemez, bahane üretmez ve her tamamlandığında beynine küçük bir başarı sinyali gönderir.",
-      "Ölçüyü gülünç derecede küçük tut. Kitap okumak istiyorsan hedef bir sayfa olsun. Hareket istiyorsan beş dakikalık yürüyüş. Su içmeyi unutuyorsan sabah tek bardak. Devamı çoğu gün kendiliğinden gelir; gelmediği gün de hedef zaten tutmuştur.",
-      "Bir ay sonra dönüp baktığında görkemli bir dönüşüm görmeyeceksin. Sessizce yerleşmiş, artık düşünmeden yaptığın birkaç iyi alışkanlık göreceksin. Kalıcı değişim böyle görünür."
-    ],
-    "en": {
-      "title": "small steps, big difference",
-      "readTime": "4 min",
-      "excerpt": "Life does not change overnight. It changes one percent a day.",
-      "body": [
-        "Big change decisions are exciting: from tomorrow I will run every morning, I am quitting sugar completely, I will finish a book every day. And most of them are quietly shelved by the third evening. The problem is not you, it is the size of the step.",
-        "The power of small steps comes from math. One percent better every day compounds enormously by the end of a year. But the real magic is psychological: a small step needs no willpower, produces no excuses, and sends your brain a little signal of success every time it is completed.",
-        "Keep the measure ridiculously small. If you want to read, make the goal one page. If you want movement, a five minute walk. If you forget to drink water, one glass in the morning. Most days the rest follows by itself; and on the days it does not, the goal was met anyway.",
-        "A month later, looking back, you will not see a glorious transformation. You will see a few good habits that settled in quietly and now happen without thinking. That is what lasting change looks like."
-      ]
-    }
-  },
-  {
-    "id": "gece-sutu",
-    "order": 16,
-    "title": "gece sütü",
+    "id": "yaban-mersinli-antioksidan",
+    "order": 11,
+    "title": "yoğun günler sonrası yaban mersinli içecek",
     "category": "tarif",
-    "readTime": "3 dk",
-    "excerpt": "Uykudan önce sıcak bir fincan sakinlik. Beş dakikada hazır.",
-    "imageUrl": "https://images.unsplash.com/photo-1669219695489-9163d12a2611?auto=format&fit=crop&w=1200&q=80",
+    "readTime": "2 dk",
+    "excerpt": "Yaban mersini, su, bal. Sert seansın ardından gelen onarım.",
+    "imageUrl": "",
     "body": [
-      "Gece sütü, panolarda moon milk adıyla dolaşan akşam içeceğinin sade hâli. Sıcak süt zaten kendi başına bir uyku sinyalidir; tarçın ve bal eklenince ortaya yatmadan önce içilen küçük bir ritüel çıkar.",
-      "Asıl işi içindekiler kadar zamanlaması yapar. Uyumadan yarım saat önce, ışıkları kısmışken, telefonsuz içilen sıcak bir fincan bedenine günün bittiğini söyler. Tarif bahane, yavaşlamak asıl."
+      "Yaban mersininin koyu rengini veren antosiyaninler, yoğun egzersizin ürettiği oksidatif stresle savaşan bileşikler. Sert bir seansın ardından kaslarda biriken hasarın toparlanmasına destek olurlar — sporcuların vişne suyuna yönelmesinin sebebi de aynı aile.",
+      "Antrenmandan sonra ya da ertesi gün kas ağrısıyla uyandığında. Donmuş yaban mersini de olur, hatta antosiyanin içeriği taze olandan düşük değildir."
     ],
     "ingredients": [
-      "1 su bardağı süt ya da badem sütü",
-      "yarım çay kaşığı tarçın",
-      "çeyrek çay kaşığı zerdeçal (istersen)",
-      "1 çay kaşığı bal"
+      "yarım su bardağı yaban mersini",
+      "250 ml su",
+      "1 tatlı kaşığı bal"
     ],
     "steps": [
-      "Sütü küçük bir tencerede kısık ateşte ısıt; kaynatma, buhar tütmeye başlaması yeterli.",
-      "Tarçını ve istersen zerdeçalı ekleyip telle karıştır.",
-      "Ocaktan al, bir dakika soğumasını bekle ve balı ekle. Bal kaynar süte girmesin; aroması kaybolur.",
-      "Sevdiğin fincana koy, ışıkları kıs ve yavaş yudumlarla iç."
+      "Yaban mersinini suyla blenderdan geçir.",
+      "İstersen kabuklarını süzgeçle ayır — süzmezsen lifi de almış olursun.",
+      "Balı ekleyip karıştır.",
+      "Soğuk servis et."
     ],
     "en": {
-      "title": "moon milk",
-      "readTime": "3 min",
-      "excerpt": "A warm cup of calm before sleep. Ready in five minutes.",
+      "title": "a blueberry drink for after the hard days",
+      "readTime": "2 min",
+      "excerpt": "Blueberries, water, honey. The repair that comes after a hard session.",
       "body": [
-        "Moon milk is the simple version of the evening drink drifting through the boards. Warm milk is a sleep signal all by itself; add cinnamon and honey and you get a little ritual to drink before bed.",
-        "Its timing does as much work as its ingredients. A warm cup, half an hour before sleep, lights dimmed, phone away, tells your body the day is over. The recipe is the excuse; slowing down is the point."
+        "The anthocyanins that give blueberries their deep colour are the compounds that fight the oxidative stress heavy exercise produces. After a hard session they support the recovery of the damage built up in your muscles — the same family of compounds is why athletes reach for tart cherry juice.",
+        "After training, or the next morning when you wake up sore. Frozen blueberries work too; their anthocyanin content is no lower than fresh."
       ],
       "ingredients": [
-        "1 cup of milk or almond milk",
-        "half a teaspoon of cinnamon",
-        "a quarter teaspoon of turmeric (optional)",
-        "1 teaspoon of honey"
+        "half a cup of blueberries",
+        "250 ml water",
+        "1 teaspoon honey"
       ],
       "steps": [
-        "Warm the milk in a small pot over low heat; do not boil, gentle steam is enough.",
-        "Add the cinnamon and, if you like, the turmeric, and stir with a whisk.",
-        "Take it off the heat, wait a minute and add the honey. Honey should not hit boiling milk; the aroma fades.",
-        "Pour into your favourite cup, dim the lights and sip slowly."
+        "Blend the blueberries with the water.",
+        "Strain out the skins if you like — leaving them in keeps the fibre.",
+        "Add the honey and stir.",
+        "Serve cold."
+      ]
+    },
+    "diets": [
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": []
+  },
+  {
+    "id": "muzlu-tarcinli-smoothie",
+    "order": 12,
+    "title": "kas toparlanması için muzlu tarçınlı smoothie",
+    "category": "tarif",
+    "readTime": "2 dk",
+    "excerpt": "Muz, süt, tarçın. Boşalan glikojen deposunu dolduran en sade karışım.",
+    "imageUrl": "",
+    "body": [
+      "Muz potasyumuyla tanınıyor ama buradaki asıl işi karbonhidrat: antrenmanda tükettiğin glikojeni yerine koyuyor. Süt proteini getiriyor, tarçın ise kan şekerinin daha dengeli seyretmesine yardım ediyor — tatlandırıcı değil, işlevsel bir ekleme.",
+      "Bitişten sonraki ilk saatte iç. Muz ne kadar olgunsa şekeri o kadar erişilebilir; benekli olanları bunun için sakla."
+    ],
+    "ingredients": [
+      "1 küçük muz",
+      "200 ml süt ya da badem sütü",
+      "1 çay kaşığı tarçın"
+    ],
+    "steps": [
+      "Muzu parçalara ayır.",
+      "Sütle birlikte blenderdan geçir.",
+      "Tarçını ekleyip bir kez daha çek.",
+      "Hemen iç; beklerse koyulaşır."
+    ],
+    "en": {
+      "title": "a banana cinnamon smoothie for muscle recovery",
+      "readTime": "2 min",
+      "excerpt": "Banana, milk, cinnamon. The simplest mix for refilling an empty glycogen store.",
+      "body": [
+        "Bananas are known for potassium, but their real job here is carbohydrate: replacing the glycogen you burned. Milk brings the protein, and cinnamon helps blood sugar run more evenly — a functional addition, not a sweetener.",
+        "Drink it in the first hour after you stop. The riper the banana the more available its sugar; save the speckled ones for this."
+      ],
+      "ingredients": [
+        "1 small banana",
+        "200 ml milk or almond milk",
+        "1 teaspoon cinnamon"
+      ],
+      "steps": [
+        "Break the banana into pieces.",
+        "Blend it with the milk.",
+        "Add the cinnamon and blend once more.",
+        "Drink straight away; it thickens if it waits."
       ]
     },
     "diets": [
@@ -563,227 +685,107 @@
     ]
   },
   {
-    "id": "yesil-glow-smoothie",
-    "order": 17,
-    "title": "yeşil glow smoothie",
+    "id": "espresso-tarcin",
+    "order": 13,
+    "title": "antrenman öncesi için tarçınlı espresso",
     "category": "tarif",
-    "readTime": "3 dk",
-    "excerpt": "Panolardaki o yeşil bardak. Tadı göründüğünden çok daha iyi.",
-    "imageUrl": "https://images.unsplash.com/photo-1610622930110-3c076902312a?auto=format&fit=crop&w=1200&q=80",
+    "readTime": "2 dk",
+    "excerpt": "Tek shot espresso, su, tarçın. Başlamadan yirmi dakika önce.",
+    "imageUrl": "",
     "body": [
-      "Elinde yeşil bir bardakla güne başlayan o insanlar bir şey biliyor: bu karışım hem doyuruyor hem de sabaha temiz bir başlangıç hissi veriyor. Ispanağın tadı muzun arkasında tamamen kaybolur; içtiğin şey tatlı ve kremamsı bir kahvaltıdır.",
-      "Avokado bu tarifin sessiz kahramanı. Kıvamı ipeksi yapar ve sağlıklı yağıyla seni öğlene kadar tok tutar. Muzun dondurulmuş olması ise smoothieyi milkshake kıvamına taşır."
+      "Kafein, algılanan eforu düşürüyor: aynı ağırlık daha hafif, aynı tempo daha kolay hissettiriyor. Etkisi içtikten yaklaşık yirmi dakika sonra başlıyor, o yüzden zamanlaması tarifin kendisi kadar önemli. Tarçın ise keskin tadı yumuşatıyor.",
+      "Sabah ve öğle seansları için. Akşam antrenmanlarında kullanma — kafein bedenden çıkana kadar uyku saatin gelir ve toparlanmanın en büyük parçasını kaybedersin."
     ],
     "ingredients": [
-      "1 muz (dondurulmuş olursa daha iyi)",
-      "bir avuç taze ıspanak",
-      "çeyrek avokado",
-      "1 su bardağı yulaf sütü",
-      "istersen: 1 çay kaşığı bal"
+      "1 shot espresso",
+      "100 ml su",
+      "1 tutam tarçın"
     ],
     "steps": [
-      "Tüm malzemeleri blendera koy; önce sıvıyı, sonra yeşillikleri, en üste muzu.",
-      "Pürüzsüz ve akışkan olana kadar çek. Çok koyuysa biraz daha süt ekle.",
-      "Tadına bak; tatlılık istersen balı şimdi ekleyip bir tur daha çek.",
-      "Uzun bir bardağa koy ve bekletmeden iç; yeşil karışımlar taze içildiğinde en iyisidir."
+      "Espressoyu tazeleyin, sıcakken bardağa al.",
+      "Tarçını ekleyip karıştır.",
+      "Suyla seyrelt — sade espresso aç mideyi yorar.",
+      "Antrenmandan yirmi dakika önce iç."
     ],
     "en": {
-      "title": "green glow smoothie",
-      "readTime": "3 min",
-      "excerpt": "That green glass from the boards. Tastes far better than it looks.",
+      "title": "a cinnamon espresso for before training",
+      "readTime": "2 min",
+      "excerpt": "One shot of espresso, water, cinnamon. Twenty minutes before you start.",
       "body": [
-        "The people starting their day with a green glass know something: this blend fills you up and gives the morning a clean-start feeling. The spinach disappears completely behind the banana; what you are drinking is a sweet, creamy breakfast.",
-        "Avocado is the quiet hero of this recipe. It makes the texture silky and its healthy fat keeps you full until noon. A frozen banana takes the smoothie all the way to milkshake territory."
+        "Caffeine lowers perceived effort: the same weight feels lighter, the same pace easier. It starts working about twenty minutes after you drink it, which makes the timing as important as the recipe. The cinnamon softens the sharpness.",
+        "For morning and midday sessions. Not for evening training — caffeine is still in you when bedtime arrives, and you lose the biggest part of recovery."
       ],
       "ingredients": [
-        "1 banana (frozen is even better)",
-        "a handful of fresh spinach",
-        "a quarter avocado",
-        "1 cup of oat milk",
-        "optional: 1 teaspoon of honey"
+        "1 shot of espresso",
+        "100 ml water",
+        "a pinch of cinnamon"
       ],
       "steps": [
-        "Add everything to the blender; liquid first, then the greens, banana on top.",
-        "Blend until smooth and pourable. If it is too thick, add a little more milk.",
-        "Taste it; if you want sweetness, add the honey now and blend once more.",
-        "Pour into a tall glass and drink right away; green blends are at their best fresh."
+        "Pull the espresso fresh and pour it into a glass while hot.",
+        "Add the cinnamon and stir.",
+        "Dilute with the water — neat espresso is hard on an empty stomach.",
+        "Drink it twenty minutes before training."
       ]
     },
     "diets": [
-      "vejetaryen",
       "vegan",
-      "laktozsuz"
-    ],
-    "allergens": [
-      "gluten"
-    ]
-  },
-  {
-    "id": "hurma-lokmalari",
-    "order": 18,
-    "title": "hurma lokmaları",
-    "category": "tarif",
-    "readTime": "4 dk",
-    "excerpt": "Tatlı krizine şefkatli cevap: üç malzeme, sıfır fırın.",
-    "imageUrl": "https://images.unsplash.com/photo-1596723455658-72ebb0d12edd?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Akşam tatlı krizi geldiğinde iki yol var: dolaptaki hazır tatlıya uzanmak ya da beş dakikada kendi lokmalarını yuvarlamak. Bu tarif ikinci yolu o kadar kolaylaştırıyor ki birincisine gerek kalmıyor.",
-      "Hurma doğal şekeriyle tatlı ihtiyacını karşılar, fıstık ezmesi ve yulaf ise kan şekerini dengede tutar. Yani bu lokmalar hem tatlı hem tok tutan cinsten; bir kavanoza dizip buzdolabında hafta boyu saklayabilirsin."
-    ],
-    "ingredients": [
-      "10 yumuşak hurma (çekirdeksiz)",
-      "2 yemek kaşığı fıstık ezmesi",
-      "yarım su bardağı yulaf",
-      "üzeri için: kakao ya da hindistan cevizi"
-    ],
-    "steps": [
-      "Hurmaları mutfak robotunda macun kıvamına gelene kadar çek. Robot yoksa ince kıyıp çatalla ez.",
-      "Fıstık ezmesi ve yulafı ekleyip karışım top olacak kıvama gelene kadar tekrar çek.",
-      "Karışımdan ceviz büyüklüğünde parçalar al ve avucunda yuvarla.",
-      "Topları kakao ya da hindistan cevizinde gezdir. Buzdolabında yarım saat dinlendir; kavanozda bir hafta dayanır."
-    ],
-    "en": {
-      "title": "date bites",
-      "readTime": "4 min",
-      "excerpt": "A kind answer to the sweet craving: three ingredients, zero oven.",
-      "body": [
-        "When the evening sweet craving hits, there are two roads: reaching for the packaged dessert in the cupboard, or rolling your own bites in five minutes. This recipe makes the second road so easy that the first becomes unnecessary.",
-        "Dates cover the sweetness with their natural sugar, while peanut butter and oats keep your blood sugar steady. So these bites are both sweet and filling; line them up in a jar and they will keep in the fridge all week."
-      ],
-      "ingredients": [
-        "10 soft dates (pitted)",
-        "2 tablespoons of peanut butter",
-        "half a cup of oats",
-        "for coating: cocoa or shredded coconut"
-      ],
-      "steps": [
-        "Blitz the dates in a food processor until they turn into a paste. No processor? Chop finely and mash with a fork.",
-        "Add the peanut butter and oats and blitz again until the mixture holds together.",
-        "Take walnut-sized pieces and roll them in your palm.",
-        "Roll the balls in cocoa or coconut. Rest in the fridge for half an hour; they keep a week in a jar."
-      ]
-    },
-    "diets": [
-      "vejetaryen",
-      "vegan",
-      "laktozsuz"
-    ],
-    "allergens": [
-      "findik_kabuklu",
-      "gluten"
-    ]
-  },
-  {
-    "id": "tek-tava-menemen",
-    "order": 19,
-    "title": "tek tava menemen",
-    "category": "tarif",
-    "diets": [
       "vejetaryen",
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": [
-      "yumurta"
-    ],
-    "readTime": "15 dk",
-    "excerpt": "Öğrenci bütçesinin klasiği: üç malzeme, tek tava, sıfır ustalık.",
-    "imageUrl": "https://images.unsplash.com/photo-1510693206972-df098062cb71?auto=format&fit=crop&w=1200&q=80",
-    "body": [
-      "Menemen, \"yemek yapamam\" cümlesini çürüten tariftir. Üç ana malzeme, tek tava ve on beş dakika. Akşam eve yorgun geldiğin, kartta az bakiye kaldığı günlerin yemeği — ve iyi yapıldığında hâlâ sofranın yıldızı.",
-      "Sır, acele etmemekte: domates suyunu salıp toplanmadan yumurta eklersen sulu ve dağınık olur. Domatesi biraz çektir, sonra yumurtayı kır. Bir de ekmeği hazır et — menemen beklemez."
-    ],
-    "ingredients": [
-      "2 olgun domates (rendelenmiş)",
-      "1 sivri biber, ince doğranmış",
-      "2 yumurta",
-      "2 yemek kaşığı zeytinyağı",
-      "tuz, pul biber"
-    ],
-    "steps": [
-      "Zeytinyağını tavada ısıt, biberi 2 dakika yumuşayana kadar kavur.",
-      "Rendelenmiş domatesi ekle; orta ateşte suyunu çekene kadar 6-8 dakika pişir. Tuzunu at.",
-      "Yumurtaları tavaya kır. İster karıştır (klasik), ister göz göz bırak — kapağı kapatıp 2-3 dakika pişir.",
-      "Ateşten alır almaz pul biber serp ve tavayla servis et. Menemen tavadan yenir."
-    ],
-    "en": {
-      "title": "one-pan menemen",
-      "readTime": "15 min",
-      "excerpt": "The student-budget classic: three ingredients, one pan, zero skill required.",
-      "body": [
-        "Menemen is the recipe that disproves \"I can't cook.\" Three main ingredients, one pan, fifteen minutes. It's the meal for nights you come home tired with little left on the card — and done right, it's still the star of the table.",
-        "The secret is patience: add the eggs before the tomatoes cook down and it turns watery. Let the tomatoes reduce, then crack the eggs. And have the bread ready — menemen doesn't wait."
-      ],
-      "ingredients": [
-        "2 ripe tomatoes, grated",
-        "1 green pepper, finely chopped",
-        "2 eggs",
-        "2 tbsp olive oil",
-        "salt, red pepper flakes"
-      ],
-      "steps": [
-        "Heat the olive oil in a pan and sauté the pepper for 2 minutes until soft.",
-        "Add the grated tomato; simmer over medium heat for 6-8 minutes until reduced. Season with salt.",
-        "Crack the eggs into the pan. Stir for classic style, or leave them sunny — cover and cook 2-3 minutes.",
-        "Sprinkle red pepper flakes right off the heat and serve in the pan. Menemen is eaten from the pan."
-      ]
-    }
+    "allergens": []
   },
   {
-    "id": "kirmizi-mercimek-corbasi",
-    "order": 20,
-    "title": "kırmızı mercimek çorbası",
+    "id": "kakaolu-enerji-shotu",
+    "order": 14,
+    "title": "hafif enerji için kakaolu enerji shotu",
     "category": "tarif",
-    "diets": [
-      "vejetaryen",
-      "vegan",
-      "glutensiz",
-      "laktozsuz"
-    ],
-    "allergens": [],
-    "readTime": "25 dk",
-    "excerpt": "Bir tencere rahatlık: dört malzeme, iki günlük yemek çıkarır.",
-    "imageUrl": "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1200&q=80",
+    "readTime": "2 dk",
+    "excerpt": "Kakao, süt, bal, bir tutam deniz tuzu. Küçük bardak, yeterli itki.",
+    "imageUrl": "",
     "body": [
-      "Mercimek çorbası bu coğrafyanın öz-bakım yemeğidir: ucuz, doyurucu ve yapması neredeyse imkânsız derecede kolay. Bir tencere kaynatırsın, iki gün boyunca \"bugün ne yesem\" sorusu çözülür.",
-      "Blender yoksa dert değil — tel çırpıcıyla ezerek de pürüzsüze yakın olur. Üzerine limon sıkmayı unutma; çorbayı çorba yapan odur."
+      "Kakaonun teobromini kafeine benzer ama daha yumuşak ve daha uzun süreli bir uyanıklık veriyor — kalp atışını hızlandırmadan. Yanında getirdiği magnezyum kas kasılmasında rol oynuyor, deniz tuzu da antrenman başlamadan sodyum deposunu dolduruyor.",
+      "Küçük hacim kasten: antrenmandan hemen önce dolu bir mide istemezsin. Kahveye hassassan bu, espresso tarifinin yerine geçer."
     ],
     "ingredients": [
-      "1 su bardağı kırmızı mercimek (yıkanmış)",
-      "1 soğan, kabaca doğranmış",
-      "1 havuç, kabaca doğranmış",
-      "1 yemek kaşığı salça",
-      "2 yemek kaşığı zeytinyağı",
-      "5 su bardağı sıcak su, tuz, kimyon"
+      "150 ml süt ya da yulaf sütü",
+      "1 tatlı kaşığı şekersiz kakao",
+      "1 çay kaşığı bal",
+      "çok küçük bir tutam deniz tuzu"
     ],
     "steps": [
-      "Zeytinyağında soğanı 3-4 dakika, sonra havucu 2 dakika kavur. Salçayı ekleyip kokusu çıkana kadar çevir.",
-      "Mercimek ve sıcak suyu ekle. Kaynayınca kısık ateşte 20 dakika, mercimekler dağılana kadar pişir.",
-      "Blenderdan geçir (ya da çırpıcıyla ez). Tuz ve kimyonla tatlandır; koyuysa su ekle.",
-      "Limonla servis et. Buzdolabında 3 gün, dondurucuda 1 ay durur."
+      "Sütü hafifçe ısıt; kaynatma.",
+      "Kakaoyu telle çırparak ekle, topaklanmasın.",
+      "Ocaktan al, bal ve deniz tuzunu ekle.",
+      "Küçük bir bardakta, antrenmandan on beş dakika önce iç."
     ],
     "en": {
-      "title": "red lentil soup",
-      "readTime": "25 min",
-      "excerpt": "A pot of comfort: four ingredients, feeds you for two days.",
+      "title": "a cocoa energy shot for a light lift",
+      "readTime": "2 min",
+      "excerpt": "Cocoa, milk, honey, a pinch of sea salt. Small glass, enough push.",
       "body": [
-        "Lentil soup is this region's original self-care meal: cheap, filling, and almost impossible to get wrong. Boil one pot and the \"what do I eat today\" question is solved for two days.",
-        "No blender? No problem — mashing with a whisk gets you close to smooth. And don't skip the lemon; that's what makes the soup."
+        "The theobromine in cocoa is caffeine's cousin, but it gives a softer and longer alertness — without pushing your heart rate. The magnesium it carries plays a part in muscle contraction, and the sea salt tops up sodium before you even start.",
+        "The small volume is deliberate: you do not want a full stomach right before training. If you are sensitive to coffee, this replaces the espresso recipe."
       ],
       "ingredients": [
-        "1 cup red lentils, rinsed",
-        "1 onion, roughly chopped",
-        "1 carrot, roughly chopped",
-        "1 tbsp tomato paste",
-        "2 tbsp olive oil",
-        "5 cups hot water, salt, cumin"
+        "150 ml milk or oat milk",
+        "1 teaspoon unsweetened cocoa",
+        "1 teaspoon honey",
+        "a very small pinch of sea salt"
       ],
       "steps": [
-        "Sauté the onion in olive oil for 3-4 minutes, then the carrot for 2. Add the tomato paste and stir until fragrant.",
-        "Add the lentils and hot water. Once boiling, simmer on low for 20 minutes until the lentils fall apart.",
-        "Blend (or mash with a whisk). Season with salt and cumin; thin with water if needed.",
-        "Serve with lemon. Keeps 3 days in the fridge, a month in the freezer."
+        "Warm the milk gently; do not boil it.",
+        "Whisk in the cocoa so it does not clump.",
+        "Take it off the heat, add the honey and sea salt.",
+        "Drink from a small glass fifteen minutes before training."
       ]
-    }
+    },
+    "diets": [
+      "vejetaryen"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "gluten"
+    ]
   }
 ]

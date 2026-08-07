@@ -12,10 +12,12 @@ import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/repositories/explore_repository.dart';
 import 'package:ilnd_app/core/repositories/movement_repository.dart';
+import 'package:ilnd_app/core/repositories/plans_repository.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
 import 'package:ilnd_app/features/movement/movement_program.dart';
 import 'package:ilnd_app/features/movement/movement_program_screen.dart';
+import 'package:ilnd_app/features/plans/plan_shelf.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 // ─── Filter ───────────────────────────────────────────────────────────────────
@@ -95,6 +97,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         .watch(publishableMovementProgramsProvider)
         .map((m) => m.forLocale(l10n.localeName))
         .toList();
+    // Planlar da aynı ilkeye tabi (ADR-0005): günü eksik ya da uzunluğu
+    // tanımsız plan listeye hiç girmez, liste boşsa raf hiç çizilmez.
+    // Yerelleştirme kart/detay içinde yapılır — sıralama ve ilerleme
+    // eşleşmesi plan id'si üzerinden yürüdüğü için burada ham liste taşınır.
+    final plans = ref.watch(publishablePlansProvider);
 
     return Scaffold(
       backgroundColor: p.base,
@@ -148,6 +155,16 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
+
+              // ── Planlar (ADR-0005). Hareket rafının üstünde: plan bir
+              // taahhüt, tek seans bir deneme — kullanıcıya önce taahhüdü
+              // gösteriyoruz ────────────────────────────────────────────────
+              if (plans.isNotEmpty) ...[
+                SliverToBoxAdapter(
+                  child: PlanShelf(plans: plans, p: p),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 28)),
+              ],
 
               // ── Hareket programları (ADR-0004) — vizyonun "grid'e yeni
               // içerik tipleri raf olarak girer" maddesi. Yayınlanabilir

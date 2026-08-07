@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/streak_copy.dart';
+import 'package:ilnd_app/core/repositories/food_repository.dart';
+import 'package:ilnd_app/core/repositories/plans_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/services/reminder_provider.dart';
 import 'package:ilnd_app/core/services/streak_tracker.dart';
@@ -21,7 +23,10 @@ import 'package:ilnd_app/features/daily_trio/daily_trio_section.dart';
 import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/features/habits/habits_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
+import 'package:ilnd_app/features/plans/plan_detail_screen.dart';
+import 'package:ilnd_app/features/plans/plan_model.dart';
 import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_provider.dart';
@@ -96,21 +101,29 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                     Entrance(index: 4, child: SocialProofBadge(p: p)),
+                    // Aktif plan Bugün'de yaşar: kullanıcı Keşfet'e girmeyi
+                    // unutur, ana ekranı unutmaz. Plan yoksa satır hiç
+                    // çizilmez (ADR-0005).
+                    const _ActivePlanRow(),
                     const SizedBox(height: 18),
                     Entrance(index: 5, child: DailyTrioSection(p: p)),
                     const SizedBox(height: 18),
+                    // Takip ana sayfanın TEK girişi (Ayarlar'dan çıkarıldı,
+                    // bkz. profile_screen). En altta dururken kullanıcı
+                    // kendi verisine ulaşamıyordu — günün okumasının üstüne
+                    // alındı: kullanıcının ürettiği veri, okuyacağı
+                    // içerikten önce gelir.
+                    Entrance(index: 6, child: _TrackingCard(p: p)),
+                    const SizedBox(height: 18),
                     Entrance(
-                      index: 6,
+                      index: 7,
                       child: _SectionTitle(l10n.homeTodaysReadTitle, p: p),
                     ),
                     const SizedBox(height: 12),
                     Entrance(
-                      index: 7,
+                      index: 8,
                       child: _DailyReadCard(article: read, p: p),
                     ),
-                    const SizedBox(height: 24),
-                    // Takip artık ana sayfada (Ayarlar'dan çıkarıldı).
-                    Entrance(index: 8, child: _TrackingCard(p: p)),
                   ]),
                 ),
               ),
@@ -866,15 +879,107 @@ class _DailyReadCard extends StatelessWidget {
   }
 }
 
+// ─── Aktif plan satırı (ADR-0005) ─────────────────────────────────────────────
+
+/// Devam eden planın bir sonraki günü. Plan yoksa, plan bittiyse ya da içerik
+/// henüz yüklenmediyse hiçbir şey çizilmez — boş bir "planın" başlığı olmayan
+/// bir özelliğin sözünü vermek olurdu.
+class _ActivePlanRow extends ConsumerWidget {
+  const _ActivePlanRow();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final plan = ref.watch(activePlanProvider);
+    if (plan == null) return const SizedBox.shrink();
+
+    final l10n = AppLocalizations.of(context)!;
+    final p = ref.watch(paletteProvider);
+    final localized = plan.forLocale(l10n.localeName);
+    final progress =
+        ref.watch(planProgressProvider(plan.id)).valueOrNull ??
+        const PlanProgress();
+    final next = progress.nextDay(localized);
+    if (next == null) return const SizedBox.shrink(); // plan bitti
+
+    final dayNumber = localized.days.indexWhere((d) => d.id == next.id) + 1;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Pressable(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => PlanDetailScreen(plan: plan)),
+        ),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: p.surface,
+            borderRadius: BorderRadius.circular(AppSpacing.radius),
+            border: Border.all(color: p.border, width: 0.5),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.homeActivePlanLabel,
+                      style: AppTextStyles.sectionLabel(color: p.accent),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${l10n.planDayLabel(dayNumber)}: ${next.title}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.body(
+                        fontSize: 15,
+                        color: p.text,
+                      ).copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      l10n.planProgress(
+                        progress.doneCountIn(localized),
+                        localized.lengthDays,
+                      ),
+                      style: AppTextStyles.body(
+                        fontSize: 12,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right_rounded, size: 20, color: p.textMuted),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // ─── Tracking card — Takip artık ana sayfada (Ayarlar'dan taşındı) ────────────
 
-class _TrackingCard extends StatelessWidget {
+/// Takip ekranının kapısı. Alt satır bugünün gerçek toplamlarını gösterir:
+/// sabit bir alt başlık kartı "ölü bir menü satırı" yapıyordu, oysa
+/// kullanıcının kendi verisi kartın kendisini davet edici kılan şey.
+/// Hiç veri yoksa tanıtıcı alt başlığa döner (boş kart 0'larla kullanıcıyı
+/// suçlamaz — non-preachy).
+class _TrackingCard extends ConsumerWidget {
   const _TrackingCard({required this.p});
   final AppPalette p;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final kcal = ref.watch(dailyMacrosProvider).kalori;
+    final water = ref.watch(waterTodayProvider);
+    final habits = ref.watch(todayCompletionsProvider).valueOrNull?.length ?? 0;
+    final hasData = kcal > 0 || water > 0 || habits > 0;
+    final subtitle = hasData
+        ? l10n.homeTrackingCardSummary(kcal, water, habits)
+        : l10n.homeTrackingCardSubtitle;
     return Pressable(
       onTap: () => context.push(routeTakip),
       child: Container(
@@ -901,7 +1006,7 @@ class _TrackingCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    l10n.homeTrackingCardSubtitle,
+                    subtitle,
                     style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
                   ),
                 ],

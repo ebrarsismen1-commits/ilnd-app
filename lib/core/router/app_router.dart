@@ -208,7 +208,8 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => _fade(state, const ReferralScreen()),
       ),
       GoRoute(
-        // Takip sekmeden çıktı (nav v2) — Sen/profil içinden push edilir.
+        // Takip sekmeden çıktı (nav v2) — Bugün ekranındaki takip kartından
+        // push edilir (tek giriş; bkz. home_screen _TrackingCard).
         path: routeTakip,
         pageBuilder: (context, state) => _fade(state, const TakipScreen()),
       ),

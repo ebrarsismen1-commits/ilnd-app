@@ -1171,6 +1171,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'adımların, öğünlerin, alışkanlıkların';
 
   @override
+  String homeTrackingCardSummary(int kcal, int water, int habits) {
+    return '$kcal kcal · $water ml · $habits alışkanlık';
+  }
+
+  @override
   String get gorevEkleNameEmpty => 'Önce alışkanlığa bir ad ver.';
 
   @override
@@ -1477,6 +1482,91 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get homeReminderInviteLater => 'Şimdi değil';
+
+  @override
+  String get planShelfLabel => 'PLANLAR';
+
+  @override
+  String planDayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gün',
+      one: '1 gün',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String planProgress(int done, int total) {
+    return '$done/$total gün';
+  }
+
+  @override
+  String get planStart => 'başla';
+
+  @override
+  String planContinue(int day) {
+    return '$day. güne devam et';
+  }
+
+  @override
+  String get planRestart => 'yeniden başla';
+
+  @override
+  String get planAllDone => 'planı tamamladın 🌿';
+
+  @override
+  String get planDayDone => 'tamamlandı';
+
+  @override
+  String planDayLabel(int day) {
+    return '$day. gün';
+  }
+
+  @override
+  String get planDayComplete => 'bugünü tamamla';
+
+  @override
+  String get planDayRead => 'günün okuması';
+
+  @override
+  String get planDayAction => 'günün adımı';
+
+  @override
+  String get planActionBreath => 'nefes al';
+
+  @override
+  String get planActionMove => 'hareket et';
+
+  @override
+  String get planActionWater => 'su iç';
+
+  @override
+  String get planActionJournal => 'günlüğüne yaz';
+
+  @override
+  String get planPaywallReason => 'bu plan ILND+ üyelerine özel 🌿';
+
+  @override
+  String get planPremiumBadge => 'ILND+';
+
+  @override
+  String get planSwitchTitle => 'Devam eden planın var';
+
+  @override
+  String planSwitchBody(String title) {
+    return '$title planı duraklar, ilerlemen kaybolmaz. Yeni plana geçilsin mi?';
+  }
+
+  @override
+  String get planSwitchConfirm => 'geç';
+
+  @override
+  String get planSwitchCancel => 'vazgeç';
+
+  @override
+  String get homeActivePlanLabel => 'PLANIN';
 
   @override
   String get movementShelfLabel => 'HAREKET PROGRAMLARI';

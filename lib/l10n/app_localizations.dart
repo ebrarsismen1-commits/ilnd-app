@@ -2252,6 +2252,12 @@ abstract class AppLocalizations {
   /// **'adımların, öğünlerin, alışkanlıkların'**
   String get homeTrackingCardSubtitle;
 
+  /// Home tracking card live summary of today's totals
+  ///
+  /// In tr, this message translates to:
+  /// **'{kcal} kcal · {water} ml · {habits} alışkanlık'**
+  String homeTrackingCardSummary(int kcal, int water, int habits);
+
   /// Error when habit name is empty
   ///
   /// In tr, this message translates to:
@@ -2755,6 +2761,144 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Şimdi değil'**
   String get homeReminderInviteLater;
+
+  /// Explore shelf label above the guided plans row
+  ///
+  /// In tr, this message translates to:
+  /// **'PLANLAR'**
+  String get planShelfLabel;
+
+  /// Length of a guided plan in days
+  ///
+  /// In tr, this message translates to:
+  /// **'{count, plural, =1{1 gün} other{{count} gün}}'**
+  String planDayCount(int count);
+
+  /// How many days of a plan the user has completed
+  ///
+  /// In tr, this message translates to:
+  /// **'{done}/{total} gün'**
+  String planProgress(int done, int total);
+
+  /// Button that starts a plan from its first day
+  ///
+  /// In tr, this message translates to:
+  /// **'başla'**
+  String get planStart;
+
+  /// Button that opens the next unfinished day of a plan
+  ///
+  /// In tr, this message translates to:
+  /// **'{day}. güne devam et'**
+  String planContinue(int day);
+
+  /// Button shown on a plan whose days are all completed
+  ///
+  /// In tr, this message translates to:
+  /// **'yeniden başla'**
+  String get planRestart;
+
+  /// Line shown on a plan whose days are all completed
+  ///
+  /// In tr, this message translates to:
+  /// **'planı tamamladın 🌿'**
+  String get planAllDone;
+
+  /// Badge on a finished day row
+  ///
+  /// In tr, this message translates to:
+  /// **'tamamlandı'**
+  String get planDayDone;
+
+  /// Title prefix for a single day of a plan
+  ///
+  /// In tr, this message translates to:
+  /// **'{day}. gün'**
+  String planDayLabel(int day);
+
+  /// Button that marks the current plan day as done
+  ///
+  /// In tr, this message translates to:
+  /// **'bugünü tamamla'**
+  String get planDayComplete;
+
+  /// Section label above the article attached to a plan day
+  ///
+  /// In tr, this message translates to:
+  /// **'günün okuması'**
+  String get planDayRead;
+
+  /// Section label above the action attached to a plan day
+  ///
+  /// In tr, this message translates to:
+  /// **'günün adımı'**
+  String get planDayAction;
+
+  /// Plan day action: breathing
+  ///
+  /// In tr, this message translates to:
+  /// **'nefes al'**
+  String get planActionBreath;
+
+  /// Plan day action: movement
+  ///
+  /// In tr, this message translates to:
+  /// **'hareket et'**
+  String get planActionMove;
+
+  /// Plan day action: drink water
+  ///
+  /// In tr, this message translates to:
+  /// **'su iç'**
+  String get planActionWater;
+
+  /// Plan day action: write in the journal
+  ///
+  /// In tr, this message translates to:
+  /// **'günlüğüne yaz'**
+  String get planActionJournal;
+
+  /// Context shown on the paywall when a premium plan is opened
+  ///
+  /// In tr, this message translates to:
+  /// **'bu plan ILND+ üyelerine özel 🌿'**
+  String get planPaywallReason;
+
+  /// Badge on a plan card that requires a subscription
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND+'**
+  String get planPremiumBadge;
+
+  /// Dialog title when starting a plan while another is active
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam eden planın var'**
+  String get planSwitchTitle;
+
+  /// Dialog body explaining that the active plan will be paused
+  ///
+  /// In tr, this message translates to:
+  /// **'{title} planı duraklar, ilerlemen kaybolmaz. Yeni plana geçilsin mi?'**
+  String planSwitchBody(String title);
+
+  /// Confirm button on the plan switch dialog
+  ///
+  /// In tr, this message translates to:
+  /// **'geç'**
+  String get planSwitchConfirm;
+
+  /// Cancel button on the plan switch dialog
+  ///
+  /// In tr, this message translates to:
+  /// **'vazgeç'**
+  String get planSwitchCancel;
+
+  /// Section label above the active plan row on the home screen
+  ///
+  /// In tr, this message translates to:
+  /// **'PLANIN'**
+  String get homeActivePlanLabel;
 
   /// Explore shelf label above the movement program row
   ///
