@@ -65,9 +65,11 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Local agent/session tooling (skills ARE versioned)
-.claude/launch.json
-.claude/settings.local.json
+# Local agent/session tooling — yerelde kalır, depoya girmez.
+# CLAUDE.md ve .claude/skills/ geliştirme makinesinde çalışmaya devam eder;
+# depoda tutulmamaları bilinçli bir karardır (2026-08-11).
+CLAUDE.md
+.claude/
 .firebase/
 
 # Admin SDK anahtari — asla commit edilmez (çift uzantılı kopyalar dahil)
