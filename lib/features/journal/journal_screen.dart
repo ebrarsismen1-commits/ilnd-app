@@ -34,11 +34,43 @@ class JournalScreen extends ConsumerWidget {
         child: SafeArea(
           child: CustomScrollView(
             slivers: [
+              // Günlük "ekle" sheet'inden push ediliyor, yani sekme değil bir
+              // yaprak ekran — kendi çıkışını taşımak zorunda. Yoksa web'de
+              // dönüş yolu HİÇ olmuyor (donanım tuşu/kenar kaydırma yok) ve
+              // kullanıcı ekranda kilitli kalıyor.
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPadding - 12,
+                    12,
+                    AppSpacing.screenPadding,
+                    0,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Semantics(
+                      button: true,
+                      label: l10n.a11yBack,
+                      child: Pressable(
+                        onTap: () => Navigator.of(context).maybePop(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            size: 18,
+                            color: p.textMuted,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.screenPadding,
-                    28,
+                    8,
                     AppSpacing.screenPadding,
                     0,
                   ),
