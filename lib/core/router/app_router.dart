@@ -21,7 +21,6 @@ import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_screen.dart';
 import 'package:ilnd_app/features/splash/splash_screen.dart';
 import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/features/referral/referral_screen.dart';
-import 'package:ilnd_app/features/takip/takip_screen.dart';
 import 'package:ilnd_app/features/topluluk/topluluk_screen.dart';
 import 'package:ilnd_app/features/vibe_card/quote_card_screen.dart';
 import 'package:ilnd_app/features/vibe_card/streak_card_screen.dart';
@@ -36,7 +35,6 @@ const routeRegister = '/register';
 const routeHome = '/home';
 const routeChat = '/chat';
 const routeExplore = '/explore';
-const routeTakip = '/takip';
 const routeTopluluk = '/topluluk';
 const routeProfile = '/profile';
 const routeYemekEkle = '/yemek-ekle';
@@ -206,12 +204,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: routeReferral,
         pageBuilder: (context, state) => _fade(state, const ReferralScreen()),
-      ),
-      GoRoute(
-        // Takip sekmeden çıktı (nav v2) — Bugün ekranındaki takip kartından
-        // push edilir (tek giriş; bkz. home_screen _TrackingCard).
-        path: routeTakip,
-        pageBuilder: (context, state) => _fade(state, const TakipScreen()),
       ),
       GoRoute(
         path: routeVibeCard,

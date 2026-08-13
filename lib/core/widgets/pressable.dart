@@ -7,12 +7,19 @@ class Pressable extends StatefulWidget {
     super.key,
     required this.child,
     this.onTap,
+    this.onLongPress,
     this.behavior = HitTestBehavior.opaque,
     this.scaleDown = 0.94,
   });
 
   final Widget child;
   final VoidCallback? onTap;
+
+  /// İsteğe bağlı kısayol. Keşfedilebilirliği düşüktür — bu yüzden yalnız
+  /// **ikincil** bir yol için kullanılır; asıl eylem her zaman [onTap]'te
+  /// kalır (kullanıcı uzun basışı hiç bulamasa da ürün eksiksiz çalışmalı).
+  final VoidCallback? onLongPress;
+
   final HitTestBehavior behavior;
   final double scaleDown;
 
@@ -44,10 +51,11 @@ class _PressableState extends State<Pressable>
 
   @override
   Widget build(BuildContext context) {
-    final disabled = widget.onTap == null;
+    final disabled = widget.onTap == null && widget.onLongPress == null;
     return GestureDetector(
       behavior: widget.behavior,
       onTap: widget.onTap,
+      onLongPress: widget.onLongPress,
       onTapDown: disabled ? null : _onDown,
       onTapUp: disabled ? null : _onUp,
       onTapCancel: disabled ? null : _onCancel,

@@ -6,7 +6,6 @@ import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/habits/habits_provider.dart';
@@ -22,86 +21,45 @@ const _kSuHedef = 2000; // ml
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
 
-class TakipScreen extends ConsumerWidget {
-  const TakipScreen({super.key});
+/// Takip bloğu — makro halkası, öğünler, aktivite ve alışkanlıklar.
+///
+/// Ayrı bir "Takip" ekranı YOKTUR: bu blok doğrudan Bugün ekranında yaşar.
+/// Gerekçe: kullanıcının kendi ürettiği veri (öğün, su, alışkanlık) ürünün
+/// günlük merkezidir; ayrı bir sekmenin ya da push edilen bir ekranın
+/// arkasında durduğu sürece pratikte görünmüyordu. [startIndex] ana ekrandaki
+/// giriş animasyonu sırasını bozmamak için dışarıdan verilir.
+class TakipSections extends ConsumerWidget {
+  const TakipSections({super.key, this.startIndex = 0});
+
+  final int startIndex;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
-    return Scaffold(
-      backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 12, 8, 0),
-                  child: Row(
-                    children: [
-                      // Bu ekran nav v2'de sekmeden çıkıp Sen'den push edilen
-                      // bir rotaya döndü (bkz. app_shell.dart) — geri butonu
-                      // olmadan iOS'ta çıkış yolu yoktu. Gerçek bug, düzeltildi.
-                      Pressable(
-                        onTap: () => Navigator.of(context).maybePop(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Icon(
-                            Icons.arrow_back_ios_rounded,
-                            size: 18,
-                            color: p.text,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        l10n.takipTitle,
-                        style: AppTextStyles.display(
-                          fontSize: 28,
-                          color: p.text,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenPadding,
-                  20,
-                  AppSpacing.screenPadding,
-                  32,
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                    Entrance(
-                      index: 0,
-                      child: _MacroCard(p: p, l10n: l10n),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 1,
-                      child: _MealsSection(p: p, l10n: l10n),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 2,
-                      child: _ActivitySection(p: p, l10n: l10n),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 3,
-                      child: _HabitsSection(p: p, l10n: l10n),
-                    ),
-                  ]),
-                ),
-              ),
-            ],
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Entrance(
+          index: startIndex,
+          child: _MacroCard(p: p, l10n: l10n),
         ),
-      ),
+        const SizedBox(height: AppSpacing.sectionGap),
+        Entrance(
+          index: startIndex + 1,
+          child: _MealsSection(p: p, l10n: l10n),
+        ),
+        const SizedBox(height: AppSpacing.sectionGap),
+        Entrance(
+          index: startIndex + 2,
+          child: _ActivitySection(p: p, l10n: l10n),
+        ),
+        const SizedBox(height: AppSpacing.sectionGap),
+        Entrance(
+          index: startIndex + 3,
+          child: _HabitsSection(p: p, l10n: l10n),
+        ),
+      ],
     );
   }
 }

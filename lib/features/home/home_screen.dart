@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/streak_copy.dart';
-import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/core/repositories/plans_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/services/reminder_provider.dart';
@@ -14,16 +13,13 @@ import 'package:ilnd_app/core/services/streak_tracker.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
-import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/daily_trio/daily_trio_section.dart';
-import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
-import 'package:ilnd_app/features/habits/habits_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/plans/plan_detail_screen.dart';
 import 'package:ilnd_app/features/plans/plan_model.dart';
@@ -31,6 +27,7 @@ import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_provider.dart';
 import 'package:ilnd_app/features/social_proof/social_proof_badge.dart';
+import 'package:ilnd_app/features/takip/takip_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -90,38 +87,37 @@ class HomeScreen extends ConsumerWidget {
                     // (Transform.translate) web'de selamlamayla çakışıyordu:
                     // translate layout'u etkilemez, fontlar geç yüklenip metin
                     // sarınca kart selamlamanın üstüne oturuyordu.
-                    Entrance(index: 0, child: _MoodCheckIn(p: p)),
-                    Entrance(index: 1, child: _StreakBanner(p: p)),
-                    Entrance(index: 2, child: _ReminderInviteCard(p: p)),
+                    // Takip artık ayrı bir ekran DEĞİL, Bugün'ün kendisi:
+                    // hero'nun hemen altında, ritüellerden önce. Kullanıcının
+                    // ürettiği veri (öğün, su, alışkanlık) günün merkezidir;
+                    // ayrı bir ekranın arkasındayken pratikte görünmüyordu.
+                    const TakipSections(),
+                    const SizedBox(height: 18),
+                    Entrance(index: 4, child: _MoodCheckIn(p: p)),
+                    Entrance(index: 5, child: _StreakBanner(p: p)),
+                    Entrance(index: 6, child: _ReminderInviteCard(p: p)),
                     Entrance(
-                      index: 3,
+                      index: 7,
                       child: _SleepRitualCard(
                         p: p,
                         hour: hourOverride ?? DateTime.now().hour,
                       ),
                     ),
-                    Entrance(index: 4, child: SocialProofBadge(p: p)),
+                    Entrance(index: 8, child: SocialProofBadge(p: p)),
                     // Aktif plan Bugün'de yaşar: kullanıcı Keşfet'e girmeyi
                     // unutur, ana ekranı unutmaz. Plan yoksa satır hiç
                     // çizilmez (ADR-0005).
                     const _ActivePlanRow(),
                     const SizedBox(height: 18),
-                    Entrance(index: 5, child: DailyTrioSection(p: p)),
-                    const SizedBox(height: 18),
-                    // Takip ana sayfanın TEK girişi (Ayarlar'dan çıkarıldı,
-                    // bkz. profile_screen). En altta dururken kullanıcı
-                    // kendi verisine ulaşamıyordu — günün okumasının üstüne
-                    // alındı: kullanıcının ürettiği veri, okuyacağı
-                    // içerikten önce gelir.
-                    Entrance(index: 6, child: _TrackingCard(p: p)),
+                    Entrance(index: 9, child: DailyTrioSection(p: p)),
                     const SizedBox(height: 18),
                     Entrance(
-                      index: 7,
+                      index: 10,
                       child: _SectionTitle(l10n.homeTodaysReadTitle, p: p),
                     ),
                     const SizedBox(height: 12),
                     Entrance(
-                      index: 8,
+                      index: 11,
                       child: _DailyReadCard(article: read, p: p),
                     ),
                   ]),
@@ -246,14 +242,10 @@ class _HeroHeader extends ConsumerWidget {
                         ),
                         const SizedBox(width: 8),
                       ],
-                      // Tek merkezli ILND girişi: eski "+" yerine marka jesti.
-                      // Dokununca ILND yüzeyi açılır (ILND'ye sor + ekle-aksiyonları).
-                      BreathRing(
-                        size: 34,
-                        semanticLabel: l10n.a11yOpenIlnd,
-                        onTap: () => showEkleSheet(context),
-                      ),
-                      const SizedBox(width: 8),
+                      // ILND girişi buradan ALINDI: ekleme günlük kullanımın
+                      // merkezi olduğu için alt navigasyonun orta halkasına
+                      // taşındı (başparmak menzili). Hero'da iki halka birden
+                      // durması "hangisi hangisi" sorusunu doğuruyordu.
                       _HeroIconButton(
                         icon: p.isDark
                             ? Icons.wb_sunny_outlined
@@ -953,67 +945,6 @@ class _ActivePlanRow extends ConsumerWidget {
               Icon(Icons.chevron_right_rounded, size: 20, color: p.textMuted),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Tracking card — Takip artık ana sayfada (Ayarlar'dan taşındı) ────────────
-
-/// Takip ekranının kapısı. Alt satır bugünün gerçek toplamlarını gösterir:
-/// sabit bir alt başlık kartı "ölü bir menü satırı" yapıyordu, oysa
-/// kullanıcının kendi verisi kartın kendisini davet edici kılan şey.
-/// Hiç veri yoksa tanıtıcı alt başlığa döner (boş kart 0'larla kullanıcıyı
-/// suçlamaz — non-preachy).
-class _TrackingCard extends ConsumerWidget {
-  const _TrackingCard({required this.p});
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final kcal = ref.watch(dailyMacrosProvider).kalori;
-    final water = ref.watch(waterTodayProvider);
-    final habits = ref.watch(todayCompletionsProvider).valueOrNull?.length ?? 0;
-    final hasData = kcal > 0 || water > 0 || habits > 0;
-    final subtitle = hasData
-        ? l10n.homeTrackingCardSummary(kcal, water, habits)
-        : l10n.homeTrackingCardSubtitle;
-    return Pressable(
-      onTap: () => context.push(routeTakip),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.bar_chart_rounded, size: 22, color: p.accent),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.navTracking,
-                    style: AppTextStyles.body(
-                      fontSize: 15,
-                      color: p.text,
-                    ).copyWith(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
-                  ),
-                ],
-              ),
-            ),
-            Icon(Icons.chevron_right_rounded, size: 20, color: p.textMuted),
-          ],
         ),
       ),
     );
