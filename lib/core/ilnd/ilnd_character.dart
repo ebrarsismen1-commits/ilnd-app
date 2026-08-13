@@ -92,6 +92,15 @@ Sınırların (çok önemli):
         ..writeln()
         ..writeln('Kullanıcı hakkında hatırladıkların:')
         ..writeln(memo);
+      // Ad cihazdan çıkmaz (veri minimizasyonu): modele gerçek ad yerine
+      // jeton verilir, hitap ederken jetonu aynen yazması istenir; istemci
+      // cevabı ekrana basmadan önce gerçek adla değiştirir.
+      if (memory.name.isNotEmpty) {
+        buffer.writeln(
+          'Adına hitap ederken $kNamePlaceholder yaz — jetonu aynen, '
+          'süslü parantezleriyle bırak, yerine bir isim uydurma.',
+        );
+      }
     }
 
     if (task != null && task.isNotEmpty) {

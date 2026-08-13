@@ -5,6 +5,10 @@ import 'package:ilnd_app/core/demo/demo_config.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
+/// Kullanıcının adı yerine prompt'a konan jeton. Gerçek ad hiçbir AI
+/// isteğinde cihazdan çıkmaz — model bunu yazar, istemci ekranda değiştirir.
+const kNamePlaceholder = '{ad}';
+
 /// ILND'nin kullanıcı hakkında "hatırladıkları".
 ///
 /// Dostluğun temeli budur: her AI etkileşimine bağlam olarak verilir, böylece
@@ -35,6 +39,11 @@ class IlndMemory {
   /// Ücretsiz katmanda hafıza kısa tutulur (maliyet + premium ayrımı).
   static const int freeRecentNotesLimit = 6;
 
+  /// Prompt'a en fazla kaç not gömülür. Saklanan geçmiş bundan uzun olabilir
+  /// (premium uzun hafıza); bu sınır **cihazdan çıkan** veriyi bağlar.
+  /// Veri minimizasyonu: modele ancak son bağlam için gerekli kadarı gider.
+  static const int promptNotesLimit = 6;
+
   bool get isEmpty =>
       name.isEmpty && goals.isEmpty && facts.isEmpty && recentNotes.isEmpty;
 
@@ -53,13 +62,25 @@ class IlndMemory {
   }
 
   /// Sistem prompt'una gömülecek insan-okunur özet.
-  String toPromptContext() {
+  ///
+  /// İki veri minimizasyonu kararı burada uygulanır:
+  ///
+  /// 1. **Ad gönderilmez.** Yerine [kNamePlaceholder] jetonu konur; model
+  ///    jetonu olduğu gibi yazar, istemci cevabı ekrana basmadan önce gerçek
+  ///    adla değiştirir (`IlndService.personalize`). Böylece kullanıcının adı
+  ///    cihazdan hiç çıkmaz ama ILND ona adıyla hitap etmeye devam eder.
+  /// 2. **Not penceresi kırpılır** ([promptNotesLimit]). Saklanan geçmiş daha
+  ///    uzun olabilir; dışarı yalnız son notlar gider.
+  String toPromptContext({int maxNotes = promptNotesLimit}) {
     final parts = <String>[];
-    if (name.isNotEmpty) parts.add('Adı: $name');
+    if (name.isNotEmpty) parts.add('Adı: $kNamePlaceholder');
     if (goals.isNotEmpty) parts.add('Hedefleri: ${goals.join(', ')}');
     if (facts.isNotEmpty) parts.add('Bildiklerin: ${facts.join('; ')}');
     if (recentNotes.isNotEmpty) {
-      parts.add('Son notlar: ${recentNotes.join(' | ')}');
+      final notes = recentNotes.length > maxNotes
+          ? recentNotes.sublist(recentNotes.length - maxNotes)
+          : recentNotes;
+      parts.add('Son notlar: ${notes.join(' | ')}');
     }
     return parts.join('\n');
   }
