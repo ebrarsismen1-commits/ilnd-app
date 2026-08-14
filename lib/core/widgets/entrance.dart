@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 
 /// Bir öğeyi yukarıdan kayarak + solarak + scale ile sahneye sokar.
 /// [index] ile gecikme kademelenir (stagger efekti).
@@ -24,18 +25,31 @@ class Entrance extends StatefulWidget {
 
 class _EntranceState extends State<Entrance>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(
-    vsync: this,
-    duration: widget.duration,
-  );
-  late final Animation<double> _curve = CurvedAnimation(
-    parent: _c,
-    curve: Curves.easeOutQuart,
-  );
+  // `late final` DEĞİL, initState'te kurulur: azaltılmış modda build erken
+  // döndüğü için denetleyiciye hiç dokunulmuyordu, sonra dispose() onu
+  // ATILMA ANINDA kuruyordu — Ticker o sırada inherited widget araması yapıp
+  // "deactivated widget's ancestor" hatası veriyordu.
+  late final AnimationController _c;
+  late final Animation<double> _curve;
+
+  bool _started = false;
 
   @override
   void initState() {
     super.initState();
+    _c = AnimationController(vsync: this, duration: widget.duration);
+    _curve = CurvedAnimation(parent: _c, curve: Curves.easeOutQuart);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Zamanlayıcı, hareket tercihi BİLİNDİKTEN sonra kurulur. initState'te
+    // kurulursa azaltılmış modda da her öğe için boşuna bir timer açılıyordu
+    // (uzun listede yüzlerce); ayrıca MediaQuery initState'te güvenilir
+    // okunmaz.
+    if (_started || prefersReducedMotion(context)) return;
+    _started = true;
     Future<void>.delayed(widget.delayStep * widget.index, () {
       if (mounted) _c.forward();
     });
@@ -49,6 +63,11 @@ class _EntranceState extends State<Entrance>
 
   @override
   Widget build(BuildContext context) {
+    // Hareket azaltılmışsa giriş animasyonu HİÇ oynamaz: içerik doğrudan
+    // yerinde belirir. Kademeli giriş dekoratiftir — bilgi taşımaz, o yüzden
+    // kesilmesi hiçbir şeyi eksiltmez.
+    if (prefersReducedMotion(context)) return widget.child;
+
     return AnimatedBuilder(
       animation: _curve,
       builder: (context, child) => Opacity(

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 
 /// Yavaşça akan, nefes alan arka plan.
@@ -67,10 +68,15 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
   @override
   Widget build(BuildContext context) {
     final p = widget.palette;
+    // Hareket azaltılmışsa zemin DONDURULUR: aynı gradyan çizilir ama
+    // süzülmez. Sürekli tam ekran hareket, vestibüler rahatsızlığı olan
+    // kullanıcıda baş dönmesi yapan tam olarak bu tür harekettir — ve
+    // dekoratif olduğu için durması hiçbir bilgi kaybettirmez.
+    final frozen = prefersReducedMotion(context);
     return AnimatedBuilder(
       animation: _lowPower ? _quantized : _c,
       builder: (context, child) {
-        final value = _lowPower ? _quantized.value : _c.value;
+        final value = frozen ? 0.0 : (_lowPower ? _quantized.value : _c.value);
         final t = value * 2 * math.pi;
         // Degradenin yönü yavaşça döner.
         final begin = Alignment(math.cos(t) * 0.8, math.sin(t) * 0.8);

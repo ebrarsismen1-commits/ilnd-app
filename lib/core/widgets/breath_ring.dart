@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 
@@ -22,10 +23,20 @@ class BreathRing extends ConsumerStatefulWidget {
 class _BreathRingState extends ConsumerState<BreathRing>
     with SingleTickerProviderStateMixin {
   // 4 sn al + 6 sn ver = 10 sn'lik tek döngü.
-  late final AnimationController _ctrl = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 10),
-  )..repeat();
+  //
+  // `late final` başlatıcı DEĞİL: azaltılmış hareket modunda build bu
+  // denetleyiciye hiç dokunmuyor, o zaman dispose() onu atılma anında kurup
+  // Ticker üzerinden inherited widget araması yapıyor ve patlıyordu.
+  late final AnimationController _ctrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    )..repeat();
+  }
 
   late final Animation<double> _scale = TweenSequence<double>([
     TweenSequenceItem(
@@ -55,8 +66,12 @@ class _BreathRingState extends ConsumerState<BreathRing>
     final p = ref.watch(paletteProvider);
     final inner = widget.size * 0.68;
 
+    // Nefes ritmi markanın jesti ama sürekli hareket: azaltılmış modda
+    // halka aynı yerde DURUR (ScaleTransition yerine düz child).
     final ring = ScaleTransition(
-      scale: _scale,
+      scale: prefersReducedMotion(context)
+          ? const AlwaysStoppedAnimation<double>(1)
+          : _scale,
       child: Container(
         width: widget.size,
         height: widget.size,
