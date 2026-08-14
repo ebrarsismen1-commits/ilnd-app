@@ -7,6 +7,22 @@
         "source": "**",
         "destination": "/index.html"
       }
+    ],
+    "headers": [
+      {
+        "//": "Flutter web'in bu dosyalarinin adinda icerik ozeti (hash) YOK — Hosting varsayilani onlari 1 saat onbellege aliyor ve deploy sonrasi kullanici eski surumu goruyor. Yazi tipi degisikligi tam olarak boyle 'uygulanmamis' gibi gorundu (2026-08-14). must-revalidate: tarayici her acilista sunucuya sorar, degismediyse 304 alir — maliyet yok.",
+        "source": "/@(main.dart.js|flutter_bootstrap.js|flutter_service_worker.js|index.html|manifest.json)",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+        ]
+      },
+      {
+        "//": "Varlıklar (fontlar, canvaskit) icerik-adresli, uzun onbellek guvenli.",
+        "source": "/assets/**",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=604800" }
+        ]
+      }
     ]
   },
   "firestore": {
