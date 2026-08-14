@@ -125,7 +125,7 @@ class _EkleSheet extends ConsumerWidget {
                               Text(
                                 l10n.ekleAskIlndSubtitle,
                                 style: AppTextStyles.body(
-                                  fontSize: 12,
+                                  fontSize: 11.5,
                                   color: p.textMuted,
                                 ),
                               ),
@@ -264,7 +264,6 @@ class _ActionCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
         ),
         padding: const EdgeInsets.all(AppSpacing.cardPadding),
         child: Column(
@@ -283,7 +282,7 @@ class _ActionCard extends StatelessWidget {
             Text(
               subtitle,
               style: AppTextStyles.body(
-                fontSize: 11,
+                fontSize: 11.5,
                 color: p.textMuted,
                 height: 1.3,
               ),

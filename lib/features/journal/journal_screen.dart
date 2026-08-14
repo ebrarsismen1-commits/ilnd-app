@@ -76,7 +76,7 @@ class JournalScreen extends ConsumerWidget {
                   ),
                   child: Text(
                     l10n.journalTitle,
-                    style: AppTextStyles.display(fontSize: 32, color: p.text),
+                    style: AppTextStyles.display(fontSize: 30, color: p.text),
                   ),
                 ),
               ),
@@ -168,7 +168,7 @@ class _ErrorState extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             l10n.journalConnectionError,
-            style: AppTextStyles.heading(fontSize: 16, color: p.text),
+            style: AppTextStyles.heading(fontSize: 15, color: p.text),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 6),
@@ -182,7 +182,7 @@ class _ErrorState extends StatelessWidget {
             onPressed: onRetry,
             child: Text(
               l10n.journalRetry,
-              style: AppTextStyles.body(fontSize: 14, color: p.accent),
+              style: AppTextStyles.body(fontSize: 13, color: p.accent),
             ),
           ),
         ],
@@ -206,18 +206,18 @@ class _EmptyJournal extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('✍️', style: const TextStyle(fontSize: 48)),
+          Text('✍️', style: const TextStyle(fontSize: 44)),
           const SizedBox(height: 20),
           Text(
             l10n.journalEmptyTitle,
-            style: AppTextStyles.display(fontSize: 22, color: p.text),
+            style: AppTextStyles.display(fontSize: 24, color: p.text),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Text(
             l10n.journalEmptyBody,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
               height: 1.5,
             ),
@@ -297,7 +297,6 @@ class _EntryCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,7 +309,7 @@ class _EntryCard extends StatelessWidget {
           Text(
             entry.body,
             style: AppTextStyles.heading(
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w600,
               height: 1.3,
               color: p.text,
@@ -570,7 +569,7 @@ class _WritingView extends StatelessWidget {
         expands: true,
         textCapitalization: TextCapitalization.sentences,
         style: AppTextStyles.display(
-          fontSize: 20,
+          fontSize: 19,
           fontWeight: FontWeight.w400,
           color: p.text,
           height: 1.55,
@@ -578,7 +577,7 @@ class _WritingView extends StatelessWidget {
         decoration: InputDecoration(
           hintText: l10n.journalWritingHint,
           hintStyle: AppTextStyles.display(
-            fontSize: 20,
+            fontSize: 19,
             fontWeight: FontWeight.w400,
             color: p.textMuted.withValues(alpha: 0.7),
             height: 1.55,
@@ -614,7 +613,7 @@ class _ResponseView extends StatelessWidget {
           Text(
             entry,
             style: AppTextStyles.display(
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w400,
               color: p.textMuted,
               height: 1.5,
@@ -628,7 +627,6 @@ class _ResponseView extends StatelessWidget {
             decoration: BoxDecoration(
               color: p.surface,
               borderRadius: BorderRadius.circular(AppSpacing.radius),
-              border: Border.all(color: p.border, width: 0.5),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -52,7 +52,7 @@ class QuoteCardWidget extends StatelessWidget {
           children: [
             Text(
               'ilnd.',
-              style: AppTextStyles.display(fontSize: 22, color: p.accent),
+              style: AppTextStyles.display(fontSize: 24, color: p.accent),
             ),
             // Alıntı bloğu esnek: kart ne kadar dar/kısa olursa olsun taşmaz,
             // sığmayan kuyruk ellipsis'le kapanır.
@@ -76,7 +76,7 @@ class QuoteCardWidget extends StatelessWidget {
                   const SizedBox(height: 14),
                   Text(
                     '— ilnd',
-                    style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
                   ),
                 ],
               ),

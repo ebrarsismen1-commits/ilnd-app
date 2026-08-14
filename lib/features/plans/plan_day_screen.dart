@@ -83,7 +83,7 @@ class PlanDayScreen extends ConsumerWidget {
         foregroundColor: p.text,
         title: Text(
           l10n.planDayLabel(dayNumber),
-          style: AppTextStyles.label(fontSize: 12, color: p.textMuted),
+          style: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
         ),
       ),
       body: SafeArea(
@@ -136,7 +136,7 @@ class PlanDayScreen extends ConsumerWidget {
               Center(
                 child: Text(
                   l10n.planDayDone,
-                  style: AppTextStyles.label(fontSize: 12, color: p.accent),
+                  style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
                 ),
               )
             else
@@ -152,7 +152,10 @@ class PlanDayScreen extends ConsumerWidget {
                   ),
                   child: Text(
                     l10n.planDayComplete,
-                    style: AppTextStyles.label(fontSize: 12, color: p.onAccent),
+                    style: AppTextStyles.label(
+                      fontSize: 11.5,
+                      color: p.onAccent,
+                    ),
                   ),
                 ),
               ),
@@ -182,7 +185,6 @@ class _ArticleRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
         ),
         child: Row(
           children: [
@@ -196,14 +198,14 @@ class _ArticleRow extends StatelessWidget {
                     article.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.body(fontSize: 14, color: p.text),
+                    style: AppTextStyles.body(fontSize: 13, color: p.text),
                   ),
                   if (article.readTime.isNotEmpty) ...[
                     const SizedBox(height: 2),
                     Text(
                       article.readTime,
                       style: AppTextStyles.body(
-                        fontSize: 11,
+                        fontSize: 11.5,
                         color: p.textMuted,
                       ),
                     ),
@@ -233,7 +235,6 @@ class _ActionRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Row(
         children: [
@@ -242,7 +243,7 @@ class _ActionRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: AppTextStyles.body(fontSize: 14, color: p.text),
+              style: AppTextStyles.body(fontSize: 13, color: p.text),
             ),
           ),
         ],

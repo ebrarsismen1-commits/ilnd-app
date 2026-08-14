@@ -116,7 +116,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   if (widget.reason != null) ...[
                     Text(
                       widget.reason!,
-                      style: AppTextStyles.body(fontSize: 14, color: p.accent),
+                      style: AppTextStyles.body(fontSize: 13, color: p.accent),
                     ),
                     const SizedBox(height: 8),
                   ],
@@ -175,7 +175,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                               Text(
                                 l10n.paywallYearly,
                                 style: AppTextStyles.body(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   color: p.text,
                                 ).copyWith(fontWeight: FontWeight.w600),
                               ),
@@ -183,7 +183,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                               Text(
                                 l10n.paywallFreeTrial,
                                 style: AppTextStyles.body(
-                                  fontSize: 12,
+                                  fontSize: 11.5,
                                   color: p.textMuted,
                                 ),
                               ),
@@ -202,7 +202,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                           child: Text(
                             l10n.paywallDiscount,
                             style: AppTextStyles.label(
-                              fontSize: 11,
+                              fontSize: 11.5,
                               color: p.accent,
                             ).copyWith(letterSpacing: 0),
                           ),
@@ -254,7 +254,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                           child: Text(
                             l10n.paywallNotNow,
                             style: AppTextStyles.body(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: p.textMuted,
                             ),
                           ),
@@ -263,7 +263,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                       Text(
                         ' · ',
                         style: AppTextStyles.body(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: p.textMuted,
                         ),
                       ),
@@ -285,7 +285,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                               : Text(
                                   l10n.paywallRestore,
                                   style: AppTextStyles.body(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     color: p.textMuted,
                                   ),
                                 ),

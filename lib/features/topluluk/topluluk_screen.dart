@@ -121,7 +121,6 @@ class _EventCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,13 +138,13 @@ class _EventCard extends ConsumerWidget {
                 Text(
                   day,
                   style: AppTextStyles.mono(
-                    fontSize: 16,
+                    fontSize: 15,
                     color: p.accent,
                   ).copyWith(fontWeight: FontWeight.w700, height: 1.1),
                 ),
                 Text(
                   month,
-                  style: AppTextStyles.label(fontSize: 8.5, color: p.accent),
+                  style: AppTextStyles.label(fontSize: 10, color: p.accent),
                 ),
               ],
             ),
@@ -157,7 +156,7 @@ class _EventCard extends ConsumerWidget {
               children: [
                 Text(
                   event.title,
-                  style: AppTextStyles.heading(fontSize: 15.5, color: p.text),
+                  style: AppTextStyles.heading(fontSize: 15, color: p.text),
                 ),
                 const SizedBox(height: 4),
                 Row(
@@ -168,7 +167,7 @@ class _EventCard extends ConsumerWidget {
                       child: Text(
                         '${event.venue} · ${event.city}',
                         style: AppTextStyles.body(
-                          fontSize: 11,
+                          fontSize: 11.5,
                           color: p.textMuted,
                         ),
                         maxLines: 1,
@@ -185,7 +184,7 @@ class _EventCard extends ConsumerWidget {
                         child: Text(
                           l10n.topulukGoingCount(count),
                           style: AppTextStyles.body(
-                            fontSize: 10.5,
+                            fontSize: 10,
                             color: p.textMuted,
                           ),
                         ),
@@ -244,7 +243,7 @@ class _EmptyInvite extends StatelessWidget {
           index: 3,
           child: Text(
             l10n.topulukComingTitle,
-            style: AppTextStyles.heading(fontSize: 22, color: p.text),
+            style: AppTextStyles.heading(fontSize: 24, color: p.text),
           ),
         ),
         const SizedBox(height: 10),
@@ -253,7 +252,7 @@ class _EmptyInvite extends StatelessWidget {
           child: Text(
             l10n.topulukComingBody,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
             ).copyWith(height: 1.6),
           ),

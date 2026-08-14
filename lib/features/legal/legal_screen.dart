@@ -55,7 +55,7 @@ class LegalScreen extends ConsumerWidget {
                       child: Text(
                         title,
                         style: AppTextStyles.heading(
-                          fontSize: 18,
+                          fontSize: 19,
                           color: p.text,
                         ),
                       ),
@@ -74,7 +74,7 @@ class LegalScreen extends ConsumerWidget {
                   child: Text(
                     body,
                     style: AppTextStyles.body(
-                      fontSize: 14,
+                      fontSize: 13,
                       color: p.text,
                     ).copyWith(height: 1.6),
                   ),

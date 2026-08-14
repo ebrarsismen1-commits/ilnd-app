@@ -131,7 +131,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                 Text(
                   'ilnd.',
-                  style: AppTextStyles.display(fontSize: 52, color: p.text),
+                  style: AppTextStyles.display(fontSize: 44, color: p.text),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 10),

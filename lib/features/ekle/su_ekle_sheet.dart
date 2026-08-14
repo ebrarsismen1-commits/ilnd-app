@@ -114,7 +114,7 @@ class _SuEkleSheet extends ConsumerWidget {
                       child: Text(
                         l10n.suEkleResetButton,
                         style: AppTextStyles.body(
-                          fontSize: 12,
+                          fontSize: 11.5,
                           color: p.textMuted,
                         ),
                       ),
@@ -128,7 +128,7 @@ class _SuEkleSheet extends ConsumerWidget {
             // Quick-add buttons
             Text(
               l10n.suEkleHowMuch,
-              style: AppTextStyles.label(fontSize: 12, color: p.textMuted),
+              style: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
             ),
             const SizedBox(height: 12),
             Row(
@@ -149,7 +149,6 @@ class _SuEkleSheet extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: p.surfaceStrong,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: p.border, width: 0.5),
                         ),
                         alignment: Alignment.center,
                         child: Column(
@@ -158,7 +157,7 @@ class _SuEkleSheet extends ConsumerWidget {
                             Text(
                               '+$ml',
                               style: AppTextStyles.mono(
-                                fontSize: 14,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: p.text,
                               ),

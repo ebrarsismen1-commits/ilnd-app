@@ -44,7 +44,7 @@ class SocialSignInButton extends ConsumerWidget {
             Text(
               label,
               style: AppTextStyles.body(
-                fontSize: 14,
+                fontSize: 13,
                 color: p.text,
               ).copyWith(fontWeight: FontWeight.w600),
             ),
@@ -74,7 +74,7 @@ class _ProviderMark extends StatelessWidget {
     return Text(
       'G',
       style: AppTextStyles.display(
-        fontSize: 18,
+        fontSize: 19,
         fontWeight: FontWeight.w700,
         color: color,
       ),
@@ -98,7 +98,7 @@ class AuthDivider extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
             label,
-            style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+            style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
           ),
         ),
         Expanded(child: Divider(color: p.border, height: 1)),

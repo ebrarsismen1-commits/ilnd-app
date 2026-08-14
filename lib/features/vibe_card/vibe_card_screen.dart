@@ -104,7 +104,7 @@ class _VibeCardScreenState extends ConsumerState<VibeCardScreen> {
                     error: (e, st) => Text(
                       l10n.vibeCardError,
                       style: AppTextStyles.body(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: p.textMuted,
                       ),
                     ),

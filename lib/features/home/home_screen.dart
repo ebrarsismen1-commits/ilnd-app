@@ -15,6 +15,7 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/daily_trio/daily_trio_section.dart';
@@ -212,7 +213,7 @@ class _HeroHeader extends ConsumerWidget {
                       Text(
                         'ilnd.',
                         style: AppTextStyles.display(
-                          fontSize: 20,
+                          fontSize: 19,
                           color: Colors.white,
                         ),
                       ),
@@ -234,7 +235,7 @@ class _HeroHeader extends ConsumerWidget {
                             child: Text(
                               '$streak',
                               style: AppTextStyles.body(
-                                fontSize: 12.5,
+                                fontSize: 13,
                                 color: Colors.white,
                               ).copyWith(fontWeight: FontWeight.w700),
                             ),
@@ -408,7 +409,10 @@ class _PulsingFlameState extends State<_PulsingFlame>
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
-      scale: _scale,
+      // Nabız dekoratif — azaltılmış modda alev sabit durur.
+      scale: prefersReducedMotion(context)
+          ? const AlwaysStoppedAnimation<double>(1)
+          : _scale,
       child: const Text('🔥 ', style: TextStyle(fontSize: 13)),
     );
   }
@@ -439,14 +443,13 @@ class _ReminderInviteCard extends ConsumerWidget {
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: p.border, width: 0.5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Text('🔔', style: TextStyle(fontSize: 20, color: p.amber)),
+                Text('🔔', style: TextStyle(fontSize: 19, color: p.amber)),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -459,7 +462,7 @@ class _ReminderInviteCard extends ConsumerWidget {
             const SizedBox(height: 6),
             Text(
               l10n.homeReminderInviteBody,
-              style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+              style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
             ),
             const SizedBox(height: 12),
             Row(
@@ -477,7 +480,7 @@ class _ReminderInviteCard extends ConsumerWidget {
                       child: Text(
                         l10n.homeReminderInviteAccept,
                         style: AppTextStyles.body(
-                          fontSize: 13.5,
+                          fontSize: 13,
                           color: p.onAccent,
                         ).copyWith(fontWeight: FontWeight.w600),
                       ),
@@ -496,7 +499,7 @@ class _ReminderInviteCard extends ConsumerWidget {
                     child: Text(
                       l10n.homeReminderInviteLater,
                       style: AppTextStyles.body(
-                        fontSize: 13.5,
+                        fontSize: 13,
                         color: p.textMuted,
                       ),
                     ),
@@ -554,11 +557,10 @@ class _SleepRitualCard extends ConsumerWidget {
           decoration: BoxDecoration(
             color: p.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: p.border, width: 0.5),
           ),
           child: Row(
             children: [
-              Text('🌙', style: TextStyle(fontSize: 20, color: p.amber)),
+              Text('🌙', style: TextStyle(fontSize: 19, color: p.amber)),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -572,7 +574,7 @@ class _SleepRitualCard extends ConsumerWidget {
                     Text(
                       l10n.sleepRitualHomeCardSubtitle,
                       style: AppTextStyles.body(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         color: p.textMuted,
                       ),
                     ),
@@ -660,16 +662,15 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: p.border, width: 0.5),
         ),
         child: Row(
           children: [
-            Text(moodEntry.$1, style: TextStyle(fontSize: 18, color: p.accent)),
+            Text(moodEntry.$1, style: TextStyle(fontSize: 19, color: p.accent)),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
                 l10n.homeMoodAnsweredToday(_moodLabel(l10n, todaysMood)),
-                style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
               ),
             ),
           ],
@@ -682,14 +683,13 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             l10n.homeMoodQuestion,
-            style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+            style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
           ),
           const SizedBox(height: 12),
           Row(
@@ -721,7 +721,7 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
                           child: Text(
                             m.$1,
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 15,
                               color: _selected == index ? p.accent : p.text,
                             ),
                           ),
@@ -732,7 +732,7 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
                         _moodLabel(l10n, m.$2),
                         style:
                             AppTextStyles.body(
-                              fontSize: 9.5,
+                              fontSize: 10,
                               color: _selected == index
                                   ? p.accent
                                   : p.textMuted,
@@ -764,7 +764,7 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: AppTextStyles.display(fontSize: 22, color: p.text),
+      style: AppTextStyles.display(fontSize: 24, color: p.text),
     );
   }
 }
@@ -856,7 +856,7 @@ class _DailyReadCard extends StatelessWidget {
                     Text(
                       l10n.homeReadTimeArrow(article.readTime),
                       style: AppTextStyles.body(
-                        fontSize: 12,
+                        fontSize: 11.5,
                         color: Colors.white,
                       ).copyWith(fontWeight: FontWeight.w600),
                     ),
@@ -906,7 +906,6 @@ class _ActivePlanRow extends ConsumerWidget {
           decoration: BoxDecoration(
             color: p.surface,
             borderRadius: BorderRadius.circular(AppSpacing.radius),
-            border: Border.all(color: p.border, width: 0.5),
           ),
           child: Row(
             children: [
@@ -935,7 +934,7 @@ class _ActivePlanRow extends ConsumerWidget {
                         localized.lengthDays,
                       ),
                       style: AppTextStyles.body(
-                        fontSize: 12,
+                        fontSize: 11.5,
                         color: p.textMuted,
                       ),
                     ),

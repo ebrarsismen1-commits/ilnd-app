@@ -321,7 +321,7 @@ class _BreathScreenState extends State<BreathScreen> {
         title: Text(
           l10n.breathScreenTitle,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 19,
             fontWeight: FontWeight.w300,
             color: p.text,
             letterSpacing: 1,
@@ -400,7 +400,7 @@ class _BreathScreenState extends State<BreathScreen> {
                   Text(
                     '$mm:$ss  ·  4 · 4 · 6',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 11.5,
                       color: p.textMuted.withValues(alpha: 0.7),
                       letterSpacing: 2,
                       fontFeatures: const [FontFeature.tabularFigures()],
@@ -483,7 +483,7 @@ class _BreathDoneView extends StatelessWidget {
           Text(
             l10n.breathDoneTitle,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 19,
               fontWeight: FontWeight.w400,
               color: p.text,
             ),

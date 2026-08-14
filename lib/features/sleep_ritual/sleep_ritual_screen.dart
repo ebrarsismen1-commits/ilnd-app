@@ -52,7 +52,7 @@ class _SleepRitualScreenState extends ConsumerState<SleepRitualScreen> {
         title: Text(
           l10n.sleepRitualTitle,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 19,
             fontWeight: FontWeight.w300,
             color: p.text,
             letterSpacing: 1,
@@ -93,7 +93,7 @@ class _PreparingView extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             l10n.sleepRitualPreparing,
-            style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+            style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
           ),
         ],
       ),
@@ -157,7 +157,7 @@ class _RunnerPhase extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             l10n.sleepRitualStepProgress(flow.index + 1, flow.queue.length),
-            style: AppTextStyles.label(fontSize: 11, color: p.textMuted),
+            style: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
           ),
           const SizedBox(height: 12),
           Expanded(
@@ -381,7 +381,11 @@ class _BreathStepState extends State<_BreathStep> {
         const SizedBox(height: 6),
         Text(
           '4 · 4 · 6',
-          style: TextStyle(fontSize: 12, color: p.textMuted, letterSpacing: 3),
+          style: TextStyle(
+            fontSize: 11.5,
+            color: p.textMuted,
+            letterSpacing: 3,
+          ),
         ),
         const Spacer(),
         _PrimaryButton(
@@ -461,7 +465,7 @@ class _TextStepState extends State<_TextStep> {
         const SizedBox(height: 24),
         Text(
           widget.spec.prompt,
-          style: AppTextStyles.display(fontSize: 22, color: p.text),
+          style: AppTextStyles.display(fontSize: 24, color: p.text),
         ),
         const SizedBox(height: 20),
         Container(
@@ -469,7 +473,6 @@ class _TextStepState extends State<_TextStep> {
           decoration: BoxDecoration(
             color: p.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: p.border, width: 0.5),
           ),
           child: TextField(
             controller: _ctrl,
@@ -532,7 +535,7 @@ class _MessageStep extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: AppTextStyles.display(
-              fontSize: 21,
+              fontSize: 19,
               fontWeight: FontWeight.w400,
               color: p.text,
               height: 1.4,
@@ -584,7 +587,7 @@ class _ClosingStep extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: AppTextStyles.display(
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: FontWeight.w400,
               color: p.text,
               height: 1.4,

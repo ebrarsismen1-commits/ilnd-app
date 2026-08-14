@@ -141,7 +141,7 @@ class _RingItem extends StatelessWidget {
               Text(
                 l10n.navRing,
                 style: AppTextStyles.body(
-                  fontSize: 9.5,
+                  fontSize: 10,
                   color: p.accent,
                 ).copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.2),
               ),

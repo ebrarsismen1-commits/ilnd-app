@@ -38,7 +38,6 @@ class CardFooter extends StatelessWidget {
             decoration: BoxDecoration(
               color: p.surface.withValues(alpha: 0.7),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: p.border, width: 0.5),
             ),
             child: Text(
               l10n.vibeCardInviteCode(referralCode),

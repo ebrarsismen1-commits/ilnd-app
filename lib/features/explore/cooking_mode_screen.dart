@@ -39,7 +39,7 @@ class _CookingModeScreenState extends ConsumerState<CookingModeScreen> {
         title: Text(
           widget.article.title,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: FontWeight.w300,
             color: p.text,
             letterSpacing: 1,
@@ -57,7 +57,7 @@ class _CookingModeScreenState extends ConsumerState<CookingModeScreen> {
               const SizedBox(height: 8),
               Text(
                 l10n.recipeStepProgress(_index + 1, steps.length),
-                style: AppTextStyles.label(fontSize: 11, color: p.textMuted),
+                style: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
               ),
               const SizedBox(height: 10),
               // İlerleme çizgisi: tamamlanan adımlar dolar.
@@ -101,7 +101,7 @@ class _CookingModeScreenState extends ConsumerState<CookingModeScreen> {
                         child: Text(
                           '${_index + 1}',
                           style: AppTextStyles.display(
-                            fontSize: 26,
+                            fontSize: 24,
                             color: p.accent,
                           ),
                         ),

@@ -84,7 +84,6 @@ class _Card extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: child,
     );
@@ -232,7 +231,7 @@ class _DonutChart extends StatelessWidget {
               Text(
                 '${macros.kalori}',
                 style: AppTextStyles.mono(
-                  fontSize: 18,
+                  fontSize: 19,
                   fontWeight: FontWeight.w600,
                   color: p.text,
                 ),
@@ -291,14 +290,14 @@ class _MacroRow extends StatelessWidget {
               ),
               Text(
                 label,
-                style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+                style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
               ),
             ],
           ),
           Text(
             text,
             style: AppTextStyles.mono(
-              fontSize: 12,
+              fontSize: 11.5,
               fontWeight: FontWeight.w500,
               color: color,
             ),
@@ -403,7 +402,7 @@ class _FoodEntryRow extends StatelessWidget {
                     entry.karbonhidrat,
                     entry.yag,
                   ),
-                  style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+                  style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
                 ),
               ],
             ),
@@ -439,7 +438,7 @@ class _AddMealRow extends StatelessWidget {
               child: Text(
                 l10n.takipAddMeal,
                 style: AppTextStyles.display(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w400,
                   color: p.textMuted,
                 ),
@@ -498,7 +497,7 @@ class _ActivitySection extends ConsumerWidget {
                     Text(
                       l10n.takipHabitsDoneLabel,
                       style: AppTextStyles.label(
-                        fontSize: 11,
+                        fontSize: 11.5,
                         color: p.textMuted,
                       ),
                     ),
@@ -517,7 +516,7 @@ class _ActivitySection extends ConsumerWidget {
                     Text(
                       '${waterMl}ml',
                       style: AppTextStyles.mono(
-                        fontSize: 22,
+                        fontSize: 24,
                         fontWeight: FontWeight.w600,
                         color: p.text,
                       ),
@@ -673,7 +672,7 @@ class _HabitRow extends StatelessWidget {
               child: Text(
                 name,
                 style: AppTextStyles.body(
-                  fontSize: 14,
+                  fontSize: 13,
                   color: p.text,
                 ).copyWith(fontWeight: FontWeight.w500),
               ),

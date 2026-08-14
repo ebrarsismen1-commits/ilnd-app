@@ -42,25 +42,25 @@ class PlanDetailScreen extends ConsumerWidget {
         backgroundColor: p.surface,
         title: Text(
           l10n.planSwitchTitle,
-          style: AppTextStyles.body(fontSize: 17, color: p.text),
+          style: AppTextStyles.body(fontSize: 15, color: p.text),
         ),
         content: Text(
           l10n.planSwitchBody(activeTitle),
-          style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+          style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
             child: Text(
               l10n.planSwitchCancel,
-              style: AppTextStyles.label(fontSize: 12, color: p.textMuted),
+              style: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
             child: Text(
               l10n.planSwitchConfirm,
-              style: AppTextStyles.label(fontSize: 12, color: p.accent),
+              style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
             ),
           ),
         ],
@@ -194,7 +194,7 @@ class PlanDetailScreen extends ConsumerWidget {
                   complete
                       ? l10n.planAllDone
                       : l10n.planProgress(done, days.length),
-                  style: AppTextStyles.label(fontSize: 11, color: p.accent),
+                  style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
                 ),
                 const SizedBox(height: 12),
                 if (next != null)
@@ -282,7 +282,7 @@ class _PrimaryButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: AppTextStyles.label(fontSize: 12, color: p.onAccent),
+          style: AppTextStyles.label(fontSize: 11.5, color: p.onAccent),
         ),
       ),
     );
@@ -317,7 +317,6 @@ class _DayRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
         ),
         child: Row(
           children: [
@@ -333,7 +332,10 @@ class _DayRow extends StatelessWidget {
                   ? Icon(Icons.check_rounded, size: 18, color: p.onAccent)
                   : Text(
                       '$index',
-                      style: AppTextStyles.label(fontSize: 12, color: p.accent),
+                      style: AppTextStyles.label(
+                        fontSize: 11.5,
+                        color: p.accent,
+                      ),
                     ),
             ),
             const SizedBox(width: 12),
@@ -345,14 +347,14 @@ class _DayRow extends StatelessWidget {
                     day.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.body(fontSize: 14, color: p.text),
+                    style: AppTextStyles.body(fontSize: 13, color: p.text),
                   ),
                   if (done) ...[
                     const SizedBox(height: 2),
                     Text(
                       l10n.planDayDone,
                       style: AppTextStyles.body(
-                        fontSize: 11,
+                        fontSize: 11.5,
                         color: p.textMuted,
                       ),
                     ),

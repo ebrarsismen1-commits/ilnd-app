@@ -435,7 +435,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
                     const SizedBox(width: 4),
                     Text(
                       l10n.yemekEkleTitle,
-                      style: AppTextStyles.display(fontSize: 20, color: p.text),
+                      style: AppTextStyles.display(fontSize: 19, color: p.text),
                     ),
                   ],
                 ),
@@ -520,7 +520,7 @@ class _PickerView extends StatelessWidget {
           Text(
             l10n.yemekEklePhotoPromptBody,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
               height: 1.5,
             ),
@@ -585,7 +585,7 @@ class _LoadingView extends StatelessWidget {
           Text(
             l10n.yemekEkleAnalyzing,
             style: AppTextStyles.body(
-              fontSize: 16,
+              fontSize: 15,
               color: p.textMuted,
             ).copyWith(fontWeight: FontWeight.w500),
           ),
@@ -719,7 +719,6 @@ class _ResultView extends StatelessWidget {
             decoration: BoxDecoration(
               color: p.surface,
               borderRadius: BorderRadius.circular(AppSpacing.radius),
-              border: Border.all(color: p.border, width: 0.5),
             ),
             child: Wrap(
               spacing: 8,
@@ -738,7 +737,7 @@ class _ResultView extends StatelessWidget {
                       child: Text(
                         m,
                         style: AppTextStyles.label(
-                          fontSize: 12,
+                          fontSize: 11.5,
                           color: p.amber,
                         ).copyWith(letterSpacing: 0),
                       ),
@@ -804,7 +803,7 @@ class _PortionSelector extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           l10n.yemekEklePortionHint,
-          style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+          style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
         ),
         const SizedBox(height: 10),
         Row(
@@ -880,13 +879,13 @@ class _ErrorView extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             l10n.yemekEkleErrorTitle,
-            style: AppTextStyles.display(fontSize: 22, color: p.text),
+            style: AppTextStyles.display(fontSize: 24, color: p.text),
           ),
           const SizedBox(height: 8),
           Text(
             message,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
               height: 1.5,
             ),
@@ -1049,7 +1048,7 @@ class _IlndComment extends StatelessWidget {
                   : Text(
                       comment!,
                       style: AppTextStyles.body(
-                        fontSize: 14,
+                        fontSize: 13,
                         height: 1.5,
                         color: p.text,
                       ),
@@ -1087,7 +1086,6 @@ class _MacroCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1100,14 +1098,17 @@ class _MacroCard extends StatelessWidget {
                   TextSpan(
                     text: value,
                     style: AppTextStyles.mono(
-                      fontSize: 22,
+                      fontSize: 24,
                       fontWeight: FontWeight.w600,
                       color: p.text,
                     ),
                   ),
                   TextSpan(
                     text: ' $unit',
-                    style: AppTextStyles.mono(fontSize: 11, color: p.textMuted),
+                    style: AppTextStyles.mono(
+                      fontSize: 11.5,
+                      color: p.textMuted,
+                    ),
                   ),
                 ],
               ),

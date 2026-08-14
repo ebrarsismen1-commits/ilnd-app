@@ -106,7 +106,7 @@ class _NewPasswordScreenState extends ConsumerState<NewPasswordScreen> {
                 Text(
                   l10n.newPasswordSubtitle,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
                 ),
                 const SizedBox(height: 32),
                 AuthInputField(

@@ -287,7 +287,7 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                   const SizedBox(height: 6),
                   Text(
                     l10n.quickSetupTitleEn,
-                    style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
                   ),
                 ],
                 const SizedBox(height: 24),
@@ -298,7 +298,7 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                     autofocus: true,
                     textCapitalization: TextCapitalization.words,
                     style: AppTextStyles.body(
-                      fontSize: 16,
+                      fontSize: 15,
                       color: p.text,
                     ).copyWith(fontWeight: FontWeight.w500),
                     decoration: InputDecoration(
@@ -309,7 +309,7 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                 const SizedBox(height: 32),
                 Text(
                   l10n.quickSetupGoalsTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
+                  style: AppTextStyles.heading(fontSize: 19, color: p.text),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -370,7 +370,7 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                 const SizedBox(height: 32),
                 Text(
                   l10n.quickSetupBodyTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
+                  style: AppTextStyles.heading(fontSize: 19, color: p.text),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -408,7 +408,7 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                 const SizedBox(height: 28),
                 Text(
                   l10n.quickSetupActivityTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
+                  style: AppTextStyles.heading(fontSize: 19, color: p.text),
                 ),
                 const SizedBox(height: 12),
                 _chipRow(
@@ -423,7 +423,7 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                 const SizedBox(height: 28),
                 Text(
                   l10n.quickSetupDietTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
+                  style: AppTextStyles.heading(fontSize: 19, color: p.text),
                 ),
                 const SizedBox(height: 12),
                 _chipRow(
@@ -437,7 +437,7 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                 const SizedBox(height: 28),
                 Text(
                   l10n.quickSetupAllergiesTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
+                  style: AppTextStyles.heading(fontSize: 19, color: p.text),
                 ),
                 const SizedBox(height: 4),
                 Text(

@@ -128,7 +128,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             Text(
                               l10n.exploreTitle,
                               style: AppTextStyles.display(
-                                fontSize: 32,
+                                fontSize: 30,
                                 color: p.text,
                               ),
                             ),
@@ -208,7 +208,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                         Text(
                           l10n.exploreFeaturedLabel,
                           style: AppTextStyles.label(
-                            fontSize: 11,
+                            fontSize: 11.5,
                             color: p.accent,
                           ),
                         ),
@@ -216,7 +216,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                         Text(
                           l10n.exploreSeeAllArrow,
                           style: AppTextStyles.body(
-                            fontSize: 12,
+                            fontSize: 11.5,
                             color: p.textMuted,
                           ),
                         ),
@@ -298,7 +298,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                               f.label(l10n),
                               style:
                                   AppTextStyles.label(
-                                    fontSize: 12,
+                                    fontSize: 11.5,
                                     color: active ? p.onAccent : p.textMuted,
                                   ).copyWith(
                                     fontWeight: active
@@ -370,7 +370,7 @@ class _MovementShelf extends StatelessWidget {
           ),
           child: Text(
             l10n.movementShelfLabel,
-            style: AppTextStyles.label(fontSize: 11, color: p.accent),
+            style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
           ),
         ),
         const SizedBox(height: 10),
@@ -474,7 +474,7 @@ class _MovementCard extends StatelessWidget {
                               child: Text(
                                 l10n.movementPremiumBadge,
                                 style: AppTextStyles.label(
-                                  fontSize: 9,
+                                  fontSize: 10,
                                   color: p.onAccent,
                                 ),
                               ),
@@ -491,7 +491,7 @@ class _MovementCard extends StatelessWidget {
               program.title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.body(fontSize: 14, color: p.text),
+              style: AppTextStyles.body(fontSize: 13, color: p.text),
             ),
             Text(
               [
@@ -501,7 +501,7 @@ class _MovementCard extends StatelessWidget {
               ].join(' · '),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.body(fontSize: 11, color: p.textMuted),
+              style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
             ),
           ],
         ),
@@ -592,7 +592,7 @@ class _RitualsRow extends StatelessWidget {
           ),
           child: Text(
             l10n.exploreRitualsLabel,
-            style: AppTextStyles.label(fontSize: 11, color: p.accent),
+            style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
           ),
         ),
         const SizedBox(height: 10),
@@ -762,7 +762,7 @@ class _HeroCard extends StatelessWidget {
                             article.readTime,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 11,
+                              fontSize: 11.5,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -871,7 +871,7 @@ class _FeaturedCard extends StatelessWidget {
                           article.readTime,
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.7),
-                            fontSize: 11,
+                            fontSize: 11.5,
                           ),
                         ),
                       ],
@@ -929,7 +929,7 @@ class _QuoteBanner extends StatelessWidget {
                 Text(
                   l10n.exploreQuote,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.w600,
                     color: p.text,
                     height: 1.4,
@@ -939,7 +939,7 @@ class _QuoteBanner extends StatelessWidget {
                 Text(
                   l10n.exploreQuoteSubtitle,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 11.5,
                     color: p.textMuted,
                     height: 1.4,
                   ),
@@ -1048,7 +1048,7 @@ class _FeedRow extends StatelessWidget {
                   Text(
                     article.excerpt,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 11.5,
                       color: p.textMuted,
                       height: 1.4,
                     ),
@@ -1058,7 +1058,7 @@ class _FeedRow extends StatelessWidget {
                   const SizedBox(height: 5),
                   Text(
                     article.readTime,
-                    style: TextStyle(fontSize: 11, color: p.accent),
+                    style: TextStyle(fontSize: 11.5, color: p.accent),
                   ),
                 ],
               ),

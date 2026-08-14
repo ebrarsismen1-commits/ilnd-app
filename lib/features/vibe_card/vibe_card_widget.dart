@@ -49,13 +49,13 @@ class VibeCardWidget extends StatelessWidget {
           children: [
             Text(
               'ilnd.',
-              style: AppTextStyles.display(fontSize: 22, color: p.accent),
+              style: AppTextStyles.display(fontSize: 24, color: p.accent),
             ),
             const SizedBox(height: 6),
             Text(
               weekRangeLabel,
               style: AppTextStyles.label(
-                fontSize: 11,
+                fontSize: 11.5,
                 color: p.textMuted,
               ).copyWith(letterSpacing: 0.6),
             ),
@@ -67,7 +67,7 @@ class VibeCardWidget extends StatelessWidget {
                 l10n: l10n,
               ),
               style: AppTextStyles.display(
-                fontSize: 32,
+                fontSize: 30,
                 color: p.text,
                 height: 1.2,
               ),
@@ -80,7 +80,7 @@ class VibeCardWidget extends StatelessWidget {
                 l10n: l10n,
               ),
               style: AppTextStyles.body(
-                fontSize: 16,
+                fontSize: 15,
                 color: p.textMuted,
                 height: 1.4,
               ),
@@ -137,7 +137,6 @@ class _StatPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,14 +144,14 @@ class _StatPill extends StatelessWidget {
           Text(
             value,
             style: AppTextStyles.mono(
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w700,
               color: p.text,
             ),
           ),
           Text(
             label,
-            style: AppTextStyles.label(fontSize: 9, color: p.textMuted),
+            style: AppTextStyles.label(fontSize: 10, color: p.textMuted),
           ),
         ],
       ),

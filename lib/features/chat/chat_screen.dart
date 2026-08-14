@@ -170,7 +170,7 @@ class _Header extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 l10n.chatListening,
-                style: AppTextStyles.body(fontSize: 10.5, color: p.textMuted),
+                style: AppTextStyles.body(fontSize: 10, color: p.textMuted),
               ),
             ],
           ),
@@ -244,7 +244,7 @@ class _Bubble extends StatelessWidget {
                   Text(
                     message.text,
                     style: AppTextStyles.display(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w400,
                       color: p.text,
                       height: 1.45,
@@ -268,7 +268,7 @@ class _Bubble extends StatelessWidget {
                         Text(
                           l10n.chatQuoteCardButton,
                           style: AppTextStyles.label(
-                            fontSize: 10.5,
+                            fontSize: 10,
                             color: p.textMuted,
                           ),
                         ),
@@ -402,7 +402,6 @@ class _Composer extends StatelessWidget {
               decoration: BoxDecoration(
                 color: p.surface,
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: p.border, width: 0.5),
               ),
               // Çok satırlı TextField'da Enter varsayılan olarak yeni satır
               // ekler ve onSubmitted hiç tetiklenmez (web/masaüstü klavye).

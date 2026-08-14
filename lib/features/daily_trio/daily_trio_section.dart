@@ -121,11 +121,10 @@ class _TrioCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 22)),
+          Text(emoji, style: const TextStyle(fontSize: 24)),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -135,7 +134,7 @@ class _TrioCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.heading(fontSize: 14, color: p.text),
+                      style: AppTextStyles.heading(fontSize: 13, color: p.text),
                     ),
                     if (chip != null) ...[
                       const SizedBox(width: 8),
@@ -151,7 +150,7 @@ class _TrioCard extends StatelessWidget {
                         child: Text(
                           chip!,
                           style: AppTextStyles.label(
-                            fontSize: 9.5,
+                            fontSize: 10,
                             color: p.textMuted,
                           ),
                         ),
@@ -165,7 +164,7 @@ class _TrioCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.body(
-                    fontSize: 12.5,
+                    fontSize: 13,
                     color: p.textMuted,
                     height: 1.35,
                   ),

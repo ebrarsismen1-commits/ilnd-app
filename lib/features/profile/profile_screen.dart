@@ -87,7 +87,6 @@ class ProfileScreen extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(
                               AppSpacing.radius,
                             ),
-                            border: Border.all(color: p.border, width: 0.5),
                           ),
                           child: Row(
                             children: [
@@ -154,7 +153,7 @@ class _ProfileHeader extends ConsumerWidget {
             onTap: () => showAvatarOptions(context, ref),
             child: Stack(
               children: [
-                UserAvatar(size: 60, initial: initial, p: p, fontSize: 26),
+                UserAvatar(size: 60, initial: initial, p: p, fontSize: 24),
                 Positioned(
                   right: 0,
                   bottom: 0,
@@ -217,7 +216,6 @@ class _MemoryCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,7 +226,7 @@ class _MemoryCard extends ConsumerWidget {
               const SizedBox(width: 10),
               Text(
                 l10n.profileMemoryHeading,
-                style: AppTextStyles.heading(fontSize: 17, color: p.text),
+                style: AppTextStyles.heading(fontSize: 15, color: p.text),
               ),
             ],
           ),
@@ -362,14 +360,13 @@ class _StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         children: [
           Text(
             '$value$suffix',
             style: AppTextStyles.mono(
-              fontSize: 22,
+              fontSize: 24,
               fontWeight: FontWeight.w700,
               color: p.text,
             ),
@@ -491,13 +488,13 @@ class _BadgeCard extends StatelessWidget {
         children: [
           Opacity(
             opacity: locked ? 0.4 : 1.0,
-            child: Text(emoji, style: const TextStyle(fontSize: 22)),
+            child: Text(emoji, style: const TextStyle(fontSize: 24)),
           ),
           const SizedBox(height: 6),
           Text(
             label,
             style: AppTextStyles.label(
-              fontSize: 9,
+              fontSize: 10,
               color: locked ? p.textMuted.withValues(alpha: 0.6) : color,
             ).copyWith(letterSpacing: 0.3),
             textAlign: TextAlign.center,
@@ -530,7 +527,6 @@ class _WeeklySummaryCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -541,7 +537,7 @@ class _WeeklySummaryCard extends StatelessWidget {
           ),
           Text(
             l10n.profileThisWeek,
-            style: AppTextStyles.display(fontSize: 20, color: p.text),
+            style: AppTextStyles.display(fontSize: 19, color: p.text),
           ),
           const SizedBox(height: 16),
           Row(
@@ -622,7 +618,7 @@ class _WeeklySummaryCard extends StatelessWidget {
                         Text(
                           dayLabels[i],
                           style: AppTextStyles.label(
-                            fontSize: 9,
+                            fontSize: 10,
                             color: isEmpty
                                 ? p.textMuted.withValues(alpha: 0.5)
                                 : p.accent,
@@ -660,7 +656,7 @@ class _SummaryRow extends StatelessWidget {
         Text(
           value,
           style: AppTextStyles.mono(
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: FontWeight.w600,
             color: p.text,
           ),
@@ -669,7 +665,7 @@ class _SummaryRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+            style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -875,7 +871,6 @@ class _ReminderSettingRow extends ConsumerWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         children: [
@@ -901,7 +896,7 @@ class _ReminderSettingRow extends ConsumerWidget {
                     Text(
                       l10n.reminderSettingSubtitle,
                       style: AppTextStyles.body(
-                        fontSize: 12,
+                        fontSize: 11.5,
                         color: p.textMuted,
                       ),
                     ),
@@ -1004,7 +999,6 @@ class _SettingsRow extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Row(
         children: [

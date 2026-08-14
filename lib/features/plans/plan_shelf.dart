@@ -42,7 +42,7 @@ class PlanShelf extends ConsumerWidget {
           ),
           child: Text(
             l10n.planShelfLabel,
-            style: AppTextStyles.label(fontSize: 11, color: p.accent),
+            style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
           ),
         ),
         const SizedBox(height: 10),
@@ -148,7 +148,7 @@ class PlanCard extends ConsumerWidget {
                               child: Text(
                                 l10n.planPremiumBadge,
                                 style: AppTextStyles.label(
-                                  fontSize: 9,
+                                  fontSize: 10,
                                   color: p.onAccent,
                                 ),
                               ),
@@ -166,7 +166,7 @@ class PlanCard extends ConsumerWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.body(
-                fontSize: 14,
+                fontSize: 13,
                 color: p.text,
               ).copyWith(fontWeight: FontWeight.w600),
             ),

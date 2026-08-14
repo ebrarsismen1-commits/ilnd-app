@@ -115,7 +115,7 @@ class _ReferralScreenState extends ConsumerState<ReferralScreen> {
                       child: Text(
                         l10n.referralSubtitle,
                         style: AppTextStyles.body(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: p.textMuted,
                         ),
                       ),
@@ -157,13 +157,12 @@ class _ReferralScreenState extends ConsumerState<ReferralScreen> {
                             borderRadius: BorderRadius.circular(
                               AppSpacing.radius,
                             ),
-                            border: Border.all(color: p.border, width: 0.5),
                           ),
                           alignment: Alignment.center,
                           child: Text(
                             l10n.referralEnterCode,
                             style: AppTextStyles.body(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: p.accent,
                             ).copyWith(fontWeight: FontWeight.w600),
                           ),
@@ -202,14 +201,13 @@ class _CodeLoadError extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             l10n.referralCodeLoadError,
-            style: AppTextStyles.heading(fontSize: 16, color: p.text),
+            style: AppTextStyles.heading(fontSize: 15, color: p.text),
           ),
           const SizedBox(height: 6),
           Text(
@@ -222,7 +220,7 @@ class _CodeLoadError extends StatelessWidget {
             child: Text(
               l10n.referralRetry,
               style: AppTextStyles.body(
-                fontSize: 14,
+                fontSize: 13,
                 color: p.accent,
               ).copyWith(fontWeight: FontWeight.w600),
             ),
@@ -265,7 +263,6 @@ class _CodeCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +292,7 @@ class _CodeCard extends ConsumerWidget {
           Text(
             code.isEmpty ? '······' : code,
             style: AppTextStyles.mono(
-              fontSize: 36,
+              fontSize: 40,
               fontWeight: FontWeight.w700,
               color: p.text,
             ).copyWith(letterSpacing: 4),
@@ -316,7 +313,7 @@ class _CodeCard extends ConsumerWidget {
                     child: Text(
                       l10n.referralCopy,
                       style: AppTextStyles.body(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: p.text,
                       ).copyWith(fontWeight: FontWeight.w600),
                     ),
@@ -337,7 +334,7 @@ class _CodeCard extends ConsumerWidget {
                     child: Text(
                       l10n.referralShare,
                       style: AppTextStyles.body(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: p.onAccent,
                       ).copyWith(fontWeight: FontWeight.w600),
                     ),

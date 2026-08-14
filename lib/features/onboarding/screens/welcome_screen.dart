@@ -58,7 +58,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 Text(
                   l10n.welcomeTagline,
                   style: AppTextStyles.body(
-                    fontSize: 18,
+                    fontSize: 19,
                     color: p.textMuted,
                   ).copyWith(letterSpacing: 0.2),
                 ),
@@ -69,7 +69,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                   Text(
                     l10n.welcomeTaglineEn,
                     style: AppTextStyles.body(
-                      fontSize: 14,
+                      fontSize: 13,
                       color: p.textMuted.withValues(alpha: 0.7),
                     ).copyWith(letterSpacing: 0.2),
                   ),

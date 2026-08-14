@@ -245,14 +245,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         TextSpan(
                           text: l10n.registerTermsPrefix,
                           style: AppTextStyles.body(
-                            fontSize: 12,
+                            fontSize: 11.5,
                             color: p.textMuted,
                           ),
                         ),
                         TextSpan(
                           text: l10n.registerTermsOfService,
                           style: AppTextStyles.body(
-                            fontSize: 12,
+                            fontSize: 11.5,
                             color: p.accent,
                           ).copyWith(fontWeight: FontWeight.w600),
                           recognizer: TapGestureRecognizer()
@@ -261,14 +261,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         TextSpan(
                           text: l10n.registerTermsAnd,
                           style: AppTextStyles.body(
-                            fontSize: 12,
+                            fontSize: 11.5,
                             color: p.textMuted,
                           ),
                         ),
                         TextSpan(
                           text: l10n.registerPrivacyPolicy,
                           style: AppTextStyles.body(
-                            fontSize: 12,
+                            fontSize: 11.5,
                             color: p.accent,
                           ).copyWith(fontWeight: FontWeight.w600),
                           recognizer: TapGestureRecognizer()
@@ -277,7 +277,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         TextSpan(
                           text: l10n.registerTermsSuffix,
                           style: AppTextStyles.body(
-                            fontSize: 12,
+                            fontSize: 11.5,
                             color: p.textMuted,
                           ),
                         ),
