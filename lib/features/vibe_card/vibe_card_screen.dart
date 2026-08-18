@@ -115,9 +115,8 @@ class _VibeCardScreenState extends ConsumerState<VibeCardScreen> {
                         child: RepaintBoundary(
                           key: _captureKey,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              AppSpacing.radius,
-                            ),
+                            // Kartin kendi yaricapiyla ayni (handoff §9: 18).
+                            borderRadius: BorderRadius.circular(18),
                             child: VibeCardWidget(
                               data: data,
                               userName: name,

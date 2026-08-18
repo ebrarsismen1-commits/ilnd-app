@@ -42,22 +42,28 @@ class VibeCardWidget extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
+          borderRadius: BorderRadius.circular(18),
+          // Paylaşım kartındaki kenarlık işlevsel: kart açık zeminli bir
+          // sohbete düştüğünde kenarı kaybolmasın (DESIGN_SYSTEM §7.1'in
+          // "kenarlık yok" kuralının istisnası).
+          border: Border.all(color: p.border, width: 0.5),
         ),
-        padding: const EdgeInsets.fromLTRB(28, 36, 28, 32),
+        padding: const EdgeInsets.fromLTRB(28, 28, 28, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'ilnd.',
-              style: AppTextStyles.display(fontSize: 24, color: p.accent),
+              style: AppTextStyles.display(fontSize: 22, color: p.accent),
             ),
             const SizedBox(height: 6),
             Text(
               weekRangeLabel,
               style: AppTextStyles.label(
-                fontSize: 11.5,
+                fontSize: 11,
                 color: p.textMuted,
-              ).copyWith(letterSpacing: 0.6),
+                letterSpacingEm: 0.06,
+              ),
             ),
             const Spacer(flex: 3),
             Text(
@@ -67,7 +73,7 @@ class VibeCardWidget extends StatelessWidget {
                 l10n: l10n,
               ),
               style: AppTextStyles.display(
-                fontSize: 30,
+                fontSize: 31,
                 color: p.text,
                 height: 1.2,
               ),
@@ -80,7 +86,7 @@ class VibeCardWidget extends StatelessWidget {
                 l10n: l10n,
               ),
               style: AppTextStyles.body(
-                fontSize: 15,
+                fontSize: 15.5,
                 color: p.textMuted,
                 height: 1.4,
               ),
@@ -137,6 +143,7 @@ class _StatPill extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,14 +151,14 @@ class _StatPill extends StatelessWidget {
           Text(
             value,
             style: AppTextStyles.mono(
-              fontSize: 15,
+              fontSize: 16,
               fontWeight: FontWeight.w700,
               color: p.text,
             ),
           ),
           Text(
             label,
-            style: AppTextStyles.label(fontSize: 10, color: p.textMuted),
+            style: AppTextStyles.label(fontSize: 9, color: p.textMuted),
           ),
         ],
       ),
