@@ -73,6 +73,17 @@ jobs:
       # forks: without it, PR CI could never build. Either way the artifact
       # this job produces is debug-signed and NOT publishable; the real store
       # build lives in release.yml and refuses to run without the secret.
+      # android/gradle.properties daemon'i bilerek 1.5 GB'a kisitliyor: bakim
+      # yapan makine ayni anda Android Studio + emulator calistiriyor. CI
+      # runner'inda o tavan release derlemesine yetmiyor (Java heap space,
+      # 17 dk sonra). Burada YALNIZ CI icin yukseltiliyor — GRADLE_USER_HOME
+      # altindaki gradle.properties proje dosyasini ezer, yani yerel makine
+      # ayarindan etkilenmiyor.
+      - name: Raise the Gradle heap for CI only
+        run: |
+          mkdir -p ~/.gradle
+          echo "org.gradle.jvmargs=-Xmx5g -XX:MaxMetaspaceSize=1g" >> ~/.gradle/gradle.properties
+
       - name: Materialize google-services.json
         env:
           GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
