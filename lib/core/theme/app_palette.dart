@@ -43,44 +43,36 @@ class AppPalette {
 
   final Color onAccent;
 
-  // ── Gündüz · lavanta zemin, beyaz yüzey ──────────────────────────────────────
-  //
-  // Ayrım KENARLIKLA değil ton farkıyla kurulur: zemin lavantaya çalan gri,
-  // kartlar saf beyaz. Apple'ın gruplanmış liste dili — hairline yalnız grup
-  // içi satır ayracında kalır.
+  // ── Gündüz · açık/havadar/gri-tonlu wellness ─────────────────────────────────
   static const light = AppPalette(
     isDark: false,
-    base: Color(0xFFF2F0F7),
-    aura: [Color(0xFFF2F0F7), Color(0xFFEDEAF4), Color(0xFFF4F2F8)],
+    base: Color(0xFFF5F4F1), // barely-there off-white
+    aura: [Color(0xFFF5F4F1), Color(0xFFEEEDE6), Color(0xFFF2F1EA)],
     surface: Color(0xFFFFFFFF),
-    surfaceStrong: Color(0xFFEAE7F0),
-    text: Color(0xFF161320),
-    textMuted: Color(0xFF6B6478), // krem-lavanta zeminde ~4.7:1 (AA)
-    border: Color(0xFFE4E0EC),
-    accent: Color(0xFF6941B5), // lavanta — marka ve eylem rengi, ~6.4:1
-    accentSoft: Color(0xFFEDE6FA),
-    amber: Color(0xFF6E7F43), // matcha — pop; metin olarak okunabilir ton
+    surfaceStrong: Color(0xFFEBE8E1),
+    text: Color(0xFF111827), // slate
+    textMuted: Color(0xFF6B7280),
+    border: Color(0xFFE3E0D8),
+    accent: Color(0xFF1F9D57), // ilnd.app green
+    accentSoft: Color(0xFFDCF3E4),
+    amber: Color(0xFFE2611C), // warm orange pop
     onAccent: Color(0xFFFFFFFF),
   );
 
-  // ── Gece · mora çalan koyular ────────────────────────────────────────────────
-  //
-  // Nötr gri hâlâ YASAK (Sert Kural #7); gecenin rengi artık yeşile değil
-  // MORA çalıyor. Koyu modun tonları açık modun ters çevrilmişi değil, ayrı
-  // seçilmiş değerler — kontrastlar bağımsız ölçüldü.
+  // ── Gece · soğuk kömür luxe ───────────────────────────────────────────────────
   static const dark = AppPalette(
     isDark: true,
-    base: Color(0xFF0F0D15),
-    aura: [Color(0xFF110F18), Color(0xFF171422), Color(0xFF0F0D15)],
-    surface: Color(0xFF1B1826),
-    surfaceStrong: Color(0xFF231F31),
-    text: Color(0xFFF3F1F7),
-    textMuted: Color(0xFF918AA1), // koyu zeminde ~6.9:1
-    border: Color(0x1FFFFFFF),
-    accent: Color(0xFFB69CFF), // parlak lavanta, ~7.9:1
-    accentSoft: Color(0xFF2A2440),
-    amber: Color(0xFFA8BC7B), // matcha, ~8.7:1
-    onAccent: Color(0xFF1A1226),
+    base: Color(0xFF10120F), // cool near-black coal
+    aura: [Color(0xFF12140F), Color(0xFF181C16), Color(0xFF10120F)],
+    surface: Color(0x18FFFFFF),
+    surfaceStrong: Color(0xFF1C211C),
+    text: Color(0xFFF1F3EF),
+    textMuted: Color(0xFF9AA39A),
+    border: Color(0x28FFFFFF),
+    accent: Color(0xFF34C77A), // brighter green for dark-mode contrast
+    accentSoft: Color(0xFF1E3A2A),
+    amber: Color(0xFFF2794A), // lighter orange for dark-mode contrast
+    onAccent: Color(0xFF0B140D),
   );
 }
 
