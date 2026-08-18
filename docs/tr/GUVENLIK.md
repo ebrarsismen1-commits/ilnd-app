@@ -106,6 +106,7 @@ Transaction, istek Anthropic'e iletilmeden önce `ai_usage/{uid}/{tier}/{bugün}
 | Supabase service role key | Firebase Secret Manager | Yalnızca `deleteAccount` |
 | Supabase anon key | İstemci `.env` | Kasıtlı olarak açık (RLS uygulanır) |
 | Android keystore | GitHub Actions secret (base64) | Yalnızca yayın iş akışı |
+| `google-services.json` | GitHub Actions secret (base64), `GOOGLE_SERVICES_JSON_BASE64` | Yayın iş akışı; CI'da yer tutucuya düşer |
 
 **Asla commit etme:**
 - `.env` dosyaları

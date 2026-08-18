@@ -56,6 +56,36 @@ jobs:
           echo "::error::ANDROID_KEYSTORE_BASE64 (and the other ANDROID_* secrets) aren't set on this repo yet. See android/KEYSTORE.md to generate the upload keystore, then add it as a repo secret before pushing a release tag."
           exit 1
 
+      # `google-services.json` is gitignored (docs/tr/GUVENLIK.md), so a store
+      # build has to reconstruct it from a secret — same base64 pattern as the
+      # keystore above. Unlike ci.yml, there is no placeholder fallback here on
+      # purpose: an .aab built against a fake Firebase config would install and
+      # then fail every auth, Firestore and App Check call at runtime.
+      #
+      # Required secret:
+      #   GOOGLE_SERVICES_JSON_BASE64   base64 of android/app/google-services.json
+      - name: Check the Firebase config secret is configured
+        id: firebase
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fail early if the Firebase config secret is missing
+        if: steps.firebase.outputs.configured == 'false'
+        run: |
+          echo "::error::GOOGLE_SERVICES_JSON_BASE64 isn't set on this repo. Run: base64 -w0 android/app/google-services.json, then add the output as a repo secret before pushing a release tag."
+          exit 1
+
+      - name: Reconstruct google-services.json
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > android/app/google-services.json
+
       - name: Reconstruct keystore and key.properties
         working-directory: android
         env:
@@ -75,10 +105,10 @@ jobs:
       - name: Build signed App Bundle
         run: flutter build appbundle --release
 
-      - name: Remove keystore from the runner
+      - name: Remove keystore and Firebase config from the runner
         if: always()
         working-directory: android
-        run: rm -f upload-keystore.jks key.properties
+        run: rm -f upload-keystore.jks key.properties app/google-services.json
 
       - name: Upload signed App Bundle
         uses: actions/upload-artifact@v4

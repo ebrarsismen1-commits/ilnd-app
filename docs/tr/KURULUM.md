@@ -72,6 +72,10 @@ Firebase Console → Proje Ayarları bölümünden indir:
 
 Her iki dosya da `.gitignore` kapsamındadır; Firebase Console'dan veya takım üyesinden temin edilmelidir.
 
+Depodaki `android/app/google-services.ci-placeholder.json` **yalnızca CI içindir** —
+sahte kimliklerle dolu, tek işi derleme doğrulamasının Firebase yapılandırması olmadan
+da yürümesini sağlamak. Yerel geliştirmede kullanma; gerçek dosyayı indir.
+
 ---
 
 ## 4. Flutter Bağımlılıkları

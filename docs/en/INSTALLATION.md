@@ -72,6 +72,10 @@ Download from Firebase Console → Project Settings:
 
 Both files are in `.gitignore` and must be obtained from a team member or Firebase Console.
 
+The `android/app/google-services.ci-placeholder.json` file in the repo is **CI-only** —
+it holds fake ids and exists purely so build verification can run without a real Firebase
+config. Don't use it for local development; download the real file.
+
 ---
 
 ## 4. Flutter Dependencies
