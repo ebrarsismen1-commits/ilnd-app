@@ -25,10 +25,7 @@ class AppSpacing {
   static const double sectionGap = 24;
 
   /// Standard card corner radius.
-  /// Kart köşesi. 16 → 14: kenarlıklar kalkınca (ayrım artık ton farkından
-  /// geliyor) daha küçük yarıçap kartı "yüzey" gibi gösteriyor, "balon" gibi
-  /// değil — Apple'ın gruplanmış liste dili.
-  static const double radius = 14;
+  static const double radius = 16;
 
   /// Small corner radius — inputs, pills, small cards.
   static const double radiusSmall = 8;
@@ -53,26 +50,26 @@ class AppTheme {
       ),
 
       // ── Typography ──────────────────────────────────────────────────────
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
+      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).copyWith(
         // Display — Playfair italic (screen titles / hero text)
-        displayLarge: AppTextStyles.display(fontSize: 44),
+        displayLarge: AppTextStyles.display(fontSize: 56),
         displayMedium: AppTextStyles.display(fontSize: 40),
         displaySmall: AppTextStyles.display(fontSize: 28),
 
         // Heading — Playfair regular (card titles, article titles)
-        headlineLarge: AppTextStyles.heading(fontSize: 24),
-        headlineMedium: AppTextStyles.heading(fontSize: 24),
-        headlineSmall: AppTextStyles.heading(fontSize: 19),
-        titleLarge: AppTextStyles.heading(fontSize: 15),
+        headlineLarge: AppTextStyles.heading(fontSize: 26),
+        headlineMedium: AppTextStyles.heading(fontSize: 22),
+        headlineSmall: AppTextStyles.heading(fontSize: 18),
+        titleLarge: AppTextStyles.heading(fontSize: 16),
 
         // Body — DM Sans 400
-        bodyLarge: AppTextStyles.body(fontSize: 15),
-        bodyMedium: AppTextStyles.body(fontSize: 13),
+        bodyLarge: AppTextStyles.body(fontSize: 16),
+        bodyMedium: AppTextStyles.body(fontSize: 14),
         bodySmall: AppTextStyles.body(fontSize: 13, color: AppColors.muted),
 
         // Label — DM Sans 500, uppercase, tracked
         labelLarge: AppTextStyles.label(fontSize: 13),
-        labelMedium: AppTextStyles.label(fontSize: 11.5),
+        labelMedium: AppTextStyles.label(fontSize: 11),
         labelSmall: AppTextStyles.label(fontSize: 10),
       ),
 
@@ -106,8 +103,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.inter(
-            fontSize: 15,
+          textStyle: GoogleFonts.dmSans(
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -123,8 +120,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.inter(
-            fontSize: 15,
+          textStyle: GoogleFonts.dmSans(
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -140,8 +137,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.inter(
-            fontSize: 15,
+          textStyle: GoogleFonts.dmSans(
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -150,8 +147,8 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.sage,
-          textStyle: GoogleFonts.inter(
-            fontSize: 13,
+          textStyle: GoogleFonts.dmSans(
+            fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -168,11 +165,11 @@ class AppTheme {
           vertical: 16,
         ),
         hintStyle: AppTextStyles.display(
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w400,
           color: AppColors.muted,
         ),
-        labelStyle: AppTextStyles.body(fontSize: 13, color: AppColors.muted),
+        labelStyle: AppTextStyles.body(fontSize: 14, color: AppColors.muted),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -201,7 +198,7 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        titleTextStyle: AppTextStyles.display(fontSize: 19),
+        titleTextStyle: AppTextStyles.display(fontSize: 20),
         iconTheme: const IconThemeData(color: AppColors.charcoal),
       ),
 
@@ -249,19 +246,19 @@ class AppTheme {
         error: const Color(0xFFE08A80),
       ),
 
-      textTheme: GoogleFonts.interTextTheme(base.textTheme).copyWith(
-        displayLarge: AppTextStyles.display(fontSize: 44, color: p.text),
+      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).copyWith(
+        displayLarge: AppTextStyles.display(fontSize: 56, color: p.text),
         displayMedium: AppTextStyles.display(fontSize: 40, color: p.text),
         displaySmall: AppTextStyles.display(fontSize: 28, color: p.text),
-        headlineLarge: AppTextStyles.heading(fontSize: 24, color: p.text),
-        headlineMedium: AppTextStyles.heading(fontSize: 24, color: p.text),
-        headlineSmall: AppTextStyles.heading(fontSize: 19, color: p.text),
-        titleLarge: AppTextStyles.heading(fontSize: 15, color: p.text),
-        bodyLarge: AppTextStyles.body(fontSize: 15, color: p.text),
-        bodyMedium: AppTextStyles.body(fontSize: 13, color: p.text),
+        headlineLarge: AppTextStyles.heading(fontSize: 26, color: p.text),
+        headlineMedium: AppTextStyles.heading(fontSize: 22, color: p.text),
+        headlineSmall: AppTextStyles.heading(fontSize: 18, color: p.text),
+        titleLarge: AppTextStyles.heading(fontSize: 16, color: p.text),
+        bodyLarge: AppTextStyles.body(fontSize: 16, color: p.text),
+        bodyMedium: AppTextStyles.body(fontSize: 14, color: p.text),
         bodySmall: AppTextStyles.body(fontSize: 13, color: p.textMuted),
         labelLarge: AppTextStyles.label(fontSize: 13, color: p.textMuted),
-        labelMedium: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
+        labelMedium: AppTextStyles.label(fontSize: 11, color: p.textMuted),
         labelSmall: AppTextStyles.label(fontSize: 10, color: p.textMuted),
       ),
 
@@ -301,8 +298,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.inter(
-            fontSize: 15,
+          textStyle: GoogleFonts.dmSans(
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -317,8 +314,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.inter(
-            fontSize: 15,
+          textStyle: GoogleFonts.dmSans(
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -333,8 +330,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.inter(
-            fontSize: 15,
+          textStyle: GoogleFonts.dmSans(
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -343,8 +340,8 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: p.accent,
-          textStyle: GoogleFonts.inter(
-            fontSize: 13,
+          textStyle: GoogleFonts.dmSans(
+            fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -358,11 +355,11 @@ class AppTheme {
           vertical: 16,
         ),
         hintStyle: AppTextStyles.display(
-          fontSize: 15,
+          fontSize: 16,
           fontWeight: FontWeight.w400,
           color: p.textMuted,
         ),
-        labelStyle: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+        labelStyle: AppTextStyles.body(fontSize: 14, color: p.textMuted),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -390,7 +387,7 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        titleTextStyle: AppTextStyles.display(fontSize: 19, color: p.text),
+        titleTextStyle: AppTextStyles.display(fontSize: 20, color: p.text),
         iconTheme: IconThemeData(color: p.text),
       ),
 

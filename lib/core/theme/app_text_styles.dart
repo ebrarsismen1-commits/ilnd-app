@@ -5,31 +5,36 @@ import 'app_colors.dart';
 
 /// ILND tipografi sistemi.
 ///
-/// **Sora** (başlık/sayı) + **Inter** (gövde/etiket). İkisi de tek eksende
-/// çalışır: geometrik, sıcak olmayan, modern.
+/// **Noto Serif** (başlık/editoryal an) + **DM Sans** (gövde/etiket) +
+/// **IBM Plex Mono** (sayı). Tasarım handoff'unun (2026-08-18,
+/// "editoryal ekran yenilemesi") birebir uygulanması — owner kararı.
 ///
-/// Neden değişti (2026-08-14): önceki eşleşme Noto Serif + DM Sans idi ve
-/// sıcak zeminle birlikte **Claude'un arayüzüne fazla benziyordu** — duygusal
-/// bir üründe "bunu bir yerden hatırlıyorum" hissi ayrışmayı öldürür.
-/// IBM Plex Mono da kaldırıldı: noktalı sıfırı sayıları çirkinleştiriyordu.
+/// Tarihçe, çünkü bu ikinci kez değişti ve gerekçeler birbirini iptal ediyor:
+/// 2026-08-14'te bu üçlü Sora + Inter'e çevrilmişti (gerekçe: eski eşleşme
+/// başka bir ürünün arayüzünü hatırlatıyordu, Plex'in noktalı sıfırı
+/// sevilmiyordu). 2026-08-18'de owner handoff'u birebir istedi ve üçlü geri
+/// geldi. Yeniden değiştirmeden önce ikisini de oku — ikisi de savunulabilir,
+/// karar estetik ve owner'ın.
 ///
-/// - display / heading → Sora — ekran adı, kart başlığı, editoryal an
-/// - body / label      → Inter — gövde, alt satır, etiket
-/// - mono              → Sora + tabular figures — kalori, streak, makro
+/// - display / heading → Noto Serif — ekran adı, kart başlığı, editoryal an
+/// - body / label      → DM Sans — gövde, alt satır, etiket
+/// - mono              → IBM Plex Mono — kalori, streak, makro, sayaç
 class AppTextStyles {
   AppTextStyles._();
 
-  // ── Ölçek — TEK KAYNAK ────────────────────────────────────────────────────
+  // ── Ölçek — VARSAYILAN roller ────────────────────────────────────────────
   //
-  // Denetim (2026-08-11): kod tabanında 33 ayrı `fontSize` vardı, çünkü her
-  // çağrı yeri kendi sayısını uyduruyordu. Ekranlar arası "farklı yazı tipi
-  // varmış gibi" hissinin sebebi buydu — font aynıydı, ÖLÇEK dağınıktı.
+  // Bu değerler artık bir kilit değil, **varsayılan**. 2026-08-14'te ölçek 10
+  // role indirilip test'le kilitlenmişti; 2026-08-18 handoff'u ekran başına
+  // kendi puntolarını getirdiği için kilit kaldırıldı (owner kararı).
   //
-  // Bundan sonra kural: **çağrı yerinde çıplak sayı yok.** Aşağıdaki adlandı-
-  // rılmış roller kullanılır. Yeni bir boyut gerçekten gerekiyorsa önce buraya
-  // eklenir (test bunu kilitler: test/core/type_scale_test.dart).
+  // Kilidin yerine iki daha zayıf ama hâlâ işe yarayan koruma kondu
+  // (test/core/typography_test.dart): (1) lib/ içinde bu üç aile dışında font
+  // kullanılamaz, (2) fontSize değerleri handoff'un belgelenmiş kümesinden
+  // gelmeli — rastgele bir 37 hâlâ CI'da kırılır.
   //
-  // Apple'ın tip rolleri gibi az sayıda ve amaç-adlı; ölçek 1.25 oranında.
+  // Adlandırılmış rol varsa onu kullan; handoff bir ekran için özel punto
+  // veriyorsa çağrı yerinde açıkça yaz.
   static const double sizeHero = 44; // splash wordmark
   static const double sizeTitle = 30; // ekran adı ("Bugün")
   static const double sizeHeadline = 24; // bölüm/kart başlığı
@@ -53,7 +58,7 @@ class AppTextStyles {
   }) {
     // Noto Serif, roman (italik değil), sıkı negatif aralık — ilnd.app'teki
     // büyük editoryal başlık dili.
-    return GoogleFonts.sora(
+    return GoogleFonts.notoSerif(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -74,7 +79,7 @@ class AppTextStyles {
     Color color = AppColors.charcoal,
     double height = 1.2,
   }) {
-    return GoogleFonts.sora(
+    return GoogleFonts.notoSerif(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -91,7 +96,7 @@ class AppTextStyles {
     Color color = AppColors.charcoal,
     double height = 1.5,
   }) {
-    return GoogleFonts.inter(
+    return GoogleFonts.dmSans(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -106,7 +111,7 @@ class AppTextStyles {
     Color color = AppColors.muted,
     double letterSpacingEm = 0.08,
   }) {
-    return GoogleFonts.inter(
+    return GoogleFonts.dmSans(
       fontSize: fontSize,
       fontWeight: FontWeight.w500,
       letterSpacing: fontSize * letterSpacingEm,
@@ -122,42 +127,37 @@ class AppTextStyles {
 
   // ── Mono — IBM Plex Mono ─────────────────────────────────────────────────
 
-  /// Sayılar. Adı tarihsel olarak `mono` ama artık monospace DEĞİL.
+  /// Sayılar — IBM Plex Mono. Kalori, streak, makro, etkinlik günü, sayaç.
   ///
-  /// Font seçimi burada tamamen **sıfırın şekline** göre yapıldı:
-  /// IBM Plex Mono'nun sıfırı noktalıydı, Sora'nınki de öyle görünüyordu.
-  /// Inter'in varsayılan sıfırı düz bir ovaldir — noktalı/çizgili sıfır o
-  /// fontta yalnız `zero`/`ss02` özelliği elle açılırsa gelir, açmıyoruz.
-  ///
-  /// **tabular figures** açık: rakamlar eşit genişlikte, alt alta gelen
-  /// sayılar hizalanır ve sayaç 999→1000 olurken satır zıplamaz. Hizayı veren
-  /// şey monospace olmak değil, tnum özelliğidir.
+  /// Monospace burada süs değil hizalama aracı: alt alta gelen makro değerleri
+  /// ve 999→1000'e geçen sayaçlar satırı zıplatmaz. (Aynı hizayı Inter'de
+  /// `tabularFigures` veriyordu; handoff monospace istediği için geri döndük.)
   static TextStyle mono({
     double fontSize = 16,
     FontWeight fontWeight = FontWeight.w500,
     Color color = AppColors.charcoal,
     double height = 1.0,
   }) {
-    return GoogleFonts.inter(
+    return GoogleFonts.ibmPlexMono(
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
       height: height,
-      fontFeatures: const [FontFeature.tabularFigures()],
     );
   }
 
   // ── Adlandırılmış roller — çağrı yerleri BUNLARI kullanır ─────────────────
 
-  /// Ekran adı. Apple'ın "large title" karşılığı: sans, kalın, sıkı aralık.
-  /// Serif DEĞİL — serif artık yalnız editoryal anlarda (selamlama, makale).
-  static TextStyle screenTitle({required Color color}) => GoogleFonts.inter(
-    fontSize: sizeTitle,
-    fontWeight: FontWeight.w700,
-    color: color,
-    height: 1.15,
-    letterSpacing: -0.9,
-  );
+  /// Ekran adı — `keşfet.` `takip` `adan.` gibi. Handoff'ta serif:
+  /// Noto Serif 600, sıkı negatif aralık. Ekran başına punto farkı için
+  /// (30 / 28 / 26) `fontSize` geçilebilir.
+  static TextStyle screenTitle({required Color color, double? fontSize}) =>
+      display(
+        fontSize: fontSize ?? sizeTitle,
+        fontWeight: FontWeight.w600,
+        color: color,
+        height: 1.1,
+      );
 
   /// Editoryal an — selamlama, makale başlığı. Serifin kaldığı tek yer.
   static TextStyle editorial({
