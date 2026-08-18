@@ -671,6 +671,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exploreSeeAllArrow => 'hepsi →';
 
   @override
+  String get exploreMoreLabel => 'DAHA FAZLA';
+
+  @override
   String get exploreRitualsLabel => 'RİTÜELLER';
 
   @override

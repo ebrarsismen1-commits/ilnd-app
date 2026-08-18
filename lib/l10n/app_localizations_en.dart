@@ -683,6 +683,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreSeeAllArrow => 'see all →';
 
   @override
+  String get exploreMoreLabel => 'MORE';
+
+  @override
   String get exploreRitualsLabel => 'RITUALS';
 
   @override

@@ -246,6 +246,9 @@
   "exploreFilterArticles": "articles",
   "exploreFeaturedLabel": "FEATURED",
   "exploreSeeAllArrow": "see all →",
+  "exploreMoreLabel": "MORE",
+  "@exploreMoreLabel": {"description": "Section label above the full article list on Explore"},
+
   "exploreRitualsLabel": "RITUALS",
   "exploreRitualBreathTitle": "2 min breath",
   "exploreRitualSleepTitle": "night ritual",

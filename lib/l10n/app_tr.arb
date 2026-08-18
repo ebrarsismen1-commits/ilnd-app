@@ -615,6 +615,9 @@
   "exploreSeeAllArrow": "hepsi →",
   "@exploreSeeAllArrow": {"description": "See-all link with arrow"},
 
+  "exploreMoreLabel": "DAHA FAZLA",
+  "@exploreMoreLabel": {"description": "Section label above the full article list on Explore"},
+
   "exploreRitualsLabel": "RİTÜELLER",
   "@exploreRitualsLabel": {"description": "Section label above the rituals rail (replaces the old emoji stories row)"},
   "exploreRitualBreathTitle": "2 dk nefes",

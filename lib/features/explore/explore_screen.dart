@@ -84,11 +84,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         ((fetched == null || fetched.isEmpty) ? kArticles : fetched)
             .map((a) => a.forLocale(l10n.localeName))
             .toList();
+    // Handoff §2: ekranin tek buyuk ani kapak, geri kalan HEPSI tek liste.
+    // Eski duzende araya bir de yatay "one cikanlar" seridi giriyordu —
+    // ayni icerigi ikinci bir bicimde gostermek listeyi zayiflatiyordu.
     final hero = allArticles.isNotEmpty ? allArticles.first : null;
-    final featured = allArticles.length > 1
-        ? allArticles.sublist(1, allArticles.length.clamp(1, 4))
-        : <Article>[];
-    final rest = allArticles.length > 4 ? allArticles.sublist(4) : <Article>[];
+    final rest = allArticles.length > 1 ? allArticles.sublist(1) : <Article>[];
     final filtered = rest.where((a) => _selected.matches(a)).toList();
     // Yalnız oynatılabilir seansı olan programlar (ADR-0004). Makalelerdeki
     // kArticles gibi bir offline yedeği YOK: video içeriğinin yerel karşılığı
@@ -148,6 +148,22 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 ),
               ),
 
+              // ── Hero card ─────────────────────────────────────────────────
+              if (hero != null) ...[
+                SliverToBoxAdapter(
+                  child: Entrance(
+                    index: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.screenPadding,
+                      ),
+                      child: _HeroCard(article: hero, p: p, onTap: _open),
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              ],
+
               // ── Ritüeller (eski emoji "stories" şeridinin yerine — vizyon
               // kararı: her kart gerçek bir deneyime açılır, dekoratif emoji
               // dairesi değil) ────────────────────────────────────────────
@@ -177,77 +193,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 const SliverToBoxAdapter(child: SizedBox(height: 28)),
               ],
 
-              // ── Hero card ─────────────────────────────────────────────────
-              if (hero != null) ...[
-                SliverToBoxAdapter(
-                  child: Entrance(
-                    index: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.screenPadding,
-                      ),
-                      child: _HeroCard(article: hero, p: p, onTap: _open),
-                    ),
-                  ),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 24)),
-              ],
-
-              // ── "Öne çıkanlar" 2-column grid ──────────────────────────────
-              if (featured.isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      AppSpacing.screenPadding,
-                      0,
-                      AppSpacing.screenPadding,
-                      12,
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          l10n.exploreFeaturedLabel,
-                          style: AppTextStyles.label(
-                            fontSize: 11.5,
-                            color: p.accent,
-                          ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          l10n.exploreSeeAllArrow,
-                          style: AppTextStyles.body(
-                            fontSize: 11.5,
-                            color: p.textMuted,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 200,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.screenPadding,
-                      ),
-                      itemCount: featured.length,
-                      separatorBuilder: (ctx0, i0) => const SizedBox(width: 12),
-                      itemBuilder: (context, i) => Entrance(
-                        index: i + 1,
-                        child: _FeaturedCard(
-                          article: featured[i],
-                          p: p,
-                          onTap: _open,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 28)),
-              ],
-
               // ── Günün alıntısı ────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: Entrance(
@@ -262,49 +207,61 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
 
-              // ── Filter pills ──────────────────────────────────────────────
               SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 36,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.screenPadding,
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPadding,
+                    0,
+                    AppSpacing.screenPadding,
+                    12,
+                  ),
+                  child: Text(
+                    l10n.exploreMoreLabel,
+                    style: AppTextStyles.sectionLabel(color: p.textMuted),
+                  ),
+                ),
+              ),
+
+              // ── Etiket rayı (handoff §2) ─────────────────────────────
+              // Pill'ler LİSTENİN yanında durur, başlığın altında değil:
+              // handoff'ta araya yalnız kapak giriyordu, bizde dört raf daha
+              // var — filtreyi listeden koparmak "bastım, hiçbir şey
+              // değişmedi" hissi veriyor.
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPadding,
+                    0,
+                    AppSpacing.screenPadding,
+                    14,
+                  ),
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: _Filter.values.map((f) {
                       final active = _selected == f;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Pressable(
-                          onTap: () => setState(() => _selected = f),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            curve: Curves.easeOut,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
+                      return Pressable(
+                        onTap: () => setState(() => _selected = f),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          curve: Curves.easeOut,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 7,
+                          ),
+                          decoration: BoxDecoration(
+                            color: active ? p.accent : Colors.transparent,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: active ? p.accent : p.border,
+                              width: 0.5,
                             ),
-                            decoration: BoxDecoration(
-                              color: active
-                                  ? p.accent
-                                  : p.surface.withValues(alpha: 0.8),
-                              borderRadius: BorderRadius.circular(24),
-                              border: Border.all(
-                                color: active ? p.accent : p.border,
-                                width: 0.5,
-                              ),
-                            ),
-                            child: Text(
-                              f.label(l10n),
-                              style:
-                                  AppTextStyles.label(
-                                    fontSize: 11.5,
-                                    color: active ? p.onAccent : p.textMuted,
-                                  ).copyWith(
-                                    fontWeight: active
-                                        ? FontWeight.w600
-                                        : FontWeight.w400,
-                                  ),
+                          ),
+                          child: Text(
+                            f.label(l10n),
+                            style: AppTextStyles.label(
+                              fontSize: 10.5,
+                              color: active ? p.onAccent : p.textMuted,
                             ),
                           ),
                         ),
@@ -313,6 +270,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   ),
                 ),
               ),
+
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
               // ── Feed ──────────────────────────────────────────────────────
@@ -327,8 +285,9 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     ? const SliverToBoxAdapter(child: SizedBox.shrink())
                     : SliverList.separated(
                         itemCount: filtered.length,
+                        // Kart yok; satirlari 0.5px hairline ayirir.
                         separatorBuilder: (ctx0, i0) =>
-                            const SizedBox(height: 10),
+                            Container(height: 0.5, color: p.border),
                         itemBuilder: (context, i) => Entrance(
                           index: i,
                           delayStep: const Duration(milliseconds: 60),
@@ -711,9 +670,10 @@ class _HeroCard extends StatelessWidget {
     return Pressable(
       onTap: () => onTap(article),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.radius),
         child: SizedBox(
-          height: 260,
+          // Ekranin tek buyuk ani (handoff §2): 3:4'e yakin, dolu bir kapak.
+          height: 400,
           child: Stack(
             fit: StackFit.expand,
             children: [
@@ -745,30 +705,7 @@ class _HeroCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // üst: kategori chip
-                    Row(
-                      children: [
-                        _CategoryChip(article.category),
-                        const Spacer(),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            article.readTime,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    Row(children: [_CategoryChip(article.category)]),
                     // alt: başlık + excerpt
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -776,9 +713,9 @@ class _HeroCard extends StatelessWidget {
                         Text(
                           article.title,
                           style: AppTextStyles.display(
-                            fontSize: 24,
+                            fontSize: 32,
                             color: Colors.white,
-                            height: 1.2,
+                            height: 1.1,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -791,88 +728,6 @@ class _HeroCard extends StatelessWidget {
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Featured card (horizontal scroll) ───────────────────────────────────────
-
-class _FeaturedCard extends StatelessWidget {
-  const _FeaturedCard({
-    required this.article,
-    required this.p,
-    required this.onTap,
-  });
-  final Article article;
-  final AppPalette p;
-  final void Function(Article) onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Pressable(
-      onTap: () => onTap(article),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: SizedBox(
-          width: 160,
-          height: 200,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              CoverImage(
-                imageUrl: article.imageUrl,
-                palette: article.category.palette,
-              ),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.65),
-                    ],
-                    stops: const [0.35, 1.0],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _CategoryChip(article.category),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          article.title,
-                          style: AppTextStyles.heading(
-                            fontSize: 15,
-                            color: Colors.white,
-                            height: 1.2,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          article.readTime,
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
-                            fontSize: 11.5,
-                          ),
                         ),
                       ],
                     ),
@@ -998,28 +853,17 @@ class _FeedRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Pressable(
       onTap: () => onTap(article),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: p.border, width: 0.5),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // thumbnail
+            // 68x82 dikey kucuk gorsel — kare degil, editoryal oran.
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(10),
               child: SizedBox(
-                width: 72,
-                height: 72,
+                width: 68,
+                height: 82,
                 child: CoverImage(
                   imageUrl: article.imageUrl,
                   palette: article.category.palette,
@@ -1027,44 +871,41 @@ class _FeedRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 14),
-            // text
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _CategoryChip(article.category),
+                  Text(
+                    article.category.tag.toUpperCase(),
+                    style: AppTextStyles.label(
+                      fontSize: 9.5,
+                      color: p.accent,
+                      letterSpacingEm: 0.12,
+                    ),
+                  ),
                   const SizedBox(height: 5),
                   Text(
                     article.title,
                     style: AppTextStyles.heading(
-                      fontSize: 15,
+                      fontSize: 16.5,
+                      fontWeight: FontWeight.w500,
                       color: p.text,
-                      height: 1.2,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    article.excerpt,
-                    style: TextStyle(
-                      fontSize: 11.5,
-                      color: p.textMuted,
-                      height: 1.4,
+                      height: 1.25,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 6),
                   Text(
                     article.readTime,
-                    style: TextStyle(fontSize: 11.5, color: p.accent),
+                    style: AppTextStyles.mono(
+                      fontSize: 11.5,
+                      color: p.textMuted,
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
-            Icon(Icons.arrow_forward_ios_rounded, size: 14, color: p.textMuted),
           ],
         ),
       ),

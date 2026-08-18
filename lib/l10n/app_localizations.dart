@@ -1358,6 +1358,12 @@ abstract class AppLocalizations {
   /// **'hepsi →'**
   String get exploreSeeAllArrow;
 
+  /// Section label above the full article list on Explore
+  ///
+  /// In tr, this message translates to:
+  /// **'DAHA FAZLA'**
+  String get exploreMoreLabel;
+
   /// Section label above the rituals rail (replaces the old emoji stories row)
   ///
   /// In tr, this message translates to:
