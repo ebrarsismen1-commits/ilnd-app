@@ -364,10 +364,13 @@
   "firstEntryNeedsLoading": "senin için birkaç öneri hazırlıyorum...",
   "@firstEntryNeedsLoading": {"description": "Loading label while fetching AI-suggested needs"},
 
-  "homeWeeklyCardRowTitle": "haftalık kartın",
+  "homeTrackRowSubtitle": "öğünler, su, alışkanlıklar",
+  "@homeTrackRowSubtitle": {"description": "Home quiet row subtitle for the tracking screen"},
+
+  "homeWeeklyCardRowTitle": "haftalık kartın hazır",
   "@homeWeeklyCardRowTitle": {"description": "Home quiet row: opens the weekly streak card"},
 
-  "homeWeeklyCardRowSubtitle": "bu haftayı tek kartta gör, istersen paylaş",
+  "homeWeeklyCardRowSubtitle": "paylaş ya da sadece sen gör",
   "@homeWeeklyCardRowSubtitle": {"description": "Home quiet row subtitle for the weekly card"},
 
   "homeTodaysReadTitle": "BUGÜNÜN OKUMASI",
@@ -726,7 +729,7 @@
   "sleepRitualHomeCardTitle": "gece ritüeline hazır mısın?",
   "@sleepRitualHomeCardTitle": {"description": "Evening invitation card title on home"},
 
-  "sleepRitualHomeCardSubtitle": "birkaç dakikalık yumuşak bir kapanış",
+  "sleepRitualHomeCardSubtitle": "birkaç dakika, sonra uyku",
   "@sleepRitualHomeCardSubtitle": {"description": "Evening invitation card subtitle on home"},
 
   "exploreQuote": "\"Bugün küçük bir adım, yarının büyük farkı.\"",

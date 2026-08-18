@@ -12,10 +12,11 @@ import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Takip ayrı bir ekran DEĞİL: Bugün'ün kendisi. Önce sekmeden, sonra
-/// profilden, en son da ayrı bir rotadan çıkarıldı — her seferinde kullanıcı
-/// kendi verisine ulaşamaz hâle geldi. Bu testler onu ana ekranda ve
-/// ritüellerin ÜSTÜNDE tutar.
+/// Takip kendi ekranı (tasarım handoff §6, owner kararı 2026-08-19). Bir süre
+/// Bugün'ün içine gömülüydü; geri çıkarıldı. Bu geçmişte iki kez kaybolmuş bir
+/// yüzey (önce sekmeden, sonra profilden), o yüzden testin işi Bugün'de ona
+/// giden BİR KAPI daima bulunmasını garanti etmek: Takip'in ana ekranda
+/// gömülü olmaması, ulaşılamaz olması demek değildir.
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
 
@@ -63,9 +64,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 900));
   }
 
-  testWidgets('takip bölümleri ana ekranda, ayrı ekran gerekmiyor', (
-    tester,
-  ) async {
+  testWidgets('takip bölümleri ana ekrana gömülü DEĞİL', (tester) async {
     SharedPreferences.resetStatic();
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
@@ -82,14 +81,17 @@ void main() {
     );
 
     final l10n = lookupAppLocalizations(const Locale('tr'));
-    // Dört takip bölümünün etiketi de ana ekranda görünür olmalı.
-    expect(find.text(l10n.takipMacrosLabel), findsOneWidget);
-    expect(find.text(l10n.takipMealsLabel), findsOneWidget);
-    expect(find.text(l10n.takipActivityLabel), findsOneWidget);
-    expect(find.text(l10n.takipHabitsLabel), findsOneWidget);
+    // Takip bölümlerinin hiçbiri Bugün'de çizilmez — onlar artık Takip
+    // ekranında yaşıyor.
+    expect(find.text(l10n.takipMacrosLabel), findsNothing);
+    expect(find.text(l10n.takipMealsLabel), findsNothing);
+    expect(find.text(l10n.takipActivityLabel), findsNothing);
+    expect(find.text(l10n.takipHabitsLabel), findsNothing);
   });
 
-  testWidgets('takip, günün okumasının ÜSTÜNDE durur', (tester) async {
+  testWidgets('ana ekranda Takip ekranına giden sessiz satır var', (
+    tester,
+  ) async {
     SharedPreferences.resetStatic();
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
@@ -101,17 +103,18 @@ void main() {
     );
 
     final l10n = lookupAppLocalizations(const Locale('tr'));
-    final takip = find.text(l10n.takipMacrosLabel);
-    final okuma = find.text(l10n.homeTodaysReadTitle);
-    expect(takip, findsOneWidget);
-    expect(okuma, findsOneWidget);
-
+    final satir = find.text(l10n.takipTitle);
+    final altMetin = find.text(l10n.homeTrackRowSubtitle);
     expect(
-      tester.getRect(takip).top,
-      lessThan(tester.getRect(okuma).top),
-      reason:
-          'Kullanıcının kendi verisi, okuyacağı içerikten önce gelmeli — '
-          'takip bloğu sayfanın dibine geri kaymamalı',
+      satir,
+      findsOneWidget,
+      reason: 'Takip ekranına giden kapı ana ekrandan kaybolmamalı',
     );
+    expect(altMetin, findsOneWidget);
+
+    // Sessiz satırlar ekranın kapanışı: günün okumasının ALTINDA dururlar.
+    final okuma = find.text(l10n.homeTodaysReadTitle);
+    expect(okuma, findsOneWidget);
+    expect(tester.getRect(satir).top, greaterThan(tester.getRect(okuma).top));
   });
 }

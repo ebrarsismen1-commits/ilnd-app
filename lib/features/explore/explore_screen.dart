@@ -148,85 +148,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 ),
               ),
 
-              // ── Hero card ─────────────────────────────────────────────────
-              if (hero != null) ...[
-                SliverToBoxAdapter(
-                  child: Entrance(
-                    index: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.screenPadding,
-                      ),
-                      child: _HeroCard(article: hero, p: p, onTap: _open),
-                    ),
-                  ),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 24)),
-              ],
-
-              // ── Ritüeller (eski emoji "stories" şeridinin yerine — vizyon
-              // kararı: her kart gerçek bir deneyime açılır, dekoratif emoji
-              // dairesi değil) ────────────────────────────────────────────
-              SliverToBoxAdapter(
-                child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
-              // ── Planlar (ADR-0005). Hareket rafının üstünde: plan bir
-              // taahhüt, tek seans bir deneme — kullanıcıya önce taahhüdü
-              // gösteriyoruz ────────────────────────────────────────────────
-              if (plans.isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: PlanShelf(plans: plans, p: p),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 28)),
-              ],
-
-              // ── Hareket programları (ADR-0004) — vizyonun "grid'e yeni
-              // içerik tipleri raf olarak girer" maddesi. Yayınlanabilir
-              // program yoksa raf HİÇ çizilmez: boş bir raf, olmayan bir
-              // özelliğin sözünü vermek olurdu ────────────────────────────
-              if (movementPrograms.isNotEmpty) ...[
-                SliverToBoxAdapter(
-                  child: _MovementShelf(programs: movementPrograms, p: p),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 28)),
-              ],
-
-              // ── Günün alıntısı ────────────────────────────────────────────
-              SliverToBoxAdapter(
-                child: Entrance(
-                  index: 3,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.screenPadding,
-                    ),
-                    child: _QuoteBanner(p: p),
-                  ),
-                ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    0,
-                    AppSpacing.screenPadding,
-                    12,
-                  ),
-                  child: Text(
-                    l10n.exploreMoreLabel,
-                    style: AppTextStyles.sectionLabel(color: p.textMuted),
-                  ),
-                ),
-              ),
-
-              // ── Etiket rayı (handoff §2) ─────────────────────────────
-              // Pill'ler LİSTENİN yanında durur, başlığın altında değil:
-              // handoff'ta araya yalnız kapak giriyordu, bizde dört raf daha
-              // var — filtreyi listeden koparmak "bastım, hiçbir şey
-              // değişmedi" hissi veriyor.
+              // ── Etiket rayı ──────────────────────────────────────────────
+              // Prototipteki yeri: başlığın hemen altı, kapaktan önce.
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(
@@ -273,6 +196,37 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
+              // ── Hero card ─────────────────────────────────────────────────
+              if (hero != null) ...[
+                SliverToBoxAdapter(
+                  child: Entrance(
+                    index: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.screenPadding,
+                      ),
+                      child: _HeroCard(article: hero, p: p, onTap: _open),
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              ],
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPadding,
+                    0,
+                    AppSpacing.screenPadding,
+                    12,
+                  ),
+                  child: Text(
+                    l10n.exploreMoreLabel,
+                    style: AppTextStyles.sectionLabel(color: p.textMuted),
+                  ),
+                ),
+              ),
+
               // ── Feed ──────────────────────────────────────────────────────
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
@@ -299,6 +253,54 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                         ),
                       ),
               ),
+              // ── Tasarımda olmayan raflar ─────────────────────────────────
+              // Ritüeller, planlar (ADR-0005) ve hareket programları (ADR-0004)
+              // handoff'un hiç görmediği içerik tipleri: tasarım main'e
+              // bakarak yazıldı. Ekranın tasarımdaki okunuşunu bozmasınlar
+              // diye listenin ALTINA alındılar; silinmeleri söz verilmiş
+              // özellikleri kaldırmak olurdu.
+              // ── Ritüeller (eski emoji "stories" şeridinin yerine — vizyon
+              // kararı: her kart gerçek bir deneyime açılır, dekoratif emoji
+              // dairesi değil) ────────────────────────────────────────────
+              SliverToBoxAdapter(
+                child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
+
+              // ── Planlar (ADR-0005). Hareket rafının üstünde: plan bir
+              // taahhüt, tek seans bir deneme — kullanıcıya önce taahhüdü
+              // gösteriyoruz ────────────────────────────────────────────────
+              if (plans.isNotEmpty) ...[
+                SliverToBoxAdapter(
+                  child: PlanShelf(plans: plans, p: p),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 28)),
+              ],
+
+              // ── Hareket programları (ADR-0004) — vizyonun "grid'e yeni
+              // içerik tipleri raf olarak girer" maddesi. Yayınlanabilir
+              // program yoksa raf HİÇ çizilmez: boş bir raf, olmayan bir
+              // özelliğin sözünü vermek olurdu ────────────────────────────
+              if (movementPrograms.isNotEmpty) ...[
+                SliverToBoxAdapter(
+                  child: _MovementShelf(programs: movementPrograms, p: p),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 28)),
+              ],
+
+              // ── Günün alıntısı ────────────────────────────────────────────
+              SliverToBoxAdapter(
+                child: Entrance(
+                  index: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.screenPadding,
+                    ),
+                    child: _QuoteBanner(p: p),
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
             ],
           ),
         ),

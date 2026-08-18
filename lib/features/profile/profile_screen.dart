@@ -725,7 +725,16 @@ class _SettingsSection extends ConsumerWidget {
           style: AppTextStyles.sectionLabel(color: p.textMuted),
         ),
         const SizedBox(height: 10),
-        // Takip ana sayfaya taşındı (Web Raporu madde 6) — buradan kaldırıldı.
+        // Takip tekrar kendi ekrani (tasarim handoff §5 ayarlar listesi):
+        // Bugun'deki sessiz satirin yaninda buradan da acilir.
+        Pressable(
+          onTap: () => context.push(routeTakip),
+          child: _SettingsRow(
+            icon: Icons.insights_outlined,
+            label: l10n.takipTitle,
+            p: p,
+          ),
+        ),
         Pressable(
           onTap: () => context.push(routeReferral),
           child: _SettingsRow(

@@ -25,7 +25,6 @@ import 'package:ilnd_app/features/plans/plan_model.dart';
 import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_provider.dart';
-import 'package:ilnd_app/features/takip/takip_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -88,12 +87,6 @@ class HomeScreen extends ConsumerWidget {
                     // yüklenince selamlamanın üstüne biniyordu.
                     Entrance(index: 4, child: _MoodCheckIn(p: p)),
                     const SizedBox(height: 26),
-                    _Hairline(p: p),
-                    // Takip ayrı bir ekran DEĞİL, Bugün'ün kendisi (d18f43e).
-                    // Handoff burada ayrı bir "takip" satırı gösteriyor ama o
-                    // main'e bakarak yazıldı: o ekran artık yok, içeriği
-                    // burada yaşıyor.
-                    const TakipSections(),
                     // Aktif plan Bugün'de yaşar: kullanıcı Keşfet'e girmeyi
                     // unutur, ana ekranı unutmaz. Plan yoksa satır hiç
                     // çizilmez (ADR-0005).
@@ -365,13 +358,10 @@ class _QuietRows extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final doneTonight = ref.watch(sleepRitualDoneTonightProvider);
+    // Gece satırı yalnız akşam penceresinde ve bu gece yapılmadıysa çıkar.
+    // Tasarımda üç satır da hep görünür ama prototip tek bir ana bakıyor;
+    // sabah 9'da "gece ritüeline hazır mısın?" demek yanlış olurdu.
     final showRitual = isSleepRitualWindow(hour) && !doneTonight;
-    // Haftalık kart satırı yalnız paylaşılacak bir şey varken çıkar: 7 günlük
-    // eşiğe gelmemiş birine "kartın hazır" demek boş bir söz olurdu.
-    final streak = ref.watch(profileStatsProvider).valueOrNull?.streakDays ?? 0;
-    final showWeekly = streak >= 7;
-
-    if (!showRitual && !showWeekly) return const SizedBox.shrink();
 
     return Column(
       children: [
@@ -384,14 +374,20 @@ class _QuietRows extends ConsumerWidget {
             subtitle: l10n.sleepRitualHomeCardSubtitle,
             onTap: () => context.push(routeSleepRitual),
           ),
-        if (showWeekly)
-          _QuietRow(
-            p: p,
-            dotColor: p.text,
-            title: l10n.homeWeeklyCardRowTitle,
-            subtitle: l10n.homeWeeklyCardRowSubtitle,
-            onTap: () => context.push(routeStreakCard),
-          ),
+        _QuietRow(
+          p: p,
+          dotColor: p.accent,
+          title: l10n.takipTitle,
+          subtitle: l10n.homeTrackRowSubtitle,
+          onTap: () => context.push(routeTakip),
+        ),
+        _QuietRow(
+          p: p,
+          dotColor: p.text,
+          title: l10n.homeWeeklyCardRowTitle,
+          subtitle: l10n.homeWeeklyCardRowSubtitle,
+          onTap: () => context.push(routeStreakCard),
+        ),
       ],
     );
   }
@@ -418,12 +414,12 @@ class _QuietRow extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
               children: [
                 Container(
-                  width: 7,
-                  height: 7,
+                  width: 8,
+                  height: 8,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: dotColor,

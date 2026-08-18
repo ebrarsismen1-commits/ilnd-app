@@ -145,10 +145,13 @@
   "firstEntryNeedsPrompt": "what do you need?",
   "firstEntryNeedsLoading": "getting a few ideas ready for you...",
 
-  "homeWeeklyCardRowTitle": "your weekly card",
+  "homeTrackRowSubtitle": "meals, water, habits",
+  "@homeTrackRowSubtitle": {"description": "Home quiet row subtitle for the tracking screen"},
+
+  "homeWeeklyCardRowTitle": "your weekly card is ready",
   "@homeWeeklyCardRowTitle": {"description": "Home quiet row: opens the weekly streak card"},
 
-  "homeWeeklyCardRowSubtitle": "see your week on one card, share it if you like",
+  "homeWeeklyCardRowSubtitle": "share it, or keep it to yourself",
   "@homeWeeklyCardRowSubtitle": {"description": "Home quiet row subtitle for the weekly card"},
 
   "homeTodaysReadTitle": "TODAY'S READ",
@@ -290,7 +293,7 @@
   "sleepRitualClosing3": "tomorrow is a fresh page. tonight, just sleep.",
   "sleepRitualClosing4": "thank you for making this space for yourself. goodnight.",
   "sleepRitualHomeCardTitle": "ready for your night ritual?",
-  "sleepRitualHomeCardSubtitle": "a few minutes of gentle winding down",
+  "sleepRitualHomeCardSubtitle": "a few minutes, then sleep",
   "exploreQuote": "\"A small step today, a big difference tomorrow.\"",
   "exploreQuoteSubtitle": "quote of the day",
 

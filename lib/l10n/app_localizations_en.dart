@@ -433,11 +433,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get firstEntryNeedsLoading => 'getting a few ideas ready for you...';
 
   @override
-  String get homeWeeklyCardRowTitle => 'your weekly card';
+  String get homeTrackRowSubtitle => 'meals, water, habits';
 
   @override
-  String get homeWeeklyCardRowSubtitle =>
-      'see your week on one card, share it if you like';
+  String get homeWeeklyCardRowTitle => 'your weekly card is ready';
+
+  @override
+  String get homeWeeklyCardRowSubtitle => 'share it, or keep it to yourself';
 
   @override
   String get homeTodaysReadTitle => 'TODAY\'S READ';
@@ -811,8 +813,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepRitualHomeCardTitle => 'ready for your night ritual?';
 
   @override
-  String get sleepRitualHomeCardSubtitle =>
-      'a few minutes of gentle winding down';
+  String get sleepRitualHomeCardSubtitle => 'a few minutes, then sleep';
 
   @override
   String get exploreQuote =>

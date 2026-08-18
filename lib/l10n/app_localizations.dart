@@ -884,16 +884,22 @@ abstract class AppLocalizations {
   /// **'senin için birkaç öneri hazırlıyorum...'**
   String get firstEntryNeedsLoading;
 
+  /// Home quiet row subtitle for the tracking screen
+  ///
+  /// In tr, this message translates to:
+  /// **'öğünler, su, alışkanlıklar'**
+  String get homeTrackRowSubtitle;
+
   /// Home quiet row: opens the weekly streak card
   ///
   /// In tr, this message translates to:
-  /// **'haftalık kartın'**
+  /// **'haftalık kartın hazır'**
   String get homeWeeklyCardRowTitle;
 
   /// Home quiet row subtitle for the weekly card
   ///
   /// In tr, this message translates to:
-  /// **'bu haftayı tek kartta gör, istersen paylaş'**
+  /// **'paylaş ya da sadece sen gör'**
   String get homeWeeklyCardRowSubtitle;
 
   /// Home screen section title for today's article
@@ -1589,7 +1595,7 @@ abstract class AppLocalizations {
   /// Evening invitation card subtitle on home
   ///
   /// In tr, this message translates to:
-  /// **'birkaç dakikalık yumuşak bir kapanış'**
+  /// **'birkaç dakika, sonra uyku'**
   String get sleepRitualHomeCardSubtitle;
 
   /// Daily quote on explore screen

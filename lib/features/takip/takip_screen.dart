@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
+import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/habits/habits_provider.dart';
@@ -27,6 +28,64 @@ const _kSuHedef = 2000; // ml
 /// günlük merkezidir; ayrı bir sekmenin ya da push edilen bir ekranın
 /// arkasında durduğu sürece pratikte görünmüyordu. [startIndex] ana ekrandaki
 /// giriş animasyonu sırasını bozmamak için dışarıdan verilir.
+/// Takip kendi ekrani (tasarim handoff §6). d18f43e'de Bugun'un icine
+/// gomulmustu; owner karariyla tekrar ayri ekran oldu — Bugun'daki sessiz
+/// "takip" satirindan ve Sen'deki ayarlar listesinden acilir.
+class TakipScreen extends ConsumerWidget {
+  const TakipScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final p = ref.watch(paletteProvider);
+    return Scaffold(
+      backgroundColor: p.base,
+      body: AnimatedBackground(
+        palette: p,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.screenPadding,
+              8,
+              AppSpacing.screenPadding,
+              40,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Pressable(
+                      onTap: () => Navigator.of(context).maybePop(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10, bottom: 4),
+                        child: Icon(
+                          Icons.chevron_left_rounded,
+                          size: 26,
+                          color: p.textMuted,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      l10n.takipTitle,
+                      style: AppTextStyles.screenTitle(
+                        color: p.text,
+                        fontSize: 28,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                const TakipSections(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class TakipSections extends ConsumerWidget {
   const TakipSections({super.key, this.startIndex = 0});
 

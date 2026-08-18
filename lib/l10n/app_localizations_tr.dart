@@ -422,11 +422,13 @@ class AppLocalizationsTr extends AppLocalizations {
       'senin için birkaç öneri hazırlıyorum...';
 
   @override
-  String get homeWeeklyCardRowTitle => 'haftalık kartın';
+  String get homeTrackRowSubtitle => 'öğünler, su, alışkanlıklar';
 
   @override
-  String get homeWeeklyCardRowSubtitle =>
-      'bu haftayı tek kartta gör, istersen paylaş';
+  String get homeWeeklyCardRowTitle => 'haftalık kartın hazır';
+
+  @override
+  String get homeWeeklyCardRowSubtitle => 'paylaş ya da sadece sen gör';
 
   @override
   String get homeTodaysReadTitle => 'BUGÜNÜN OKUMASI';
@@ -797,8 +799,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sleepRitualHomeCardTitle => 'gece ritüeline hazır mısın?';
 
   @override
-  String get sleepRitualHomeCardSubtitle =>
-      'birkaç dakikalık yumuşak bir kapanış';
+  String get sleepRitualHomeCardSubtitle => 'birkaç dakika, sonra uyku';
 
   @override
   String get exploreQuote => '\"Bugün küçük bir adım, yarının büyük farkı.\"';
