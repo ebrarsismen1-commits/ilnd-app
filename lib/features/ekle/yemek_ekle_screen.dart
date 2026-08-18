@@ -648,7 +648,7 @@ class _ResultView extends StatelessWidget {
           // Food name
           Text(
             result.yemekAdi,
-            style: AppTextStyles.display(fontSize: 28, color: p.text),
+            style: AppTextStyles.display(fontSize: 24, color: p.text),
           ),
 
           // ILND's dietitian-friend comment
@@ -665,45 +665,43 @@ class _ResultView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Macro cards — porsiyon çarpanıyla ölçeklenir.
+          // Kalori ekranin kahramani, makrolar onun altinda sessiz satirlar
+          // (handoff §10). Onceki 2x2 kart izgarasi dort sayiyi esit agirlikta
+          // gosteriyordu; hangisine bakacagini soylemiyordu.
           Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
             children: [
-              _MacroCard(
-                label: l10n.yemekEkleCalories,
-                value: '${(result.kalori * portion).round()}',
-                unit: 'kcal',
-                color: p.amber,
-                p: p,
+              Text(
+                '${(result.kalori * portion).round()}',
+                style: AppTextStyles.mono(
+                  fontSize: 42,
+                  fontWeight: FontWeight.w600,
+                  color: p.text,
+                ),
               ),
-              const SizedBox(width: 10),
-              _MacroCard(
-                label: l10n.yemekEkleProtein,
-                value: (result.protein * portion).toStringAsFixed(1),
-                unit: 'g',
-                color: p.accent,
-                p: p,
+              const SizedBox(width: 8),
+              Text(
+                'kcal',
+                style: AppTextStyles.mono(fontSize: 13, color: p.textMuted),
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              _MacroCard(
-                label: l10n.yemekEkleCarbs,
-                value: (result.karbonhidrat * portion).toStringAsFixed(1),
-                unit: 'g',
-                color: p.accentSoft,
-                p: p,
-              ),
-              const SizedBox(width: 10),
-              _MacroCard(
-                label: l10n.yemekEkleFat,
-                value: (result.yag * portion).toStringAsFixed(1),
-                unit: 'g',
-                color: p.amber.withValues(alpha: 0.7),
-                p: p,
-              ),
-            ],
+          const SizedBox(height: 18),
+          _MacroLine(
+            label: l10n.yemekEkleProtein,
+            value: '${(result.protein * portion).toStringAsFixed(1)}g',
+            p: p,
+          ),
+          _MacroLine(
+            label: l10n.yemekEkleCarbs,
+            value: '${(result.karbonhidrat * portion).toStringAsFixed(1)}g',
+            p: p,
+          ),
+          _MacroLine(
+            label: l10n.yemekEkleFat,
+            value: '${(result.yag * portion).toStringAsFixed(1)}g',
+            p: p,
           ),
           const SizedBox(height: AppSpacing.sectionGap),
 
@@ -1061,61 +1059,39 @@ class _IlndComment extends StatelessWidget {
   }
 }
 
-// ─── Macro card ───────────────────────────────────────────────────────────────
+// ─── Makro satırı ─────────────────────────────────────────────────────────────
 
-class _MacroCard extends StatelessWidget {
-  const _MacroCard({
-    required this.label,
-    required this.value,
-    required this.unit,
-    required this.color,
-    required this.p,
-  });
-
+/// Etiket solda, değer sağda, altında hairline. Kart değil: kalori zaten
+/// ekranın büyük anı, makrolar onun detayı.
+class _MacroLine extends StatelessWidget {
+  const _MacroLine({required this.label, required this.value, required this.p});
   final String label;
   final String value;
-  final String unit;
-  final Color color;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.cardPadding),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(AppSpacing.radius),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: AppTextStyles.label(fontSize: 10, color: color)),
-            const SizedBox(height: 6),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: value,
-                    style: AppTextStyles.mono(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      color: p.text,
-                    ),
-                  ),
-                  TextSpan(
-                    text: ' $unit',
-                    style: AppTextStyles.mono(
-                      fontSize: 11.5,
-                      color: p.textMuted,
-                    ),
-                  ),
-                ],
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+                ),
               ),
-            ),
-          ],
+              Text(
+                value,
+                style: AppTextStyles.mono(fontSize: 12.5, color: p.text),
+              ),
+            ],
+          ),
         ),
-      ),
+        Container(height: 0.5, color: p.border),
+      ],
     );
   }
 }

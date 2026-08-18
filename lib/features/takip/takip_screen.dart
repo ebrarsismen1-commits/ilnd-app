@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -67,14 +66,11 @@ class TakipSections extends ConsumerWidget {
 // ─── Shared card wrapper ──────────────────────────────────────────────────────
 
 class _Card extends StatelessWidget {
-  const _Card({
-    required this.child,
-    required this.p,
-    this.padding = const EdgeInsets.all(AppSpacing.cardPadding),
-  });
+  const _Card({required this.child, required this.p});
   final Widget child;
   final AppPalette p;
-  final EdgeInsets padding;
+
+  static const padding = EdgeInsets.all(AppSpacing.cardPadding);
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +84,15 @@ class _Card extends StatelessWidget {
       child: child,
     );
   }
+}
+
+/// 0.5px ayırıcı — bölüm içi satırları kart yerine bu ayırır.
+class _Hairline extends StatelessWidget {
+  const _Hairline({required this.p});
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) => Container(height: 0.5, color: p.border);
 }
 
 class _SectionLabel extends StatelessWidget {
@@ -104,8 +109,11 @@ class _SectionLabel extends StatelessWidget {
   }
 }
 
-// ─── SECTION 1: Macro card with donut chart ───────────────────────────────────
+// ─── SECTION 1: Makro — tek büyük sayı ────────────────────────────────────────
 
+/// Donut grafiği kaldırıldı (handoff §6, DESIGN_SYSTEM §7.2 "ölçek zıtlığı"):
+/// üç dilimli bir çember, üç sayının hangisinin önemli olduğunu söylemiyordu.
+/// Ekranın kahramanı artık tek bir sayı — bugünkü kalori.
 class _MacroCard extends ConsumerWidget {
   const _MacroCard({required this.p, required this.l10n});
   final AppPalette p;
@@ -114,192 +122,102 @@ class _MacroCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final macros = ref.watch(dailyMacrosProvider);
-    return _Card(
-      p: p,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _SectionLabel(l10n.takipMacrosLabel, color: p.accent),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _DonutChart(p: p, macros: macros),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _MacroRow(
-                      label: l10n.takipCalories,
-                      current: macros.kalori,
-                      goal: _kKaloriHedef,
-                      unit: 'kcal',
-                      color: p.amber,
-                      p: p,
-                    ),
-                    _MacroRow(
-                      label: l10n.takipProtein,
-                      current: macros.protein,
-                      goal: _kProteinHedef,
-                      unit: 'g',
-                      color: p.accent,
-                      p: p,
-                    ),
-                    _MacroRow(
-                      label: l10n.takipCarbs,
-                      current: macros.karbonhidrat,
-                      goal: _kKarbHedef,
-                      unit: 'g',
-                      color: p.accentSoft,
-                      p: p,
-                    ),
-                    _MacroRow(
-                      label: l10n.takipFat,
-                      current: macros.yag,
-                      goal: _kYagHedef,
-                      unit: 'g',
-                      color: p.amber.withValues(alpha: 0.6),
-                      p: p,
-                    ),
-                  ],
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionLabel(l10n.takipMacrosLabel, color: p.accent),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(
+              '${macros.kalori}',
+              style: AppTextStyles.mono(
+                fontSize: 56,
+                fontWeight: FontWeight.w600,
+                color: p.text,
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _DonutChart extends StatelessWidget {
-  const _DonutChart({required this.p, required this.macros});
-  final AppPalette p;
-  final DailyMacros macros;
-
-  @override
-  Widget build(BuildContext context) {
-    final total = (macros.protein + macros.karbonhidrat + macros.yag)
-        .toDouble();
-    final hasData = total > 0;
-
-    return SizedBox(
-      width: 110,
-      height: 110,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          PieChart(
-            PieChartData(
-              startDegreeOffset: -90,
-              sectionsSpace: 2,
-              centerSpaceRadius: 36,
-              sections: hasData
-                  ? [
-                      PieChartSectionData(
-                        value: macros.protein / total * 100,
-                        color: p.accent,
-                        radius: 17,
-                        showTitle: false,
-                      ),
-                      PieChartSectionData(
-                        value: macros.karbonhidrat / total * 100,
-                        color: p.accentSoft,
-                        radius: 17,
-                        showTitle: false,
-                      ),
-                      PieChartSectionData(
-                        value: macros.yag / total * 100,
-                        color: p.amber.withValues(alpha: 0.6),
-                        radius: 17,
-                        showTitle: false,
-                      ),
-                    ]
-                  : [
-                      PieChartSectionData(
-                        value: 100,
-                        color: p.border,
-                        radius: 17,
-                        showTitle: false,
-                      ),
-                    ],
             ),
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '${macros.kalori}',
-                style: AppTextStyles.mono(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w600,
-                  color: p.text,
-                ),
-              ),
-              Text(
-                'kcal',
-                style: AppTextStyles.label(
-                  fontSize: 10,
-                  color: p.textMuted,
-                ).copyWith(letterSpacing: 0),
-              ),
-            ],
-          ),
-        ],
-      ),
+            const SizedBox(width: 8),
+            Text(
+              '/ $_kKaloriHedef kcal',
+              style: AppTextStyles.mono(fontSize: 13, color: p.textMuted),
+            ),
+          ],
+        ),
+        const SizedBox(height: 18),
+        _MacroBar(
+          label: l10n.takipProtein,
+          current: macros.protein,
+          goal: _kProteinHedef,
+          color: p.accent,
+          p: p,
+        ),
+        _MacroBar(
+          label: l10n.takipCarbs,
+          current: macros.karbonhidrat,
+          goal: _kKarbHedef,
+          color: p.amber,
+          p: p,
+        ),
+        _MacroBar(
+          label: l10n.takipFat,
+          current: macros.yag,
+          goal: _kYagHedef,
+          color: p.textMuted,
+          p: p,
+        ),
+      ],
     );
   }
 }
 
-class _MacroRow extends StatelessWidget {
-  const _MacroRow({
+/// Etiket + değer, altında 3px'lik ince bar. Bar bir grafik değil, bir
+/// ölçü çizgisi: dolgu yüzdesi hedefin neresinde olduğunu tek bakışta verir.
+class _MacroBar extends StatelessWidget {
+  const _MacroBar({
     required this.label,
     required this.current,
     required this.goal,
-    required this.unit,
     required this.color,
     required this.p,
   });
   final String label;
   final int current;
   final int goal;
-  final String unit;
   final Color color;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    final text = unit == 'kcal'
-        ? '$current / $goal'
-        : '$current$unit / $goal$unit';
+    final ratio = goal <= 0 ? 0.0 : (current / goal).clamp(0.0, 1.0);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                width: 8,
-                height: 8,
-                margin: const EdgeInsets.only(right: 6),
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(2),
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
                 ),
               ),
               Text(
-                label,
-                style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
+                '${current}g / ${goal}g',
+                style: AppTextStyles.mono(fontSize: 12.5, color: color),
               ),
             ],
           ),
-          Text(
-            text,
-            style: AppTextStyles.mono(
-              fontSize: 11.5,
-              fontWeight: FontWeight.w500,
-              color: color,
+          const SizedBox(height: 6),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: LinearProgressIndicator(
+              value: ratio,
+              minHeight: 3,
+              backgroundColor: p.border,
+              valueColor: AlwaysStoppedAnimation<Color>(color),
             ),
           ),
         ],
@@ -324,42 +242,29 @@ class _MealsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionLabel(l10n.takipMealsLabel, color: p.textMuted),
-        _Card(
-          p: p,
-          padding: EdgeInsets.zero,
-          child: Column(
-            children: [
-              if (entries.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 18,
-                  ),
-                  child: Text(
-                    l10n.takipNoMealsYet,
-                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-                  ),
-                )
-              else
-                ...entries.asMap().entries.map((e) {
-                  final isLast = e.key == entries.length - 1;
-                  return Column(
-                    children: [
-                      _FoodEntryRow(entry: e.value, p: p, l10n: l10n),
-                      if (!isLast)
-                        Divider(
-                          height: 1,
-                          indent: 16,
-                          endIndent: 16,
-                          color: p.border,
-                        ),
-                    ],
-                  );
-                }),
-              Divider(height: 1, indent: 16, endIndent: 16, color: p.border),
-              _AddMealRow(p: p, l10n: l10n),
-            ],
-          ),
+        // Kart yok: satırları 0.5px hairline ayırır (handoff §6).
+        Column(
+          children: [
+            if (entries.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Text(
+                  l10n.takipNoMealsYet,
+                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+                ),
+              )
+            else
+              ...entries.map(
+                (entry) => Column(
+                  children: [
+                    _FoodEntryRow(entry: entry, p: p, l10n: l10n),
+                    _Hairline(p: p),
+                  ],
+                ),
+              ),
+            if (entries.isEmpty) _Hairline(p: p),
+            _AddMealRow(p: p, l10n: l10n),
+          ],
         ),
       ],
     );
@@ -379,7 +284,7 @@ class _FoodEntryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -390,7 +295,7 @@ class _FoodEntryRow extends StatelessWidget {
                 Text(
                   entry.yemekAdi,
                   style: AppTextStyles.heading(
-                    fontSize: 15,
+                    fontSize: 15.5,
                     fontWeight: FontWeight.w600,
                     color: p.text,
                   ),
@@ -431,14 +336,14 @@ class _AddMealRow extends StatelessWidget {
     return Pressable(
       onTap: () => context.push(routeYemekEkle),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         child: Row(
           children: [
             Expanded(
               child: Text(
                 l10n.takipAddMeal,
                 style: AppTextStyles.display(
-                  fontSize: 13,
+                  fontSize: 14.5,
                   fontWeight: FontWeight.w400,
                   color: p.textMuted,
                 ),
@@ -573,63 +478,47 @@ class _HabitsSection extends ConsumerWidget {
       children: [
         _SectionLabel(l10n.takipHabitsLabel, color: p.textMuted),
         if (habitsAsync.isLoading)
-          _Card(
-            p: p,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: CircularProgressIndicator(
-                  color: p.accent,
-                  strokeWidth: 1.5,
-                ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: CircularProgressIndicator(
+                color: p.accent,
+                strokeWidth: 1.5,
               ),
             ),
           )
         else if (habits.isEmpty)
-          _Card(
-            p: p,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 18),
-              child: Text(
-                l10n.takipNoHabitsYet,
-                style: AppTextStyles.body(
-                  fontSize: 13,
-                  color: p.textMuted,
-                  height: 1.5,
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            child: Text(
+              l10n.takipNoHabitsYet,
+              style: AppTextStyles.body(
+                fontSize: 13,
+                color: p.textMuted,
+                height: 1.5,
               ),
             ),
           )
         else
-          _Card(
-            p: p,
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: habits.asMap().entries.map((e) {
-                final isLast = e.key == habits.length - 1;
-                final habit = e.value;
-                final isToday = todayCompletions.contains(habit.id);
-                return Column(
-                  children: [
-                    _HabitRow(
-                      habitId: habit.id,
-                      name: habit.name,
-                      last7: last7,
-                      isTodayDone: isToday,
-                      onToggle: () => toggle(habit.id),
-                      p: p,
-                    ),
-                    if (!isLast)
-                      Divider(
-                        height: 1,
-                        indent: 16,
-                        endIndent: 16,
-                        color: p.border,
-                      ),
-                  ],
-                );
-              }).toList(),
-            ),
+          Column(
+            children: habits.asMap().entries.map((e) {
+              final isLast = e.key == habits.length - 1;
+              final habit = e.value;
+              final isToday = todayCompletions.contains(habit.id);
+              return Column(
+                children: [
+                  _HabitRow(
+                    habitId: habit.id,
+                    name: habit.name,
+                    last7: last7,
+                    isTodayDone: isToday,
+                    onToggle: () => toggle(habit.id),
+                    p: p,
+                  ),
+                  if (!isLast) _Hairline(p: p),
+                ],
+              );
+            }).toList(),
           ),
       ],
     );
@@ -665,14 +554,14 @@ class _HabitRow extends StatelessWidget {
     return Pressable(
       onTap: onToggle,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         child: Row(
           children: [
             Expanded(
               child: Text(
                 name,
                 style: AppTextStyles.body(
-                  fontSize: 13,
+                  fontSize: 14,
                   color: p.text,
                 ).copyWith(fontWeight: FontWeight.w500),
               ),
