@@ -67,9 +67,10 @@ class TopulukScreen extends ConsumerWidget {
                   for (final (i, e) in events.indexed) ...[
                     Entrance(
                       index: 3 + i,
-                      child: _EventCard(event: e, p: p),
+                      child: _EventRow(event: e, p: p),
                     ),
-                    const SizedBox(height: 12),
+                    Container(height: 0.5, color: p.border),
+                    const SizedBox(height: 20),
                   ],
                   const SizedBox(height: 12),
                   Entrance(
@@ -87,10 +88,12 @@ class TopulukScreen extends ConsumerWidget {
   }
 }
 
-// ─── Etkinlik kartı ───────────────────────────────────────────────────────────
+// ─── Etkinlik satırı ───────────────────────────────────────────────────────────
 
-class _EventCard extends ConsumerWidget {
-  const _EventCard({required this.event, required this.p});
+/// Kart değil satır (handoff §4): ayrımı kutu değil, tarih monogramının
+/// boşluğu ve alttaki hairline kurar.
+class _EventRow extends ConsumerWidget {
+  const _EventRow({required this.event, required this.p});
   final CommunityEvent event;
   final AppPalette p;
 
@@ -116,35 +119,27 @@ class _EventCard extends ConsumerWidget {
       }
     }
 
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: p.accentSoft,
-              borderRadius: BorderRadius.circular(12),
-            ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   day,
                   style: AppTextStyles.mono(
-                    fontSize: 15,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     color: p.accent,
-                  ).copyWith(fontWeight: FontWeight.w700, height: 1.1),
+                  ).copyWith(height: 1.05),
                 ),
                 Text(
                   month,
-                  style: AppTextStyles.label(fontSize: 10, color: p.accent),
+                  style: AppTextStyles.label(fontSize: 8.5, color: p.accent),
                 ),
               ],
             ),
@@ -156,25 +151,14 @@ class _EventCard extends ConsumerWidget {
               children: [
                 Text(
                   event.title,
-                  style: AppTextStyles.heading(fontSize: 15, color: p.text),
+                  style: AppTextStyles.heading(fontSize: 17, color: p.text),
                 ),
                 const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.place_outlined, size: 13, color: p.textMuted),
-                    const SizedBox(width: 3),
-                    Expanded(
-                      child: Text(
-                        '${event.venue} · ${event.city}',
-                        style: AppTextStyles.body(
-                          fontSize: 11.5,
-                          color: p.textMuted,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                Text(
+                  '${event.venue} · ${event.city}',
+                  style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -184,7 +168,7 @@ class _EventCard extends ConsumerWidget {
                         child: Text(
                           l10n.topulukGoingCount(count),
                           style: AppTextStyles.body(
-                            fontSize: 10,
+                            fontSize: 10.5,
                             color: p.textMuted,
                           ),
                         ),
@@ -206,6 +190,8 @@ class _EventCard extends ConsumerWidget {
                         ),
                         child: Text(
                           going ? l10n.topulukRsvpGoing : l10n.topulukRsvpJoin,
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
                           style: AppTextStyles.body(
                             fontSize: 11.5,
                             color: going ? p.onAccent : p.accent,

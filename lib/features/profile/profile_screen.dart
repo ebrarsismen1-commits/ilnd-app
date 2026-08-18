@@ -314,74 +314,71 @@ class _StatsRow extends StatelessWidget {
     final foodCount = statsAsync.valueOrNull?.weeklyFoodCount ?? 0;
     final puan = streak * 10 + journalCount * 5 + foodCount * 3;
 
-    return Row(
+    // Handoff §5: üç ayrı kart değil, hairline'la çerçevelenmiş TEK şerit.
+    // Kartlar üç sayıyı üç ayrı nesne gibi gösteriyordu; oysa bunlar aynı
+    // cümlenin üç kelimesi.
+    return Column(
       children: [
-        Expanded(
-          child: _StatCard(
-            value: '$streak',
-            label: l10n.profileStatStreak,
-            suffix: ' 🔥',
-            p: p,
+        Container(height: 0.5, color: p.border),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          child: Row(
+            children: [
+              Expanded(
+                child: _Stat(
+                  value: '$streak',
+                  label: l10n.profileStatStreak,
+                  p: p,
+                ),
+              ),
+              Expanded(
+                child: _Stat(
+                  value: '$puan',
+                  label: l10n.profileStatPoints,
+                  p: p,
+                ),
+              ),
+              Expanded(
+                child: _Stat(
+                  value: streak >= 7 ? '2' : '1',
+                  label: l10n.profileStatBadge,
+                  p: p,
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _StatCard(value: '$puan', label: l10n.profileStatPoints, p: p),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _StatCard(
-            value: streak >= 7 ? '2' : '1',
-            label: l10n.profileStatBadge,
-            p: p,
-          ),
-        ),
+        Container(height: 0.5, color: p.border),
       ],
     );
   }
 }
 
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.value,
-    required this.label,
-    this.suffix = '',
-    required this.p,
-  });
+class _Stat extends StatelessWidget {
+  const _Stat({required this.value, required this.label, required this.p});
   final String value;
   final String label;
-  final String suffix;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-      ),
-      child: Column(
-        children: [
-          Text(
-            '$value$suffix',
-            style: AppTextStyles.mono(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: p.text,
-            ),
+    return Column(
+      children: [
+        Text(
+          value,
+          style: AppTextStyles.mono(
+            fontSize: 26,
+            fontWeight: FontWeight.w600,
+            color: p.text,
           ),
-          const SizedBox(height: 3),
-          Text(
-            label,
-            style: AppTextStyles.label(
-              fontSize: 10,
-              color: p.textMuted,
-            ).copyWith(letterSpacing: 0.4),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: AppTextStyles.label(fontSize: 9.5, color: p.textMuted),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
@@ -522,117 +519,110 @@ class _WeeklySummaryCard extends StatelessWidget {
     final stats = statsAsync.valueOrNull ?? ProfileStats.zero;
     final barValues = stats.weeklyActivityByDay;
 
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.cardPadding),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.profileWeeklySummaryLabel,
-            style: AppTextStyles.sectionLabel(color: p.textMuted),
-          ),
-          Text(
-            l10n.profileThisWeek,
-            style: AppTextStyles.display(fontSize: 19, color: p.text),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _SummaryRow(
-                      value: '${stats.weeklyFoodCount}',
-                      label: l10n.profileMealsAdded,
-                      p: p,
-                    ),
-                    const SizedBox(height: 10),
-                    _SummaryRow(
-                      value: '${stats.streakDays}',
-                      label: l10n.profileDayStreak,
-                      p: p,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _SummaryRow(
-                      value: '${stats.weeklyJournalCount}',
-                      label: l10n.profileJournalEntriesWritten,
-                      p: p,
-                    ),
-                    const SizedBox(height: 10),
-                    _SummaryRow(
-                      value: statsAsync.isLoading ? '…' : '✓',
-                      label: l10n.profileSynced,
-                      p: p,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Divider(height: 0.5, thickness: 0.5, color: p.border),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 64,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(barValues.length, (i) {
-                final value = barValues[i];
-                final isEmpty = value == 0.0;
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 400),
-                                curve: Curves.easeOut,
-                                width: double.infinity,
-                                height: isEmpty ? 4 : 48 * value,
-                                decoration: BoxDecoration(
-                                  color: isEmpty ? p.surfaceStrong : p.accent,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          dayLabels[i],
-                          style: AppTextStyles.label(
-                            fontSize: 10,
-                            color: isEmpty
-                                ? p.textMuted.withValues(alpha: 0.5)
-                                : p.accent,
-                          ).copyWith(letterSpacing: 0),
-                        ),
-                      ],
-                    ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.profileWeeklySummaryLabel,
+          style: AppTextStyles.sectionLabel(color: p.textMuted),
+        ),
+        Text(
+          l10n.profileThisWeek,
+          style: AppTextStyles.display(fontSize: 19, color: p.text),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _SummaryRow(
+                    value: '${stats.weeklyFoodCount}',
+                    label: l10n.profileMealsAdded,
+                    p: p,
                   ),
-                );
-              }),
+                  const SizedBox(height: 10),
+                  _SummaryRow(
+                    value: '${stats.streakDays}',
+                    label: l10n.profileDayStreak,
+                    p: p,
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _SummaryRow(
+                    value: '${stats.weeklyJournalCount}',
+                    label: l10n.profileJournalEntriesWritten,
+                    p: p,
+                  ),
+                  const SizedBox(height: 10),
+                  _SummaryRow(
+                    value: statsAsync.isLoading ? '…' : '✓',
+                    label: l10n.profileSynced,
+                    p: p,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Divider(height: 0.5, thickness: 0.5, color: p.border),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 96,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: List.generate(barValues.length, (i) {
+              final value = barValues[i];
+              final isEmpty = value == 0.0;
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeOut,
+                              width: double.infinity,
+                              height: isEmpty ? 4 : 76 * value,
+                              decoration: BoxDecoration(
+                                color: isEmpty ? p.surfaceStrong : p.accent,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        dayLabels[i],
+                        style: AppTextStyles.mono(
+                          fontSize: 9.5,
+                          color: isEmpty
+                              ? p.textMuted.withValues(alpha: 0.5)
+                              : p.accent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -994,29 +984,30 @@ class _SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: iconColor ?? p.textMuted),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              label,
-              style: AppTextStyles.body(
-                fontSize: 15,
-                color: labelColor ?? p.text,
-              ).copyWith(fontWeight: FontWeight.w500),
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            children: [
+              Icon(icon, size: 19, color: iconColor ?? p.textMuted),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyles.body(
+                    fontSize: 14.5,
+                    color: labelColor ?? p.text,
+                  ),
+                ),
+              ),
+              if (showChevron)
+                Icon(Icons.chevron_right_rounded, size: 19, color: p.textMuted),
+            ],
           ),
-          if (showChevron)
-            Icon(Icons.chevron_right_rounded, size: 20, color: p.textMuted),
-        ],
-      ),
+        ),
+        Container(height: 0.5, color: p.border),
+      ],
     );
   }
 }
