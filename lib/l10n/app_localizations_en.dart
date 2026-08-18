@@ -433,6 +433,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get firstEntryNeedsLoading => 'getting a few ideas ready for you...';
 
   @override
+  String get homeWeeklyCardRowTitle => 'your weekly card';
+
+  @override
+  String get homeWeeklyCardRowSubtitle =>
+      'see your week on one card, share it if you like';
+
+  @override
   String get homeTodaysReadTitle => 'TODAY\'S READ';
 
   @override

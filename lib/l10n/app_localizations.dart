@@ -884,6 +884,18 @@ abstract class AppLocalizations {
   /// **'senin için birkaç öneri hazırlıyorum...'**
   String get firstEntryNeedsLoading;
 
+  /// Home quiet row: opens the weekly streak card
+  ///
+  /// In tr, this message translates to:
+  /// **'haftalık kartın'**
+  String get homeWeeklyCardRowTitle;
+
+  /// Home quiet row subtitle for the weekly card
+  ///
+  /// In tr, this message translates to:
+  /// **'bu haftayı tek kartta gör, istersen paylaş'**
+  String get homeWeeklyCardRowSubtitle;
+
   /// Home screen section title for today's article
   ///
   /// In tr, this message translates to:

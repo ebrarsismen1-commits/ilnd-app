@@ -66,15 +66,16 @@ void main() {
     final moodFinder = find.text(l10n.homeMoodQuestion);
     expect(moodFinder, findsOneWidget);
 
-    // Hero 272px; kart hero'nun altında + 16px nefes payıyla başlamalı.
+    // Hero 330px (handoff §1); mood satırı hero'nun altında + nefes payıyla
+    // başlamalı.
     // Not: eski bindirme Transform.translate'ti (paint-only) — getRect'e
     // yansımaz; bu eşik layout'taki gerçek boşluğu kilitler (eski düzen
     // 287.5 veriyordu, ayrık düzen ~304).
     final moodRect = tester.getRect(moodFinder);
     expect(
       moodRect.top,
-      greaterThanOrEqualTo(272 + 16),
-      reason: 'Mood kartı hero/selamlamayla çakışmamalı, ayrık durmalı',
+      greaterThanOrEqualTo(330 + 16),
+      reason: 'Mood satırı hero/selamlamayla çakışmamalı, ayrık durmalı',
     );
   });
 }

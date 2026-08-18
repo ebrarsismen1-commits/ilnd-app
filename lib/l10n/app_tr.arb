@@ -364,6 +364,12 @@
   "firstEntryNeedsLoading": "senin için birkaç öneri hazırlıyorum...",
   "@firstEntryNeedsLoading": {"description": "Loading label while fetching AI-suggested needs"},
 
+  "homeWeeklyCardRowTitle": "haftalık kartın",
+  "@homeWeeklyCardRowTitle": {"description": "Home quiet row: opens the weekly streak card"},
+
+  "homeWeeklyCardRowSubtitle": "bu haftayı tek kartta gör, istersen paylaş",
+  "@homeWeeklyCardRowSubtitle": {"description": "Home quiet row subtitle for the weekly card"},
+
   "homeTodaysReadTitle": "BUGÜNÜN OKUMASI",
   "@homeTodaysReadTitle": {"description": "Home screen section title for today's article"},
 

@@ -422,6 +422,13 @@ class AppLocalizationsTr extends AppLocalizations {
       'senin için birkaç öneri hazırlıyorum...';
 
   @override
+  String get homeWeeklyCardRowTitle => 'haftalık kartın';
+
+  @override
+  String get homeWeeklyCardRowSubtitle =>
+      'bu haftayı tek kartta gör, istersen paylaş';
+
+  @override
   String get homeTodaysReadTitle => 'BUGÜNÜN OKUMASI';
 
   @override

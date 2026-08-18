@@ -13,6 +13,9 @@ class Entrance extends StatefulWidget {
     this.offset = 24,
   });
 
+  /// Gecikmenin durduğu adım — 6 * 80ms = 480ms tavan.
+  static const int maxStaggerSteps = 6;
+
   final Widget child;
   final int index;
   final Duration delayStep;
@@ -34,6 +37,14 @@ class _EntranceState extends State<Entrance>
 
   bool _started = false;
 
+  /// Kademelenme [maxStaggerSteps]'te durur. Sınırsızken ekranın altındaki
+  /// öğeler saniyeye yaklaşan bir gecikmeyle giriyordu (Bugün'de 12. öğe =
+  /// 960ms) — o noktada etki "kademeli giriş" değil "geç açılıyor" diye
+  /// okunuyor. Altıncı adımdan sonra hepsi birlikte gelir.
+  int get _staggerSteps => widget.index < Entrance.maxStaggerSteps
+      ? widget.index
+      : Entrance.maxStaggerSteps;
+
   @override
   void initState() {
     super.initState();
@@ -50,7 +61,7 @@ class _EntranceState extends State<Entrance>
     // okunmaz.
     if (_started || prefersReducedMotion(context)) return;
     _started = true;
-    Future<void>.delayed(widget.delayStep * widget.index, () {
+    Future<void>.delayed(widget.delayStep * _staggerSteps, () {
       if (mounted) _c.forward();
     });
   }

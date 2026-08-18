@@ -15,8 +15,6 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
-import 'package:ilnd_app/core/widgets/motion.dart';
-import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/daily_trio/daily_trio_section.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
@@ -27,7 +25,6 @@ import 'package:ilnd_app/features/plans/plan_model.dart';
 import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_provider.dart';
-import 'package:ilnd_app/features/social_proof/social_proof_badge.dart';
 import 'package:ilnd_app/features/takip/takip_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
@@ -78,48 +75,51 @@ class HomeScreen extends ConsumerWidget {
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPadding,
-                  16,
+                  22,
                   AppSpacing.screenPadding,
-                  32,
+                  40,
                 ),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate.fixed([
-                    // Mood kartı hero'nun ALTINDA yaşar — üzerine bindirme
-                    // (Transform.translate) web'de selamlamayla çakışıyordu:
-                    // translate layout'u etkilemez, fontlar geç yüklenip metin
-                    // sarınca kart selamlamanın üstüne oturuyordu.
-                    // Takip artık ayrı bir ekran DEĞİL, Bugün'ün kendisi:
-                    // hero'nun hemen altında, ritüellerden önce. Kullanıcının
-                    // ürettiği veri (öğün, su, alışkanlık) günün merkezidir;
-                    // ayrı bir ekranın arkasındayken pratikte görünmüyordu.
-                    const TakipSections(),
-                    const SizedBox(height: 18),
+                    // Sıra handoff §1'den: hero → mood → takip → günün üçü →
+                    // okuma → sessiz satırlar. Mood hero'nun hemen altında
+                    // yaşar; bindirme (Transform.translate) denenip
+                    // bırakılmıştı — layout'u etkilemediği için fontlar geç
+                    // yüklenince selamlamanın üstüne biniyordu.
                     Entrance(index: 4, child: _MoodCheckIn(p: p)),
-                    Entrance(index: 5, child: _StreakBanner(p: p)),
-                    Entrance(index: 6, child: _ReminderInviteCard(p: p)),
-                    Entrance(
-                      index: 7,
-                      child: _SleepRitualCard(
-                        p: p,
-                        hour: hourOverride ?? DateTime.now().hour,
-                      ),
-                    ),
-                    Entrance(index: 8, child: SocialProofBadge(p: p)),
+                    const SizedBox(height: 26),
+                    _Hairline(p: p),
+                    // Takip ayrı bir ekran DEĞİL, Bugün'ün kendisi (d18f43e).
+                    // Handoff burada ayrı bir "takip" satırı gösteriyor ama o
+                    // main'e bakarak yazıldı: o ekran artık yok, içeriği
+                    // burada yaşıyor.
+                    const TakipSections(),
                     // Aktif plan Bugün'de yaşar: kullanıcı Keşfet'e girmeyi
                     // unutur, ana ekranı unutmaz. Plan yoksa satır hiç
                     // çizilmez (ADR-0005).
                     const _ActivePlanRow(),
                     const SizedBox(height: 18),
                     Entrance(index: 9, child: DailyTrioSection(p: p)),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 26),
                     Entrance(
                       index: 10,
-                      child: _SectionTitle(l10n.homeTodaysReadTitle, p: p),
+                      child: _SectionLabel(l10n.homeTodaysReadTitle, p: p),
                     ),
                     const SizedBox(height: 12),
                     Entrance(
                       index: 11,
                       child: _DailyReadCard(article: read, p: p),
+                    ),
+                    const SizedBox(height: 26),
+                    // Üç sessiz satır (handoff §1): kart değil, hairline ile
+                    // ayrılmış satırlar. "takip" satırı yok — o içerik zaten
+                    // yukarıda, ekranın içinde.
+                    Entrance(
+                      index: 12,
+                      child: _QuietRows(
+                        p: p,
+                        hour: hourOverride ?? DateTime.now().hour,
+                      ),
                     ),
                   ]),
                 ),
@@ -170,6 +170,11 @@ class _HeroHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final streak = ref.watch(profileStatsProvider).valueOrNull?.streakDays ?? 0;
+    final streakLine = StreakCopy.line(
+      current: streak,
+      longest: ref.watch(longestStreakProvider),
+      l10n: l10n,
+    );
     final greeting = _greeting(l10n);
     final who = name.isNotEmpty
         ? l10n.homeGreetingWithName(greeting, name)
@@ -181,7 +186,7 @@ class _HeroHeader extends ConsumerWidget {
     final initial = name.isNotEmpty ? name[0].toUpperCase() : '?';
 
     return SizedBox(
-      height: 272,
+      height: 330,
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -193,18 +198,18 @@ class _HeroHeader extends ConsumerWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.black.withValues(alpha: 0.28),
+                  Colors.black.withValues(alpha: 0.30),
                   Colors.transparent,
-                  Colors.black.withValues(alpha: 0.55),
+                  Colors.black.withValues(alpha: 0.62),
                 ],
-                stops: const [0.0, 0.45, 1.0],
+                stops: const [0.0, 0.44, 1.0],
               ),
             ),
           ),
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -286,12 +291,24 @@ class _HeroHeader extends ConsumerWidget {
                   Text(
                     who,
                     style: AppTextStyles.display(
-                      fontSize: 30,
+                      fontSize: 34,
                       color: Colors.white,
                       height: 1.1,
                     ),
                   ),
-                  const SizedBox(height: 44),
+                  // Streak satiri hero'nun icinde yasar (handoff §1): ayri bir
+                  // banner degil, selamlamanin devami. Dil gurur odakli,
+                  // sucluluk yok — StreakCopy zaten bunu garantiliyor.
+                  if (streakLine != null) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      streakLine,
+                      style: AppTextStyles.body(
+                        fontSize: 13,
+                        color: Colors.white.withValues(alpha: 0.82),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -336,207 +353,11 @@ class _HeroIconButton extends StatelessWidget {
   }
 }
 
-// ─── Streak banner — gurur odaklı, ceza yok ───────────────────────────────────
-
-class _StreakBanner extends ConsumerWidget {
-  const _StreakBanner({required this.p});
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final current =
-        ref.watch(profileStatsProvider).valueOrNull?.streakDays ?? 0;
-    final longest = ref.watch(longestStreakProvider);
-    final line = StreakCopy.line(
-      current: current,
-      longest: longest,
-      l10n: l10n,
-    );
-    if (line == null) return const SizedBox.shrink();
-
-    // 7+ günde satır dokunulabilir: eşik kartı (paylaşılabilir gurur anı).
-    final hasMilestone = current >= 7;
-    final row = Row(
-      children: [
-        if (current > 0) const _PulsingFlame(),
-        Expanded(
-          child: Text(
-            line,
-            style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-          ),
-        ),
-        if (hasMilestone)
-          Icon(Icons.ios_share_rounded, size: 14, color: p.textMuted),
-      ],
-    );
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: hasMilestone
-          ? Pressable(onTap: () => context.push(routeStreakCard), child: row)
-          : row,
-    );
-  }
-}
-
-/// A live, active streak deserves a heartbeat instead of a static emoji —
-/// slow enough (1.6s) to read as "alive", not as a loading spinner.
-class _PulsingFlame extends StatefulWidget {
-  const _PulsingFlame();
-
-  @override
-  State<_PulsingFlame> createState() => _PulsingFlameState();
-}
-
-class _PulsingFlameState extends State<_PulsingFlame>
-    with SingleTickerProviderStateMixin {
-  late final _ctrl = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1600),
-  )..repeat(reverse: true);
-  late final _scale = Tween(
-    begin: 0.92,
-    end: 1.12,
-  ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
-
-  @override
-  void dispose() {
-    _ctrl.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScaleTransition(
-      // Nabız dekoratif — azaltılmış modda alev sabit durur.
-      scale: prefersReducedMotion(context)
-          ? const AlwaysStoppedAnimation<double>(1)
-          : _scale,
-      child: const Text('🔥 ', style: TextStyle(fontSize: 13)),
-    );
-  }
-}
-
-// ─── Gece ritüeli daveti ──────────────────────────────────────────────────────
-
-// ─── Hatırlatma daveti ────────────────────────────────────────────────────────
-
-/// Tek seferlik davet: ILND akşamları yazsın mı? İzin, değer görüldükten
-/// sonra ve bağlam içinde istenir (soğuk sistem dialoğu ilk açılışta değil).
-/// Cevap ne olursa olsun kart bir daha görünmez; toggle ayarlarda yaşar.
-class _ReminderInviteCard extends ConsumerWidget {
-  const _ReminderInviteCard({required this.p});
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final settings = ref.watch(reminderProvider);
-    final inviteDone = ref.watch(reminderInviteDoneProvider);
-    if (settings.enabled || inviteDone) return const SizedBox.shrink();
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text('🔔', style: TextStyle(fontSize: 19, color: p.amber)),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    l10n.homeReminderInviteTitle,
-                    style: AppTextStyles.heading(fontSize: 15, color: p.text),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              l10n.homeReminderInviteBody,
-              style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: Pressable(
-                    onTap: () => _accept(context, ref),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: p.accent,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        l10n.homeReminderInviteAccept,
-                        style: AppTextStyles.body(
-                          fontSize: 13,
-                          color: p.onAccent,
-                        ).copyWith(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Pressable(
-                  onTap: () =>
-                      ref.read(reminderInviteDoneProvider.notifier).setDone(),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
-                    child: Text(
-                      l10n.homeReminderInviteLater,
-                      style: AppTextStyles.body(
-                        fontSize: 13,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<void> _accept(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context)!;
-    final hasActivityToday = ref.read(todaysMoodProvider) != null;
-    // Önce daveti kapat: izin reddedilse bile soru tekrarlanmaz.
-    await ref.read(reminderInviteDoneProvider.notifier).setDone();
-    final granted = await ref
-        .read(reminderProvider.notifier)
-        .enable(
-          title: l10n.reminderNotificationTitle,
-          body: l10n.reminderNotificationBody,
-          channelName: l10n.reminderSettingLabel,
-          hasActivityToday: hasActivityToday,
-        );
-    if (!granted && context.mounted) {
-      IlndToast.info(context, l10n.reminderPermissionDenied);
-    }
-  }
-}
-
-/// Akşam saatlerinde (bkz. isSleepRitualWindow) görünen nazik davet; bu gece
-/// tamamlandıysa gizlenir. Saat parametreyle gelir — test edilebilirlik
-/// (_heroImageUrl deseninin aynısı).
-class _SleepRitualCard extends ConsumerWidget {
-  const _SleepRitualCard({required this.p, required this.hour});
+/// Ekranın kapanış satırları: gece ritüeli daveti ve haftalık kart.
+/// Handoff §1 "üç sessiz satır" — kart değil, hairline ile ayrılmış satırlar.
+/// Saat parametreyle gelir (test edilebilirlik, `_heroImageUrl` deseni).
+class _QuietRows extends ConsumerWidget {
+  const _QuietRows({required this.p, required this.hour});
   final AppPalette p;
   final int hour;
 
@@ -544,50 +365,112 @@ class _SleepRitualCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final doneTonight = ref.watch(sleepRitualDoneTonightProvider);
-    if (!isSleepRitualWindow(hour) || doneTonight) {
-      return const SizedBox.shrink();
-    }
+    final showRitual = isSleepRitualWindow(hour) && !doneTonight;
+    // Haftalık kart satırı yalnız paylaşılacak bir şey varken çıkar: 7 günlük
+    // eşiğe gelmemiş birine "kartın hazır" demek boş bir söz olurdu.
+    final streak = ref.watch(profileStatsProvider).valueOrNull?.streakDays ?? 0;
+    final showWeekly = streak >= 7;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Pressable(
-        onTap: () => context.push(routeSleepRitual),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          decoration: BoxDecoration(
-            color: p.surface,
-            borderRadius: BorderRadius.circular(16),
+    if (!showRitual && !showWeekly) return const SizedBox.shrink();
+
+    return Column(
+      children: [
+        _Hairline(p: p),
+        if (showRitual)
+          _QuietRow(
+            p: p,
+            dotColor: p.amber,
+            title: l10n.sleepRitualHomeCardTitle,
+            subtitle: l10n.sleepRitualHomeCardSubtitle,
+            onTap: () => context.push(routeSleepRitual),
           ),
-          child: Row(
-            children: [
-              Text('🌙', style: TextStyle(fontSize: 19, color: p.amber)),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.sleepRitualHomeCardTitle,
-                      style: AppTextStyles.heading(fontSize: 15, color: p.text),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      l10n.sleepRitualHomeCardSubtitle,
-                      style: AppTextStyles.body(
-                        fontSize: 13,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ],
+        if (showWeekly)
+          _QuietRow(
+            p: p,
+            dotColor: p.text,
+            title: l10n.homeWeeklyCardRowTitle,
+            subtitle: l10n.homeWeeklyCardRowSubtitle,
+            onTap: () => context.push(routeStreakCard),
+          ),
+      ],
+    );
+  }
+}
+
+class _QuietRow extends StatelessWidget {
+  const _QuietRow({
+    required this.p,
+    required this.dotColor,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+  final AppPalette p;
+  final Color dotColor;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Pressable(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              children: [
+                Container(
+                  width: 7,
+                  height: 7,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: dotColor,
+                  ),
                 ),
-              ),
-              Icon(Icons.chevron_right_rounded, size: 20, color: p.textMuted),
-            ],
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: AppTextStyles.heading(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: p.text,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: AppTextStyles.body(
+                          fontSize: 12,
+                          color: p.textMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right_rounded, size: 18, color: p.textMuted),
+              ],
+            ),
           ),
-        ),
+          _Hairline(p: p),
+        ],
       ),
     );
   }
+}
+
+/// 0.5px ayırıcı — bölümleri kart yerine bu ayırır (DESIGN_SYSTEM §7.1).
+class _Hairline extends StatelessWidget {
+  const _Hairline({required this.p});
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) => Container(height: 0.5, color: p.border);
 }
 
 // ─── Mood check-in ────────────────────────────────────────────────────────────
@@ -657,33 +540,25 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
         (m) => m.$2 == todaysMood,
         orElse: () => _moods.first,
       );
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            Text(moodEntry.$1, style: TextStyle(fontSize: 19, color: p.accent)),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                l10n.homeMoodAnsweredToday(_moodLabel(l10n, todaysMood)),
-                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-              ),
+      // Cevaplandiktan sonra tek sessiz satir kalir — kutu yok.
+      return Row(
+        children: [
+          Text(moodEntry.$1, style: TextStyle(fontSize: 17, color: p.accent)),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              l10n.homeMoodAnsweredToday(_moodLabel(l10n, todaysMood)),
+              style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(20),
-      ),
+    // Kart degil: soru + daireler dogrudan zeminde durur. Ayrimi kenarlik
+    // degil bosluk ve hairline kurar (DESIGN_SYSTEM §7.1, kutu hastaligi).
+    return Padding(
+      padding: const EdgeInsets.only(top: 6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -703,11 +578,13 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 220),
                         curve: Curves.easeOut,
-                        width: 46,
-                        height: 46,
+                        width: 48,
+                        height: 48,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: _selected == index ? p.accentSoft : p.base,
+                          color: _selected == index
+                              ? p.accentSoft
+                              : Colors.transparent,
                           border: Border.all(
                             color: _selected == index ? p.accent : p.border,
                             width: _selected == index ? 1.5 : 0.5,
@@ -721,18 +598,18 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
                           child: Text(
                             m.$1,
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 17,
                               color: _selected == index ? p.accent : p.text,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 6),
                       Text(
                         _moodLabel(l10n, m.$2),
                         style:
                             AppTextStyles.body(
-                              fontSize: 10,
+                              fontSize: 9.5,
                               color: _selected == index
                                   ? p.accent
                                   : p.textMuted,
@@ -753,19 +630,17 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
   }
 }
 
-// ─── Section title ────────────────────────────────────────────────────────────
+// ─── Section label ────────────────────────────────────────────────────────────
 
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.text, {required this.p});
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.text, {required this.p});
   final String text;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: AppTextStyles.display(fontSize: 24, color: p.text),
-    );
+    // Büyük harf .arb'den gelir, koddan değil (turkish_copy_test).
+    return Text(text, style: AppTextStyles.sectionLabel(color: p.textMuted));
   }
 }
 

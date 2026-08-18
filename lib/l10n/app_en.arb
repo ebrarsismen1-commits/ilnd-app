@@ -145,6 +145,12 @@
   "firstEntryNeedsPrompt": "what do you need?",
   "firstEntryNeedsLoading": "getting a few ideas ready for you...",
 
+  "homeWeeklyCardRowTitle": "your weekly card",
+  "@homeWeeklyCardRowTitle": {"description": "Home quiet row: opens the weekly streak card"},
+
+  "homeWeeklyCardRowSubtitle": "see your week on one card, share it if you like",
+  "@homeWeeklyCardRowSubtitle": {"description": "Home quiet row subtitle for the weekly card"},
+
   "homeTodaysReadTitle": "TODAY'S READ",
   "homeGreetingNight": "good night",
   "homeGreetingMorning": "good morning",
