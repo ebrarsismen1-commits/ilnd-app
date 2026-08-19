@@ -395,7 +395,7 @@ abstract class AppLocalizations {
   /// Toast after password successfully updated
   ///
   /// In tr, this message translates to:
-  /// **'Şifren güncellendi. Tekrar hoş geldin 🌿'**
+  /// **'Şifren güncellendi. Tekrar hoş geldin'**
   String get newPasswordSuccess;
 
   /// Auth error: sign-up failed
@@ -551,7 +551,7 @@ abstract class AppLocalizations {
   /// Shown after successful registration
   ///
   /// In tr, this message translates to:
-  /// **'Hesabın oluşturuldu! Hoş geldin 🌿'**
+  /// **'Hesabın oluşturuldu! Hoş geldin'**
   String get registerSuccess;
 
   /// Shown after sign-up when email confirmation is required before first sign-in
@@ -1433,7 +1433,7 @@ abstract class AppLocalizations {
   /// Toast shown after signing out
   ///
   /// In tr, this message translates to:
-  /// **'Çıkış yapıldı. Görüşürüz 👋'**
+  /// **'Çıkış yapıldı. Görüşürüz'**
   String get profileSignedOut;
 
   /// Sign out settings row
@@ -1475,7 +1475,7 @@ abstract class AppLocalizations {
   /// Toast shown after successful account deletion
   ///
   /// In tr, this message translates to:
-  /// **'Hesabın silindi. Kendine iyi bak 👋'**
+  /// **'Hesabın silindi. Kendine iyi bak'**
   String get profileAccountDeleted;
 
   /// Explore screen title
@@ -1898,12 +1898,6 @@ abstract class AppLocalizations {
   /// **'  ·  {readTime}'**
   String articleDetailReadTime(String readTime);
 
-  /// Soft sign-off shown at the end of an article
-  ///
-  /// In tr, this message translates to:
-  /// **'🌿'**
-  String get articleDetailSignOff;
-
   /// Referral screen title
   ///
   /// In tr, this message translates to:
@@ -1925,13 +1919,13 @@ abstract class AppLocalizations {
   /// Share sheet text when sharing the vibe card
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'deki ruh halimi paylaşıyorum 🌿'**
+  /// **'ilnd\'deki ruh halimi paylaşıyorum'**
   String get vibeCardShareText;
 
   /// Share sheet text when the user has a referral code — the code rides along with every share
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'deki ruh halimi paylaşıyorum 🌿 davet kodum: {code}'**
+  /// **'ilnd\'deki ruh halimi paylaşıyorum davet kodum: {code}'**
   String vibeCardShareTextWithCode(String code);
 
   /// Home section title: the three daily cards ILND prepares (move/plate/mind)
@@ -2009,13 +2003,13 @@ abstract class AppLocalizations {
   /// Share sheet text for the streak card
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'de {days} gündür buradayım 🔥'**
+  /// **'ilnd\'de {days} gündür buradayım'**
   String streakCardShareText(int days);
 
   /// Streak card share text carrying the user's referral code
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'de {days} gündür buradayım 🔥 davet kodum: {code}'**
+  /// **'ilnd\'de {days} gündür buradayım davet kodum: {code}'**
   String streakCardShareTextWithCode(int days, String code);
 
   /// Tiny action under an ILND chat line that turns the sentence into a shareable quote card
@@ -2027,13 +2021,13 @@ abstract class AppLocalizations {
   /// Share sheet text when sharing a quote card
   ///
   /// In tr, this message translates to:
-  /// **'ilnd bugün bana bunu dedi 🌙'**
+  /// **'ilnd bugün bana bunu dedi'**
   String get quoteCardShareText;
 
   /// Quote card share text carrying the user's referral code
   ///
   /// In tr, this message translates to:
-  /// **'ilnd bugün bana bunu dedi 🌙 davet kodum: {code}'**
+  /// **'ilnd bugün bana bunu dedi davet kodum: {code}'**
   String quoteCardShareTextWithCode(String code);
 
   /// Small referral code chip printed on the shareable card image
@@ -2081,7 +2075,7 @@ abstract class AppLocalizations {
   /// Context shown on the paywall when the weekly chat limit is reached
   ///
   /// In tr, this message translates to:
-  /// **'bu hafta benimle çok konuştun 🌿'**
+  /// **'bu hafta benimle çok konuştun'**
   String get chatPaywallReason;
 
   /// Chat empty state greeting without a name
@@ -2117,7 +2111,7 @@ abstract class AppLocalizations {
   /// Toast shown when a referral code is redeemed successfully
   ///
   /// In tr, this message translates to:
-  /// **'Davet kodu kullanıldı! 🎉'**
+  /// **'Davet kodu kullanıldı!'**
   String get redeemCodeSuccess;
 
   /// Toast: the entered referral code does not exist
@@ -2129,7 +2123,7 @@ abstract class AppLocalizations {
   /// Toast: user tried to redeem their own referral code
   ///
   /// In tr, this message translates to:
-  /// **'Bu senin kendi kodun 🙂 Bir arkadaşının kodunu dene.'**
+  /// **'Bu senin kendi kodun Bir arkadaşının kodunu dene.'**
   String get redeemCodeSelfReferral;
 
   /// Toast: user already redeemed a referral code before
@@ -2537,7 +2531,7 @@ abstract class AppLocalizations {
   /// Context shown on the paywall when the daily food-scan limit is reached
   ///
   /// In tr, this message translates to:
-  /// **'bugünlük yemek analizi hakkın doldu 🌿'**
+  /// **'bugünlük yemek analizi hakkın doldu'**
   String get yemekEklePaywallReason;
 
   /// Error when picking a photo fails
@@ -2987,7 +2981,7 @@ abstract class AppLocalizations {
   /// Line shown on a plan whose days are all completed
   ///
   /// In tr, this message translates to:
-  /// **'planı tamamladın 🌿'**
+  /// **'planı tamamladın'**
   String get planAllDone;
 
   /// Badge on a finished day row
@@ -3047,7 +3041,7 @@ abstract class AppLocalizations {
   /// Context shown on the paywall when a premium plan is opened
   ///
   /// In tr, this message translates to:
-  /// **'bu plan ILND+ üyelerine özel 🌿'**
+  /// **'bu plan ILND+ üyelerine özel'**
   String get planPaywallReason;
 
   /// Badge on a plan card that requires a subscription
@@ -3149,7 +3143,7 @@ abstract class AppLocalizations {
   /// Line shown on a program whose sessions are all completed
   ///
   /// In tr, this message translates to:
-  /// **'programı tamamladın 🌿'**
+  /// **'programı tamamladın'**
   String get movementAllDone;
 
   /// Badge on a finished session row
@@ -3173,7 +3167,7 @@ abstract class AppLocalizations {
   /// Context shown on the paywall when a premium program is opened
   ///
   /// In tr, this message translates to:
-  /// **'bu program ILND+ üyelerine özel 🌿'**
+  /// **'bu program ILND+ üyelerine özel'**
   String get movementPaywallReason;
 
   /// Badge on a program card that requires a subscription

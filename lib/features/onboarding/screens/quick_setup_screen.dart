@@ -35,12 +35,12 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
   // Internal keys (used for state/toggle logic) — display labels are
   // resolved via l10n in build() through _goalLabel().
   static const _goals = [
-    ('kalori_besin_takibi', '🍽️'),
-    ('kilo_vermek_almak', '⚖️'),
-    ('daha_fazla_hareket', '🏃'),
-    ('su_uyku_takibi', '💧'),
-    ('aliskanlik_olusturma', '🔄'),
-    ('ruh_hali_takibi', '💙'),
+    ('kalori_besin_takibi', Icons.restaurant_rounded),
+    ('kilo_vermek_almak', Icons.monitor_weight_outlined),
+    ('daha_fazla_hareket', Icons.directions_run_rounded),
+    ('su_uyku_takibi', Icons.water_drop_rounded),
+    ('aliskanlik_olusturma', Icons.autorenew_rounded),
+    ('ruh_hali_takibi', Icons.favorite_border_rounded),
   ];
 
   static const _activityLevels = ['az_hareketli', 'orta', 'aktif'];
@@ -344,7 +344,11 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(item.$2, style: const TextStyle(fontSize: 15)),
+                          Icon(
+                            item.$2,
+                            size: 16,
+                            color: on ? p.accent : p.textMuted,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             _goalLabel(l10n, item.$1),

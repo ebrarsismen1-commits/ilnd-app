@@ -149,17 +149,6 @@ class ArticleDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   _RecipeSection(article: article, p: p),
                 ],
-                const SizedBox(height: 12),
-                // Soft sign-off
-                Center(
-                  child: Text(
-                    l10n.articleDetailSignOff,
-                    style: AppTextStyles.display(
-                      fontSize: 19,
-                      color: p.textMuted,
-                    ),
-                  ),
-                ),
               ]),
             ),
           ),

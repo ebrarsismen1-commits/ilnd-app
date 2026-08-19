@@ -179,7 +179,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newPasswordSubmit => 'update password';
 
   @override
-  String get newPasswordSuccess => 'Your password is updated. Welcome back 🌿';
+  String get newPasswordSuccess => 'Your password is updated. Welcome back';
 
   @override
   String get authErrorSignupFailed =>
@@ -263,7 +263,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerLoginLink => 'sign in';
 
   @override
-  String get registerSuccess => 'Your account has been created! Welcome 🌿';
+  String get registerSuccess => 'Your account has been created! Welcome';
 
   @override
   String get registerConfirmEmailSent =>
@@ -724,7 +724,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTermsOfService => 'terms of service';
 
   @override
-  String get profileSignedOut => 'Signed out. See you soon 👋';
+  String get profileSignedOut => 'Signed out. See you soon';
 
   @override
   String get profileSignOut => 'sign out';
@@ -747,7 +747,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileAccountDeleted =>
-      'Your account has been deleted. Take care 👋';
+      'Your account has been deleted. Take care';
 
   @override
   String get exploreTitle => 'explore.';
@@ -982,9 +982,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get articleDetailSignOff => '🌿';
-
-  @override
   String get referralTitle => 'invite a friend';
 
   @override
@@ -994,11 +991,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get referralEnterCode => 'enter invite code';
 
   @override
-  String get vibeCardShareText => 'sharing my mood on ilnd 🌿';
+  String get vibeCardShareText => 'sharing my mood on ilnd';
 
   @override
   String vibeCardShareTextWithCode(String code) {
-    return 'sharing my mood on ilnd 🌿 my invite code: $code';
+    return 'sharing my mood on ilnd my invite code: $code';
   }
 
   @override
@@ -1043,23 +1040,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String streakCardShareText(int days) {
-    return '$days days in a row on ilnd 🔥';
+    return '$days days in a row on ilnd';
   }
 
   @override
   String streakCardShareTextWithCode(int days, String code) {
-    return '$days days in a row on ilnd 🔥 my invite code: $code';
+    return '$days days in a row on ilnd my invite code: $code';
   }
 
   @override
   String get chatQuoteCardButton => 'Make it a card';
 
   @override
-  String get quoteCardShareText => 'ilnd told me this today 🌙';
+  String get quoteCardShareText => 'ilnd told me this today';
 
   @override
   String quoteCardShareTextWithCode(String code) {
-    return 'ilnd told me this today 🌙 my invite code: $code';
+    return 'ilnd told me this today my invite code: $code';
   }
 
   @override
@@ -1086,7 +1083,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vibeCardStatHabit => 'habits';
 
   @override
-  String get chatPaywallReason => 'you\'ve talked to me a lot this week 🌿';
+  String get chatPaywallReason => 'you\'ve talked to me a lot this week';
 
   @override
   String get chatGreeting => 'hey.';
@@ -1106,14 +1103,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatListening => 'ilnd · listening';
 
   @override
-  String get redeemCodeSuccess => 'Invite code redeemed! 🎉';
+  String get redeemCodeSuccess => 'Invite code redeemed!';
 
   @override
   String get redeemCodeInvalid => 'No such invite code. Double-check it.';
 
   @override
   String get redeemCodeSelfReferral =>
-      'That\'s your own code 🙂 Try a friend\'s code.';
+      'That\'s your own code Try a friend\'s code.';
 
   @override
   String get redeemCodeAlreadyUsed =>
@@ -1342,7 +1339,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get suEkleMl => 'ML';
 
   @override
-  String get yemekEklePaywallReason => 'you\'ve used today\'s food scans 🌿';
+  String get yemekEklePaywallReason => 'you\'ve used today\'s food scans';
 
   @override
   String get yemekEklePhotoAccessError =>
@@ -1634,7 +1631,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planRestart => 'start over';
 
   @override
-  String get planAllDone => 'you finished the plan 🌿';
+  String get planAllDone => 'you finished the plan';
 
   @override
   String get planDayDone => 'done';
@@ -1666,7 +1663,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planActionJournal => 'write in your journal';
 
   @override
-  String get planPaywallReason => 'this plan is for ILND+ members 🌿';
+  String get planPaywallReason => 'this plan is for ILND+ members';
 
   @override
   String get planPremiumBadge => 'ILND+';
@@ -1731,7 +1728,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movementReplay => 'watch again';
 
   @override
-  String get movementAllDone => 'you finished the program 🌿';
+  String get movementAllDone => 'you finished the program';
 
   @override
   String get movementSessionDone => 'done';
@@ -1743,7 +1740,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movementPlayerRetry => 'try again';
 
   @override
-  String get movementPaywallReason => 'this program is for ILND+ members 🌿';
+  String get movementPaywallReason => 'this program is for ILND+ members';
 
   @override
   String get movementPremiumBadge => 'ILND+';

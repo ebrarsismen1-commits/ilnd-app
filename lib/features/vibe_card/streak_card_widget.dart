@@ -68,7 +68,11 @@ class StreakCardWidget extends StatelessWidget {
                       const SizedBox(width: 8),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
-                        child: Text('🔥', style: const TextStyle(fontSize: 24)),
+                        child: Icon(
+                          Icons.local_fire_department_rounded,
+                          size: 22,
+                          color: p.accent,
+                        ),
                       ),
                     ],
                   ),

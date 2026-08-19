@@ -129,7 +129,7 @@
   "newPasswordSubmit": "şifreyi güncelle",
   "@newPasswordSubmit": {"description": "Save new password button"},
 
-  "newPasswordSuccess": "Şifren güncellendi. Tekrar hoş geldin 🌿",
+  "newPasswordSuccess": "Şifren güncellendi. Tekrar hoş geldin",
   "@newPasswordSuccess": {"description": "Toast after password successfully updated"},
   "authErrorSignupFailed": "Hesabın oluşturulamadı. Tekrar dener misin?",
   "@authErrorSignupFailed": {"description": "Auth error: sign-up failed"},
@@ -196,7 +196,7 @@
   "registerLoginLink": "giriş yap",
   "@registerLoginLink": {"description": "Login link on register screen"},
 
-  "registerSuccess": "Hesabın oluşturuldu! Hoş geldin 🌿",
+  "registerSuccess": "Hesabın oluşturuldu! Hoş geldin",
   "@registerSuccess": {"description": "Shown after successful registration"},
 
   "registerConfirmEmailSent": "Onay bağlantısı e-postana gönderildi. Gelen kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.",
@@ -651,7 +651,7 @@
   "profileTermsOfService": "kullanım şartları",
   "@profileTermsOfService": {"description": "Terms of service settings row"},
 
-  "profileSignedOut": "Çıkış yapıldı. Görüşürüz 👋",
+  "profileSignedOut": "Çıkış yapıldı. Görüşürüz",
   "@profileSignedOut": {"description": "Toast shown after signing out"},
 
   "profileSignOut": "çıkış yap",
@@ -672,7 +672,7 @@
   "profileDeleteAccountConfirm": "Hesabımı sil",
   "@profileDeleteAccountConfirm": {"description": "Delete account dialog confirm button"},
 
-  "profileAccountDeleted": "Hesabın silindi. Kendine iyi bak 👋",
+  "profileAccountDeleted": "Hesabın silindi. Kendine iyi bak",
   "@profileAccountDeleted": {"description": "Toast shown after successful account deletion"},
 
   "exploreTitle": "keşfet.",
@@ -887,9 +887,6 @@
     }
   },
 
-  "articleDetailSignOff": "🌿",
-  "@articleDetailSignOff": {"description": "Soft sign-off shown at the end of an article"},
-
   "referralTitle": "arkadaşını davet et",
   "@referralTitle": {"description": "Referral screen title"},
 
@@ -899,10 +896,10 @@
   "referralEnterCode": "davet kodu gir",
   "@referralEnterCode": {"description": "Button to open the redeem-code sheet"},
 
-  "vibeCardShareText": "ilnd'deki ruh halimi paylaşıyorum 🌿",
+  "vibeCardShareText": "ilnd'deki ruh halimi paylaşıyorum",
   "@vibeCardShareText": {"description": "Share sheet text when sharing the vibe card"},
 
-  "vibeCardShareTextWithCode": "ilnd'deki ruh halimi paylaşıyorum 🌿 davet kodum: {code}",
+  "vibeCardShareTextWithCode": "ilnd'deki ruh halimi paylaşıyorum davet kodum: {code}",
   "@vibeCardShareTextWithCode": {
     "description": "Share sheet text when the user has a referral code — the code rides along with every share",
     "placeholders": {
@@ -951,7 +948,7 @@
   "streakCardDaysLabel": "gün üst üste",
   "@streakCardDaysLabel": {"description": "Label under the big day count on the streak card"},
 
-  "streakCardShareText": "ilnd'de {days} gündür buradayım 🔥",
+  "streakCardShareText": "ilnd'de {days} gündür buradayım",
   "@streakCardShareText": {
     "description": "Share sheet text for the streak card",
     "placeholders": {
@@ -959,7 +956,7 @@
     }
   },
 
-  "streakCardShareTextWithCode": "ilnd'de {days} gündür buradayım 🔥 davet kodum: {code}",
+  "streakCardShareTextWithCode": "ilnd'de {days} gündür buradayım davet kodum: {code}",
   "@streakCardShareTextWithCode": {
     "description": "Streak card share text carrying the user's referral code",
     "placeholders": {
@@ -971,10 +968,10 @@
   "chatQuoteCardButton": "Karta çevir",
   "@chatQuoteCardButton": {"description": "Tiny action under an ILND chat line that turns the sentence into a shareable quote card"},
 
-  "quoteCardShareText": "ilnd bugün bana bunu dedi 🌙",
+  "quoteCardShareText": "ilnd bugün bana bunu dedi",
   "@quoteCardShareText": {"description": "Share sheet text when sharing a quote card"},
 
-  "quoteCardShareTextWithCode": "ilnd bugün bana bunu dedi 🌙 davet kodum: {code}",
+  "quoteCardShareTextWithCode": "ilnd bugün bana bunu dedi davet kodum: {code}",
   "@quoteCardShareTextWithCode": {
     "description": "Quote card share text carrying the user's referral code",
     "placeholders": {
@@ -1008,7 +1005,7 @@
   "vibeCardStatHabit": "alışkanlık",
   "@vibeCardStatHabit": {"description": "Vibe card stat: habit completion count"},
 
-  "chatPaywallReason": "bu hafta benimle çok konuştun 🌿",
+  "chatPaywallReason": "bu hafta benimle çok konuştun",
   "@chatPaywallReason": {"description": "Context shown on the paywall when the weekly chat limit is reached"},
 
   "chatGreeting": "selam.",
@@ -1030,13 +1027,13 @@
   "@chatListening": {"description": "Chat header subtitle under the breath ring"},
   "@chatComposerHint": {"description": "Chat message composer hint"},
 
-  "redeemCodeSuccess": "Davet kodu kullanıldı! 🎉",
+  "redeemCodeSuccess": "Davet kodu kullanıldı!",
   "@redeemCodeSuccess": {"description": "Toast shown when a referral code is redeemed successfully"},
 
   "redeemCodeInvalid": "Böyle bir davet kodu yok. Tekrar bak.",
   "@redeemCodeInvalid": {"description": "Toast: the entered referral code does not exist"},
 
-  "redeemCodeSelfReferral": "Bu senin kendi kodun 🙂 Bir arkadaşının kodunu dene.",
+  "redeemCodeSelfReferral": "Bu senin kendi kodun Bir arkadaşının kodunu dene.",
   "@redeemCodeSelfReferral": {"description": "Toast: user tried to redeem their own referral code"},
 
   "redeemCodeAlreadyUsed": "Zaten bir davet kodu kullanmışsın.",
@@ -1290,7 +1287,7 @@
   "suEkleMl": "ML",
   "@suEkleMl": {"description": "Unit label under a quick-add water amount"},
 
-  "yemekEklePaywallReason": "bugünlük yemek analizi hakkın doldu 🌿",
+  "yemekEklePaywallReason": "bugünlük yemek analizi hakkın doldu",
   "@yemekEklePaywallReason": {"description": "Context shown on the paywall when the daily food-scan limit is reached"},
 
   "yemekEklePhotoAccessError": "Fotoğrafa erişilemedi. Tekrar dene.",
@@ -1560,7 +1557,7 @@
   "planRestart": "yeniden başla",
   "@planRestart": {"description": "Button shown on a plan whose days are all completed"},
 
-  "planAllDone": "planı tamamladın 🌿",
+  "planAllDone": "planı tamamladın",
   "@planAllDone": {"description": "Line shown on a plan whose days are all completed"},
 
   "planDayDone": "tamamlandı",
@@ -1595,7 +1592,7 @@
   "planActionJournal": "günlüğüne yaz",
   "@planActionJournal": {"description": "Plan day action: write in the journal"},
 
-  "planPaywallReason": "bu plan ILND+ üyelerine özel 🌿",
+  "planPaywallReason": "bu plan ILND+ üyelerine özel",
   "@planPaywallReason": {"description": "Context shown on the paywall when a premium plan is opened"},
 
   "planPremiumBadge": "ILND+",
@@ -1667,7 +1664,7 @@
   "movementReplay": "yeniden izle",
   "@movementReplay": {"description": "Button shown when every session of the program is done"},
 
-  "movementAllDone": "programı tamamladın 🌿",
+  "movementAllDone": "programı tamamladın",
   "@movementAllDone": {"description": "Line shown on a program whose sessions are all completed"},
 
   "movementSessionDone": "tamamlandı",
@@ -1679,7 +1676,7 @@
   "movementPlayerRetry": "tekrar dene",
   "@movementPlayerRetry": {"description": "Retry button on the video player error state"},
 
-  "movementPaywallReason": "bu program ILND+ üyelerine özel 🌿",
+  "movementPaywallReason": "bu program ILND+ üyelerine özel",
   "@movementPaywallReason": {"description": "Context shown on the paywall when a premium program is opened"},
 
   "movementPremiumBadge": "ILND+",

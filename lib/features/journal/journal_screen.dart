@@ -160,7 +160,7 @@ class _ErrorState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('🔌', style: const TextStyle(fontSize: 40)),
+          Icon(Icons.wifi_off_rounded, size: 32, color: p.textMuted),
           const SizedBox(height: 16),
           Text(
             l10n.journalConnectionError,
@@ -202,7 +202,7 @@ class _EmptyJournal extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('✍️', style: const TextStyle(fontSize: 44)),
+          Icon(Icons.edit_note_rounded, size: 36, color: p.textMuted),
           const SizedBox(height: 20),
           Text(
             l10n.journalEmptyTitle,

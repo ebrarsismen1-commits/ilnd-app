@@ -42,7 +42,7 @@ class DailyTrioSection extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         _TrioCard(
-          emoji: movement.emoji,
+          icon: movement.icon,
           title: l10n.trioMoveTitle,
           subtitle: movement.forLocale(l10n.localeName),
           chip: l10n.trioMinutes(movement.minutes),
@@ -56,7 +56,7 @@ class DailyTrioSection extends ConsumerWidget {
         if (recipe != null) ...[
           const SizedBox(height: 8),
           _TrioCard(
-            emoji: '🍳',
+            icon: Icons.restaurant_rounded,
             title: l10n.trioPlateTitle,
             subtitle: recipe.title,
             chip: recipe.readTime,
@@ -78,7 +78,7 @@ class DailyTrioSection extends ConsumerWidget {
         ],
         const SizedBox(height: 8),
         _TrioCard(
-          emoji: '🌙',
+          icon: Icons.nightlight_round,
           title: l10n.trioMindTitle,
           subtitle: mindDone ? l10n.trioMindDone : l10n.trioMindPending,
           done: mindDone,
@@ -94,7 +94,7 @@ class DailyTrioSection extends ConsumerWidget {
 
 class _TrioCard extends StatelessWidget {
   const _TrioCard({
-    required this.emoji,
+    required this.icon,
     required this.title,
     required this.subtitle,
     this.chip,
@@ -104,7 +104,7 @@ class _TrioCard extends StatelessWidget {
     required this.p,
   });
 
-  final String emoji;
+  final IconData icon;
   final String title;
   final String subtitle;
   final String? chip;
@@ -124,7 +124,7 @@ class _TrioCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 24)),
+          Icon(icon, size: 20, color: p.textMuted),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

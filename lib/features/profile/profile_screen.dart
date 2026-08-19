@@ -409,7 +409,7 @@ class _BadgesSection extends StatelessWidget {
           children: [
             Expanded(
               child: _BadgeCard(
-                emoji: '⭐',
+                icon: Icons.star_border_rounded,
                 label: l10n.profileBadgeFirstStep,
                 color: p.accent,
                 locked: !hasFirstEntry,
@@ -419,7 +419,7 @@ class _BadgesSection extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _BadgeCard(
-                emoji: '🔥',
+                icon: Icons.local_fire_department_rounded,
                 label: l10n.profileBadgeSevenDays,
                 color: p.amber,
                 locked: !hasWeekStreak,
@@ -429,7 +429,7 @@ class _BadgesSection extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _BadgeCard(
-                emoji: '📖',
+                icon: Icons.menu_book_rounded,
                 label: l10n.profileBadgeReader,
                 color: p.accent,
                 locked: true,
@@ -439,7 +439,7 @@ class _BadgesSection extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _BadgeCard(
-                emoji: '🏆',
+                icon: Icons.emoji_events_rounded,
                 label: l10n.profileBadgeThirtyDays,
                 color: p.amber,
                 locked: stats.streakDays < 30,
@@ -455,13 +455,13 @@ class _BadgesSection extends StatelessWidget {
 
 class _BadgeCard extends StatelessWidget {
   const _BadgeCard({
-    required this.emoji,
+    required this.icon,
     required this.label,
     required this.color,
     required this.locked,
     required this.p,
   });
-  final String emoji;
+  final IconData icon;
   final String label;
   final Color color;
   final bool locked;
@@ -481,7 +481,7 @@ class _BadgeCard extends StatelessWidget {
         children: [
           Opacity(
             opacity: locked ? 0.4 : 1.0,
-            child: Text(emoji, style: const TextStyle(fontSize: 24)),
+            child: Icon(icon, size: 22, color: color),
           ),
           const SizedBox(height: 6),
           Text(
