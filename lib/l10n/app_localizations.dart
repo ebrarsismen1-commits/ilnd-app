@@ -182,12 +182,6 @@ abstract class AppLocalizations {
   /// **'Keşfet'**
   String get navExplore;
 
-  /// Bottom nav: tracking tab
-  ///
-  /// In tr, this message translates to:
-  /// **'Takip'**
-  String get navTracking;
-
   /// Bottom nav: community tab
   ///
   /// In tr, this message translates to:
@@ -205,12 +199,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'ilnd'**
   String get navRing;
-
-  /// Accessibility label for the center ring
-  ///
-  /// In tr, this message translates to:
-  /// **'ILND ile sohbeti aç'**
-  String get a11yOpenChat;
 
   /// Community screen title
   ///
@@ -1310,12 +1298,6 @@ abstract class AppLocalizations {
   /// **'puan'**
   String get profileStatPoints;
 
-  /// Badge count stat label
-  ///
-  /// In tr, this message translates to:
-  /// **'rozet'**
-  String get profileStatBadge;
-
   /// Badges section label
   ///
   /// In tr, this message translates to:
@@ -1411,12 +1393,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'arkadaşını davet et'**
   String get profileInviteFriend;
-
-  /// Generic settings row
-  ///
-  /// In tr, this message translates to:
-  /// **'ayarlar'**
-  String get profileSettingsRow;
 
   /// Privacy policy settings row
   ///
@@ -1514,17 +1490,11 @@ abstract class AppLocalizations {
   /// **'yazılar'**
   String get exploreFilterArticles;
 
-  /// Featured section label
+  /// Shown when a tag filter matches no articles
   ///
   /// In tr, this message translates to:
-  /// **'ÖNE ÇIKANLAR'**
-  String get exploreFeaturedLabel;
-
-  /// See-all link with arrow
-  ///
-  /// In tr, this message translates to:
-  /// **'hepsi →'**
-  String get exploreSeeAllArrow;
+  /// **'bu etikette henüz yazı yok'**
+  String get exploreFilterEmpty;
 
   /// Section label above the full article list on Explore
   ///
@@ -2240,12 +2210,6 @@ abstract class AppLocalizations {
   /// **'MAKROLAR'**
   String get takipMacrosLabel;
 
-  /// Macro row label: calories
-  ///
-  /// In tr, this message translates to:
-  /// **'kalori'**
-  String get takipCalories;
-
   /// Macro row label: protein
   ///
   /// In tr, this message translates to:
@@ -2426,18 +2390,6 @@ abstract class AppLocalizations {
   /// **'aklındakini konuş'**
   String get ekleAskIlndSubtitle;
 
-  /// Home tracking card subtitle
-  ///
-  /// In tr, this message translates to:
-  /// **'adımların, öğünlerin, alışkanlıkların'**
-  String get homeTrackingCardSubtitle;
-
-  /// Home tracking card live summary of today's totals
-  ///
-  /// In tr, this message translates to:
-  /// **'{kcal} kcal · {water} ml · {habits} alışkanlık'**
-  String homeTrackingCardSummary(int kcal, int water, int habits);
-
   /// Error when habit name is empty
   ///
   /// In tr, this message translates to:
@@ -2605,12 +2557,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'analiz ediliyor...'**
   String get yemekEkleAnalyzing;
-
-  /// Macro card label: calories
-  ///
-  /// In tr, this message translates to:
-  /// **'KALORİ'**
-  String get yemekEkleCalories;
 
   /// Macro card label: protein
   ///
@@ -2918,30 +2864,6 @@ abstract class AppLocalizations {
   /// **'Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.'**
   String get reminderPermissionDenied;
 
-  /// One-time home card inviting the user to enable the daily reminder — ILND's voice
-  ///
-  /// In tr, this message translates to:
-  /// **'Akşamları sana yazayım mı?'**
-  String get homeReminderInviteTitle;
-
-  /// Body of the one-time reminder invite card — once a day, no pressure
-  ///
-  /// In tr, this message translates to:
-  /// **'Günde bir kez, nazikçe. Saatini istediğin zaman ayarlardan değiştirebilirsin.'**
-  String get homeReminderInviteBody;
-
-  /// Accept button on the reminder invite card; triggers the permission request
-  ///
-  /// In tr, this message translates to:
-  /// **'Olur, hatırlat'**
-  String get homeReminderInviteAccept;
-
-  /// Decline button on the reminder invite card; dismisses it permanently
-  ///
-  /// In tr, this message translates to:
-  /// **'Şimdi değil'**
-  String get homeReminderInviteLater;
-
   /// Explore shelf label above the guided plans row
   ///
   /// In tr, this message translates to:
@@ -2971,12 +2893,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'{day}. güne devam et'**
   String planContinue(int day);
-
-  /// Button shown on a plan whose days are all completed
-  ///
-  /// In tr, this message translates to:
-  /// **'yeniden başla'**
-  String get planRestart;
 
   /// Line shown on a plan whose days are all completed
   ///

@@ -16,11 +16,9 @@
 
   "navHome": "Today",
   "navExplore": "Explore",
-  "navTracking": "Tracking",
   "navCommunity": "Community",
   "navYou": "You",
   "navRing": "ilnd",
-  "a11yOpenChat": "Open chat with ILND",
 
   "topulukTitle": "community.",
   "topulukTagline": "in your city, by your side",
@@ -292,7 +290,6 @@
   "profileAboutYouLabel": "ABOUT YOU",
   "profileStatStreak": "streak",
   "profileStatPoints": "points",
-  "profileStatBadge": "badges",
   "profileBadgesLabel": "BADGES",
   "profileBadgeFirstStep": "first step",
   "profileBadgeSevenDays": "7-day",
@@ -310,7 +307,6 @@
   "profileGoPremium": "upgrade to ILND+",
   "profileSettingsLabel": "SETTINGS",
   "profileInviteFriend": "invite a friend",
-  "profileSettingsRow": "settings",
   "profilePrivacyPolicy": "privacy policy",
   "profileTermsOfService": "terms of service",
   "profileSignedOut": "Signed out. See you soon",
@@ -328,8 +324,9 @@
   "exploreFilterWellness": "wellness",
   "exploreFilterRecipes": "recipes",
   "exploreFilterArticles": "articles",
-  "exploreFeaturedLabel": "FEATURED",
-  "exploreSeeAllArrow": "see all →",
+  "exploreFilterEmpty": "nothing under this tag yet",
+  "@exploreFilterEmpty": {"description": "Shown when a tag filter matches no articles"},
+
   "exploreMoreLabel": "MORE",
   "@exploreMoreLabel": {"description": "Section label above the full article list on Explore"},
 
@@ -478,7 +475,6 @@
   "splashTagline": "feel good, live good",
   "takipTitle": "tracking",
   "takipMacrosLabel": "MACROS",
-  "takipCalories": "calories",
   "takipProtein": "protein",
   "takipCarbs": "carbs",
   "takipFat": "fat",
@@ -533,9 +529,6 @@
   "ekleSheetSubtitle": "what would you like to do?",
   "ekleAskIlndTitle": "ask ILND",
   "ekleAskIlndSubtitle": "talk it through",
-  "homeTrackingCardSubtitle": "your steps, meals, habits",
-
-  "homeTrackingCardSummary": "{kcal} kcal · {water} ml · {habits} habits",
 
   "gorevEkleNameEmpty": "Give the habit a name first.",
   "gorevEkleSuccess": "Habit added!",
@@ -588,7 +581,6 @@
   "yemekEkleOpenCamera": "open camera",
   "yemekEkleChooseFromGallery": "choose from gallery",
   "yemekEkleAnalyzing": "analyzing...",
-  "yemekEkleCalories": "CALORIES",
   "yemekEkleProtein": "PROTEIN",
   "yemekEkleCarbs": "CARBS",
   "yemekEkleFat": "FAT",
@@ -668,17 +660,11 @@
   "reminderNotificationBody": "A small moment is enough today. One sentence, one breath — ILND is here.",
   "reminderPermissionDenied": "Notification permission was declined. Allow it in device settings and I can remind you.",
 
-  "homeReminderInviteTitle": "Want me to write to you in the evenings?",
-  "homeReminderInviteBody": "Once a day, gently. You can change the time in settings whenever you like.",
-  "homeReminderInviteAccept": "Sure, remind me",
-  "homeReminderInviteLater": "Not now",
-
   "planShelfLabel": "PLANS",
   "planDayCount": "{count, plural, =1{1 day} other{{count} days}}",
   "planProgress": "{done}/{total} days",
   "planStart": "start",
   "planContinue": "continue with day {day}",
-  "planRestart": "start over",
   "planAllDone": "you finished the plan",
   "planDayDone": "done",
   "planDayLabel": "day {day}",

@@ -81,7 +81,7 @@ void main() {
     final labels = <String, String>{
       'homeTodaysReadTitle': tr.homeTodaysReadTitle,
       'trioSectionTitle': tr.trioSectionTitle,
-      'exploreFeaturedLabel': tr.exploreFeaturedLabel,
+      'exploreMoreLabel': tr.exploreMoreLabel,
       'exploreRitualsLabel': tr.exploreRitualsLabel,
       'profileGoalsLabel': tr.profileGoalsLabel,
       'profileBadgesLabel': tr.profileBadgesLabel,
@@ -93,6 +93,8 @@ void main() {
       'takipHabitsLabel': tr.takipHabitsLabel,
       'movementShelfLabel': tr.movementShelfLabel,
       'topulukUpcomingLabel': tr.topulukUpcomingLabel,
+      'adanLabel': tr.adanLabel,
+      'adanItemsLabel': tr.adanItemsLabel,
       'referralYourCode': tr.referralYourCode,
     };
 

@@ -53,9 +53,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navExplore => 'Keşfet';
 
   @override
-  String get navTracking => 'Takip';
-
-  @override
   String get navCommunity => 'Topluluk';
 
   @override
@@ -63,9 +60,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get navRing => 'ilnd';
-
-  @override
-  String get a11yOpenChat => 'ILND ile sohbeti aç';
 
   @override
   String get topulukTitle => 'topluluk.';
@@ -651,9 +645,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileStatPoints => 'puan';
 
   @override
-  String get profileStatBadge => 'rozet';
-
-  @override
   String get profileBadgesLabel => 'ROZETLER';
 
   @override
@@ -700,9 +691,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get profileInviteFriend => 'arkadaşını davet et';
-
-  @override
-  String get profileSettingsRow => 'ayarlar';
 
   @override
   String get profilePrivacyPolicy => 'gizlilik politikası';
@@ -754,10 +742,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exploreFilterArticles => 'yazılar';
 
   @override
-  String get exploreFeaturedLabel => 'ÖNE ÇIKANLAR';
-
-  @override
-  String get exploreSeeAllArrow => 'hepsi →';
+  String get exploreFilterEmpty => 'bu etikette henüz yazı yok';
 
   @override
   String get exploreMoreLabel => 'DAHA FAZLA';
@@ -1158,9 +1143,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get takipMacrosLabel => 'MAKROLAR';
 
   @override
-  String get takipCalories => 'kalori';
-
-  @override
   String get takipProtein => 'protein';
 
   @override
@@ -1262,15 +1244,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get ekleAskIlndSubtitle => 'aklındakini konuş';
 
   @override
-  String get homeTrackingCardSubtitle =>
-      'adımların, öğünlerin, alışkanlıkların';
-
-  @override
-  String homeTrackingCardSummary(int kcal, int water, int habits) {
-    return '$kcal kcal · $water ml · $habits alışkanlık';
-  }
-
-  @override
   String get gorevEkleNameEmpty => 'Önce alışkanlığa bir ad ver.';
 
   @override
@@ -1366,9 +1339,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get yemekEkleAnalyzing => 'analiz ediliyor...';
-
-  @override
-  String get yemekEkleCalories => 'KALORİ';
 
   @override
   String get yemekEkleProtein => 'PROTEİN';
@@ -1566,19 +1536,6 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.';
 
   @override
-  String get homeReminderInviteTitle => 'Akşamları sana yazayım mı?';
-
-  @override
-  String get homeReminderInviteBody =>
-      'Günde bir kez, nazikçe. Saatini istediğin zaman ayarlardan değiştirebilirsin.';
-
-  @override
-  String get homeReminderInviteAccept => 'Olur, hatırlat';
-
-  @override
-  String get homeReminderInviteLater => 'Şimdi değil';
-
-  @override
   String get planShelfLabel => 'PLANLAR';
 
   @override
@@ -1604,9 +1561,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String planContinue(int day) {
     return '$day. güne devam et';
   }
-
-  @override
-  String get planRestart => 'yeniden başla';
 
   @override
   String get planAllDone => 'planı tamamladın';

@@ -232,8 +232,21 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 AppSpacing.screenPadding,
                 40,
               ),
+              // Boş sonuç SESSİZ kalmamalı: etikete dokunup listenin yok
+              // olmasını izlemek "uygulama bozuldu" gibi okunuyor.
               sliver: filtered.isEmpty
-                  ? const SliverToBoxAdapter(child: SizedBox.shrink())
+                  ? SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 24),
+                        child: Text(
+                          l10n.exploreFilterEmpty,
+                          style: AppTextStyles.body(
+                            fontSize: 13,
+                            color: p.textMuted,
+                          ),
+                        ),
+                      ),
+                    )
                   : SliverList.separated(
                       itemCount: filtered.length,
                       // Kart yok; satirlari 0.5px hairline ayirir.

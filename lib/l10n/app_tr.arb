@@ -41,16 +41,12 @@
   "@navHome": {"description": "Bottom nav: home tab"},
   "navExplore": "Keşfet",
   "@navExplore": {"description": "Bottom nav: explore tab"},
-  "navTracking": "Takip",
-  "@navTracking": {"description": "Bottom nav: tracking tab"},
   "navCommunity": "Topluluk",
   "@navCommunity": {"description": "Bottom nav: community tab"},
   "navYou": "Sen",
   "@navYou": {"description": "Bottom nav: you tab (profile+tracking)"},
   "navRing": "ilnd",
   "@navRing": {"description": "Center breathing ring label"},
-  "a11yOpenChat": "ILND ile sohbeti aç",
-  "@a11yOpenChat": {"description": "Accessibility label for the center ring"},
 
   "topulukTitle": "topluluk.",
   "@topulukTitle": {"description": "Community screen title"},
@@ -591,9 +587,6 @@
   "profileStatPoints": "puan",
   "@profileStatPoints": {"description": "Points stat label"},
 
-  "profileStatBadge": "rozet",
-  "@profileStatBadge": {"description": "Badge count stat label"},
-
   "profileBadgesLabel": "ROZETLER",
   "@profileBadgesLabel": {"description": "Badges section label"},
 
@@ -641,9 +634,6 @@
 
   "profileInviteFriend": "arkadaşını davet et",
   "@profileInviteFriend": {"description": "Invite a friend settings row"},
-
-  "profileSettingsRow": "ayarlar",
-  "@profileSettingsRow": {"description": "Generic settings row"},
 
   "profilePrivacyPolicy": "gizlilik politikası",
   "@profilePrivacyPolicy": {"description": "Privacy policy settings row"},
@@ -693,11 +683,8 @@
   "exploreFilterArticles": "yazılar",
   "@exploreFilterArticles": {"description": "Explore filter: articles"},
 
-  "exploreFeaturedLabel": "ÖNE ÇIKANLAR",
-  "@exploreFeaturedLabel": {"description": "Featured section label"},
-
-  "exploreSeeAllArrow": "hepsi →",
-  "@exploreSeeAllArrow": {"description": "See-all link with arrow"},
+  "exploreFilterEmpty": "bu etikette henüz yazı yok",
+  "@exploreFilterEmpty": {"description": "Shown when a tag filter matches no articles"},
 
   "exploreMoreLabel": "DAHA FAZLA",
   "@exploreMoreLabel": {"description": "Section label above the full article list on Explore"},
@@ -1098,9 +1085,6 @@
   "takipMacrosLabel": "MAKROLAR",
   "@takipMacrosLabel": {"description": "Macros card section label"},
 
-  "takipCalories": "kalori",
-  "@takipCalories": {"description": "Macro row label: calories"},
-
   "takipProtein": "protein",
   "@takipProtein": {"description": "Macro row label: protein"},
 
@@ -1213,19 +1197,6 @@
   "ekleAskIlndSubtitle": "aklındakini konuş",
   "@ekleAskIlndSubtitle": {"description": "ILND sheet primary action subtitle"},
 
-  "homeTrackingCardSubtitle": "adımların, öğünlerin, alışkanlıkların",
-  "@homeTrackingCardSubtitle": {"description": "Home tracking card subtitle"},
-
-  "homeTrackingCardSummary": "{kcal} kcal · {water} ml · {habits} alışkanlık",
-  "@homeTrackingCardSummary": {
-    "description": "Home tracking card live summary of today's totals",
-    "placeholders": {
-      "kcal": {"type": "int"},
-      "water": {"type": "int"},
-      "habits": {"type": "int"}
-    }
-  },
-
   "gorevEkleNameEmpty": "Önce alışkanlığa bir ad ver.",
   "@gorevEkleNameEmpty": {"description": "Error when habit name is empty"},
 
@@ -1330,9 +1301,6 @@
 
   "yemekEkleAnalyzing": "analiz ediliyor...",
   "@yemekEkleAnalyzing": {"description": "Food photo analysis loading message"},
-
-  "yemekEkleCalories": "KALORİ",
-  "@yemekEkleCalories": {"description": "Macro card label: calories"},
 
   "yemekEkleProtein": "PROTEİN",
   "@yemekEkleProtein": {"description": "Macro card label: protein"},
@@ -1511,18 +1479,6 @@
   "reminderPermissionDenied": "Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.",
   "@reminderPermissionDenied": {"description": "Toast shown when the notification permission is declined"},
 
-  "homeReminderInviteTitle": "Akşamları sana yazayım mı?",
-  "@homeReminderInviteTitle": {"description": "One-time home card inviting the user to enable the daily reminder — ILND's voice"},
-
-  "homeReminderInviteBody": "Günde bir kez, nazikçe. Saatini istediğin zaman ayarlardan değiştirebilirsin.",
-  "@homeReminderInviteBody": {"description": "Body of the one-time reminder invite card — once a day, no pressure"},
-
-  "homeReminderInviteAccept": "Olur, hatırlat",
-  "@homeReminderInviteAccept": {"description": "Accept button on the reminder invite card; triggers the permission request"},
-
-  "homeReminderInviteLater": "Şimdi değil",
-  "@homeReminderInviteLater": {"description": "Decline button on the reminder invite card; dismisses it permanently"},
-
   "planShelfLabel": "PLANLAR",
   "@planShelfLabel": {"description": "Explore shelf label above the guided plans row"},
 
@@ -1553,9 +1509,6 @@
       "day": {"type": "int"}
     }
   },
-
-  "planRestart": "yeniden başla",
-  "@planRestart": {"description": "Button shown on a plan whose days are all completed"},
 
   "planAllDone": "planı tamamladın",
   "@planAllDone": {"description": "Line shown on a plan whose days are all completed"},

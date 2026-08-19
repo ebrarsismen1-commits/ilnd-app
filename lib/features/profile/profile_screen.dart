@@ -14,6 +14,7 @@ import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/auth/auth_error_l10n.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
+import 'package:ilnd_app/features/adan/adan_repository.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
 import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
@@ -309,6 +310,8 @@ class _StatsRow extends StatelessWidget {
     final journalCount = statsAsync.valueOrNull?.weeklyJournalCount ?? 0;
     final foodCount = statsAsync.valueOrNull?.weeklyFoodCount ?? 0;
     final puan = streak * 10 + journalCount * 5 + foodCount * 3;
+    final islandItems =
+        ref.watch(islandStateProvider).valueOrNull?.earnedCount ?? 0;
 
     // Handoff §5: üç ayrı kart değil, hairline'la çerçevelenmiş TEK şerit.
     // Kartlar üç sayıyı üç ayrı nesne gibi gösteriyordu; oysa bunlar aynı
@@ -336,8 +339,11 @@ class _StatsRow extends StatelessWidget {
               ),
               Expanded(
                 child: _Stat(
-                  value: streak >= 7 ? '2' : '1',
-                  label: l10n.profileStatBadge,
+                  // Eskiden `streak >= 7 ? 2 : 1` yazan uydurma bir "rozet"
+                  // sayacıydı — hiçbir şeyi saymıyordu. Artık sunucunun
+                  // verdiği gerçek ada öğesi sayısı (ADR-0006).
+                  value: '$islandItems',
+                  label: l10n.profileStatIslandItems,
                   p: p,
                 ),
               ),

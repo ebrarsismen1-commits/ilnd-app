@@ -77,3 +77,9 @@ functions/serviceAccountKey*.json
 
 # Owner'in yerel calisma notlari — iki kez kazara commit'lendi (git add -A docs)
 docs/tanitim_videosu_akisi.md
+
+# Emulator artigi
+functions/firestore-debug.log
+
+# Owner'in verdigi tasarim paketi — depoya girmez, diskte durur
+ilnd app mobile design.zip

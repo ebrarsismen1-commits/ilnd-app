@@ -52,9 +52,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navExplore => 'Explore';
 
   @override
-  String get navTracking => 'Tracking';
-
-  @override
   String get navCommunity => 'Community';
 
   @override
@@ -62,9 +59,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navRing => 'ilnd';
-
-  @override
-  String get a11yOpenChat => 'Open chat with ILND';
 
   @override
   String get topulukTitle => 'community.';
@@ -664,9 +658,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileStatPoints => 'points';
 
   @override
-  String get profileStatBadge => 'badges';
-
-  @override
   String get profileBadgesLabel => 'BADGES';
 
   @override
@@ -713,9 +704,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileInviteFriend => 'invite a friend';
-
-  @override
-  String get profileSettingsRow => 'settings';
 
   @override
   String get profilePrivacyPolicy => 'privacy policy';
@@ -768,10 +756,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreFilterArticles => 'articles';
 
   @override
-  String get exploreFeaturedLabel => 'FEATURED';
-
-  @override
-  String get exploreSeeAllArrow => 'see all →';
+  String get exploreFilterEmpty => 'nothing under this tag yet';
 
   @override
   String get exploreMoreLabel => 'MORE';
@@ -1176,9 +1161,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takipMacrosLabel => 'MACROS';
 
   @override
-  String get takipCalories => 'calories';
-
-  @override
   String get takipProtein => 'protein';
 
   @override
@@ -1280,14 +1262,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ekleAskIlndSubtitle => 'talk it through';
 
   @override
-  String get homeTrackingCardSubtitle => 'your steps, meals, habits';
-
-  @override
-  String homeTrackingCardSummary(int kcal, int water, int habits) {
-    return '$kcal kcal · $water ml · $habits habits';
-  }
-
-  @override
   String get gorevEkleNameEmpty => 'Give the habit a name first.';
 
   @override
@@ -1383,9 +1357,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yemekEkleAnalyzing => 'analyzing...';
-
-  @override
-  String get yemekEkleCalories => 'CALORIES';
 
   @override
   String get yemekEkleProtein => 'PROTEIN';
@@ -1587,20 +1558,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Notification permission was declined. Allow it in device settings and I can remind you.';
 
   @override
-  String get homeReminderInviteTitle =>
-      'Want me to write to you in the evenings?';
-
-  @override
-  String get homeReminderInviteBody =>
-      'Once a day, gently. You can change the time in settings whenever you like.';
-
-  @override
-  String get homeReminderInviteAccept => 'Sure, remind me';
-
-  @override
-  String get homeReminderInviteLater => 'Not now';
-
-  @override
   String get planShelfLabel => 'PLANS';
 
   @override
@@ -1626,9 +1583,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String planContinue(int day) {
     return 'continue with day $day';
   }
-
-  @override
-  String get planRestart => 'start over';
 
   @override
   String get planAllDone => 'you finished the plan';

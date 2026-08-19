@@ -74,7 +74,7 @@ class _AdanScreenState extends ConsumerState<AdanScreen> {
               const SizedBox(height: 20),
               Entrance(
                 index: 0,
-                child: AdanCanvas(state: state, p: p),
+                child: AdanCanvas(state: state, p: p, showWordmark: false),
               ),
               const SizedBox(height: 24),
               Entrance(
@@ -135,10 +135,20 @@ class _AdanScreenState extends ConsumerState<AdanScreen> {
 /// Ada yüzeyi. İllüstrasyon gelene kadar sade bir alan — kazanılan öğe
 /// sayısını taşır. Boş bir çerçeveye "ada" demek yerine ne olduğunu söyler.
 class AdanCanvas extends StatelessWidget {
-  const AdanCanvas({super.key, required this.state, required this.p});
+  const AdanCanvas({
+    super.key,
+    required this.state,
+    required this.p,
+    this.showWordmark = true,
+  });
 
   final IslandState state;
   final AppPalette p;
+
+  /// Kartın sol üstündeki serif `adan.` imzası. Adan ekranında başlık zaten
+  /// aynı kelimeyi söylüyor, orada kapatılır — Bugün'de ise kartı adlandıran
+  /// tek şey bu (prototip §1: sol üstte Noto Serif 19 "adan.").
+  final bool showWordmark;
 
   @override
   Widget build(BuildContext context) {
@@ -156,10 +166,13 @@ class AdanCanvas extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            l10n.adanLabel,
-            style: AppTextStyles.sectionLabel(color: p.accent),
-          ),
+          if (showWordmark)
+            Text(
+              l10n.adanTitle,
+              style: AppTextStyles.heading(fontSize: 19, color: p.accent),
+            )
+          else
+            const SizedBox.shrink(),
           Text(
             next == null
                 ? '${state.earnedCount}'
