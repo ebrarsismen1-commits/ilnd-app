@@ -289,6 +289,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get welcomeTaglineEn => 'journal, track your mood, talk to ILND.';
 
   @override
+  String get welcomeBeatMemory => 'ILND yazdıklarından öğrenir, seni hatırlar';
+
+  @override
+  String get welcomeBeatCommunity =>
+      'şehrindeki buluşmalarda yüz yüze görüşürüz';
+
+  @override
   String get welcomeStart => 'başla';
 
   @override

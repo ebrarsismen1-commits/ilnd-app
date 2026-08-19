@@ -620,6 +620,18 @@ abstract class AppLocalizations {
   /// **'journal, track your mood, talk to ILND.'**
   String get welcomeTaglineEn;
 
+  /// Welcome screen value beat
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND yazdıklarından öğrenir, seni hatırlar'**
+  String get welcomeBeatMemory;
+
+  /// Welcome screen value beat
+  ///
+  /// In tr, this message translates to:
+  /// **'şehrindeki buluşmalarda yüz yüze görüşürüz'**
+  String get welcomeBeatCommunity;
+
   /// Welcome screen start button
   ///
   /// In tr, this message translates to:

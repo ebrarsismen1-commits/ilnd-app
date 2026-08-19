@@ -301,6 +301,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get welcomeTaglineEn => 'journal, track your mood, talk to ILND.';
 
   @override
+  String get welcomeBeatMemory =>
+      'ILND learns from what you write and remembers you';
+
+  @override
+  String get welcomeBeatCommunity =>
+      'we meet face to face at gatherings in your city';
+
+  @override
   String get welcomeStart => 'start';
 
   @override

@@ -58,9 +58,10 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 Text(
                   l10n.welcomeTagline,
                   style: AppTextStyles.body(
-                    fontSize: 19,
+                    fontSize: 18,
                     color: p.textMuted,
-                  ).copyWith(letterSpacing: 0.2),
+                    height: 1.45,
+                  ),
                 ),
                 // İki dilli marka dokunuşu: Türkçe satırın altında soluk
                 // İngilizcesi. İngilizce cihazda ikisi de aynı cümle olur ve
@@ -73,7 +74,14 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                       color: p.textMuted.withValues(alpha: 0.7),
                     ).copyWith(letterSpacing: 0.2),
                   ),
-                const Spacer(flex: 4),
+                const Spacer(flex: 2),
+                // Üç değer önerisi satırı (prototip: welcomeBeats). Adan'ı
+                // tanıtan ilk satır Faz 8'de, Adan yüzeyiyle birlikte gelir —
+                // olmayan bir özelliğin sözünü vermemek için.
+                _Beat(text: l10n.welcomeBeatMemory, p: p),
+                const SizedBox(height: 14),
+                _Beat(text: l10n.welcomeBeatCommunity, p: p),
+                const Spacer(flex: 2),
                 const SocialProofBadge(),
                 const SizedBox(height: 12),
                 SizedBox(
@@ -124,6 +132,38 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Değer önerisi satırı: 7px accent nokta + tek cümle (prototip §12).
+class _Beat extends StatelessWidget {
+  const _Beat({required this.text, required this.p});
+  final String text;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 7,
+          height: 7,
+          margin: const EdgeInsets.only(top: 7, right: 12),
+          decoration: BoxDecoration(shape: BoxShape.circle, color: p.accent),
+        ),
+        Expanded(
+          child: Text(
+            text,
+            style: AppTextStyles.body(
+              fontSize: 13.5,
+              color: p.text,
+              height: 1.45,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

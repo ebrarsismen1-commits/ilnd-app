@@ -98,6 +98,12 @@
 
   "welcomeTagline": "journal, track your mood, talk to ILND.",
   "welcomeTaglineEn": "journal, track your mood, talk to ILND.",
+  "welcomeBeatMemory": "ILND learns from what you write and remembers you",
+  "@welcomeBeatMemory": {"description": "Welcome screen value beat"},
+
+  "welcomeBeatCommunity": "we meet face to face at gatherings in your city",
+  "@welcomeBeatCommunity": {"description": "Welcome screen value beat"},
+
   "welcomeStart": "start",
   "welcomeHaveAccount": "already have an account? ",
   "welcomeLoginLink": "sign in",

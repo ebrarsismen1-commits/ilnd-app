@@ -157,7 +157,11 @@ class _RunnerPhase extends ConsumerWidget {
           const SizedBox(height: 8),
           Text(
             l10n.sleepRitualStepProgress(flow.index + 1, flow.queue.length),
-            style: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
+            style: AppTextStyles.label(
+              fontSize: 10,
+              color: p.textMuted,
+              letterSpacingEm: 0.14,
+            ),
           ),
           const SizedBox(height: 12),
           Expanded(
@@ -465,26 +469,48 @@ class _TextStepState extends State<_TextStep> {
         const SizedBox(height: 24),
         Text(
           widget.spec.prompt,
-          style: AppTextStyles.display(fontSize: 24, color: p.text),
+          style: AppTextStyles.display(
+            fontSize: 30,
+            color: p.text,
+            height: 1.15,
+          ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 26),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          constraints: const BoxConstraints(minHeight: 92),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: p.surface,
+            // Ekran her zaman gece paletinde; degerler prototipten birebir.
+            color: Colors.white.withValues(alpha: 0.06),
             borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.16),
+              width: 0.5,
+            ),
           ),
           child: TextField(
             controller: _ctrl,
+            maxLines: null,
             textCapitalization: TextCapitalization.sentences,
             textInputAction: TextInputAction.done,
-            style: AppTextStyles.body(fontSize: 15, color: p.text),
+            style: AppTextStyles.display(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: p.text,
+              height: 1.4,
+            ),
             decoration: InputDecoration(
               hintText: widget.spec.hint.isNotEmpty
                   ? widget.spec.hint
                   : l10n.sleepRitualUnloadHint,
-              hintStyle: AppTextStyles.body(fontSize: 15, color: p.textMuted),
+              hintStyle: AppTextStyles.body(
+                fontSize: 14,
+                color: p.textMuted,
+                height: 1.6,
+              ),
               border: InputBorder.none,
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
             ),
             onChanged: widget.onChanged,
             onSubmitted: (_) => widget.onContinue(),

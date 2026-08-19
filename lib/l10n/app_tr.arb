@@ -232,6 +232,12 @@
   "welcomeTaglineEn": "journal, track your mood, talk to ILND.",
   "@welcomeTaglineEn": {"description": "Welcome screen tagline (English subtitle shown alongside Turkish)"},
 
+  "welcomeBeatMemory": "ILND yazdıklarından öğrenir, seni hatırlar",
+  "@welcomeBeatMemory": {"description": "Welcome screen value beat"},
+
+  "welcomeBeatCommunity": "şehrindeki buluşmalarda yüz yüze görüşürüz",
+  "@welcomeBeatCommunity": {"description": "Welcome screen value beat"},
+
   "welcomeStart": "başla",
   "@welcomeStart": {"description": "Welcome screen start button"},
 

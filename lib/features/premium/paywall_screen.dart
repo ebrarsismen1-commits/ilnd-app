@@ -116,13 +116,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   if (widget.reason != null) ...[
                     Text(
                       widget.reason!,
-                      style: AppTextStyles.body(fontSize: 13, color: p.accent),
+                      style: AppTextStyles.body(fontSize: 14, color: p.accent),
                     ),
                     const SizedBox(height: 8),
                   ],
                   Text(
                     'ILND+',
-                    style: AppTextStyles.display(fontSize: 40, color: p.text),
+                    style: AppTextStyles.display(fontSize: 42, color: p.text),
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -135,25 +135,21 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   ),
                   const SizedBox(height: 24),
                   _Benefit(
-                    icon: Icons.all_inclusive_rounded,
                     title: l10n.paywallBenefitUnlimitedChatTitle,
                     subtitle: l10n.paywallBenefitUnlimitedChatSubtitle,
                     p: p,
                   ),
                   _Benefit(
-                    icon: Icons.psychology_outlined,
                     title: l10n.paywallBenefitLongMemoryTitle,
                     subtitle: l10n.paywallBenefitLongMemorySubtitle,
                     p: p,
                   ),
                   _Benefit(
-                    icon: Icons.favorite_border_rounded,
                     title: l10n.paywallBenefitProactiveTitle,
                     subtitle: l10n.paywallBenefitProactiveSubtitle,
                     p: p,
                   ),
                   _Benefit(
-                    icon: Icons.map_outlined,
                     title: l10n.paywallBenefitPersonalPlanTitle,
                     subtitle: l10n.paywallBenefitPersonalPlanSubtitle,
                     p: p,
@@ -305,56 +301,49 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
 class _Benefit extends StatelessWidget {
   const _Benefit({
-    required this.icon,
     required this.title,
     required this.subtitle,
     required this.p,
   });
 
-  final IconData icon;
   final String title;
   final String subtitle;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: p.accent.withValues(alpha: 0.22),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, size: 20, color: p.accent),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.heading(fontSize: 15, color: p.text),
+    // Kart ya da ikon dairesi yok: faydalar hairline'la ayrılmış satırlar
+    // (prototip §11). Dört daire, dört sözü birbirinin kopyası gibi
+    // gösteriyordu.
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: AppTextStyles.heading(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: p.text,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.body(
-                    fontSize: 13,
-                    color: p.textMuted,
-                    height: 1.4,
-                  ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                subtitle,
+                style: AppTextStyles.body(
+                  fontSize: 12.5,
+                  color: p.textMuted,
+                  height: 1.45,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Container(height: 0.5, color: p.border),
+      ],
     );
   }
 }
