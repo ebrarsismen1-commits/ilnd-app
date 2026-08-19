@@ -74,3 +74,6 @@ CLAUDE.md
 
 # Admin SDK anahtari — asla commit edilmez (çift uzantılı kopyalar dahil)
 functions/serviceAccountKey*.json
+
+# Owner'in yerel calisma notlari — iki kez kazara commit'lendi (git add -A docs)
+docs/tanitim_videosu_akisi.md
