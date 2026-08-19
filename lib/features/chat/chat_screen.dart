@@ -7,7 +7,6 @@ import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/chat/chat_provider.dart';
@@ -99,36 +98,33 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: Column(
-            children: [
-              _Header(p: p, l10n: l10n),
-              Expanded(
-                child: state.messages.isEmpty
-                    ? _EmptyState(name: name, p: p, l10n: l10n)
-                    : ListView.builder(
-                        controller: _scrollController,
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.screenPadding,
-                          12,
-                          AppSpacing.screenPadding,
-                          12,
-                        ),
-                        itemCount: state.messages.length,
-                        itemBuilder: (context, i) =>
-                            _Bubble(message: state.messages[i], p: p),
+      body: SafeArea(
+        child: Column(
+          children: [
+            _Header(p: p, l10n: l10n),
+            Expanded(
+              child: state.messages.isEmpty
+                  ? _EmptyState(name: name, p: p, l10n: l10n)
+                  : ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.screenPadding,
+                        12,
+                        AppSpacing.screenPadding,
+                        12,
                       ),
-              ),
-              _Composer(
-                controller: _controller,
-                sending: state.sending,
-                onSend: _send,
-                p: p,
-              ),
-            ],
-          ),
+                      itemCount: state.messages.length,
+                      itemBuilder: (context, i) =>
+                          _Bubble(message: state.messages[i], p: p),
+                    ),
+            ),
+            _Composer(
+              controller: _controller,
+              sending: state.sending,
+              onSend: _send,
+              p: p,
+            ),
+          ],
         ),
       ),
     );

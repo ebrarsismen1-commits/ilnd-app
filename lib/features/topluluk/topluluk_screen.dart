@@ -6,7 +6,6 @@ import 'package:ilnd_app/core/repositories/events_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
@@ -26,61 +25,58 @@ class TopulukScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 28),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.screenPadding,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 28),
+              Entrance(
+                index: 0,
+                child: Text(
+                  l10n.topulukTitle,
+                  style: AppTextStyles.display(fontSize: 30, color: p.text),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Entrance(
+                index: 1,
+                child: Text(
+                  l10n.topulukTagline,
+                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+                ),
+              ),
+              const SizedBox(height: 24),
+              if (events.isEmpty)
+                _EmptyInvite(l10n: l10n, p: p)
+              else ...[
                 Entrance(
-                  index: 0,
+                  index: 2,
                   child: Text(
-                    l10n.topulukTitle,
-                    style: AppTextStyles.display(fontSize: 30, color: p.text),
+                    l10n.topulukUpcomingLabel,
+                    style: AppTextStyles.sectionLabel(color: p.textMuted),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Entrance(
-                  index: 1,
-                  child: Text(
-                    l10n.topulukTagline,
-                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                if (events.isEmpty)
-                  _EmptyInvite(l10n: l10n, p: p)
-                else ...[
+                const SizedBox(height: 12),
+                for (final (i, e) in events.indexed) ...[
                   Entrance(
-                    index: 2,
-                    child: Text(
-                      l10n.topulukUpcomingLabel,
-                      style: AppTextStyles.sectionLabel(color: p.textMuted),
-                    ),
+                    index: 3 + i,
+                    child: _EventRow(event: e, p: p),
                   ),
-                  const SizedBox(height: 12),
-                  for (final (i, e) in events.indexed) ...[
-                    Entrance(
-                      index: 3 + i,
-                      child: _EventRow(event: e, p: p),
-                    ),
-                    Container(height: 0.5, color: p.border),
-                    const SizedBox(height: 20),
-                  ],
-                  const SizedBox(height: 12),
-                  Entrance(
-                    index: 3 + events.length,
-                    child: _InviteRow(l10n: l10n, p: p),
-                  ),
+                  Container(height: 0.5, color: p.border),
+                  const SizedBox(height: 20),
                 ],
-                const SizedBox(height: 40),
+                const SizedBox(height: 12),
+                Entrance(
+                  index: 3 + events.length,
+                  child: _InviteRow(l10n: l10n, p: p),
+                ),
               ],
-            ),
+              const SizedBox(height: 40),
+            ],
           ),
         ),
       ),

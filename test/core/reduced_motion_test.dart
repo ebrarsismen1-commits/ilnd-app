@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ilnd_app/core/theme/app_palette.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 
@@ -14,7 +12,7 @@ import 'package:ilnd_app/core/widgets/entrance.dart';
 /// Uygulamada aynı anda dört sürekli hareket vardı (zemin, giriş animasyonu,
 /// streak alevi, nefes halkası) ve hiçbiri bu ayarı dinlemiyordu.
 ///
-/// Not: `pumpAndSettle` KULLANILMAZ — AnimatedBackground normal modda sürekli
+/// Not: `pumpAndSettle` KULLANILMAZ — bazı ekranlarda sürekli
 /// döner, sahne hiç durulmaz (CLAUDE.md #12).
 Widget _wrap(Widget child, {required bool reduced}) => ProviderScope(
   child: MaterialApp(
@@ -73,39 +71,6 @@ void main() {
       t.scale.value,
       1.0,
       reason: 'Nefes ritmi dekoratif — azaltılmış modda durmalı',
-    );
-  });
-
-  testWidgets('AnimatedBackground azaltılmış modda gradyan yönü değişmez', (
-    tester,
-  ) async {
-    Alignment beginOf() {
-      final box = tester.widget<DecoratedBox>(
-        find
-            .descendant(
-              of: find.byType(AnimatedBackground),
-              matching: find.byType(DecoratedBox),
-            )
-            .first,
-      );
-      final gradient = (box.decoration as BoxDecoration).gradient!;
-      return (gradient as LinearGradient).begin as Alignment;
-    }
-
-    await tester.pumpWidget(
-      _wrap(
-        const AnimatedBackground(palette: AppPalette.light, lowPower: false),
-        reduced: true,
-      ),
-    );
-    await tester.pump();
-    final first = beginOf();
-
-    await tester.pump(const Duration(seconds: 5));
-    expect(
-      beginOf(),
-      first,
-      reason: 'Tam ekran sürekli hareket azaltılmış modda dondurulmalı',
     );
   });
 }

@@ -8,7 +8,6 @@ import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
@@ -37,91 +36,88 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenPadding,
-                  28,
-                  AppSpacing.screenPadding,
-                  32,
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                    Entrance(
-                      index: 0,
-                      child: _ProfileHeader(name: name, initial: initial, p: p),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 1,
-                      child: _StatsRow(p: p, ref: ref),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 2, child: _MemoryCard(p: p)),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 3,
-                      child: _BadgesSection(p: p, ref: ref),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 4,
-                      child: _WeeklySummaryCard(p: p, ref: ref),
-                    ),
-                    const SizedBox(height: 12),
-                    Entrance(
-                      index: 5,
-                      child: Pressable(
-                        onTap: () => context.push(routeVibeCard),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenPadding,
+                28,
+                AppSpacing.screenPadding,
+                32,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  Entrance(
+                    index: 0,
+                    child: _ProfileHeader(name: name, initial: initial, p: p),
+                  ),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(
+                    index: 1,
+                    child: _StatsRow(p: p, ref: ref),
+                  ),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(index: 2, child: _MemoryCard(p: p)),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(
+                    index: 3,
+                    child: _BadgesSection(p: p, ref: ref),
+                  ),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(
+                    index: 4,
+                    child: _WeeklySummaryCard(p: p, ref: ref),
+                  ),
+                  const SizedBox(height: 12),
+                  Entrance(
+                    index: 5,
+                    child: Pressable(
+                      onTap: () => context.push(routeVibeCard),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        decoration: BoxDecoration(
+                          color: p.surface,
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.radius,
                           ),
-                          decoration: BoxDecoration(
-                            color: p.surface,
-                            borderRadius: BorderRadius.circular(
-                              AppSpacing.radius,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.auto_awesome_rounded,
+                              size: 20,
+                              color: p.accent,
                             ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.auto_awesome_rounded,
-                                size: 20,
-                                color: p.accent,
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                l10n.profileShareWeeklySummary,
+                                style: AppTextStyles.body(
+                                  fontSize: 15,
+                                  color: p.text,
+                                ).copyWith(fontWeight: FontWeight.w600),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  l10n.profileShareWeeklySummary,
-                                  style: AppTextStyles.body(
-                                    fontSize: 15,
-                                    color: p.text,
-                                  ).copyWith(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              Icon(
-                                Icons.chevron_right_rounded,
-                                size: 20,
-                                color: p.textMuted,
-                              ),
-                            ],
-                          ),
+                            ),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              size: 20,
+                              color: p.textMuted,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 6, child: _SettingsSection(p: p)),
-                  ]),
-                ),
+                  ),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(index: 6, child: _SettingsSection(p: p)),
+                ]),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

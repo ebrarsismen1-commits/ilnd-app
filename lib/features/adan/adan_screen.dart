@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/adan/adan_model.dart';
@@ -39,96 +38,93 @@ class _AdanScreenState extends ConsumerState<AdanScreen> {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.screenPadding,
-              8,
-              AppSpacing.screenPadding,
-              40,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Pressable(
-                      onTap: () => Navigator.of(context).maybePop(),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10, bottom: 4),
-                        child: Icon(
-                          Icons.chevron_left_rounded,
-                          size: 26,
-                          color: p.textMuted,
-                        ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.screenPadding,
+            8,
+            AppSpacing.screenPadding,
+            40,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Pressable(
+                    onTap: () => Navigator.of(context).maybePop(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10, bottom: 4),
+                      child: Icon(
+                        Icons.chevron_left_rounded,
+                        size: 26,
+                        color: p.textMuted,
                       ),
                     ),
-                    Text(
-                      l10n.adanTitle,
-                      style: AppTextStyles.screenTitle(
-                        color: p.text,
-                        fontSize: 28,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Entrance(
-                  index: 0,
-                  child: AdanCanvas(state: state, p: p),
-                ),
-                const SizedBox(height: 24),
-                Entrance(
-                  index: 1,
-                  child: Text(
-                    l10n.adanLead,
-                    style: AppTextStyles.heading(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: p.text,
-                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
-                Entrance(
-                  index: 2,
-                  child: Text(
-                    l10n.adanBody,
-                    style: AppTextStyles.body(
-                      fontSize: 13,
-                      color: p.textMuted,
-                      height: 1.55,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 28),
-                Text(
-                  l10n.adanItemsLabel,
-                  style: AppTextStyles.sectionLabel(color: p.textMuted),
-                ),
-                const SizedBox(height: 10),
-                for (final (i, item) in kIslandItems.indexed)
-                  Entrance(
-                    index: 3 + i,
-                    child: _ItemRow(item: item, state: state, p: p),
-                  ),
-                const SizedBox(height: 18),
-                if (state.nextItem case final next?)
                   Text(
-                    l10n.adanNextNote(
-                      adanItemName(l10n, next.id),
-                      adanItemHow(l10n, next.id),
-                    ),
-                    style: AppTextStyles.body(
-                      fontSize: 12.5,
-                      color: p.textMuted,
-                      height: 1.55,
+                    l10n.adanTitle,
+                    style: AppTextStyles.screenTitle(
+                      color: p.text,
+                      fontSize: 28,
                     ),
                   ),
-              ],
-            ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Entrance(
+                index: 0,
+                child: AdanCanvas(state: state, p: p),
+              ),
+              const SizedBox(height: 24),
+              Entrance(
+                index: 1,
+                child: Text(
+                  l10n.adanLead,
+                  style: AppTextStyles.heading(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: p.text,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Entrance(
+                index: 2,
+                child: Text(
+                  l10n.adanBody,
+                  style: AppTextStyles.body(
+                    fontSize: 13,
+                    color: p.textMuted,
+                    height: 1.55,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
+              Text(
+                l10n.adanItemsLabel,
+                style: AppTextStyles.sectionLabel(color: p.textMuted),
+              ),
+              const SizedBox(height: 10),
+              for (final (i, item) in kIslandItems.indexed)
+                Entrance(
+                  index: 3 + i,
+                  child: _ItemRow(item: item, state: state, p: p),
+                ),
+              const SizedBox(height: 18),
+              if (state.nextItem case final next?)
+                Text(
+                  l10n.adanNextNote(
+                    adanItemName(l10n, next.id),
+                    adanItemHow(l10n, next.id),
+                  ),
+                  style: AppTextStyles.body(
+                    fontSize: 12.5,
+                    color: p.textMuted,
+                    height: 1.55,
+                  ),
+                ),
+            ],
           ),
         ),
       ),

@@ -12,7 +12,6 @@ import 'package:ilnd_app/core/services/reminder_provider.dart';
 import 'package:ilnd_app/core/services/streak_tracker.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
@@ -66,67 +65,64 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: _HeroHeader(name: name, p: p),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: _HeroHeader(name: name, p: p),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenPadding,
+                22,
+                AppSpacing.screenPadding,
+                40,
               ),
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenPadding,
-                  22,
-                  AppSpacing.screenPadding,
-                  40,
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                    // Sıra handoff §1'den: hero → mood → takip → günün üçü →
-                    // okuma → sessiz satırlar. Mood hero'nun hemen altında
-                    // yaşar; bindirme (Transform.translate) denenip
-                    // bırakılmıştı — layout'u etkilemediği için fontlar geç
-                    // yüklenince selamlamanın üstüne biniyordu.
-                    Entrance(index: 4, child: _MoodCheckIn(p: p)),
-                    const SizedBox(height: 26),
-                    _Hairline(p: p),
-                    const SizedBox(height: 22),
-                    // ADAN bloğu (handoff §1): ilerlemenin yer hâli.
-                    Entrance(index: 5, child: _AdanBlock(p: p)),
-                    const SizedBox(height: 22),
-                    // Aktif plan Bugün'de yaşar: kullanıcı Keşfet'e girmeyi
-                    // unutur, ana ekranı unutmaz. Plan yoksa satır hiç
-                    // çizilmez (ADR-0005).
-                    const _ActivePlanRow(),
-                    const SizedBox(height: 18),
-                    Entrance(index: 9, child: DailyTrioSection(p: p)),
-                    const SizedBox(height: 26),
-                    Entrance(
-                      index: 10,
-                      child: _SectionLabel(l10n.homeTodaysReadTitle, p: p),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  // Sıra handoff §1'den: hero → mood → takip → günün üçü →
+                  // okuma → sessiz satırlar. Mood hero'nun hemen altında
+                  // yaşar; bindirme (Transform.translate) denenip
+                  // bırakılmıştı — layout'u etkilemediği için fontlar geç
+                  // yüklenince selamlamanın üstüne biniyordu.
+                  Entrance(index: 4, child: _MoodCheckIn(p: p)),
+                  const SizedBox(height: 26),
+                  _Hairline(p: p),
+                  const SizedBox(height: 22),
+                  // ADAN bloğu (handoff §1): ilerlemenin yer hâli.
+                  Entrance(index: 5, child: _AdanBlock(p: p)),
+                  const SizedBox(height: 22),
+                  // Aktif plan Bugün'de yaşar: kullanıcı Keşfet'e girmeyi
+                  // unutur, ana ekranı unutmaz. Plan yoksa satır hiç
+                  // çizilmez (ADR-0005).
+                  const _ActivePlanRow(),
+                  const SizedBox(height: 18),
+                  Entrance(index: 9, child: DailyTrioSection(p: p)),
+                  const SizedBox(height: 26),
+                  Entrance(
+                    index: 10,
+                    child: _SectionLabel(l10n.homeTodaysReadTitle, p: p),
+                  ),
+                  const SizedBox(height: 12),
+                  Entrance(
+                    index: 11,
+                    child: _DailyReadCard(article: read, p: p),
+                  ),
+                  const SizedBox(height: 26),
+                  // Üç sessiz satır (handoff §1): kart değil, hairline ile
+                  // ayrılmış satırlar. "takip" satırı yok — o içerik zaten
+                  // yukarıda, ekranın içinde.
+                  Entrance(
+                    index: 12,
+                    child: _QuietRows(
+                      p: p,
+                      hour: hourOverride ?? DateTime.now().hour,
                     ),
-                    const SizedBox(height: 12),
-                    Entrance(
-                      index: 11,
-                      child: _DailyReadCard(article: read, p: p),
-                    ),
-                    const SizedBox(height: 26),
-                    // Üç sessiz satır (handoff §1): kart değil, hairline ile
-                    // ayrılmış satırlar. "takip" satırı yok — o içerik zaten
-                    // yukarıda, ekranın içinde.
-                    Entrance(
-                      index: 12,
-                      child: _QuietRows(
-                        p: p,
-                        hour: hourOverride ?? DateTime.now().hour,
-                      ),
-                    ),
-                  ]),
-                ),
+                  ),
+                ]),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

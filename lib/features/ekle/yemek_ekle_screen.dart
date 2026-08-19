@@ -20,7 +20,6 @@ import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
@@ -411,72 +410,69 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
     final p = ref.watch(paletteProvider);
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: Column(
-          children: [
-            SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 4, 16, 4),
-                child: Row(
-                  children: [
-                    Pressable(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.arrow_back_ios_rounded,
-                          size: 18,
-                          color: p.text,
-                        ),
+      body: Column(
+        children: [
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 16, 4),
+              child: Row(
+                children: [
+                  Pressable(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Icon(
+                        Icons.arrow_back_ios_rounded,
+                        size: 18,
+                        color: p.text,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      l10n.yemekEkleTitle,
-                      style: AppTextStyles.display(fontSize: 19, color: p.text),
-                    ),
-                  ],
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    l10n.yemekEkleTitle,
+                    style: AppTextStyles.display(fontSize: 19, color: p.text),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: SafeArea(
+              top: false,
+              child: switch (_phase) {
+                _Phase.picker => _PickerView(
+                  onPick: (s) => _pick(s, l10n),
+                  p: p,
+                  l10n: l10n,
                 ),
-              ),
+                _Phase.loading => _LoadingView(
+                  photo: _photoBytes!,
+                  p: p,
+                  l10n: l10n,
+                ),
+                _Phase.result => _ResultView(
+                  photo: _photoBytes!,
+                  result: _result!,
+                  comment: _comment,
+                  portion: _portion,
+                  onPortion: (v) => setState(() => _portion = v),
+                  onRetry: _retry,
+                  onSave: () => _saveAndPop(context),
+                  p: p,
+                  l10n: l10n,
+                ),
+                _Phase.error => _ErrorView(
+                  message: _errorMsg,
+                  onRetry: _retry,
+                  p: p,
+                  l10n: l10n,
+                ),
+              },
             ),
-            Expanded(
-              child: SafeArea(
-                top: false,
-                child: switch (_phase) {
-                  _Phase.picker => _PickerView(
-                    onPick: (s) => _pick(s, l10n),
-                    p: p,
-                    l10n: l10n,
-                  ),
-                  _Phase.loading => _LoadingView(
-                    photo: _photoBytes!,
-                    p: p,
-                    l10n: l10n,
-                  ),
-                  _Phase.result => _ResultView(
-                    photo: _photoBytes!,
-                    result: _result!,
-                    comment: _comment,
-                    portion: _portion,
-                    onPortion: (v) => setState(() => _portion = v),
-                    onRetry: _retry,
-                    onSave: () => _saveAndPop(context),
-                    p: p,
-                    l10n: l10n,
-                  ),
-                  _Phase.error => _ErrorView(
-                    message: _errorMsg,
-                    onRetry: _retry,
-                    p: p,
-                    l10n: l10n,
-                  ),
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

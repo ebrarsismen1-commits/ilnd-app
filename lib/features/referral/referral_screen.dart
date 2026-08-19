@@ -9,7 +9,6 @@ import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
@@ -66,114 +65,107 @@ class _ReferralScreenState extends ConsumerState<ReferralScreen> {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    8,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () => Navigator.of(context).maybePop(),
-                        icon: Icon(Icons.arrow_back_rounded, color: p.text),
-                        tooltip: l10n.a11yBack,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SliverPadding(
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Padding(
                 padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPadding,
                   8,
                   AppSpacing.screenPadding,
-                  32,
+                  0,
                 ),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                    Entrance(
-                      index: 0,
-                      child: Text(
-                        l10n.referralTitle,
-                        style: AppTextStyles.display(
-                          fontSize: 28,
-                          color: p.text,
-                        ),
-                      ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => Navigator.of(context).maybePop(),
+                      icon: Icon(Icons.arrow_back_rounded, color: p.text),
+                      tooltip: l10n.a11yBack,
                     ),
-                    const SizedBox(height: 8),
-                    Entrance(
-                      index: 1,
-                      child: Text(
-                        l10n.referralSubtitle,
-                        style: AppTextStyles.body(
-                          fontSize: 13,
-                          color: p.textMuted,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 28),
-                    Entrance(
-                      index: 2,
-                      child: profileAsync.when(
-                        loading: () => const _CodeCardSkeleton(),
-                        error: (e, st) => _CodeLoadError(
-                          p: p,
-                          onRetry: () =>
-                              ref.invalidate(myGrowthProfileProvider),
-                        ),
-                        data: (profile) => _CodeCard(
-                          code: profile?.referralCode ?? '',
-                          founding: profile?.foundingMember ?? false,
-                          p: p,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Entrance(
-                      index: 3,
-                      child: Pressable(
-                        onTap: () => showModalBottomSheet<void>(
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          barrierColor: AppColors.charcoal.withValues(
-                            alpha: 0.45,
-                          ),
-                          isScrollControlled: true,
-                          builder: (ctx) => const RedeemCodeSheet(),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          decoration: BoxDecoration(
-                            color: p.surface,
-                            borderRadius: BorderRadius.circular(
-                              AppSpacing.radius,
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            l10n.referralEnterCode,
-                            style: AppTextStyles.body(
-                              fontSize: 13,
-                              color: p.accent,
-                            ).copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ]),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenPadding,
+                8,
+                AppSpacing.screenPadding,
+                32,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  Entrance(
+                    index: 0,
+                    child: Text(
+                      l10n.referralTitle,
+                      style: AppTextStyles.display(fontSize: 28, color: p.text),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Entrance(
+                    index: 1,
+                    child: Text(
+                      l10n.referralSubtitle,
+                      style: AppTextStyles.body(
+                        fontSize: 13,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  Entrance(
+                    index: 2,
+                    child: profileAsync.when(
+                      loading: () => const _CodeCardSkeleton(),
+                      error: (e, st) => _CodeLoadError(
+                        p: p,
+                        onRetry: () => ref.invalidate(myGrowthProfileProvider),
+                      ),
+                      data: (profile) => _CodeCard(
+                        code: profile?.referralCode ?? '',
+                        founding: profile?.foundingMember ?? false,
+                        p: p,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Entrance(
+                    index: 3,
+                    child: Pressable(
+                      onTap: () => showModalBottomSheet<void>(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        barrierColor: AppColors.charcoal.withValues(
+                          alpha: 0.45,
+                        ),
+                        isScrollControlled: true,
+                        builder: (ctx) => const RedeemCodeSheet(),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          color: p.surface,
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.radius,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          l10n.referralEnterCode,
+                          style: AppTextStyles.body(
+                            fontSize: 13,
+                            color: p.accent,
+                          ).copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
+                  ),
+                ]),
+              ),
+            ),
+          ],
         ),
       ),
     );

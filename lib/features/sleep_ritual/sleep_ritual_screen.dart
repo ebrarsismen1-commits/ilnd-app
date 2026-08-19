@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_animation.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
@@ -60,16 +59,13 @@ class _SleepRitualScreenState extends ConsumerState<SleepRitualScreen> {
         ),
         centerTitle: true,
       ),
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 320),
-            switchInCurve: Curves.easeOut,
-            child: flow.phase == SleepRitualPhase.running
-                ? _RunnerPhase(p: p)
-                : _PreparingView(p: p),
-          ),
+      body: SafeArea(
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 320),
+          switchInCurve: Curves.easeOut,
+          child: flow.phase == SleepRitualPhase.running
+              ? _RunnerPhase(p: p)
+              : _PreparingView(p: p),
         ),
       ),
     );

@@ -4,7 +4,6 @@ import 'package:ilnd_app/core/billing/entitlement.dart';
 import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
@@ -89,7 +88,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         color: p.base,
         child: Stack(
           children: [
-            const Positioned.fill(child: AnimatedBackground(palette: p)),
             SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.screenPadding,

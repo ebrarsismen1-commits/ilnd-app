@@ -37,7 +37,7 @@ Pano ek tonları (editoryal kartlar): deep #274D33 · matcha #9BAA6F · krem #EF
 Yeni süre/eğri icat edilmez; sayfa geçişi = mevcut fade-up.
 
 ## 5. Bileşen Envanteri (önce bunları kullan, sonra icat et)
-Pressable · Entrance · AnimatedBackground · CoverImage(+editoryal filtre) ·
+Pressable · Entrance · CoverImage(+editoryal filtre) ·
 EditorialGradient · Shimmer · IlndToast · AuthInputField · SocialSignInButton ·
 AuthDivider. Yeni bileşen = 2+ yerde kullanım kanıtı → core/widgets'a.
 

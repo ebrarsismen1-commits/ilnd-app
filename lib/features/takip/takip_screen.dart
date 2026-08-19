@@ -5,7 +5,6 @@ import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/habits/habits_provider.dart';
@@ -40,45 +39,42 @@ class TakipScreen extends ConsumerWidget {
     final p = ref.watch(paletteProvider);
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.screenPadding,
-              8,
-              AppSpacing.screenPadding,
-              40,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Pressable(
-                      onTap: () => Navigator.of(context).maybePop(),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10, bottom: 4),
-                        child: Icon(
-                          Icons.chevron_left_rounded,
-                          size: 26,
-                          color: p.textMuted,
-                        ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.screenPadding,
+            8,
+            AppSpacing.screenPadding,
+            40,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Pressable(
+                    onTap: () => Navigator.of(context).maybePop(),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10, bottom: 4),
+                      child: Icon(
+                        Icons.chevron_left_rounded,
+                        size: 26,
+                        color: p.textMuted,
                       ),
                     ),
-                    Text(
-                      l10n.takipTitle,
-                      style: AppTextStyles.screenTitle(
-                        color: p.text,
-                        fontSize: 28,
-                      ),
+                  ),
+                  Text(
+                    l10n.takipTitle,
+                    style: AppTextStyles.screenTitle(
+                      color: p.text,
+                      fontSize: 28,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                const TakipSections(),
-              ],
-            ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              const TakipSections(),
+            ],
           ),
         ),
       ),

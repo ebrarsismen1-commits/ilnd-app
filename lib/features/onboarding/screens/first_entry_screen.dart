@@ -14,7 +14,6 @@ import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/services/onboarding_timer.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
@@ -156,59 +155,56 @@ class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(32, 24, 32, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      l10n.firstEntryHeader,
-                      style: AppTextStyles.sectionLabel(color: p.textMuted),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(32, 24, 32, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n.firstEntryHeader,
+                    style: AppTextStyles.sectionLabel(color: p.textMuted),
+                  ),
+                  Pressable(
+                    onTap: _skip,
+                    child: Text(
+                      l10n.firstEntrySkip,
+                      style: AppTextStyles.body(
+                        fontSize: 13,
+                        color: p.textMuted,
+                      ).copyWith(decoration: TextDecoration.underline),
                     ),
-                    Pressable(
-                      onTap: _skip,
-                      child: Text(
-                        l10n.firstEntrySkip,
-                        style: AppTextStyles.body(
-                          fontSize: 13,
-                          color: p.textMuted,
-                        ).copyWith(decoration: TextDecoration.underline),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Text(
+                l10n.firstEntryNeedsPrompt,
+                style: AppTextStyles.display(fontSize: 30, color: p.text),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              child: options == null
+                  ? _LoadingOptions(p: p, label: l10n.firstEntryNeedsLoading)
+                  : ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
+                      itemCount: options.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 12),
+                      itemBuilder: (context, i) => _NeedOption(
+                        label: options[i],
+                        p: p,
+                        onTap: () => _pick(options[i]),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: Text(
-                  l10n.firstEntryNeedsPrompt,
-                  style: AppTextStyles.display(fontSize: 30, color: p.text),
-                ),
-              ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: options == null
-                    ? _LoadingOptions(p: p, label: l10n.firstEntryNeedsLoading)
-                    : ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-                        itemCount: options.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 12),
-                        itemBuilder: (context, i) => _NeedOption(
-                          label: options[i],
-                          p: p,
-                          onTap: () => _pick(options[i]),
-                        ),
-                      ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

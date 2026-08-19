@@ -10,7 +10,6 @@ import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
 import 'package:ilnd_app/core/repositories/journal_repository.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/widgets/shimmer.dart';
@@ -29,120 +28,117 @@ class JournalScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              // Günlük "ekle" sheet'inden push ediliyor, yani sekme değil bir
-              // yaprak ekran — kendi çıkışını taşımak zorunda. Yoksa web'de
-              // dönüş yolu HİÇ olmuyor (donanım tuşu/kenar kaydırma yok) ve
-              // kullanıcı ekranda kilitli kalıyor.
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding - 12,
-                    12,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Semantics(
-                      button: true,
-                      label: l10n.a11yBack,
-                      child: Pressable(
-                        onTap: () => Navigator.of(context).maybePop(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            size: 18,
-                            color: p.textMuted,
-                          ),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            // Günlük "ekle" sheet'inden push ediliyor, yani sekme değil bir
+            // yaprak ekran — kendi çıkışını taşımak zorunda. Yoksa web'de
+            // dönüş yolu HİÇ olmuyor (donanım tuşu/kenar kaydırma yok) ve
+            // kullanıcı ekranda kilitli kalıyor.
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenPadding - 12,
+                  12,
+                  AppSpacing.screenPadding,
+                  0,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Semantics(
+                    button: true,
+                    label: l10n.a11yBack,
+                    child: Pressable(
+                      onTap: () => Navigator.of(context).maybePop(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 18,
+                          color: p.textMuted,
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    8,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  child: Text(
-                    l10n.journalTitle,
-                    style: AppTextStyles.display(fontSize: 30, color: p.text),
-                  ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenPadding,
+                  8,
+                  AppSpacing.screenPadding,
+                  0,
+                ),
+                child: Text(
+                  l10n.journalTitle,
+                  style: AppTextStyles.display(fontSize: 30, color: p.text),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    20,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  child: _NewEntryButton(
-                    p: p,
-                    onTap: () => _showWriteSheet(context, ref),
-                  ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenPadding,
+                  20,
+                  AppSpacing.screenPadding,
+                  0,
+                ),
+                child: _NewEntryButton(
+                  p: p,
+                  onTap: () => _showWriteSheet(context, ref),
                 ),
               ),
-              entriesAsync.when(
-                loading: () => SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    20,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  sliver: SliverList.separated(
-                    itemCount: 4,
-                    separatorBuilder: (ctx1, i1) => const SizedBox(height: 12),
-                    itemBuilder: (ctx1, i1) => const ShimmerCard(),
-                  ),
+            ),
+            entriesAsync.when(
+              loading: () => SliverPadding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenPadding,
+                  20,
+                  AppSpacing.screenPadding,
+                  0,
                 ),
-                error: (e, st) => SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: _ErrorState(
-                    p: p,
-                    onRetry: () => ref.invalidate(journalEntriesProvider),
-                  ),
+                sliver: SliverList.separated(
+                  itemCount: 4,
+                  separatorBuilder: (ctx1, i1) => const SizedBox(height: 12),
+                  itemBuilder: (ctx1, i1) => const ShimmerCard(),
                 ),
-                data: (entries) => entries.isEmpty
-                    ? SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: _EmptyJournal(
-                          p: p,
-                          onTap: () => _showWriteSheet(context, ref),
-                        ),
-                      )
-                    : SliverPadding(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.screenPadding,
-                          20,
-                          AppSpacing.screenPadding,
-                          32,
-                        ),
-                        sliver: SliverList.separated(
-                          itemCount: entries.length,
-                          separatorBuilder: (ctx2, i2) =>
-                              const SizedBox(height: 12),
-                          itemBuilder: (context, i) => Entrance(
-                            index: i,
-                            child: _EntryCard(entry: entries[i], p: p),
-                          ),
+              ),
+              error: (e, st) => SliverFillRemaining(
+                hasScrollBody: false,
+                child: _ErrorState(
+                  p: p,
+                  onRetry: () => ref.invalidate(journalEntriesProvider),
+                ),
+              ),
+              data: (entries) => entries.isEmpty
+                  ? SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: _EmptyJournal(
+                        p: p,
+                        onTap: () => _showWriteSheet(context, ref),
+                      ),
+                    )
+                  : SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.screenPadding,
+                        20,
+                        AppSpacing.screenPadding,
+                        32,
+                      ),
+                      sliver: SliverList.separated(
+                        itemCount: entries.length,
+                        separatorBuilder: (ctx2, i2) =>
+                            const SizedBox(height: 12),
+                        itemBuilder: (context, i) => Entrance(
+                          index: i,
+                          child: _EntryCard(entry: entries[i], p: p),
                         ),
                       ),
-              ),
-            ],
-          ),
+                    ),
+            ),
+          ],
         ),
       ),
     );
