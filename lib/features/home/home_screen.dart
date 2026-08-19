@@ -16,6 +16,9 @@ import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/adan/adan_model.dart';
+import 'package:ilnd_app/features/adan/adan_repository.dart';
+import 'package:ilnd_app/features/adan/adan_screen.dart';
 import 'package:ilnd_app/features/daily_trio/daily_trio_section.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
@@ -87,6 +90,11 @@ class HomeScreen extends ConsumerWidget {
                     // yüklenince selamlamanın üstüne biniyordu.
                     Entrance(index: 4, child: _MoodCheckIn(p: p)),
                     const SizedBox(height: 26),
+                    _Hairline(p: p),
+                    const SizedBox(height: 22),
+                    // ADAN bloğu (handoff §1): ilerlemenin yer hâli.
+                    Entrance(index: 5, child: _AdanBlock(p: p)),
+                    const SizedBox(height: 22),
                     // Aktif plan Bugün'de yaşar: kullanıcı Keşfet'e girmeyi
                     // unutur, ana ekranı unutmaz. Plan yoksa satır hiç
                     // çizilmez (ADR-0005).
@@ -454,6 +462,37 @@ class _QuietRow extends StatelessWidget {
             ),
           ),
           _Hairline(p: p),
+        ],
+      ),
+    );
+  }
+}
+
+/// Bugün'deki ada bloğu — etiket + yüzey. Yüzey Adan ekranıyla aynı
+/// widget'tır (AdanCanvas): illüstrasyon geldiğinde iki yer birden değişir.
+class _AdanBlock extends ConsumerWidget {
+  const _AdanBlock({required this.p});
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final state =
+        ref.watch(islandStateProvider).valueOrNull ?? const IslandState();
+    return Pressable(
+      onTap: () => context.push(routeAdan),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.adanLabel,
+            style: AppTextStyles.sectionLabel(color: p.textMuted),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 150,
+            child: AdanCanvas(state: state, p: p),
+          ),
         ],
       ),
     );

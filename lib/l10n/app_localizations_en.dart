@@ -309,6 +309,87 @@ class AppLocalizationsEn extends AppLocalizations {
       'we meet face to face at gatherings in your city';
 
   @override
+  String get adanLabel => 'ISLAND';
+
+  @override
+  String get adanTitle => 'island.';
+
+  @override
+  String get adanLead => 'your island grows from what you finish.';
+
+  @override
+  String get adanBody =>
+      'every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed — quiet days only deepen the water, they do not punish.';
+
+  @override
+  String get adanItemsLabel => 'PIECES';
+
+  @override
+  String get adanStateOpen => 'OPEN';
+
+  @override
+  String get adanStateLocked => 'LOCKED';
+
+  @override
+  String get adanItemLantern => 'lantern';
+
+  @override
+  String get adanItemPine => 'pine';
+
+  @override
+  String get adanItemOven => 'oven';
+
+  @override
+  String get adanItemMoonlight => 'moonlight';
+
+  @override
+  String get adanItemWindrose => 'weather vane';
+
+  @override
+  String get adanItemMeetingStone => 'meetup stone';
+
+  @override
+  String get adanHowLantern => 'first journal';
+
+  @override
+  String get adanHowPine => '3-day streak';
+
+  @override
+  String get adanHowOven => '10 meals logged';
+
+  @override
+  String get adanHowMoonlight => 'first night ritual';
+
+  @override
+  String get adanHowWindrose => '7-day streak';
+
+  @override
+  String get adanHowMeetingStone => 'first community meetup';
+
+  @override
+  String get adanEarnedSuffix => 'earned';
+
+  @override
+  String get adanEmptyProgress => 'no pieces yet';
+
+  @override
+  String get profileStatIslandItems => 'PIECES';
+
+  @override
+  String get welcomeBeatIsland =>
+      'three small things a day — finish them and your island grows';
+
+  @override
+  String adanProgress(int count, String next) {
+    return '$count pieces · next: $next';
+  }
+
+  @override
+  String adanNextNote(String next, String how) {
+    return '$next settles in once $how is done.';
+  }
+
+  @override
   String get welcomeStart => 'start';
 
   @override

@@ -296,6 +296,86 @@ class AppLocalizationsTr extends AppLocalizations {
       'şehrindeki buluşmalarda yüz yüze görüşürüz';
 
   @override
+  String get adanLabel => 'ADAN';
+
+  @override
+  String get adanTitle => 'adan.';
+
+  @override
+  String get adanLead => 'ada, tamamladığın işlerden büyüyor.';
+
+  @override
+  String get adanBody =>
+      'her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez — sessiz geçen günler suyu koyulaştırır, cezalandırmaz.';
+
+  @override
+  String get adanItemsLabel => 'ÖĞELER';
+
+  @override
+  String get adanStateOpen => 'AÇIK';
+
+  @override
+  String get adanStateLocked => 'KİLİTLİ';
+
+  @override
+  String get adanItemLantern => 'fener';
+
+  @override
+  String get adanItemPine => 'çam';
+
+  @override
+  String get adanItemOven => 'fırın';
+
+  @override
+  String get adanItemMoonlight => 'ay ışığı';
+
+  @override
+  String get adanItemWindrose => 'rüzgâr gülü';
+
+  @override
+  String get adanItemMeetingStone => 'buluşma taşı';
+
+  @override
+  String get adanHowLantern => 'ilk günlük';
+
+  @override
+  String get adanHowPine => '3 gün seri';
+
+  @override
+  String get adanHowOven => '10 öğün yazıldı';
+
+  @override
+  String get adanHowMoonlight => 'ilk gece ritüeli';
+
+  @override
+  String get adanHowWindrose => '7 günlük seri';
+
+  @override
+  String get adanHowMeetingStone => 'ilk topluluk buluşması';
+
+  @override
+  String get adanEarnedSuffix => 'kazanıldı';
+
+  @override
+  String get adanEmptyProgress => 'henüz öğe yok';
+
+  @override
+  String get profileStatIslandItems => 'ADA ÖĞESİ';
+
+  @override
+  String get welcomeBeatIsland => 'her gün üç küçük iş — bitince adan büyür';
+
+  @override
+  String adanProgress(int count, String next) {
+    return '$count öğe · sıradaki: $next';
+  }
+
+  @override
+  String adanNextNote(String next, String how) {
+    return '$next $how tamamlandığında yerleşecek.';
+  }
+
+  @override
   String get welcomeStart => 'başla';
 
   @override

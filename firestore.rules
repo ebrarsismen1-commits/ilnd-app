@@ -127,6 +127,15 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // Adan — ada öğeleri (ADR-0006). Kazanımı SADECE syncIslandItems
+    // (Admin SDK) yazar; istemci yalnız okur. Yazma açık olsaydı kullanıcı
+    // kendine bütün adayı verebilirdi — kotada bir kez yaşanmış hata sınıfı
+    // (Sert Kural #13: kullanıcının yazabildiği yerde ödül yoktur).
+    match /island/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if false;
+    }
+
     // Sosyal kanıt sayacı için anonim, kullanıcı başına günde tek doküman.
     // Toplam aktif kullanıcı sayısını saymak için herkes (authenticated)
     // okuyabilir; her kullanıcı sadece kendi kaydını yazabilir.

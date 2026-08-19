@@ -104,6 +104,81 @@
   "welcomeBeatCommunity": "we meet face to face at gatherings in your city",
   "@welcomeBeatCommunity": {"description": "Welcome screen value beat"},
 
+  "adanLabel": "ISLAND",
+  "@adanLabel": {"description": "Adan (island) surface"},
+
+  "adanTitle": "island.",
+  "@adanTitle": {"description": "Adan (island) surface"},
+
+  "adanLead": "your island grows from what you finish.",
+  "@adanLead": {"description": "Adan (island) surface"},
+
+  "adanBody": "every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed — quiet days only deepen the water, they do not punish.",
+  "@adanBody": {"description": "Adan (island) surface"},
+
+  "adanItemsLabel": "PIECES",
+  "@adanItemsLabel": {"description": "Adan (island) surface"},
+
+  "adanStateOpen": "OPEN",
+  "@adanStateOpen": {"description": "Adan (island) surface"},
+
+  "adanStateLocked": "LOCKED",
+  "@adanStateLocked": {"description": "Adan (island) surface"},
+
+  "adanItemLantern": "lantern",
+  "@adanItemLantern": {"description": "Adan (island) surface"},
+
+  "adanItemPine": "pine",
+  "@adanItemPine": {"description": "Adan (island) surface"},
+
+  "adanItemOven": "oven",
+  "@adanItemOven": {"description": "Adan (island) surface"},
+
+  "adanItemMoonlight": "moonlight",
+  "@adanItemMoonlight": {"description": "Adan (island) surface"},
+
+  "adanItemWindrose": "weather vane",
+  "@adanItemWindrose": {"description": "Adan (island) surface"},
+
+  "adanItemMeetingStone": "meetup stone",
+  "@adanItemMeetingStone": {"description": "Adan (island) surface"},
+
+  "adanHowLantern": "first journal",
+  "@adanHowLantern": {"description": "Adan (island) surface"},
+
+  "adanHowPine": "3-day streak",
+  "@adanHowPine": {"description": "Adan (island) surface"},
+
+  "adanHowOven": "10 meals logged",
+  "@adanHowOven": {"description": "Adan (island) surface"},
+
+  "adanHowMoonlight": "first night ritual",
+  "@adanHowMoonlight": {"description": "Adan (island) surface"},
+
+  "adanHowWindrose": "7-day streak",
+  "@adanHowWindrose": {"description": "Adan (island) surface"},
+
+  "adanHowMeetingStone": "first community meetup",
+  "@adanHowMeetingStone": {"description": "Adan (island) surface"},
+
+  "adanEarnedSuffix": "earned",
+  "@adanEarnedSuffix": {"description": "Adan (island) surface"},
+
+  "adanEmptyProgress": "no pieces yet",
+  "@adanEmptyProgress": {"description": "Adan (island) surface"},
+
+  "profileStatIslandItems": "PIECES",
+  "@profileStatIslandItems": {"description": "Adan (island) surface"},
+
+  "welcomeBeatIsland": "three small things a day — finish them and your island grows",
+  "@welcomeBeatIsland": {"description": "Adan (island) surface"},
+
+  "adanProgress": "{count} pieces · next: {next}",
+  "@adanProgress": {"description": "Island progress line", "placeholders": {"count": {"type": "int"}, "next": {"type": "String"}}},
+
+  "adanNextNote": "{next} settles in once {how} is done.",
+  "@adanNextNote": {"description": "Note about the next island piece", "placeholders": {"next": {"type": "String"}, "how": {"type": "String"}}},
+
   "welcomeStart": "start",
   "welcomeHaveAccount": "already have an account? ",
   "welcomeLoginLink": "sign in",

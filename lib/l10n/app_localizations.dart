@@ -632,6 +632,156 @@ abstract class AppLocalizations {
   /// **'şehrindeki buluşmalarda yüz yüze görüşürüz'**
   String get welcomeBeatCommunity;
 
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ADAN'**
+  String get adanLabel;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'adan.'**
+  String get adanTitle;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ada, tamamladığın işlerden büyüyor.'**
+  String get adanLead;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez — sessiz geçen günler suyu koyulaştırır, cezalandırmaz.'**
+  String get adanBody;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ÖĞELER'**
+  String get adanItemsLabel;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'AÇIK'**
+  String get adanStateOpen;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'KİLİTLİ'**
+  String get adanStateLocked;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'fener'**
+  String get adanItemLantern;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'çam'**
+  String get adanItemPine;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'fırın'**
+  String get adanItemOven;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ay ışığı'**
+  String get adanItemMoonlight;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'rüzgâr gülü'**
+  String get adanItemWindrose;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'buluşma taşı'**
+  String get adanItemMeetingStone;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ilk günlük'**
+  String get adanHowLantern;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'3 gün seri'**
+  String get adanHowPine;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'10 öğün yazıldı'**
+  String get adanHowOven;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ilk gece ritüeli'**
+  String get adanHowMoonlight;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'7 günlük seri'**
+  String get adanHowWindrose;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ilk topluluk buluşması'**
+  String get adanHowMeetingStone;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'kazanıldı'**
+  String get adanEarnedSuffix;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'henüz öğe yok'**
+  String get adanEmptyProgress;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ADA ÖĞESİ'**
+  String get profileStatIslandItems;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'her gün üç küçük iş — bitince adan büyür'**
+  String get welcomeBeatIsland;
+
+  /// Island progress line
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} öğe · sıradaki: {next}'**
+  String adanProgress(int count, String next);
+
+  /// Note about the next island piece
+  ///
+  /// In tr, this message translates to:
+  /// **'{next} {how} tamamlandığında yerleşecek.'**
+  String adanNextNote(String next, String how);
+
   /// Welcome screen start button
   ///
   /// In tr, this message translates to:

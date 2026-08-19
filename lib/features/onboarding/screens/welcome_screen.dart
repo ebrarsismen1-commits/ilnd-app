@@ -75,9 +75,9 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                     ).copyWith(letterSpacing: 0.2),
                   ),
                 const Spacer(flex: 2),
-                // Üç değer önerisi satırı (prototip: welcomeBeats). Adan'ı
-                // tanıtan ilk satır Faz 8'de, Adan yüzeyiyle birlikte gelir —
-                // olmayan bir özelliğin sözünü vermemek için.
+                // Üç değer önerisi satırı (prototip: welcomeBeats).
+                _Beat(text: l10n.welcomeBeatIsland, p: p),
+                const SizedBox(height: 14),
                 _Beat(text: l10n.welcomeBeatMemory, p: p),
                 const SizedBox(height: 14),
                 _Beat(text: l10n.welcomeBeatCommunity, p: p),

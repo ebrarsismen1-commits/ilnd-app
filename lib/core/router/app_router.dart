@@ -21,6 +21,7 @@ import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_screen.dart';
 import 'package:ilnd_app/features/splash/splash_screen.dart';
 import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/features/referral/referral_screen.dart';
+import 'package:ilnd_app/features/adan/adan_screen.dart';
 import 'package:ilnd_app/features/takip/takip_screen.dart';
 import 'package:ilnd_app/features/topluluk/topluluk_screen.dart';
 import 'package:ilnd_app/features/vibe_card/quote_card_screen.dart';
@@ -38,6 +39,7 @@ const routeChat = '/chat';
 const routeExplore = '/explore';
 const routeTopluluk = '/topluluk';
 const routeProfile = '/profile';
+const routeAdan = '/adan';
 const routeTakip = '/takip';
 const routeYemekEkle = '/yemek-ekle';
 const routeVibeCard = '/vibe-card';
@@ -198,6 +200,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         // extra: ilk-giriş ekranından seçilen ihtiyaç metni (opsiyonel seed).
         pageBuilder: (context, state) =>
             _fade(state, ChatScreen(seedMessage: state.extra as String?)),
+      ),
+      GoRoute(
+        // Adan — ada yuzeyi (ADR-0006).
+        path: routeAdan,
+        pageBuilder: (context, state) => _fade(state, const AdanScreen()),
       ),
       GoRoute(
         // Takip kendi ekrani (tasarim handoff §6) — Bugun'deki sessiz "takip"

@@ -104,6 +104,8 @@ abstract final class AppConfig {
   static String get redeemReferralCodeUrl =>
       _siblingFunctionUrl('redeemReferralCode');
   static String get deleteAccountUrl => _siblingFunctionUrl('deleteAccount');
+  static String get syncIslandItemsUrl =>
+      _siblingFunctionUrl('syncIslandItems');
 
   static bool get isAnthropicProxyConfigured => anthropicProxyUrl.isNotEmpty;
 
