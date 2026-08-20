@@ -1550,6 +1550,24 @@ abstract class AppLocalizations {
   /// **'ilnd bu geceni hazırlıyor…'**
   String get sleepRitualPreparing;
 
+  /// Recipe nutrition row
+  ///
+  /// In tr, this message translates to:
+  /// **'PORSİYON BAŞINA'**
+  String get recipeNutritionLabel;
+
+  /// Recipe nutrition row
+  ///
+  /// In tr, this message translates to:
+  /// **'yaklaşık değerler, malzemeye göre değişir'**
+  String get recipeNutritionApprox;
+
+  /// Recipe nutrition row
+  ///
+  /// In tr, this message translates to:
+  /// **'lif'**
+  String get recipeNutritionFiber;
+
   /// Recipe ingredients section label
   ///
   /// In tr, this message translates to:

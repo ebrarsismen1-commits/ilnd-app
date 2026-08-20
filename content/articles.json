@@ -52,7 +52,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 2,
+      "kalori": 118,
+      "protein": 0,
+      "karbonhidrat": 29,
+      "yag": 0
+    }
   },
   {
     "id": "akcaagacli-elektrolit",
@@ -105,7 +112,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 59,
+      "protein": 0,
+      "karbonhidrat": 15,
+      "yag": 0
+    }
   },
   {
     "id": "hizli-hidrasyon",
@@ -157,7 +171,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 68,
+      "protein": 0,
+      "karbonhidrat": 18,
+      "yag": 0
+    }
   },
   {
     "id": "hindistan-cevizi-turuncgil",
@@ -210,7 +231,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 97,
+      "protein": 1,
+      "karbonhidrat": 21,
+      "yag": 0
+    }
   },
   {
     "id": "salatalik-lime",
@@ -266,7 +294,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 27,
+      "protein": 0,
+      "karbonhidrat": 7,
+      "yag": 0
+    }
   },
   {
     "id": "portakal-zencefil",
@@ -319,7 +354,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 138,
+      "protein": 2,
+      "karbonhidrat": 32,
+      "yag": 0
+    }
   },
   {
     "id": "karpuzlu-potasyum",
@@ -371,7 +413,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 67,
+      "protein": 1,
+      "karbonhidrat": 17,
+      "yag": 0
+    }
   },
   {
     "id": "uzum-limon",
@@ -424,7 +473,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 125,
+      "protein": 0,
+      "karbonhidrat": 31,
+      "yag": 0
+    }
   },
   {
     "id": "hurmali-kakao",
@@ -477,7 +533,15 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 132,
+      "protein": 2,
+      "karbonhidrat": 35,
+      "yag": 1,
+      "lif": 5
+    }
   },
   {
     "id": "yesil-cay-sporcu",
@@ -529,7 +593,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 23,
+      "protein": 0,
+      "karbonhidrat": 6,
+      "yag": 0
+    }
   },
   {
     "id": "cilekli-kefir",
@@ -580,7 +651,15 @@
     ],
     "allergens": [
       "sut_laktoz"
-    ]
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 151,
+      "protein": 8,
+      "karbonhidrat": 25,
+      "yag": 3,
+      "lif": 3
+    }
   },
   {
     "id": "yaban-mersinli-antioksidan",
@@ -630,7 +709,15 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 63,
+      "protein": 1,
+      "karbonhidrat": 17,
+      "yag": 0,
+      "lif": 2
+    }
   },
   {
     "id": "muzlu-tarcinli-smoothie",
@@ -682,7 +769,15 @@
     "allergens": [
       "sut_laktoz",
       "findik_kabuklu"
-    ]
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 200,
+      "protein": 8,
+      "karbonhidrat": 33,
+      "yag": 4,
+      "lif": 3
+    }
   },
   {
     "id": "espresso-tarcin",
@@ -733,7 +828,14 @@
       "glutensiz",
       "laktozsuz"
     ],
-    "allergens": []
+    "allergens": [],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 5,
+      "protein": 0,
+      "karbonhidrat": 1,
+      "yag": 0
+    }
   },
   {
     "id": "kakaolu-enerji-shotu",
@@ -786,6 +888,13 @@
     "allergens": [
       "sut_laktoz",
       "gluten"
-    ]
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 111,
+      "protein": 6,
+      "karbonhidrat": 16,
+      "yag": 4
+    }
   }
 ]

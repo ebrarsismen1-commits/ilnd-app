@@ -710,6 +710,15 @@
   "sleepRitualPreparing": "ilnd bu geceni hazırlıyor…",
   "@sleepRitualPreparing": {"description": "Shown while ILND builds tonight's personalized ritual"},
 
+  "recipeNutritionLabel": "PORSİYON BAŞINA",
+  "@recipeNutritionLabel": {"description": "Recipe nutrition row"},
+
+  "recipeNutritionApprox": "yaklaşık değerler, malzemeye göre değişir",
+  "@recipeNutritionApprox": {"description": "Recipe nutrition row"},
+
+  "recipeNutritionFiber": "lif",
+  "@recipeNutritionFiber": {"description": "Recipe nutrition row"},
+
   "recipeIngredientsTitle": "malzemeler",
   "@recipeIngredientsTitle": {"description": "Recipe ingredients section label"},
 

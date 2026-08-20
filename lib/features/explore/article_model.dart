@@ -89,6 +89,50 @@ class ArticleTranslation {
   };
 }
 
+/// Bir porsiyonun besin değerleri. Değerler malzeme tablolarından hesaplanmış
+/// YAKLAŞIK değerlerdir: malzeme boyu, marka ve pişirme kaybı sonucu
+/// değiştirir. Ekranda da "yaklaşık" olarak sunulur, kesin sayı gibi değil.
+class RecipeNutrition {
+  const RecipeNutrition({
+    required this.servings,
+    required this.kalori,
+    required this.protein,
+    required this.karbonhidrat,
+    required this.yag,
+    this.lif,
+  });
+
+  /// Değerlerin kaç porsiyona bölündüğü. Tarifin verimi değişirse bu da
+  /// değişir, yoksa porsiyon başı değer sessizce yanlış olur.
+  final int servings;
+  final int kalori;
+  final int protein;
+  final int karbonhidrat;
+  final int yag;
+
+  /// Lif ayrı tutuluyor: beslenme yazılarında takip edilmesi önerilen tek
+  /// sayı bu (bkz. lif-meselesi), tarifte de görünmesi tutarlı olur.
+  final int? lif;
+
+  factory RecipeNutrition.fromMap(Map<String, dynamic> m) => RecipeNutrition(
+    servings: (m['servings'] as num?)?.toInt() ?? 1,
+    kalori: (m['kalori'] as num?)?.toInt() ?? 0,
+    protein: (m['protein'] as num?)?.toInt() ?? 0,
+    karbonhidrat: (m['karbonhidrat'] as num?)?.toInt() ?? 0,
+    yag: (m['yag'] as num?)?.toInt() ?? 0,
+    lif: (m['lif'] as num?)?.toInt(),
+  );
+
+  Map<String, dynamic> toMap() => {
+    'servings': servings,
+    'kalori': kalori,
+    'protein': protein,
+    'karbonhidrat': karbonhidrat,
+    'yag': yag,
+    if (lif != null) 'lif': lif,
+  };
+}
+
 class Article {
   const Article({
     required this.id,
@@ -104,6 +148,7 @@ class Article {
     this.videoUrl,
     this.allergens = const [],
     this.diets = const [],
+    this.nutrition,
     this.en,
   });
 
@@ -133,6 +178,10 @@ class Article {
   /// (vejetaryen, vegan, glutensiz, laktozsuz). Boş = yalnız 'yok' tercihine.
   final List<String> diets;
 
+  /// Porsiyon başına besin değerleri. Yalnız tariflerde dolu; yazılarda null
+  /// ve o zaman ekranda hiç çizilmez.
+  final RecipeNutrition? nutrition;
+
   /// İngilizce çeviri — yoksa EN kullanıcı Türkçesini görür (asla boş ekran).
   final ArticleTranslation? en;
 
@@ -157,6 +206,7 @@ class Article {
       videoUrl: videoUrl,
       allergens: allergens,
       diets: diets,
+      nutrition: nutrition,
       en: t,
     );
   }
@@ -177,6 +227,11 @@ class Article {
       videoUrl: d['videoUrl'] as String?,
       allergens: List<String>.from(d['allergens'] as List? ?? []),
       diets: List<String>.from(d['diets'] as List? ?? []),
+      nutrition: d['nutrition'] is Map
+          ? RecipeNutrition.fromMap(
+              Map<String, dynamic>.from(d['nutrition'] as Map),
+            )
+          : null,
       en: d['en'] is Map
           ? ArticleTranslation.fromMap(
               Map<String, dynamic>.from(d['en'] as Map),
@@ -239,6 +294,13 @@ const kArticles = <Article>[
       'Portakal ve limon suyunu ekle, kalan suyla bir litreye tamamla.',
       'Buzdolabında soğut. Antrenman boyunca on beş dakikada bir birkaç yudum iç.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 2,
+      kalori: 118,
+      protein: 0,
+      karbonhidrat: 29,
+      yag: 0,
+    ),
     diets: ['vegan', 'vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'the classic sports drink for long cardio',
@@ -288,6 +350,13 @@ const kArticles = <Article>[
       'Limon suyunu ve kalan suyu ekleyip çalkala.',
       'Soğuk servis et, antrenman boyunca azar azar iç.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 59,
+      protein: 0,
+      karbonhidrat: 15,
+      yag: 0,
+    ),
     diets: ['vegan', 'vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a maple drink for sensitive stomachs',
@@ -335,6 +404,13 @@ const kArticles = <Article>[
       'Limon suyunu ve kalan suyu ekle.',
       'Oda sıcaklığında ya da hafif soğuk iç.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 68,
+      protein: 0,
+      karbonhidrat: 18,
+      yag: 0,
+    ),
     diets: ['vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a honey hydration drink for short hard sessions',
@@ -383,6 +459,13 @@ const kArticles = <Article>[
       'Tuzu ekleyip iyice karıştır.',
       'Buzla soğuk servis et.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 97,
+      protein: 1,
+      karbonhidrat: 21,
+      yag: 0,
+    ),
     diets: ['vegan', 'vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a coconut drink for after training',
@@ -433,6 +516,13 @@ const kArticles = <Article>[
       'Lime suyunu ve tuzu ekle.',
       'Kalan suyu doldur, buzdolabında en az yarım saat beklet.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 27,
+      protein: 0,
+      karbonhidrat: 7,
+      yag: 0,
+    ),
     diets: ['vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a cucumber lime cooler for hot days',
@@ -483,6 +573,13 @@ const kArticles = <Article>[
       'Tuzu ve kalan suyu ekleyip karıştır.',
       'Soğutup şişeye al, antrenman boyunca azar azar iç.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 138,
+      protein: 2,
+      karbonhidrat: 32,
+      yag: 0,
+    ),
     diets: ['vegan', 'vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'an orange ginger drink for long runs',
@@ -531,6 +628,13 @@ const kArticles = <Article>[
       'Balı, tuzu ve soğuk suyu ekleyip karıştır.',
       'Buzla servis et; en iyi ilk yarım saatte içilir.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 67,
+      protein: 1,
+      karbonhidrat: 17,
+      yag: 0,
+    ),
     diets: ['vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a watermelon potassium drink for summer training',
@@ -578,6 +682,13 @@ const kArticles = <Article>[
       'Tuzu ekleyip iyice çalkala.',
       'Serin sakla, antrenmanın ortasında birkaç yudum al.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 125,
+      protein: 0,
+      karbonhidrat: 31,
+      yag: 0,
+    ),
     diets: ['vegan', 'vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a grape lemon drink for fast energy',
@@ -626,6 +737,14 @@ const kArticles = <Article>[
       'Kakaoyu ve tuzu ekleyip tekrar çek.',
       'İstersen süzerek iç; soğuk servis daha iyi gider.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 132,
+      protein: 2,
+      karbonhidrat: 35,
+      yag: 1,
+      lif: 5,
+    ),
     diets: ['vegan', 'vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a date and cocoa drink for endurance',
@@ -674,6 +793,13 @@ const kArticles = <Article>[
       'Balı az ılık suda çözdürüp ekle.',
       'Limon dilimini son anda at, buzla iç.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 23,
+      protein: 0,
+      karbonhidrat: 6,
+      yag: 0,
+    ),
     diets: ['vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a green tea drink for a light lift of caffeine',
@@ -716,6 +842,14 @@ const kArticles = <Article>[
       'Balı ekleyip bir kez daha karıştır.',
       'Hemen iç; beklerse ayrışır.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 151,
+      protein: 8,
+      karbonhidrat: 25,
+      yag: 3,
+      lif: 3,
+    ),
     diets: ['vejetaryen', 'glutensiz'],
     allergens: ['sut_laktoz'],
     en: ArticleTranslation(
@@ -758,6 +892,14 @@ const kArticles = <Article>[
       'Balı ekleyip karıştır.',
       'Soğuk servis et.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 63,
+      protein: 1,
+      karbonhidrat: 17,
+      yag: 0,
+      lif: 2,
+    ),
     diets: ['vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a blueberry drink for after the hard days',
@@ -804,6 +946,14 @@ const kArticles = <Article>[
       'Tarçını ekleyip bir kez daha çek.',
       'Hemen iç; beklerse koyulaşır.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 200,
+      protein: 8,
+      karbonhidrat: 33,
+      yag: 4,
+      lif: 3,
+    ),
     diets: ['vejetaryen', 'glutensiz'],
     allergens: ['sut_laktoz', 'findik_kabuklu'],
     en: ArticleTranslation(
@@ -846,6 +996,13 @@ const kArticles = <Article>[
       'Suyla seyrelt — sade espresso aç mideyi yorar.',
       'Antrenmandan yirmi dakika önce iç.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 5,
+      protein: 0,
+      karbonhidrat: 1,
+      yag: 0,
+    ),
     diets: ['vegan', 'vejetaryen', 'glutensiz', 'laktozsuz'],
     en: ArticleTranslation(
       title: 'a cinnamon espresso for before training',
@@ -893,6 +1050,13 @@ const kArticles = <Article>[
       'Ocaktan al, bal ve deniz tuzunu ekle.',
       'Küçük bir bardakta, antrenmandan on beş dakika önce iç.',
     ],
+    nutrition: RecipeNutrition(
+      servings: 1,
+      kalori: 111,
+      protein: 6,
+      karbonhidrat: 16,
+      yag: 4,
+    ),
     diets: ['vejetaryen'],
     allergens: ['sut_laktoz', 'gluten'],
     en: ArticleTranslation(

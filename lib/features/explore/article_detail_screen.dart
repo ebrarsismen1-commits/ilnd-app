@@ -180,9 +180,17 @@ class _RecipeSectionState extends State<_RecipeSection> {
     final l10n = AppLocalizations.of(context)!;
     final p = widget.p;
 
+    final nutrition = widget.article.nutrition;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Besin değerleri malzemelerin ÜSTÜNDE: "bu tarif bana uyar mı"
+        // sorusu alışverişten önce soruluyor.
+        if (nutrition != null) ...[
+          _NutritionRow(nutrition: nutrition, p: p),
+          const SizedBox(height: 24),
+        ],
         Text(
           l10n.recipeIngredientsTitle,
           style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
@@ -263,6 +271,96 @@ class _RecipeSectionState extends State<_RecipeSection> {
           ),
         ),
         const SizedBox(height: 8),
+      ],
+    );
+  }
+}
+
+// ─── Porsiyon başına besin değerleri ──────────────────────────────────────────
+
+/// Kalori büyük sayı, makrolar altında sessiz satırlar. Aynı hiyerarşi
+/// Takip ekranında da var; iki yerde farklı görünmesi kafa karıştırırdı.
+class _NutritionRow extends StatelessWidget {
+  const _NutritionRow({required this.nutrition, required this.p});
+
+  final RecipeNutrition nutrition;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.recipeNutritionLabel,
+          style: AppTextStyles.sectionLabel(color: p.accent),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
+          children: [
+            Text(
+              '${nutrition.kalori}',
+              style: AppTextStyles.mono(
+                fontSize: 34,
+                fontWeight: FontWeight.w600,
+                color: p.text,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              'kcal',
+              style: AppTextStyles.mono(fontSize: 13, color: p.textMuted),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        _MacroLine(label: l10n.takipProtein, value: nutrition.protein, p: p),
+        _MacroLine(label: l10n.takipCarbs, value: nutrition.karbonhidrat, p: p),
+        _MacroLine(label: l10n.takipFat, value: nutrition.yag, p: p),
+        if (nutrition.lif case final lif?)
+          _MacroLine(label: l10n.recipeNutritionFiber, value: lif, p: p),
+        const SizedBox(height: 8),
+        Text(
+          l10n.recipeNutritionApprox,
+          style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
+        ),
+      ],
+    );
+  }
+}
+
+class _MacroLine extends StatelessWidget {
+  const _MacroLine({required this.label, required this.value, required this.p});
+
+  final String label;
+  final int value;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 9),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+                ),
+              ),
+              Text(
+                '${value}g',
+                style: AppTextStyles.mono(fontSize: 12.5, color: p.text),
+              ),
+            ],
+          ),
+        ),
+        Container(height: 0.5, color: p.border),
       ],
     );
   }

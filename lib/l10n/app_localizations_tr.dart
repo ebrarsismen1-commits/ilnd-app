@@ -772,6 +772,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sleepRitualPreparing => 'ilnd bu geceni hazırlıyor…';
 
   @override
+  String get recipeNutritionLabel => 'PORSİYON BAŞINA';
+
+  @override
+  String get recipeNutritionApprox =>
+      'yaklaşık değerler, malzemeye göre değişir';
+
+  @override
+  String get recipeNutritionFiber => 'lif';
+
+  @override
   String get recipeIngredientsTitle => 'malzemeler';
 
   @override

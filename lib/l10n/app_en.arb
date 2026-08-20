@@ -348,6 +348,15 @@
   "exploreRitualMovementTitle": "movement break",
   "sleepRitualTitle": "sleep ritual",
   "sleepRitualPreparing": "ilnd is shaping your night…",
+  "recipeNutritionLabel": "PER SERVING",
+  "@recipeNutritionLabel": {"description": "Recipe nutrition row"},
+
+  "recipeNutritionApprox": "approximate, varies with ingredients",
+  "@recipeNutritionApprox": {"description": "Recipe nutrition row"},
+
+  "recipeNutritionFiber": "fibre",
+  "@recipeNutritionFiber": {"description": "Recipe nutrition row"},
+
   "recipeIngredientsTitle": "ingredients",
   "recipeStartCooking": "start cooking",
   "recipeStepProgress": "step {current} / {total}",

@@ -786,6 +786,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepRitualPreparing => 'ilnd is shaping your night…';
 
   @override
+  String get recipeNutritionLabel => 'PER SERVING';
+
+  @override
+  String get recipeNutritionApprox => 'approximate, varies with ingredients';
+
+  @override
+  String get recipeNutritionFiber => 'fibre';
+
+  @override
   String get recipeIngredientsTitle => 'ingredients';
 
   @override
