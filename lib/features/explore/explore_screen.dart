@@ -21,22 +21,31 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 
 // ─── Filter ───────────────────────────────────────────────────────────────────
 
-enum _Filter { hepsi, wellness, tarifler, yazilar }
+/// Etiket rayı doğrudan [ArticleCategory]'yi yansıtır — "hepsi" dışında her
+/// pill bir kategoriye birebir karşılık gelir. Ayrı bir filtre listesi
+/// tutmak, kategori eklendiğinde iki yerin ayrışması demekti.
+enum _Filter { hepsi, meditasyon, beslenme, hareket, ozBakim, gelisim }
 
 extension _FilterX on _Filter {
-  String label(AppLocalizations l10n) => switch (this) {
-    _Filter.hepsi => l10n.exploreFilterAll,
-    _Filter.wellness => l10n.exploreFilterWellness,
-    _Filter.tarifler => l10n.exploreFilterRecipes,
-    _Filter.yazilar => l10n.exploreFilterArticles,
+  ArticleCategory? get category => switch (this) {
+    _Filter.hepsi => null,
+    _Filter.meditasyon => ArticleCategory.meditasyon,
+    _Filter.beslenme => ArticleCategory.beslenme,
+    _Filter.hareket => ArticleCategory.hareket,
+    _Filter.ozBakim => ArticleCategory.ozBakim,
+    _Filter.gelisim => ArticleCategory.gelisim,
   };
 
-  bool matches(Article a) => switch (this) {
-    _Filter.hepsi => true,
-    _Filter.wellness => a.category == ArticleCategory.wellness,
-    _Filter.tarifler => a.category == ArticleCategory.tarif,
-    _Filter.yazilar => a.category == ArticleCategory.yazi,
+  String label(AppLocalizations l10n) => switch (this) {
+    _Filter.hepsi => l10n.exploreFilterAll,
+    _Filter.meditasyon => l10n.exploreFilterMeditation,
+    _Filter.beslenme => l10n.exploreFilterNutrition,
+    _Filter.hareket => l10n.exploreFilterMovement,
+    _Filter.ozBakim => l10n.exploreFilterSelfCare,
+    _Filter.gelisim => l10n.exploreFilterGrowth,
   };
+
+  bool matches(Article a) => category == null || a.category == category;
 }
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
@@ -834,9 +843,11 @@ class _CategoryChip extends StatelessWidget {
   final ArticleCategory category;
 
   Color get _color => switch (category) {
-    ArticleCategory.wellness => const Color(0xFF5B8C7B),
-    ArticleCategory.tarif => const Color(0xFF34D399),
-    ArticleCategory.yazi => const Color(0xFFC17A63),
+    ArticleCategory.meditasyon => const Color(0xFF5B8C7B),
+    ArticleCategory.beslenme => const Color(0xFF34D399),
+    ArticleCategory.hareket => const Color(0xFF7FA05B),
+    ArticleCategory.ozBakim => const Color(0xFF8FA8B5),
+    ArticleCategory.gelisim => const Color(0xFFC17A63),
   };
 
   @override

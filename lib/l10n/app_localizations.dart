@@ -1466,29 +1466,41 @@ abstract class AppLocalizations {
   /// **'iyi hissetmenin küçük adımları'**
   String get exploreSubtitle;
 
+  /// Explore category filter
+  ///
+  /// In tr, this message translates to:
+  /// **'meditasyon'**
+  String get exploreFilterMeditation;
+
+  /// Explore category filter
+  ///
+  /// In tr, this message translates to:
+  /// **'beslenme'**
+  String get exploreFilterNutrition;
+
+  /// Explore category filter
+  ///
+  /// In tr, this message translates to:
+  /// **'hareket'**
+  String get exploreFilterMovement;
+
+  /// Explore category filter
+  ///
+  /// In tr, this message translates to:
+  /// **'öz bakım'**
+  String get exploreFilterSelfCare;
+
+  /// Explore category filter
+  ///
+  /// In tr, this message translates to:
+  /// **'gelişim'**
+  String get exploreFilterGrowth;
+
   /// Explore filter: all
   ///
   /// In tr, this message translates to:
   /// **'hepsi'**
   String get exploreFilterAll;
-
-  /// Explore filter: wellness
-  ///
-  /// In tr, this message translates to:
-  /// **'wellness'**
-  String get exploreFilterWellness;
-
-  /// Explore filter: recipes
-  ///
-  /// In tr, this message translates to:
-  /// **'tarifler'**
-  String get exploreFilterRecipes;
-
-  /// Explore filter: articles
-  ///
-  /// In tr, this message translates to:
-  /// **'yazılar'**
-  String get exploreFilterArticles;
 
   /// Shown when a tag filter matches no articles
   ///

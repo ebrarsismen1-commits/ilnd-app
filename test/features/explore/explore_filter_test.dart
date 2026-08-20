@@ -74,10 +74,10 @@ void main() {
       reason: '"tümü" seçiliyken liste dolu olmalı',
     );
 
-    // Yerleşik içerikte "wellness" kategorisinde makale YOK; eskiden bu
-    // dokunuş listeyi hiçbir açıklama bırakmadan siliyordu ve ekran
-    // bozulmuş gibi görünüyordu.
-    await tester.tap(find.text(l10n.exploreFilterWellness));
+    // Yerleşik içeriğin tamamı "beslenme" (eski tarifler); meditasyon
+    // kategorisinde henüz makale YOK. Eskiden bu dokunuş listeyi hiçbir
+    // açıklama bırakmadan siliyordu ve ekran bozulmuş gibi görünüyordu.
+    await tester.tap(find.text(l10n.exploreFilterMeditation));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 

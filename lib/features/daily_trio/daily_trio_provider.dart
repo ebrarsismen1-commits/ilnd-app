@@ -34,7 +34,7 @@ Article? selectRecipeForDay({
   required List<String> allergies,
 }) {
   final recipes = articles
-      .where((a) => a.category == ArticleCategory.tarif && a.isRecipe)
+      .where((a) => a.category == ArticleCategory.beslenme && a.isRecipe)
       .toList();
   if (recipes.isEmpty) return null;
 

@@ -1,24 +1,54 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum ArticleCategory { wellness, tarif, yazi }
+/// Editoryal kategoriler (owner kararı 2026-08-20). Beşi de içerik
+/// planındaki adlandırmayı taşır; sıra da ondan gelir.
+///
+/// Önceki üçlü (`wellness` / `tarif` / `yazi`) kaldırıldı ama Firestore'da
+/// o değerlerle yazılmış dokümanlar var — [fromString] onları yeni
+/// karşılıklarına taşır (bkz. eski-değer eşlemesi). Yoksa yayındaki her
+/// makale sessizce ilk kategoriye düşerdi.
+enum ArticleCategory { meditasyon, beslenme, hareket, ozBakim, gelisim }
 
 extension ArticleCategoryX on ArticleCategory {
+  /// Kart üzerindeki kategori etiketi. Büyük harfe UI'da çevrilir.
   String get tag => switch (this) {
-    ArticleCategory.wellness => 'wellness',
-    ArticleCategory.tarif => 'tarif',
-    ArticleCategory.yazi => 'yazı',
+    ArticleCategory.meditasyon => 'meditasyon',
+    ArticleCategory.beslenme => 'beslenme',
+    ArticleCategory.hareket => 'hareket',
+    ArticleCategory.ozBakim => 'öz bakım',
+    ArticleCategory.gelisim => 'gelişim',
   };
 
+  /// Görsel yoksa kapağa çizilen küratörlü degrade (EditorialGradient).
+  /// Dört palet var; sakinlik yeşili meditasyona, sıcak terracotta
+  /// beslenmeye, derinlik gelişime gider.
   int get palette => switch (this) {
-    ArticleCategory.wellness => 0,
-    ArticleCategory.tarif => 1,
-    ArticleCategory.yazi => 3,
+    ArticleCategory.meditasyon => 0,
+    ArticleCategory.beslenme => 1,
+    ArticleCategory.hareket => 2,
+    ArticleCategory.ozBakim => 0,
+    ArticleCategory.gelisim => 3,
   };
 
   String get firestoreValue => name;
 
-  static ArticleCategory fromString(String s) => ArticleCategory.values
-      .firstWhere((e) => e.name == s, orElse: () => ArticleCategory.wellness);
+  /// Eski üçlüden gelen dokümanlar için geçiş eşlemesi:
+  /// tarif → beslenme (hepsi yemek tarifiydi), wellness → öz bakım,
+  /// yazı → gelişim.
+  static const _legacy = <String, ArticleCategory>{
+    'tarif': ArticleCategory.beslenme,
+    'wellness': ArticleCategory.ozBakim,
+    'yazi': ArticleCategory.gelisim,
+  };
+
+  static ArticleCategory fromString(String s) {
+    final legacy = _legacy[s];
+    if (legacy != null) return legacy;
+    return ArticleCategory.values.firstWhere(
+      (e) => e.name == s,
+      orElse: () => ArticleCategory.gelisim,
+    );
+  }
 }
 
 /// Bir makalenin İngilizce karşılığı — boş alanlar Türkçesine düşer.
@@ -188,7 +218,7 @@ const kArticles = <Article>[
     id: 'klasik-sporcu-icecegi',
     order: 0,
     title: 'uzun kardiyolar için klasik sporcu içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Su, şeker, tuz ve bir tutam turunçgil. Rafta aradığın şey mutfağında.',
@@ -238,7 +268,7 @@ const kArticles = <Article>[
     id: 'akcaagacli-elektrolit',
     order: 1,
     title: 'hassas mideler için akçaağaçlı içecek',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Rafine şeker yerine akçaağaç: daha yavaş, daha yumuşak bir enerji.',
@@ -285,7 +315,7 @@ const kArticles = <Article>[
     id: 'hizli-hidrasyon',
     order: 2,
     title: 'kısa ve sert seanslar için ballı hidrasyon içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Az karbonhidrat, yeterli sodyum. Terle gideni en kısa yoldan geri koyar.',
@@ -333,7 +363,7 @@ const kArticles = <Article>[
     id: 'hindistan-cevizi-turuncgil',
     order: 3,
     title: 'antrenman sonrası için hindistan cevizli içecek',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Potasyumu yüksek, serinletici. Bitişten sonraki ilk saatin içeceği.',
@@ -381,7 +411,7 @@ const kArticles = <Article>[
     id: 'salatalik-lime',
     order: 4,
     title: 'sıcak günler için salatalıklı lime içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Salatalık, lime, nane. Enerji değil, sıcakta kaybettiğini geri koymak için.',
@@ -433,7 +463,7 @@ const kArticles = <Article>[
     id: 'portakal-zencefil',
     order: 5,
     title: 'uzun mesafe koşuları için portakallı zencefil içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Portakal suyu enerjiyi, zencefil mideyi taşır. Saatler süren tempolarda.',
@@ -481,7 +511,7 @@ const kArticles = <Article>[
     id: 'karpuzlu-potasyum',
     order: 6,
     title: 'yaz antrenmanları için karpuzlu potasyum içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Karpuz, bal, bir tutam tuz. Sıcakta terleyerek kaybettiğinin karşılığı.',
@@ -529,7 +559,7 @@ const kArticles = <Article>[
     id: 'uzum-limon',
     order: 7,
     title: 'hızlı enerji için üzüm limon içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt: 'Üzüm suyu, limon, tuz. Kana en çabuk karışan karbonhidrat.',
     body: [
@@ -576,7 +606,7 @@ const kArticles = <Article>[
     id: 'hurmali-kakao',
     order: 8,
     title: 'dayanıklılık için hurmalı kakao içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'İki hurma, bir kaşık kakao, tuz. Doğal şeker ve magnezyum bir arada.',
@@ -624,7 +654,7 @@ const kArticles = <Article>[
     id: 'yesil-cay-sporcu',
     order: 9,
     title: 'hafif kafein için yeşil çay içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Soğuk demlenmiş yeşil çay, bal, limon. Sert bir kafein değil, yumuşak bir uyanış.',
@@ -672,7 +702,7 @@ const kArticles = <Article>[
     id: 'cilekli-kefir',
     order: 10,
     title: 'ağırlık antrenmanı sonrası çilekli kefir içeceği',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt: 'Çilek, kefir, bal. Protein ve karbonhidrat aynı bardakta.',
     body: [
@@ -710,7 +740,7 @@ const kArticles = <Article>[
     id: 'yaban-mersinli-antioksidan',
     order: 11,
     title: 'yoğun günler sonrası yaban mersinli içecek',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt: 'Yaban mersini, su, bal. Sert seansın ardından gelen onarım.',
     body: [
@@ -755,7 +785,7 @@ const kArticles = <Article>[
     id: 'muzlu-tarcinli-smoothie',
     order: 12,
     title: 'kas toparlanması için muzlu tarçınlı smoothie',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Muz, süt, tarçın. Boşalan glikojen deposunu dolduran en sade karışım.',
@@ -802,7 +832,7 @@ const kArticles = <Article>[
     id: 'espresso-tarcin',
     order: 13,
     title: 'antrenman öncesi için tarçınlı espresso',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt: 'Tek shot espresso, su, tarçın. Başlamadan yirmi dakika önce.',
     body: [
@@ -843,7 +873,7 @@ const kArticles = <Article>[
     id: 'kakaolu-enerji-shotu',
     order: 14,
     title: 'hafif enerji için kakaolu enerji shotu',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '2 dk',
     excerpt:
         'Kakao, süt, bal, bir tutam deniz tuzu. Küçük bardak, yeterli itki.',

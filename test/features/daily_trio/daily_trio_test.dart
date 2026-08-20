@@ -13,7 +13,7 @@ Article _recipe(
 }) => Article(
   id: title,
   title: title,
-  category: ArticleCategory.tarif,
+  category: ArticleCategory.beslenme,
   readTime: '10 dk',
   excerpt: '',
   body: const [],

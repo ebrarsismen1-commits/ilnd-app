@@ -671,17 +671,23 @@
   "exploreSubtitle": "iyi hissetmenin küçük adımları",
   "@exploreSubtitle": {"description": "Explore screen subtitle"},
 
+  "exploreFilterMeditation": "meditasyon",
+  "@exploreFilterMeditation": {"description": "Explore category filter"},
+
+  "exploreFilterNutrition": "beslenme",
+  "@exploreFilterNutrition": {"description": "Explore category filter"},
+
+  "exploreFilterMovement": "hareket",
+  "@exploreFilterMovement": {"description": "Explore category filter"},
+
+  "exploreFilterSelfCare": "öz bakım",
+  "@exploreFilterSelfCare": {"description": "Explore category filter"},
+
+  "exploreFilterGrowth": "gelişim",
+  "@exploreFilterGrowth": {"description": "Explore category filter"},
+
   "exploreFilterAll": "hepsi",
   "@exploreFilterAll": {"description": "Explore filter: all"},
-
-  "exploreFilterWellness": "wellness",
-  "@exploreFilterWellness": {"description": "Explore filter: wellness"},
-
-  "exploreFilterRecipes": "tarifler",
-  "@exploreFilterRecipes": {"description": "Explore filter: recipes"},
-
-  "exploreFilterArticles": "yazılar",
-  "@exploreFilterArticles": {"description": "Explore filter: articles"},
 
   "exploreFilterEmpty": "bu etikette henüz yazı yok",
   "@exploreFilterEmpty": {"description": "Shown when a tag filter matches no articles"},

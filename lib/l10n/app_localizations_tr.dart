@@ -730,16 +730,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exploreSubtitle => 'iyi hissetmenin küçük adımları';
 
   @override
+  String get exploreFilterMeditation => 'meditasyon';
+
+  @override
+  String get exploreFilterNutrition => 'beslenme';
+
+  @override
+  String get exploreFilterMovement => 'hareket';
+
+  @override
+  String get exploreFilterSelfCare => 'öz bakım';
+
+  @override
+  String get exploreFilterGrowth => 'gelişim';
+
+  @override
   String get exploreFilterAll => 'hepsi';
-
-  @override
-  String get exploreFilterWellness => 'wellness';
-
-  @override
-  String get exploreFilterRecipes => 'tarifler';
-
-  @override
-  String get exploreFilterArticles => 'yazılar';
 
   @override
   String get exploreFilterEmpty => 'bu etikette henüz yazı yok';

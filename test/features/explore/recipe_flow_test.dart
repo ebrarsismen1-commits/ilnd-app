@@ -15,7 +15,7 @@ void main() {
   const recipe = Article(
     id: 'test-tarif',
     title: 'test tarifi',
-    category: ArticleCategory.tarif,
+    category: ArticleCategory.beslenme,
     readTime: '3 dk',
     excerpt: 'kısa özet',
     body: ['giriş paragrafı'],
@@ -26,7 +26,7 @@ void main() {
   const plainArticle = Article(
     id: 'test-yazi',
     title: 'test yazısı',
-    category: ArticleCategory.yazi,
+    category: ArticleCategory.gelisim,
     readTime: '3 dk',
     excerpt: 'kısa özet',
     body: ['paragraf'],

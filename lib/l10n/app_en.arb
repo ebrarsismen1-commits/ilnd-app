@@ -320,10 +320,22 @@
 
   "exploreTitle": "explore.",
   "exploreSubtitle": "small steps toward feeling good",
+  "exploreFilterMeditation": "meditation",
+  "@exploreFilterMeditation": {"description": "Explore category filter"},
+
+  "exploreFilterNutrition": "eating",
+  "@exploreFilterNutrition": {"description": "Explore category filter"},
+
+  "exploreFilterMovement": "movement",
+  "@exploreFilterMovement": {"description": "Explore category filter"},
+
+  "exploreFilterSelfCare": "self-care",
+  "@exploreFilterSelfCare": {"description": "Explore category filter"},
+
+  "exploreFilterGrowth": "growth",
+  "@exploreFilterGrowth": {"description": "Explore category filter"},
+
   "exploreFilterAll": "all",
-  "exploreFilterWellness": "wellness",
-  "exploreFilterRecipes": "recipes",
-  "exploreFilterArticles": "articles",
   "exploreFilterEmpty": "nothing under this tag yet",
   "@exploreFilterEmpty": {"description": "Shown when a tag filter matches no articles"},
 

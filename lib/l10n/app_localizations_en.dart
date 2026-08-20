@@ -744,16 +744,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreSubtitle => 'small steps toward feeling good';
 
   @override
+  String get exploreFilterMeditation => 'meditation';
+
+  @override
+  String get exploreFilterNutrition => 'eating';
+
+  @override
+  String get exploreFilterMovement => 'movement';
+
+  @override
+  String get exploreFilterSelfCare => 'self-care';
+
+  @override
+  String get exploreFilterGrowth => 'growth';
+
+  @override
   String get exploreFilterAll => 'all';
-
-  @override
-  String get exploreFilterWellness => 'wellness';
-
-  @override
-  String get exploreFilterRecipes => 'recipes';
-
-  @override
-  String get exploreFilterArticles => 'articles';
 
   @override
   String get exploreFilterEmpty => 'nothing under this tag yet';

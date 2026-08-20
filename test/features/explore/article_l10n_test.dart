@@ -7,7 +7,7 @@ void main() {
   const article = Article(
     id: 'dikkatle-hareket',
     title: 'dikkatle hareket',
-    category: ArticleCategory.wellness,
+    category: ArticleCategory.ozBakim,
     readTime: '4 dk',
     excerpt: 'TR özet',
     body: ['TR paragraf'],
@@ -46,7 +46,7 @@ void main() {
     const noEn = Article(
       id: 'x',
       title: 'başlık',
-      category: ArticleCategory.yazi,
+      category: ArticleCategory.gelisim,
       readTime: '3 dk',
       excerpt: 'özet',
       body: ['gövde'],
