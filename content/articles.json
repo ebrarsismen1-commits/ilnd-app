@@ -1101,5 +1101,501 @@
     "steps": [],
     "diets": [],
     "allergens": []
+  },
+  {
+    "id": "bagirsak-diyetleri",
+    "title": "Bağırsak diyetleri: işe yarayan protokol, yanlış uygulanan hayat tarzı",
+    "category": "beslenme",
+    "readTime": "10 dk",
+    "excerpt": "Düşük FODMAP gerçekten çalışıyor ama bir yaşam tarzı değil, üç aşamalı bir protokol. Fermente gıdada ise beklenmedik bir sonuç çıktı.",
+    "body": [
+      "Bağırsak sağlığı, internetteki beslenme içeriğinin en kalabalık ve en kontrolsüz alanı. Sebebi şu: şikâyet çok yaygın, tanı koymak zor ve herkesin denediği bir şey var.",
+      "Bu yazı iki soruya bakıyor. Birincisi, en çok konuşulan diyet olan düşük FODMAP gerçekten işe yarıyor mu? İkincisi, bağırsak florasını beslemek için ne yapmak gerekiyor? Bir de üçüncü soru var ve en çok atlananı: bir şeyi diyetten çıkarmanın bedeli ne?",
+      "DÜŞÜK FODMAP: KANITI VAR AMA OKUNMASI GEREKİYOR",
+      "FODMAP, ince bağırsakta iyi emilmeyen ve kalın bağırsakta hızla fermente olan bir grup karbonhidratın kısaltması. Soğan, sarımsak, buğday, bakliyat, bazı meyveler ve süt ürünleri bu grubun içinde.",
+      "Huzursuz bağırsak sendromunda düşük FODMAP diyetini inceleyen randomize kontrollü çalışmalar, karın ağrısı, şişkinlik ve yaşam kalitesi ölçümlerinde anlamlı iyileşme gösteriyor. Sistematik derlemeler bunu orta kalitede kanıt olarak değerlendiriyor ve özellikle ishal baskın tipte faydayı belirgin buluyor.",
+      "Yani soru işe yarıyor mu değil. İşe yarıyor. Asıl sorun uygulamada.",
+      "ÜÇ AŞAMALI BİR PROTOKOL, KALICI BİR DİYET DEĞİL",
+      "Birinci aşama, kısıtlama. FODMAP içeriği yüksek gıdalar genellikle iki ila altı hafta çıkarılıyor. Amaç belirtilerin geçip geçmediğini görmek.",
+      "İkinci aşama, yeniden ekleme. Çıkarılan gruplar tek tek, kontrollü biçimde geri veriliyor. Amaç hangisinin sorun çıkardığını bulmak.",
+      "Üçüncü aşama, kişiselleştirme. Yalnızca gerçekten sorun çıkaran gıdalar sınırlı kalıyor, geri kalanı diyete dönüyor.",
+      "İnternette dolaşan hâli genelde sadece birinci aşama. İnsanlar aylarca, bazen yıllarca kısıtlı beslenmeye devam ediyor ve ikinci aşamayı hiç yapmıyor.",
+      "Bunun iki bedeli var. Birincisi, gereksiz yere yasaklanmış onlarca gıda. İkincisi ve daha önemlisi: FODMAP'ların çoğu aynı zamanda prebiyotik, yani bağırsak florasını besleyen liflerdir. Uzun süreli kısıtlama, iyileştirmeye çalıştığın sistemi zayıflatabilir.",
+      "Kısacası düşük FODMAP, bir teşhis aracı gibi kullanıldığında değerli; bir yaşam tarzı hâline geldiğinde sorun.",
+      "FERMENTE GIDA: BEKLENMEDİK SONUÇ",
+      "2021'de Cell dergisinde yayımlanan Stanford kaynaklı bir çalışma, bağırsak florasını beslemenin iki yolunu doğrudan karşılaştırdı.",
+      "36 sağlıklı yetişkin on hafta boyunca ya fermente gıda ağırlıklı ya da lif ağırlıklı bir diyete rastgele atandı. Fermente grup yoğurt, kefir, lor, kimchi, turşu suyu ve kombucha tüketti. Lif grubu bakliyat, tam tahıl, kuruyemiş, sebze ve meyve.",
+      "Fermente gıda grubunda bağırsak mikrobiyota çeşitliliği arttı ve on dokuz iltihap belirtecinden birçoğunda düşüş görüldü. Etki, porsiyon arttıkça güçlendi.",
+      "Lif grubunda ise çeşitlilik ortalamada sabit kaldı ve aynı iltihap belirteçlerinde düşüş görülmedi.",
+      "Bu, lif işe yaramıyor demek değil. Lifin kalp damar sağlığı ve ölüm riski üzerindeki kanıtı çok güçlü ve ayrı bir konu. Buradaki bulgu daha dar: on haftalık bir sürede mikrobiyota çeşitliliğini artırmak söz konusu olduğunda fermente gıdalar daha hızlı sonuç verdi.",
+      "Pratik karşılığı: günde bir porsiyon fermente gıda eklemek küçük ve ucuz bir değişiklik. Yoğurt, kefir, turşu, ev yapımı lahana turşusu. Türkiye mutfağında zaten var olan şeyler.",
+      "BİR ŞEYİ ÇIKARMADAN ÖNCE",
+      "Test öncesi çıkarma, testi bozar. Çölyak hastalığı testleri, kişi gluten tüketirken yapıldığında geçerli. Glutensiz beslenmeye başladıktan sonra yapılan test yanlış negatif verebiliyor. Yani önce bir deneyeyim, olmazsa doktora giderim sırası tam da bu hastalıkta ters çalışıyor.",
+      "Kısıtlama besin açığı üretebilir. Süt ürünlerini tamamen çıkarmak kalsiyum ve D vitamini, tahılları çıkarmak lif ve B vitaminleri tarafında boşluk bırakabiliyor.",
+      "Liste uzadıkça yeme davranışı bozulabiliyor. Yasaklı gıda sayısı arttıkça sosyal yemekler zorlaşıyor, kaygı artıyor ve bazı kişilerde bu döngü yeme bozukluğuna yakın bir tabloya dönüşebiliyor.",
+      "Belirti günlüğü tahminden iyidir. Ne yediğini ve nasıl hissettiğini iki hafta boyunca yazmak, çoğu zaman rastgele eleme yapmaktan daha çok bilgi veriyor.",
+      "NE ZAMAN HEKİME GİTMELİ",
+      "Bazı belirtiler diyetle denenecek şeyler değil. Kilo kaybı, dışkıda kan, gece uyandıran ağrı, ateş, elli yaş üstünde başlayan yeni bağırsak şikâyetleri ve ailede bağırsak hastalığı öyküsü bu gruba giriyor. Bunlar varken kendi kendine diyet denemek tanıyı geciktiriyor.",
+      "ÖZET",
+      "Düşük FODMAP kanıtlı ama üç aşamalı bir protokol; ikinci aşamayı atlamak faydayı zarara çeviriyor. Fermente gıda, mikrobiyota çeşitliliğini artırmada on haftalık sürede lif ağırlıklı diyetten daha hızlı sonuç verdi. Bir besin grubunu çıkarmadan önce test sırasını, besin açığını ve psikolojik maliyeti hesaba katmak gerekiyor.",
+      "Bu protokollerin doğru uygulanması bir diyetisyen işi. Yazının amacı neyin bilindiğini anlatmak, kimseye diyet yazmak değil."
+    ],
+    "en": {
+      "title": "gut diets: a protocol that works, applied as a lifestyle that doesn't",
+      "readTime": "10 min",
+      "excerpt": "Low FODMAP is real but it is a three phase protocol, not a way of life.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Wastyk HC, Fragiadakis GK, Perelman D ve ark. Gut-microbiota-targeted diets modulate human immune status. Cell, 2021;184(16):4137-4153.",
+        "url": "https://www.cell.com/cell/fulltext/S0092-8674(21)00754-6"
+      },
+      {
+        "citation": "Efficacy of a Low-FODMAP Diet on the Severity of Gastrointestinal Symptoms and Quality of Life: A Systematic Review of Randomized Controlled Trials.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40573159/"
+      },
+      {
+        "citation": "A Low-FODMAP Diet Improves the Global Symptoms and Bowel Habits of Adult IBS Patients: A Systematic Review and Meta-Analysis.",
+        "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8417072/"
+      }
+    ],
+    "order": 18,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "sporcu-icecegi-rehberi",
+    "title": "Sporcu içeceği kullanım rehberi: hangisi, ne zaman, ne kadar",
+    "category": "beslenme",
+    "readTime": "8 dk",
+    "excerpt": "Uygulamadaki on beş tarifin hangisi hangi antrenman için? Tek soruyla başlıyor: kaç dakika ve ne kadar sıcak?",
+    "body": [
+      "Sporcu içeceği çoğu insanın gereğinden çok kullandığı, bazı insanınsa hiç kullanmadığı bir şey. İkisi de aynı sebepten: ne zaman gerektiğini kimse söylemiyor.",
+      "Karar aslında tek soruya bakıyor: antrenman ne kadar sürüyor ve ne kadar terletiyor?",
+      "BİR SAATİN ALTINDAYSA: SU",
+      "Altmış dakikanın altındaki çalışmalarda kas glikojeni zaten yeterli. Bu sürede karbonhidratlı içecek performansa ölçülebilir bir katkı yapmıyor, sadece kalori ekliyor. Salonda geçirilen kırk beş dakika için sporcu içeceği gereksiz.",
+      "İki istisna var. Çok sıcakta ya da çok terleten bir ortamdaysan sıvı kaybı bir saatin altında da anlamlı olabiliyor; burada gereken şey karbonhidrat değil sodyum. İkincisi, tatlı bir içecek daha çok içmeni sağlıyorsa bu da geçerli bir sebep.",
+      "Bu durumlar için uygulamadaki seçenekler: salatalıklı lime içeceği ve yeşil çay içeceği. İkisi de tat veriyor, kaloriyi yükseltmiyor.",
+      "BİR SAATİ AŞIYORSA: İÇECEĞİN İKİ İŞİ VAR",
+      "Karbonhidrat yakıt sağlıyor. Bir saatten sonra depolar azalmaya başlıyor ve dışarıdan gelen karbonhidrat performansı koruyor.",
+      "Sodyum suyu tutuyor. Sodyum yalnızca terle kaybedileni yerine koymuyor; bağırsakta suyun emilimini de hızlandırıyor. Sade su, sodyumsuz olduğu için daha yavaş emiliyor ve fazlası hızla idrara gidiyor.",
+      "SAYILAR",
+      "Karbonhidrat: saatte 30 ila 90 gram. Alt sınır iki saatlik orta tempolu bir koşu için, üst sınır uzun ve yoğun yarışlar için.",
+      "Burada fizyolojik bir tavan var: tek tip şeker bağırsakta saatte yaklaşık 60 ile 70 gramda doyuma ulaşıyor. Daha fazlası emilmiyor, mideyi rahatsız ediyor. 90 grama çıkmak isteyen sporcular yaklaşık 2:1 glikoz fruktoz karışımı kullanıyor; meyve suyu içeren tarifler bu karışımı doğal olarak veriyor.",
+      "Sodyum: Amerikan Spor Hekimliği Koleji'nin önerisi litre başına 500 ile 700 miligram. Tariflerdeki bir tutam tuz ifadesinin karşılığı bu; tuzu unutmak içeceğin yarısını işlevsiz bırakıyor.",
+      "HANGİ TARİF, HANGİ ANTRENMAN",
+      "Antrenman öncesi uyarılma için tarçınlı espresso. Kısa seans ve sıcak hava için salatalıklı lime. Kısa seans ve hafif kafein için yeşil çay içeceği.",
+      "60 ila 90 dakika arası: hassas mide için akçaağaçlı içecek, yaz sıcağı için karpuzlu potasyum, kısa ve sert seanslar için ballı hidrasyon.",
+      "90 dakika üstü: klasik sporcu içeceği, uzun mesafe koşusu için portakallı zencefil, hızlı enerji gerektiğinde üzüm limon, uzun etkinliklerde hurmalı kakao.",
+      "Antrenman sonrası: ağırlık çalışması sonrası çilekli kefir, kas toparlanması için muzlu tarçınlı smoothie, sıcakta terleme sonrası hindistan cevizli içecek, yoğun gün sonrası yaban mersinli içecek.",
+      "BİR PORSİYON BİR SAATLİK DEĞİL",
+      "En sık yapılan hesap hatası bu. Tariflerin çoğu porsiyon başına 15 ile 35 gram karbonhidrat veriyor. Saatlik hedef 30 ile 90 gram olduğuna göre, iki saatlik bir koşuda tek şişe yetmiyor.",
+      "İki saatlik bir çalışmada saatte 40 ile 50 gram hedefliyorsan, klasik sporcu içeceğinden yaklaşık üç porsiyon gerekiyor. Tarifi bir litre olarak hazırlayıp yanına almak daha kullanışlı.",
+      "NASIL İÇİLİR",
+      "Erken başla. Susadığını hissettiğinde zaten geride kalmışsın demektir. İlk yudumu ilk yirmi dakikada al.",
+      "Aralıklı iç. On beş dakikada bir birkaç yudum. Tek seferde yarım litre içmek mideyi zorluyor ve emilimi hızlandırmıyor.",
+      "Serin olsun, buz gibi olmasın. Serin içecekler daha hızlı boşalıyor ve daha çok içiliyor.",
+      "Yeni bir tarifi yarışta deneme. Mide toleransı kişiye göre değişiyor, denemeler antrenmanda yapılır.",
+      "SIK YAPILAN ÜÇ HATA",
+      "Tuzu atlamak. Tarifteki tutam tuz tat için değil; onsuz içecek tatlandırılmış sudan ibaret kalıyor.",
+      "Kısa antrenmanda kullanmak. Kırk dakikalık salon çalışmasında sporcu içeceği sadece ekstra kalori.",
+      "Şekeri sağlıklı alternatifle değiştirmeye çalışmak. Buradaki şeker bir kusur değil, mekanizmanın parçası. Tatlandırıcıyla yapılan bir sporcu içeceği, sporcu içeceği olmuyor."
+    ],
+    "en": {
+      "title": "sports drink guide: which one, when, how much",
+      "readTime": "8 min",
+      "excerpt": "Which of the fifteen recipes fits which session. It starts with one question.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "American College of Sports Medicine. Position Stand: Exercise and Fluid Replacement. Medicine and Science in Sports and Exercise, 2007.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17277604/"
+      },
+      {
+        "citation": "Jeukendrup A. Carbohydrate feeding during exercise. European Journal of Sport Science, 2008.",
+        "url": "https://www.tandfonline.com/doi/full/10.1080/17461390801918971"
+      }
+    ],
+    "order": 19,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "protein-cesitlendirme",
+    "title": "Protein çeşitlendirme: aynı üç yemekten çıkmak",
+    "category": "beslenme",
+    "readTime": "6 dk",
+    "excerpt": "Sorun protein miktarı değil, kaynak sayısı. Dağılım ve kaynak üzerine iki meta-analiz, birbirini tam olarak doğrulamıyor.",
+    "body": [
+      "Protein hedefini tutturmaya çalışan çoğu insan aynı yere sıkışıyor: tavuk göğsü, yumurta, yoğurt. Üç yemeğin döngüsü kısa sürede sıkıcı hâle geliyor ve hedef de onunla birlikte düşüyor.",
+      "MİKTARDAN ÖNCE DAĞILIM",
+      "Kas protein sentezi öğün başına doyuma ulaşıyor. Yani günlük toplamı tek öğünde almak, dört öğüne yaymakla aynı sonucu vermiyor.",
+      "Öğün başına yaklaşık 0,4 gram kilogram başına kaliteli protein, çoğu yetişkinde yeterli uyaranı veriyor. 70 kilogramlık biri için bu, öğün başına yaklaşık 28 gram demek. Günde dört öğüne yayıldığında toplam 1,6 civarına çıkıyor.",
+      "Buradan çıkan pratik sonuç: kahvaltıda 8 gram, akşam 60 gram protein alan biri, toplamı tutturmuş olsa bile dağılımı kaçırıyor.",
+      "BİTKİSEL Mİ HAYVANSAL MI: İKİ META-ANALİZ, İKİ FARKLI VURGU",
+      "Bu soru genelde ideolojik tartışılıyor, ama veriler daha ayrıntılı.",
+      "2021'de Nutrients dergisinde yayımlanan bir meta-analiz, toplam protein alımı yeterli olduğunda kaynağın yağsız kütle ve kuvvet üzerinde fark yaratmadığını buldu.",
+      "2025'te Nutrition Reviews'da yayımlanan daha yeni bir meta-analiz ise biraz farklı bir tablo çizdi: bitkisel protein, hayvansal proteine kıyasla daha düşük kas kütlesiyle sonuçlandı ve bu fark altmış yaş altındakilerde daha belirgindi. Ancak kuvvet ve fiziksel performansta fark bulunmadı.",
+      "En kullanışlı ayrıntı ise şu: soya proteini, süt proteinine denk çıktı. Fark, soya dışındaki bitkisel kaynaklarda ortaya çıktı.",
+      "Pratik karşılığı: bitkisel ağırlıklı besleniyorsan soya ve bakliyat en güçlü seçeneklerin, ve toplam miktarı biraz yukarı çekmek makul. Karışık besleniyorsan kaynak tartışması senin için zaten büyük ölçüde teorik.",
+      "Uygulamadaki altı protein tarifi bu mantıkla yazıldı: altı farklı kaynak, porsiyon başına 24 gramın üstünde protein."
+    ],
+    "en": {
+      "title": "diversifying protein: getting out of the same three meals",
+      "readTime": "6 min",
+      "excerpt": "The problem is not the amount, it is the number of sources.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Schoenfeld BJ, Aragon AA. How much protein can the body use in a single meal for muscle-building? Implications for daily protein distribution. Journal of the International Society of Sports Nutrition, 2018.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29497353/"
+      },
+      {
+        "citation": "Lim MT, Pan BJ, Toh DWK ve ark. Animal Protein versus Plant Protein in Supporting Lean Mass and Muscle Strength: A Systematic Review and Meta-Analysis of Randomized Controlled Trials. Nutrients, 2021;13(2):661.",
+        "url": "https://www.mdpi.com/2072-6643/13/2/661"
+      },
+      {
+        "citation": "Effect of Plant Versus Animal Protein on Muscle Mass, Strength, Physical Performance, and Sarcopenia: A Systematic Review and Meta-analysis of Randomized Controlled Trials. Nutrition Reviews, 2025.",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39813010/"
+      }
+    ],
+    "order": 20,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "lor-kasesi",
+    "title": "çırpılmış lor kâsesi",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Lor peyniri blenderdan geçince kremaya dönüşüyor. Porsiyon başına 33 gram protein.",
+    "body": [
+      "Lor peyniri Türkiye'de en ucuz ve en az kullanılan protein kaynaklarından biri. Blenderdan geçince dokusu tamamen değişiyor: kabarık, sürülebilir, kremamsı.",
+      "Bir kâsede 33 gram protein var, yani tek başına bir öğünün protein hedefini karşılıyor."
+    ],
+    "ingredients": [
+      "200 g lor peyniri",
+      "2 yemek kaşığı süzme yoğurt",
+      "1 yumurta",
+      "1 salatalık",
+      "1 domates",
+      "1 yemek kaşığı zeytinyağı",
+      "1 dilim ekşi mayalı ekmek",
+      "dereotu",
+      "karabiber"
+    ],
+    "steps": [
+      "Lor peynirini ve yoğurdu blenderdan bir dakika geçir. Kremamsı olmalı.",
+      "Yumurtayı rafadan haşla, altı dakika yeterli.",
+      "Loru kâsenin dibine yay, üstüne doğranmış salatalık ve domatesi koy.",
+      "Yumurtayı ikiye böl ve ortaya yerleştir.",
+      "Zeytinyağını gezdir, dereotu ve karabiber serp. Ekmekle ye."
+    ],
+    "diets": [
+      "vejetaryen"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "gluten",
+      "yumurta"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 470,
+      "protein": 33,
+      "karbonhidrat": 28,
+      "yag": 24
+    },
+    "en": {
+      "title": "whipped lor bowl",
+      "readTime": "3 min",
+      "excerpt": "Cottage cheese whipped into cream. 33 grams of protein per serving.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 21
+  },
+  {
+    "id": "edamame-nohut",
+    "title": "edamame nohut salatası",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Soya, meta-analizde süt proteinine denk çıkan tek bitkisel kaynak. Kâsede 27 gram protein, 17 gram lif.",
+    "body": [
+      "Soya, bitkisel protein kaynakları arasında kas kütlesi açısından süt proteinine denk çıkan tek kaynak. Edamame donmuş hâlde bulunuyor ve beş dakikada hazırlanıyor.",
+      "Buzdolabında iki gün duruyor ve ikinci gün daha lezzetli oluyor, yani öğle yemeğine götürülebiliyor."
+    ],
+    "ingredients": [
+      "150 g kabuğu ayıklanmış donmuş edamame",
+      "120 g haşlanmış nohut",
+      "1 kırmızı soğan",
+      "1 avuç maydanoz",
+      "1 yemek kaşığı zeytinyağı",
+      "yarım limon",
+      "1 çay kaşığı kimyon",
+      "tuz"
+    ],
+    "steps": [
+      "Edamameyi tuzlu suda beş dakika haşla, süz ve soğut.",
+      "Soğanı ince ince doğra, limon suyuyla ovala ve on dakika beklet. Keskinliği gidiyor.",
+      "Nohut, edamame, soğan ve maydanozu karıştır.",
+      "Zeytinyağı, kimyon ve tuzu ekle, iyice karıştır.",
+      "En az yarım saat bekletip öyle ye."
+    ],
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "soya"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 490,
+      "protein": 27,
+      "karbonhidrat": 44,
+      "yag": 25,
+      "lif": 17
+    },
+    "en": {
+      "title": "edamame and chickpea salad",
+      "readTime": "3 min",
+      "excerpt": "Soy is the one plant source that matched dairy protein in the meta-analysis.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 22
+  },
+  {
+    "id": "firinda-tofu-kinoa",
+    "title": "fırında baharatlı tofu ve kinoa",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Tofunun sorunu tadı değil suyu. Sıkılmadan pişen tofu yumuşak kalıyor.",
+    "body": [
+      "Tofu sevilmemesinin sebebi genelde yanlış hazırlanması. Suyu çıkarılmadan fırına giren tofu yumuşak ve tatsız kalıyor; sıkıldığında ise kenarları çıtırlaşıyor ve baharatı içine alıyor.",
+      "Tahin sosu hem tadı toparlıyor hem protein ekliyor."
+    ],
+    "ingredients": [
+      "200 g sert tofu",
+      "60 g kinoa",
+      "1 yemek kaşığı tahin",
+      "yarım limon",
+      "1 tatlı kaşığı tatlı toz biber",
+      "yarım çay kaşığı kimyon",
+      "1 yemek kaşığı zeytinyağı",
+      "1 avuç roka",
+      "tuz"
+    ],
+    "steps": [
+      "Tofuyu bir mutfak beziyle sar ve üstüne ağır bir şey koy. On beş dakika bekle, suyunu bırakacak.",
+      "Fırını 200 dereceye ısıt.",
+      "Tofuyu küp doğra, zeytinyağı ve baharatlarla harmanla.",
+      "Tepsiye tek kat yay, 25 dakika pişir. Yarısında bir kez çevir.",
+      "Kinoayı paket üstündeki süreye göre haşla.",
+      "Tahini limon ve iki kaşık suyla çırp, sos olacak.",
+      "Kinoanın üstüne tofuyu ve rokayı koy, tahin sosunu gezdir."
+    ],
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "soya",
+      "susam"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 510,
+      "protein": 27,
+      "karbonhidrat": 54,
+      "yag": 21,
+      "lif": 8
+    },
+    "en": {
+      "title": "roasted spiced tofu with quinoa",
+      "readTime": "4 min",
+      "excerpt": "The problem with tofu is water, not taste.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 23
+  },
+  {
+    "id": "ton-fasulye-piyaz",
+    "title": "ton balıklı fasulye piyazı",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Piyaz zaten var olan bir tarif. Ton balığı eklendiğinde protein iki katına çıkıyor.",
+    "body": [
+      "Piyaz Türk mutfağının hazır protein kaynaklarından biri ama tek başına öğün olacak kadar doyurucu değil.",
+      "Bir kutu ton balığı eklendiğinde porsiyon başına 34 gram proteine çıkıyor ve öğle yemeği hâline geliyor. Yanına haşlanmış yumurta eklersen 40 grama ulaşıyor."
+    ],
+    "ingredients": [
+      "1 kutu ton balığı (suyu süzülmüş)",
+      "100 g haşlanmış kuru fasulye",
+      "1 domates",
+      "yarım kırmızı soğan",
+      "1 avuç maydanoz",
+      "2 yemek kaşığı zeytinyağı",
+      "yarım limon",
+      "1 tatlı kaşığı sumak",
+      "tuz"
+    ],
+    "steps": [
+      "Soğanı yarım ay doğra, sumak ve tuzla ovala.",
+      "Fasulyeyi, domatesi ve maydanozu ekle.",
+      "Ton balığını süzüp iri parçalar hâlinde üstüne koy. Karıştırırken dağıtma.",
+      "Zeytinyağı ve limonu gezdir."
+    ],
+    "diets": [
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "balik"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 520,
+      "protein": 34,
+      "karbonhidrat": 32,
+      "yag": 28,
+      "lif": 8
+    },
+    "en": {
+      "title": "tuna and white bean piyaz",
+      "readTime": "3 min",
+      "excerpt": "A recipe that already exists. Tuna doubles the protein.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 24
+  },
+  {
+    "id": "tuzlu-yulaf",
+    "title": "yumurtalı tuzlu yulaf",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Yulaf tatlı yenmek zorunda değil. Tuzlu hâli, kahvaltıya protein sokmanın en hızlı yolu.",
+    "body": [
+      "Yulaf denince akla tatlı hâli geliyor ve o hâliyle protein tarafı zayıf kalıyor.",
+      "Tuzlu yulaf, aynı tabanı yumurta ve peynirle birleştiriyor. Hazırlığı on dakika ve 24 gram protein veriyor."
+    ],
+    "ingredients": [
+      "50 g yulaf ezmesi",
+      "250 ml su ya da sebze suyu",
+      "2 yumurta",
+      "30 g beyaz peynir",
+      "1 tatlı kaşığı zeytinyağı",
+      "taze soğan",
+      "karabiber",
+      "pul biber"
+    ],
+    "steps": [
+      "Yulafı suyla tencereye al, kısık ateşte beş dakika pişir. Lapa kıvamına gelecek.",
+      "Bu sırada iki yumurtayı sahanda ya da rafadan pişir.",
+      "Yulafı kâseye al, üstüne peyniri ufalayarak serp.",
+      "Yumurtaları üstüne koy.",
+      "Zeytinyağını gezdir, taze soğan ve pul biber ekle."
+    ],
+    "diets": [
+      "vejetaryen"
+    ],
+    "allergens": [
+      "gluten",
+      "yumurta",
+      "sut_laktoz"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 424,
+      "protein": 24,
+      "karbonhidrat": 33,
+      "yag": 22,
+      "lif": 5
+    },
+    "en": {
+      "title": "savoury oats with eggs",
+      "readTime": "3 min",
+      "excerpt": "Oats do not have to be sweet. This is the fastest protein breakfast.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 25
+  },
+  {
+    "id": "kefirli-protein-smoothie",
+    "title": "kefirli fıstık ezmeli smoothie",
+    "category": "beslenme",
+    "readTime": "2 dk",
+    "excerpt": "Kefir hem protein hem fermente gıda. Bağırsak florası bulgusuyla aynı öğünde buluşuyor.",
+    "body": [
+      "Kefir iki işi birden yapıyor: porsiyon başına ciddi miktarda protein veriyor ve fermente gıda olarak mikrobiyota çeşitliliğine katkıda bulunuyor.",
+      "Yulafı önce tek başına öğütmek dokuyu tamamen değiştiriyor, içecek pürüzsüz oluyor."
+    ],
+    "ingredients": [
+      "300 ml kefir",
+      "30 g şekersiz fıstık ezmesi",
+      "40 g yulaf",
+      "1 donmuş muz",
+      "1 çay kaşığı tarçın",
+      "buz"
+    ],
+    "steps": [
+      "Yulafı önce tek başına blenderdan geçirip un hâline getir.",
+      "Kalan malzemeyi ekle.",
+      "Bir dakika yüksek hızda çek.",
+      "Kıvam koyu isteniyorsa buzu artır, sıvı isteniyorsa kefiri."
+    ],
+    "diets": [
+      "vejetaryen",
+      "glutensiz"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "findik_kabuklu"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 558,
+      "protein": 24,
+      "karbonhidrat": 72,
+      "yag": 23,
+      "lif": 9
+    },
+    "en": {
+      "title": "kefir and peanut butter smoothie",
+      "readTime": "2 min",
+      "excerpt": "Kefir is protein and a fermented food at the same time.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 26
   }
 ]
