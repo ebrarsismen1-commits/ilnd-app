@@ -2073,5 +2073,370 @@
     "steps": [],
     "diets": [],
     "allergens": []
+  },
+  {
+    "id": "on-dakika-kurali",
+    "title": "on dakika kuralı kalktı",
+    "category": "hareket",
+    "readTime": "3 dk",
+    "excerpt": "İki dakikalık yürüyüş de sayılıyor. Bu kural 2018'de resmen değişti.",
+    "body": [
+      "Yıllarca söylenen bir kural vardı: egzersizin sayılması için en az on dakika sürmesi gerekir. Kısa hareketler gerçek sayılmıyordu.",
+      "2018'de yayımlanan Amerikan Fiziksel Aktivite Kılavuzu'nun ikinci baskısı bu şartı kaldırdı. Gerekçe şu: kısa süreli hareketin de ölçülebilir faydası var ve on dakika şartı insanları hareket etmekten alıkoyuyordu.",
+      "Yani markete kadar yürümek sayılıyor. Üç kat merdiven sayılıyor. Telefonda konuşurken odada dolaşmak sayılıyor. Hepsi haftalık toplama giriyor.",
+      "Kılavuz ayrıca tek bir hareket seansının bile anlık faydaları olduğunu belirtiyor: kaygıda azalma, kan basıncında düşüş, uyku kalitesinde ve insülin duyarlılığında iyileşme.",
+      "Pratik karşılığı: bugün spora gidemedim cümlesi çoğu zaman yanlış. Gidemedin ama yürüdün, merdiven çıktın, ayakta durdun. Bunlar sıfır değil.",
+      "Haftalık hedefi tek seferde toplamaya çalışmak da gerekmiyor. Beşer dakikalık parçalar aynı toplamı veriyor."
+    ],
+    "en": {
+      "title": "the ten minute rule is gone",
+      "readTime": "3 min",
+      "excerpt": "A two minute walk counts too. The rule officially changed in 2018.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "U.S. Department of Health and Human Services. Physical Activity Guidelines for Americans, 2nd edition, 2018.",
+        "url": "https://odphp.health.gov/sites/default/files/2019-09/Physical_Activity_Guidelines_2nd_edition.pdf"
+      }
+    ],
+    "order": 42,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "yedi-bin-adim",
+    "title": "yedi bin adım",
+    "category": "hareket",
+    "readTime": "4 dk",
+    "excerpt": "On bin adım bir pazarlama sayısıydı. Asıl eşik daha düşük ve ölçüldü.",
+    "body": [
+      "Günde on bin adım hedefi 1960'larda Japonya'da satılan bir adımsayarın isminden geliyor. Bilimsel bir eşik değil, yuvarlak bir sayı.",
+      "2021'de JAMA Network Open'da yayımlanan bir çalışma gerçek eşiği aradı. 38 ile 50 yaş arası 2000'den fazla kişiye ivmeölçer takıldı ve ortalama on bir yıl takip edildiler.",
+      "Bulgu: günde en az 7000 adım atanlarda, daha az atanlara kıyasla ölüm riski belirgin biçimde düşüktü. 7000 ile 10.000 arasında fayda sürüyordu ama 10.000'in ötesinde ek bir kazanç görünmüyordu.",
+      "İkinci bulgu daha rahatlatıcı: adımların hızı fark yaratmadı. Yani hızlı yürümek şart değil, toplam sayı önemli.",
+      "7000 adım pratikte yaklaşık 5 ile 5,5 kilometre demek, yani ortalama 60 ile 70 dakikalık toplam yürüme. Gün içine dağılmış hâlde çoğu insanın 4000 ile 5000'i zaten var; eksik olan kısım genelde bir tek yürüyüşle kapanıyor.",
+      "Bu bir gözlem çalışması, yani nedensellik kanıtlamıyor. Ama hedefi 10.000'den 7000'e çekmek, ulaşılabilir olduğu için daha çok insanın gerçekten yaptığı bir hedef."
+    ],
+    "en": {
+      "title": "seven thousand steps",
+      "readTime": "4 min",
+      "excerpt": "Ten thousand was a marketing number. The real threshold is lower and it was measured.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Paluch AE, Gabriel KP, Fulton JE ve ark. Steps per Day and All-Cause Mortality in Middle-aged Adults in the Coronary Artery Risk Development in Young Adults Study. JAMA Network Open, 2021.",
+        "url": "https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2783711"
+      }
+    ],
+    "order": 43,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "en-iyi-egzersiz",
+    "title": "en iyi egzersiz hangisi",
+    "category": "hareket",
+    "readTime": "3 dk",
+    "excerpt": "Sorunun cevabı programda değil, altı ay sonra hâlâ yapıyor olmanda.",
+    "body": [
+      "Hangi egzersiz daha iyi diye sorulduğunda verilen cevaplar genelde teknik: şu daha çok kalori yakar, bu kası daha çok çalıştırır.",
+      "Pratikte belirleyici olan şey başka: altı ay sonra hâlâ yapıyor musun.",
+      "Mükemmel bir program, üç hafta sonra bırakılırsa hiçbir şey vermiyor. Vasat bir program, iki yıl sürdürülürse çok şey veriyor. Bu, motivasyonla ilgili bir söz değil, aritmetikle ilgili.",
+      "O yüzden seçim kriterin şunlar olsun.",
+      "Ulaşımı kolay mı? Yarım saat yol giderek gidilen salon, kışın gidilmiyor.",
+      "Sevmesen de katlanabiliyor musun? Nefret ettiğin bir şeyi disiplinle sürdürme fikri işe yaramıyor.",
+      "Kötü bir günde yapılabilir mi? Enerjinin en düşük olduğu günde yapılabilecek bir hâli var mı? Yoksa o günler tamamen kaçıyor.",
+      "Yalnız yapılabiliyor mu? Başkasına bağlı egzersizler, o kişi gelmediğinde duruyor.",
+      "Bu dört soruya iyi cevap veren egzersiz, kâğıt üstünde daha verimli olandan iyidir."
+    ],
+    "en": {
+      "title": "which exercise is best",
+      "readTime": "3 min",
+      "excerpt": "The answer is not in the programme. It is whether you are still doing it in six months.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 44,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "agirlik-kaldirmak",
+    "title": "ağırlık kaldırmak",
+    "category": "hareket",
+    "readTime": "4 dk",
+    "excerpt": "Kaslı görünmekten korkanlara: o görünüm kazara oluşmuyor.",
+    "body": [
+      "Ağırlık çalışmasından uzak duranların en yaygın gerekçesi kaslı görünme korkusu, özellikle kadınlarda.",
+      "Bu korkunun gerçekle ilişkisi zayıf. Belirgin kas hacmi kazanmak yıllarca süren, planlı, yüksek hacimli antrenman ve buna eşlik eden fazla kalori alımı gerektiriyor. Kazara olmuyor. Haftada iki gün ağırlık çalışan biri bir sabah uyanıp kaslı bulmuyor kendini.",
+      "Karşılığında elde edilenler ise sessiz ve önemli: kemik yoğunluğu, denge, yaşla birlikte kaybedilen kas kütlesinin korunması, günlük işlerde zorlanmamak.",
+      "NEREDEN BAŞLANIR",
+      "Makine değil, birkaç temel hareket: çömelme, itme, çekme, kalça menteşesi. Dört hareket vücudun çoğunu kapsıyor.",
+      "Ağırlık gerekmiyor. İlk haftalarda kendi vücut ağırlığın yeterli ve hareketi doğru öğrenmen için daha iyi.",
+      "Haftada iki gün, her hareketten iki üç set. Tamamı yirmi dakika.",
+      "Zorluk kademeli artar: önce tekrar sayısı, sonra ağırlık. Aynı anda ikisini artırmak sakatlanmanın en kolay yolu.",
+      "Bir uyarı: mevcut bir sakatlığın ya da kronik rahatsızlığın varsa başlamadan önce bir uzmana sor. Bu genel bir yazı, kişiye özel bir program değil."
+    ],
+    "en": {
+      "title": "lifting weights",
+      "readTime": "4 min",
+      "excerpt": "For those afraid of looking muscular: that look does not happen by accident.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 45,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "isinma-gerekli-mi",
+    "title": "ısınmak gerekli mi",
+    "category": "hareket",
+    "readTime": "3 dk",
+    "excerpt": "Uzun esnetme seansı değil. Beş dakika hareketli ısınma, iki farklı işi birden yapıyor.",
+    "body": [
+      "Isınma denince akla gelen şey genelde yerde oturup esneme. Oysa antrenman öncesinde uzun süreli statik esneme, bazı çalışmalarda güç çıktısını geçici olarak düşürüyor.",
+      "Daha kullanışlı olan hareketli ısınma: yapacağın hareketin hafif hâlini yapmak.",
+      "Yürüyüşe çıkacaksan ilk üç dakika yavaş yürü. Ağırlık kaldıracaksan ilk seti boş çubukla ya da çok hafif yap. Koşacaksan yürüyerek başla.",
+      "İki işi birden yapıyor: kaslar ısınıp esnekliği artıyor ve sinir sistemi o harekete hazırlanıyor.",
+      "Beş dakika yeterli. Daha uzunu asıl antrenmandan çalıyor.",
+      "Statik esnemenin yeri antrenman sonrası ya da ayrı bir esneklik seansı. O zaman faydalı ve keyifli.",
+      "Kısa bir not: ısınmanın sakatlanmayı önlediğine dair kanıtlar karışık. Ama ilk setin ya da ilk kilometrenin daha rahat geçtiği kesin ve bu bile yeterli sebep."
+    ],
+    "en": {
+      "title": "do you need to warm up",
+      "readTime": "3 min",
+      "excerpt": "Not a long stretching session. Five minutes of moving warm up does two jobs at once.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 46,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "kas-agrisi",
+    "title": "kas ağrısı ne anlatıyor",
+    "category": "hareket",
+    "readTime": "3 dk",
+    "excerpt": "Ertesi gün ağrımak iyi antrenman göstergesi değil. Laktik asitle de ilgisi yok.",
+    "body": [
+      "Antrenmandan bir iki gün sonra gelen kas ağrısına gecikmiş kas ağrısı deniyor. İki yaygın yanlış var.",
+      "Birincisi: laktik asit değil. Laktik asit egzersizden sonra saatler içinde temizleniyor, iki gün sonraki ağrıyı açıklamıyor. Ağrının kaynağı kas liflerindeki mikro hasar ve buna eşlik eden iltihabi süreç.",
+      "İkincisi: ağrı başarı ölçüsü değil. Ağrı çoğunlukla yeni bir harekete ya da alışık olmadığın bir yüke verilen tepki. Aynı antrenmanı düzenli yaptığında ağrı azalıyor ama kazanç devam ediyor. Yani ağrımamak, boşa çalıştığın anlamına gelmiyor.",
+      "Ağrılıyken ne yapmalı: hafif hareket, yürüyüş, kan akışını artıran her şey işe yarıyor. Tamamen durmak süreci uzatıyor.",
+      "Ne zaman dikkat etmeli: ağrı keskinse, tek bir noktadaysa, hareketi engelliyorsa ya da bir hafta geçmiyorsa bu kas ağrısı olmayabilir. O zaman ara ver ve gerekirse bir hekime görün."
+    ],
+    "en": {
+      "title": "what muscle soreness is telling you",
+      "readTime": "3 min",
+      "excerpt": "Being sore the next day is not a sign of a good workout. And it is not lactic acid.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 47,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "evde-ekipmansiz",
+    "title": "evde ekipmansız",
+    "category": "hareket",
+    "readTime": "4 dk",
+    "excerpt": "Dört hareket, on beş dakika, hiçbir alet yok. Odanın ortasında yapılıyor.",
+    "body": [
+      "Salona gitmek her zaman mümkün olmuyor. Ekipmansız bir rutin, o boşluğu dolduran şey.",
+      "Dört hareket vücudun büyük kısmını kapsıyor.",
+      "Çömelme: ayaklar omuz genişliğinde, kalçayı geriye götürerek in. Dizler ayak ucunu çok geçmesin. Sandalyeye oturur gibi düşün.",
+      "Şınav: zor geliyorsa dizlerin üstünde ya da eller duvara yaslı yap. Kolay hâliyle doğru yapmak, zor hâliyle bozuk yapmaktan iyi.",
+      "Kalça köprüsü: sırtüstü uzan, dizler bükülü, kalçayı yukarı kaldır. Oturarak geçen günlerin en çok ihmal ettiği kas grubu burası.",
+      "Plank: dirsekler yerde, vücut düz bir çizgi. Yirmi saniyeyle başla.",
+      "Nasıl birleştirilir: her hareketten 30 saniye, aralarında 15 saniye dinlenme. Dört hareket bir tur, üç tur yap. Toplam yaklaşık on beş dakika.",
+      "Zorluk artışı basit: süreyi uzat ya da tur sayısını artır. Yeni hareket eklemek gerekmiyor.",
+      "Haftada iki üç gün yeterli. Her gün yapmak toparlanmaya zaman bırakmıyor."
+    ],
+    "en": {
+      "title": "at home without equipment",
+      "readTime": "4 min",
+      "excerpt": "Four moves, fifteen minutes, no gear. Done in the middle of the room.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 48,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "merdiven",
+    "title": "merdiven",
+    "category": "hareket",
+    "readTime": "2 dk",
+    "excerpt": "Günde üç kat, ayrıca zaman ayırmadan yapılan tek egzersiz.",
+    "body": [
+      "Merdiven çıkmak, hiç plan gerektirmeyen bir egzersiz. Zaten oradasın ve alternatifi asansör.",
+      "Yokuş yukarı hareket, düz yürümeye göre daha fazla kas grubunu ve daha yüksek nabzı çalıştırıyor. Kalp damar sistemi açısından kısa ama yoğun bir uyaran.",
+      "On dakika kuralı kalktığı için bu kısa bloklar da haftalık toplama giriyor.",
+      "Nasıl alışkanlık olur: kural koy ve tartışmaya kapat. Üç kata kadar merdiven, üstü asansör. Karar her seferinde yeniden verilirse yorgun olduğun gün kaybediyorsun.",
+      "Elinde yük varken zorlama. Alışkanlığı ağır poşetlerle sınamak, alışkanlığı bitirir.",
+      "İnerken de merdiven kullanmak eklem açısından daha zorlayıcı, dizinde sorun varsa inişte asansörü tercih et.",
+      "Küçük ve sıkıcı görünüyor ama günde üç kez yapılan bir şey, haftada yirmi bir oluyor."
+    ],
+    "en": {
+      "title": "stairs",
+      "readTime": "2 min",
+      "excerpt": "Three flights a day, the only exercise that needs no extra time.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 49,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "haftada-kac-gun",
+    "title": "haftada kaç gün",
+    "category": "hareket",
+    "readTime": "3 dk",
+    "excerpt": "Her gün çalışmak daha hızlı sonuç vermiyor. Gelişme dinlenirken oluyor.",
+    "body": [
+      "Yeni başlayanların en yaygın hatası her gün çalışmak. Mantıklı görünüyor: daha çok yaparsam daha hızlı ilerlerim.",
+      "Ama kas antrenman sırasında gelişmiyor. Antrenman sırasında hasar oluşuyor; gelişme, dinlenme ve uyku sırasında onarılırken oluyor. Ara vermezsen onarım tamamlanmıyor ve birikiyor.",
+      "MAKUL BİR BAŞLANGIÇ",
+      "Ağırlık ya da direnç çalışması: haftada 2 ile 3 gün, aynı kas grubuna ard arda gün koymadan.",
+      "Yürüyüş ve hafif kardiyo: her gün olabilir, dinlenme gerektirmiyor.",
+      "Yoğun kardiyo, yani koşu ve interval: haftada 2 ile 3 gün.",
+      "Dinlenme günü boş gün değil. Yürüyüş, esneme, hafif hareket toparlanmayı hızlandırıyor. Kanepede yatmak da bazen doğru cevap ama varsayılan olmamalı.",
+      "Aşırıya kaçtığının işaretleri: sürekli yorgunluk, uykunun bozulması, performansın düşmesi, isteksizlik. Bunlar disiplin eksikliği değil, dinlenme sinyali."
+    ],
+    "en": {
+      "title": "how many days a week",
+      "readTime": "3 min",
+      "excerpt": "Training every day does not speed things up. Progress happens while you rest.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 50,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "motivasyon-beklemek",
+    "title": "motivasyonu beklemek",
+    "category": "hareket",
+    "readTime": "3 dk",
+    "excerpt": "Motivasyon hareketten önce değil sonra geliyor. Sıra genelde ters kuruluyor.",
+    "body": [
+      "Motivasyonum gelince başlayacağım cümlesi bir bekleme odası kuruyor ve o odadan çıkılmıyor.",
+      "Pratikte sıra çoğu zaman tersi: önce hareket ediyorsun, sonra istek geliyor. İlk beş dakika en zoru; onu geçtikten sonra devam etmek nadiren sorun oluyor.",
+      "Bunu kullanmanın yolu eşiği düşürmek.",
+      "Beş dakika kuralı: ayakkabıyı giy, beş dakika yürü. Beş dakikanın sonunda hâlâ istemiyorsan dur, gerçekten dur. Çoğu zaman durmuyorsun ama izin verilmiş olması başlamayı kolaylaştırıyor.",
+      "Hazırlığı akşamdan yap. Spor kıyafetini çıkar, çantayı hazırla. Sabah karar verilecek şey sayısı azalıyor.",
+      "En küçük hâlini tanımla. Kötü bir gün için on dakika yürüyüş gibi bir alt sınır belirle. O gün onu yaparsan seri devam ediyor ve kimlik kırılmıyor.",
+      "Motivasyon dalgalı bir kaynak. Üzerine sistem kurulmuyor, ama gelirse de reddedilmiyor."
+    ],
+    "en": {
+      "title": "waiting for motivation",
+      "readTime": "3 min",
+      "excerpt": "Motivation comes after movement, not before. The order is usually taught backwards.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 51,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "oturmayi-bolmek",
+    "title": "uzun oturmayı bölmek",
+    "category": "hareket",
+    "readTime": "3 dk",
+    "excerpt": "Akşam bir saat spor yapmak, gün boyu oturmanın etkisini tamamen silmiyor.",
+    "body": [
+      "Masa başı çalışan biri günde sekiz saatten fazla oturuyor olabilir. Akşam yapılan bir saatlik egzersiz iyi bir şey ama gün boyu hareketsizliğin yerini tamamen doldurmuyor. Bunlar ayrı iki değişken.",
+      "Buradaki mesele kalori değil, kesintisizlik. Uzun süre hareketsiz kalmak kan şekeri düzenlenmesini ve dolaşımı etkiliyor. Bölünmüş oturma ise daha iyi görünüyor.",
+      "UYGULANABİLİR HÂLİ",
+      "Her saat başı ayağa kalk ve iki üç dakika hareket et. Su doldur, telefonda ayakta konuş, odada dolaş.",
+      "Toplantıların bir kısmını ayakta ya da yürüyerek yap. Video gerektirmeyen görüşmeler için işe yarıyor.",
+      "Bir hatırlatıcı kur. Kendi kendine hatırlamak ilk hafta oluyor, sonra unutuluyor.",
+      "Bu, egzersizin yerine geçen bir şey değil. İkisi farklı işler yapıyor ve ikisi de gerekiyor."
+    ],
+    "en": {
+      "title": "breaking up long sitting",
+      "readTime": "3 min",
+      "excerpt": "An hour of evening exercise does not fully cancel a day of sitting.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 52,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "fazla-hevesle-baslamak",
+    "title": "fazla hevesle başlamak",
+    "category": "hareket",
+    "readTime": "3 dk",
+    "excerpt": "İlk hafta yapılan hata genelde tembellik değil, aşırılık.",
+    "body": [
+      "Yeni başlayanların bıraktığı nokta genelde ikinci hafta ve sebebi tembellik değil.",
+      "İlk hafta heves yüksek oluyor: her gün antrenman, uzun süreler, ağır yükler. Vücut buna hazır olmadığı için ikinci hafta ağrı, yorgunluk ya da küçük bir sakatlıkla geliyor. Sonra ara veriliyor ve ara kalıcı oluyor.",
+      "Kas hızlı adapte oluyor ama tendon, bağ ve eklem daha yavaş. Bu yüzden yapabiliyor olmak ile hazır olmak aynı şey değil.",
+      "DAHA DAYANIKLI BİR BAŞLANGIÇ",
+      "İlk iki hafta yapabileceğinin yaklaşık yarısını yap. Az geldiğini hissetmek iyi bir işaret.",
+      "Haftada bir değişken artır: ya süre, ya ağırlık, ya sıklık. Üçü birden değil.",
+      "Artışı yaklaşık yüzde on civarında tut. Sayı kesin bir kural değil ama sıçramaları engelliyor.",
+      "Ağrıyla zorlanmayı ayır: zorlanma çalışırken olur ve biter, ağrı sonrasında kalır ve keskindir.",
+      "Altı ay sonra hangi noktada olacağını belirleyen şey ilk haftanın yoğunluğu değil, kaç hafta ara vermeden devam ettiğin."
+    ],
+    "en": {
+      "title": "starting with too much enthusiasm",
+      "readTime": "3 min",
+      "excerpt": "The first week mistake is usually excess, not laziness.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 53,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
   }
 ]
