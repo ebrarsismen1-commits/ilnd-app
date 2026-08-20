@@ -1475,6 +1475,12 @@ abstract class AppLocalizations {
   /// Explore category filter
   ///
   /// In tr, this message translates to:
+  /// **'tarifler'**
+  String get exploreFilterRecipes;
+
+  /// Explore category filter
+  ///
+  /// In tr, this message translates to:
   /// **'beslenme'**
   String get exploreFilterNutrition;
 
@@ -1567,6 +1573,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'lif'**
   String get recipeNutritionFiber;
+
+  /// Section label above the reference list
+  ///
+  /// In tr, this message translates to:
+  /// **'KAYNAKLAR'**
+  String get articleSourcesLabel;
 
   /// Recipe ingredients section label
   ///
@@ -1927,54 +1939,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'ilnd\'deki ruh halimi paylaşıyorum davet kodum: {code}'**
   String vibeCardShareTextWithCode(String code);
-
-  /// Home section title: the three daily cards ILND prepares (move/plate/mind)
-  ///
-  /// In tr, this message translates to:
-  /// **'BUGÜNÜN ÜÇLÜSÜ'**
-  String get trioSectionTitle;
-
-  /// Daily trio card title: movement
-  ///
-  /// In tr, this message translates to:
-  /// **'Hareket'**
-  String get trioMoveTitle;
-
-  /// Daily trio card title: today's recipe
-  ///
-  /// In tr, this message translates to:
-  /// **'Tabak'**
-  String get trioPlateTitle;
-
-  /// Daily trio card title: evening check-in / mind
-  ///
-  /// In tr, this message translates to:
-  /// **'Kafa'**
-  String get trioMindTitle;
-
-  /// Duration chip on trio cards, minutes
-  ///
-  /// In tr, this message translates to:
-  /// **'{m} dk'**
-  String trioMinutes(int m);
-
-  /// Mind card subtitle when today's check-in is not done yet
-  ///
-  /// In tr, this message translates to:
-  /// **'Akşam check-in\'i seni bekliyor'**
-  String get trioMindPending;
-
-  /// Mind card subtitle when today's check-in or ritual is done
-  ///
-  /// In tr, this message translates to:
-  /// **'Bugün kendine döndün'**
-  String get trioMindDone;
-
-  /// Semantics label for the trio card completion tick
-  ///
-  /// In tr, this message translates to:
-  /// **'Tamamlandı olarak işaretle'**
-  String get trioMarkDone;
 
   /// Streak milestone card headline for a 7+ day streak
   ///

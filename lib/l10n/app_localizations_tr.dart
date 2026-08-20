@@ -733,6 +733,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exploreFilterMeditation => 'meditasyon';
 
   @override
+  String get exploreFilterRecipes => 'tarifler';
+
+  @override
   String get exploreFilterNutrition => 'beslenme';
 
   @override
@@ -780,6 +783,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get recipeNutritionFiber => 'lif';
+
+  @override
+  String get articleSourcesLabel => 'KAYNAKLAR';
 
   @override
   String get recipeIngredientsTitle => 'malzemeler';
@@ -981,32 +987,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String vibeCardShareTextWithCode(String code) {
     return 'ilnd\'deki ruh halimi paylaşıyorum davet kodum: $code';
   }
-
-  @override
-  String get trioSectionTitle => 'BUGÜNÜN ÜÇLÜSÜ';
-
-  @override
-  String get trioMoveTitle => 'Hareket';
-
-  @override
-  String get trioPlateTitle => 'Tabak';
-
-  @override
-  String get trioMindTitle => 'Kafa';
-
-  @override
-  String trioMinutes(int m) {
-    return '$m dk';
-  }
-
-  @override
-  String get trioMindPending => 'Akşam check-in\'i seni bekliyor';
-
-  @override
-  String get trioMindDone => 'Bugün kendine döndün';
-
-  @override
-  String get trioMarkDone => 'Tamamlandı olarak işaretle';
 
   @override
   String get streakCardHeadlineWeek =>

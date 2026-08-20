@@ -747,6 +747,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreFilterMeditation => 'meditation';
 
   @override
+  String get exploreFilterRecipes => 'recipes';
+
+  @override
   String get exploreFilterNutrition => 'eating';
 
   @override
@@ -793,6 +796,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recipeNutritionFiber => 'fibre';
+
+  @override
+  String get articleSourcesLabel => 'SOURCES';
 
   @override
   String get recipeIngredientsTitle => 'ingredients';
@@ -997,32 +1003,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String vibeCardShareTextWithCode(String code) {
     return 'sharing my mood on ilnd my invite code: $code';
   }
-
-  @override
-  String get trioSectionTitle => 'TODAY\'S THREE';
-
-  @override
-  String get trioMoveTitle => 'Move';
-
-  @override
-  String get trioPlateTitle => 'Plate';
-
-  @override
-  String get trioMindTitle => 'Mind';
-
-  @override
-  String trioMinutes(int m) {
-    return '$m min';
-  }
-
-  @override
-  String get trioMindPending => 'Your evening check-in is waiting';
-
-  @override
-  String get trioMindDone => 'You came back to yourself today';
-
-  @override
-  String get trioMarkDone => 'Mark as done';
 
   @override
   String get streakCardHeadlineWeek =>

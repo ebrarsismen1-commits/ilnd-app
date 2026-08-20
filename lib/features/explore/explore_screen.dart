@@ -14,6 +14,7 @@ import 'package:ilnd_app/core/repositories/movement_repository.dart';
 import 'package:ilnd_app/core/repositories/plans_repository.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/features/explore/explore_ordering.dart';
 import 'package:ilnd_app/features/movement/movement_program.dart';
 import 'package:ilnd_app/features/movement/movement_program_screen.dart';
 import 'package:ilnd_app/features/plans/plan_shelf.dart';
@@ -24,13 +25,14 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 /// Etiket rayı doğrudan [ArticleCategory]'yi yansıtır — "hepsi" dışında her
 /// pill bir kategoriye birebir karşılık gelir. Ayrı bir filtre listesi
 /// tutmak, kategori eklendiğinde iki yerin ayrışması demekti.
-enum _Filter { hepsi, meditasyon, beslenme, hareket, ozBakim, gelisim }
+enum _Filter { hepsi, meditasyon, beslenme, tarif, hareket, ozBakim, gelisim }
 
 extension _FilterX on _Filter {
   ArticleCategory? get category => switch (this) {
     _Filter.hepsi => null,
     _Filter.meditasyon => ArticleCategory.meditasyon,
     _Filter.beslenme => ArticleCategory.beslenme,
+    _Filter.tarif => ArticleCategory.tarif,
     _Filter.hareket => ArticleCategory.hareket,
     _Filter.ozBakim => ArticleCategory.ozBakim,
     _Filter.gelisim => ArticleCategory.gelisim,
@@ -40,6 +42,7 @@ extension _FilterX on _Filter {
     _Filter.hepsi => l10n.exploreFilterAll,
     _Filter.meditasyon => l10n.exploreFilterMeditation,
     _Filter.beslenme => l10n.exploreFilterNutrition,
+    _Filter.tarif => l10n.exploreFilterRecipes,
     _Filter.hareket => l10n.exploreFilterMovement,
     _Filter.ozBakim => l10n.exploreFilterSelfCare,
     _Filter.gelisim => l10n.exploreFilterGrowth,
@@ -92,12 +95,18 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         ((fetched == null || fetched.isEmpty) ? kArticles : fetched)
             .map((a) => a.forLocale(l10n.localeName))
             .toList();
-    // Handoff §2: ekranin tek buyuk ani kapak, geri kalan HEPSI tek liste.
-    // Eski duzende araya bir de yatay "one cikanlar" seridi giriyordu —
-    // ayni icerigi ikinci bir bicimde gostermek listeyi zayiflatiyordu.
-    final hero = allArticles.isNotEmpty ? allArticles.first : null;
-    final rest = allArticles.length > 1 ? allArticles.sublist(1) : <Article>[];
-    final filtered = rest.where((a) => _selected.matches(a)).toList();
+    // Sıra iki kez düzeltildi. Firestore `order` alanına göre veriyor ve o
+    // alan EKLEME sırası: içerik kategori kategori girildiği için liste blok
+    // blok diziliyordu ve kaydıran kişi tek kategoride sıkışıyordu.
+    // interleaveByCategory kategorileri dönüşümlü hâle getiriyor.
+    //
+    // Kapak da artık filtreye tabi: önce filtreleniyor, kapak o havuzdan
+    // güne göre seçiliyor. Eskiden kapak listenin ilk elemanıydı ve hangi
+    // etikete basılırsa basılsın aynı içerik duruyordu.
+    final ordered = interleaveByCategory(allArticles);
+    final matching = ordered.where((a) => _selected.matches(a)).toList();
+    final hero = pickCover(matching);
+    final filtered = matching.where((a) => a.id != hero?.id).toList();
     // Yalnız oynatılabilir seansı olan programlar (ADR-0004). Makalelerdeki
     // kArticles gibi bir offline yedeği YOK: video içeriğinin yerel karşılığı
     // olamaz, içerik gelmeden raf da olmaz.
@@ -218,6 +227,17 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
             ],
 
+            // ── Programlar (ADR-0005) ────────────────────────────────────
+            // Owner kararı: 7 ve 21 günlük programlar Keşfet'te görünür
+            // olsun. Kapağın hemen altında, listeden önce: bir program
+            // taahhüt, tek yazı bir okuma.
+            if (plans.isNotEmpty) ...[
+              SliverToBoxAdapter(
+                child: PlanShelf(plans: plans, p: p),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
+            ],
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
@@ -285,16 +305,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
-            // ── Planlar (ADR-0005). Hareket rafının üstünde: plan bir
-            // taahhüt, tek seans bir deneme — kullanıcıya önce taahhüdü
-            // gösteriyoruz ────────────────────────────────────────────────
-            if (plans.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: PlanShelf(plans: plans, p: p),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 28)),
-            ],
 
             // ── Hareket programları (ADR-0004) — vizyonun "grid'e yeni
             // içerik tipleri raf olarak girer" maddesi. Yayınlanabilir
@@ -845,6 +855,7 @@ class _CategoryChip extends StatelessWidget {
   Color get _color => switch (category) {
     ArticleCategory.meditasyon => const Color(0xFF5B8C7B),
     ArticleCategory.beslenme => const Color(0xFF34D399),
+    ArticleCategory.tarif => const Color(0xFFC98B3F),
     ArticleCategory.hareket => const Color(0xFF7FA05B),
     ArticleCategory.ozBakim => const Color(0xFF8FA8B5),
     ArticleCategory.gelisim => const Color(0xFFC17A63),

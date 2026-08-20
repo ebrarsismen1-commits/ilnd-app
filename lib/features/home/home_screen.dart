@@ -18,7 +18,6 @@ import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/adan/adan_model.dart';
 import 'package:ilnd_app/features/adan/adan_repository.dart';
 import 'package:ilnd_app/features/adan/adan_screen.dart';
-import 'package:ilnd_app/features/daily_trio/daily_trio_section.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
@@ -96,8 +95,6 @@ class HomeScreen extends ConsumerWidget {
                   // unutur, ana ekranı unutmaz. Plan yoksa satır hiç
                   // çizilmez (ADR-0005).
                   const _ActivePlanRow(),
-                  const SizedBox(height: 18),
-                  Entrance(index: 9, child: DailyTrioSection(p: p)),
                   const SizedBox(height: 26),
                   Entrance(
                     index: 10,
