@@ -201,6 +201,15 @@ void main() {
             '${offenders.join(" | ")}',
       );
     }
+
+    // İçerik dosyası da kullanıcı metni taşıyor. Testin ilk hâli yalnız
+    // .arb'ye bakıyordu ve 15 tarifin tamamındaki tireleri kaçırmıştı.
+    final content = File('content/articles.json').readAsStringSync();
+    expect(
+      content.contains('—') || content.contains('–'),
+      isFalse,
+      reason: 'content/articles.json içinde uzun tire var',
+    );
   });
 
   test('sayıdan sonra belirtme eki gelmez', () {
