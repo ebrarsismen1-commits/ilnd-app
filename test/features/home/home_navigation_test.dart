@@ -28,11 +28,12 @@ void main() {
   Future<void> pumpHome(
     WidgetTester tester, {
     IslandState island = const IslandState(),
+    double width = 420,
   }) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
 
-    await tester.binding.setSurfaceSize(const Size(420, 3000));
+    await tester.binding.setSurfaceSize(Size(width, 3000));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     final router = GoRouter(
@@ -86,6 +87,20 @@ void main() {
     );
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 900));
+  }
+
+  // Okuma kartı sabit 300px ama makale her gün dönüyor: 2026-08-20'de o
+  // günün uzun başlığı kartı 29px taşırdı. Dar ekranlarda sarma daha erken
+  // başladığı için kontrol orada yapılır.
+  for (final width in const [320.0, 375.0]) {
+    testWidgets('Bugün ${width.toInt()}px genişlikte taşmaz', (tester) async {
+      await pumpHome(tester, width: width);
+      expect(
+        tester.takeException(),
+        isNull,
+        reason: '${width.toInt()}px genişlikte bir kart taşıyor',
+      );
+    });
   }
 
   testWidgets('takip satırına dokununca Takip ekranı açılır', (tester) async {

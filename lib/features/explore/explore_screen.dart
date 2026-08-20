@@ -717,30 +717,38 @@ class _HeroCard extends StatelessWidget {
                   children: [
                     // üst: kategori chip
                     Row(children: [_CategoryChip(article.category)]),
-                    // alt: başlık + excerpt
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          article.title,
-                          style: AppTextStyles.display(
-                            fontSize: 32,
-                            color: Colors.white,
-                            height: 1.1,
+                    // alt: başlık + excerpt. Kapak sabit 400px ama başlık
+                    // Firestore'dan geliyor; uzun başlıkta bu blok esner,
+                    // metinler maxLines ile kırpılır (Bugün'ün okuma
+                    // kartında yaşanan taşmanın aynı sınıfı).
+                    Flexible(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            article.title,
+                            style: AppTextStyles.display(
+                              fontSize: 32,
+                              color: Colors.white,
+                              height: 1.1,
+                            ),
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          article.excerpt,
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.85),
-                            fontSize: 13,
-                            height: 1.4,
+                          const SizedBox(height: 6),
+                          Text(
+                            article.excerpt,
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.85),
+                              fontSize: 13,
+                              height: 1.4,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

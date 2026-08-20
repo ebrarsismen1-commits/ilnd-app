@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:ilnd_app/core/services/firebase_service.dart';
+import 'package:ilnd_app/features/auth/auth_provider.dart';
 
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
@@ -14,9 +18,15 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 bool isSleepRitualWindow(int hour) => hour >= 21 || hour < 4;
 
 // ─── Bu gece yapıldı bayrağı ──────────────────────────────────────────────────
-// todaysMoodProvider deseninin klonu: tarih + değer anahtarı, tarih bugün
-// değilse false. Cihaza-yerel günlük bayrak — mood check-in ile aynı yaşam
-// döngüsü, o yüzden aynı desen.
+// İKİ KATMANLI: cihazdaki bayrak "bu gece daveti bir daha gösterme" içindir
+// (anlık, ucuz, offline çalışır). Kalıcı kayıt Firestore'a gider —
+// `users/{uid}/sleep_rituals/{tarih}`.
+//
+// Neden ikisi birden: cihaz-yerel bayrak tek başına iki şeyi bozuyordu.
+// (1) Kullanıcı telefonu değiştirince ya da web'e geçince yaptığı ritüeller
+// yok sayılıyordu — kotada yaşanan hatanın aynı sınıfı (Sert Kural #13).
+// (2) Sunucu ritüeli göremediği için "ay ışığı" ada öğesi hiç kazanılamıyordu
+// (ADR-0006 §3'te kilitli olarak yazılmıştı).
 
 const _kSleepRitualDate = 'sleep_ritual_date';
 const _kSleepRitualDone = 'sleep_ritual_done';
@@ -43,10 +53,36 @@ class SleepRitualDoneTonightNotifier extends StateNotifier<bool> {
     return prefs.getBool(_kSleepRitualDone) ?? false;
   }
 
+  /// Cihazdaki bayrağı yazar. Kalıcı kayıt için [recordCompletion] çağrılır.
   Future<void> record() async {
     state = true;
     await _prefs.setString(_kSleepRitualDate, _today());
     await _prefs.setBool(_kSleepRitualDone, true);
+  }
+}
+
+/// Ritüel tamamlanmasını hesaba yazar — gün başına tek doküman (deterministik
+/// id, idempotent). Sessizce başarısız olur: ritüelin kendisi tamamlandı,
+/// ağ hatası kullanıcıya bir şey kaybettirmemeli.
+Future<void> recordSleepRitualCompletion(Ref ref) async {
+  final fbUid = ref.read(firebaseAuthUidProvider).valueOrNull;
+  if (fbUid == null) return;
+  final now = DateTime.now();
+  final date =
+      '${now.year}-${now.month.toString().padLeft(2, '0')}'
+      '-${now.day.toString().padLeft(2, '0')}';
+  try {
+    await FirebaseService.firestore
+        .collection('users')
+        .doc(fbUid)
+        .collection('sleep_rituals')
+        .doc(date)
+        .set({
+          'date': date,
+          'createdAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+  } catch (_) {
+    // sessizce yut — bir sonraki ritüelde tekrar denenir
   }
 }
 
@@ -158,6 +194,10 @@ class SleepRitualFlowNotifier extends StateNotifier<SleepRitualFlowState> {
     state = state.copyWith(phase: SleepRitualPhase.done);
 
     await _ref.read(sleepRitualDoneTonightProvider.notifier).record();
+    if (!mounted) return;
+    // Kalıcı kayıt: cihaz değişse de ritüel sayılır, "ay ışığı" ada öğesi
+    // sunucudan doğrulanabilir hale gelir.
+    await recordSleepRitualCompletion(_ref);
     if (!mounted) return;
     // AI-görünür notlar kanonik TR (desen: mood check-in notu, profile_sync).
     final memory = _ref.read(ilndMemoryProvider.notifier);

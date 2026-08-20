@@ -717,6 +717,10 @@ class _DailyReadCard extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(18),
+                // Kart sabit 300px ama içerik değişken: makale her gün döner
+                // ve uzun başlıklı bir gün geldiğinde taşıyordu (dar ekranda
+                // sarma + serif satır yüksekliği). Sert Kural #14'ün aynısı:
+                // sabit boyutlu bir yüzey esnek içerik varsayamaz.
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -739,24 +743,30 @@ class _DailyReadCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Text(
-                      article.title,
-                      style: AppTextStyles.display(
-                        fontSize: 30,
-                        color: Colors.white,
-                        height: 1.05,
+                    Flexible(
+                      child: Text(
+                        article.title,
+                        style: AppTextStyles.display(
+                          fontSize: 30,
+                          color: Colors.white,
+                          height: 1.05,
+                        ),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      article.excerpt,
-                      style: AppTextStyles.body(
-                        fontSize: 13,
-                        color: Colors.white.withValues(alpha: 0.9),
-                        height: 1.4,
+                    Flexible(
+                      child: Text(
+                        article.excerpt,
+                        style: AppTextStyles.body(
+                          fontSize: 13,
+                          color: Colors.white.withValues(alpha: 0.9),
+                          height: 1.4,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 10),
                     Text(

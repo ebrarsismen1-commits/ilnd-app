@@ -61,13 +61,13 @@ const kIslandItems = <IslandItem>[
     id: 'moonlight',
     metric: IslandMetric.nightRituals,
     threshold: 1,
-    serverVerifiable: false,
+    serverVerifiable: true,
   ),
   IslandItem(
     id: 'meetingStone',
     metric: IslandMetric.meetups,
     threshold: 1,
-    serverVerifiable: false,
+    serverVerifiable: true,
   ),
 ];
 

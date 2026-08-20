@@ -48,6 +48,8 @@ describe("syncIslandItems", () => {
     await wipe(db.collection("users").doc(UID).collection("journal_entries"));
     await wipe(db.collection("users").doc(UID).collection("food_entries"));
     await wipe(db.collection("daily_checkins").where("userId", "==", UID));
+    await wipe(db.collection("users").doc(UID).collection("sleep_rituals"));
+    await wipe(db.collectionGroup("rsvps").where("userId", "==", UID));
   });
 
   test("token yoksa 401", async () => {
@@ -108,18 +110,31 @@ describe("syncIslandItems", () => {
     expect(body.gained).toEqual([]);
   });
 
-  test("sunucudan doğrulanamayan öğeler hiç verilmez", async () => {
-    // ay ışığı (gece ritüeli) ve buluşma taşı (RSVP) şu an kilitli —
-    // kaynakları sunucudan okunamıyor (ADR-0006 §3).
+  test("gece ritüeli kaydı ay ışığını kazandırır", async () => {
+    // Yayın öncesi düzeltme: ritüel tamamlanması artık Firestore'a da
+    // yazılıyor (eskiden yalnız cihazdaydı, bu yüzden öğe kazanılamıyordu).
     await db
         .collection("users").doc(UID)
-        .collection("journal_entries").add({text: "x"});
+        .collection("sleep_rituals").doc("2026-08-19").set({date: "2026-08-19"});
 
     const token = await getIdTokenForUid(UID);
     const {body} = await callSync(token);
 
-    expect(body.earned).not.toContain("moonlight");
-    expect(body.earned).not.toContain("meetingStone");
+    expect(body.earned).toContain("moonlight");
+  });
+
+  test("etkinliğe RSVP buluşma taşını kazandırır", async () => {
+    await db
+        .collection("events").doc("evt-1")
+        .collection("rsvps").doc(UID).set({userId: UID});
+
+    const token = await getIdTokenForUid(UID);
+    const {body} = await callSync(token);
+
+    expect(body.earned).toContain("meetingStone");
+
+    await db.collection("events").doc("evt-1")
+        .collection("rsvps").doc(UID).delete();
   });
 
   test("çağrı idempotent — ikinci çağrı yeni öğe vermez", async () => {

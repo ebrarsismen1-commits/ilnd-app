@@ -41,25 +41,31 @@ Eşik tablosu hem sunucuda (`functions/index.js` `ISLAND_ITEMS`) hem istemcide
 gösterim** içindir (kilitli öğenin "nasıl kazanılır" satırı); kazanım
 kararını asla vermez. İkisinin aynı kaldığı testle kilitlenir.
 
-### 3. Bu turda dört öğe kazanılabilir, ikisi kilitli görünür
+### 3. Altı öğenin hepsi kazanılabilir
 
-| Öğe | Eşik | Durum |
-|---|---|---|
-| fener | ilk günlük | kazanılabilir |
-| çam | 3 gün seri | kazanılabilir |
-| fırın | 10 öğün | kazanılabilir |
-| rüzgâr gülü | 7 gün seri | kazanılabilir |
-| ay ışığı | ilk gece ritüeli | **kilitli** |
-| buluşma taşı | ilk topluluk buluşması | **kilitli** |
+| Öğe | Eşik |
+|---|---|
+| fener | ilk günlük |
+| çam | 3 gün seri |
+| fırın | 10 öğün |
+| rüzgâr gülü | 7 gün seri |
+| ay ışığı | ilk gece ritüeli |
+| buluşma taşı | ilk topluluk buluşması |
 
-Son ikisi sunucudan doğrulanamıyor: gece ritüeli tamamlanması yalnız
-SharedPreferences'ta (cihaz-yerel), RSVP ise `events/{id}/rsvps/{uid}`
-alt koleksiyonunda — collectionGroup sorgusu ve indeks gerektiriyor.
-İkisi de listede **kilitli** görünür; bu tasarımın kendi sözlüğünde zaten
-var olan bir durum, uydurma değil.
+**Güncelleme (2026-08-20, yayın öncesi denetim):** ilk sürümde son iki öğe
+"kilitli" bırakılmıştı, çünkü kaynakları sunucudan okunamıyordu. Yayın
+denetiminde bu bir sorun olarak işaretlendi: hiç kazanılamayan bir öğeyi
+listede göstermek, deponun kendi ilkesine (asla sahte özellik göstermeyiz)
+aykırı. İkisi de kapatıldı:
 
-Kilitli kalmaları geçici: gece ritüeli için Firestore'a tamamlanma kaydı
-yazmak, RSVP için collectionGroup indeksi açmak gerekiyor. İkisi de ayrı iş.
+- **ay ışığı** — gece ritüeli tamamlanması artık `users/{uid}/sleep_rituals/
+  {tarih}` altına da yazılıyor. Cihazdaki bayrak duruyor ("bu gece daveti
+  tekrar gösterme" için) ama kalıcı kayıt hesapta. Bu aynı zamanda cihaz
+  değiştiren kullanıcının ritüel geçmişini kaybetmesini de düzeltiyor —
+  Sert Kural #13'ün sınıfı.
+- **buluşma taşı** — RSVP dokümanları zaten `userId` alanı taşıyordu;
+  `rsvps` için tek alanlı bir collectionGroup indeksi eklendi
+  (firestore.indexes.json) ve fonksiyon aggregate `count()` ile sayıyor.
 
 ### 4. Ada görseli bu turda YOK
 

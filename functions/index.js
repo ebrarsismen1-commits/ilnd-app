@@ -708,9 +708,9 @@ const ISLAND_ITEMS = [
   {id: "oven", metric: "mealCount", threshold: 10, serverVerifiable: true},
   {id: "windrose", metric: "streakDays", threshold: 7, serverVerifiable: true},
   {id: "moonlight", metric: "nightRituals", threshold: 1,
-    serverVerifiable: false},
+    serverVerifiable: true},
   {id: "meetingStone", metric: "meetups", threshold: 1,
-    serverVerifiable: false},
+    serverVerifiable: true},
 ];
 
 /** @return {string} bugünün YYYY-MM-DD karşılığı (UTC). */
@@ -727,12 +727,18 @@ function islandDateKey(date) {
 async function collectIslandMetrics(uid) {
   const userRef = db.collection("users").doc(uid);
 
-  const [journalAgg, foodAgg, checkinSnap] = await Promise.all([
-    userRef.collection("journal_entries").count().get(),
-    userRef.collection("food_entries").count().get(),
-    // Seri hesabı için son 60 günün check-in'leri yeter: en uzun eşik 7 gün.
-    db.collection("daily_checkins").where("userId", "==", uid).get(),
-  ]);
+  const [journalAgg, foodAgg, checkinSnap, ritualAgg, rsvpAgg] =
+    await Promise.all([
+      userRef.collection("journal_entries").count().get(),
+      userRef.collection("food_entries").count().get(),
+      // Seri hesabı için son 60 günün check-in'leri yeter: en uzun eşik 7 gün.
+      db.collection("daily_checkins").where("userId", "==", uid).get(),
+      // Gece ritüeli: gün başına tek doküman (istemci deterministik id yazar).
+      userRef.collection("sleep_rituals").count().get(),
+      // RSVP'ler events/{id}/rsvps/{uid} altında; collectionGroup + userId
+      // alanı tek indeksle sayılabiliyor (firestore.indexes.json).
+      db.collectionGroup("rsvps").where("userId", "==", uid).count().get(),
+    ]);
 
   const dates = new Set();
   checkinSnap.docs.forEach((d) => {
@@ -756,8 +762,8 @@ async function collectIslandMetrics(uid) {
     journalCount: journalAgg.data().count || 0,
     mealCount: foodAgg.data().count || 0,
     streakDays,
-    nightRituals: 0, // cihaz-yerel, sunucudan okunamıyor (ADR-0006 §3)
-    meetups: 0, // collectionGroup indeksi gerekiyor (ADR-0006 §3)
+    nightRituals: ritualAgg.data().count || 0,
+    meetups: rsvpAgg.data().count || 0,
   };
 }
 

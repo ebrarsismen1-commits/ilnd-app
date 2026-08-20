@@ -66,11 +66,25 @@ void main() {
   });
 
   group('IslandState', () {
-    test('sıradaki öğe yalnız sunucudan doğrulanabilir olanlardan seçilir', () {
-      // Dördü de kazanılmışsa sırada kilitli öğeler VAR ama onlar hiç
-      // kazanılamaz — "sıradaki" diye onları göstermek boş söz olurdu.
-      const all = IslandState(earned: {'lantern', 'pine', 'oven', 'windrose'});
+    test('altı öğe de kazanıldığında sıradaki öğe kalmaz', () {
+      const all = IslandState(
+        earned: {
+          'lantern',
+          'pine',
+          'oven',
+          'windrose',
+          'moonlight',
+          'meetingStone',
+        },
+      );
       expect(all.nextItem, isNull);
+    });
+
+    test('her öğe kazanılabilir — kalıcı kilitli öğe kalmadı', () {
+      // Ay ışığı (gece ritüeli kaydı) ve buluşma taşı (rsvps collectionGroup
+      // indeksi) yayın öncesi sunucudan doğrulanabilir hale getirildi.
+      // Kazanılamayan bir öğeyi listede göstermek boş söz vermektir.
+      expect(kIslandItems.every((i) => i.serverVerifiable), isTrue);
     });
 
     test('boş adada sıradaki öğe ilk kazanılabilir öğedir', () {

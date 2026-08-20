@@ -4,16 +4,38 @@
       "collectionGroup": "habit_completions",
       "queryScope": "COLLECTION",
       "fields": [
-        {"fieldPath": "userId", "order": "ASCENDING"},
-        {"fieldPath": "date", "order": "ASCENDING"}
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "date",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "habits",
       "queryScope": "COLLECTION",
       "fields": [
-        {"fieldPath": "userId", "order": "ASCENDING"},
-        {"fieldPath": "createdAt", "order": "ASCENDING"}
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "rsvps",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        }
       ]
     }
   ],
