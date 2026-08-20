@@ -1597,5 +1597,481 @@
       "steps": []
     },
     "order": 26
+  },
+  {
+    "id": "uzun-nefes-verme",
+    "title": "nefes vermeyi uzat, gerisi kendiliğinden gelir",
+    "category": "meditasyon",
+    "readTime": "4 dk",
+    "excerpt": "Günde beş dakika, nefes vermeyi uzatarak. Karşılaştırmalı bir çalışmada meditasyondan daha hızlı sonuç verdi.",
+    "body": [
+      "Sakinleşmek için derin nefes al tavsiyesi yaygın ama eksik. İşi yapan kısım almak değil, vermek.",
+      "2023'te Cell Reports Medicine'de yayımlanan bir Stanford çalışması bunu doğrudan ölçtü. 100'den fazla katılımcı bir ay boyunca günde beş dakika ya bir nefes egzersizi yaptı ya da farkındalık meditasyonu.",
+      "Üç farklı nefes tekniği denendi ve en iyi sonucu döngüsel iç çekme verdi, yani nefes vermenin almaktan belirgin şekilde uzun olduğu teknik. O grup hem ruh hâlinde daha büyük iyileşme bildirdi hem de dinlenme sırasındaki solunum hızı düştü. Meditasyon da işe yaradı ama daha yavaş.",
+      "Sebebi otonom sinir sisteminde. Nefes alırken kalp atışın hafifçe hızlanır, verirken yavaşlar. Nefes vermeyi uzattığında bu yavaşlama tarafında daha uzun kalırsın; vücuda tehlike geçti sinyali veren dal baskın çıkar. Yani sakinlik bir ruh hâli değil, tetiklenebilir bir refleks.",
+      "PRATİĞİ",
+      "Burnundan normal bir nefes al. Ciğerlerin dolduğunda dur ve üstüne kısa bir nefes daha ekle, az kalmış yeri de doldur. Sonra ağzından, yavaşça, uzun uzun ver. Verişin alışın iki katı kadar sürsün.",
+      "Beş kez tekrarla. Yaklaşık bir dakika.",
+      "Çalışmadaki süre günde beş dakikaydı ve etkiyi bir ay boyunca ölçtüler. Ama tek bir turun etkisi de dakikalar içinde hissedilir; toplantı öncesi ya da telefonu kapattıktan sonra deneyebilirsin.",
+      "Bir şey uydurmayalım: bu çalışma katılımcıların kendi bildirimlerine dayanıyor ve bir aylık. Kaygı bozukluğu tedavisi değil, günlük gerginlik için ucuz ve hızlı bir araç."
+    ],
+    "en": {
+      "title": "make the exhale longer",
+      "readTime": "4 min",
+      "excerpt": "Five minutes a day with a longer exhale. In a head to head study it worked faster than meditation.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Balban MY, Neri E, Kogon MM ve ark. Brief structured respiration practices enhance mood and reduce physiological arousal. Cell Reports Medicine, 2023.",
+        "url": "https://www.cell.com/cell-reports-medicine/fulltext/S2666-3791(22)00474-8"
+      }
+    ],
+    "order": 27,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "zihin-nerede",
+    "title": "zihnin şu an nerede",
+    "category": "meditasyon",
+    "readTime": "4 dk",
+    "excerpt": "Uyanık saatlerinin neredeyse yarısında başka bir yerdesin. Bunun ölçülmüş bir bedeli var.",
+    "body": [
+      "Harvard'dan iki araştırmacı, Killingsworth ve Gilbert, 2010'da tuhaf bir şey yaptı: 2000'den fazla insana telefon uygulaması verip gün içinde rastgele saatlerde üç soru sordular. Ne yapıyorsun? Ne düşünüyorsun? Ne kadar mutlusun?",
+      "Science'ta yayımlanan sonuç şu: insanlar uyanık zamanlarının yüzde 46,9'unda yaptıkları işten başka bir şey düşünüyor. Neredeyse yarısı.",
+      "Asıl bulgu ikinci kısımda. Zihni gezinen insanlar, ne yaptıklarına odaklanmış olanlardan daha mutsuzdu, hoş bir şey düşünürken bile. Üstelik sıralama beklenenin tersiydi: mutsuzluk zihin gezinmesine yol açmıyordu, zihin gezinmesi mutsuzluğu önceliyordu.",
+      "Yani sıkıcı işten kaçmak için hayal kuruyorum açıklaması yetmiyor. Bulaşık yıkarken bulaşığı düşünmek, bulaşık yıkarken tatili düşünmekten daha iyi hissettiriyor.",
+      "Buradan çıkan pratik basit ama alışılması zor: dikkatini nereye koyduğun, ne yaptığından daha çok belirliyor.",
+      "Bugün üç kez, hiçbir hazırlık yapmadan kendine sor: zihnim şu an nerede? Cevabı düzeltmeye çalışma. Sadece fark et. Fark etmek zaten dikkatini geri getiriyor.",
+      "Bu çalışma bir ilişki gösteriyor, tedavi önermiyor. Ama kendi gününde test etmesi bedava."
+    ],
+    "en": {
+      "title": "where is your mind right now",
+      "readTime": "4 min",
+      "excerpt": "You spend nearly half your waking hours somewhere else. That has a measured cost.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Killingsworth MA, Gilbert DT. A Wandering Mind Is an Unhappy Mind. Science, 2010;330(6006):932.",
+        "url": "https://www.science.org/doi/10.1126/science.1192439"
+      }
+    ],
+    "order": 28,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "uykuya-hazirlik",
+    "title": "uykuya hazırlık, kurallarla değil dikkatle",
+    "category": "meditasyon",
+    "readTime": "5 dk",
+    "excerpt": "Uyku hijyeni kurallarıyla karşılaştırıldığında, farkındalık pratiği daha iyi sonuç verdi.",
+    "body": [
+      "Uyuyamamak için verilen tavsiyeler hep aynı: ekranı bırak, kafein içme, aynı saatte yat. Bunlara uyku hijyeni deniyor ve işe yarıyorlar, ama tek seçenek değiller.",
+      "2015'te JAMA Internal Medicine'de yayımlanan bir çalışma ikisini yarıştırdı. Uyku sorunu olan yaklaşık 50 yetişkin ikiye ayrıldı: bir grup altı hafta boyunca haftada iki saat farkındalık pratiği yaptı, diğer grup aynı süre uyku hijyeni eğitimi aldı.",
+      "Sonuçta farkındalık grubu uyku kalitesinde daha büyük iyileşme bildirdi. Gündüz yorgunluğu da daha çok azaldı.",
+      "Neden? Uyuyamamanın büyük kısmı yorgunluk eksikliği değil, zihnin kapanmaması. Yatakta yarınki konuşmayı prova ediyorsan sorun yatağında değil dikkatinde. Uyku hijyeni ortamı düzenler; farkındalık pratiği zihnin o döngüye girme alışkanlığına dokunur.",
+      "YATAKTA DENEYEBİLECEĞİN HÂLİ",
+      "Sırtüstü uzan. Nefesini değiştirmeye çalışma, sadece karnının hareketini izle.",
+      "Bir düşünce geldiğinde, ki gelecek, onu kovmaya çalışma. Düşünüyorum de içinden ve nefese dön.",
+      "Bunu on kez yaparsan on kez dönmüşsün demektir. Başarısızlık değil, pratiğin kendisi.",
+      "Uyumaya çalışma. Uyumaya çalışmak uyanık tutar. Amacın sadece uzanmış hâlde dikkatini bir yere koymak.",
+      "Not: bu çalışma orta yaş üstü ve uyku sorunu olan bir grupla yapıldı, örneklem küçüktü. Uykusuzluğun sürekliyse bu bir doktor görüşmesinin yerini tutmaz."
+    ],
+    "en": {
+      "title": "getting ready for sleep with attention instead of rules",
+      "readTime": "5 min",
+      "excerpt": "Head to head with sleep hygiene training, mindfulness practice did better.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Black DS, O'Reilly GA, Olmstead R ve ark. Mindfulness Meditation and Improvement in Sleep Quality and Daytime Impairment Among Older Adults With Sleep Disturbances. JAMA Internal Medicine, 2015;175(4):494-501.",
+        "url": "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/2110998"
+      }
+    ],
+    "order": 29,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "zihnin-dolu",
+    "title": "zihnin dolu, bu normal",
+    "category": "meditasyon",
+    "readTime": "4 dk",
+    "excerpt": "Aklımı boşaltamıyorum diye bırakanlar, aslında doğru şeyi yapıyordu.",
+    "body": [
+      "Meditasyonu bırakanların çoğu aynı cümleyi kuruyor: aklımı boşaltamıyorum.",
+      "Bu cümlenin içinde yanlış bir varsayım var. Meditasyon aklı boşaltmak değil. Boş zihin hedefse kimse ulaşamıyor ve herkes başarısız hissediyor.",
+      "Olan şu: oturuyorsun, nefesini takip ediyorsun, otuz saniye sonra yarınki bir konuşmayı prova ederken buluyorsun kendini. Fark ediyorsun. Nefese dönüyorsun. Kırk saniye sonra market listesindesin.",
+      "O fark ettim ve döndüm anı pratiğin kendisi. Dalıp gitmek hata değil, egzersizin malzemesi. Ağırlık kaldırırken ağırlığın ağır gelmesi gibi.",
+      "Bunu anladığında ölçü de değişir. İyi bir oturum hiç dalmadığın oturum değil; kaç kez döndüğünü sayabildiğin oturum.",
+      "Bir de şu var: zihnin en dolu olduğu günler pratiğin en çok işe yaradığı günlerdir. Sakin bir günde oturmak kolaydır ama az şey öğretir. Kafanın karıştığı bir günde beş dakika oturmak, o karışıklıkla aynı odada durabildiğini gösterir.",
+      "Yani bugün zihnin doluysa, bırakmak için sebep değil. Tam da sebep."
+    ],
+    "en": {
+      "title": "your mind is full and that is normal",
+      "readTime": "4 min",
+      "excerpt": "The people who quit saying they cannot empty their mind were doing it right.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 30,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "beden-taramasi",
+    "title": "beden taraması: ayaktan başla",
+    "category": "meditasyon",
+    "readTime": "5 dk",
+    "excerpt": "Kliniklerde kırk yıldır öğretilen pratiğin en sade hâli: ayaktan başla, yukarı çık.",
+    "body": [
+      "Zihnini takip etmek zor geliyorsa bedeninden başla. Beden daha somut, kaçması daha zor.",
+      "Bu pratiğin kökeni 1979'da Massachusetts Üniversitesi'nde Jon Kabat-Zinn'in kurduğu programa dayanıyor. Program kronik ağrısı olan hastalar için tasarlanmıştı ve beden taraması ilk öğretilen egzersizdi, çünkü öğrenmesi en kolay olanı.",
+      "Sırtüstü uzan ya da dik otur. Uzanınca uyuma ihtimalin var; o da kötü bir sonuç değil.",
+      "Ayaklardan başla. Tabanların yere mi değiyor, çorap içinde mi, serin mi. Gevşetmeye çalışma, sadece orada olduklarını fark et.",
+      "Yukarı çık: baldırlar, dizler, uyluklar. Her bölgede birkaç saniye.",
+      "Kalçalar ve bel. Oturarak geçen bir gün gerginliği buraya biriktirir.",
+      "Karın. Nefes alırken burası hareket ediyor mu, yoksa göğüsten mi nefes alıyorsun. Düzeltmen gerekmiyor, sadece bak.",
+      "Göğüs, omuzlar, kollar, eller. Omuzlarda muhtemelen bir şey bulacaksın.",
+      "Boyun ve çene. Dişlerinin birbirine değip değmediğine bak; çoğu insanda değiyor.",
+      "Yüz. Alın ve gözlerin çevresi. Ekrana uzun bakan bir yüz gün sonunda kasılı kalır.",
+      "Tüm tarama beş dakika sürer. Amacı gevşemek değil, gevşeme çoğu zaman kendiliğinden gelir. Amacı neyi taşıdığını bilmek. Fark etmediğin gerginliği bırakamazsın."
+    ],
+    "en": {
+      "title": "body scan: start at your feet",
+      "readTime": "5 min",
+      "excerpt": "The simplest form of a practice taught in clinics for forty years.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 31,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "kacirdigin-gun",
+    "title": "kaçırdığın günü kaçırılmış say",
+    "category": "meditasyon",
+    "readTime": "3 dk",
+    "excerpt": "Üst üste yapamadığın günler pratiği bitirmiyor. Bitiren şey, o günlerden sonra kurduğun cümle.",
+    "body": [
+      "Yedi gün üst üste yaptın, sekizinci gün unuttun. Dokuzuncu gün zaten bozuldu diye düşündün. On beşinci günde artık yapmıyorsun.",
+      "Bu, pratiğin kendisiyle ilgili değil. Seri fikriyle ilgili.",
+      "Seri saymak başlangıçta motive eder çünkü ilerlemeyi görünür kılar. Ama bir yan etkisi var: seriyi bozan gün, sadece bir gün olmaktan çıkıp bir yargıya dönüşür. Beceremedim. Ondan sonrası kolay bırakılır.",
+      "Alternatif ölçü daha dayanıklı: iki kez üst üste kaçırma. Bir gün atlarsan hiçbir şey olmaz. İki gün atlarsan üçüncü günü öncelikli hâle getir.",
+      "Bu kural neden çalışır: alışkanlığın kırılganlığı tek boşlukta değil, boşluğun alışkanlık hâline gelmesinde. Bir gün ara vermek pratiği unutturmaz; üç gün ara vermek unutturur.",
+      "Bugün kaçırdıysan yarın üç nefeslik bir tur yeter. Telafi etmeye, iki katını yapmaya gerek yok. Telafi mantığı sporda da pratikte de işe yaramıyor, sadece borç hissi üretiyor."
+    ],
+    "en": {
+      "title": "let the missed day be a missed day",
+      "readTime": "3 min",
+      "excerpt": "Skipping does not end the practice. The sentence you tell yourself afterwards does.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 32,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "dort-gun",
+    "title": "dört gün yeter mi",
+    "category": "meditasyon",
+    "readTime": "4 dk",
+    "excerpt": "Dört gün, günde yirmi dakika. Ölçülebilir fark için gereken süre sandığından kısa.",
+    "body": [
+      "Meditasyonun faydalarını anlatan yazılar genelde yıllarca pratik yapmış keşişlerin beyin taramalarını gösterir. Etkileyici ama caydırıcı: sen yarın sabah başlayacaksan o veriyle ne yapacaksın.",
+      "2010'da Consciousness and Cognition'da yayımlanan bir çalışma tam bu soruyu sordu. Hiç meditasyon deneyimi olmayan üniversite öğrencileri iki gruba ayrıldı. Bir grup dört gün boyunca günde yirmi dakika rehberli meditasyon yaptı; kontrol grubu aynı süre boyunca sesli kitap dinledi.",
+      "Dört gün sonra iki grubun da ruh hâli düzelmişti. Ama yalnız meditasyon grubunda yorgunluk ve kaygı azaldı, çalışma belleği ve dikkat gerektiren görevlerde performans yükseldi.",
+      "Buradaki asıl bilgi meditasyon iyidir değil. Kontrol grubu da bir şey yaptı ve onların da modu düzeldi, yani kendine yirmi dakika ayırmak tek başına bir şey veriyor. Meditasyonun ekstra verdiği şey dikkat tarafında görünüyor.",
+      "Pratik karşılığı: başlarken hedefin hayatımı değiştirmek olmasın. Dört gün, günde yirmi dakika. Sonunda bir fark hissetmezsen bırakırsın; kaybettiğin seksen dakika olur.",
+      "Örneklem küçüktü ve etkiler kısa vadeliydi. Ama kısa vadeli olması, başlamak için yeterli bir sebep."
+    ],
+    "en": {
+      "title": "is four days enough",
+      "readTime": "4 min",
+      "excerpt": "Four days, twenty minutes each. The runway is shorter than you think.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Zeidan F, Johnson SK, Diamond BJ ve ark. Mindfulness meditation improves cognition: Evidence of brief mental training. Consciousness and Cognition, 2010;19(2):597-605.",
+        "url": "https://www.sciencedirect.com/science/article/abs/pii/S1053810010000681"
+      }
+    ],
+    "order": 33,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "ne-zaman-yaparim",
+    "title": "niyet değil, cümle kur",
+    "category": "meditasyon",
+    "readTime": "4 dk",
+    "excerpt": "Her gün meditasyon yapacağım işe yaramıyor. Cümleyi değiştirince oran değişiyor.",
+    "body": [
+      "Bir şeyi yapmak isteyip yapmamanın sebebi genelde motivasyon eksikliği değil, cümlenin belirsizliği.",
+      "Daha çok spor yapacağım bir niyet. Salı ve perşembe işten çıkınca spor çantasını alıp doğrudan salona gideceğim bir plan. Psikolojide ikincisine uygulama niyeti deniyor: eğer X olursa, Y yapacağım kalıbı.",
+      "Gollwitzer ve Sheeran'ın 2006'daki meta-analizi 94 ayrı deneyi ve 8000'den fazla katılımcıyı bir araya getirdi. Sonuç: bu kalıbı kuran insanlar hedeflerine belirgin biçimde daha çok ulaşıyor, etki büyüklüğü orta yüksek aralıkta. Sosyal psikolojide bu küçümsenecek bir sayı değil.",
+      "Neden çalışıyor: karar anını öne alıyor. Ne zaman yapsam sorusunu yorgun bir akşamda değil, planı kurduğun sakin anda cevaplamış oluyorsun.",
+      "MEDİTASYON İÇİN HÂLİ",
+      "Zayıf: her gün meditasyon yapacağım.",
+      "Güçlü: sabah kahvemi doldurduktan sonra, mutfak masasında üç dakika oturacağım.",
+      "İkincisinde üç şey var: tetikleyici, yer ve süre. Üçü de belirli olduğunda karar vermen gereken bir şey kalmıyor.",
+      "Tetikleyiciyi zaten her gün yaptığın bir şeye bağla: diş fırçalamak, telefonu şarja takmak, çocuğu okula bırakmak. Yeni alışkanlığın en sağlam iskeleti, eski bir alışkanlıktır."
+    ],
+    "en": {
+      "title": "write the sentence, not the intention",
+      "readTime": "4 min",
+      "excerpt": "Saying you will meditate daily does not work. Changing the sentence changes the odds.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Gollwitzer PM, Sheeran P. Implementation Intentions and Goal Achievement: A Meta-Analysis of Effects and Processes. Advances in Experimental Social Psychology, 2006;38:69-119.",
+        "url": "https://www.sciencedirect.com/science/chapter/bookseries/abs/pii/S0065260106380021"
+      }
+    ],
+    "order": 34,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "odak-mi-acik-mi",
+    "title": "iki tür pratik, iki farklı gün",
+    "category": "meditasyon",
+    "readTime": "4 dk",
+    "excerpt": "Meditasyon tek bir şey değil. İki farklı aile var ve farklı günlerde farklı olan işe yarıyor.",
+    "body": [
+      "Meditasyon yapıyorum cümlesi, spor yapıyorum kadar belirsiz. Araştırmacılar pratikleri genelde iki aileye ayırır ve ikisi farklı işler yapar.",
+      "ODAKLANMIŞ DİKKAT",
+      "Tek bir şey seçersin: nefes, bir ses, mumun alevi. Dikkat kaçtığında geri getirirsin. Bir kası tekrar tekrar çalıştırmak gibi. Zihnin dağınıksa, karar veremiyorsan, aynı düşünce dönüp duruyorsa bu aile daha iyi tutar.",
+      "AÇIK İZLEME",
+      "Bir şey seçmezsin. Ne gelirse, ses, düşünce, bedendeki his, onu peşine takılmadan izlersin. Gelir, gider. Bu daha zor çünkü tutunacak yer yok, ama duyguların yoğun olduğu günlerde daha iyi çalışır: bastırmadan yanında durmayı öğretir.",
+      "Yeni başlıyorsan odaklanmış dikkatle başla. Tutunacak bir yerin olması, ilk haftalarda pratiği ayakta tutan şey.",
+      "Günü seçmek için basit bir soru: kafam mı dağınık, içim mi sıkışık? Dağınıksa nefese dön. Sıkışıksa hiçbir şeye tutunma, sadece izle.",
+      "İkisini aynı oturumda karıştırmak da mümkün ama başlangıçta gereksiz. Bir tanesini birkaç hafta yap, farkı kendin hisset."
+    ],
+    "en": {
+      "title": "two kinds of practice, two kinds of day",
+      "readTime": "4 min",
+      "excerpt": "Meditation is not one thing. There are two families and different days call for different ones.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 35,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "yururken",
+    "title": "yürürken",
+    "category": "meditasyon",
+    "readTime": "3 dk",
+    "excerpt": "Oturmak zorunda değilsin. Yürüyüş, gözü açık yapılan bir pratik.",
+    "body": [
+      "Oturarak yapılan pratik herkese uymuyor. Kimi uyukluyor, kimi huzursuzlanıyor, kimi de günde on beş dakika oturacak yer bulamıyor.",
+      "Yürüyüş bunların hepsini çözüyor ve zaten yaptığın bir şeye ekleniyor. Kural tek: kulaklık yok.",
+      "Yürümeye başla, normal hızında. İlk bir dakika ayaklarına dikkat et: topuk mu değiyor önce, ayak tabanının neresi. Ritmi fark et.",
+      "Sonra dikkatini genişlet. Ne duyuyorsun? Trafiği, kuşları, kendi adımını. Duyduğun şeyleri adlandırmaya çalışma, sadece geldiklerini fark et.",
+      "Zihnin kayacak. Kayınca ayaklara dön. Bu, oturarak yapılanla aynı egzersiz, sadece gözlerin açık.",
+      "Beş dakika yeter. Markete giderken, otobüs durağına yürürken, köpeği gezdirirken.",
+      "Bir uyarı: telefonuna bakarken bu pratik olmuyor. Ekranla yürümek dikkatini toplamıyor, sadece bacaklarını hareket ettiriyor."
+    ],
+    "en": {
+      "title": "while walking",
+      "readTime": "3 min",
+      "excerpt": "You do not have to sit. Walking is practice with your eyes open.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 36,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "poz-meselesi",
+    "title": "nasıl oturulur meselesi",
+    "category": "meditasyon",
+    "readTime": "3 dk",
+    "excerpt": "Bağdaş kurmak zorunda değilsin. Tek gereken, uykuya davet etmeyen bir duruş.",
+    "body": [
+      "Meditasyon görsellerindeki bağdaş, minder ve dik sırt bir engel yaratıyor: bedeni öyle oturmaya uygun olmayan insan işe başlamadan eleniyor.",
+      "Oysa duruşun tek işi var: uyanık kalmanı sağlamak.",
+      "Sandalyede otur. Ayaklarını yere bas. Sırtını sandalyenin arkalığına yasla ya da yaslama, ikisi de olur. Yaslarsan omurgan biraz dik kalsın, tamamen çökme.",
+      "Ellerini kucağına koy. Nereye koyduğunun bir anlamı yok, sadece bir yere koy ki gün boyu kımıldayan eller sabit kalsın.",
+      "Gözler kapalı ya da yarı açık, iki metre ileriye bakan bir bakışla. Uykun varsa yarı açık daha iyi.",
+      "Bir kural: rahatsız edici bir şey varsa düzelt. Bacağın uyuştuysa kımılda. Bozmamak için acı çekmek pratiğin parçası değil, sadece pratikten soğutur.",
+      "Uzanarak da yapabilirsin ama uyuma ihtimalin yüksek. Uykuya hazırlık için yapıyorsan bu bir sorun değil, hatta amaç."
+    ],
+    "en": {
+      "title": "on how to sit",
+      "readTime": "3 min",
+      "excerpt": "You do not need to cross your legs. You need a posture that does not invite sleep.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 37,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "iki-dakikalik-sifirlama",
+    "title": "iki dakikalık sıfırlama",
+    "category": "meditasyon",
+    "readTime": "3 dk",
+    "excerpt": "İki iş arasında geçen iki dakika, bir sonrakine hangi kafayla başladığını belirliyor.",
+    "body": [
+      "Bir toplantıdan çıkıp doğrudan diğerine giriyorsan, ikinci toplantıya birincinin kalıntısıyla giriyorsun. Kapanmamış bir konuşma, cevap veremediğin bir cümle, aklına sonradan gelen doğru laf.",
+      "Aradaki geçişe iki dakika koymak bu taşımayı kesiyor.",
+      "YAPILIŞI",
+      "Bilgisayarı bırak, telefona bakma. Bakarsan sıfırlama olmaz, sadece kaynağı değiştirmiş olursun.",
+      "Üç uzun nefes ver. Alma değil, verme uzun olsun.",
+      "Kendine tek soru sor: biten işten aklımda ne kaldı? Cevap bir cümleyse söyle içinden, sonra bırak. Not alman gereken bir şeyse yaz; yazdığın an aklın onu taşımayı bırakır.",
+      "Sonra bir soru daha: sıradaki iş için neye ihtiyacım var? Sakinlik mi, enerji mi, dikkat mi.",
+      "Bunu günde bir kez bile yapsan gün sonundaki yorgunluk farkı hissedilir. Yorgunluğun bir kısmı iş miktarından değil, hiç kapanmamış işlerin üst üste binmesinden geliyor."
+    ],
+    "en": {
+      "title": "a two minute reset",
+      "readTime": "3 min",
+      "excerpt": "The two minutes between tasks decide which head you bring to the next one.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 38,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "sefkat-pratigi",
+    "title": "kendine söylenen cümleler",
+    "category": "meditasyon",
+    "readTime": "4 dk",
+    "excerpt": "Kendine iyi davranmak bir his değil, cümle kurma pratiği. Hissetmek sonra geliyor.",
+    "body": [
+      "Kendine karşı sert olmak yaygın bir alışkanlık ve sinsi bir tarafı var: verimli göründüğü için bırakılmıyor. Kendime yüklenmezsem tembelleşirim.",
+      "Şefkat pratiği bunun karşı egzersizi. Duyguyla değil, cümleyle başlıyor.",
+      "Otur, gözlerini kapat. Aklına iyi hissettiğin biri gelsin: bir arkadaş, bir çocuk, hatta bir hayvan. Ona içinden şu cümleleri söyle: iyi ol, sakin ol, yükün hafif olsun.",
+      "Bir dakika kadar tekrarla. Bu kısmı kolay.",
+      "Sonra aynı cümleleri kendine söyle. Aynı sözcükler, aynı ton.",
+      "Burada çoğu insan tuhaf hissediyor, hatta içinden bir itiraz geliyor: bunu hak etmiyorum ya da saçma geliyor. Bu itiraz pratiğin başarısızlığı değil, tam da neden yapıldığının kanıtı. İtirazı kovmaya çalışma, cümleyi söylemeye devam et.",
+      "İşin sırrı hissetmeye çalışmamak. Cümleyi kurarsın, his gelirse gelir. Haftalarca gelmeyebilir.",
+      "Bunun neden işe yaradığına dair bir mekanizma anlatmayacağım, çünkü dürüst cevabı bilmiyorum. Ama kendine söylediğin cümlelerin tonu, zamanla içinden gelen sesin tonunu belirliyor."
+    ],
+    "en": {
+      "title": "the sentences you say to yourself",
+      "readTime": "4 min",
+      "excerpt": "Being kind to yourself is a practice of phrasing, not feeling. The feeling comes later.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 39,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "sabah-mi-aksam-mi",
+    "title": "sabah mı, akşam mı",
+    "category": "meditasyon",
+    "readTime": "3 dk",
+    "excerpt": "En iyi saat, gerçekten yapabildiğin saat. Ama sabahın bir avantajı var.",
+    "body": [
+      "Kısa cevap: hangisini gerçekten yapıyorsan o. Uzun cevap biraz daha ilginç.",
+      "Sabahın avantajı günün henüz bir şey istememiş olması. Sabah sekizde yapılacak beş dakikayı bozacak pek bir şey yok. Akşam sekizde yapılacak beş dakikanın önünde ise bütün gün var: yorgunluk, planların değişmesi, sadece uzanma isteği.",
+      "Bu yüzden sabah pratiğinin sürme oranı genelde daha yüksek. Sabah insanı olduğun için değil, sabahın daha az rakibi olduğu için.",
+      "Akşamın avantajı ise farklı: gün boyunca biriktirdiğin şeyle çalışıyorsun. Sabah oturduğunda zihnin nispeten boş; akşam oturduğunda ne taşıdığını görüyorsun. Uykuya geçişi kolaylaştırması da cabası.",
+      "Öneri: ilk iki hafta sabah dene. Sabahları gerçekten imkânsızsa akşama al ama saatini sabitle. Akşam bir ara diye bir saat yok.",
+      "İkisini birden yapmaya çalışma. İki pratikten biri kaçtığında ikisi birden bırakılıyor."
+    ],
+    "en": {
+      "title": "morning or evening",
+      "readTime": "3 min",
+      "excerpt": "The best time is the one you actually do. But mornings have one advantage.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 40,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "uygulamasiz-devam",
+    "title": "bir gün uygulamayı kapat",
+    "category": "meditasyon",
+    "readTime": "3 dk",
+    "excerpt": "Rehberli pratik başlangıçta yardımcı. Bir noktadan sonra tek başına oturabilmek gerekiyor.",
+    "body": [
+      "Rehberli pratikler başlarken çok işe yarıyor: ne yapacağını söyleyen bir ses varken başlamak kolay, süreyi de o ses tutuyor.",
+      "Ama bir yan etkisi var. Bir süre sonra pratik, sesi dinlemekle eş anlamlı hâle geliyor. Kulaklık yoksa oturmuyorsun. Uygulama açılmıyorsa gün kaçıyor.",
+      "Bunu erken fark etmek daha iyi.",
+      "Deneme: haftada bir kez, rehbersiz otur. Telefonun zamanlayıcısını üç dakikaya kur ve başka bir şey açma.",
+      "İlk seferinde uzun gelecek. Üç dakika, kimsenin sana ne yapacağını söylemediği üç dakika olduğunda gerçekten uzun. Bu his normal ve geçiyor.",
+      "Ne yapacağını bilmiyorsan: nefesini izle, dikkatin kaçınca geri getir. Pratiğin tamamı bu zaten; rehberli hâlinde de olan şey bu, sadece araya bir ses giriyor.",
+      "Rehberli pratiği tamamen bırakman gerekmiyor. Ama ikisi de elinde olsun, biri yokken diğeriyle devam edebilesin."
+    ],
+    "en": {
+      "title": "close the app one day",
+      "readTime": "3 min",
+      "excerpt": "Guidance helps at the start. At some point you need to be able to sit alone.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 41,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
   }
 ]
