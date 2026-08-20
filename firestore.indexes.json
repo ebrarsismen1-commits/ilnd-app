@@ -27,17 +27,26 @@
           "order": "ASCENDING"
         }
       ]
-    },
+    }
+  ],
+  "fieldOverrides": [
     {
       "collectionGroup": "rsvps",
-      "queryScope": "COLLECTION_GROUP",
-      "fields": [
+      "fieldPath": "userId",
+      "indexes": [
         {
-          "fieldPath": "userId",
-          "order": "ASCENDING"
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "order": "DESCENDING",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
         }
       ]
     }
-  ],
-  "fieldOverrides": []
+  ]
 }
