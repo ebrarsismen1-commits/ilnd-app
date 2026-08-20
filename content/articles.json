@@ -2438,5 +2438,545 @@
     "steps": [],
     "diets": [],
     "allergens": []
+  },
+  {
+    "id": "iki-saat-doga",
+    "title": "haftada iki saat doğa",
+    "category": "ozBakim",
+    "readTime": "4 dk",
+    "excerpt": "Haftada iki saat. Tek seferde ya da parça parça, fark etmiyor.",
+    "body": [
+      "2019'da Scientific Reports'ta yayımlanan bir çalışma İngiltere'de yaklaşık 20.000 kişinin verisini inceledi. Bulgu net bir eşik gösterdi: haftada en az 120 dakika doğada vakit geçirenler, hiç geçirmeyenlere kıyasla belirgin şekilde daha iyi sağlık ve psikolojik iyilik hâli bildiriyordu.",
+      "120 dakikanın altında bu fark görünmüyordu. Üstünde ise fayda sürüyor ama yavaşlayarak; yaklaşık 200 ile 300 dakikadan sonra ek kazanç azalıyor.",
+      "En kullanışlı ayrıntı şu: tek seferde olması gerekmiyor. Haftaya dağılmış kısa ziyaretler de aynı sonucu veriyordu. Günde 17 dakika ya da hafta sonu iki uzun yürüyüş, ikisi de olur.",
+      "Doğa tanımı da geniş tutulmuştu: şehir parkı, koruluk, sahil. Ormana gitmek gerekmiyor.",
+      "Bu bir gözlem çalışması, yani doğa iyileştirir demiyor, ilişki gösteriyor. Ama uygulaması ücretsiz ve yan etkisi yok.",
+      "Bugün için: öğle molasını dışarıda yürüyerek geçir. Haftada beş gün yaparsan hedefin yarısını öğle aralarında tamamlamış olursun."
+    ],
+    "en": {
+      "title": "two hours of nature a week",
+      "readTime": "4 min",
+      "excerpt": "Two hours a week. In one go or in pieces, it does not matter.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "White MP, Alcock I, Grellier J ve ark. Spending at least 120 minutes a week in nature is associated with good health and wellbeing. Scientific Reports, 2019.",
+        "url": "https://www.nature.com/articles/s41598-019-44097-3"
+      }
+    ],
+    "order": 54,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "yalnizlik-ve-saglik",
+    "title": "bağlar bir lüks değil",
+    "category": "ozBakim",
+    "readTime": "4 dk",
+    "excerpt": "Sosyal bağların sağlık üzerindeki etkisi, bilinen büyük risk faktörleriyle aynı ölçekte çıktı.",
+    "body": [
+      "Sosyal ilişkiler genelde hayatın keyif tarafına konur, sağlık tarafına değil. 2010'da PLoS Medicine'de yayımlanan bir meta-analiz bunu tartışmalı hâle getirdi.",
+      "148 çalışma ve 300.000'den fazla katılımcının verisi birleştirildi. Sonuç: güçlü sosyal ilişkileri olanların takip süresi boyunca hayatta kalma olasılığı yaklaşık yüzde 50 daha yüksekti. Bu ilişki yaştan, cinsiyetten ve başlangıçtaki sağlık durumundan bağımsız olarak sürdü.",
+      "Araştırmacıların dikkat çektiği nokta şu: etkinin büyüklüğü, yerleşik risk faktörleriyle karşılaştırılabilir düzeyde.",
+      "İlginç bir ayrıntı: en güçlü ilişki, yalnız mı yaşıyor gibi basit ölçütlerde değil, sosyal bütünleşmeyi ölçen karmaşık ölçütlerde çıktı. Yani kiminle yaşadığından çok, hayatının içinde kaç bağ olduğu.",
+      "Pratik karşılığı: bağ kurmak bir öz bakım eylemi. Erteleyip vaktim olunca diye bırakılan görüşmeler, ertelenen bir sağlık davranışı gibi düşünülebilir.",
+      "Bir mesaj at. Uzun bir plan yapma, sadece bir mesaj."
+    ],
+    "en": {
+      "title": "connection is not a luxury",
+      "readTime": "4 min",
+      "excerpt": "The effect of social ties on health came out on the same scale as major risk factors.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Holt-Lunstad J, Smith TB, Layton JB. Social Relationships and Mortality Risk: A Meta-analytic Review. PLoS Medicine, 2010;7(7):e1000316.",
+        "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000316"
+      }
+    ],
+    "order": 55,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "ayni-saatte-kalkmak",
+    "title": "sabit olan kalkma saati olsun",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Uyku düzenini yatma saati değil, kalkma saati kuruyor.",
+    "body": [
+      "Uyku düzenini kurmaya çalışırken çoğu insan yatma saatini sabitlemeye çalışıyor ve başaramıyor. Uyku isteğe bağlı gelmiyor, yatakta uyanık yatmak da düzeni bozuyor.",
+      "Daha kolay tutan yer kalkma saati. Onu sabitlediğinde vücut birkaç gün içinde yatma saatini kendisi ayarlıyor.",
+      "Bunun sebebi iç saatin ışıkla ayar yapması. Sabah aynı saatte uyanıp ışığa çıkmak, o günün akşamında uyku isteğinin ne zaman geleceğini belirliyor.",
+      "Hafta sonu meselesi: cumartesi üç saat geç kalkmak, pazartesi sabahını üç saatlik bir jet lag hâline getiriyor. Aradaki farkı bir saatte tutmak çoğu insanda pazartesiyi kurtarıyor.",
+      "Uykusuz bir gecenin ertesinde de kalkma saatini koru. Öğleden sonra kısa bir şekerleme, yirmi otuz dakika, telafi için geç yatmaktan iyi.",
+      "Bu hafta dene: yatma saatini hiç düşünme, sadece kalkma saatini sabitle. Beş gün sonra farkı gör."
+    ],
+    "en": {
+      "title": "keep the wake time fixed",
+      "readTime": "3 min",
+      "excerpt": "Sleep rhythm is set by when you get up, not when you go to bed.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 56,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "ekran-ve-uyku",
+    "title": "yatmadan önce ekran",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Mavi ışık tek suçlu değil. Asıl mesele ekranın ne yaptırdığı.",
+    "body": [
+      "Mavi ışığın melatonini baskıladığı doğru ama etkisi popüler anlatımdaki kadar büyük değil ve gece modu bunu tamamen çözmüyor.",
+      "Ekranın uykuyu bozmasının daha büyük sebebi içerik. Telefon kaydırmak zihni uyandırıyor, sosyal medya duygusal tepki üretiyor, iş e-postası ertesi günü başlatıyor. Uykuyu geciktiren şey ışıktan çok bu uyarılma.",
+      "İkinci sebep daha sıradan: ekran zaman çalıyor. Beş dakika bakayım kırk dakika oluyor ve yatma saati kayıyor.",
+      "DENENMEYE DEĞER",
+      "Telefonu yatak odasının dışında şarj et. En etkili değişiklik bu ve en zor olanı.",
+      "Alarm için ayrı bir saat al. Telefonun odada kalma gerekçesi genelde bu.",
+      "Yatmadan önceki yarım saat için ekransız bir alternatif hazırla: kitap, dergi, müzik. Boşluk bırakırsan telefon geri dolduruyor.",
+      "Hepsini birden yapma. Birini seç, bir hafta sürdür."
+    ],
+    "en": {
+      "title": "screens before bed",
+      "readTime": "3 min",
+      "excerpt": "Blue light is not the only culprit. The real issue is what the screen makes you do.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 57,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "dus-riteli",
+    "title": "duş bir geçiş",
+    "category": "ozBakim",
+    "readTime": "2 dk",
+    "excerpt": "Akşam duşu temizlik değil, gün ile gece arasına konan bir sınır.",
+    "body": [
+      "Evde çalışmak ya da geç saate kadar mesaj yanıtlamak, iş ile ev arasındaki sınırı silmiş durumda. Vücut hâlâ gündeyken zihin de kapanmıyor.",
+      "Akşam duşu bu sınırı geri koyabilecek en basit ritüel. İşi temizlik değil, işaret vermek: gün bitti.",
+      "Ayrıca fizyolojik bir tarafı var. Sıcak duştan çıktığında vücut ısın hızla düşüyor ve bu düşüş uyku isteğini tetikleyen sinyallerden biri. O yüzden yatmadan bir buçuk iki saat önce alınan sıcak duş çoğu insanda uykuya geçişi kolaylaştırıyor.",
+      "Ritüel hâline getirmek için: duştan sonra iş konusuna dönme. Telefonu kontrol etme, e-posta açma. Duşu sınır yapan şey, ondan sonra ne yapmadığın.",
+      "Duş alamıyorsan yüzünü yıkamak ve dişlerini fırçalamak da aynı işi görebiliyor, yeter ki hep aynı sırayla olsun."
+    ],
+    "en": {
+      "title": "the shower is a transition",
+      "readTime": "2 min",
+      "excerpt": "The evening shower is not about cleaning. It is a border between day and night.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 58,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "hayir-demek",
+    "title": "hayır demenin pratiği",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Her evet, başka bir şeye söylenmiş sessiz bir hayır.",
+    "body": [
+      "Hayır demek karakterle ilgili değil, cümle bulamamakla ilgili. Kelimeler hazırda olmadığında refleks evet diyor.",
+      "Birkaç hazır cümle.",
+      "Bakıp döneyim. En kullanışlısı. Anında karar vermek zorunda kalmıyorsun ve düşününce çoğu şey daha kolay reddediliyor.",
+      "Bu hafta olmaz, önümüzdeki hafta konuşalım. Reddetmiyorsun, erteliyorsun. Çoğu istek ertelenince kendiliğinden düşüyor.",
+      "Yapamam ama şunu önerebilirim. İlişkiyi korurken işi almıyorsun.",
+      "Hayır, kusura bakma. Gerekçe eklemek zorunda değilsin. Gerekçe sunmak pazarlık kapısı açıyor.",
+      "Bir de şu var: her evet, zaten söz verdiğin başka bir şeye söylenmiş sessiz bir hayır. Kimseye hayır demediğini sanan insan, genelde kendisine diyor.",
+      "İlk hafta bir tane reddet. Sadece bir tane."
+    ],
+    "en": {
+      "title": "the practice of saying no",
+      "readTime": "3 min",
+      "excerpt": "Every yes is a quiet no to something else.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 59,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "dinlenme-turleri",
+    "title": "uyku her yorgunluğu çözmüyor",
+    "category": "ozBakim",
+    "readTime": "4 dk",
+    "excerpt": "Uyuduğun hâlde yorgunsan, eksik olan uyku olmayabilir.",
+    "body": [
+      "Sekiz saat uyuyup yorgun kalkmak yaygın ve kafa karıştırıcı. Sebebi genelde uyku eksikliği değil, başka bir dinlenme türünün eksikliği.",
+      "Zihinsel dinlenme. Gün boyu karar verdiysen zihin yorgun. Çözüm uyku değil, karar gerektirmeyen bir aralık: yürüyüş, bulaşık, tekrarlayan bir iş.",
+      "Duyusal dinlenme. Ekran, bildirim, açık ofis gürültüsü. Çözüm sessizlik ve karanlık. On dakika gözleri kapalı oturmak bile fark ediyor.",
+      "Duygusal dinlenme. Gün boyu iyi görünmek, idare etmek, kimseyi üzmemek yorucu. Çözüm, olduğun gibi olabildiğin bir ortam. Genelde tek bir kişi yeterli.",
+      "Sosyal dinlenme. İnsanlarla olmak yoruyorsa çözüm yalnızlık. Ama bazı insanlarda tersi: yalnızlık yoruyor, bağ dinlendiriyor.",
+      "Yaratıcı dinlenme. Sürekli üretiyorsan girdi tükeniyor. Çözüm izlemek, dinlemek, bakmak.",
+      "Kendine sor: bugün hangisi eksik? Cevap uyku değilse, erken yatmak işe yaramayacak."
+    ],
+    "en": {
+      "title": "sleep does not fix every kind of tired",
+      "readTime": "4 min",
+      "excerpt": "If you sleep and still wake up tired, sleep may not be what is missing.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 60,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "sabahin-ilk-yirmi-dakikasi",
+    "title": "ilk yirmi dakika",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Uyanır uyanmaz telefona bakmak, günün tonunu başkasının belirlemesi demek.",
+    "body": [
+      "Uyanınca ilk yapılan şey genelde telefona bakmak. O anda gördüğün şey, henüz uyanmamış bir zihne giren ilk bilgi oluyor: bir bildirim, bir haber, bir iş mesajı.",
+      "Sorun içeriğin kötü olması değil. Sorun, günün ilk kararını senin vermemen.",
+      "YİRMİ DAKİKALIK BİR TAMPON",
+      "Alarmı kapat ve telefonu bırak. Yatağın dışında bir yerde şarj oluyorsa bu kolaylaşıyor.",
+      "Su iç. Uyandığında hafif susuz olmak yaygın ve yorgunlukla karışıyor.",
+      "Perdeyi aç. Sabah ışığı iç saati ayarlayan en güçlü sinyal, kahveden önce gelmesi daha iyi.",
+      "Bir şey yaz ya da sadece otur. Üç nefes yeterli.",
+      "Yirmi dakika çok geliyorsa beşle başla. Ölçü süre değil, günün ilk on dakikasında ne olduğuna kimin karar verdiği."
+    ],
+    "en": {
+      "title": "the first twenty minutes",
+      "readTime": "3 min",
+      "excerpt": "Reaching for the phone means someone else sets the tone of your day.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 61,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "bes-dakikalik-toparlama",
+    "title": "beş dakikalık toparlama",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Dağınık ev, dağınık zihinle aynı şey değil ama birbirini besliyor.",
+    "body": [
+      "Ev toparlamak öz bakım gibi durmuyor ama etkisi orada.",
+      "Görsel dağınıklık dikkati sürekli meşgul ediyor: yerde duran her şey, yarım kalmış her iş, zihinde küçük bir açık dosya olarak kalıyor. Toparlamak o dosyaları kapatıyor.",
+      "Ama bütün evi toplamak bir proje ve o yüzden hiç başlanmıyor.",
+      "BEŞ DAKİKALIK HÂLİ",
+      "Bir zamanlayıcı kur. Beş dakika.",
+      "Tek bir yüzey seç: mutfak tezgâhı, komodin, çalışma masası. Sadece o.",
+      "Yerine koymak yerine toplamayı hedefle. Mükemmel düzen değil, boş yüzey.",
+      "Süre bitince dur. Devam etme isteği gelirse bile dur; ertesi gün başlamayı kolaylaştıran şey bu.",
+      "Günün sonunda yapılırsa ayrıca bir kapanış işlevi görüyor: sabah temiz bir yüzeye uyanmak, günü farklı başlatıyor."
+    ],
+    "en": {
+      "title": "a five minute reset",
+      "readTime": "3 min",
+      "excerpt": "A messy home is not the same as a messy mind, but they feed each other.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 62,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "gunes-koruyucu",
+    "title": "tek bir şey yapacaksan",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Cilt bakımının en çok etkisi olan adımı, en sıkıcı olanı.",
+    "body": [
+      "Cilt bakımı ürün sayısıyla ölçülüyor ama etkisi en kanıtlanmış adım en sade olanı: güneş koruyucu.",
+      "Cildin zamanla gördüğü hasarın büyük kısmı ultraviyole kaynaklı. Bu, hem kozmetik değişimleri hem de cilt kanseri riskini kapsıyor. Kremler, serumlar ve bakım rutinleri bu tabloyu güneş korumasının yaptığı kadar değiştirmiyor.",
+      "Kışın ve bulutlu günde de sürülür. UVA camdan geçiyor, kapalı havada azalıyor ama bitmiyor.",
+      "Miktar yetersiz kalıyor. Yüz için yaklaşık iki parmak boyu krem gerekiyor; çoğu insan bunun yarısını sürüyor.",
+      "Sabah rutinine bağla. Diş fırçalamadan sonra gibi sabit bir yere koyarsan hatırlaman gereken bir şey olmaktan çıkıyor.",
+      "Gün içinde tazelemek dışarıdaysan gerekiyor, masada oturuyorsan o kadar kritik değil.",
+      "Cildin yağlıysa jel formlar, kuruysa nemlendirici içerenler daha rahat."
+    ],
+    "en": {
+      "title": "if you only do one thing",
+      "readTime": "3 min",
+      "excerpt": "The most evidenced step in skincare is also the dullest.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 63,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "sade-cilt-rutini",
+    "title": "üç adımlık rutin",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "On adımlık rutin gerekmiyor. Üç adım çoğu cilde yetiyor.",
+    "body": [
+      "İnternetteki cilt bakımı içerikleri uzun rutinler gösteriyor ve bu iki soruna yol açıyor: masraf ve cildin tahriş olması. Çok sayıda aktif içeriği aynı anda kullanmak, faydadan çok kızarıklık üretiyor.",
+      "Sabah: yıkama, nemlendirme, güneş koruyucu.",
+      "Akşam: yıkama, nemlendirme.",
+      "Bu kadar. Cildin özel bir sorunu yoksa, yani akne, egzama ya da melazma gibi, fazlası gerekmiyor.",
+      "Bir aktif eklemek istersen tek seferde bir tane ekle ve en az bir ay kullan. İki ürünü aynı hafta başlatırsan hangisinin işe yaradığını ya da hangisinin tahriş ettiğini bilemiyorsun.",
+      "Sonuçlar yavaş gelir. Cilt yenilenme döngüsü haftalar sürüyor, bir haftada değişim beklemek ürün değiştirmeye yol açıyor ve döngü baştan başlıyor.",
+      "Cilt sorunun sürekli ya da ağrılıysa bu bir ürün meselesi değil, dermatoloji meselesi."
+    ],
+    "en": {
+      "title": "a three step routine",
+      "readTime": "3 min",
+      "excerpt": "You do not need ten steps. Three is enough for most skin.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 64,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "mikro-molalar",
+    "title": "saat başı doksan saniye",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Öğle arası tek başına yetmiyor. Asıl fark saatlik küçük duraklarda.",
+    "body": [
+      "Dikkat sınırsız değil. Uzun süre kesintisiz çalışmak verimi artırmıyor, sadece yorgunluğu geciktirilmiş hâlde biriktiriyor.",
+      "Öğle arası tek bir büyük mola ve genelde ekrana bakarak geçiyor, yani dinlenme sayılmıyor.",
+      "Daha işe yarayan yapı: saat başı doksan saniye.",
+      "Ayağa kalk. Oturmayı bölmek başlı başına bir kazanç.",
+      "Gözlerini uzağa odakla. Ekran mesafesinde saatlerce kalan göz kasları yoruluyor; pencereden uzağa bakmak onları gevşetiyor.",
+      "Omuzlarını ve boynunu çevir. Gerginlik en çok orada birikiyor.",
+      "Su iç. Bunu ayağa kalkmak için bir sebep olarak da kullanabilirsin.",
+      "Telefona bakma. Bakarsan mola olmuyor, sadece ekran değişiyor.",
+      "Doksan saniye kısa görünüyor ama günde sekiz kez yapıldığında on iki dakika ediyor ve o on iki dakika öğleden sonranın verimini değiştiriyor."
+    ],
+    "en": {
+      "title": "ninety seconds every hour",
+      "readTime": "3 min",
+      "excerpt": "A lunch break alone is not enough. The difference is in the hourly stops.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 65,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "duygusal-yorgunluk",
+    "title": "idare etmenin yorgunluğu",
+    "category": "ozBakim",
+    "readTime": "4 dk",
+    "excerpt": "Bazı günler bedenin değil, idare etmenin yorgunluğu.",
+    "body": [
+      "Fiziksel olarak hiçbir şey yapmadığın bir günün sonunda bitkin olmak tuhaf geliyor ve genelde tembellikle karıştırılıyor.",
+      "Oysa gün boyu yapılan görünmez bir iş var: duyguyu düzenlemek. Sinirlendiğin hâlde sakin görünmek, kaygılıyken işe odaklanmak, kötü haberi taşırken normal davranmak. Bunların hepsi enerji harcıyor.",
+      "Bu yorgunluğun uykuyla geçmemesinin sebebi bu. Uyku bedeni onarıyor, duygusal yükü boşaltmıyor.",
+      "BOŞALTMANIN YOLLARI",
+      "Adlandır. Ne hissettiğini tek kelimeyle yaz. Duyguyu adlandırmak, onu taşımayı hafifletiyor.",
+      "Bir kişiye söyle. Çözüm istemene gerek yok. Bugün zorlandım cümlesi tek başına iş görüyor.",
+      "Bedeni kullan. Yürüyüş, duş, ağır bir nesne kaldırmak. Duygusal yük bedende de duruyor.",
+      "İdare etmeyi bırakabileceğin bir yer bırak. Herkese iyi görünmek zorunda olmadığın tek bir ortam, günün geri kalanını taşınabilir kılıyor.",
+      "Bu yorgunluk sürekliyse ve haftalarca geçmiyorsa yalnız dinlenme meselesi olmayabilir; bir uzmanla konuşmak makul bir adım."
+    ],
+    "en": {
+      "title": "the fatigue of holding it together",
+      "readTime": "4 min",
+      "excerpt": "Some days it is not your body that is tired.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 66,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "kendine-randevu",
+    "title": "takvime yaz",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Takvimde yeri olmayan şey yapılmıyor. Kendin için ayrılan zaman da öyle.",
+    "body": [
+      "Kendine vakit ayırmak niyet düzeyinde kalıyor çünkü takvimde yeri yok. Takvimde yeri olmayan her şey, bir başkasının isteğiyle doluyor.",
+      "Çözüm sıkıcı ama çalışıyor: yaz.",
+      "Bir saat, bir gün, tekrarlayan bir randevu olarak. Adı da somut olsun: yürüyüş, kitap, hiçbir şey. Kendime zaman gibi belirsiz bir başlık, ilk çakışmada siliniyor.",
+      "Randevuyu başkasının randevusu gibi koru. Bir toplantıyı iptal ederken düşünüyorsan, bunu da düşün.",
+      "Küçük başla. Haftada bir saat, savunulabilir bir alan. Üç saat koyarsan ilk yoğun haftada tamamen kalkıyor.",
+      "Bir de şu: o saatte ne yapacağını önceden bil. Boş bir saat, telefonla dolan bir saat oluyor.",
+      "Bunu bencillik gibi hissetmek yaygın. Ama sürekli herkese ulaşılabilir olan biri, kimseye tam olarak orada değil."
+    ],
+    "en": {
+      "title": "put it in the calendar",
+      "readTime": "3 min",
+      "excerpt": "What has no place in the calendar does not happen.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 67,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "bildirimleri-kapatmak",
+    "title": "kim böldüğüne karar veriyor",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Dikkatini bölen şey telefonun kendisi değil, kim ne zaman böleceğine karar veriyor olması.",
+    "body": [
+      "Telefon kullanımını azaltma tavsiyeleri genelde süre üzerine kurulu. Ama asıl mesele süre değil, kesinti.",
+      "Bildirim açıkken dikkatinin ne zaman bölüneceğine sen karar vermiyorsun. Bölünen dikkatin geri toplanması da anlık değil; kısa bir kesintiden sonra işe dönmek dakikalar alıyor.",
+      "SADELEŞTİRME SIRASI",
+      "Önce bütün uygulamaların bildirimini kapat. Hepsini.",
+      "Sonra tek tek geri aç ve her biri için sor: bu, beni yaptığım işten koparmayı hak ediyor mu? Genelde arama ve birkaç kişinin mesajı kalıyor.",
+      "Rozetleri, yani kırmızı sayıları kapat. Sayı görmek, açmak için yeterli sebep üretiyor.",
+      "Sosyal medya bildirimlerini tamamen kapat. O uygulamalar zaten açılıyor, hatırlatılmasına gerek yok.",
+      "İki gün tuhaf hissettiriyor, sonra sessizlik normalleşiyor."
+    ],
+    "en": {
+      "title": "who decides when you are interrupted",
+      "readTime": "3 min",
+      "excerpt": "It is not the phone that breaks your attention. It is who decides when.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 68,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "sosyal-medya-akisi",
+    "title": "akışını temizlemek",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Akışını kim doldurduğuna bakmıyorsan, ruh hâlini de onlar belirliyor.",
+    "body": [
+      "Sosyal medyayı bırakmak çoğu insan için gerçekçi değil. Ama ne gördüğünü seçmek mümkün ve etkisi hızlı.",
+      "Bir hafta boyunca not al: bir gönderiyi gördükten sonra kendini nasıl hissettiğini fark et. Kötü hissettiren hesapları not et. Bu genelde birkaç hesapta yoğunlaşıyor.",
+      "Takibi bırakmak zorunda değilsin. Çoğu platformda sessize alma seçeneği var; ilişki bozulmadan akış temizleniyor.",
+      "Karşılaştırma üreten içeriği azalt: beden, gelir, ev, tatil. Bunlar bilgi vermiyor, ölçüt üretiyor.",
+      "Bir şey ekle. Akıştan çıkarmak boşluk bırakıyor; öğreten ya da güldüren birkaç hesap eklemek o boşluğu dolduruyor.",
+      "Bir de zamanlama: yatmadan önce ve uyanır uyanmaz bakılan akış, gün içindekinden daha çok etkiliyor. Sadece o iki pencereyi kapatmak bile fark ediyor."
+    ],
+    "en": {
+      "title": "cleaning up your feed",
+      "readTime": "3 min",
+      "excerpt": "If you do not choose who fills your feed, they choose your mood.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 69,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "sessizlik",
+    "title": "sessizlikte on dakika",
+    "category": "ozBakim",
+    "readTime": "2 dk",
+    "excerpt": "Gün boyu kulağında bir şey varsa, zihnin hiç boşta kalmıyor.",
+    "body": [
+      "Yürürken podcast, çalışırken müzik, bulaşık yıkarken video. Boş kalan her aralık dolduruluyor.",
+      "Bunun bir bedeli var: zihin hiç boşta kalmıyor. Oysa dağınık düşüncelerin toparlanması, bir şeyi çözmek ya da sadece ne hissettiğini fark etmek o boşluklarda oluyor.",
+      "Deneme: günde bir aralığı sessiz bırak. Yürüyüş, duş, mutfak işi. Bir tanesi yeter.",
+      "İlk günlerde sıkıcı geliyor, hatta huzursuz edici olabiliyor. Bu normal ve genelde bir hafta içinde geçiyor.",
+      "Sessizlik meditasyon değil. Bir şey yapmaya çalışmıyorsun, sadece doldurmuyorsun.",
+      "Kalabalık bir evde yaşıyorsan tam sessizlik mümkün olmayabilir. O zaman kulaklıksız olmak bile yeterli bir başlangıç."
+    ],
+    "en": {
+      "title": "ten minutes of silence",
+      "readTime": "2 min",
+      "excerpt": "If something is in your ears all day, your mind is never idle.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 70,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "yardim-istemek",
+    "title": "yardım istemek",
+    "category": "ozBakim",
+    "readTime": "3 dk",
+    "excerpt": "Yardım istemek zayıflık değil, ama zor olmasının gerçek bir sebebi var.",
+    "body": [
+      "Yardım istemenin zor olması karakter meselesi değil. İki gerçek sebebi var.",
+      "Birincisi: reddedilme tahmini. İnsanlar başkalarının yardım etme isteğini sistematik olarak olduğundan düşük tahmin ediyor. Yani rahatsız ederim düşüncesi genelde abartılı çıkıyor.",
+      "İkincisi: belirsizlik. Yardıma ihtiyacım var cümlesi karşıdakine ne yapacağını söylemiyor, o yüzden cevap gelmiyor.",
+      "DAHA KOLAY HÂLİ, BELİRLİ OLANI",
+      "Cumartesi iki saat çocuğa bakabilir misin?",
+      "Bu metni okuyup bir şey anlaşılmıyor mu diye söyler misin?",
+      "Bugün konuşmaya ihtiyacım var, yirmi dakikan var mı?",
+      "Belirli bir istek, karşıdakine evet demeyi kolaylaştırıyor ve hayır demeyi de.",
+      "Bir de şunu hatırla: birine yardım ettiğinde kendini kötü hissetmiyorsun. Karşındaki de hissetmeyecek.",
+      "Uzun süredir zorlanıyorsan ve yakınında isteyebileceğin kimse yoksa, profesyonel destek de bir seçenek ve son çare olması gerekmiyor."
+    ],
+    "en": {
+      "title": "asking for help",
+      "readTime": "3 min",
+      "excerpt": "Asking is not weakness, but there is a real reason it feels hard.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 71,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
   }
 ]
