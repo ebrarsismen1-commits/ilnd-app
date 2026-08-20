@@ -3701,5 +3701,857 @@
     "steps": [],
     "diets": [],
     "allergens": []
+  },
+  {
+    "id": "islenmis-gida-farki",
+    "title": "neden aynı kalori aynı sonucu vermiyor",
+    "category": "beslenme",
+    "readTime": "5 dk",
+    "excerpt": "Aynı kaloriyi, aynı yağı, aynı şekeri verdiler. Yine de bir grup günde 500 kalori fazla yedi.",
+    "body": [
+      "Beslenme tartışmalarının çoğu kalori kaloridir cümlesinde tıkanıyor. 2019'da yapılan bir çalışma bu cümleyi kontrollü şekilde test etti ve ilginç bir yerinden kırdı.",
+      "Cell Metabolism'de yayımlanan araştırmada 20 yetişkin, bir klinikte yatarak iki hafta ultra işlenmiş gıda, iki hafta işlenmemiş gıda ile beslendi. Sıra rastgeleydi ve kritik nokta şu: iki menü kalori, şeker, yağ, sodyum, lif ve makro besin açısından eşitlenmişti. Katılımcılar istedikleri kadar yiyebiliyordu.",
+      "Sonuç: işlenmiş dönemde günde ortalama 500 kalori fazla yediler. İki haftada yaklaşık bir kilo aldılar. İşlenmemiş dönemde ise kalori saymadan, porsiyon kısıtlamadan yaklaşık bir kilo verdiler.",
+      "Yani fark menünün besin değerinde değil, yeme davranışında ortaya çıktı. İşlenmiş yiyecekler daha hızlı yeniyor, daha yumuşak, çiğnemesi kolay ve tokluk sinyali gelmeden önce fazlası bitmiş oluyor.",
+      "Buradan çıkan pratik sonuç yasak listesi değil. İşlenmiş gıda yeme tavsiyesi gerçekçi değil, çoğumuz o dünyada yaşıyoruz.",
+      "Daha kullanışlı hâli: öğünün merkezini işlenmemiş bir şey yap. Yanında ne olursa olsun, tabağın ortasında pişmiş bir sebze, bir yumurta, bir bakliyat, bir et parçası olsun. Merkez sağlamsa çevresi çok belirleyici olmuyor.",
+      "Çalışma küçüktü, 20 kişi, ve iki haftalıktı. Ama kontrollü bir ortamda yapıldığı için nedensellik konusunda gözlem çalışmalarından güçlü."
+    ],
+    "en": {
+      "title": "why the same calories do not give the same result",
+      "readTime": "5 min",
+      "excerpt": "Same calories, same fat, same sugar. One group still ate 500 more a day.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Hall KD, Ayuketah A, Brychta R ve ark. Ultra-Processed Diets Cause Excess Calorie Intake and Weight Gain: An Inpatient Randomized Controlled Trial of Ad Libitum Food Intake. Cell Metabolism, 2019;30(1):67-77.",
+        "url": "https://www.cell.com/cell-metabolism/fulltext/S1550-4131(19)30248-7"
+      }
+    ],
+    "order": 97,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "lif-meselesi",
+    "title": "takip edilecek tek sayı: lif",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Beslenmede tek bir sayıyı takip edecek olsan, o sayı lif olurdu.",
+    "body": [
+      "Beslenme önerileri sürekli değişiyor ama bir tanesi kırk yıldır yerinde duruyor ve kanıtı en güçlü olanlardan.",
+      "2019'da The Lancet'te yayımlanan bir derleme, kırk yıla yayılan gözlem çalışmalarını ve klinik denemeleri bir araya getirdi. Bulgu şu: günde 25 ila 30 gram lif alan insanlarda, en az alanlara kıyasla tüm nedenlere bağlı ölüm ve kalp damar hastalığı riski belirgin biçimde düşük. Günlük lif alımındaki her 8 gramlık artış, kalp hastalığı, tip 2 diyabet ve kolorektal kanser görülme sıklığında azalmayla ilişkilendirildi.",
+      "Çoğu insan bunun yarısını bile almıyor.",
+      "25 ile 30 gram pratikte ne demek: bir kâse mercimek çorbası yaklaşık 6 ile 8 gram. Bir avuç badem 3 ile 4 gram. Bir orta boy elma kabuğuyla 4 gram. Yarım fincan kuru fasulye 7 ile 8 gram. Tam buğday ekmeği dilim başına 2 ile 3 gram.",
+      "Yani üç öğünde bakliyat, kabuklu meyve ve tam tahıl varsa hedef zaten tutuyor. Takviyeye gerek yok; derlemedeki fayda yiyecekten gelen lifle ilişkiliydi.",
+      "Bir uyarı: lifi birden artırırsan şişkinlik yaparsın. Bir iki hafta içinde kademeli çıkar ve su içmeyi artır."
+    ],
+    "en": {
+      "title": "the one number worth tracking: fibre",
+      "readTime": "4 min",
+      "excerpt": "If you were going to follow a single number in nutrition, this would be it.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Reynolds A, Mann J, Cummings J ve ark. Carbohydrate quality and human health: a series of systematic reviews and meta-analyses. The Lancet, 2019;393(10170):434-445.",
+        "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(18)31809-9/fulltext"
+      }
+    ],
+    "order": 98,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "tabak-duzeni",
+    "title": "tabağı kurmanın basit yolu",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Ne yediğini hesaplamak yerine tabağın nasıl kurulduğuna bak.",
+    "body": [
+      "Kalori saymak işe yarıyor ama yorucu ve çoğu insan iki hafta sonra bırakıyor. Daha dayanıklı bir yöntem tabağın kendisini kullanmak.",
+      "Yarısı sebze. Pişmiş ya da çiğ, fark etmez. Salata da olur, fırında kabak da, zeytinyağlı bir şey de.",
+      "Çeyreği protein. Yumurta, tavuk, balık, et, peynir, bakliyat. Bakliyat aynı anda lif de veriyor, iki işi birden görüyor.",
+      "Çeyreği karbonhidrat. Bulgur, pirinç, patates, ekmek, makarna. Çıkarılacak bir şey değil, oranı belirlenecek bir şey.",
+      "Bu düzenin avantajı hesap gerektirmemesi. Restoranda da, evde de, misafirlikte de gözle uygulanabiliyor.",
+      "Bir de sıra meselesi var: önce sebzeyi ve proteini yemek, karbonhidratı sona bırakmak çoğu insanda öğün sonundaki tokluğu değiştiriyor. Bunu kendi üzerinde bir hafta dene.",
+      "Tabak bir kez bu şekilde kurulunca porsiyon kontrolü ayrıca yapılacak bir iş olmaktan çıkıyor."
+    ],
+    "en": {
+      "title": "a simple way to build the plate",
+      "readTime": "3 min",
+      "excerpt": "Instead of calculating what you eat, look at how the plate is built.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 99,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "yavas-ye",
+    "title": "tokluk gecikmeli geliyor",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Tokluk sinyali mideden beyne gecikmeli gidiyor. O gecikme, fazladan yenen kısmı belirliyor.",
+    "body": [
+      "Yediğin şeyin doyurduğunu hissetmen ani olmuyor. Mide dolduğunda ve besinler bağırsağa geçmeye başladığında salgılanan hormonlar beyne ulaşana kadar bir süre geçiyor.",
+      "Sonuç şu: on dakikada yenen bir öğünde, tokluk sinyali gelmeden önce yemek çoktan bitmiş oluyor. Fazladan yenen kısım açlıktan değil, sadece hızdan geliyor.",
+      "Yavaşlamak için tavsiye listesi vermek kolay ama uygulaması zor. Onun yerine tek bir şey dene.",
+      "Çatalı ağzına götürdükten sonra bırak. Elinde tutma. Lokmayı bitirince tekrar al.",
+      "Bu tek değişiklik, ayrıca hiçbir şey yapmadan öğün süresini uzatıyor. Çünkü asıl hızlandıran şey, ağzındaki lokma biterken bir sonrakini hazırlamış olmak.",
+      "İkinci bir yöntem: yemeğin ilk üç lokmasında sadece tada dikkat et. Ekran, telefon, konuşma yok. Üç lokma sonra ne yaparsan yap.",
+      "Ekran karşısında yemek bunun tam tersini yapıyor. Dikkat başka yerdeyken hem daha hızlı yeniyor hem de yenen miktar sonradan daha az hatırlanıyor."
+    ],
+    "en": {
+      "title": "fullness arrives late",
+      "readTime": "3 min",
+      "excerpt": "The signal takes time to reach your brain. That delay is the part you overeat.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 100,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "kahvalti-sart-mi",
+    "title": "kahvaltı şart mı",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Günün en önemli öğünü cümlesi bir reklam sloganıydı. Gerçek cevap daha sıkıcı.",
+    "body": [
+      "Kahvaltı günün en önemli öğünüdür cümlesi bilimsel bir bulgudan değil, yirminci yüzyıl başındaki bir tahıl reklamından geliyor. Bu, kahvaltının kötü olduğu anlamına gelmiyor; sadece o cümlenin bir kanıtı olmadığı anlamına geliyor.",
+      "Gerçek cevap kişiye bağlı ve sıkıcı: sabah acıkıyorsan ye, acıkmıyorsan zorlama.",
+      "Kahvaltıyı atlayan bazı insanlar öğlene kadar rahat, öğlen normal yiyor ve gün sonunda toplamda daha az almış oluyor. Bazıları ise öğlen aşırı acıkıp öğleden sonrayı atıştırarak geçiriyor. İkisi de olabiliyor ve hangisi olduğunu ancak kendinde görebilirsin.",
+      "Bir hafta deneyip not al: kahvaltı yaptığın günlerde saat dörtte nasılsın, yapmadığın günlerde nasılsın. Cevap sende zaten var, sadece bakılmamış.",
+      "Kahvaltı yapıyorsan içeriği, yapıp yapmamandan daha belirleyici. Sadece beyaz ekmek ve reçel, iki saat sonra acıktırır. İçinde protein olan bir kahvaltı çoğu insanda öğlene kadar daha rahat götürüyor.",
+      "Tek istisna: sabah sporu yapıyorsan ya da ilaç kullanımın öğüne bağlıysa bu tercih meselesi olmaktan çıkar."
+    ],
+    "en": {
+      "title": "is breakfast mandatory",
+      "readTime": "4 min",
+      "excerpt": "The most important meal was an ad line. The real answer is duller.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 101,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "siviyla-gelen-kalori",
+    "title": "içtiğin kaloriler",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "İçtiğin kaloriler tokluk üretmiyor. Günlük toplamın en sessiz kısmı burada.",
+    "body": [
+      "Yediğin bir şey seni doyurur. İçtiğin aynı miktarda kalori genelde doyurmaz.",
+      "Bunun sebebi katı gıdanın çiğnenmesi, mideyi fiziksel olarak doldurması ve sindiriminin uzun sürmesi. Sıvı hızlı geçiyor ve arkasında tokluk hissi bırakmıyor. Bu yüzden meyve suyu içmek, aynı meyveyi yemekle aynı şey değil.",
+      "Günlük toplamı sessizce yükselten yerler genelde şunlar: şekerli içecekler, üç şekerli çaylar, sütlü ve şuruplu kahveler, meyve suyu etiketi taşıyan içecekler.",
+      "Değiştirmesi en kolay olan: kahveni sade ya da az şekerli iç, meyve suyu yerine meyveyi ye.",
+      "Alkol de aynı kategoride, üstelik ek bir etkisi var: iştahı açıyor ve o akşam ne yediğine dair kararları gevşetiyor.",
+      "Yasak listesi çıkarmıyorum. Ama günlük alımını nereden azaltacağını arıyorsan, tokluk vermeyen kalorilerden başlamak en az fedakârlık isteyen yer."
+    ],
+    "en": {
+      "title": "the calories you drink",
+      "readTime": "3 min",
+      "excerpt": "Liquid calories do not produce fullness. This is the quietest part of your daily total.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 102,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "aksam-atistirmasi",
+    "title": "akşam atıştırması neyin işareti",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Akşam dokuzdaki atıştırma açlık değil. O yüzden yemekle çözülmüyor.",
+    "body": [
+      "Akşam saat dokuzda mutfağa gidip dolabı açmak, sonra kapatmak, sonra tekrar açmak. Tanıdıksa yalnız değilsin ve bunun genelde açlıkla ilgisi yok.",
+      "Üç yaygın sebep var ve üçünün çözümü farklı.",
+      "Gün içinde yeterince yememişsin. Öğle yemeğini atladıysan ya da geçiştirdiysen akşam vücut hesabı kapatıyor. Bu gerçek açlık ve çözümü akşamda değil, gündüzde.",
+      "Yorgunluk. Yorulduğunda vücut hızlı enerji arıyor ve en hızlı enerji şeker. Burada yenen şey işe yaramıyor çünkü sorun uyku eksikliği.",
+      "Boşluk. Gün bitti, yapılacak bir şey yok, ekran açık. Bu durumda yeme bir aktivite. Çözümü de yemekte değil: elini meşgul edecek başka bir şey, kısa bir yürüyüş ya da o an duşa girmek çoğu insanda döngüyü kesiyor.",
+      "Ayırt etme sorusu: şu an bir elma yer miydim? Cevap hayırsa aç değilsin, başka bir şey arıyorsun.",
+      "Bu, atıştırmanın yasak olduğu anlamına gelmiyor. Sadece hangisini yaptığını bilmek, sonrasında kendine kızmanı engelliyor."
+    ],
+    "en": {
+      "title": "what evening snacking is telling you",
+      "readTime": "4 min",
+      "excerpt": "Nine pm snacking is not hunger. That is why food does not solve it.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 103,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "etiket-okuma",
+    "title": "paketin arkasına bakmak",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Paketin önü pazarlama, arkası bilgi. Bakılacak üç satır var.",
+    "body": [
+      "Paketin ön yüzü satmak için tasarlanmış. Doğal, light, fit, şeker ilavesiz, protein kaynağı ifadelerinin çoğu yasal olarak serbest ve besin değeri hakkında az şey söylüyor.",
+      "Bilgi arkada. Bakılacak üç yer var.",
+      "İçindekiler listesi, ilk üç madde. Liste ağırlığa göre sıralanır. İlk üç maddede şeker, glikoz şurubu, nişasta bazlı tatlandırıcı veya bitkisel yağ varsa ürünün büyük kısmı odur. Etiketteki tam buğday iddiası, listenin ilk sırasında beyaz un varsa bir şey ifade etmiyor.",
+      "Şeker satırı. 100 gram başına yazılır. Kahvaltılık gevrek, yoğurt ve sos gibi ürünlerde en çok sürpriz burada çıkıyor. Şeker ilavesiz ifadesi doğal şekerin olmadığı anlamına gelmez.",
+      "Porsiyon boyutu. En sinsi kısım. Değerler çoğu zaman gerçekte yediğinden küçük bir porsiyon üzerinden verilir. Paketin tamamını yiyorsan çarpman gerekir.",
+      "Bir de kısa yol var: içindekiler listesi ne kadar kısa ve okunabilirse, ürün o kadar az işlenmiş demektir. Yirmi maddelik bir liste kendi başına bir bilgi."
+    ],
+    "en": {
+      "title": "reading the back of the package",
+      "readTime": "4 min",
+      "excerpt": "The front is marketing, the back is information. Three lines matter.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 104,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "disarida-yemek",
+    "title": "dışarıda yerken",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Dışarıda yemek planı bozmuyor. Bozan şey, o günü zaten kaçtı saymak.",
+    "body": [
+      "Dışarıda yemek beslenme düzenini bozan bir şey değil. Bozan şey genelde ondan sonra kurulan cümle: bugün zaten kaçtı, akşam da ne olursa olsun.",
+      "Menüye acken bakma. Yola çıkmadan önce bir şey at, bir avuç kuruyemiş ya da bir yoğurt. Aç oturulan masada seçim yapılmıyor, refleks çalışıyor.",
+      "Sebzeyi ayrıca iste. Çoğu yerde ana yemeğin yanında salata ya da mevsim sebzesi var ama sipariş edilmesi gerekiyor.",
+      "Ekmek sepeti masaya gelmesin. Yemek beklerken yenen ekmek, kararla yenen bir şey değil.",
+      "İçeceği baştan seç. Masada karar verilen içecek genelde şekerli oluyor.",
+      "Ve en önemlisi: bir öğün bir düzeni belirlemez. Haftada yirmi bir öğün yiyorsun. Birinin dışarıda ve keyfince olması, kalan yirmisini değiştirmiyor. Değiştiren tek şey, o bir öğünün ardından gelen nasılsa cümlesi."
+    ],
+    "en": {
+      "title": "when you eat out",
+      "readTime": "3 min",
+      "excerpt": "Eating out does not break the plan. Writing the day off does.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 105,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "su-ne-kadar",
+    "title": "su: sekiz bardak nereden çıktı",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Günde sekiz bardak kuralının kaynağı belirsiz. Daha iyi bir gösterge var ve ücretsiz.",
+    "body": [
+      "Günde sekiz bardak su kuralının net bir bilimsel kaynağı yok. Yaygınlaşmış bir yuvarlama ve kişiden kişiye değişen bir ihtiyacı tek sayıya indiriyor.",
+      "İhtiyacın vücut ağırlığına, hareket düzeyine, havanın sıcaklığına ve yediğin şeylere göre değişiyor. Ayrıca aldığın sıvının hepsi bardaktan gelmiyor: çorba, meyve, sebze, çay ve kahve de sayılıyor.",
+      "Sayı takip etmek istiyorsan daha iyi bir gösterge var ve ölçmesi bedava: idrar rengi. Açık sarıysa yeterli. Koyulaştıkça su içmen gerekiyor demektir. Tamamen renksizse gereğinden fazla içiyor olabilirsin, ki bu da bir hedef değil.",
+      "Pratik bir tetikleyici: her öğünün başında bir bardak su. Bu tek alışkanlık günlük toplamın büyük kısmını hallediyor ve ayrıca hatırlaman gereken bir şey olmaktan çıkıyor, çünkü zaten sofradasın.",
+      "Susadığını fark ettiğinde su iç. Sağlıklı bir yetişkinde susama mekanizması iyi çalışıyor ve takvim uygulamasından daha güvenilir."
+    ],
+    "en": {
+      "title": "water: where did eight glasses come from",
+      "readTime": "3 min",
+      "excerpt": "The eight glass rule has no clear source. There is a better signal and it is free.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 106,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "cirpilmis-peynir-tost",
+    "title": "çırpılmış beyaz peynirli tost",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Beyaz peyniri çırpınca krema kıvamına geliyor. Üstüne bal, karabiber, taze kekik.",
+    "body": [
+      "Beyaz peynir buzdolabında öylece dururken sıkıcı. Blenderdan bir tur geçirip azıcık yoğurt eklediğinde ise bambaşka bir şeye dönüşüyor: kabarık, ipeksi, ekmeğin üstüne kalın kalın sürülen bir krema.",
+      "Bu tarifin tamamı iki dakika. Asıl iş peynirin çırpılmasında ve o kısmı makine yapıyor."
+    ],
+    "ingredients": [
+      "150 g beyaz peynir",
+      "2 yemek kaşığı süzme yoğurt",
+      "1 yemek kaşığı zeytinyağı",
+      "2 dilim ekşi mayalı ekmek",
+      "1 tatlı kaşığı bal",
+      "iri çekilmiş karabiber",
+      "taze kekik ya da nane"
+    ],
+    "steps": [
+      "Peyniri, yoğurdu ve zeytinyağını blendera koy. Bir dakika, pürüzsüz ve kabarık olana kadar çek.",
+      "Kıvam çok koyuysa bir kaşık daha yoğurt ekle. Sürülebilir olmalı, akmamalı.",
+      "Ekmekleri kızart. Tostun sert olması önemli, yumuşak ekmek altta kalıyor.",
+      "Peyniri kalın kalın sür. İnce sürersen tarifin tamamı kayboluyor.",
+      "Üstüne balı ince bir çizgi hâlinde gezdir.",
+      "Karabiberi ve otları serp."
+    ],
+    "diets": [
+      "vejetaryen"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "gluten"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 581,
+      "protein": 23,
+      "karbonhidrat": 42,
+      "yag": 36,
+      "lif": 2
+    },
+    "en": {
+      "title": "whipped feta toast",
+      "readTime": "3 min",
+      "excerpt": "Whip the feta and it turns into cream.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 107
+  },
+  {
+    "id": "firinda-yulaf",
+    "title": "fırında yulaf",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Kaşık batırınca ortası akan, kek kıvamında bir kahvaltı. Tek kapta, on beş dakika fırında.",
+    "body": [
+      "Yulaf lapası sağlıklı ama kimse onun için heyecanlanmıyor. Aynı malzemeyi fırına verdiğinde dokusu tamamen değişiyor: üstü kek gibi kabarıyor, ortası ıslak kalıyor.",
+      "İçine attığın bir kare bitter çikolata fırında eriyip ortada akışkan bir cep bırakıyor."
+    ],
+    "ingredients": [
+      "yarım su bardağı yulaf ezmesi",
+      "1 olgun muz",
+      "1 yumurta",
+      "yarım su bardağı süt",
+      "1 tatlı kaşığı kakao",
+      "1 çay kaşığı kabartma tozu",
+      "1 tatlı kaşığı bal",
+      "2 kare bitter çikolata",
+      "bir tutam tuz"
+    ],
+    "steps": [
+      "Fırını 180 dereceye ısıt.",
+      "Muzu çatalla ez. Pürüzsüz olması gerekmiyor, küçük parçalar kalsın.",
+      "Yumurtayı, sütü ve balı ekleyip karıştır.",
+      "Yulafı, kakaoyu, kabartma tozunu ve tuzu ekle.",
+      "Fırına dayanıklı küçük bir kâseye dök.",
+      "Çikolata karelerini ortaya, hamurun içine göm. Üstte bırakırsan yanıyor.",
+      "On beş, on sekiz dakika pişir. Üstü kabardığında ve dokunduğunda geri geldiğinde hazır.",
+      "Beş dakika dinlendir."
+    ],
+    "diets": [
+      "vejetaryen"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "gluten",
+      "yumurta"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 480,
+      "protein": 18,
+      "karbonhidrat": 74,
+      "yag": 15,
+      "lif": 10
+    },
+    "en": {
+      "title": "baked oats",
+      "readTime": "4 min",
+      "excerpt": "Cake texture, molten centre. One bowl, fifteen minutes.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 108
+  },
+  {
+    "id": "yesil-tanrica-kase",
+    "title": "yeşil tanrıça kâsesi",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Sosu blenderdan çıkınca fosforlu yeşil oluyor. Lahana, salatalık ve bir avuç ot.",
+    "body": [
+      "Bu salatanın tamamı sosunda. Blendera bir tutam maydanoz, bir tutam fesleğen, yoğurt ve tahin atıyorsun; çıkan şey neredeyse fosforlu, kalın, kremamsı bir yeşil.",
+      "Lahana bekledikçe suyunu bırakmıyor, o yüzden bu salata buzdolabında iki gün dayanıyor."
+    ],
+    "ingredients": [
+      "çeyrek beyaz lahana",
+      "2 salatalık",
+      "1 avuç taze soğan",
+      "yarım su bardağı ceviz",
+      "yarım su bardağı beyaz peynir",
+      "1 su bardağı süzme yoğurt",
+      "2 yemek kaşığı tahin",
+      "1 avuç maydanoz",
+      "1 avuç fesleğen ya da dereotu",
+      "yarım limon suyu",
+      "1 diş sarımsak",
+      "tuz",
+      "zeytinyağı"
+    ],
+    "steps": [
+      "Sosun tüm malzemesini blendera koy. Yoğun yeşil bir renk çıkana kadar çek.",
+      "Kıvam çok koyuysa bir kaşık su ekle. Kaşıktan ağır ağır akmalı.",
+      "Lahanayı olabildiğince ince kıy. Bu tarifin tek zahmetli kısmı ve dokuyu o belirliyor.",
+      "Salatalıkları küp doğra, taze soğanı ince ince kes.",
+      "Hepsini geniş bir kâsede karıştır.",
+      "Sosu üstüne dök ve elinle karıştır.",
+      "Cevizi ve peyniri en üste serp. Karıştırma, üstte kalsın."
+    ],
+    "diets": [
+      "vejetaryen",
+      "glutensiz"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "findik_kabuklu",
+      "susam"
+    ],
+    "nutrition": {
+      "servings": 2,
+      "kalori": 520,
+      "protein": 25,
+      "karbonhidrat": 22,
+      "yag": 40,
+      "lif": 7
+    },
+    "en": {
+      "title": "green goddess bowl",
+      "readTime": "4 min",
+      "excerpt": "The dressing comes out neon green.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 109
+  },
+  {
+    "id": "tahinli-hurma-smoothie",
+    "title": "tahinli hurma smoothie",
+    "category": "beslenme",
+    "readTime": "2 dk",
+    "excerpt": "Tadı çikolatalı bara benziyor ama içinde sadece hurma, tahin ve muz var.",
+    "body": [
+      "Tahin ve hurma bir araya geldiğinde ortaya karamele yakın bir tat çıkıyor. Muzla birleşince de tarif, tadını bildiğin bir çikolatalı bara benziyor.",
+      "İçinde şeker yok. Tatlılığın tamamı hurmadan geliyor, kıvamı da donmuş muz veriyor."
+    ],
+    "ingredients": [
+      "1 donmuş muz",
+      "3 adet hurma",
+      "1 yemek kaşığı tahin",
+      "1 su bardağı süt ya da badem sütü",
+      "1 tatlı kaşığı kakao",
+      "buz",
+      "susam"
+    ],
+    "steps": [
+      "Hurmaları beş dakika sıcak suda beklet. Sert hurma blenderda parça bırakıyor.",
+      "Tüm malzemeyi blendera koy.",
+      "Yüksek hızda bir dakika çek. Kıvam milkshake gibi olmalı.",
+      "Bardağa dök, üstüne susam serp."
+    ],
+    "diets": [
+      "vejetaryen",
+      "glutensiz"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "susam"
+    ],
+    "nutrition": {
+      "servings": 1,
+      "kalori": 527,
+      "protein": 14,
+      "karbonhidrat": 99,
+      "yag": 13,
+      "lif": 11
+    },
+    "en": {
+      "title": "tahini date smoothie",
+      "readTime": "2 min",
+      "excerpt": "Tastes like a chocolate bar. It is dates, tahini and banana.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 110
+  },
+  {
+    "id": "yogun-fasulye-salatasi",
+    "title": "yoğun fasulye salatası",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Üç çeşit bakliyat, bir kavanoz sos. Buzdolabında üç gün, her gün daha iyi.",
+    "body": [
+      "Bu salatanın fikri şu: bir kez yap, üç gün ye. Bakliyat beklerken suyunu bırakmıyor, aksine sosu emiyor ve tadı her gün derinleşiyor.",
+      "Bir kâsede ciddi miktarda lif ve bitkisel protein var, yani öğle yemeği olarak tek başına yetiyor."
+    ],
+    "ingredients": [
+      "1 kutu nohut",
+      "1 kutu barbunya ya da börülce",
+      "1 su bardağı haşlanmış yeşil mercimek",
+      "1 kırmızı soğan",
+      "1 kırmızı biber",
+      "1 demet maydanoz",
+      "yarım su bardağı zeytin",
+      "4 yemek kaşığı zeytinyağı",
+      "2 yemek kaşığı nar ekşisi",
+      "1 yemek kaşığı hardal",
+      "1 diş sarımsak",
+      "1 çay kaşığı kimyon",
+      "tuz, karabiber"
+    ],
+    "steps": [
+      "Konserve bakliyatı süzgeçte iyice yıka. Konserve suyu tadı bozuyor.",
+      "Soğanı ve biberi küçük küp doğra.",
+      "Maydanozu ince kıy, sapını atma.",
+      "Sos malzemesini kapaklı bir kavanoza koy ve on saniye çalkala. Emülsiyon oluşuyor.",
+      "Her şeyi geniş bir kâsede karıştır.",
+      "En az yarım saat bekletip öyle ye.",
+      "Kavanozlara paylaştır ve buzdolabına kaldır."
+    ],
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "hardal"
+    ],
+    "nutrition": {
+      "servings": 3,
+      "kalori": 545,
+      "protein": 20,
+      "karbonhidrat": 61,
+      "yag": 24,
+      "lif": 21
+    },
+    "en": {
+      "title": "dense bean salad",
+      "readTime": "4 min",
+      "excerpt": "Three beans, one jar of dressing. Better each day.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 111
+  },
+  {
+    "id": "firinda-peynirli-makarna",
+    "title": "fırında peynirli domates makarna",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Bir blok peynir, bir tepsi kiraz domates. Fırından çıkınca çatalla eziyorsun, sos kendiliğinden oluyor.",
+    "body": [
+      "Bu tarifin tamamı tek tepside oluyor ve sos diye ayrı bir iş yok. Peynir fırında yumuşayıp kremalaşıyor, domatesler patlayıp suyunu bırakıyor, ikisini çatalla ezdiğinde sos ortaya çıkıyor.",
+      "Tuzu fazlaysa peyniri yarım saat suda beklet."
+    ],
+    "ingredients": [
+      "200 g blok beyaz peynir",
+      "500 g kiraz domates",
+      "4 diş sarımsak",
+      "4 yemek kaşığı zeytinyağı",
+      "1 çay kaşığı kuru kekik",
+      "pul biber, karabiber",
+      "250 g makarna",
+      "taze fesleğen"
+    ],
+    "steps": [
+      "Fırını 200 dereceye ısıt.",
+      "Domatesleri ve kabuklu sarımsakları fırın kabına yay. Peynir bloğunu ortaya koy.",
+      "Zeytinyağını her şeyin üstüne gezdir, kekik ve karabiber serp.",
+      "Otuz dakika pişir. Domatesler çatlayıp suyunu bırakmalı.",
+      "Bu sırada makarnayı haşla. Haşlama suyundan bir kepçe ayır.",
+      "Tepsi çıkınca sarımsakları kabuğundan çıkarıp içine ez.",
+      "Her şeyi çatalla ezerek karıştır.",
+      "Makarnayı ve bir miktar haşlama suyunu ekle. Su sosu bağlıyor.",
+      "Fesleğeni en son, ateşten indirdikten sonra ekle."
+    ],
+    "diets": [
+      "vejetaryen"
+    ],
+    "allergens": [
+      "sut_laktoz",
+      "gluten"
+    ],
+    "nutrition": {
+      "servings": 3,
+      "kalori": 592,
+      "protein": 18,
+      "karbonhidrat": 66,
+      "yag": 28,
+      "lif": 5
+    },
+    "en": {
+      "title": "baked feta pasta",
+      "readTime": "4 min",
+      "excerpt": "A block of cheese, a tray of tomatoes. The sauce makes itself.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 112
+  },
+  {
+    "id": "pancar-humusu",
+    "title": "pancar humusu",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Fuşya. Tadı klasik humus, rengi tamamen başka bir şey.",
+    "body": [
+      "Humusa haşlanmış bir pancar eklediğinde tat neredeyse değişmiyor ama renk bambaşka oluyor: koyu, doygun bir fuşya.",
+      "Pancarın toprağımsı tadı tahin ve limonun içinde kayboluyor, geriye sadece hafif bir tatlılık kalıyor."
+    ],
+    "ingredients": [
+      "1 kutu nohut",
+      "1 orta boy haşlanmış pancar",
+      "3 yemek kaşığı tahin",
+      "1 limon suyu",
+      "1 diş sarımsak",
+      "yarım çay kaşığı kimyon",
+      "3 yemek kaşığı zeytinyağı",
+      "tuz",
+      "3 yemek kaşığı buzlu su"
+    ],
+    "steps": [
+      "Nohudu iyice yıka. Kabuklarını ayıklarsan doku çok daha kremamsı oluyor.",
+      "Pancarı iri parçalara böl.",
+      "Tahin ve limon suyunu önce tek başına çırp. Bu adım humusun kabarmasını sağlıyor.",
+      "Nohudu, pancarı, sarımsağı, kimyonu ve tuzu ekle.",
+      "Blenderda çekerken buzlu suyu azar azar dök.",
+      "İki üç dakika, tamamen pürüzsüz olana kadar çek.",
+      "Kâseye al, kaşığın arkasıyla ortasına bir havuz aç, zeytinyağını oraya dök."
+    ],
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "susam"
+    ],
+    "nutrition": {
+      "servings": 4,
+      "kalori": 264,
+      "protein": 8,
+      "karbonhidrat": 20,
+      "yag": 18,
+      "lif": 6
+    },
+    "en": {
+      "title": "beetroot hummus",
+      "readTime": "3 min",
+      "excerpt": "Fuchsia. Tastes like hummus, looks like something else.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 113
+  },
+  {
+    "id": "tepside-balli-tavuk",
+    "title": "tepside ballı hardallı tavuk",
+    "category": "beslenme",
+    "readTime": "4 dk",
+    "excerpt": "Tek tepsi, tek bulaşık. Tavuk ve sebzeler aynı anda karamelize oluyor.",
+    "body": [
+      "Akşam yemeği kararının en zor kısmı genelde bulaşık. Bu tarif her şeyi tek tepsiye topluyor.",
+      "Bal ve hardal karışımı fırında karamelize olup tavuğun üstünde parlak, koyu bir tabaka bırakıyor."
+    ],
+    "ingredients": [
+      "6 tavuk baget ya da but",
+      "2 tatlı patates",
+      "2 kırmızı soğan",
+      "1 kırmızı biber",
+      "3 yemek kaşığı bal",
+      "2 yemek kaşığı hardal",
+      "3 yemek kaşığı zeytinyağı",
+      "1 limon suyu",
+      "2 diş sarımsak",
+      "kekik, tuz, karabiber"
+    ],
+    "steps": [
+      "Fırını 200 dereceye ısıt.",
+      "Bal, hardal, zeytinyağı, limon, sarımsak ve baharatları bir kâsede karıştır.",
+      "Tavukları bu sosun içinde en az on beş dakika beklet.",
+      "Sebzeleri kalın dilimler hâlinde doğra. İnce doğrarsan tavuk pişene kadar yanıyorlar.",
+      "Sebzeleri tepsiye yay, tavukları üstüne yerleştir. Kalan sosu her şeyin üstüne dök.",
+      "Kırk dakika pişir.",
+      "Son on dakikada tepsiyi çıkarıp tavukların üstünü tepsideki sosla bir kez daha yağla.",
+      "Fırından çıkınca beş dakika dinlendir."
+    ],
+    "diets": [
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [
+      "hardal"
+    ],
+    "nutrition": {
+      "servings": 3,
+      "kalori": 603,
+      "protein": 31,
+      "karbonhidrat": 44,
+      "yag": 32,
+      "lif": 4
+    },
+    "en": {
+      "title": "sheet pan honey mustard chicken",
+      "readTime": "4 min",
+      "excerpt": "One tray, one dish to wash.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 114
+  },
+  {
+    "id": "karpuz-peynir-salata",
+    "title": "karpuz peynir salatası",
+    "category": "beslenme",
+    "readTime": "2 dk",
+    "excerpt": "Yaz akşamlarının en kolay tarifi. Doğra, üst üste koy, nane at.",
+    "body": [
+      "Karpuz ve beyaz peynir zaten yan yana yenen bir ikili. Buradaki tek değişiklik sunumu ve üstüne eklenen üç şey: nane, zeytinyağı ve nar ekşisi.",
+      "Hazırlığı üç dakika. Renk kontrastı yüzünden çok daha uğraşılmış görünüyor."
+    ],
+    "ingredients": [
+      "yarım kg karpuz",
+      "200 g beyaz peynir",
+      "1 avuç taze nane",
+      "2 yemek kaşığı zeytinyağı",
+      "1 yemek kaşığı nar ekşisi",
+      "iri çekilmiş karabiber"
+    ],
+    "steps": [
+      "Karpuzu iri küp doğra. Küçük doğrarsan suyunu bırakıp tabağı sulandırıyor.",
+      "Peyniri elinle iri iri kopar. Bıçakla kesme, düzensiz parçalar daha iyi duruyor.",
+      "Geniş bir tabağa karpuzları yay, aralarına peyniri serpiştir.",
+      "Nane yapraklarını bütün hâlde dağıt.",
+      "Zeytinyağını ve nar ekşisini gezdir.",
+      "Karabiberi son anda çek. Servise kadar buzdolabında bekletme."
+    ],
+    "diets": [
+      "vejetaryen",
+      "glutensiz"
+    ],
+    "allergens": [
+      "sut_laktoz"
+    ],
+    "nutrition": {
+      "servings": 2,
+      "kalori": 375,
+      "protein": 12,
+      "karbonhidrat": 25,
+      "yag": 27,
+      "lif": 1
+    },
+    "en": {
+      "title": "watermelon feta salad",
+      "readTime": "2 min",
+      "excerpt": "The easiest thing you will make this summer.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 115
+  },
+  {
+    "id": "firinda-baharatli-nohut",
+    "title": "fırında baharatlı nohut",
+    "category": "beslenme",
+    "readTime": "3 dk",
+    "excerpt": "Cips yerine geçen, çıtır, baharatlı bir atıştırmalık. Kavanozda bir hafta duruyor.",
+    "body": [
+      "Akşam atıştırması bırakılacak bir alışkanlık değil, yerine bir şey konacak bir alışkanlık. Fırında nohut o boşluğu dolduruyor.",
+      "Çıtırlığın sırrı iki adımda: nohudu iyice kurulamak ve fırından çıkınca tepside soğutmak."
+    ],
+    "ingredients": [
+      "2 kutu nohut",
+      "2 yemek kaşığı zeytinyağı",
+      "1 çay kaşığı tatlı toz biber",
+      "1 çay kaşığı kimyon",
+      "yarım çay kaşığı sarımsak tozu",
+      "pul biber",
+      "tuz"
+    ],
+    "steps": [
+      "Fırını 200 dereceye ısıt.",
+      "Nohudu yıka ve bir mutfak beziyle iyice kurula. Islak nohut çıtır olmuyor.",
+      "Kabuklarını ayıkla. Zorunlu değil ama kabuk fırında yanıyor.",
+      "Zeytinyağı ve baharatlarla harmanla.",
+      "Tepsiye tek kat hâlinde yay. Üst üste gelirse buğulanıyor.",
+      "Otuz beş dakika pişir, on beş dakikada bir tepsiyi salla.",
+      "Fırından çıkınca tepside soğut. Tam çıtırlık soğurken geliyor.",
+      "Cam kavanoza al."
+    ],
+    "diets": [
+      "vegan",
+      "vejetaryen",
+      "glutensiz",
+      "laktozsuz"
+    ],
+    "allergens": [],
+    "nutrition": {
+      "servings": 4,
+      "kalori": 250,
+      "protein": 10,
+      "karbonhidrat": 30,
+      "yag": 10,
+      "lif": 9
+    },
+    "en": {
+      "title": "crispy roasted chickpeas",
+      "readTime": "3 min",
+      "excerpt": "A crunchy spiced snack that replaces chips.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 116
   }
 ]
