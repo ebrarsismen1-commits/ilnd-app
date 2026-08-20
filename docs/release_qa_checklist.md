@@ -65,5 +65,52 @@ veya APK yükleyerek) test edilmeli. İdeal matris: 1 küçük Android (düşük
 - [ ] Firebase konsolunda app_open + onboarding event'leri düşüyor mu
 - [ ] Release build'de bilerek bir test crash'i (geçici buton) Crashlytics'e düşüyor mu
 
+## 10. Tasarım yenilemesi + Adan (2026-08 turunun cihaz teyidi)
+
+Bu bölüm otomatik testlerin ULAŞAMADIĞI şeyleri sorar. Widget testleri düzeni
+ve navigasyonu kilitliyor; aşağıdakiler ancak gerçek cihazda görülür.
+
+**Editoryal yüzeyler — taşma riski**
+- [ ] Bugün'ün "BUGÜNÜN OKUMASI" kartı: başlık kesilmiyor, kart taşmıyor
+      (makale HER GÜN değişiyor — birkaç farklı günde bak; 2026-08-20'de
+      uzun başlıklı bir makale kartı taşırmıştı)
+- [ ] Keşfet kapağı: uzun başlıklı bir makalede de düzgün
+- [ ] 320dp'lik küçük ekranda ikisi de sağlam
+
+**Takip ayrı ekran**
+- [ ] Bugün'deki "takip" satırı Takip ekranını açıyor
+- [ ] Sen → ayarlar → "takip" aynı ekrana gidiyor
+- [ ] Takip'te geri tuşu çalışıyor (bu yüzey geçmişte iki kez erişilemez oldu)
+
+**Adan**
+- [ ] Bugün'deki ADAN bloğu Adan ekranını açıyor
+- [ ] İlk günlüğü yazınca "fener" AÇIK oluyor (fonksiyon deploy edilmiş olmalı)
+- [ ] Gece ritüelini tamamlayınca "ay ışığı" açılıyor
+- [ ] Bir etkinliğe RSVP verince "buluşma taşı" açılıyor (rsvps indeksi
+      deploy edilmiş olmalı)
+- [ ] Sen'deki "ADA ÖĞESİ" sayısı Adan'daki kazanılmış öğe sayısıyla AYNI
+- [ ] Veriyi silince (ör. günlüğü sil) öğe geri ALINMIYOR
+- [ ] Başka bir cihazdan gir: kazanılmış öğeler orada da duruyor
+
+**Ton ve dil**
+- [ ] Hiçbir ekranda emoji yok (mood glifleri ☾ ◍ ◐ ✦ ☁ kalır, onlar emoji değil)
+- [ ] Zeminler düz renk — hareketli gradyan kalmadı
+- [ ] Başlıklar serif (Noto Serif), gövde DM Sans, sayılar IBM Plex Mono
+- [ ] Keşfet'te eşleşmeyen bir etikete dokun: "bu etikette henüz yazı yok"
+      çıkıyor, ekran boşalmıyor
+
+**Yeni kullanıcının ilk günü** (en çok gözden kaçan senaryo)
+- [ ] Sıfır veriyle Bugün: hiçbir bölüm boş kutu ya da "0" göstermiyor
+- [ ] Sıfır veriyle Takip: nazik boş durumlar
+- [ ] Sıfır veriyle Adan: "henüz öğe yok" + sıradaki öğe cümlesi
+- [ ] Sıfır veriyle Sen: istatistikler 0 ama ekran kırık görünmüyor
+- [ ] Topluluk'ta etkinlik yoksa davet içeriği çıkıyor (boş liste değil)
+
 ---
-Otomatik kapılar (her PR'da CI zaten koşuyor): format ✅ analyze ✅ 54 test ✅ release APK ✅
+Otomatik kapılar (her PR'da CI zaten koşuyor): format ✅ analyze ✅ 304 Flutter
+testi + 52 functions testi ✅ release APK ✅
+
+**Bu listedeki hiçbir madde otomatik testle karşılanmıyor.** Widget testleri
+düzeni, navigasyonu ve taşmayı kilitler; gerçek AI cevabı, gerçek Firestore
+yazımı, deep link, bildirim, paylaşım sayfası ve koyu modun gözle görünüşü
+yalnız cihazda doğrulanır.
