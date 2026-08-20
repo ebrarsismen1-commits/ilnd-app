@@ -21,6 +21,7 @@ import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_screen.dart';
 import 'package:ilnd_app/features/splash/splash_screen.dart';
 import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/features/referral/referral_screen.dart';
+import 'package:ilnd_app/features/adan/adan_screen.dart';
 import 'package:ilnd_app/features/takip/takip_screen.dart';
 import 'package:ilnd_app/features/topluluk/topluluk_screen.dart';
 import 'package:ilnd_app/features/vibe_card/quote_card_screen.dart';
@@ -36,9 +37,10 @@ const routeRegister = '/register';
 const routeHome = '/home';
 const routeChat = '/chat';
 const routeExplore = '/explore';
-const routeTakip = '/takip';
 const routeTopluluk = '/topluluk';
 const routeProfile = '/profile';
+const routeAdan = '/adan';
+const routeTakip = '/takip';
 const routeYemekEkle = '/yemek-ekle';
 const routeVibeCard = '/vibe-card';
 const routeQuoteCard = '/quote-card';
@@ -200,17 +202,23 @@ final routerProvider = Provider<GoRouter>((ref) {
             _fade(state, ChatScreen(seedMessage: state.extra as String?)),
       ),
       GoRoute(
+        // Adan — ada yuzeyi (ADR-0006).
+        path: routeAdan,
+        pageBuilder: (context, state) => _fade(state, const AdanScreen()),
+      ),
+      GoRoute(
+        // Takip kendi ekrani (tasarim handoff §6) — Bugun'deki sessiz "takip"
+        // satirindan ve Sen'deki ayarlar listesinden acilir.
+        path: routeTakip,
+        pageBuilder: (context, state) => _fade(state, const TakipScreen()),
+      ),
+      GoRoute(
         path: routeYemekEkle,
         pageBuilder: (context, state) => _fade(state, const YemekEkleScreen()),
       ),
       GoRoute(
         path: routeReferral,
         pageBuilder: (context, state) => _fade(state, const ReferralScreen()),
-      ),
-      GoRoute(
-        // Takip sekmeden çıktı (nav v2) — Sen/profil içinden push edilir.
-        path: routeTakip,
-        pageBuilder: (context, state) => _fade(state, const TakipScreen()),
       ),
       GoRoute(
         path: routeVibeCard,

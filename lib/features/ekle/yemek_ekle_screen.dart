@@ -20,7 +20,6 @@ import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
@@ -411,72 +410,69 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
     final p = ref.watch(paletteProvider);
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: Column(
-          children: [
-            SafeArea(
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 4, 16, 4),
-                child: Row(
-                  children: [
-                    Pressable(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Icon(
-                          Icons.arrow_back_ios_rounded,
-                          size: 18,
-                          color: p.text,
-                        ),
+      body: Column(
+        children: [
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 16, 4),
+              child: Row(
+                children: [
+                  Pressable(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Icon(
+                        Icons.arrow_back_ios_rounded,
+                        size: 18,
+                        color: p.text,
                       ),
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      l10n.yemekEkleTitle,
-                      style: AppTextStyles.display(fontSize: 20, color: p.text),
-                    ),
-                  ],
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    l10n.yemekEkleTitle,
+                    style: AppTextStyles.display(fontSize: 19, color: p.text),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: SafeArea(
+              top: false,
+              child: switch (_phase) {
+                _Phase.picker => _PickerView(
+                  onPick: (s) => _pick(s, l10n),
+                  p: p,
+                  l10n: l10n,
                 ),
-              ),
+                _Phase.loading => _LoadingView(
+                  photo: _photoBytes!,
+                  p: p,
+                  l10n: l10n,
+                ),
+                _Phase.result => _ResultView(
+                  photo: _photoBytes!,
+                  result: _result!,
+                  comment: _comment,
+                  portion: _portion,
+                  onPortion: (v) => setState(() => _portion = v),
+                  onRetry: _retry,
+                  onSave: () => _saveAndPop(context),
+                  p: p,
+                  l10n: l10n,
+                ),
+                _Phase.error => _ErrorView(
+                  message: _errorMsg,
+                  onRetry: _retry,
+                  p: p,
+                  l10n: l10n,
+                ),
+              },
             ),
-            Expanded(
-              child: SafeArea(
-                top: false,
-                child: switch (_phase) {
-                  _Phase.picker => _PickerView(
-                    onPick: (s) => _pick(s, l10n),
-                    p: p,
-                    l10n: l10n,
-                  ),
-                  _Phase.loading => _LoadingView(
-                    photo: _photoBytes!,
-                    p: p,
-                    l10n: l10n,
-                  ),
-                  _Phase.result => _ResultView(
-                    photo: _photoBytes!,
-                    result: _result!,
-                    comment: _comment,
-                    portion: _portion,
-                    onPortion: (v) => setState(() => _portion = v),
-                    onRetry: _retry,
-                    onSave: () => _saveAndPop(context),
-                    p: p,
-                    l10n: l10n,
-                  ),
-                  _Phase.error => _ErrorView(
-                    message: _errorMsg,
-                    onRetry: _retry,
-                    p: p,
-                    l10n: l10n,
-                  ),
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -520,7 +516,7 @@ class _PickerView extends StatelessWidget {
           Text(
             l10n.yemekEklePhotoPromptBody,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
               height: 1.5,
             ),
@@ -585,7 +581,7 @@ class _LoadingView extends StatelessWidget {
           Text(
             l10n.yemekEkleAnalyzing,
             style: AppTextStyles.body(
-              fontSize: 16,
+              fontSize: 15,
               color: p.textMuted,
             ).copyWith(fontWeight: FontWeight.w500),
           ),
@@ -648,7 +644,7 @@ class _ResultView extends StatelessWidget {
           // Food name
           Text(
             result.yemekAdi,
-            style: AppTextStyles.display(fontSize: 28, color: p.text),
+            style: AppTextStyles.display(fontSize: 24, color: p.text),
           ),
 
           // ILND's dietitian-friend comment
@@ -665,45 +661,43 @@ class _ResultView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Macro cards — porsiyon çarpanıyla ölçeklenir.
+          // Kalori ekranin kahramani, makrolar onun altinda sessiz satirlar
+          // (handoff §10). Onceki 2x2 kart izgarasi dort sayiyi esit agirlikta
+          // gosteriyordu; hangisine bakacagini soylemiyordu.
           Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
             children: [
-              _MacroCard(
-                label: l10n.yemekEkleCalories,
-                value: '${(result.kalori * portion).round()}',
-                unit: 'kcal',
-                color: p.amber,
-                p: p,
+              Text(
+                '${(result.kalori * portion).round()}',
+                style: AppTextStyles.mono(
+                  fontSize: 42,
+                  fontWeight: FontWeight.w600,
+                  color: p.text,
+                ),
               ),
-              const SizedBox(width: 10),
-              _MacroCard(
-                label: l10n.yemekEkleProtein,
-                value: (result.protein * portion).toStringAsFixed(1),
-                unit: 'g',
-                color: p.accent,
-                p: p,
+              const SizedBox(width: 8),
+              Text(
+                'kcal',
+                style: AppTextStyles.mono(fontSize: 13, color: p.textMuted),
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              _MacroCard(
-                label: l10n.yemekEkleCarbs,
-                value: (result.karbonhidrat * portion).toStringAsFixed(1),
-                unit: 'g',
-                color: p.accentSoft,
-                p: p,
-              ),
-              const SizedBox(width: 10),
-              _MacroCard(
-                label: l10n.yemekEkleFat,
-                value: (result.yag * portion).toStringAsFixed(1),
-                unit: 'g',
-                color: p.amber.withValues(alpha: 0.7),
-                p: p,
-              ),
-            ],
+          const SizedBox(height: 18),
+          _MacroLine(
+            label: l10n.yemekEkleProtein,
+            value: '${(result.protein * portion).toStringAsFixed(1)}g',
+            p: p,
+          ),
+          _MacroLine(
+            label: l10n.yemekEkleCarbs,
+            value: '${(result.karbonhidrat * portion).toStringAsFixed(1)}g',
+            p: p,
+          ),
+          _MacroLine(
+            label: l10n.yemekEkleFat,
+            value: '${(result.yag * portion).toStringAsFixed(1)}g',
+            p: p,
           ),
           const SizedBox(height: AppSpacing.sectionGap),
 
@@ -719,7 +713,6 @@ class _ResultView extends StatelessWidget {
             decoration: BoxDecoration(
               color: p.surface,
               borderRadius: BorderRadius.circular(AppSpacing.radius),
-              border: Border.all(color: p.border, width: 0.5),
             ),
             child: Wrap(
               spacing: 8,
@@ -738,7 +731,7 @@ class _ResultView extends StatelessWidget {
                       child: Text(
                         m,
                         style: AppTextStyles.label(
-                          fontSize: 12,
+                          fontSize: 11.5,
                           color: p.amber,
                         ).copyWith(letterSpacing: 0),
                       ),
@@ -804,7 +797,7 @@ class _PortionSelector extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           l10n.yemekEklePortionHint,
-          style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+          style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
         ),
         const SizedBox(height: 10),
         Row(
@@ -880,13 +873,13 @@ class _ErrorView extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             l10n.yemekEkleErrorTitle,
-            style: AppTextStyles.display(fontSize: 22, color: p.text),
+            style: AppTextStyles.display(fontSize: 24, color: p.text),
           ),
           const SizedBox(height: 8),
           Text(
             message,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
               height: 1.5,
             ),
@@ -1049,7 +1042,7 @@ class _IlndComment extends StatelessWidget {
                   : Text(
                       comment!,
                       style: AppTextStyles.body(
-                        fontSize: 14,
+                        fontSize: 13,
                         height: 1.5,
                         color: p.text,
                       ),
@@ -1062,59 +1055,39 @@ class _IlndComment extends StatelessWidget {
   }
 }
 
-// ─── Macro card ───────────────────────────────────────────────────────────────
+// ─── Makro satırı ─────────────────────────────────────────────────────────────
 
-class _MacroCard extends StatelessWidget {
-  const _MacroCard({
-    required this.label,
-    required this.value,
-    required this.unit,
-    required this.color,
-    required this.p,
-  });
-
+/// Etiket solda, değer sağda, altında hairline. Kart değil: kalori zaten
+/// ekranın büyük anı, makrolar onun detayı.
+class _MacroLine extends StatelessWidget {
+  const _MacroLine({required this.label, required this.value, required this.p});
   final String label;
   final String value;
-  final String unit;
-  final Color color;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.cardPadding),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: AppTextStyles.label(fontSize: 10, color: color)),
-            const SizedBox(height: 6),
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: value,
-                    style: AppTextStyles.mono(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: p.text,
-                    ),
-                  ),
-                  TextSpan(
-                    text: ' $unit',
-                    style: AppTextStyles.mono(fontSize: 11, color: p.textMuted),
-                  ),
-                ],
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+                ),
               ),
-            ),
-          ],
+              Text(
+                value,
+                style: AppTextStyles.mono(fontSize: 12.5, color: p.text),
+              ),
+            ],
+          ),
         ),
-      ),
+        Container(height: 0.5, color: p.border),
+      ],
     );
   }
 }

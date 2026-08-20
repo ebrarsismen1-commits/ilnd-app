@@ -182,12 +182,6 @@ abstract class AppLocalizations {
   /// **'Keşfet'**
   String get navExplore;
 
-  /// Bottom nav: tracking tab
-  ///
-  /// In tr, this message translates to:
-  /// **'Takip'**
-  String get navTracking;
-
   /// Bottom nav: community tab
   ///
   /// In tr, this message translates to:
@@ -205,12 +199,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'ilnd'**
   String get navRing;
-
-  /// Accessibility label for the center ring
-  ///
-  /// In tr, this message translates to:
-  /// **'ILND ile sohbeti aç'**
-  String get a11yOpenChat;
 
   /// Community screen title
   ///
@@ -323,37 +311,37 @@ abstract class AppLocalizations {
   /// Auth error: weak password
   ///
   /// In tr, this message translates to:
-  /// **'Şifre en az 6 karakter olmalıdır.'**
+  /// **'Şifre en az 6 karakter olmalı.'**
   String get authErrorWeakPassword;
 
   /// Auth error: user not found
   ///
   /// In tr, this message translates to:
-  /// **'Bu e-posta ile kayıtlı kullanıcı bulunamadı.'**
+  /// **'Bu e-postayla kayıtlı bir hesap yok.'**
   String get authErrorUserNotFound;
 
   /// Auth error: network problem
   ///
   /// In tr, this message translates to:
-  /// **'Bağlantı hatası. İnternet bağlantınızı kontrol edin.'**
+  /// **'Bağlantı hatası. İnternet bağlantını kontrol et.'**
   String get authErrorNetwork;
 
   /// Auth error: invalid email format
   ///
   /// In tr, this message translates to:
-  /// **'Geçerli bir e-posta adresi girin.'**
+  /// **'Geçerli bir e-posta adresi gir.'**
   String get authErrorInvalidEmail;
 
   /// Auth error: generic fallback
   ///
   /// In tr, this message translates to:
-  /// **'Bir hata oluştu. Lütfen tekrar deneyin.'**
+  /// **'Bir şeyler ters gitti. Tekrar dener misin?'**
   String get authErrorGeneric;
 
   /// Auth error: sign-in returned no session
   ///
   /// In tr, this message translates to:
-  /// **'Giriş yapılamadı. E-posta onayı gerekiyor olabilir.'**
+  /// **'Giriş yapılamadı. Önce e-postanı onaylaman gerekiyor olabilir.'**
   String get authErrorConfirmEmail;
 
   /// Auth error: updating password after recovery failed
@@ -395,13 +383,13 @@ abstract class AppLocalizations {
   /// Toast after password successfully updated
   ///
   /// In tr, this message translates to:
-  /// **'Şifren güncellendi. Hoş geldin 🌿'**
+  /// **'Şifren güncellendi. Tekrar hoş geldin'**
   String get newPasswordSuccess;
 
   /// Auth error: sign-up failed
   ///
   /// In tr, this message translates to:
-  /// **'Kayıt oluşturulamadı. Lütfen tekrar deneyin.'**
+  /// **'Hesabın oluşturulamadı. Tekrar dener misin?'**
   String get authErrorSignupFailed;
 
   /// Auth error: sign-out failed
@@ -425,13 +413,13 @@ abstract class AppLocalizations {
   /// Auth error: password reset email failed
   ///
   /// In tr, this message translates to:
-  /// **'E-posta gönderilemedi. İnternet bağlantınızı kontrol edin.'**
+  /// **'E-posta gönderilemedi. İnternet bağlantını kontrol et.'**
   String get authErrorResetFailed;
 
   /// Auth error: delete account service unavailable
   ///
   /// In tr, this message translates to:
-  /// **'Hesap silme servisi şu an kullanılamıyor.'**
+  /// **'Hesap silme şu an kullanılamıyor.'**
   String get authErrorDeleteUnavailable;
 
   /// Auth error: delete account failed
@@ -551,13 +539,13 @@ abstract class AppLocalizations {
   /// Shown after successful registration
   ///
   /// In tr, this message translates to:
-  /// **'Hesabın oluşturuldu! Hoş geldin 🌿'**
+  /// **'Hesabın oluşturuldu! Hoş geldin'**
   String get registerSuccess;
 
   /// Shown after sign-up when email confirmation is required before first sign-in
   ///
   /// In tr, this message translates to:
-  /// **'Onay bağlantısı e-postana gönderildi. Kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.'**
+  /// **'Onay bağlantısı e-postana gönderildi. Gelen kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.'**
   String get registerConfirmEmailSent;
 
   /// Email validation: empty
@@ -619,6 +607,168 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'journal, track your mood, talk to ILND.'**
   String get welcomeTaglineEn;
+
+  /// Welcome screen value beat
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND yazdıklarından öğrenir, seni hatırlar'**
+  String get welcomeBeatMemory;
+
+  /// Welcome screen value beat
+  ///
+  /// In tr, this message translates to:
+  /// **'şehrindeki buluşmalarda yüz yüze görüşürüz'**
+  String get welcomeBeatCommunity;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ADAN'**
+  String get adanLabel;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'adan.'**
+  String get adanTitle;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ada, tamamladığın işlerden büyüyor.'**
+  String get adanLead;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez — sessiz geçen günler suyu koyulaştırır, cezalandırmaz.'**
+  String get adanBody;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ÖĞELER'**
+  String get adanItemsLabel;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'AÇIK'**
+  String get adanStateOpen;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'KİLİTLİ'**
+  String get adanStateLocked;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'fener'**
+  String get adanItemLantern;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'çam'**
+  String get adanItemPine;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'fırın'**
+  String get adanItemOven;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ay ışığı'**
+  String get adanItemMoonlight;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'rüzgâr gülü'**
+  String get adanItemWindrose;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'buluşma taşı'**
+  String get adanItemMeetingStone;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ilk günlük'**
+  String get adanHowLantern;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'3 gün seri'**
+  String get adanHowPine;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'10 öğün yazıldı'**
+  String get adanHowOven;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ilk gece ritüeli'**
+  String get adanHowMoonlight;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'7 günlük seri'**
+  String get adanHowWindrose;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ilk topluluk buluşması'**
+  String get adanHowMeetingStone;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'kazanıldı'**
+  String get adanEarnedSuffix;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'henüz öğe yok'**
+  String get adanEmptyProgress;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'ADA ÖĞESİ'**
+  String get profileStatIslandItems;
+
+  /// Adan (island) surface
+  ///
+  /// In tr, this message translates to:
+  /// **'her gün üç küçük iş — bitince adan büyür'**
+  String get welcomeBeatIsland;
+
+  /// Island progress line
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} öğe · sıradaki: {next}'**
+  String adanProgress(int count, String next);
+
+  /// Note about the next island piece
+  ///
+  /// In tr, this message translates to:
+  /// **'{next} {how} tamamlandığında yerleşecek.'**
+  String adanNextNote(String next, String how);
 
   /// Welcome screen start button
   ///
@@ -884,6 +1034,24 @@ abstract class AppLocalizations {
   /// **'senin için birkaç öneri hazırlıyorum...'**
   String get firstEntryNeedsLoading;
 
+  /// Home quiet row subtitle for the tracking screen
+  ///
+  /// In tr, this message translates to:
+  /// **'öğünler, su, alışkanlıklar'**
+  String get homeTrackRowSubtitle;
+
+  /// Home quiet row: opens the weekly streak card
+  ///
+  /// In tr, this message translates to:
+  /// **'haftalık kartın hazır'**
+  String get homeWeeklyCardRowTitle;
+
+  /// Home quiet row subtitle for the weekly card
+  ///
+  /// In tr, this message translates to:
+  /// **'paylaş ya da sadece sen gör'**
+  String get homeWeeklyCardRowSubtitle;
+
   /// Home screen section title for today's article
   ///
   /// In tr, this message translates to:
@@ -1001,7 +1169,7 @@ abstract class AppLocalizations {
   /// Journal empty state body
   ///
   /// In tr, this message translates to:
-  /// **'bugün nasıl hissettiğini, ya da aklından geçeni yaz. ILND seninle düşünür.'**
+  /// **'bugün nasıl hissettiğini ya da aklından geçeni yaz. ILND seninle düşünür.'**
   String get journalEmptyBody;
 
   /// Journal empty state CTA
@@ -1130,12 +1298,6 @@ abstract class AppLocalizations {
   /// **'puan'**
   String get profileStatPoints;
 
-  /// Badge count stat label
-  ///
-  /// In tr, this message translates to:
-  /// **'rozet'**
-  String get profileStatBadge;
-
   /// Badges section label
   ///
   /// In tr, this message translates to:
@@ -1151,7 +1313,7 @@ abstract class AppLocalizations {
   /// 7-day streak badge label
   ///
   /// In tr, this message translates to:
-  /// **'7 günlük'**
+  /// **'7 gün'**
   String get profileBadgeSevenDays;
 
   /// Reader badge label
@@ -1163,7 +1325,7 @@ abstract class AppLocalizations {
   /// 30-day streak badge label
   ///
   /// In tr, this message translates to:
-  /// **'30 günlük'**
+  /// **'30 gün'**
   String get profileBadgeThirtyDays;
 
   /// Comma-separated abbreviated weekday names for the weekly bar chart, Monday through Sunday
@@ -1193,7 +1355,7 @@ abstract class AppLocalizations {
   /// Weekly summary: day streak stat label
   ///
   /// In tr, this message translates to:
-  /// **'günlük seri'**
+  /// **'gün serisi'**
   String get profileDayStreak;
 
   /// Weekly summary: journal entries written stat label
@@ -1217,7 +1379,7 @@ abstract class AppLocalizations {
   /// CTA to upgrade to premium
   ///
   /// In tr, this message translates to:
-  /// **'ILND+’a geç'**
+  /// **'ILND+\'a geç'**
   String get profileGoPremium;
 
   /// Settings section label
@@ -1231,12 +1393,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'arkadaşını davet et'**
   String get profileInviteFriend;
-
-  /// Generic settings row
-  ///
-  /// In tr, this message translates to:
-  /// **'ayarlar'**
-  String get profileSettingsRow;
 
   /// Privacy policy settings row
   ///
@@ -1253,7 +1409,7 @@ abstract class AppLocalizations {
   /// Toast shown after signing out
   ///
   /// In tr, this message translates to:
-  /// **'Çıkış yapıldı. Görüşürüz 👋'**
+  /// **'Çıkış yapıldı. Görüşürüz'**
   String get profileSignedOut;
 
   /// Sign out settings row
@@ -1295,7 +1451,7 @@ abstract class AppLocalizations {
   /// Toast shown after successful account deletion
   ///
   /// In tr, this message translates to:
-  /// **'Hesabın silindi. İyi günler 👋'**
+  /// **'Hesabın silindi. Kendine iyi bak'**
   String get profileAccountDeleted;
 
   /// Explore screen title
@@ -1334,17 +1490,17 @@ abstract class AppLocalizations {
   /// **'yazılar'**
   String get exploreFilterArticles;
 
-  /// Featured section label
+  /// Shown when a tag filter matches no articles
   ///
   /// In tr, this message translates to:
-  /// **'ÖNE ÇIKANLAR'**
-  String get exploreFeaturedLabel;
+  /// **'bu etikette henüz yazı yok'**
+  String get exploreFilterEmpty;
 
-  /// See-all link with arrow
+  /// Section label above the full article list on Explore
   ///
   /// In tr, this message translates to:
-  /// **'hepsi →'**
-  String get exploreSeeAllArrow;
+  /// **'DAHA FAZLA'**
+  String get exploreMoreLabel;
 
   /// Section label above the rituals rail (replaces the old emoji stories row)
   ///
@@ -1571,7 +1727,7 @@ abstract class AppLocalizations {
   /// Evening invitation card subtitle on home
   ///
   /// In tr, this message translates to:
-  /// **'birkaç dakikalık yumuşak bir kapanış'**
+  /// **'birkaç dakika, sonra uyku'**
   String get sleepRitualHomeCardSubtitle;
 
   /// Daily quote on explore screen
@@ -1712,12 +1868,6 @@ abstract class AppLocalizations {
   /// **'  ·  {readTime}'**
   String articleDetailReadTime(String readTime);
 
-  /// Soft sign-off shown at the end of an article
-  ///
-  /// In tr, this message translates to:
-  /// **'🌿'**
-  String get articleDetailSignOff;
-
   /// Referral screen title
   ///
   /// In tr, this message translates to:
@@ -1739,19 +1889,19 @@ abstract class AppLocalizations {
   /// Share sheet text when sharing the vibe card
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'deki ruh halimi paylaşıyorum 🌿'**
+  /// **'ilnd\'deki ruh halimi paylaşıyorum'**
   String get vibeCardShareText;
 
   /// Share sheet text when the user has a referral code — the code rides along with every share
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'deki ruh halimi paylaşıyorum 🌿 davet kodum: {code}'**
+  /// **'ilnd\'deki ruh halimi paylaşıyorum davet kodum: {code}'**
   String vibeCardShareTextWithCode(String code);
 
   /// Home section title: the three daily cards ILND prepares (move/plate/mind)
   ///
   /// In tr, this message translates to:
-  /// **'Bugünün Üçlüsü'**
+  /// **'BUGÜNÜN ÜÇLÜSÜ'**
   String get trioSectionTitle;
 
   /// Daily trio card title: movement
@@ -1823,13 +1973,13 @@ abstract class AppLocalizations {
   /// Share sheet text for the streak card
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'de {days} gündür buradayım 🔥'**
+  /// **'ilnd\'de {days} gündür buradayım'**
   String streakCardShareText(int days);
 
   /// Streak card share text carrying the user's referral code
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'de {days} gündür buradayım 🔥 davet kodum: {code}'**
+  /// **'ilnd\'de {days} gündür buradayım davet kodum: {code}'**
   String streakCardShareTextWithCode(int days, String code);
 
   /// Tiny action under an ILND chat line that turns the sentence into a shareable quote card
@@ -1841,13 +1991,13 @@ abstract class AppLocalizations {
   /// Share sheet text when sharing a quote card
   ///
   /// In tr, this message translates to:
-  /// **'ilnd bugün bana bunu dedi 🌙'**
+  /// **'ilnd bugün bana bunu dedi'**
   String get quoteCardShareText;
 
   /// Quote card share text carrying the user's referral code
   ///
   /// In tr, this message translates to:
-  /// **'ilnd bugün bana bunu dedi 🌙 davet kodum: {code}'**
+  /// **'ilnd bugün bana bunu dedi davet kodum: {code}'**
   String quoteCardShareTextWithCode(String code);
 
   /// Small referral code chip printed on the shareable card image
@@ -1895,7 +2045,7 @@ abstract class AppLocalizations {
   /// Context shown on the paywall when the weekly chat limit is reached
   ///
   /// In tr, this message translates to:
-  /// **'bu hafta benimle çok konuştun 🌿'**
+  /// **'bu hafta benimle çok konuştun'**
   String get chatPaywallReason;
 
   /// Chat empty state greeting without a name
@@ -1931,7 +2081,7 @@ abstract class AppLocalizations {
   /// Toast shown when a referral code is redeemed successfully
   ///
   /// In tr, this message translates to:
-  /// **'Davet kodu kullanıldı! 🎉'**
+  /// **'Davet kodu kullanıldı!'**
   String get redeemCodeSuccess;
 
   /// Toast: the entered referral code does not exist
@@ -1943,7 +2093,7 @@ abstract class AppLocalizations {
   /// Toast: user tried to redeem their own referral code
   ///
   /// In tr, this message translates to:
-  /// **'Bu senin kendi kodun 🙂 Bir arkadaşının kodunu dene.'**
+  /// **'Bu senin kendi kodun Bir arkadaşının kodunu dene.'**
   String get redeemCodeSelfReferral;
 
   /// Toast: user already redeemed a referral code before
@@ -2009,7 +2159,7 @@ abstract class AppLocalizations {
   /// Share sheet text when sharing the referral code
   ///
   /// In tr, this message translates to:
-  /// **'ilnd\'e benimle katıl! davet kodum: {code}'**
+  /// **'benimle ilnd\'e katıl! davet kodum: {code}'**
   String referralShareText(String code);
 
   /// Share sheet subject when sharing the referral code
@@ -2059,12 +2209,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'MAKROLAR'**
   String get takipMacrosLabel;
-
-  /// Macro row label: calories
-  ///
-  /// In tr, this message translates to:
-  /// **'kalori'**
-  String get takipCalories;
 
   /// Macro row label: protein
   ///
@@ -2213,7 +2357,7 @@ abstract class AppLocalizations {
   /// Add-sheet action subtitle: habit
   ///
   /// In tr, this message translates to:
-  /// **'yeni hedef ekle'**
+  /// **'yeni alışkanlık ekle'**
   String get ekleHabitSubtitle;
 
   /// Add-sheet action: water
@@ -2245,12 +2389,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'aklındakini konuş'**
   String get ekleAskIlndSubtitle;
-
-  /// Home tracking card subtitle
-  ///
-  /// In tr, this message translates to:
-  /// **'adımların, öğünlerin, alışkanlıkların'**
-  String get homeTrackingCardSubtitle;
 
   /// Error when habit name is empty
   ///
@@ -2345,7 +2483,7 @@ abstract class AppLocalizations {
   /// Context shown on the paywall when the daily food-scan limit is reached
   ///
   /// In tr, this message translates to:
-  /// **'bugünlük yemek analizi hakkın doldu 🌿'**
+  /// **'bugünlük yemek analizi hakkın doldu'**
   String get yemekEklePaywallReason;
 
   /// Error when picking a photo fails
@@ -2419,12 +2557,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'analiz ediliyor...'**
   String get yemekEkleAnalyzing;
-
-  /// Macro card label: calories
-  ///
-  /// In tr, this message translates to:
-  /// **'KALORİ'**
-  String get yemekEkleCalories;
 
   /// Macro card label: protein
   ///
@@ -2573,7 +2705,7 @@ abstract class AppLocalizations {
   /// ILND offline food-comment fallback 4
   ///
   /// In tr, this message translates to:
-  /// **'keyifli görünüyor. suçluluk yok — küçük dokunuşlar yeter, baskı değil.'**
+  /// **'keyifli görünüyor. suçluluk yok. küçük dokunuşlar yeter, baskı değil.'**
   String get ilndFallbackFood4;
 
   /// First-entry fallback need option 1
@@ -2663,7 +2795,7 @@ abstract class AppLocalizations {
   /// Vibe card subline fragment: completed habit count
   ///
   /// In tr, this message translates to:
-  /// **'{count, plural, =1{1 alışkanlığı tamamladın} other{{count} alışkanlığı tamamladın}}'**
+  /// **'{count, plural, =1{1 alışkanlık tamamladın} other{{count} alışkanlık tamamladın}}'**
   String vibeCardSublineHabitCount(int count);
 
   /// Screen-reader label for the theme toggle icon button
@@ -2705,7 +2837,7 @@ abstract class AppLocalizations {
   /// Settings row subtitle explaining the gentle daily reminder
   ///
   /// In tr, this message translates to:
-  /// **'Günü kaçırmadan önce nazik bir dokunuş'**
+  /// **'Gün geçip gitmeden nazik bir dokunuş'**
   String get reminderSettingSubtitle;
 
   /// Row showing the selected reminder time; opens a time picker
@@ -2732,29 +2864,137 @@ abstract class AppLocalizations {
   /// **'Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.'**
   String get reminderPermissionDenied;
 
-  /// One-time home card inviting the user to enable the daily reminder — ILND's voice
+  /// Explore shelf label above the guided plans row
   ///
   /// In tr, this message translates to:
-  /// **'Akşamları sana yazayım mı?'**
-  String get homeReminderInviteTitle;
+  /// **'PLANLAR'**
+  String get planShelfLabel;
 
-  /// Body of the one-time reminder invite card — once a day, no pressure
+  /// Length of a guided plan in days
   ///
   /// In tr, this message translates to:
-  /// **'Günde bir kez, nazikçe. Saatini istediğin zaman ayarlardan değiştirebilirsin.'**
-  String get homeReminderInviteBody;
+  /// **'{count, plural, =1{1 gün} other{{count} gün}}'**
+  String planDayCount(int count);
 
-  /// Accept button on the reminder invite card; triggers the permission request
+  /// How many days of a plan the user has completed
   ///
   /// In tr, this message translates to:
-  /// **'Olur, hatırlat'**
-  String get homeReminderInviteAccept;
+  /// **'{done}/{total} gün'**
+  String planProgress(int done, int total);
 
-  /// Decline button on the reminder invite card; dismisses it permanently
+  /// Button that starts a plan from its first day
   ///
   /// In tr, this message translates to:
-  /// **'Şimdi değil'**
-  String get homeReminderInviteLater;
+  /// **'başla'**
+  String get planStart;
+
+  /// Button that opens the next unfinished day of a plan
+  ///
+  /// In tr, this message translates to:
+  /// **'{day}. güne devam et'**
+  String planContinue(int day);
+
+  /// Line shown on a plan whose days are all completed
+  ///
+  /// In tr, this message translates to:
+  /// **'planı tamamladın'**
+  String get planAllDone;
+
+  /// Badge on a finished day row
+  ///
+  /// In tr, this message translates to:
+  /// **'tamamlandı'**
+  String get planDayDone;
+
+  /// Title prefix for a single day of a plan
+  ///
+  /// In tr, this message translates to:
+  /// **'{day}. gün'**
+  String planDayLabel(int day);
+
+  /// Button that marks the current plan day as done
+  ///
+  /// In tr, this message translates to:
+  /// **'bugünü tamamla'**
+  String get planDayComplete;
+
+  /// Section label above the article attached to a plan day
+  ///
+  /// In tr, this message translates to:
+  /// **'günün okuması'**
+  String get planDayRead;
+
+  /// Section label above the action attached to a plan day
+  ///
+  /// In tr, this message translates to:
+  /// **'günün adımı'**
+  String get planDayAction;
+
+  /// Plan day action: breathing
+  ///
+  /// In tr, this message translates to:
+  /// **'nefes al'**
+  String get planActionBreath;
+
+  /// Plan day action: movement
+  ///
+  /// In tr, this message translates to:
+  /// **'hareket et'**
+  String get planActionMove;
+
+  /// Plan day action: drink water
+  ///
+  /// In tr, this message translates to:
+  /// **'su iç'**
+  String get planActionWater;
+
+  /// Plan day action: write in the journal
+  ///
+  /// In tr, this message translates to:
+  /// **'günlüğüne yaz'**
+  String get planActionJournal;
+
+  /// Context shown on the paywall when a premium plan is opened
+  ///
+  /// In tr, this message translates to:
+  /// **'bu plan ILND+ üyelerine özel'**
+  String get planPaywallReason;
+
+  /// Badge on a plan card that requires a subscription
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND+'**
+  String get planPremiumBadge;
+
+  /// Dialog title when starting a plan while another is active
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam eden planın var'**
+  String get planSwitchTitle;
+
+  /// Dialog body explaining that the active plan will be paused
+  ///
+  /// In tr, this message translates to:
+  /// **'{title} planı duraklar, ilerlemen kaybolmaz. Yeni plana geçilsin mi?'**
+  String planSwitchBody(String title);
+
+  /// Confirm button on the plan switch dialog
+  ///
+  /// In tr, this message translates to:
+  /// **'geç'**
+  String get planSwitchConfirm;
+
+  /// Cancel button on the plan switch dialog
+  ///
+  /// In tr, this message translates to:
+  /// **'vazgeç'**
+  String get planSwitchCancel;
+
+  /// Section label above the active plan row on the home screen
+  ///
+  /// In tr, this message translates to:
+  /// **'PLANIN'**
+  String get homeActivePlanLabel;
 
   /// Explore shelf label above the movement program row
   ///
@@ -2801,25 +3041,25 @@ abstract class AppLocalizations {
   /// Button that opens the first session of a program
   ///
   /// In tr, this message translates to:
-  /// **'Başla'**
+  /// **'başla'**
   String get movementStart;
 
   /// Button that opens the next unfinished session of a program
   ///
   /// In tr, this message translates to:
-  /// **'Devam et'**
+  /// **'devam et'**
   String get movementContinue;
 
   /// Button shown when every session of the program is done
   ///
   /// In tr, this message translates to:
-  /// **'Yeniden izle'**
+  /// **'yeniden izle'**
   String get movementReplay;
 
   /// Line shown on a program whose sessions are all completed
   ///
   /// In tr, this message translates to:
-  /// **'programı tamamladın 🌿'**
+  /// **'programı tamamladın'**
   String get movementAllDone;
 
   /// Badge on a finished session row
@@ -2831,19 +3071,19 @@ abstract class AppLocalizations {
   /// Shown when the video fails to load or play
   ///
   /// In tr, this message translates to:
-  /// **'Video şu an açılamadı'**
+  /// **'video şu an açılamadı'**
   String get movementPlayerError;
 
   /// Retry button on the video player error state
   ///
   /// In tr, this message translates to:
-  /// **'Tekrar dene'**
+  /// **'tekrar dene'**
   String get movementPlayerRetry;
 
   /// Context shown on the paywall when a premium program is opened
   ///
   /// In tr, this message translates to:
-  /// **'bu program ILND+ üyelerine özel 🌿'**
+  /// **'bu program ILND+ üyelerine özel'**
   String get movementPaywallReason;
 
   /// Badge on a program card that requires a subscription

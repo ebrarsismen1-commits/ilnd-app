@@ -691,3 +691,128 @@ exports.deleteAccount = onRequest(
       }
     },
 );
+
+// ─── Adan: ada öğeleri (ADR-0006) ───────────────────────────────────────────
+
+/**
+ * Öğe eşikleri — TEK KARAR YERİ. İstemcideki `adan_model.dart` kopyası
+ * yalnız gösterim içindir ("nasıl kazanılır" satırı); kazanımı burası verir.
+ *
+ * `metric` alanları aşağıdaki `collectIslandMetrics` çıktısına karşılık gelir.
+ * `serverVerifiable: false` olanlar listede kilitli görünür ama hiç
+ * kazanılmaz — kaynakları henüz sunucudan okunamıyor (bkz. ADR-0006 §3).
+ */
+const ISLAND_ITEMS = [
+  {id: "lantern", metric: "journalCount", threshold: 1, serverVerifiable: true},
+  {id: "pine", metric: "streakDays", threshold: 3, serverVerifiable: true},
+  {id: "oven", metric: "mealCount", threshold: 10, serverVerifiable: true},
+  {id: "windrose", metric: "streakDays", threshold: 7, serverVerifiable: true},
+  {id: "moonlight", metric: "nightRituals", threshold: 1,
+    serverVerifiable: false},
+  {id: "meetingStone", metric: "meetups", threshold: 1,
+    serverVerifiable: false},
+];
+
+/** @return {string} bugünün YYYY-MM-DD karşılığı (UTC). */
+function islandDateKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+/**
+ * Kullanıcının kendi verisinden kazanım ölçütlerini toplar. Hepsi Admin SDK
+ * ile okunur — istemcinin gönderdiği hiçbir sayıya güvenilmez.
+ * @param {string} uid kullanıcı kimliği
+ * @return {Promise<Object<string, number>>} ölçüt adı -> değer
+ */
+async function collectIslandMetrics(uid) {
+  const userRef = db.collection("users").doc(uid);
+
+  const [journalAgg, foodAgg, checkinSnap] = await Promise.all([
+    userRef.collection("journal_entries").count().get(),
+    userRef.collection("food_entries").count().get(),
+    // Seri hesabı için son 60 günün check-in'leri yeter: en uzun eşik 7 gün.
+    db.collection("daily_checkins").where("userId", "==", uid).get(),
+  ]);
+
+  const dates = new Set();
+  checkinSnap.docs.forEach((d) => {
+    const date = (d.data() || {}).date;
+    if (typeof date === "string") dates.add(date);
+  });
+
+  // Bugünden geriye kesintisiz gün sayısı. Bugün yoksa dünden başlar —
+  // gün ortasında seriyi sıfırlamak cezalandırmak olurdu (ses tonu §6).
+  let streakDays = 0;
+  const cursor = new Date();
+  if (!dates.has(islandDateKey(cursor))) {
+    cursor.setUTCDate(cursor.getUTCDate() - 1);
+  }
+  while (dates.has(islandDateKey(cursor)) && streakDays < 400) {
+    streakDays += 1;
+    cursor.setUTCDate(cursor.getUTCDate() - 1);
+  }
+
+  return {
+    journalCount: journalAgg.data().count || 0,
+    mealCount: foodAgg.data().count || 0,
+    streakDays,
+    nightRituals: 0, // cihaz-yerel, sunucudan okunamıyor (ADR-0006 §3)
+    meetups: 0, // collectionGroup indeksi gerekiyor (ADR-0006 §3)
+  };
+}
+
+/**
+ * Adayı senkronize eder: kazanılmış öğeleri hesaplar, YENİ olanları yazar.
+ *
+ * İdempotent ve toplayıcıdır — kazanılmış bir öğe ASLA geri alınmaz
+ * (handoff §7: sessiz geçen günler cezalandırmaz). Bu yüzden fonksiyon
+ * yalnız ekler; eşiğin altına düşmek bir öğeyi silmez.
+ *
+ * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
+ */
+exports.syncIslandItems = onRequest({cors: true}, async (req, res) => {
+  if (req.method !== "POST") {
+    res.status(405).json({error: "Method Not Allowed"});
+    return;
+  }
+
+  let uid;
+  try {
+    const decoded = await requireFirebaseAuth(req);
+    uid = decoded.uid;
+  } catch (err) {
+    res.status(401).json({error: "Invalid or missing auth token"});
+    return;
+  }
+
+  try {
+    const metrics = await collectIslandMetrics(uid);
+    const ref = db.collection("island").doc(uid);
+    const snap = await ref.get();
+    const existing = (snap.exists ? snap.data() : null) || {};
+    const earned = Array.isArray(existing.earned) ? existing.earned : [];
+
+    const nextEarned = earned.slice();
+    for (const item of ISLAND_ITEMS) {
+      if (!item.serverVerifiable) continue;
+      if (nextEarned.includes(item.id)) continue;
+      if ((metrics[item.metric] || 0) >= item.threshold) {
+        nextEarned.push(item.id);
+      }
+    }
+
+    const gained = nextEarned.filter((id) => !earned.includes(id));
+    if (gained.length > 0 || !snap.exists) {
+      await ref.set({
+        uid,
+        earned: nextEarned,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      }, {merge: true});
+    }
+
+    res.json({earned: nextEarned, gained, metrics});
+  } catch (err) {
+    console.error("syncIslandItems failed:", err);
+    res.status(500).json({error: "Internal error"});
+  }
+});

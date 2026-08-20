@@ -173,7 +173,7 @@ class _StartupFailureBody extends StatelessWidget {
               Text(
                 l10n.startupFailedTitle,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 19,
                   fontWeight: FontWeight.w600,
                 ),
               ),

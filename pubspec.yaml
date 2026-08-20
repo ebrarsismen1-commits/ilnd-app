@@ -46,7 +46,6 @@ dependencies:
   share_plus: ^10.1.2
   google_fonts: ^6.2.1
   shared_preferences: ^2.5.5
-  fl_chart: ^0.70.2
   image_picker: ^1.1.2
   http: ^1.2.2
   purchases_flutter: ^8.0.0

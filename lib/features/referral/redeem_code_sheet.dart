@@ -92,7 +92,7 @@ class _RedeemCodeSheetState extends ConsumerState<RedeemCodeSheet> {
             ),
             Text(
               l10n.redeemCodeTitle,
-              style: AppTextStyles.heading(fontSize: 20, color: p.text),
+              style: AppTextStyles.heading(fontSize: 19, color: p.text),
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -101,7 +101,7 @@ class _RedeemCodeSheetState extends ConsumerState<RedeemCodeSheet> {
                 controller: _controller,
                 autofocus: true,
                 textCapitalization: TextCapitalization.characters,
-                style: AppTextStyles.body(fontSize: 16, color: p.text),
+                style: AppTextStyles.body(fontSize: 15, color: p.text),
                 decoration: InputDecoration(hintText: l10n.redeemCodeHint),
               ),
             ),

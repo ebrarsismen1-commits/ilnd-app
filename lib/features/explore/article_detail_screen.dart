@@ -98,12 +98,15 @@ class ArticleDetailScreen extends ConsumerWidget {
                   children: [
                     Text(
                       article.category.tag.toUpperCase(),
-                      style: AppTextStyles.label(fontSize: 11, color: p.accent),
+                      style: AppTextStyles.label(
+                        fontSize: 11.5,
+                        color: p.accent,
+                      ),
                     ),
                     Text(
                       l10n.articleDetailReadTime(article.readTime),
                       style: AppTextStyles.body(
-                        fontSize: 12,
+                        fontSize: 11.5,
                         color: p.textMuted,
                       ),
                     ),
@@ -113,7 +116,7 @@ class ArticleDetailScreen extends ConsumerWidget {
                 Text(
                   article.title,
                   style: AppTextStyles.display(
-                    fontSize: 32,
+                    fontSize: 30,
                     color: p.text,
                     height: 1.1,
                   ),
@@ -122,7 +125,7 @@ class ArticleDetailScreen extends ConsumerWidget {
                 Text(
                   article.excerpt,
                   style: AppTextStyles.body(
-                    fontSize: 16,
+                    fontSize: 15,
                     color: p.textMuted,
                     height: 1.5,
                   ),
@@ -133,7 +136,7 @@ class ArticleDetailScreen extends ConsumerWidget {
                   Text(
                     paragraph,
                     style: AppTextStyles.body(
-                      fontSize: 16,
+                      fontSize: 15,
                       color: p.text,
                       height: 1.7,
                     ),
@@ -146,17 +149,6 @@ class ArticleDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   _RecipeSection(article: article, p: p),
                 ],
-                const SizedBox(height: 12),
-                // Soft sign-off
-                Center(
-                  child: Text(
-                    l10n.articleDetailSignOff,
-                    style: AppTextStyles.display(
-                      fontSize: 18,
-                      color: p.textMuted,
-                    ),
-                  ),
-                ),
               ]),
             ),
           ),
@@ -193,7 +185,7 @@ class _RecipeSectionState extends State<_RecipeSection> {
       children: [
         Text(
           l10n.recipeIngredientsTitle,
-          style: AppTextStyles.label(fontSize: 11, color: p.accent),
+          style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
         ),
         const SizedBox(height: 12),
         Container(
@@ -201,7 +193,6 @@ class _RecipeSectionState extends State<_RecipeSection> {
           decoration: BoxDecoration(
             color: p.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: p.border, width: 0.5),
           ),
           child: Column(
             children: [

@@ -25,6 +25,20 @@ Pano ek tonları (editoryal kartlar): deep #274D33 · matcha #9BAA6F · krem #EF
 | Sayı/istatistik | IBM Plex Mono | makro, streak, saat |
 
 ## 3. Boşluk & Şekil
+**Ayrım kutuyla değil boşlukla kurulur** (2026-08-19 editoryal geçiş): içerik
+kartı yok; bölümleri 0.5px hairline + boşluk + tipografi ayırır. Kenarlık
+yalnız işlevselse kalır (buton, giriş alanı, paylaşım kartı, kilitli öğe çipi).
+Her ekranda TEK büyük an olur — ölçek zıtlığı (§7.2) bir süs değil, "önce şuna
+bak" demenin yolu.
+
+**Emoji yasak.** İkon gerekiyorsa `Icons.*`, sembol gerekiyorsa tek renkli
+geometrik glif (mood glifleri ☾ ◍ ◐ ✦ ☁ bu yüzden kalır). Yasak
+test/core/no_emoji_test.dart ile kilitli.
+
+**Zeminde animasyon yok.** Ekran zemini düz renktir (`p.base`); hareketli aura
+degradesi 2026-08-19'da kaldırıldı. Fotoğraf üzerindeki karartma gradyanları
+işlevseldir (metin okunabilirliği), onlar kalır.
+
 8pt grid (`AppSpacing.unit`) · ekran pad 20 · kart radius 16 · input/buton radius 12
 · buton yüksekliği 52 · tap hedefi ≥44. Gölge yalnız 2 yerde: merkez halka + modal.
 
@@ -37,7 +51,7 @@ Pano ek tonları (editoryal kartlar): deep #274D33 · matcha #9BAA6F · krem #EF
 Yeni süre/eğri icat edilmez; sayfa geçişi = mevcut fade-up.
 
 ## 5. Bileşen Envanteri (önce bunları kullan, sonra icat et)
-Pressable · Entrance · AnimatedBackground · CoverImage(+editoryal filtre) ·
+Pressable · Entrance · CoverImage(+editoryal filtre) ·
 EditorialGradient · Shimmer · IlndToast · AuthInputField · SocialSignInButton ·
 AuthDivider. Yeni bileşen = 2+ yerde kullanım kanıtı → core/widgets'a.
 

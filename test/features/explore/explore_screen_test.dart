@@ -14,6 +14,12 @@ void main() {
     WidgetTester tester, {
     List<MovementProgram>? programs,
   }) async {
+    // Keşfet artık 400px'lik kapakla açılıyor (handoff §2: ekranın tek büyük
+    // anı önce gelir), raflar onun altında. Varsayılan 800x600 viewport'ta
+    // raflar sliver önbelleğinin dışında kalıp hiç kurulmuyor — testin
+    // ölçtüğü şey scroll konumu değil, veri varken rafın çizilmesi.
+    await tester.binding.setSurfaceSize(const Size(420, 2400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     await tester.pumpWidget(
       ProviderScope(
         overrides: [

@@ -126,7 +126,8 @@ class IlndService {
       final decoded =
           jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
       final content = decoded['content'] as List;
-      return (content.first['text'] as String).trim();
+      // Ad jetonu burada, cevap ekrana gitmeden önce gerçek adla değişir.
+      return personalize((content.first['text'] as String).trim(), memory.name);
     } on IlndFreeLimitException {
       // Kota duvarı karakter-içi bir cevapla gizlenemez: kullanıcıya paywall
       // gösterilmesi gerekiyor, fallback'e düşülürse bunu hiç öğrenemez.
@@ -295,6 +296,28 @@ class IlndFreeLimitException implements Exception {
   final UsageKind kind;
   @override
   String toString() => 'IlndFreeLimitException(${kind.name})';
+}
+
+/// AI cevabındaki ad jetonunu gerçek adla değiştirir.
+///
+/// Kullanıcının adı hiçbir istekte cihazdan çıkmıyor (bkz.
+/// [IlndMemory.toPromptContext]); model yalnız [kNamePlaceholder] görüyor ve
+/// onu yazıyor. Kişiselleştirme bu son adımda, tamamen istemcide oluyor.
+///
+/// Ad boşsa jeton **silinir**, olduğu gibi bırakılmaz — kullanıcıya
+/// "merhaba {ad}" diye seslenmek kırık bir ürün izlenimi verir. Jeton hiç
+/// geçmiyorsa metin olduğu gibi döner (model onu kullanmak zorunda değil).
+String personalize(String text, String name) {
+  if (!text.contains(kNamePlaceholder)) return text;
+  if (name.trim().isEmpty) {
+    // Jetonu ve peşine takılan boşluğu/virgülü temizle: "merhaba {ad}, nasıl"
+    // → "merhaba, nasıl" değil "merhaba nasıl" olsun.
+    return text
+        .replaceAll(RegExp('\\s*${RegExp.escape(kNamePlaceholder)}\\s*,'), '')
+        .replaceAll(RegExp('\\s*${RegExp.escape(kNamePlaceholder)}'), '')
+        .trim();
+  }
+  return text.replaceAll(kNamePlaceholder, name.trim());
 }
 
 /// 429 yanıtının, hesabın ücretsiz katman kotasından mı (paywall) yoksa

@@ -16,11 +16,9 @@
 
   "navHome": "Today",
   "navExplore": "Explore",
-  "navTracking": "Tracking",
   "navCommunity": "Community",
   "navYou": "You",
   "navRing": "ilnd",
-  "a11yOpenChat": "Open chat with ILND",
 
   "topulukTitle": "community.",
   "topulukTagline": "in your city, by your side",
@@ -56,7 +54,7 @@
   "newPasswordHint": "new password",
   "newPasswordConfirmHint": "new password (again)",
   "newPasswordSubmit": "update password",
-  "newPasswordSuccess": "Your password is updated. Welcome back 🌿",
+  "newPasswordSuccess": "Your password is updated. Welcome back",
   "authErrorSignupFailed": "Couldn't create your account. Please try again.",
   "authErrorSignOutFailed": "Couldn't sign out. Try again?",
   "authErrorGoogleFailed": "Couldn't sign in with Google. Try again?",
@@ -84,7 +82,7 @@
   "registerSubmit": "sign up",
   "registerHaveAccount": "already have an account? ",
   "registerLoginLink": "sign in",
-  "registerSuccess": "Your account has been created! Welcome 🌿",
+  "registerSuccess": "Your account has been created! Welcome",
   "registerConfirmEmailSent": "We sent a confirmation link to your email. Check your inbox (and spam folder), then sign in.",
 
   "validatorEmailRequired": "Email address is required.",
@@ -98,6 +96,87 @@
 
   "welcomeTagline": "journal, track your mood, talk to ILND.",
   "welcomeTaglineEn": "journal, track your mood, talk to ILND.",
+  "welcomeBeatMemory": "ILND learns from what you write and remembers you",
+  "@welcomeBeatMemory": {"description": "Welcome screen value beat"},
+
+  "welcomeBeatCommunity": "we meet face to face at gatherings in your city",
+  "@welcomeBeatCommunity": {"description": "Welcome screen value beat"},
+
+  "adanLabel": "ISLAND",
+  "@adanLabel": {"description": "Adan (island) surface"},
+
+  "adanTitle": "island.",
+  "@adanTitle": {"description": "Adan (island) surface"},
+
+  "adanLead": "your island grows from what you finish.",
+  "@adanLead": {"description": "Adan (island) surface"},
+
+  "adanBody": "every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed — quiet days only deepen the water, they do not punish.",
+  "@adanBody": {"description": "Adan (island) surface"},
+
+  "adanItemsLabel": "PIECES",
+  "@adanItemsLabel": {"description": "Adan (island) surface"},
+
+  "adanStateOpen": "OPEN",
+  "@adanStateOpen": {"description": "Adan (island) surface"},
+
+  "adanStateLocked": "LOCKED",
+  "@adanStateLocked": {"description": "Adan (island) surface"},
+
+  "adanItemLantern": "lantern",
+  "@adanItemLantern": {"description": "Adan (island) surface"},
+
+  "adanItemPine": "pine",
+  "@adanItemPine": {"description": "Adan (island) surface"},
+
+  "adanItemOven": "oven",
+  "@adanItemOven": {"description": "Adan (island) surface"},
+
+  "adanItemMoonlight": "moonlight",
+  "@adanItemMoonlight": {"description": "Adan (island) surface"},
+
+  "adanItemWindrose": "weather vane",
+  "@adanItemWindrose": {"description": "Adan (island) surface"},
+
+  "adanItemMeetingStone": "meetup stone",
+  "@adanItemMeetingStone": {"description": "Adan (island) surface"},
+
+  "adanHowLantern": "first journal",
+  "@adanHowLantern": {"description": "Adan (island) surface"},
+
+  "adanHowPine": "3-day streak",
+  "@adanHowPine": {"description": "Adan (island) surface"},
+
+  "adanHowOven": "10 meals logged",
+  "@adanHowOven": {"description": "Adan (island) surface"},
+
+  "adanHowMoonlight": "first night ritual",
+  "@adanHowMoonlight": {"description": "Adan (island) surface"},
+
+  "adanHowWindrose": "7-day streak",
+  "@adanHowWindrose": {"description": "Adan (island) surface"},
+
+  "adanHowMeetingStone": "first community meetup",
+  "@adanHowMeetingStone": {"description": "Adan (island) surface"},
+
+  "adanEarnedSuffix": "earned",
+  "@adanEarnedSuffix": {"description": "Adan (island) surface"},
+
+  "adanEmptyProgress": "no pieces yet",
+  "@adanEmptyProgress": {"description": "Adan (island) surface"},
+
+  "profileStatIslandItems": "PIECES",
+  "@profileStatIslandItems": {"description": "Adan (island) surface"},
+
+  "welcomeBeatIsland": "three small things a day — finish them and your island grows",
+  "@welcomeBeatIsland": {"description": "Adan (island) surface"},
+
+  "adanProgress": "{count} pieces · next: {next}",
+  "@adanProgress": {"description": "Island progress line", "placeholders": {"count": {"type": "int"}, "next": {"type": "String"}}},
+
+  "adanNextNote": "{next} settles in once {how} is done.",
+  "@adanNextNote": {"description": "Note about the next island piece", "placeholders": {"next": {"type": "String"}, "how": {"type": "String"}}},
+
   "welcomeStart": "start",
   "welcomeHaveAccount": "already have an account? ",
   "welcomeLoginLink": "sign in",
@@ -144,6 +223,15 @@
   "firstEntrySkip": "not now",
   "firstEntryNeedsPrompt": "what do you need?",
   "firstEntryNeedsLoading": "getting a few ideas ready for you...",
+
+  "homeTrackRowSubtitle": "meals, water, habits",
+  "@homeTrackRowSubtitle": {"description": "Home quiet row subtitle for the tracking screen"},
+
+  "homeWeeklyCardRowTitle": "your weekly card is ready",
+  "@homeWeeklyCardRowTitle": {"description": "Home quiet row: opens the weekly streak card"},
+
+  "homeWeeklyCardRowSubtitle": "share it, or keep it to yourself",
+  "@homeWeeklyCardRowSubtitle": {"description": "Home quiet row subtitle for the weekly card"},
 
   "homeTodaysReadTitle": "TODAY'S READ",
   "homeGreetingNight": "good night",
@@ -202,7 +290,6 @@
   "profileAboutYouLabel": "ABOUT YOU",
   "profileStatStreak": "streak",
   "profileStatPoints": "points",
-  "profileStatBadge": "badges",
   "profileBadgesLabel": "BADGES",
   "profileBadgeFirstStep": "first step",
   "profileBadgeSevenDays": "7-day",
@@ -220,17 +307,16 @@
   "profileGoPremium": "upgrade to ILND+",
   "profileSettingsLabel": "SETTINGS",
   "profileInviteFriend": "invite a friend",
-  "profileSettingsRow": "settings",
   "profilePrivacyPolicy": "privacy policy",
   "profileTermsOfService": "terms of service",
-  "profileSignedOut": "Signed out. See you soon 👋",
+  "profileSignedOut": "Signed out. See you soon",
   "profileSignOut": "sign out",
   "profileDeleteAccount": "delete my account",
   "profileDeleteAccountDialogTitle": "Delete your account",
   "profileDeleteAccountDialogBody": "This can't be undone. Your journal entries, meal logs, streak history, and everything tied to your account will be permanently deleted.",
   "profileDeleteAccountCancel": "Cancel",
   "profileDeleteAccountConfirm": "Delete my account",
-  "profileAccountDeleted": "Your account has been deleted. Take care 👋",
+  "profileAccountDeleted": "Your account has been deleted. Take care",
 
   "exploreTitle": "explore.",
   "exploreSubtitle": "small steps toward feeling good",
@@ -238,8 +324,12 @@
   "exploreFilterWellness": "wellness",
   "exploreFilterRecipes": "recipes",
   "exploreFilterArticles": "articles",
-  "exploreFeaturedLabel": "FEATURED",
-  "exploreSeeAllArrow": "see all →",
+  "exploreFilterEmpty": "nothing under this tag yet",
+  "@exploreFilterEmpty": {"description": "Shown when a tag filter matches no articles"},
+
+  "exploreMoreLabel": "MORE",
+  "@exploreMoreLabel": {"description": "Section label above the full article list on Explore"},
+
   "exploreRitualsLabel": "RITUALS",
   "exploreRitualBreathTitle": "2 min breath",
   "exploreRitualSleepTitle": "night ritual",
@@ -281,7 +371,7 @@
   "sleepRitualClosing3": "tomorrow is a fresh page. tonight, just sleep.",
   "sleepRitualClosing4": "thank you for making this space for yourself. goodnight.",
   "sleepRitualHomeCardTitle": "ready for your night ritual?",
-  "sleepRitualHomeCardSubtitle": "a few minutes of gentle winding down",
+  "sleepRitualHomeCardSubtitle": "a few minutes, then sleep",
   "exploreQuote": "\"A small step today, a big difference tomorrow.\"",
   "exploreQuoteSubtitle": "quote of the day",
 
@@ -312,16 +402,15 @@
       "readTime": {"type": "String"}
     }
   },
-  "articleDetailSignOff": "🌿",
 
   "referralTitle": "invite a friend",
   "referralSubtitle": "share your code, you both get a reward",
   "referralEnterCode": "enter invite code",
 
-  "vibeCardShareText": "sharing my mood on ilnd 🌿",
-  "vibeCardShareTextWithCode": "sharing my mood on ilnd 🌿 my invite code: {code}",
+  "vibeCardShareText": "sharing my mood on ilnd",
+  "vibeCardShareTextWithCode": "sharing my mood on ilnd my invite code: {code}",
   "vibeCardInviteCode": "my invite code: {code}",
-  "trioSectionTitle": "Today's Three",
+  "trioSectionTitle": "TODAY'S THREE",
   "trioMoveTitle": "Move",
   "trioPlateTitle": "Plate",
   "trioMindTitle": "Mind",
@@ -333,11 +422,11 @@
   "streakCardHeadlineMonth": "A month of being here, every day. Few people do this.",
   "streakCardHeadlineHundred": "100 days. Quietly, steadily.",
   "streakCardDaysLabel": "days in a row",
-  "streakCardShareText": "{days} days in a row on ilnd 🔥",
-  "streakCardShareTextWithCode": "{days} days in a row on ilnd 🔥 my invite code: {code}",
+  "streakCardShareText": "{days} days in a row on ilnd",
+  "streakCardShareTextWithCode": "{days} days in a row on ilnd my invite code: {code}",
   "chatQuoteCardButton": "Make it a card",
-  "quoteCardShareText": "ilnd told me this today 🌙",
-  "quoteCardShareTextWithCode": "ilnd told me this today 🌙 my invite code: {code}",
+  "quoteCardShareText": "ilnd told me this today",
+  "quoteCardShareTextWithCode": "ilnd told me this today my invite code: {code}",
   "vibeCardError": "couldn't generate the card.",
   "vibeCardShare": "share",
   "vibeCardShareFailed": "Couldn't share. Try again.",
@@ -345,7 +434,7 @@
   "vibeCardStatJournal": "journal",
   "vibeCardStatHabit": "habits",
 
-  "chatPaywallReason": "you've talked to me a lot this week 🌿",
+  "chatPaywallReason": "you've talked to me a lot this week",
   "chatGreeting": "hey.",
   "chatGreetingWithName": "hey, {name}.",
   "@chatGreetingWithName": {
@@ -357,9 +446,9 @@
   "chatComposerHint": "write something...",
   "chatListening": "ilnd · listening",
 
-  "redeemCodeSuccess": "Invite code redeemed! 🎉",
+  "redeemCodeSuccess": "Invite code redeemed!",
   "redeemCodeInvalid": "No such invite code. Double-check it.",
-  "redeemCodeSelfReferral": "That's your own code 🙂 Try a friend's code.",
+  "redeemCodeSelfReferral": "That's your own code Try a friend's code.",
   "redeemCodeAlreadyUsed": "You've already redeemed an invite code.",
   "redeemCodeNotReady": "Your account is still getting ready. Try again in a few seconds.",
   "redeemCodeNetworkError": "Couldn't connect. Check your internet and try again.",
@@ -386,7 +475,6 @@
   "splashTagline": "feel good, live good",
   "takipTitle": "tracking",
   "takipMacrosLabel": "MACROS",
-  "takipCalories": "calories",
   "takipProtein": "protein",
   "takipCarbs": "carbs",
   "takipFat": "fat",
@@ -435,13 +523,12 @@
   "ekleJournalTitle": "journal",
   "ekleJournalSubtitle": "write about today",
   "ekleHabitTitle": "habit",
-  "ekleHabitSubtitle": "add a new goal",
+  "ekleHabitSubtitle": "add a new habit",
   "ekleWaterTitle": "water",
   "ekleWaterSubtitle": "add a glass",
   "ekleSheetSubtitle": "what would you like to do?",
   "ekleAskIlndTitle": "ask ILND",
   "ekleAskIlndSubtitle": "talk it through",
-  "homeTrackingCardSubtitle": "your steps, meals, habits",
 
   "gorevEkleNameEmpty": "Give the habit a name first.",
   "gorevEkleSuccess": "Habit added!",
@@ -476,7 +563,7 @@
   },
   "suEkleMl": "ML",
 
-  "yemekEklePaywallReason": "you've used today's food scans 🌿",
+  "yemekEklePaywallReason": "you've used today's food scans",
   "yemekEklePhotoAccessError": "Couldn't access the photo. Try again.",
   "yemekEkleAnalysisFailed": "Analysis failed. Want to try again?",
   "yemekEkleUnsupportedImage": "This image format isn't supported. Try a JPEG or PNG photo?",
@@ -494,7 +581,6 @@
   "yemekEkleOpenCamera": "open camera",
   "yemekEkleChooseFromGallery": "choose from gallery",
   "yemekEkleAnalyzing": "analyzing...",
-  "yemekEkleCalories": "CALORIES",
   "yemekEkleProtein": "PROTEIN",
   "yemekEkleCarbs": "CARBS",
   "yemekEkleFat": "FAT",
@@ -522,8 +608,8 @@
 
   "ilndFallbackFood1": "nice choice. add a bit of greens and it's perfectly balanced.",
   "ilndFallbackFood2": "looks good. don't forget to drink plenty of water, it'll do you good.",
-  "ilndFallbackFood3": "a balanced meal. protein's solid — try adding some fiber next meal.",
-  "ilndFallbackFood4": "looks lovely. no guilt here — small touches are enough, no pressure.",
+  "ilndFallbackFood3": "a balanced meal. protein's solid, try adding some fiber next meal.",
+  "ilndFallbackFood4": "looks lovely. no guilt here. small touches are enough, no pressure.",
   "ilndFallbackNeed1": "a short breathing break",
   "ilndFallbackNeed2": "a recipe for today",
   "ilndFallbackNeed3": "a skincare routine",
@@ -574,10 +660,28 @@
   "reminderNotificationBody": "A small moment is enough today. One sentence, one breath — ILND is here.",
   "reminderPermissionDenied": "Notification permission was declined. Allow it in device settings and I can remind you.",
 
-  "homeReminderInviteTitle": "Want me to write to you in the evenings?",
-  "homeReminderInviteBody": "Once a day, gently. You can change the time in settings whenever you like.",
-  "homeReminderInviteAccept": "Sure, remind me",
-  "homeReminderInviteLater": "Not now",
+  "planShelfLabel": "PLANS",
+  "planDayCount": "{count, plural, =1{1 day} other{{count} days}}",
+  "planProgress": "{done}/{total} days",
+  "planStart": "start",
+  "planContinue": "continue with day {day}",
+  "planAllDone": "you finished the plan",
+  "planDayDone": "done",
+  "planDayLabel": "day {day}",
+  "planDayComplete": "complete today",
+  "planDayRead": "today's read",
+  "planDayAction": "today's step",
+  "planActionBreath": "take a breath",
+  "planActionMove": "move",
+  "planActionWater": "drink water",
+  "planActionJournal": "write in your journal",
+  "planPaywallReason": "this plan is for ILND+ members",
+  "planPremiumBadge": "ILND+",
+  "planSwitchTitle": "You have a plan in progress",
+  "planSwitchBody": "{title} will pause, your progress stays. Switch to the new plan?",
+  "planSwitchConfirm": "switch",
+  "planSwitchCancel": "never mind",
+  "homeActivePlanLabel": "YOUR PLAN",
 
   "movementShelfLabel": "MOVEMENT PROGRAMS",
   "movementLevelEasy": "gentle",
@@ -602,14 +706,14 @@
       "total": {"type": "int"}
     }
   },
-  "movementStart": "Start",
-  "movementContinue": "Continue",
-  "movementReplay": "Watch again",
-  "movementAllDone": "you finished the program 🌿",
+  "movementStart": "start",
+  "movementContinue": "continue",
+  "movementReplay": "watch again",
+  "movementAllDone": "you finished the program",
   "movementSessionDone": "done",
-  "movementPlayerError": "The video could not be opened",
-  "movementPlayerRetry": "Try again",
-  "movementPaywallReason": "this program is for ILND+ members 🌿",
+  "movementPlayerError": "couldn't open the video",
+  "movementPlayerRetry": "try again",
+  "movementPaywallReason": "this program is for ILND+ members",
   "movementPremiumBadge": "ILND+",
   "a11yMovementPlay": "Play the video",
   "a11yMovementPause": "Pause the video"

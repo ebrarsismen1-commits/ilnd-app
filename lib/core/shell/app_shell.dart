@@ -6,6 +6,7 @@ import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// Navigasyon v2 (docs/ilnd_tasarim_vizyonu.md §2):
@@ -13,8 +14,9 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 ///
 /// Merkez, ürünün kalbi olan ILND sohbetine aittir — halka bir buton değil,
 /// markanın jestidir. Eski [+] (ekle sheet) Bugün ekranının üst çubuğuna
-/// taşındı; "Takip" sekmesi kaldırıldı, verisine Sen (profil) içinden
-/// erişilir (tam birleşme: roadmap NEXT-4 devamı).
+/// taşındı; "Takip" sekmesi kaldırıldı, verisine **Bugün ekranındaki takip
+/// kartından** erişilir (roadmap NEXT-4 devamı). Profildeki eski giriş de
+/// kaldırıldı — takibin tek kapısı Bugün'dür, ikinci bir giriş açılmaz.
 class AppShell extends ConsumerWidget {
   const AppShell({super.key, required this.navigationShell});
 
@@ -106,8 +108,14 @@ class _BottomNav extends StatelessWidget {
   }
 }
 
-/// Merkez: sohbete açılan nefes halkası. Sekme değil — her sekmenin
+/// Merkez: ILND yüzeyini açan nefes halkası. Sekme değil — her sekmenin
 /// üzerinden erişilebilen, markanın kalbine giden kapı.
+///
+/// Kısa basış **ekle sheet'ini** açar (ILND'ye sor + yemek/günlük/alışkanlık/
+/// su). Eskiden doğrudan sohbete gidiyordu ve ekleme hero'nun sağ üstündeydi;
+/// ekleme günlük kullanımın merkezi olduğu için ikisi yer değiştirdi.
+/// Uzun basış doğrudan sohbeti açar — ikincil bir kısayol; kullanıcı hiç
+/// bulamasa da sohbet sheet'in ilk maddesi olarak duruyor.
 class _RingItem extends StatelessWidget {
   const _RingItem({required this.p, required this.l10n});
   final AppPalette p;
@@ -117,7 +125,8 @@ class _RingItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Pressable(
-        onTap: () => context.push(routeChat),
+        onTap: () => showEkleSheet(context),
+        onLongPress: () => context.push(routeChat),
         child: SizedBox(
           height: 64,
           child: Column(
@@ -125,14 +134,14 @@ class _RingItem extends StatelessWidget {
             children: [
               Semantics(
                 button: true,
-                label: l10n.a11yOpenChat,
+                label: l10n.a11yOpenIlnd,
                 child: const BreathRing(size: 44),
               ),
               const SizedBox(height: 2),
               Text(
                 l10n.navRing,
                 style: AppTextStyles.body(
-                  fontSize: 9.5,
+                  fontSize: 10,
                   color: p.accent,
                 ).copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.2),
               ),

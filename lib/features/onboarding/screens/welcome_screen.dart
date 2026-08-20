@@ -8,7 +8,6 @@ import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/services/onboarding_timer.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/social_proof/social_proof_badge.dart';
@@ -41,85 +40,126 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
     final p = ref.watch(paletteProvider);
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Spacer(flex: 3),
-                Text(
-                  'ilnd.',
-                  style: AppTextStyles.displayHero().copyWith(color: p.text),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Spacer(flex: 3),
+              Text(
+                'ilnd.',
+                style: AppTextStyles.displayHero().copyWith(color: p.text),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                l10n.welcomeTagline,
+                style: AppTextStyles.body(
+                  fontSize: 18,
+                  color: p.textMuted,
+                  height: 1.45,
                 ),
-                const SizedBox(height: 20),
-                Text(
-                  l10n.welcomeTagline,
-                  style: AppTextStyles.body(
-                    fontSize: 18,
-                    color: p.textMuted,
-                  ).copyWith(letterSpacing: 0.2),
-                ),
+              ),
+              // İki dilli marka dokunuşu: Türkçe satırın altında soluk
+              // İngilizcesi. İngilizce cihazda ikisi de aynı cümle olur ve
+              // sloganı iki kez yazardık — o yüzden yalnız Türkçede çizilir.
+              if (l10n.localeName.startsWith('tr'))
                 Text(
                   l10n.welcomeTaglineEn,
                   style: AppTextStyles.body(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: p.textMuted.withValues(alpha: 0.7),
                   ).copyWith(letterSpacing: 0.2),
                 ),
-                const Spacer(flex: 4),
-                const SocialProofBadge(),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  // AppTheme.dark artık MaterialApp'e bağlı (main.dart) —
-                  // ElevatedButtonThemeData zaten aktif moda göre doğru
-                  // rengi veriyor, manuel override'a gerek yok.
-                  child: ElevatedButton(
-                    onPressed: () => context.push(routeQuickSetup),
-                    child: Text(l10n.welcomeStart),
-                  ),
+              const Spacer(flex: 2),
+              // Üç değer önerisi satırı (prototip: welcomeBeats).
+              _Beat(text: l10n.welcomeBeatIsland, p: p),
+              const SizedBox(height: 14),
+              _Beat(text: l10n.welcomeBeatMemory, p: p),
+              const SizedBox(height: 14),
+              _Beat(text: l10n.welcomeBeatCommunity, p: p),
+              const Spacer(flex: 2),
+              const SocialProofBadge(),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                // AppTheme.dark artık MaterialApp'e bağlı (main.dart) —
+                // ElevatedButtonThemeData zaten aktif moda göre doğru
+                // rengi veriyor, manuel override'a gerek yok.
+                child: ElevatedButton(
+                  onPressed: () => context.push(routeQuickSetup),
+                  child: Text(l10n.welcomeStart),
                 ),
-                const SizedBox(height: 12),
-                // Zaten kayıtlı kullanıcı (yeni cihaz/web) doğrudan giriş yapıp
-                // profilini hidratlayabilsin — onboarding'i tekrar etmeden.
-                Center(
-                  child: Pressable(
-                    onTap: () => context.push(routeLogin),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text.rich(
-                        TextSpan(
-                          children: [
-                            TextSpan(
-                              text: l10n.welcomeHaveAccount,
-                              style: AppTextStyles.body(
-                                fontSize: 13,
-                                color: p.textMuted,
-                              ),
+              ),
+              const SizedBox(height: 12),
+              // Zaten kayıtlı kullanıcı (yeni cihaz/web) doğrudan giriş yapıp
+              // profilini hidratlayabilsin — onboarding'i tekrar etmeden.
+              Center(
+                child: Pressable(
+                  onTap: () => context.push(routeLogin),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: l10n.welcomeHaveAccount,
+                            style: AppTextStyles.body(
+                              fontSize: 13,
+                              color: p.textMuted,
                             ),
-                            TextSpan(
-                              text: l10n.welcomeLoginLink,
-                              style: AppTextStyles.body(
-                                fontSize: 13,
-                                color: p.accent,
-                              ).copyWith(fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
+                          ),
+                          TextSpan(
+                            text: l10n.welcomeLoginLink,
+                            style: AppTextStyles.body(
+                              fontSize: 13,
+                              color: p.accent,
+                            ).copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 40),
-              ],
-            ),
+              ),
+              const SizedBox(height: 40),
+            ],
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Değer önerisi satırı: 7px accent nokta + tek cümle (prototip §12).
+class _Beat extends StatelessWidget {
+  const _Beat({required this.text, required this.p});
+  final String text;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 7,
+          height: 7,
+          margin: const EdgeInsets.only(top: 7, right: 12),
+          decoration: BoxDecoration(shape: BoxShape.circle, color: p.accent),
+        ),
+        Expanded(
+          child: Text(
+            text,
+            style: AppTextStyles.body(
+              fontSize: 13.5,
+              color: p.text,
+              height: 1.45,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

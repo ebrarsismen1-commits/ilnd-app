@@ -42,7 +42,7 @@ class StreakCardWidget extends StatelessWidget {
           children: [
             Text(
               'ilnd.',
-              style: AppTextStyles.display(fontSize: 22, color: p.accent),
+              style: AppTextStyles.display(fontSize: 24, color: p.accent),
             ),
             Expanded(
               child: Column(
@@ -58,7 +58,7 @@ class StreakCardWidget extends StatelessWidget {
                           child: Text(
                             '$days',
                             style: AppTextStyles.display(
-                              fontSize: 88,
+                              fontSize: 44,
                               color: p.text,
                               height: 1,
                             ),
@@ -68,7 +68,11 @@ class StreakCardWidget extends StatelessWidget {
                       const SizedBox(width: 8),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
-                        child: Text('🔥', style: const TextStyle(fontSize: 26)),
+                        child: Icon(
+                          Icons.local_fire_department_rounded,
+                          size: 22,
+                          color: p.accent,
+                        ),
                       ),
                     ],
                   ),
@@ -76,7 +80,7 @@ class StreakCardWidget extends StatelessWidget {
                   Text(
                     l10n.streakCardDaysLabel,
                     style: AppTextStyles.label(
-                      fontSize: 12,
+                      fontSize: 11.5,
                       color: p.textMuted,
                     ).copyWith(letterSpacing: 0.8),
                   ),
@@ -85,7 +89,7 @@ class StreakCardWidget extends StatelessWidget {
                     Text(
                       headline,
                       style: AppTextStyles.display(
-                        fontSize: 22,
+                        fontSize: 24,
                         color: p.text,
                         height: 1.3,
                       ),

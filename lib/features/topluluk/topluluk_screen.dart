@@ -6,7 +6,6 @@ import 'package:ilnd_app/core/repositories/events_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
@@ -26,60 +25,58 @@ class TopulukScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenPadding,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 28),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.screenPadding,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 28),
+              Entrance(
+                index: 0,
+                child: Text(
+                  l10n.topulukTitle,
+                  style: AppTextStyles.display(fontSize: 30, color: p.text),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Entrance(
+                index: 1,
+                child: Text(
+                  l10n.topulukTagline,
+                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+                ),
+              ),
+              const SizedBox(height: 24),
+              if (events.isEmpty)
+                _EmptyInvite(l10n: l10n, p: p)
+              else ...[
                 Entrance(
-                  index: 0,
+                  index: 2,
                   child: Text(
-                    l10n.topulukTitle,
-                    style: AppTextStyles.display(fontSize: 30, color: p.text),
+                    l10n.topulukUpcomingLabel,
+                    style: AppTextStyles.sectionLabel(color: p.textMuted),
                   ),
                 ),
-                const SizedBox(height: 4),
-                Entrance(
-                  index: 1,
-                  child: Text(
-                    l10n.topulukTagline,
-                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                if (events.isEmpty)
-                  _EmptyInvite(l10n: l10n, p: p)
-                else ...[
+                const SizedBox(height: 12),
+                for (final (i, e) in events.indexed) ...[
                   Entrance(
-                    index: 2,
-                    child: Text(
-                      l10n.topulukUpcomingLabel,
-                      style: AppTextStyles.sectionLabel(color: p.textMuted),
-                    ),
+                    index: 3 + i,
+                    child: _EventRow(event: e, p: p),
                   ),
-                  const SizedBox(height: 12),
-                  for (final (i, e) in events.indexed) ...[
-                    Entrance(
-                      index: 3 + i,
-                      child: _EventCard(event: e, p: p),
-                    ),
-                    const SizedBox(height: 12),
-                  ],
-                  const SizedBox(height: 12),
-                  Entrance(
-                    index: 3 + events.length,
-                    child: _InviteRow(l10n: l10n, p: p),
-                  ),
+                  Container(height: 0.5, color: p.border),
+                  const SizedBox(height: 20),
                 ],
-                const SizedBox(height: 40),
+                const SizedBox(height: 12),
+                Entrance(
+                  index: 3 + events.length,
+                  child: _InviteRow(l10n: l10n, p: p),
+                ),
               ],
-            ),
+              const SizedBox(height: 40),
+            ],
           ),
         ),
       ),
@@ -87,10 +84,12 @@ class TopulukScreen extends ConsumerWidget {
   }
 }
 
-// ─── Etkinlik kartı ───────────────────────────────────────────────────────────
+// ─── Etkinlik satırı ───────────────────────────────────────────────────────────
 
-class _EventCard extends ConsumerWidget {
-  const _EventCard({required this.event, required this.p});
+/// Kart değil satır (handoff §4): ayrımı kutu değil, tarih monogramının
+/// boşluğu ve alttaki hairline kurar.
+class _EventRow extends ConsumerWidget {
+  const _EventRow({required this.event, required this.p});
   final CommunityEvent event;
   final AppPalette p;
 
@@ -116,32 +115,23 @@ class _EventCard extends ConsumerWidget {
       }
     }
 
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: p.border, width: 0.5),
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
+          SizedBox(
             width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: p.accentSoft,
-              borderRadius: BorderRadius.circular(12),
-            ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   day,
                   style: AppTextStyles.mono(
-                    fontSize: 16,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
                     color: p.accent,
-                  ).copyWith(fontWeight: FontWeight.w700, height: 1.1),
+                  ).copyWith(height: 1.05),
                 ),
                 Text(
                   month,
@@ -157,25 +147,14 @@ class _EventCard extends ConsumerWidget {
               children: [
                 Text(
                   event.title,
-                  style: AppTextStyles.heading(fontSize: 15.5, color: p.text),
+                  style: AppTextStyles.heading(fontSize: 17, color: p.text),
                 ),
                 const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.place_outlined, size: 13, color: p.textMuted),
-                    const SizedBox(width: 3),
-                    Expanded(
-                      child: Text(
-                        '${event.venue} · ${event.city}',
-                        style: AppTextStyles.body(
-                          fontSize: 11,
-                          color: p.textMuted,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                Text(
+                  '${event.venue} · ${event.city}',
+                  style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -207,6 +186,8 @@ class _EventCard extends ConsumerWidget {
                         ),
                         child: Text(
                           going ? l10n.topulukRsvpGoing : l10n.topulukRsvpJoin,
+                          softWrap: false,
+                          overflow: TextOverflow.fade,
                           style: AppTextStyles.body(
                             fontSize: 11.5,
                             color: going ? p.onAccent : p.accent,
@@ -244,7 +225,7 @@ class _EmptyInvite extends StatelessWidget {
           index: 3,
           child: Text(
             l10n.topulukComingTitle,
-            style: AppTextStyles.heading(fontSize: 22, color: p.text),
+            style: AppTextStyles.heading(fontSize: 24, color: p.text),
           ),
         ),
         const SizedBox(height: 10),
@@ -253,7 +234,7 @@ class _EmptyInvite extends StatelessWidget {
           child: Text(
             l10n.topulukComingBody,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
             ).copyWith(height: 1.6),
           ),

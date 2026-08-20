@@ -26,6 +26,11 @@ class EntitlementNotifier extends StateNotifier<bool> {
 
   Future<void> _syncFromRevenueCat() async {
     final premium = await RevenueCatService.isPremium();
+    // Sert Kural #5: await sonrası mounted kontrolü. RevenueCat yanıtı
+    // gelmeden notifier atılmış olabilir (çıkış yapma, hızlı ekran değişimi,
+    // uygulamanın kapanması) — kontrol yoksa `state` erişimi
+    // "used after dispose" fırlatır ve bu, yakalanmayan bir async hata olur.
+    if (!mounted) return;
     if (premium != state) {
       state = premium;
       await _prefs.setBool(_kIsPremium, premium);

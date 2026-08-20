@@ -63,6 +63,39 @@ jobs:
       - name: Generate localizations
         run: flutter gen-l10n
 
+      # `google-services.json` is gitignored on purpose (docs/tr/GUVENLIK.md),
+      # so it has to be materialized here — without it the Google Services
+      # Gradle plugin aborts the build outright. Two paths, in order:
+      #   1. the GOOGLE_SERVICES_JSON_BASE64 repo secret — the real config;
+      #   2. android/app/google-services.ci-placeholder.json — same package
+      #      name, fake ids, enough for the plugin to run.
+      # Path 2 exists because secrets are not exposed to pull requests from
+      # forks: without it, PR CI could never build. Either way the artifact
+      # this job produces is debug-signed and NOT publishable; the real store
+      # build lives in release.yml and refuses to run without the secret.
+      # android/gradle.properties daemon'i bilerek 1.5 GB'a kisitliyor: bakim
+      # yapan makine ayni anda Android Studio + emulator calistiriyor. CI
+      # runner'inda o tavan release derlemesine yetmiyor (Java heap space,
+      # 17 dk sonra). Burada YALNIZ CI icin yukseltiliyor — GRADLE_USER_HOME
+      # altindaki gradle.properties proje dosyasini ezer, yani yerel makine
+      # ayarindan etkilenmiyor.
+      - name: Raise the Gradle heap for CI only
+        run: |
+          mkdir -p ~/.gradle
+          echo "org.gradle.jvmargs=-Xmx5g -XX:MaxMetaspaceSize=1g" >> ~/.gradle/gradle.properties
+
+      - name: Materialize google-services.json
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 -d > android/app/google-services.json
+            echo "google-services.json written from the repo secret."
+          else
+            cp android/app/google-services.ci-placeholder.json android/app/google-services.json
+            echo "::warning::GOOGLE_SERVICES_JSON_BASE64 is not set, so this build used the placeholder Firebase config. The build itself is still verified; the resulting APK/AAB will not talk to Firebase and must not be distributed."
+          fi
+
       # No `android/key.properties` exists in this job — every build here is
       # debug-signed. That's fine for verifying the build doesn't break; it
       # is NOT a publishable artifact. See android/KEYSTORE.md for what's
@@ -103,7 +136,15 @@ jobs:
       - name: Lint
         run: npm run lint --if-present
 
-      # ubuntu-latest ships a JDK, which the Firestore/Auth emulators need.
+      # The Firestore/Auth emulators run on the JVM, and firebase-tools
+      # refuses to start them on anything older than JDK 21. The runner's
+      # preinstalled JDK is older than that, so pin it explicitly here
+      # rather than inheriting whatever the image happens to ship.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
       # firebase-tools is installed on the fly rather than as a devDependency
       # so functions/package.json stays focused on runtime deps.
       - name: Install Firebase CLI

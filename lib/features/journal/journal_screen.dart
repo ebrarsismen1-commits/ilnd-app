@@ -10,7 +10,6 @@ import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
 import 'package:ilnd_app/core/repositories/journal_repository.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/widgets/shimmer.dart';
@@ -29,88 +28,117 @@ class JournalScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    28,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  child: Text(
-                    l10n.journalTitle,
-                    style: AppTextStyles.display(fontSize: 32, color: p.text),
-                  ),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            // Günlük "ekle" sheet'inden push ediliyor, yani sekme değil bir
+            // yaprak ekran — kendi çıkışını taşımak zorunda. Yoksa web'de
+            // dönüş yolu HİÇ olmuyor (donanım tuşu/kenar kaydırma yok) ve
+            // kullanıcı ekranda kilitli kalıyor.
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenPadding - 12,
+                  12,
+                  AppSpacing.screenPadding,
+                  0,
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    20,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  child: _NewEntryButton(
-                    p: p,
-                    onTap: () => _showWriteSheet(context, ref),
-                  ),
-                ),
-              ),
-              entriesAsync.when(
-                loading: () => SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(
-                    AppSpacing.screenPadding,
-                    20,
-                    AppSpacing.screenPadding,
-                    0,
-                  ),
-                  sliver: SliverList.separated(
-                    itemCount: 4,
-                    separatorBuilder: (ctx1, i1) => const SizedBox(height: 12),
-                    itemBuilder: (ctx1, i1) => const ShimmerCard(),
-                  ),
-                ),
-                error: (e, st) => SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: _ErrorState(
-                    p: p,
-                    onRetry: () => ref.invalidate(journalEntriesProvider),
-                  ),
-                ),
-                data: (entries) => entries.isEmpty
-                    ? SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: _EmptyJournal(
-                          p: p,
-                          onTap: () => _showWriteSheet(context, ref),
-                        ),
-                      )
-                    : SliverPadding(
-                        padding: const EdgeInsets.fromLTRB(
-                          AppSpacing.screenPadding,
-                          20,
-                          AppSpacing.screenPadding,
-                          32,
-                        ),
-                        sliver: SliverList.separated(
-                          itemCount: entries.length,
-                          separatorBuilder: (ctx2, i2) =>
-                              const SizedBox(height: 12),
-                          itemBuilder: (context, i) => Entrance(
-                            index: i,
-                            child: _EntryCard(entry: entries[i], p: p),
-                          ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Semantics(
+                    button: true,
+                    label: l10n.a11yBack,
+                    child: Pressable(
+                      onTap: () => Navigator.of(context).maybePop(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 18,
+                          color: p.textMuted,
                         ),
                       ),
+                    ),
+                  ),
+                ),
               ),
-            ],
-          ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenPadding,
+                  8,
+                  AppSpacing.screenPadding,
+                  0,
+                ),
+                child: Text(
+                  l10n.journalTitle,
+                  style: AppTextStyles.display(fontSize: 30, color: p.text),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenPadding,
+                  20,
+                  AppSpacing.screenPadding,
+                  0,
+                ),
+                child: _NewEntryButton(
+                  p: p,
+                  onTap: () => _showWriteSheet(context, ref),
+                ),
+              ),
+            ),
+            entriesAsync.when(
+              loading: () => SliverPadding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.screenPadding,
+                  20,
+                  AppSpacing.screenPadding,
+                  0,
+                ),
+                sliver: SliverList.separated(
+                  itemCount: 4,
+                  separatorBuilder: (ctx1, i1) => const SizedBox(height: 12),
+                  itemBuilder: (ctx1, i1) => const ShimmerCard(),
+                ),
+              ),
+              error: (e, st) => SliverFillRemaining(
+                hasScrollBody: false,
+                child: _ErrorState(
+                  p: p,
+                  onRetry: () => ref.invalidate(journalEntriesProvider),
+                ),
+              ),
+              data: (entries) => entries.isEmpty
+                  ? SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: _EmptyJournal(
+                        p: p,
+                        onTap: () => _showWriteSheet(context, ref),
+                      ),
+                    )
+                  : SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppSpacing.screenPadding,
+                        20,
+                        AppSpacing.screenPadding,
+                        32,
+                      ),
+                      sliver: SliverList.separated(
+                        itemCount: entries.length,
+                        separatorBuilder: (ctx2, i2) =>
+                            const SizedBox(height: 12),
+                        itemBuilder: (context, i) => Entrance(
+                          index: i,
+                          child: _EntryCard(entry: entries[i], p: p),
+                        ),
+                      ),
+                    ),
+            ),
+          ],
         ),
       ),
     );
@@ -132,11 +160,11 @@ class _ErrorState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('🔌', style: const TextStyle(fontSize: 40)),
+          Icon(Icons.wifi_off_rounded, size: 32, color: p.textMuted),
           const SizedBox(height: 16),
           Text(
             l10n.journalConnectionError,
-            style: AppTextStyles.heading(fontSize: 16, color: p.text),
+            style: AppTextStyles.heading(fontSize: 15, color: p.text),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 6),
@@ -150,7 +178,7 @@ class _ErrorState extends StatelessWidget {
             onPressed: onRetry,
             child: Text(
               l10n.journalRetry,
-              style: AppTextStyles.body(fontSize: 14, color: p.accent),
+              style: AppTextStyles.body(fontSize: 13, color: p.accent),
             ),
           ),
         ],
@@ -174,18 +202,18 @@ class _EmptyJournal extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('✍️', style: const TextStyle(fontSize: 48)),
+          Icon(Icons.edit_note_rounded, size: 36, color: p.textMuted),
           const SizedBox(height: 20),
           Text(
             l10n.journalEmptyTitle,
-            style: AppTextStyles.display(fontSize: 22, color: p.text),
+            style: AppTextStyles.display(fontSize: 24, color: p.text),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 10),
           Text(
             l10n.journalEmptyBody,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
               height: 1.5,
             ),
@@ -265,7 +293,6 @@ class _EntryCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -278,7 +305,7 @@ class _EntryCard extends StatelessWidget {
           Text(
             entry.body,
             style: AppTextStyles.heading(
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w600,
               height: 1.3,
               color: p.text,
@@ -538,7 +565,7 @@ class _WritingView extends StatelessWidget {
         expands: true,
         textCapitalization: TextCapitalization.sentences,
         style: AppTextStyles.display(
-          fontSize: 20,
+          fontSize: 19,
           fontWeight: FontWeight.w400,
           color: p.text,
           height: 1.55,
@@ -546,7 +573,7 @@ class _WritingView extends StatelessWidget {
         decoration: InputDecoration(
           hintText: l10n.journalWritingHint,
           hintStyle: AppTextStyles.display(
-            fontSize: 20,
+            fontSize: 19,
             fontWeight: FontWeight.w400,
             color: p.textMuted.withValues(alpha: 0.7),
             height: 1.55,
@@ -582,7 +609,7 @@ class _ResponseView extends StatelessWidget {
           Text(
             entry,
             style: AppTextStyles.display(
-              fontSize: 16,
+              fontSize: 15,
               fontWeight: FontWeight.w400,
               color: p.textMuted,
               height: 1.5,
@@ -596,7 +623,6 @@ class _ResponseView extends StatelessWidget {
             decoration: BoxDecoration(
               color: p.surface,
               borderRadius: BorderRadius.circular(AppSpacing.radius),
-              border: Border.all(color: p.border, width: 0.5),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,

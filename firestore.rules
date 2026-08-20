@@ -23,6 +23,17 @@ service cloud.firestore {
       allow write: if false; // Admin SDK ile yazılır
     }
 
+    // Rehberli planlar (ADR-0005): movement_programs ile aynı gerekçe —
+    // katalog seed script'ten (Admin SDK) gelir, kullanıcı ilerlemesi
+    // users/{uid}/plan_progress altındadır (yukarıdaki sahiplik kuralı
+    // kapsar). Plan dokümanına yazma hiç kimseye açık değil; açık olsaydı
+    // bir kullanıcı herkesin gördüğü planı değiştirebilirdi. `premium`
+    // alanı da burada yaşadığı için yazma izni doğrudan paywall'ı delerdi.
+    match /plans/{planId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Admin SDK ile yazılır
+    }
+
     // Referral kodları — okuma tüm authenticated kullanıcılara açık (kod
     // çözümleme ve sayaç/istatistik için). Yazma SADECE doküman sahibinin
     // kendi başlangıç dokümanını (referral_code) oluşturmasına izin verir;
@@ -113,6 +124,15 @@ service cloud.firestore {
     match /ai_usage/{usageId} {
       allow read: if request.auth != null
         && (resource == null || resource.data.uid == request.auth.uid);
+      allow write: if false;
+    }
+
+    // Adan — ada öğeleri (ADR-0006). Kazanımı SADECE syncIslandItems
+    // (Admin SDK) yazar; istemci yalnız okur. Yazma açık olsaydı kullanıcı
+    // kendine bütün adayı verebilirdi — kotada bir kez yaşanmış hata sınıfı
+    // (Sert Kural #13: kullanıcının yazabildiği yerde ödül yoktur).
+    match /island/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
       allow write: if false;
     }
 

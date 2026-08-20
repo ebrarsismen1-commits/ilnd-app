@@ -63,13 +63,13 @@ class _CrisisSheet extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             l10n.crisisTitle,
-            style: AppTextStyles.heading(fontSize: 20, color: p.text),
+            style: AppTextStyles.heading(fontSize: 19, color: p.text),
           ),
           const SizedBox(height: 10),
           Text(
             l10n.crisisBody,
             style: AppTextStyles.body(
-              fontSize: 14,
+              fontSize: 13,
               color: p.textMuted,
             ).copyWith(height: 1.5),
           ),
@@ -121,7 +121,7 @@ class _ResourceRow extends StatelessWidget {
             child: Text(
               text,
               style: AppTextStyles.body(
-                fontSize: 14,
+                fontSize: 13,
                 color: p.text,
               ).copyWith(fontWeight: FontWeight.w600),
             ),

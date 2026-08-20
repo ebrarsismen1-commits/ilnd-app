@@ -171,7 +171,7 @@ class MovementProgramScreen extends ConsumerWidget {
                   complete
                       ? l10n.movementAllDone
                       : l10n.movementProgress(done, sessions.length),
-                  style: AppTextStyles.label(fontSize: 11, color: p.accent),
+                  style: AppTextStyles.label(fontSize: 11.5, color: p.accent),
                 ),
                 const SizedBox(height: 12),
                 if (next != null)
@@ -261,7 +261,7 @@ class _PrimaryButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: AppTextStyles.label(fontSize: 12, color: p.onAccent),
+          style: AppTextStyles.label(fontSize: 11.5, color: p.onAccent),
         ),
       ),
     );
@@ -296,7 +296,6 @@ class _SessionRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
         ),
         child: Row(
           children: [
@@ -312,7 +311,10 @@ class _SessionRow extends StatelessWidget {
                   ? Icon(Icons.check_rounded, size: 18, color: p.onAccent)
                   : Text(
                       '$index',
-                      style: AppTextStyles.label(fontSize: 12, color: p.accent),
+                      style: AppTextStyles.label(
+                        fontSize: 11.5,
+                        color: p.accent,
+                      ),
                     ),
             ),
             const SizedBox(width: 12),
@@ -324,7 +326,7 @@ class _SessionRow extends StatelessWidget {
                     session.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.body(fontSize: 14, color: p.text),
+                    style: AppTextStyles.body(fontSize: 13, color: p.text),
                   ),
                   const SizedBox(height: 2),
                   Text(
@@ -333,7 +335,10 @@ class _SessionRow extends StatelessWidget {
                         : (session.minutes > 0
                               ? l10n.movementMinutes(session.minutes)
                               : ''),
-                    style: AppTextStyles.body(fontSize: 11, color: p.textMuted),
+                    style: AppTextStyles.body(
+                      fontSize: 11.5,
+                      color: p.textMuted,
+                    ),
                   ),
                 ],
               ),

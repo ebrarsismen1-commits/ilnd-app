@@ -42,7 +42,7 @@ class DailyTrioSection extends ConsumerWidget {
         ),
         const SizedBox(height: 12),
         _TrioCard(
-          emoji: movement.emoji,
+          icon: movement.icon,
           title: l10n.trioMoveTitle,
           subtitle: movement.forLocale(l10n.localeName),
           chip: l10n.trioMinutes(movement.minutes),
@@ -56,7 +56,7 @@ class DailyTrioSection extends ConsumerWidget {
         if (recipe != null) ...[
           const SizedBox(height: 8),
           _TrioCard(
-            emoji: '🍳',
+            icon: Icons.restaurant_rounded,
             title: l10n.trioPlateTitle,
             subtitle: recipe.title,
             chip: recipe.readTime,
@@ -78,7 +78,7 @@ class DailyTrioSection extends ConsumerWidget {
         ],
         const SizedBox(height: 8),
         _TrioCard(
-          emoji: '🌙',
+          icon: Icons.nightlight_round,
           title: l10n.trioMindTitle,
           subtitle: mindDone ? l10n.trioMindDone : l10n.trioMindPending,
           done: mindDone,
@@ -94,7 +94,7 @@ class DailyTrioSection extends ConsumerWidget {
 
 class _TrioCard extends StatelessWidget {
   const _TrioCard({
-    required this.emoji,
+    required this.icon,
     required this.title,
     required this.subtitle,
     this.chip,
@@ -104,7 +104,7 @@ class _TrioCard extends StatelessWidget {
     required this.p,
   });
 
-  final String emoji;
+  final IconData icon;
   final String title;
   final String subtitle;
   final String? chip;
@@ -121,11 +121,10 @@ class _TrioCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Row(
         children: [
-          Text(emoji, style: const TextStyle(fontSize: 22)),
+          Icon(icon, size: 20, color: p.textMuted),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -135,7 +134,7 @@ class _TrioCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.heading(fontSize: 14, color: p.text),
+                      style: AppTextStyles.heading(fontSize: 13, color: p.text),
                     ),
                     if (chip != null) ...[
                       const SizedBox(width: 8),
@@ -151,7 +150,7 @@ class _TrioCard extends StatelessWidget {
                         child: Text(
                           chip!,
                           style: AppTextStyles.label(
-                            fontSize: 9.5,
+                            fontSize: 10,
                             color: p.textMuted,
                           ),
                         ),
@@ -165,7 +164,7 @@ class _TrioCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.body(
-                    fontSize: 12.5,
+                    fontSize: 13,
                     color: p.textMuted,
                     height: 1.35,
                   ),

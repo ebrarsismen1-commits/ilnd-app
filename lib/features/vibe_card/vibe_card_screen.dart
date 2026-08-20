@@ -8,7 +8,6 @@ import 'package:ilnd_app/core/repositories/vibe_card_repository.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
@@ -74,102 +73,95 @@ class _VibeCardScreenState extends ConsumerState<VibeCardScreen> {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  8,
-                  4,
-                  AppSpacing.screenPadding,
-                  0,
-                ),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => Navigator.of(context).maybePop(),
-                      icon: Icon(Icons.close_rounded, color: p.text),
-                      tooltip: l10n.a11yClose,
-                    ),
-                    const Spacer(),
-                  ],
-                ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                8,
+                4,
+                AppSpacing.screenPadding,
+                0,
               ),
-              Expanded(
-                child: Center(
-                  child: dataAsync.when(
-                    loading: () => CircularProgressIndicator(color: p.accent),
-                    error: (e, st) => Text(
-                      l10n.vibeCardError,
-                      style: AppTextStyles.body(
-                        fontSize: 14,
-                        color: p.textMuted,
-                      ),
-                    ),
-                    data: (data) {
-                      if (data == null) return const SizedBox.shrink();
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: RepaintBoundary(
-                          key: _captureKey,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              AppSpacing.radius,
-                            ),
-                            child: VibeCardWidget(
-                              data: data,
-                              userName: name,
-                              p: p,
-                              referralCode: referralCode,
-                            ),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.of(context).maybePop(),
+                    icon: Icon(Icons.close_rounded, color: p.text),
+                    tooltip: l10n.a11yClose,
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Center(
+                child: dataAsync.when(
+                  loading: () => CircularProgressIndicator(color: p.accent),
+                  error: (e, st) => Text(
+                    l10n.vibeCardError,
+                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+                  ),
+                  data: (data) {
+                    if (data == null) return const SizedBox.shrink();
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      child: RepaintBoundary(
+                        key: _captureKey,
+                        child: ClipRRect(
+                          // Kartin kendi yaricapiyla ayni (handoff §9: 18).
+                          borderRadius: BorderRadius.circular(18),
+                          child: VibeCardWidget(
+                            data: data,
+                            userName: name,
+                            p: p,
+                            referralCode: referralCode,
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenPadding,
-                  16,
-                  AppSpacing.screenPadding,
-                  32,
-                ),
-                child: Pressable(
-                  onTap: dataAsync.valueOrNull == null || _sharing
-                      ? null
-                      : () => _share(l10n),
-                  child: Container(
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: p.accent,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    alignment: Alignment.center,
-                    child: _sharing
-                        ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: p.onAccent,
-                            ),
-                          )
-                        : Text(
-                            l10n.vibeCardShare,
-                            style: AppTextStyles.body(
-                              fontSize: 15,
-                              color: p.onAccent,
-                            ).copyWith(fontWeight: FontWeight.w600),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenPadding,
+                16,
+                AppSpacing.screenPadding,
+                32,
+              ),
+              child: Pressable(
+                onTap: dataAsync.valueOrNull == null || _sharing
+                    ? null
+                    : () => _share(l10n),
+                child: Container(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: p.accent,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  alignment: Alignment.center,
+                  child: _sharing
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: p.onAccent,
                           ),
-                  ),
+                        )
+                      : Text(
+                          l10n.vibeCardShare,
+                          style: AppTextStyles.body(
+                            fontSize: 15,
+                            color: p.onAccent,
+                          ).copyWith(fontWeight: FontWeight.w600),
+                        ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

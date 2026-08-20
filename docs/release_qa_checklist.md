@@ -15,6 +15,8 @@ veya APK yükleyerek) test edilmeli. İdeal matris: 1 küçük Android (düşük
 - [ ] Kayıt sonrası first-entry ekranına düşüyor; günlük YAZILABİLİYOR (ilk-giriş köprü düzeltmesinin cihaz teyidi — kritik)
 - [ ] Yanlış şifre ile giriş: "E-posta veya şifre hatalı" (İngilizce cihazda İngilizcesi)
 - [ ] Şifremi unuttum: e-posta geliyor, linkteki sayfada şifre değişiyor, yeni şifreyle giriş oluyor
+- [ ] Şifremi unuttum (mobil): linke basınca **uygulama açılıyor** (tarayıcı değil) → yeni-şifre ekranı
+- [ ] Kayıt onay linki: linke basınca uygulama açılıyor, oturum kuruluyor — hiçbir link localhost'a gitmiyor
 - [ ] Google ile giriş (panel kurulumu sonrası): hesap seçici → giriş; seçiciyi kapatınca hata YOK
 - [ ] Apple ile giriş (iOS, kurulum sonrası): aynı davranış
 - [ ] Çıkış yap → login ekranı; geri tuşu ile içeri sızılamıyor

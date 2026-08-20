@@ -55,7 +55,7 @@ void main() {
           locale: Locale('tr'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: TakipScreen(),
+          home: Scaffold(body: SingleChildScrollView(child: TakipSections())),
         ),
       ),
     );

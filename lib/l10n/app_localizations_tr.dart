@@ -53,9 +53,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navExplore => 'Keşfet';
 
   @override
-  String get navTracking => 'Takip';
-
-  @override
   String get navCommunity => 'Topluluk';
 
   @override
@@ -63,9 +60,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get navRing => 'ilnd';
-
-  @override
-  String get a11yOpenChat => 'ILND ile sohbeti aç';
 
   @override
   String get topulukTitle => 'topluluk.';
@@ -128,25 +122,24 @@ class AppLocalizationsTr extends AppLocalizations {
   String get authErrorEmailInUse => 'Bu e-posta adresi zaten kullanılıyor.';
 
   @override
-  String get authErrorWeakPassword => 'Şifre en az 6 karakter olmalıdır.';
+  String get authErrorWeakPassword => 'Şifre en az 6 karakter olmalı.';
 
   @override
-  String get authErrorUserNotFound =>
-      'Bu e-posta ile kayıtlı kullanıcı bulunamadı.';
+  String get authErrorUserNotFound => 'Bu e-postayla kayıtlı bir hesap yok.';
 
   @override
   String get authErrorNetwork =>
-      'Bağlantı hatası. İnternet bağlantınızı kontrol edin.';
+      'Bağlantı hatası. İnternet bağlantını kontrol et.';
 
   @override
-  String get authErrorInvalidEmail => 'Geçerli bir e-posta adresi girin.';
+  String get authErrorInvalidEmail => 'Geçerli bir e-posta adresi gir.';
 
   @override
-  String get authErrorGeneric => 'Bir hata oluştu. Lütfen tekrar deneyin.';
+  String get authErrorGeneric => 'Bir şeyler ters gitti. Tekrar dener misin?';
 
   @override
   String get authErrorConfirmEmail =>
-      'Giriş yapılamadı. E-posta onayı gerekiyor olabilir.';
+      'Giriş yapılamadı. Önce e-postanı onaylaman gerekiyor olabilir.';
 
   @override
   String get authErrorUpdatePasswordFailed =>
@@ -169,11 +162,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get newPasswordSubmit => 'şifreyi güncelle';
 
   @override
-  String get newPasswordSuccess => 'Şifren güncellendi. Hoş geldin 🌿';
+  String get newPasswordSuccess => 'Şifren güncellendi. Tekrar hoş geldin';
 
   @override
   String get authErrorSignupFailed =>
-      'Kayıt oluşturulamadı. Lütfen tekrar deneyin.';
+      'Hesabın oluşturulamadı. Tekrar dener misin?';
 
   @override
   String get authErrorSignOutFailed => 'Çıkış yapılamadı. Tekrar dener misin?';
@@ -188,11 +181,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get authErrorResetFailed =>
-      'E-posta gönderilemedi. İnternet bağlantınızı kontrol edin.';
+      'E-posta gönderilemedi. İnternet bağlantını kontrol et.';
 
   @override
-  String get authErrorDeleteUnavailable =>
-      'Hesap silme servisi şu an kullanılamıyor.';
+  String get authErrorDeleteUnavailable => 'Hesap silme şu an kullanılamıyor.';
 
   @override
   String get authErrorDeleteFailed => 'Hesap silinemedi. Tekrar dener misin?';
@@ -253,11 +245,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get registerLoginLink => 'giriş yap';
 
   @override
-  String get registerSuccess => 'Hesabın oluşturuldu! Hoş geldin 🌿';
+  String get registerSuccess => 'Hesabın oluşturuldu! Hoş geldin';
 
   @override
   String get registerConfirmEmailSent =>
-      'Onay bağlantısı e-postana gönderildi. Kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.';
+      'Onay bağlantısı e-postana gönderildi. Gelen kutunu (gerekirse spam klasörünü) kontrol et, sonra giriş yap.';
 
   @override
   String get validatorEmailRequired => 'E-posta adresi gerekli.';
@@ -289,6 +281,93 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get welcomeTaglineEn => 'journal, track your mood, talk to ILND.';
+
+  @override
+  String get welcomeBeatMemory => 'ILND yazdıklarından öğrenir, seni hatırlar';
+
+  @override
+  String get welcomeBeatCommunity =>
+      'şehrindeki buluşmalarda yüz yüze görüşürüz';
+
+  @override
+  String get adanLabel => 'ADAN';
+
+  @override
+  String get adanTitle => 'adan.';
+
+  @override
+  String get adanLead => 'ada, tamamladığın işlerden büyüyor.';
+
+  @override
+  String get adanBody =>
+      'her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez — sessiz geçen günler suyu koyulaştırır, cezalandırmaz.';
+
+  @override
+  String get adanItemsLabel => 'ÖĞELER';
+
+  @override
+  String get adanStateOpen => 'AÇIK';
+
+  @override
+  String get adanStateLocked => 'KİLİTLİ';
+
+  @override
+  String get adanItemLantern => 'fener';
+
+  @override
+  String get adanItemPine => 'çam';
+
+  @override
+  String get adanItemOven => 'fırın';
+
+  @override
+  String get adanItemMoonlight => 'ay ışığı';
+
+  @override
+  String get adanItemWindrose => 'rüzgâr gülü';
+
+  @override
+  String get adanItemMeetingStone => 'buluşma taşı';
+
+  @override
+  String get adanHowLantern => 'ilk günlük';
+
+  @override
+  String get adanHowPine => '3 gün seri';
+
+  @override
+  String get adanHowOven => '10 öğün yazıldı';
+
+  @override
+  String get adanHowMoonlight => 'ilk gece ritüeli';
+
+  @override
+  String get adanHowWindrose => '7 günlük seri';
+
+  @override
+  String get adanHowMeetingStone => 'ilk topluluk buluşması';
+
+  @override
+  String get adanEarnedSuffix => 'kazanıldı';
+
+  @override
+  String get adanEmptyProgress => 'henüz öğe yok';
+
+  @override
+  String get profileStatIslandItems => 'ADA ÖĞESİ';
+
+  @override
+  String get welcomeBeatIsland => 'her gün üç küçük iş — bitince adan büyür';
+
+  @override
+  String adanProgress(int count, String next) {
+    return '$count öğe · sıradaki: $next';
+  }
+
+  @override
+  String adanNextNote(String next, String how) {
+    return '$next $how tamamlandığında yerleşecek.';
+  }
 
   @override
   String get welcomeStart => 'başla';
@@ -424,6 +503,15 @@ class AppLocalizationsTr extends AppLocalizations {
       'senin için birkaç öneri hazırlıyorum...';
 
   @override
+  String get homeTrackRowSubtitle => 'öğünler, su, alışkanlıklar';
+
+  @override
+  String get homeWeeklyCardRowTitle => 'haftalık kartın hazır';
+
+  @override
+  String get homeWeeklyCardRowSubtitle => 'paylaş ya da sadece sen gör';
+
+  @override
   String get homeTodaysReadTitle => 'BUGÜNÜN OKUMASI';
 
   @override
@@ -489,7 +577,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get journalEmptyBody =>
-      'bugün nasıl hissettiğini, ya da aklından geçeni yaz. ILND seninle düşünür.';
+      'bugün nasıl hissettiğini ya da aklından geçeni yaz. ILND seninle düşünür.';
 
   @override
   String get journalWriteFirst => 'ilk yazını yaz';
@@ -557,22 +645,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileStatPoints => 'puan';
 
   @override
-  String get profileStatBadge => 'rozet';
-
-  @override
   String get profileBadgesLabel => 'ROZETLER';
 
   @override
   String get profileBadgeFirstStep => 'ilk adım';
 
   @override
-  String get profileBadgeSevenDays => '7 günlük';
+  String get profileBadgeSevenDays => '7 gün';
 
   @override
   String get profileBadgeReader => 'okur';
 
   @override
-  String get profileBadgeThirtyDays => '30 günlük';
+  String get profileBadgeThirtyDays => '30 gün';
 
   @override
   String get profileWeekdaysShort => 'Pt,Sa,Ça,Pe,Cu,Ct,Pa';
@@ -587,7 +672,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileMealsAdded => 'yemek eklendi';
 
   @override
-  String get profileDayStreak => 'günlük seri';
+  String get profileDayStreak => 'gün serisi';
 
   @override
   String get profileJournalEntriesWritten => 'günlük yazıldı';
@@ -599,7 +684,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profilePremiumMember => 'ILND+ üyesisin';
 
   @override
-  String get profileGoPremium => 'ILND+’a geç';
+  String get profileGoPremium => 'ILND+\'a geç';
 
   @override
   String get profileSettingsLabel => 'AYARLAR';
@@ -608,16 +693,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileInviteFriend => 'arkadaşını davet et';
 
   @override
-  String get profileSettingsRow => 'ayarlar';
-
-  @override
   String get profilePrivacyPolicy => 'gizlilik politikası';
 
   @override
   String get profileTermsOfService => 'kullanım şartları';
 
   @override
-  String get profileSignedOut => 'Çıkış yapıldı. Görüşürüz 👋';
+  String get profileSignedOut => 'Çıkış yapıldı. Görüşürüz';
 
   @override
   String get profileSignOut => 'çıkış yap';
@@ -639,7 +721,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileDeleteAccountConfirm => 'Hesabımı sil';
 
   @override
-  String get profileAccountDeleted => 'Hesabın silindi. İyi günler 👋';
+  String get profileAccountDeleted => 'Hesabın silindi. Kendine iyi bak';
 
   @override
   String get exploreTitle => 'keşfet.';
@@ -660,10 +742,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get exploreFilterArticles => 'yazılar';
 
   @override
-  String get exploreFeaturedLabel => 'ÖNE ÇIKANLAR';
+  String get exploreFilterEmpty => 'bu etikette henüz yazı yok';
 
   @override
-  String get exploreSeeAllArrow => 'hepsi →';
+  String get exploreMoreLabel => 'DAHA FAZLA';
 
   @override
   String get exploreRitualsLabel => 'RİTÜELLER';
@@ -789,8 +871,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sleepRitualHomeCardTitle => 'gece ritüeline hazır mısın?';
 
   @override
-  String get sleepRitualHomeCardSubtitle =>
-      'birkaç dakikalık yumuşak bir kapanış';
+  String get sleepRitualHomeCardSubtitle => 'birkaç dakika, sonra uyku';
 
   @override
   String get exploreQuote => '\"Bugün küçük bir adım, yarının büyük farkı.\"';
@@ -869,9 +950,6 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get articleDetailSignOff => '🌿';
-
-  @override
   String get referralTitle => 'arkadaşını davet et';
 
   @override
@@ -881,15 +959,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get referralEnterCode => 'davet kodu gir';
 
   @override
-  String get vibeCardShareText => 'ilnd\'deki ruh halimi paylaşıyorum 🌿';
+  String get vibeCardShareText => 'ilnd\'deki ruh halimi paylaşıyorum';
 
   @override
   String vibeCardShareTextWithCode(String code) {
-    return 'ilnd\'deki ruh halimi paylaşıyorum 🌿 davet kodum: $code';
+    return 'ilnd\'deki ruh halimi paylaşıyorum davet kodum: $code';
   }
 
   @override
-  String get trioSectionTitle => 'Bugünün Üçlüsü';
+  String get trioSectionTitle => 'BUGÜNÜN ÜÇLÜSÜ';
 
   @override
   String get trioMoveTitle => 'Hareket';
@@ -930,23 +1008,23 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String streakCardShareText(int days) {
-    return 'ilnd\'de $days gündür buradayım 🔥';
+    return 'ilnd\'de $days gündür buradayım';
   }
 
   @override
   String streakCardShareTextWithCode(int days, String code) {
-    return 'ilnd\'de $days gündür buradayım 🔥 davet kodum: $code';
+    return 'ilnd\'de $days gündür buradayım davet kodum: $code';
   }
 
   @override
   String get chatQuoteCardButton => 'Karta çevir';
 
   @override
-  String get quoteCardShareText => 'ilnd bugün bana bunu dedi 🌙';
+  String get quoteCardShareText => 'ilnd bugün bana bunu dedi';
 
   @override
   String quoteCardShareTextWithCode(String code) {
-    return 'ilnd bugün bana bunu dedi 🌙 davet kodum: $code';
+    return 'ilnd bugün bana bunu dedi davet kodum: $code';
   }
 
   @override
@@ -973,7 +1051,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get vibeCardStatHabit => 'alışkanlık';
 
   @override
-  String get chatPaywallReason => 'bu hafta benimle çok konuştun 🌿';
+  String get chatPaywallReason => 'bu hafta benimle çok konuştun';
 
   @override
   String get chatGreeting => 'selam.';
@@ -993,14 +1071,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get chatListening => 'ilnd · seni dinliyor';
 
   @override
-  String get redeemCodeSuccess => 'Davet kodu kullanıldı! 🎉';
+  String get redeemCodeSuccess => 'Davet kodu kullanıldı!';
 
   @override
   String get redeemCodeInvalid => 'Böyle bir davet kodu yok. Tekrar bak.';
 
   @override
   String get redeemCodeSelfReferral =>
-      'Bu senin kendi kodun 🙂 Bir arkadaşının kodunu dene.';
+      'Bu senin kendi kodun Bir arkadaşının kodunu dene.';
 
   @override
   String get redeemCodeAlreadyUsed => 'Zaten bir davet kodu kullanmışsın.';
@@ -1037,7 +1115,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String referralShareText(String code) {
-    return 'ilnd\'e benimle katıl! davet kodum: $code';
+    return 'benimle ilnd\'e katıl! davet kodum: $code';
   }
 
   @override
@@ -1063,9 +1141,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get takipMacrosLabel => 'MAKROLAR';
-
-  @override
-  String get takipCalories => 'kalori';
 
   @override
   String get takipProtein => 'protein';
@@ -1151,7 +1226,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get ekleHabitTitle => 'alışkanlık';
 
   @override
-  String get ekleHabitSubtitle => 'yeni hedef ekle';
+  String get ekleHabitSubtitle => 'yeni alışkanlık ekle';
 
   @override
   String get ekleWaterTitle => 'su';
@@ -1167,10 +1242,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ekleAskIlndSubtitle => 'aklındakini konuş';
-
-  @override
-  String get homeTrackingCardSubtitle =>
-      'adımların, öğünlerin, alışkanlıkların';
 
   @override
   String get gorevEkleNameEmpty => 'Önce alışkanlığa bir ad ver.';
@@ -1224,7 +1295,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get suEkleMl => 'ML';
 
   @override
-  String get yemekEklePaywallReason => 'bugünlük yemek analizi hakkın doldu 🌿';
+  String get yemekEklePaywallReason => 'bugünlük yemek analizi hakkın doldu';
 
   @override
   String get yemekEklePhotoAccessError => 'Fotoğrafa erişilemedi. Tekrar dene.';
@@ -1268,9 +1339,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get yemekEkleAnalyzing => 'analiz ediliyor...';
-
-  @override
-  String get yemekEkleCalories => 'KALORİ';
 
   @override
   String get yemekEkleProtein => 'PROTEİN';
@@ -1359,7 +1427,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ilndFallbackFood4 =>
-      'keyifli görünüyor. suçluluk yok — küçük dokunuşlar yeter, baskı değil.';
+      'keyifli görünüyor. suçluluk yok. küçük dokunuşlar yeter, baskı değil.';
 
   @override
   String get ilndFallbackNeed1 => 'kısa bir nefes molası';
@@ -1424,8 +1492,8 @@ class AppLocalizationsTr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count alışkanlığı tamamladın',
-      one: '1 alışkanlığı tamamladın',
+      other: '$count alışkanlık tamamladın',
+      one: '1 alışkanlık tamamladın',
     );
     return '$_temp0';
   }
@@ -1449,8 +1517,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reminderSettingLabel => 'Günlük hatırlatma';
 
   @override
-  String get reminderSettingSubtitle =>
-      'Günü kaçırmadan önce nazik bir dokunuş';
+  String get reminderSettingSubtitle => 'Gün geçip gitmeden nazik bir dokunuş';
 
   @override
   String reminderTimeLabel(String time) {
@@ -1469,17 +1536,86 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.';
 
   @override
-  String get homeReminderInviteTitle => 'Akşamları sana yazayım mı?';
+  String get planShelfLabel => 'PLANLAR';
 
   @override
-  String get homeReminderInviteBody =>
-      'Günde bir kez, nazikçe. Saatini istediğin zaman ayarlardan değiştirebilirsin.';
+  String planDayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gün',
+      one: '1 gün',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get homeReminderInviteAccept => 'Olur, hatırlat';
+  String planProgress(int done, int total) {
+    return '$done/$total gün';
+  }
 
   @override
-  String get homeReminderInviteLater => 'Şimdi değil';
+  String get planStart => 'başla';
+
+  @override
+  String planContinue(int day) {
+    return '$day. güne devam et';
+  }
+
+  @override
+  String get planAllDone => 'planı tamamladın';
+
+  @override
+  String get planDayDone => 'tamamlandı';
+
+  @override
+  String planDayLabel(int day) {
+    return '$day. gün';
+  }
+
+  @override
+  String get planDayComplete => 'bugünü tamamla';
+
+  @override
+  String get planDayRead => 'günün okuması';
+
+  @override
+  String get planDayAction => 'günün adımı';
+
+  @override
+  String get planActionBreath => 'nefes al';
+
+  @override
+  String get planActionMove => 'hareket et';
+
+  @override
+  String get planActionWater => 'su iç';
+
+  @override
+  String get planActionJournal => 'günlüğüne yaz';
+
+  @override
+  String get planPaywallReason => 'bu plan ILND+ üyelerine özel';
+
+  @override
+  String get planPremiumBadge => 'ILND+';
+
+  @override
+  String get planSwitchTitle => 'Devam eden planın var';
+
+  @override
+  String planSwitchBody(String title) {
+    return '$title planı duraklar, ilerlemen kaybolmaz. Yeni plana geçilsin mi?';
+  }
+
+  @override
+  String get planSwitchConfirm => 'geç';
+
+  @override
+  String get planSwitchCancel => 'vazgeç';
+
+  @override
+  String get homeActivePlanLabel => 'PLANIN';
 
   @override
   String get movementShelfLabel => 'HAREKET PROGRAMLARI';
@@ -1515,28 +1651,28 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get movementStart => 'Başla';
+  String get movementStart => 'başla';
 
   @override
-  String get movementContinue => 'Devam et';
+  String get movementContinue => 'devam et';
 
   @override
-  String get movementReplay => 'Yeniden izle';
+  String get movementReplay => 'yeniden izle';
 
   @override
-  String get movementAllDone => 'programı tamamladın 🌿';
+  String get movementAllDone => 'programı tamamladın';
 
   @override
   String get movementSessionDone => 'tamamlandı';
 
   @override
-  String get movementPlayerError => 'Video şu an açılamadı';
+  String get movementPlayerError => 'video şu an açılamadı';
 
   @override
-  String get movementPlayerRetry => 'Tekrar dene';
+  String get movementPlayerRetry => 'tekrar dene';
 
   @override
-  String get movementPaywallReason => 'bu program ILND+ üyelerine özel 🌿';
+  String get movementPaywallReason => 'bu program ILND+ üyelerine özel';
 
   @override
   String get movementPremiumBadge => 'ILND+';

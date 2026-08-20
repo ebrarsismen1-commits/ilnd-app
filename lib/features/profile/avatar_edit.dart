@@ -183,7 +183,6 @@ class _AvatarOption extends StatelessWidget {
         decoration: BoxDecoration(
           color: p.surface,
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          border: Border.all(color: p.border, width: 0.5),
         ),
         child: Row(
           children: [

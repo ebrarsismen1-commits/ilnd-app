@@ -52,9 +52,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navExplore => 'Explore';
 
   @override
-  String get navTracking => 'Tracking';
-
-  @override
   String get navCommunity => 'Community';
 
   @override
@@ -62,9 +59,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navRing => 'ilnd';
-
-  @override
-  String get a11yOpenChat => 'Open chat with ILND';
 
   @override
   String get topulukTitle => 'community.';
@@ -179,7 +173,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get newPasswordSubmit => 'update password';
 
   @override
-  String get newPasswordSuccess => 'Your password is updated. Welcome back 🌿';
+  String get newPasswordSuccess => 'Your password is updated. Welcome back';
 
   @override
   String get authErrorSignupFailed =>
@@ -263,7 +257,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerLoginLink => 'sign in';
 
   @override
-  String get registerSuccess => 'Your account has been created! Welcome 🌿';
+  String get registerSuccess => 'Your account has been created! Welcome';
 
   @override
   String get registerConfirmEmailSent =>
@@ -299,6 +293,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeTaglineEn => 'journal, track your mood, talk to ILND.';
+
+  @override
+  String get welcomeBeatMemory =>
+      'ILND learns from what you write and remembers you';
+
+  @override
+  String get welcomeBeatCommunity =>
+      'we meet face to face at gatherings in your city';
+
+  @override
+  String get adanLabel => 'ISLAND';
+
+  @override
+  String get adanTitle => 'island.';
+
+  @override
+  String get adanLead => 'your island grows from what you finish.';
+
+  @override
+  String get adanBody =>
+      'every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed — quiet days only deepen the water, they do not punish.';
+
+  @override
+  String get adanItemsLabel => 'PIECES';
+
+  @override
+  String get adanStateOpen => 'OPEN';
+
+  @override
+  String get adanStateLocked => 'LOCKED';
+
+  @override
+  String get adanItemLantern => 'lantern';
+
+  @override
+  String get adanItemPine => 'pine';
+
+  @override
+  String get adanItemOven => 'oven';
+
+  @override
+  String get adanItemMoonlight => 'moonlight';
+
+  @override
+  String get adanItemWindrose => 'weather vane';
+
+  @override
+  String get adanItemMeetingStone => 'meetup stone';
+
+  @override
+  String get adanHowLantern => 'first journal';
+
+  @override
+  String get adanHowPine => '3-day streak';
+
+  @override
+  String get adanHowOven => '10 meals logged';
+
+  @override
+  String get adanHowMoonlight => 'first night ritual';
+
+  @override
+  String get adanHowWindrose => '7-day streak';
+
+  @override
+  String get adanHowMeetingStone => 'first community meetup';
+
+  @override
+  String get adanEarnedSuffix => 'earned';
+
+  @override
+  String get adanEmptyProgress => 'no pieces yet';
+
+  @override
+  String get profileStatIslandItems => 'PIECES';
+
+  @override
+  String get welcomeBeatIsland =>
+      'three small things a day — finish them and your island grows';
+
+  @override
+  String adanProgress(int count, String next) {
+    return '$count pieces · next: $next';
+  }
+
+  @override
+  String adanNextNote(String next, String how) {
+    return '$next settles in once $how is done.';
+  }
 
   @override
   String get welcomeStart => 'start';
@@ -431,6 +514,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get firstEntryNeedsLoading => 'getting a few ideas ready for you...';
+
+  @override
+  String get homeTrackRowSubtitle => 'meals, water, habits';
+
+  @override
+  String get homeWeeklyCardRowTitle => 'your weekly card is ready';
+
+  @override
+  String get homeWeeklyCardRowSubtitle => 'share it, or keep it to yourself';
 
   @override
   String get homeTodaysReadTitle => 'TODAY\'S READ';
@@ -566,9 +658,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileStatPoints => 'points';
 
   @override
-  String get profileStatBadge => 'badges';
-
-  @override
   String get profileBadgesLabel => 'BADGES';
 
   @override
@@ -617,16 +706,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileInviteFriend => 'invite a friend';
 
   @override
-  String get profileSettingsRow => 'settings';
-
-  @override
   String get profilePrivacyPolicy => 'privacy policy';
 
   @override
   String get profileTermsOfService => 'terms of service';
 
   @override
-  String get profileSignedOut => 'Signed out. See you soon 👋';
+  String get profileSignedOut => 'Signed out. See you soon';
 
   @override
   String get profileSignOut => 'sign out';
@@ -649,7 +735,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileAccountDeleted =>
-      'Your account has been deleted. Take care 👋';
+      'Your account has been deleted. Take care';
 
   @override
   String get exploreTitle => 'explore.';
@@ -670,10 +756,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exploreFilterArticles => 'articles';
 
   @override
-  String get exploreFeaturedLabel => 'FEATURED';
+  String get exploreFilterEmpty => 'nothing under this tag yet';
 
   @override
-  String get exploreSeeAllArrow => 'see all →';
+  String get exploreMoreLabel => 'MORE';
 
   @override
   String get exploreRitualsLabel => 'RITUALS';
@@ -801,8 +887,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepRitualHomeCardTitle => 'ready for your night ritual?';
 
   @override
-  String get sleepRitualHomeCardSubtitle =>
-      'a few minutes of gentle winding down';
+  String get sleepRitualHomeCardSubtitle => 'a few minutes, then sleep';
 
   @override
   String get exploreQuote =>
@@ -882,9 +967,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get articleDetailSignOff => '🌿';
-
-  @override
   String get referralTitle => 'invite a friend';
 
   @override
@@ -894,15 +976,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get referralEnterCode => 'enter invite code';
 
   @override
-  String get vibeCardShareText => 'sharing my mood on ilnd 🌿';
+  String get vibeCardShareText => 'sharing my mood on ilnd';
 
   @override
   String vibeCardShareTextWithCode(String code) {
-    return 'sharing my mood on ilnd 🌿 my invite code: $code';
+    return 'sharing my mood on ilnd my invite code: $code';
   }
 
   @override
-  String get trioSectionTitle => 'Today\'s Three';
+  String get trioSectionTitle => 'TODAY\'S THREE';
 
   @override
   String get trioMoveTitle => 'Move';
@@ -943,23 +1025,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String streakCardShareText(int days) {
-    return '$days days in a row on ilnd 🔥';
+    return '$days days in a row on ilnd';
   }
 
   @override
   String streakCardShareTextWithCode(int days, String code) {
-    return '$days days in a row on ilnd 🔥 my invite code: $code';
+    return '$days days in a row on ilnd my invite code: $code';
   }
 
   @override
   String get chatQuoteCardButton => 'Make it a card';
 
   @override
-  String get quoteCardShareText => 'ilnd told me this today 🌙';
+  String get quoteCardShareText => 'ilnd told me this today';
 
   @override
   String quoteCardShareTextWithCode(String code) {
-    return 'ilnd told me this today 🌙 my invite code: $code';
+    return 'ilnd told me this today my invite code: $code';
   }
 
   @override
@@ -986,7 +1068,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vibeCardStatHabit => 'habits';
 
   @override
-  String get chatPaywallReason => 'you\'ve talked to me a lot this week 🌿';
+  String get chatPaywallReason => 'you\'ve talked to me a lot this week';
 
   @override
   String get chatGreeting => 'hey.';
@@ -1006,14 +1088,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatListening => 'ilnd · listening';
 
   @override
-  String get redeemCodeSuccess => 'Invite code redeemed! 🎉';
+  String get redeemCodeSuccess => 'Invite code redeemed!';
 
   @override
   String get redeemCodeInvalid => 'No such invite code. Double-check it.';
 
   @override
   String get redeemCodeSelfReferral =>
-      'That\'s your own code 🙂 Try a friend\'s code.';
+      'That\'s your own code Try a friend\'s code.';
 
   @override
   String get redeemCodeAlreadyUsed =>
@@ -1077,9 +1159,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get takipMacrosLabel => 'MACROS';
-
-  @override
-  String get takipCalories => 'calories';
 
   @override
   String get takipProtein => 'protein';
@@ -1165,7 +1244,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ekleHabitTitle => 'habit';
 
   @override
-  String get ekleHabitSubtitle => 'add a new goal';
+  String get ekleHabitSubtitle => 'add a new habit';
 
   @override
   String get ekleWaterTitle => 'water';
@@ -1181,9 +1260,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ekleAskIlndSubtitle => 'talk it through';
-
-  @override
-  String get homeTrackingCardSubtitle => 'your steps, meals, habits';
 
   @override
   String get gorevEkleNameEmpty => 'Give the habit a name first.';
@@ -1237,7 +1313,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get suEkleMl => 'ML';
 
   @override
-  String get yemekEklePaywallReason => 'you\'ve used today\'s food scans 🌿';
+  String get yemekEklePaywallReason => 'you\'ve used today\'s food scans';
 
   @override
   String get yemekEklePhotoAccessError =>
@@ -1281,9 +1357,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yemekEkleAnalyzing => 'analyzing...';
-
-  @override
-  String get yemekEkleCalories => 'CALORIES';
 
   @override
   String get yemekEkleProtein => 'PROTEIN';
@@ -1367,11 +1440,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ilndFallbackFood3 =>
-      'a balanced meal. protein\'s solid — try adding some fiber next meal.';
+      'a balanced meal. protein\'s solid, try adding some fiber next meal.';
 
   @override
   String get ilndFallbackFood4 =>
-      'looks lovely. no guilt here — small touches are enough, no pressure.';
+      'looks lovely. no guilt here. small touches are enough, no pressure.';
 
   @override
   String get ilndFallbackNeed1 => 'a short breathing break';
@@ -1485,18 +1558,86 @@ class AppLocalizationsEn extends AppLocalizations {
       'Notification permission was declined. Allow it in device settings and I can remind you.';
 
   @override
-  String get homeReminderInviteTitle =>
-      'Want me to write to you in the evenings?';
+  String get planShelfLabel => 'PLANS';
 
   @override
-  String get homeReminderInviteBody =>
-      'Once a day, gently. You can change the time in settings whenever you like.';
+  String planDayCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get homeReminderInviteAccept => 'Sure, remind me';
+  String planProgress(int done, int total) {
+    return '$done/$total days';
+  }
 
   @override
-  String get homeReminderInviteLater => 'Not now';
+  String get planStart => 'start';
+
+  @override
+  String planContinue(int day) {
+    return 'continue with day $day';
+  }
+
+  @override
+  String get planAllDone => 'you finished the plan';
+
+  @override
+  String get planDayDone => 'done';
+
+  @override
+  String planDayLabel(int day) {
+    return 'day $day';
+  }
+
+  @override
+  String get planDayComplete => 'complete today';
+
+  @override
+  String get planDayRead => 'today\'s read';
+
+  @override
+  String get planDayAction => 'today\'s step';
+
+  @override
+  String get planActionBreath => 'take a breath';
+
+  @override
+  String get planActionMove => 'move';
+
+  @override
+  String get planActionWater => 'drink water';
+
+  @override
+  String get planActionJournal => 'write in your journal';
+
+  @override
+  String get planPaywallReason => 'this plan is for ILND+ members';
+
+  @override
+  String get planPremiumBadge => 'ILND+';
+
+  @override
+  String get planSwitchTitle => 'You have a plan in progress';
+
+  @override
+  String planSwitchBody(String title) {
+    return '$title will pause, your progress stays. Switch to the new plan?';
+  }
+
+  @override
+  String get planSwitchConfirm => 'switch';
+
+  @override
+  String get planSwitchCancel => 'never mind';
+
+  @override
+  String get homeActivePlanLabel => 'YOUR PLAN';
 
   @override
   String get movementShelfLabel => 'MOVEMENT PROGRAMS';
@@ -1532,28 +1673,28 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get movementStart => 'Start';
+  String get movementStart => 'start';
 
   @override
-  String get movementContinue => 'Continue';
+  String get movementContinue => 'continue';
 
   @override
-  String get movementReplay => 'Watch again';
+  String get movementReplay => 'watch again';
 
   @override
-  String get movementAllDone => 'you finished the program 🌿';
+  String get movementAllDone => 'you finished the program';
 
   @override
   String get movementSessionDone => 'done';
 
   @override
-  String get movementPlayerError => 'The video could not be opened';
+  String get movementPlayerError => 'couldn\'t open the video';
 
   @override
-  String get movementPlayerRetry => 'Try again';
+  String get movementPlayerRetry => 'try again';
 
   @override
-  String get movementPaywallReason => 'this program is for ILND+ members 🌿';
+  String get movementPaywallReason => 'this program is for ILND+ members';
 
   @override
   String get movementPremiumBadge => 'ILND+';

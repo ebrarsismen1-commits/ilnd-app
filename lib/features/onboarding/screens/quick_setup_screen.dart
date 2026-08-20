@@ -7,7 +7,6 @@ import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
@@ -36,12 +35,12 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
   // Internal keys (used for state/toggle logic) — display labels are
   // resolved via l10n in build() through _goalLabel().
   static const _goals = [
-    ('kalori_besin_takibi', '🍽️'),
-    ('kilo_vermek_almak', '⚖️'),
-    ('daha_fazla_hareket', '🏃'),
-    ('su_uyku_takibi', '💧'),
-    ('aliskanlik_olusturma', '🔄'),
-    ('ruh_hali_takibi', '💙'),
+    ('kalori_besin_takibi', Icons.restaurant_rounded),
+    ('kilo_vermek_almak', Icons.monitor_weight_outlined),
+    ('daha_fazla_hareket', Icons.directions_run_rounded),
+    ('su_uyku_takibi', Icons.water_drop_rounded),
+    ('aliskanlik_olusturma', Icons.autorenew_rounded),
+    ('ruh_hali_takibi', Icons.favorite_border_rounded),
   ];
 
   static const _activityLevels = ['az_hareketli', 'orta', 'aktif'];
@@ -267,232 +266,236 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 24),
-                Text(
-                  l10n.quickSetupTitle,
-                  style: AppTextStyles.display(fontSize: 28, color: p.text),
-                ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 24),
+              Text(
+                l10n.quickSetupTitle,
+                style: AppTextStyles.display(fontSize: 28, color: p.text),
+              ),
+              // Bkz. welcome_screen: iki dilli başlık yalnız Türkçede.
+              // Boşluk da koşula dahil, yoksa İngilizcede sarkan bir
+              // aralık kalır.
+              if (l10n.localeName.startsWith('tr')) ...[
                 const SizedBox(height: 6),
                 Text(
                   l10n.quickSetupTitleEn,
-                  style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  height: 52,
-                  child: TextField(
-                    controller: _nameController,
-                    autofocus: true,
-                    textCapitalization: TextCapitalization.words,
-                    style: AppTextStyles.body(
-                      fontSize: 16,
-                      color: p.text,
-                    ).copyWith(fontWeight: FontWeight.w500),
-                    decoration: InputDecoration(
-                      hintText: l10n.quickSetupNameHint,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                Text(
-                  l10n.quickSetupGoalsTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.quickSetupGoalsSubtitle,
                   style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
                 ),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: _goals.map((item) {
-                    final on = goals.contains(item.$1);
-                    return Pressable(
-                      onTap: () => ref
-                          .read(onboardingGoalsProvider.notifier)
-                          .toggle(item.$1),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 160),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          color: on
-                              ? p.accent.withValues(alpha: 0.08)
-                              : p.surface,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: on
-                                ? p.accent
-                                : p.textMuted.withValues(alpha: 0.2),
-                            width: on ? 1.5 : 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(item.$2, style: const TextStyle(fontSize: 15)),
-                            const SizedBox(width: 6),
-                            Text(
-                              _goalLabel(l10n, item.$1),
-                              style:
-                                  AppTextStyles.body(
-                                    fontSize: 13,
-                                    color: on ? p.accent : p.text,
-                                  ).copyWith(
-                                    fontWeight: on
-                                        ? FontWeight.w600
-                                        : FontWeight.normal,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 32),
-                Text(
-                  l10n.quickSetupBodyTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.quickSetupBodySubtitle,
-                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _numberField(
-                        p,
-                        _ageController,
-                        l10n.quickSetupAgeHint,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _numberField(
-                        p,
-                        _heightController,
-                        l10n.quickSetupHeightHint,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _numberField(
-                        p,
-                        _weightController,
-                        l10n.quickSetupWeightHint,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 28),
-                Text(
-                  l10n.quickSetupActivityTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
-                ),
-                const SizedBox(height: 12),
-                _chipRow(
-                  p,
-                  keys: _activityLevels,
-                  isSelected: (key) => activity == key,
-                  onTap: (key) => ref
-                      .read(onboardingFrequencyProvider.notifier)
-                      .select(key),
-                  label: (key) => _activityLabel(l10n, key),
-                ),
-                const SizedBox(height: 28),
-                Text(
-                  l10n.quickSetupDietTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
-                ),
-                const SizedBox(height: 12),
-                _chipRow(
-                  p,
-                  keys: _diets,
-                  isSelected: (key) => diet == key,
-                  onTap: (key) =>
-                      ref.read(onboardingDietProvider.notifier).select(key),
-                  label: (key) => _dietLabel(l10n, key),
-                ),
-                const SizedBox(height: 28),
-                Text(
-                  l10n.quickSetupAllergiesTitle,
-                  style: AppTextStyles.heading(fontSize: 18, color: p.text),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.quickSetupAllergiesSubtitle,
-                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-                ),
-                const SizedBox(height: 12),
-                _chipRow(
-                  p,
-                  keys: _allergies,
-                  isSelected: (key) => allergies.contains(key),
-                  onTap: (key) => ref
-                      .read(onboardingAllergiesProvider.notifier)
-                      .toggle(key),
-                  label: (key) => _allergyLabel(l10n, key),
-                ),
-                const SizedBox(height: 24),
-                if (_showCodeField) ...[
-                  Text(
-                    l10n.quickSetupInviteCodeTitle,
-                    style: AppTextStyles.heading(fontSize: 15, color: p.text),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 48,
-                    child: TextField(
-                      controller: _codeController,
-                      textCapitalization: TextCapitalization.characters,
-                      style: AppTextStyles.body(fontSize: 15, color: p.text),
-                      decoration: InputDecoration(
-                        hintText: l10n.quickSetupInviteCodeHint,
-                      ),
-                    ),
-                  ),
-                ] else
-                  Pressable(
-                    onTap: () => setState(() => _showCodeField = true),
-                    child: Text(
-                      l10n.quickSetupHaveInviteCode,
-                      style: AppTextStyles.body(
-                        fontSize: 13,
-                        color: p.textMuted,
-                      ).copyWith(decoration: TextDecoration.underline),
-                    ),
-                  ),
-                const SizedBox(height: 32),
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  // AppTheme.dark artık MaterialApp'e bağlı (main.dart) —
-                  // ElevatedButtonThemeData zaten aktif moda göre doğru
-                  // rengi (disabled dahil) veriyor, manuel override gerekmiyor.
-                  child: ElevatedButton(
-                    onPressed: _canProceed ? () => _proceed(l10n) : null,
-                    child: Text(l10n.quickSetupContinue),
-                  ),
-                ),
-                const SizedBox(height: 40),
               ],
-            ),
+              const SizedBox(height: 24),
+              SizedBox(
+                height: 52,
+                child: TextField(
+                  controller: _nameController,
+                  autofocus: true,
+                  textCapitalization: TextCapitalization.words,
+                  style: AppTextStyles.body(
+                    fontSize: 15,
+                    color: p.text,
+                  ).copyWith(fontWeight: FontWeight.w500),
+                  decoration: InputDecoration(
+                    hintText: l10n.quickSetupNameHint,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Text(
+                l10n.quickSetupGoalsTitle,
+                style: AppTextStyles.heading(fontSize: 19, color: p.text),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l10n.quickSetupGoalsSubtitle,
+                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+              ),
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _goals.map((item) {
+                  final on = goals.contains(item.$1);
+                  return Pressable(
+                    onTap: () => ref
+                        .read(onboardingGoalsProvider.notifier)
+                        .toggle(item.$1),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 160),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: on
+                            ? p.accent.withValues(alpha: 0.08)
+                            : p.surface,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: on
+                              ? p.accent
+                              : p.textMuted.withValues(alpha: 0.2),
+                          width: on ? 1.5 : 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            item.$2,
+                            size: 16,
+                            color: on ? p.accent : p.textMuted,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            _goalLabel(l10n, item.$1),
+                            style:
+                                AppTextStyles.body(
+                                  fontSize: 13,
+                                  color: on ? p.accent : p.text,
+                                ).copyWith(
+                                  fontWeight: on
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 32),
+              Text(
+                l10n.quickSetupBodyTitle,
+                style: AppTextStyles.heading(fontSize: 19, color: p.text),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l10n.quickSetupBodySubtitle,
+                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _numberField(
+                      p,
+                      _ageController,
+                      l10n.quickSetupAgeHint,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _numberField(
+                      p,
+                      _heightController,
+                      l10n.quickSetupHeightHint,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _numberField(
+                      p,
+                      _weightController,
+                      l10n.quickSetupWeightHint,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 28),
+              Text(
+                l10n.quickSetupActivityTitle,
+                style: AppTextStyles.heading(fontSize: 19, color: p.text),
+              ),
+              const SizedBox(height: 12),
+              _chipRow(
+                p,
+                keys: _activityLevels,
+                isSelected: (key) => activity == key,
+                onTap: (key) =>
+                    ref.read(onboardingFrequencyProvider.notifier).select(key),
+                label: (key) => _activityLabel(l10n, key),
+              ),
+              const SizedBox(height: 28),
+              Text(
+                l10n.quickSetupDietTitle,
+                style: AppTextStyles.heading(fontSize: 19, color: p.text),
+              ),
+              const SizedBox(height: 12),
+              _chipRow(
+                p,
+                keys: _diets,
+                isSelected: (key) => diet == key,
+                onTap: (key) =>
+                    ref.read(onboardingDietProvider.notifier).select(key),
+                label: (key) => _dietLabel(l10n, key),
+              ),
+              const SizedBox(height: 28),
+              Text(
+                l10n.quickSetupAllergiesTitle,
+                style: AppTextStyles.heading(fontSize: 19, color: p.text),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l10n.quickSetupAllergiesSubtitle,
+                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+              ),
+              const SizedBox(height: 12),
+              _chipRow(
+                p,
+                keys: _allergies,
+                isSelected: (key) => allergies.contains(key),
+                onTap: (key) =>
+                    ref.read(onboardingAllergiesProvider.notifier).toggle(key),
+                label: (key) => _allergyLabel(l10n, key),
+              ),
+              const SizedBox(height: 24),
+              if (_showCodeField) ...[
+                Text(
+                  l10n.quickSetupInviteCodeTitle,
+                  style: AppTextStyles.heading(fontSize: 15, color: p.text),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 48,
+                  child: TextField(
+                    controller: _codeController,
+                    textCapitalization: TextCapitalization.characters,
+                    style: AppTextStyles.body(fontSize: 15, color: p.text),
+                    decoration: InputDecoration(
+                      hintText: l10n.quickSetupInviteCodeHint,
+                    ),
+                  ),
+                ),
+              ] else
+                Pressable(
+                  onTap: () => setState(() => _showCodeField = true),
+                  child: Text(
+                    l10n.quickSetupHaveInviteCode,
+                    style: AppTextStyles.body(
+                      fontSize: 13,
+                      color: p.textMuted,
+                    ).copyWith(decoration: TextDecoration.underline),
+                  ),
+                ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                // AppTheme.dark artık MaterialApp'e bağlı (main.dart) —
+                // ElevatedButtonThemeData zaten aktif moda göre doğru
+                // rengi (disabled dahil) veriyor, manuel override gerekmiyor.
+                child: ElevatedButton(
+                  onPressed: _canProceed ? () => _proceed(l10n) : null,
+                  child: Text(l10n.quickSetupContinue),
+                ),
+              ),
+              const SizedBox(height: 40),
+            ],
           ),
         ),
       ),

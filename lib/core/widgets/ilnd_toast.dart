@@ -47,7 +47,7 @@ class IlndToast {
                 child: Text(
                   message,
                   style: AppTextStyles.body(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: Colors.white,
                     height: 1.4,
                   ),

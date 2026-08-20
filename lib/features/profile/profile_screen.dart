@@ -8,13 +8,13 @@ import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/auth/auth_error_l10n.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
+import 'package:ilnd_app/features/adan/adan_repository.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
 import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
@@ -37,92 +37,88 @@ class ProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: p.base,
-      body: AnimatedBackground(
-        palette: p,
-        child: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenPadding,
-                  28,
-                  AppSpacing.screenPadding,
-                  32,
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                    Entrance(
-                      index: 0,
-                      child: _ProfileHeader(name: name, initial: initial, p: p),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 1,
-                      child: _StatsRow(p: p, ref: ref),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 2, child: _MemoryCard(p: p)),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 3,
-                      child: _BadgesSection(p: p, ref: ref),
-                    ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(
-                      index: 4,
-                      child: _WeeklySummaryCard(p: p, ref: ref),
-                    ),
-                    const SizedBox(height: 12),
-                    Entrance(
-                      index: 5,
-                      child: Pressable(
-                        onTap: () => context.push(routeVibeCard),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenPadding,
+                28,
+                AppSpacing.screenPadding,
+                32,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate.fixed([
+                  Entrance(
+                    index: 0,
+                    child: _ProfileHeader(name: name, initial: initial, p: p),
+                  ),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(
+                    index: 1,
+                    child: _StatsRow(p: p, ref: ref),
+                  ),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(index: 2, child: _MemoryCard(p: p)),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(
+                    index: 3,
+                    child: _BadgesSection(p: p, ref: ref),
+                  ),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(
+                    index: 4,
+                    child: _WeeklySummaryCard(p: p, ref: ref),
+                  ),
+                  const SizedBox(height: 12),
+                  Entrance(
+                    index: 5,
+                    child: Pressable(
+                      onTap: () => context.push(routeVibeCard),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        decoration: BoxDecoration(
+                          color: p.surface,
+                          borderRadius: BorderRadius.circular(
+                            AppSpacing.radius,
                           ),
-                          decoration: BoxDecoration(
-                            color: p.surface,
-                            borderRadius: BorderRadius.circular(
-                              AppSpacing.radius,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.auto_awesome_rounded,
+                              size: 20,
+                              color: p.accent,
                             ),
-                            border: Border.all(color: p.border, width: 0.5),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.auto_awesome_rounded,
-                                size: 20,
-                                color: p.accent,
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                l10n.profileShareWeeklySummary,
+                                style: AppTextStyles.body(
+                                  fontSize: 15,
+                                  color: p.text,
+                                ).copyWith(fontWeight: FontWeight.w600),
                               ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  l10n.profileShareWeeklySummary,
-                                  style: AppTextStyles.body(
-                                    fontSize: 15,
-                                    color: p.text,
-                                  ).copyWith(fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              Icon(
-                                Icons.chevron_right_rounded,
-                                size: 20,
-                                color: p.textMuted,
-                              ),
-                            ],
-                          ),
+                            ),
+                            Icon(
+                              Icons.chevron_right_rounded,
+                              size: 20,
+                              color: p.textMuted,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.sectionGap),
-                    Entrance(index: 6, child: _SettingsSection(p: p)),
-                  ]),
-                ),
+                  ),
+                  const SizedBox(height: AppSpacing.sectionGap),
+                  Entrance(index: 6, child: _SettingsSection(p: p)),
+                ]),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -154,7 +150,7 @@ class _ProfileHeader extends ConsumerWidget {
             onTap: () => showAvatarOptions(context, ref),
             child: Stack(
               children: [
-                UserAvatar(size: 60, initial: initial, p: p, fontSize: 26),
+                UserAvatar(size: 60, initial: initial, p: p, fontSize: 24),
                 Positioned(
                   right: 0,
                   bottom: 0,
@@ -217,7 +213,6 @@ class _MemoryCard extends ConsumerWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,7 +223,7 @@ class _MemoryCard extends ConsumerWidget {
               const SizedBox(width: 10),
               Text(
                 l10n.profileMemoryHeading,
-                style: AppTextStyles.heading(fontSize: 17, color: p.text),
+                style: AppTextStyles.heading(fontSize: 15, color: p.text),
               ),
             ],
           ),
@@ -315,76 +310,77 @@ class _StatsRow extends StatelessWidget {
     final journalCount = statsAsync.valueOrNull?.weeklyJournalCount ?? 0;
     final foodCount = statsAsync.valueOrNull?.weeklyFoodCount ?? 0;
     final puan = streak * 10 + journalCount * 5 + foodCount * 3;
+    final islandItems =
+        ref.watch(islandStateProvider).valueOrNull?.earnedCount ?? 0;
 
-    return Row(
+    // Handoff §5: üç ayrı kart değil, hairline'la çerçevelenmiş TEK şerit.
+    // Kartlar üç sayıyı üç ayrı nesne gibi gösteriyordu; oysa bunlar aynı
+    // cümlenin üç kelimesi.
+    return Column(
       children: [
-        Expanded(
-          child: _StatCard(
-            value: '$streak',
-            label: l10n.profileStatStreak,
-            suffix: ' 🔥',
-            p: p,
+        Container(height: 0.5, color: p.border),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 18),
+          child: Row(
+            children: [
+              Expanded(
+                child: _Stat(
+                  value: '$streak',
+                  label: l10n.profileStatStreak,
+                  p: p,
+                ),
+              ),
+              Expanded(
+                child: _Stat(
+                  value: '$puan',
+                  label: l10n.profileStatPoints,
+                  p: p,
+                ),
+              ),
+              Expanded(
+                child: _Stat(
+                  // Eskiden `streak >= 7 ? 2 : 1` yazan uydurma bir "rozet"
+                  // sayacıydı — hiçbir şeyi saymıyordu. Artık sunucunun
+                  // verdiği gerçek ada öğesi sayısı (ADR-0006).
+                  value: '$islandItems',
+                  label: l10n.profileStatIslandItems,
+                  p: p,
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _StatCard(value: '$puan', label: l10n.profileStatPoints, p: p),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _StatCard(
-            value: streak >= 7 ? '2' : '1',
-            label: l10n.profileStatBadge,
-            p: p,
-          ),
-        ),
+        Container(height: 0.5, color: p.border),
       ],
     );
   }
 }
 
-class _StatCard extends StatelessWidget {
-  const _StatCard({
-    required this.value,
-    required this.label,
-    this.suffix = '',
-    required this.p,
-  });
+class _Stat extends StatelessWidget {
+  const _Stat({required this.value, required this.label, required this.p});
   final String value;
   final String label;
-  final String suffix;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
-      ),
-      child: Column(
-        children: [
-          Text(
-            '$value$suffix',
-            style: AppTextStyles.mono(
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: p.text,
-            ),
+    return Column(
+      children: [
+        Text(
+          value,
+          style: AppTextStyles.mono(
+            fontSize: 26,
+            fontWeight: FontWeight.w600,
+            color: p.text,
           ),
-          const SizedBox(height: 3),
-          Text(
-            label,
-            style: AppTextStyles.label(
-              fontSize: 10,
-              color: p.textMuted,
-            ).copyWith(letterSpacing: 0.4),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: AppTextStyles.label(fontSize: 9.5, color: p.textMuted),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
@@ -419,7 +415,7 @@ class _BadgesSection extends StatelessWidget {
           children: [
             Expanded(
               child: _BadgeCard(
-                emoji: '⭐',
+                icon: Icons.star_border_rounded,
                 label: l10n.profileBadgeFirstStep,
                 color: p.accent,
                 locked: !hasFirstEntry,
@@ -429,7 +425,7 @@ class _BadgesSection extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _BadgeCard(
-                emoji: '🔥',
+                icon: Icons.local_fire_department_rounded,
                 label: l10n.profileBadgeSevenDays,
                 color: p.amber,
                 locked: !hasWeekStreak,
@@ -439,7 +435,7 @@ class _BadgesSection extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _BadgeCard(
-                emoji: '📖',
+                icon: Icons.menu_book_rounded,
                 label: l10n.profileBadgeReader,
                 color: p.accent,
                 locked: true,
@@ -449,7 +445,7 @@ class _BadgesSection extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: _BadgeCard(
-                emoji: '🏆',
+                icon: Icons.emoji_events_rounded,
                 label: l10n.profileBadgeThirtyDays,
                 color: p.amber,
                 locked: stats.streakDays < 30,
@@ -465,13 +461,13 @@ class _BadgesSection extends StatelessWidget {
 
 class _BadgeCard extends StatelessWidget {
   const _BadgeCard({
-    required this.emoji,
+    required this.icon,
     required this.label,
     required this.color,
     required this.locked,
     required this.p,
   });
-  final String emoji;
+  final IconData icon;
   final String label;
   final Color color;
   final bool locked;
@@ -491,13 +487,13 @@ class _BadgeCard extends StatelessWidget {
         children: [
           Opacity(
             opacity: locked ? 0.4 : 1.0,
-            child: Text(emoji, style: const TextStyle(fontSize: 22)),
+            child: Icon(icon, size: 22, color: color),
           ),
           const SizedBox(height: 6),
           Text(
             label,
             style: AppTextStyles.label(
-              fontSize: 9,
+              fontSize: 10,
               color: locked ? p.textMuted.withValues(alpha: 0.6) : color,
             ).copyWith(letterSpacing: 0.3),
             textAlign: TextAlign.center,
@@ -525,118 +521,110 @@ class _WeeklySummaryCard extends StatelessWidget {
     final stats = statsAsync.valueOrNull ?? ProfileStats.zero;
     final barValues = stats.weeklyActivityByDay;
 
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.cardPadding),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.profileWeeklySummaryLabel,
-            style: AppTextStyles.sectionLabel(color: p.textMuted),
-          ),
-          Text(
-            l10n.profileThisWeek,
-            style: AppTextStyles.display(fontSize: 20, color: p.text),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _SummaryRow(
-                      value: '${stats.weeklyFoodCount}',
-                      label: l10n.profileMealsAdded,
-                      p: p,
-                    ),
-                    const SizedBox(height: 10),
-                    _SummaryRow(
-                      value: '${stats.streakDays}',
-                      label: l10n.profileDayStreak,
-                      p: p,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _SummaryRow(
-                      value: '${stats.weeklyJournalCount}',
-                      label: l10n.profileJournalEntriesWritten,
-                      p: p,
-                    ),
-                    const SizedBox(height: 10),
-                    _SummaryRow(
-                      value: statsAsync.isLoading ? '…' : '✓',
-                      label: l10n.profileSynced,
-                      p: p,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Divider(height: 0.5, thickness: 0.5, color: p.border),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 64,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: List.generate(barValues.length, (i) {
-                final value = barValues[i];
-                final isEmpty = value == 0.0;
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 3),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 400),
-                                curve: Curves.easeOut,
-                                width: double.infinity,
-                                height: isEmpty ? 4 : 48 * value,
-                                decoration: BoxDecoration(
-                                  color: isEmpty ? p.surfaceStrong : p.accent,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          dayLabels[i],
-                          style: AppTextStyles.label(
-                            fontSize: 9,
-                            color: isEmpty
-                                ? p.textMuted.withValues(alpha: 0.5)
-                                : p.accent,
-                          ).copyWith(letterSpacing: 0),
-                        ),
-                      ],
-                    ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.profileWeeklySummaryLabel,
+          style: AppTextStyles.sectionLabel(color: p.textMuted),
+        ),
+        Text(
+          l10n.profileThisWeek,
+          style: AppTextStyles.display(fontSize: 19, color: p.text),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _SummaryRow(
+                    value: '${stats.weeklyFoodCount}',
+                    label: l10n.profileMealsAdded,
+                    p: p,
                   ),
-                );
-              }),
+                  const SizedBox(height: 10),
+                  _SummaryRow(
+                    value: '${stats.streakDays}',
+                    label: l10n.profileDayStreak,
+                    p: p,
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _SummaryRow(
+                    value: '${stats.weeklyJournalCount}',
+                    label: l10n.profileJournalEntriesWritten,
+                    p: p,
+                  ),
+                  const SizedBox(height: 10),
+                  _SummaryRow(
+                    value: statsAsync.isLoading ? '…' : '✓',
+                    label: l10n.profileSynced,
+                    p: p,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Divider(height: 0.5, thickness: 0.5, color: p.border),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 96,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: List.generate(barValues.length, (i) {
+              final value = barValues[i];
+              final isEmpty = value == 0.0;
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeOut,
+                              width: double.infinity,
+                              height: isEmpty ? 4 : 76 * value,
+                              decoration: BoxDecoration(
+                                color: isEmpty ? p.surfaceStrong : p.accent,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        dayLabels[i],
+                        style: AppTextStyles.mono(
+                          fontSize: 9.5,
+                          color: isEmpty
+                              ? p.textMuted.withValues(alpha: 0.5)
+                              : p.accent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -660,7 +648,7 @@ class _SummaryRow extends StatelessWidget {
         Text(
           value,
           style: AppTextStyles.mono(
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: FontWeight.w600,
             color: p.text,
           ),
@@ -669,7 +657,7 @@ class _SummaryRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+            style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -739,7 +727,16 @@ class _SettingsSection extends ConsumerWidget {
           style: AppTextStyles.sectionLabel(color: p.textMuted),
         ),
         const SizedBox(height: 10),
-        // Takip ana sayfaya taşındı (Web Raporu madde 6) — buradan kaldırıldı.
+        // Takip tekrar kendi ekrani (tasarim handoff §5 ayarlar listesi):
+        // Bugun'deki sessiz satirin yaninda buradan da acilir.
+        Pressable(
+          onTap: () => context.push(routeTakip),
+          child: _SettingsRow(
+            icon: Icons.insights_outlined,
+            label: l10n.takipTitle,
+            p: p,
+          ),
+        ),
         Pressable(
           onTap: () => context.push(routeReferral),
           child: _SettingsRow(
@@ -875,7 +872,6 @@ class _ReminderSettingRow extends ConsumerWidget {
       decoration: BoxDecoration(
         color: p.surface,
         borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
       ),
       child: Column(
         children: [
@@ -901,7 +897,7 @@ class _ReminderSettingRow extends ConsumerWidget {
                     Text(
                       l10n.reminderSettingSubtitle,
                       style: AppTextStyles.body(
-                        fontSize: 12,
+                        fontSize: 11.5,
                         color: p.textMuted,
                       ),
                     ),
@@ -999,30 +995,30 @@ class _SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-        border: Border.all(color: p.border, width: 0.5),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: iconColor ?? p.textMuted),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              label,
-              style: AppTextStyles.body(
-                fontSize: 15,
-                color: labelColor ?? p.text,
-              ).copyWith(fontWeight: FontWeight.w500),
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            children: [
+              Icon(icon, size: 19, color: iconColor ?? p.textMuted),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: AppTextStyles.body(
+                    fontSize: 14.5,
+                    color: labelColor ?? p.text,
+                  ),
+                ),
+              ),
+              if (showChevron)
+                Icon(Icons.chevron_right_rounded, size: 19, color: p.textMuted),
+            ],
           ),
-          if (showChevron)
-            Icon(Icons.chevron_right_rounded, size: 20, color: p.textMuted),
-        ],
-      ),
+        ),
+        Container(height: 0.5, color: p.border),
+      ],
     );
   }
 }

@@ -65,10 +65,21 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Local agent/session tooling (skills ARE versioned)
-.claude/launch.json
-.claude/settings.local.json
+# Local agent/session tooling — yerelde kalır, depoya girmez.
+# CLAUDE.md ve .claude/skills/ geliştirme makinesinde çalışmaya devam eder;
+# depoda tutulmamaları bilinçli bir karardır (2026-08-11).
+CLAUDE.md
+.claude/
 .firebase/
 
 # Admin SDK anahtari — asla commit edilmez (çift uzantılı kopyalar dahil)
 functions/serviceAccountKey*.json
+
+# Owner'in yerel calisma notlari — iki kez kazara commit'lendi (git add -A docs)
+docs/tanitim_videosu_akisi.md
+
+# Emulator artigi
+functions/firestore-debug.log
+
+# Owner'in verdigi tasarim paketi — depoya girmez, diskte durur
+ilnd app mobile design.zip

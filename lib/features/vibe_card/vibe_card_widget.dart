@@ -42,8 +42,13 @@ class VibeCardWidget extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
+          borderRadius: BorderRadius.circular(18),
+          // Paylaşım kartındaki kenarlık işlevsel: kart açık zeminli bir
+          // sohbete düştüğünde kenarı kaybolmasın (DESIGN_SYSTEM §7.1'in
+          // "kenarlık yok" kuralının istisnası).
+          border: Border.all(color: p.border, width: 0.5),
         ),
-        padding: const EdgeInsets.fromLTRB(28, 36, 28, 32),
+        padding: const EdgeInsets.fromLTRB(28, 28, 28, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,7 +62,8 @@ class VibeCardWidget extends StatelessWidget {
               style: AppTextStyles.label(
                 fontSize: 11,
                 color: p.textMuted,
-              ).copyWith(letterSpacing: 0.6),
+                letterSpacingEm: 0.06,
+              ),
             ),
             const Spacer(flex: 3),
             Text(
@@ -67,7 +73,7 @@ class VibeCardWidget extends StatelessWidget {
                 l10n: l10n,
               ),
               style: AppTextStyles.display(
-                fontSize: 32,
+                fontSize: 31,
                 color: p.text,
                 height: 1.2,
               ),
@@ -80,7 +86,7 @@ class VibeCardWidget extends StatelessWidget {
                 l10n: l10n,
               ),
               style: AppTextStyles.body(
-                fontSize: 16,
+                fontSize: 15.5,
                 color: p.textMuted,
                 height: 1.4,
               ),

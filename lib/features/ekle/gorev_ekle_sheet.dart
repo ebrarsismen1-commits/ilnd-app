@@ -138,7 +138,7 @@ class _GorevEkleSheetState extends ConsumerState<_GorevEkleSheet> {
               // Target days per week
               Text(
                 l10n.gorevEkleDaysPerWeek,
-                style: AppTextStyles.label(fontSize: 12, color: p.textMuted),
+                style: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
               ),
               const SizedBox(height: 10),
               Row(
@@ -160,7 +160,7 @@ class _GorevEkleSheetState extends ConsumerState<_GorevEkleSheet> {
                       child: Text(
                         '$day',
                         style: AppTextStyles.mono(
-                          fontSize: 14,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: selected ? p.onAccent : p.textMuted,
                         ),

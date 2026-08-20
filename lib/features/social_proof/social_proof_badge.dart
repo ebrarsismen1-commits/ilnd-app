@@ -26,11 +26,11 @@ class SocialProofBadge extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         children: [
-          const Text('✦ ', style: TextStyle(fontSize: 12)),
+          const Text('✦ ', style: TextStyle(fontSize: 11.5)),
           Expanded(
             child: Text(
               AppLocalizations.of(context)!.socialProofWeekly(count),
-              style: AppTextStyles.body(fontSize: 12, color: textColor),
+              style: AppTextStyles.body(fontSize: 11.5, color: textColor),
             ),
           ),
         ],

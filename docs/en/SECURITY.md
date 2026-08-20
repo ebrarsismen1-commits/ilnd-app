@@ -124,6 +124,7 @@ The transaction reads and increments `ai_usage/{uid}/{tier}/{today}` atomically 
 | Supabase service role key | Firebase Secret Manager | `deleteAccount` function only |
 | Supabase anon key | Client `.env` / `--dart-define` | Intentionally public (RLS enforced) |
 | Android keystore | GitHub Actions secret (base64) | Release workflow only |
+| `google-services.json` | GitHub Actions secret (base64), `GOOGLE_SERVICES_JSON_BASE64` | Release workflow; CI falls back to a placeholder |
 
 **Never commit:**
 - `.env` files

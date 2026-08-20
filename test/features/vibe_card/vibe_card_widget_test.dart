@@ -52,4 +52,24 @@ void main() {
     expect(find.textContaining('davet kodum'), findsNothing);
     expect(find.text('Zeynep · ilnd.app'), findsOneWidget);
   });
+
+  // Sert Kural #14: paylaşılabilir kart sabit boyut varsayamaz. Kural iki kez
+  // yaşanmış bir taşmadan doğdu (istatistik satırı, alıntı bloğu) ve "dar
+  // viewport testiyle gelir" diyordu — ama bu klasörde öyle bir test yoktu.
+  // Kartın tipografisi handoff ölçüsüne çıkarılırken (başlık 31, alt anlatı
+  // 15.5, sayı 16) eksik kalan test de kapatıldı.
+  for (final size in const [Size(320, 640), Size(360, 740)]) {
+    testWidgets('dar viewport ${size.width.toInt()}px: kart taşmaz', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(size);
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await pumpCard(tester, code: 'ABC123');
+
+      // Taşma debug'da bir FlutterError olarak yükselir; sessizce geçmesin.
+      expect(tester.takeException(), isNull);
+      expect(find.text('ilnd.'), findsOneWidget);
+    });
+  }
 }

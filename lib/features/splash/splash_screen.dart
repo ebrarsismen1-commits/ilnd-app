@@ -58,7 +58,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               // Logo: "ilnd." büyük harf
               Text(
                 'ilnd.',
-                style: AppTextStyles.display(fontSize: 56, color: p.text),
+                style: AppTextStyles.display(fontSize: 44, color: p.text),
               ),
               const SizedBox(height: 8),
               Text(

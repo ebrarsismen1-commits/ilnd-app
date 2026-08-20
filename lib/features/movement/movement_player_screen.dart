@@ -209,7 +209,7 @@ class _PlayerHeader extends StatelessWidget {
               title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.body(fontSize: 14, color: Colors.white),
+              style: AppTextStyles.body(fontSize: 13, color: Colors.white),
             ),
           ),
           const SizedBox(width: 44),
@@ -291,7 +291,10 @@ class _VideoSurface extends StatelessWidget {
               const SizedBox(width: 12),
               Text(
                 '${_clock(value.position)} / ${_clock(value.duration)}',
-                style: AppTextStyles.body(fontSize: 12, color: Colors.white70),
+                style: AppTextStyles.body(
+                  fontSize: 11.5,
+                  color: Colors.white70,
+                ),
               ),
             ],
           ),
@@ -320,7 +323,7 @@ class _PlayerError extends StatelessWidget {
         Text(
           l10n.movementPlayerError,
           textAlign: TextAlign.center,
-          style: AppTextStyles.body(fontSize: 14, color: Colors.white70),
+          style: AppTextStyles.body(fontSize: 13, color: Colors.white70),
         ),
         const SizedBox(height: 16),
         Pressable(
@@ -333,7 +336,7 @@ class _PlayerError extends StatelessWidget {
             ),
             child: Text(
               l10n.movementPlayerRetry,
-              style: AppTextStyles.label(fontSize: 12, color: p.onAccent),
+              style: AppTextStyles.label(fontSize: 11.5, color: p.onAccent),
             ),
           ),
         ),

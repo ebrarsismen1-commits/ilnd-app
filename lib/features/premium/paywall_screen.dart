@@ -4,7 +4,6 @@ import 'package:ilnd_app/core/billing/entitlement.dart';
 import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/animated_background.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
@@ -89,7 +88,6 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         color: p.base,
         child: Stack(
           children: [
-            const Positioned.fill(child: AnimatedBackground(palette: p)),
             SingleChildScrollView(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.screenPadding,
@@ -122,7 +120,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   ],
                   Text(
                     'ILND+',
-                    style: AppTextStyles.display(fontSize: 40, color: p.text),
+                    style: AppTextStyles.display(fontSize: 42, color: p.text),
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -135,25 +133,21 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                   ),
                   const SizedBox(height: 24),
                   _Benefit(
-                    icon: Icons.all_inclusive_rounded,
                     title: l10n.paywallBenefitUnlimitedChatTitle,
                     subtitle: l10n.paywallBenefitUnlimitedChatSubtitle,
                     p: p,
                   ),
                   _Benefit(
-                    icon: Icons.psychology_outlined,
                     title: l10n.paywallBenefitLongMemoryTitle,
                     subtitle: l10n.paywallBenefitLongMemorySubtitle,
                     p: p,
                   ),
                   _Benefit(
-                    icon: Icons.favorite_border_rounded,
                     title: l10n.paywallBenefitProactiveTitle,
                     subtitle: l10n.paywallBenefitProactiveSubtitle,
                     p: p,
                   ),
                   _Benefit(
-                    icon: Icons.map_outlined,
                     title: l10n.paywallBenefitPersonalPlanTitle,
                     subtitle: l10n.paywallBenefitPersonalPlanSubtitle,
                     p: p,
@@ -175,7 +169,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                               Text(
                                 l10n.paywallYearly,
                                 style: AppTextStyles.body(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   color: p.text,
                                 ).copyWith(fontWeight: FontWeight.w600),
                               ),
@@ -183,7 +177,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                               Text(
                                 l10n.paywallFreeTrial,
                                 style: AppTextStyles.body(
-                                  fontSize: 12,
+                                  fontSize: 11.5,
                                   color: p.textMuted,
                                 ),
                               ),
@@ -202,7 +196,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                           child: Text(
                             l10n.paywallDiscount,
                             style: AppTextStyles.label(
-                              fontSize: 11,
+                              fontSize: 11.5,
                               color: p.accent,
                             ).copyWith(letterSpacing: 0),
                           ),
@@ -254,7 +248,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                           child: Text(
                             l10n.paywallNotNow,
                             style: AppTextStyles.body(
-                              fontSize: 14,
+                              fontSize: 13,
                               color: p.textMuted,
                             ),
                           ),
@@ -263,7 +257,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                       Text(
                         ' · ',
                         style: AppTextStyles.body(
-                          fontSize: 14,
+                          fontSize: 13,
                           color: p.textMuted,
                         ),
                       ),
@@ -285,7 +279,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                               : Text(
                                   l10n.paywallRestore,
                                   style: AppTextStyles.body(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     color: p.textMuted,
                                   ),
                                 ),
@@ -305,56 +299,49 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
 class _Benefit extends StatelessWidget {
   const _Benefit({
-    required this.icon,
     required this.title,
     required this.subtitle,
     required this.p,
   });
 
-  final IconData icon;
   final String title;
   final String subtitle;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: p.accent.withValues(alpha: 0.22),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, size: 20, color: p.accent),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.heading(fontSize: 15, color: p.text),
+    // Kart ya da ikon dairesi yok: faydalar hairline'la ayrılmış satırlar
+    // (prototip §11). Dört daire, dört sözü birbirinin kopyası gibi
+    // gösteriyordu.
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: AppTextStyles.heading(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: p.text,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: AppTextStyles.body(
-                    fontSize: 13,
-                    color: p.textMuted,
-                    height: 1.4,
-                  ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                subtitle,
+                style: AppTextStyles.body(
+                  fontSize: 12.5,
+                  color: p.textMuted,
+                  height: 1.45,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Container(height: 0.5, color: p.border),
+      ],
     );
   }
 }

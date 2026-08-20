@@ -29,6 +29,20 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <!-- Supabase e-posta bağlantıları (şifre sıfırlama, hesap onayı)
+                 uygulamaya dönsün. BROWSABLE olmadan tarayıcıdan/mail
+                 istemcisinden gelen link buraya hiç ulaşmaz; link tarayıcıda
+                 açılır ve PKCE code verifier uygulamanın deposunda kaldığı
+                 için oturum kurulamaz. Şema authDeepLinkScheme ile aynı
+                 olmalı (auth_provider.dart) — deep_link_config_test kilitler.
+                 launchMode=singleTop: uygulama açıkken link onNewIntent ile
+                 gelir, ikinci bir kopya açılmaz. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="com.ilnd.app" android:host="login-callback"/>
+            </intent-filter>
         </activity>
         <!-- Zamanlanmış hatırlatma bildirimleri cihaz yeniden başlasa da
              yaşasın diye flutter_local_notifications receiver'ları. -->
