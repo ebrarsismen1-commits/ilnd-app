@@ -2978,5 +2978,728 @@
     "steps": [],
     "diets": [],
     "allergens": []
+  },
+  {
+    "id": "altmis-alti-gun",
+    "title": "21 gün değil",
+    "category": "gelisim",
+    "readTime": "4 dk",
+    "excerpt": "21 gün kuralı bir gözlemden uydurulmuş. Gerçek sayı hem daha uzun hem daha değişken.",
+    "body": [
+      "Bir alışkanlık 21 günde oturur cümlesi 1960'larda bir cerrahın hastalarını gözlemleyip yazdığı bir kitaptan geliyor. Ölçüm değil, izlenim.",
+      "2010'da European Journal of Social Psychology'de yayımlanan bir çalışma bunu gerçekten ölçtü. 96 katılımcı yeni bir günlük alışkanlık seçti ve 12 hafta boyunca her gün yapıp yapmadıklarını, davranışın ne kadar otomatik hissettirdiğini bildirdi.",
+      "Ortanca süre 66 gün çıktı. Ama asıl bulgu ortalama değil, aralık: 18 ile 254 gün arasında değişti.",
+      "Yani kaç gün sürer sorusunun tek cevabı yok. Alışkanlığın zorluğu, kişinin koşulları ve bağlam her şeyi değiştiriyor.",
+      "Bir de rahatlatıcı ayrıntı: çalışmada bir günü kaçırmak otomatikleşme sürecini bozmadı. Tek bir boşluk süreci sıfırlamıyor.",
+      "Pratik karşılığı: üç hafta sonra hâlâ zorlanıyorsan başarısız değilsin, ortalamadasın."
+    ],
+    "en": {
+      "title": "not twenty one days",
+      "readTime": "4 min",
+      "excerpt": "The 21 day rule came from an observation, not a measurement.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Lally P, van Jaarsveld CHM, Potts HWW, Wardle J. How are habits formed: Modelling habit formation in the real world. European Journal of Social Psychology, 2010;40(6):998-1009.",
+        "url": "https://onlinelibrary.wiley.com/doi/10.1002/ejsp.674"
+      }
+    ],
+    "order": 72,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "on-bin-saat",
+    "title": "on bin saat meselesi",
+    "category": "gelisim",
+    "readTime": "4 dk",
+    "excerpt": "Pratik önemli ama tek belirleyici değil. Sayıyı ölçtüklerinde tablo değişti.",
+    "body": [
+      "On bin saat pratik ustalaştırır fikri popüler bir kitapla yayıldı ve basit olduğu için tuttu.",
+      "2014'te Psychological Science'ta yayımlanan bir meta-analiz bunu test etti. Farklı alanlarda pratiğin performans farklılıklarının ne kadarını açıkladığına baktılar.",
+      "Sonuçlar alana göre ciddi biçimde değişti: oyunlarda yüzde 26, müzikte yüzde 21, sporda yüzde 18, eğitimde yüzde 4, mesleklerde yüzde 1'in altında.",
+      "Yani pratik hiçbir yerde belirleyicinin tamamı değil ve bazı alanlarda neredeyse hiç açıklamıyor. Geri kalanı başlangıç yaşı, öğretim kalitesi, koşullar ve bireysel farklar gibi etkenlerden geliyor.",
+      "Bu, pratiği önemsiz kılmıyor. Kılmadığı şey şu: aynı saati koyan iki kişinin aynı yere geleceği varsayımı.",
+      "Kullanışlı sonuç: saat saymayı bırak, pratiğin türüne bak. Zorlandığın, geri bildirim aldığın ve hata düzelttiğin pratik, tekrar ettiğin pratikten farklı sonuç veriyor."
+    ],
+    "en": {
+      "title": "about the ten thousand hours",
+      "readTime": "4 min",
+      "excerpt": "Practice matters but it is not the whole story. The numbers say so.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "sources": [
+      {
+        "citation": "Macnamara BN, Hambrick DZ, Oswald FL. Deliberate Practice and Performance in Music, Games, Sports, Education, and Professions: A Meta-Analysis. Psychological Science, 2014;25(8):1608-1618.",
+        "url": "https://journals.sagepub.com/doi/abs/10.1177/0956797614535810"
+      }
+    ],
+    "order": 73,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "erteleme",
+    "title": "erteleme neyin kaçışı",
+    "category": "gelisim",
+    "readTime": "4 dk",
+    "excerpt": "Erteleme zaman yönetimi sorunu değil. Kaçtığın şey iş değil, işin hissettirdiği.",
+    "body": [
+      "Erteleme genelde tembellikle ya da kötü planlamayla açıklanıyor. Ama ertelenen işlere bakınca ortak nokta zorluk değil, duygu: sıkıcı, kafa karıştırıcı, başarısız olma ihtimali olan ya da nereden başlanacağı belirsiz işler erteleniyor.",
+      "Yani erteleme kısa vadeli bir duygu düzenleme yöntemi. O işi düşünmenin verdiği rahatsızlığı erteleyerek anlık rahatlıyorsun, sonra suçluluk geliyor ve döngü büyüyor.",
+      "Bu çerçeve önemli çünkü çözümü değiştiriyor. Daha iyi bir planlama uygulaması işe yaramıyor; rahatsızlığı azaltmak yarıyor.",
+      "İşi küçült. Rapor yaz ertelenir, başlığı yaz ertelenmez.",
+      "Belirsizliği azalt. Nereden başlayacağını bilmiyorsan ilk adım ne yapacağımı yaz olsun.",
+      "Kendine kızmayı bırak. Erteleme sonrası kendini suçlamak, ertesi gün ertelemeyi artırıyor.",
+      "İki dakikalık bir başlangıç yap ve bırakma iznini kendine ver. Genelde bırakmıyorsun."
+    ],
+    "en": {
+      "title": "what procrastination is avoiding",
+      "readTime": "4 min",
+      "excerpt": "It is not a time management problem. You are avoiding a feeling, not a task.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 74,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "iki-dakika",
+    "title": "iki dakikalık versiyon",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Başlamak bitirmekten zor. O yüzden hedef bitirmek olmasın.",
+    "body": [
+      "Yeni bir şeye başlarken en yaygın hata hedefi büyük tutmak. Her gün otuz dakika okuyacağım iki hafta sürüyor.",
+      "Daha dayanıklı yöntem, alışkanlığın iki dakikalık bir versiyonunu tanımlamak.",
+      "Okumak: bir sayfa. Spor: ayakkabıyı giy ve dışarı çık. Yazmak: bir cümle. Meditasyon: üç nefes.",
+      "Amaç iki dakikada bir şey başarmak değil. Amaç, alışkanlığın başlama kısmını otomatikleştirmek. Zor olan kısım o; devam etmek genelde kendiliğinden geliyor.",
+      "Bu yöntemin sinsi bir yararı daha var: kötü günlerde de yapılabiliyor. Hastalandığın, yorulduğun, işlerin karıştığı günde otuz dakika kaçıyor ama bir sayfa kaçmıyor. Böylece zincir kırılmıyor ve kimliğin sarsılmıyor.",
+      "Kural: iki dakikayı yaptıktan sonra devam etmek serbest, ama zorunlu değil."
+    ],
+    "en": {
+      "title": "the two minute version",
+      "readTime": "3 min",
+      "excerpt": "Starting is harder than finishing. So do not make finishing the goal.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 75,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "kimlik-ve-aliskanlik",
+    "title": "davranış mı kimlik mi",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Koşuyorum ile koşucuyum arasındaki fark, altıncı ayda ortaya çıkıyor.",
+    "body": [
+      "Hedefler genelde sonuç üzerinden kuruluyor: beş kilo vermek, kitap bitirmek, dil öğrenmek. Sonuca ulaşınca davranış duruyor, çünkü davranışın sebebi ortadan kalkıyor.",
+      "Alternatif çerçeve kimlik üzerinden kurmak. Beş kilo vermek istiyorum yerine düzenli hareket eden biriyim. Fark küçük görünüyor ama davranışın ne zaman biteceğini değiştiriyor.",
+      "Kimlik iddiası havada kalmıyor, kanıtla besleniyor. Her yapılan tekrar küçük bir kanıt. Yeterince kanıt biriktiğinde davranış artık motivasyon gerektirmiyor, ben böyleyim oluyor.",
+      "Olmak istediğin kişiyi tek cümleyle yaz. O kişinin bugün yapacağı en küçük şeyi sor. Onu yap. Küçüklüğü önemli değil, kanıt olması önemli.",
+      "Bir gün kaçırdığında ben böyle biri değilmişim diye yorumlama. Bir kanıt eksik kaldı, o kadar."
+    ],
+    "en": {
+      "title": "behaviour or identity",
+      "readTime": "3 min",
+      "excerpt": "The difference between I run and I am a runner shows up in month six.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 76,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "hedef-degil-sistem",
+    "title": "hedefi bırak, sistemi kur",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Hedef nereye gideceğini söylüyor, sistem oraya nasıl gidileceğini.",
+    "body": [
+      "Herkes aynı hedefi koyabilir. Yarışmaya giren iki takımın da hedefi kazanmak, ama biri kazanıyor. Fark hedefte değil, sistemde.",
+      "Hedef bir yön veriyor ve bu faydalı. Sorun, günlük kararları yönetmemesi.",
+      "Sistem, tekrarlanan davranışın kendisi: ne zaman, nerede, ne kadar, hangi sırayla.",
+      "Bir örnek: bu yıl on iki kitap okuyacağım hedef. Her akşam yatmadan önce yirmi dakika okuyorum, telefon salonda kalıyor sistem. İkincisi birincisini zaten üretiyor.",
+      "Sistemin bir avantajı daha var: hedefe ulaşmadığın günlerde de bir şey yapmış oluyorsun. Hedef ikili bir şey, ya oluyor ya olmuyor. Sistem sürekli.",
+      "Bugün için: bir hedefini al ve onu bir haftalık tekrar cümlesine çevir. Sonucu değil, davranışı yaz."
+    ],
+    "en": {
+      "title": "drop the goal, build the system",
+      "readTime": "3 min",
+      "excerpt": "A goal says where. A system says how.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 77,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "haftalik-gozden-gecirme",
+    "title": "haftalık gözden geçirme",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Haftada yirmi dakika, bir sonraki haftanın yarısını kurtarıyor.",
+    "body": [
+      "Günler birbirine benzemeye başladığında sebep genelde yoğunluk değil, yönsüzlük. Aynı işleri yapıyorsun ama nereye gittiğini kimse söylemiyor.",
+      "Haftada bir kez, yirmi dakikalık bir duruş bunu değiştiriyor.",
+      "Bu hafta ne oldu? Takvimine ve notlarına bak. Hafızadan yazma, göreceğin şey seni şaşırtıyor.",
+      "Ne işe yaradı, ne yaramadı? Tek bir şey yeter. Her şeyi analiz etmeye çalışırsan bir daha yapmıyorsun.",
+      "Önümüzdeki hafta en önemli üç şey ne? Üçten fazla yazma. Yazarsan hiçbiri olmuyor.",
+      "Sabit bir zaman seç. Cuma öğleden sonra ya da pazar akşamı yaygın tercihler; hangisi olduğu önemli değil, aynı olması önemli.",
+      "İlk birkaç hafta gereksiz gelecek. Dördüncü haftada, üç hafta önce yazdıklarını okuyunca değeri ortaya çıkıyor."
+    ],
+    "en": {
+      "title": "the weekly review",
+      "readTime": "3 min",
+      "excerpt": "Twenty minutes a week saves half of the next one.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 78,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "karar-yorgunlugu",
+    "title": "kararı azalt",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Gün içinde verdiğin karar sayısı, akşam verdiğin kararların kalitesini belirliyor.",
+    "body": [
+      "Gün boyunca sayısız küçük karar veriyorsun: ne giyeceğim, ne yiyeceğim, önce hangi işi yapacağım, bu mesaja şimdi mi cevap vereyim.",
+      "Her biri küçük ama sayı yükseldikçe akşam verilen kararlar bozuluyor. Akşam yemeğinin kolay yoldan halledilmesi, gece geç saatte gereksiz alışveriş yapmak, önemli bir konuşmayı ertelemek genelde burada.",
+      "Çözüm daha çok irade değil, daha az karar.",
+      "Tekrar eden şeyleri sabitle. Hafta içi kahvaltısı hep aynı olsun. Spor günleri sabit olsun.",
+      "Kıyafeti akşamdan hazırla. Küçük görünüyor ama sabahın ilk kararını siliyor.",
+      "Önemli kararları sabaha al, zihin en az yorgun olduğunda.",
+      "Küçük kararlara az zaman ver. Hangi kahve, hangi film, hangi restoran. Bunlar için harcanan enerji akşamki gerçek karardan çalıyor."
+    ],
+    "en": {
+      "title": "reduce the decisions",
+      "readTime": "3 min",
+      "excerpt": "The number of decisions you make sets the quality of the evening ones.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 79,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "derin-calisma",
+    "title": "kesintisiz doksan dakika",
+    "category": "gelisim",
+    "readTime": "4 dk",
+    "excerpt": "Dört saatlik dağınık çalışma, doksan dakikalık kesintisiz çalışmayı geçmiyor.",
+    "body": [
+      "Zor iş, kesintisiz dikkat gerektiriyor. Ama tipik bir çalışma günü kesintiden ibaret: mesajlar, toplantılar, hızlı sorular.",
+      "Kesintinin bedeli sadece kaybedilen dakika değil. Dikkat bir işten koptuktan sonra tam olarak geri dönmesi zaman alıyor ve bu süre boyunca performans düşük kalıyor. Yani beş dakikalık bir kesinti beş dakikaya mal olmuyor.",
+      "BİR BLOK NASIL KURULUR",
+      "Günün bir saatini seç ve sabitle. Sabah genelde daha korunaklı.",
+      "Doksan dakika koy. Daha uzunu çoğu insanda tutmuyor.",
+      "Telefonu başka odaya al. Sessize almak yetmiyor, görüş alanında olması bile dikkati bölüyor.",
+      "Ne yapacağını önceden yaz. Blok başlarken ne yapsam diye düşünmek yirmi dakika yiyor.",
+      "Tek bir iş. İki iş arasında geçiş yapmak bloğun amacını bitiriyor.",
+      "Günde bir blok yeterli. Kalan saatlerde toplantı ve mesaj olabilir, sorun değil."
+    ],
+    "en": {
+      "title": "ninety uninterrupted minutes",
+      "readTime": "4 min",
+      "excerpt": "Four scattered hours do not beat ninety focused minutes.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 80,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "ogrenmeyi-ogrenmek",
+    "title": "okumak değil, hatırlamaya çalışmak",
+    "category": "gelisim",
+    "readTime": "4 dk",
+    "excerpt": "Tekrar okumak öğrenme hissi veriyor ama öğretmiyor. Hatırlamaya çalışmak öğretiyor.",
+    "body": [
+      "Bir şeyi öğrenmenin en yaygın yolu tekrar okumak ve altını çizmek. İkisi de tanıdıklık hissi üretiyor: metni gördüğünde biliyorum diyorsun. Ama bilmekle tanımak aynı şey değil ve sınav ya da gerçek kullanım anında fark ortaya çıkıyor.",
+      "Daha etkili iki yöntem var ve ikisi de zor hissettiriyor.",
+      "Hatırlamaya çalışmak. Kitabı kapat ve ne hatırladığını yaz. Boşluklar canını sıkacak; öğrenme tam o boşlukları fark ettiğinde oluyor.",
+      "Aralıklı tekrar. Aynı şeyi arka arkaya üç kez çalışmak yerine bugün, üç gün sonra ve bir hafta sonra çalış. Unutmaya başladığın anda hatırlamak, hafızayı en çok güçlendiren nokta.",
+      "İkisi de verimsiz hissettiriyor çünkü zorlanıyorsun. Tekrar okumak akıcı ve rahat, o yüzden tercih ediliyor.",
+      "Pratik hâli: bir şey okuduktan sonra kitabı kapat ve üç cümleyle özetle. Bakmadan."
+    ],
+    "en": {
+      "title": "not rereading, retrieving",
+      "readTime": "4 min",
+      "excerpt": "Rereading feels like learning. Retrieving is learning.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 81,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "not-almak",
+    "title": "notların işe yaraması",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Not almanın işi hatırlamak değil, düşünmeyi görünür kılmak.",
+    "body": [
+      "Çoğu not bir daha açılmıyor. Sebebi sistem eksikliği değil, notun kopyalanmış olması.",
+      "Kaynaktan aynen aktarılan bir not, düşünmeden geçtiğin bir şey. Kendi cümlenle yazılan bir not ise anlama zorunluluğu getiriyor.",
+      "Kendi cümlenle yaz. Alıntı gerekiyorsa altına neden önemli olduğunu ekle.",
+      "Bir yere yaz. Uygulama önemli değil, dağılmaması önemli. Üç ayrı yerde tutulan not, hiç tutulmamış nottur.",
+      "Bağla. Yeni not, daha önce bildiğin bir şeye nasıl bağlanıyor? Bu tek soru, notu ölü bir kayıttan düşünceye çeviriyor.",
+      "Sistem kurmaya çalışırken içerik üretmeyi unutmak yaygın bir tuzak. Klasörleri düzenlemek üretken hissettiriyor ama üretim değil."
+    ],
+    "en": {
+      "title": "making notes useful",
+      "readTime": "3 min",
+      "excerpt": "Notes are not for remembering. They are for making thinking visible.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 82,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "geri-bildirim",
+    "title": "işe yarayan geri bildirim",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Nasıl olmuş diye sorarsan iyi olmuş derler. Soruyu daralt.",
+    "body": [
+      "Nasıl olmuş sorusunun cevabı neredeyse her zaman güzel olmuş oluyor. Karşındaki seni kırmak istemiyor ve genel soru genel cevap üretiyor.",
+      "Kullanışlı geri bildirim almak için soruyu daraltman gerekiyor.",
+      "Anlaşılmayan bir yer var mı? Hangi kısımda sıkıldın? Bunu bir arkadaşına anlatsan ne derdin? Tek bir şey değiştirebilseydin ne olurdu?",
+      "Son soru özellikle işe yarıyor çünkü karşıdakinin bir tane seçmesini zorunlu kılıyor.",
+      "Bir de alırken ne yapılacağı var: savunma yapmadan dinle. Açıklamaya başladığın an geri bildirim duruyor ve bir daha gelmiyor.",
+      "Her geri bildirimi uygulamak zorunda değilsin. Ama bunu neden söyledi sorusunu sormadan reddetme."
+    ],
+    "en": {
+      "title": "feedback that works",
+      "readTime": "3 min",
+      "excerpt": "Ask how was it and they will say it was good. Narrow the question.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 83,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "karsilastirma",
+    "title": "kiminle kıyaslıyorsun",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Kıyaslamayı bırakamıyorsan, en azından kiminle kıyasladığını seç.",
+    "body": [
+      "Kendini başkalarıyla kıyaslamamak tavsiyesi işe yaramıyor çünkü kıyaslama otomatik bir zihinsel işlem, kapatılamıyor.",
+      "Değiştirilebilen şey kimle ve neyle kıyasladığın.",
+      "Sosyal medyada gördüğün kıyas taraflı: karşındakinin en iyi anıyla kendi ortalama gününü karşılaştırıyorsun. Bu kıyas bilgi vermiyor.",
+      "Daha kullanışlı iki kıyas var. Geçmiş kendinle: altı ay önce bu işi nasıl yapıyordun? Bu, ilerlemeyi görünür kılan tek kıyas.",
+      "Bir adım öndeki kişiyle: senden çok ilerideki biri örnek değil, uzak bir resim. Bir adım öndeki kişi ise ne yaptığı öğrenilebilir olan kişi.",
+      "Bir de kıyasın ne ürettiğine bak: bazı kıyaslar motive ediyor, bazıları felç ediyor. İkincisini üreten kaynaklardan uzaklaşmak bir zayıflık değil, bakım."
+    ],
+    "en": {
+      "title": "who are you comparing to",
+      "readTime": "3 min",
+      "excerpt": "If you cannot stop comparing, at least choose the comparison.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 84,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "mukemmeliyetcilik",
+    "title": "mükemmeliyetçilik neyi saklıyor",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Mükemmeliyetçilik yüksek standart değil, çoğu zaman ertelemenin kibar hâli.",
+    "body": [
+      "Mükemmeliyetçilik bir erdem gibi anlatılıyor ama pratikte ürettiği şey genelde gecikme ve bitmemiş iş.",
+      "Mekanizması şu: iş yeterince iyi olmadığı sürece değerlendirilmiyor. Değerlendirilmediği sürece de eleştirilme riski yok. Yani mükemmeliyetçilik, yargılanmayı erteleyen bir strateji.",
+      "Bunun bedeli sadece gecikme değil. Geri bildirim alamadığın için gerçekten gelişmiyorsun da.",
+      "Bir bitiş tanımı yaz: şu üç şey olduğunda bitmiştir. Önceden yazılırsa sonsuz düzeltme durur.",
+      "Kötü bir ilk versiyon üret ve bilerek kötü olsun. Düzeltmek, boş sayfadan üretmekten kolay.",
+      "Küçük bir kitleye erken göster. Bir kişi bile olur.",
+      "Şunu sor: bu işi bugün teslim etmek zorunda olsam ne yapardım? Cevap genelde yeterince iyi."
+    ],
+    "en": {
+      "title": "what perfectionism hides",
+      "readTime": "3 min",
+      "excerpt": "It is rarely a high standard. It is usually procrastination in a nicer outfit.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 85,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "basarisizliktan-sonra",
+    "title": "başarısızlıktan sonraki hafta",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Başarısızlıktan ders çıkarmak otomatik değil. Çıkarmayan çoğunluk.",
+    "body": [
+      "Başarısızlıktan ders çıkarılır cümlesi doğru ama eksik. Ders çıkarmak kendiliğinden olmuyor; olan şey genelde ya kendini suçlamak ya da olayı hiç düşünmemek. İkisi de öğretmiyor.",
+      "Ne oldu? Duygusuz, olgusal bir anlatım. Berbattım değil, hazırlığı iki gün önce yaptım ve soruların yarısına çalışmamıştım.",
+      "Hangi kısmı bendeydi? Hepsi sende değil ve hiçbiri sende değil de değil. Kontrol edebildiğin kısmı ayır.",
+      "Bir sonrakinde ne farklı olacak? Tek bir şey. Beş madde yazarsan hiçbiri uygulanmıyor.",
+      "Bunu olayın hemen ardından yapma. Duygu yüksekken yazılan analiz, analiz değil savunma oluyor. Bir iki gün bekle.",
+      "Ve bir sınır: aynı olayı haftalarca düşünmek öğrenme değil, ruminasyon. Üç soruyu cevapladıysan iş bitmiştir."
+    ],
+    "en": {
+      "title": "the week after failing",
+      "readTime": "3 min",
+      "excerpt": "Learning from failure is not automatic. Most people do not.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 86,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "zaman-tahmini",
+    "title": "neden hep geç kalıyorsun",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "İşlerin ne kadar süreceğini sistematik olarak yanlış tahmin ediyoruz. Yönü hep aynı.",
+    "body": [
+      "Bir işin ne kadar süreceğini tahmin ederken sistematik olarak yanılıyoruz ve yanılma yönü hep aynı: olduğundan kısa tahmin ediyoruz.",
+      "Sebebi, planlarken en iyi senaryoyu hayal etmemiz. Aksilikler, kesintiler, işin ortasında çıkan ek işler hesaba katılmıyor. Üstelik geçmişte aynı işin ne kadar sürdüğünü bilsek bile bu tahmini düzeltmiyoruz.",
+      "Geçmiş veriye bak, hisse değil. Benzer bir iş geçen sefer ne kadar sürdü?",
+      "Tahminini 1,5 ile çarp. Kaba ama çoğu durumda tahminden iyi.",
+      "İşi parçalara böl ve her parçayı ayrı tahmin et. Parçaların toplamı, bütünün tahmininden gerçeğe daha yakın çıkıyor.",
+      "Takvime tampon koy. Arka arkaya dizilmiş bir gün, ilk gecikmede tamamen bozuluyor.",
+      "Bunu bilmek yanılmayı bitirmiyor ama sürprizi azaltıyor."
+    ],
+    "en": {
+      "title": "why you are always late",
+      "readTime": "3 min",
+      "excerpt": "We systematically misjudge how long things take, always in the same direction.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 87,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "gunun-uc-isi",
+    "title": "bugünün üç işi",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Yapılacaklar listesi uzadıkça işe yaramıyor. Üçe indir.",
+    "body": [
+      "Uzun yapılacaklar listesi güven veriyor ama gün sonunda geriye bakınca çoğu yapılmamış oluyor. Yirmi maddelik listeden dördü bitince gün başarısız hissettiriyor, oysa iyi bir gün olmuş olabilir.",
+      "Alternatif basit: her sabah üç iş seç.",
+      "Neden üç: çoğu insanın gerçekten yaptığı derin iş sayısı bu civarda. Fazlası liste, azı hedef değil.",
+      "Nasıl seçilir: bugün sadece bunu yapsam gün iyi geçmiş sayılır mı sorusuna evet dedirten iş birinci sıraya. İkisi destekleyici olabilir.",
+      "Nereye yazılır: görünür bir yere. Uygulamanın içindeki bir listede kaybolan madde, olmayan madde.",
+      "Kalan işler kaybolmuyor, ayrı bir yerde duruyor. Sadece bugünün ölçüsü olmuyorlar.",
+      "Gün sonunda üçü de bittiyse fazlasını yapabilirsin. Ama ölçü tamamlandı."
+    ],
+    "en": {
+      "title": "today's three",
+      "readTime": "3 min",
+      "excerpt": "The longer the list, the less it works. Cut it to three.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 88,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "takvimi-savunmak",
+    "title": "boş görünen zaman doluyor",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Takvimin boşsa dolduruluyor. Dolu görünen zaman korunuyor.",
+    "body": [
+      "Takviminde boş görünen her aralık, birinin toplantı koyabileceği bir aralık. Kendi işin için ayırdığın zaman takvimde yoksa, o zaman senin değil.",
+      "Çözüm görünür kılmak: kendi işin için de blok koy ve ismini somut yaz. Rapor yazımı savunulabilir, meşgul savunulamaz.",
+      "Toplantıları arka arkaya dizme. Aralarına on beş dakika koy; hem geçiş oluyor hem biri uzarsa zincir kırılmıyor.",
+      "Toplantı davetine hemen evet deme. Gündemi yoksa sor. Gündemi olmayan toplantıların çoğu bir mesajla hallolabiliyor.",
+      "Haftada bir gün toplantısız bırakmayı dene. Tam gün olmuyorsa yarım gün.",
+      "Bu, iş birliğinden kaçmak değil. Bir şey üretme zamanı da işin parçası ve o zaman kendini savunmuyor."
+    ],
+    "en": {
+      "title": "empty time gets filled",
+      "readTime": "3 min",
+      "excerpt": "If your calendar looks empty it will be filled. Blocked time is protected.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 89,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "okuma-aliskanligi",
+    "title": "kitabı bırakma izni",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Kitap bitirme zorunluluğu, okumayı en çok baltalayan kural.",
+    "body": [
+      "Okuma alışkanlığı kurmaya çalışanların takıldığı yer genelde sıkıcı bir kitap. Bitirilmesi gerektiği düşünülüyor, bitirilemiyor, ve o kitap yüzünden aylarca hiç okunmuyor.",
+      "Oysa bitirme zorunluluğu okulda kalmış bir kural.",
+      "Elli sayfa kuralı: elli sayfada tutmadıysa bırak. Kitap kötü olmayabilir, sen o kitabın zamanında olmayabilirsin.",
+      "Aynı anda iki kitap: biri zor, biri kolay. Yorgun akşamlar için kolay olan.",
+      "Bir sayfalık taban: kötü günlerde bir sayfa. Zincir kırılmıyor.",
+      "Görünür yere koy. Kitap çekmecede duruyorsa okunmuyor.",
+      "Ne okuduğunu takip etme zorunluluğu da yok. Yıllık hedefler bazı insanı motive ediyor, bazısını kitap uzunluğuna göre seçim yapmaya itiyor ki bu okumanın amacını bozuyor."
+    ],
+    "en": {
+      "title": "permission to quit a book",
+      "readTime": "3 min",
+      "excerpt": "The rule that you must finish is what most damages reading.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 90,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "merak-listesi",
+    "title": "merak listesi",
+    "category": "gelisim",
+    "readTime": "2 dk",
+    "excerpt": "Öğrenme isteği plan değil merak istiyor. Merak da not almazsan kayboluyor.",
+    "body": [
+      "Gün içinde aklına acaba diye bir soru geliyor ve on dakika sonra unutuluyor. Öğrenmenin en doğal kaynağı böyle kaybolup gidiyor.",
+      "Bir merak listesi tut. Telefonda tek bir not yeterli.",
+      "Kural: cevaplamaya çalışma, sadece yaz. O anda araştırmaya başlarsan yaptığın işi bölüyorsun.",
+      "Haftada bir listeyi aç ve bir tanesini seç. Sadece bir tane. Yirmi dakika ayır.",
+      "Listede kalan sorulara bakınca ne öğrenmek istediğini de görüyorsun. Çoğu insan bunu bilmediğini sanıyor; aslında sadece kaydetmemiş oluyor.",
+      "Bir de yan etkisi var: merakla öğrenilen şey akılda kalıyor, çünkü soru senin."
+    ],
+    "en": {
+      "title": "a curiosity list",
+      "readTime": "2 min",
+      "excerpt": "Learning needs curiosity, not a plan. And curiosity disappears if you do not write it down.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 91,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "konfor-alani",
+    "title": "konfor alanı meselesi",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Konfor alanından çıkmak her zaman iyi değil. Ölçü, çıkışın ne öğrettiği.",
+    "body": [
+      "Konfor alanından çık tavsiyesi o kadar tekrarlandı ki her rahatsızlık gelişme sanılır oldu. Oysa bazı rahatsızlıklar sadece rahatsızlık.",
+      "Faydalı olan çıkış, öğrenme üreten çıkış. Yani zorlandığın ama tamamen kapanmadığın alan. Çok kolaysa gelişme yok; çok zorsa panik var ve o durumda da öğrenme durur.",
+      "Zorlanıyorum ama ilerliyorum: doğru bölge.",
+      "Hiçbir şey anlamıyorum ve her denemede kötü hissediyorum: fazla ileri, bir basamak geri gel.",
+      "Sıkılıyorum: bir basamak ileri git.",
+      "Bir de sürekli çıkmak gerekmiyor. Rahat alan dinlenme yeri; oradan hiç çıkmamak sorun, oraya hiç dönmemek de sorun.",
+      "Ölçü konfor değil, yön. Altı ay önce zor gelen şey şimdi rahat geliyorsa alan zaten genişlemiş demektir."
+    ],
+    "en": {
+      "title": "about the comfort zone",
+      "readTime": "3 min",
+      "excerpt": "Leaving it is not always good. The measure is what the discomfort teaches.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 92,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "tavsiye-secmek",
+    "title": "tavsiyeyi süzmek",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Herkesin işe yaradığını söylediği şey, sana yaramayabilir. Üç filtre.",
+    "body": [
+      "Kişisel gelişim alanı tavsiyeyle dolu ve çoğu birbiriyle çelişiyor. Erken kalk, uykunu al. Odaklan, çeşitlen. Israr et, bırakmayı bil.",
+      "Çelişki tavsiyelerin yanlış olmasından gelmiyor. Farklı bağlamlar için doğru olmalarından geliyor.",
+      "Kim söylüyor ve hangi koşullarda işe yaradı? Sabah beşte kalkmayı öneren kişinin çocuğu var mı, işi kaçta başlıyor?",
+      "Bu tavsiyenin bedeli ne? Her tavsiyenin bir bedeli var ve genelde anlatılmıyor. Bedeli görmediysen tavsiyeyi tam anlamamışsındır.",
+      "İki hafta deneyebilir miyim? Deneyip ölçebileceğin tavsiye iyi tavsiye. Ölçemiyorsan inanç meselesi olur.",
+      "Ve şu: sana uymayan bir tavsiye seni başarısız yapmıyor. Sadece o tavsiye senin için değil."
+    ],
+    "en": {
+      "title": "filtering advice",
+      "readTime": "3 min",
+      "excerpt": "What worked for everyone may not work for you. Three filters.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 93,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "birikimli-etki",
+    "title": "başta hiçbir şey olmuyor",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Küçük şeylerin toplamı doğrusal değil. O yüzden başta hiçbir şey olmuyor gibi hissediyor.",
+    "body": [
+      "Yeni bir alışkanlığın ilk haftalarında görünür sonuç yok. Spor yapıyorsun ama aynı görünüyorsun, okuyorsun ama daha bilgili hissetmiyorsun. Çoğu insan tam burada bırakıyor.",
+      "Sebebi beklentinin doğrusal olması. Girdi kadar çıktı bekliyorsun. Ama biriken şeylerde çıktı başta düz gidiyor, sonra hızlanıyor.",
+      "Bu, devam et her şey düzelir demek değil. Yanlış bir şey yapıyorsan tekrar etmek onu düzeltmiyor. Ama doğru şeyi yapıyorsan ilk dönemin sessiz olması normal.",
+      "Bu dönemi geçirmenin yolu: sonucu değil davranışı ölç. Kaç gün yaptığını say, kaç kilo verdiğini değil. Davranış bugün ölçülebiliyor, sonuç aylar sonra.",
+      "Bir de küçük işaretleri fark et: merdiven çıkarken daha az zorlanmak, bir sayfayı daha hızlı okumak. Bunlar sonucun erken haberleri."
+    ],
+    "en": {
+      "title": "nothing happens at first",
+      "readTime": "3 min",
+      "excerpt": "Small things do not add up in a straight line. That is why the start feels empty.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 94,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "enerji-yonetimi",
+    "title": "saatler eşit değil",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Hangi işi ne zaman yaptığın, ne kadar çalıştığından önemli.",
+    "body": [
+      "Zaman yönetimi bütün saatleri eşit sayıyor: sekiz saat, sekiz saatlik iş. Oysa sabah dokuzdaki bir saatle akşam altıdaki bir saat aynı işi görmüyor.",
+      "Enerji gün içinde dalgalanıyor ve bu dalga kişiden kişiye değişiyor. Bazı insan sabah keskin, bazısı akşam.",
+      "Kendi dalganı bulmak: bir hafta boyunca günde üç kez, sabah, öğle ve akşam, enerjini 1 ile 10 arası not et. Yedi gün sonra desen ortaya çıkıyor.",
+      "En yüksek enerjili saatlere düşünme gerektiren işi koy.",
+      "Düşük saatlere mekanik işleri: e-posta, dosyalama, düzenleme.",
+      "Orta saatlere toplantı ve görüşme.",
+      "Bu eşleştirme, çalışma süresini artırmadan çıktıyı değiştiriyor. Çoğu insan tam tersini yapıyor: sabahın en iyi saatini e-postayla harcayıp zor işi yorgunken yapmaya çalışıyor."
+    ],
+    "en": {
+      "title": "not all hours are equal",
+      "readTime": "3 min",
+      "excerpt": "When you do the work matters more than how long you work.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 95,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
+  },
+  {
+    "id": "kim-olmak-istiyorsun",
+    "title": "neye doğru",
+    "category": "gelisim",
+    "readTime": "3 dk",
+    "excerpt": "Gelişim listesi uzayınca amaç kayboluyor. Tek soruya dön.",
+    "body": [
+      "Kişisel gelişim içerikleri bir süre sonra kendi başına bir uğraşa dönüşebiliyor: daha çok sistem, daha çok rutin, daha çok ölçüm. Araçlar çoğalırken neyin aracı oldukları unutuluyor.",
+      "Ara ara tek soruya dönmek gerekiyor: bunların hepsi neye hizmet ediyor?",
+      "Cevap daha verimli olmak ise soru yeterince derin değil. Verim de bir araç.",
+      "Daha kullanışlı hâli: bir yıl sonra hangi cümleyi kurabilmek istiyorsun? Şunu öğrendim. Şu ilişkiyi onardım. Şunu bitirdim. Daha az sinirli biri oldum.",
+      "Yazdığın cümle, hangi alışkanlığın gerçekten önemli olduğunu da söylüyor. Çoğu zaman listenin yarısı o cümleye hizmet etmiyor ve silinebilir.",
+      "Gelişmek zorunda değilsin. Bazı dönemler korumak, dinlenmek ve olduğun yerde durmak da geçerli bir tercih.",
+      "Ama ilerlemeyi seçtiysen, yönü senin seçmen gerekiyor. Yoksa listeyi başkası doldurur."
+    ],
+    "en": {
+      "title": "toward what",
+      "readTime": "3 min",
+      "excerpt": "When the list grows, the point disappears. Come back to one question.",
+      "body": [],
+      "ingredients": [],
+      "steps": []
+    },
+    "order": 96,
+    "ingredients": [],
+    "steps": [],
+    "diets": [],
+    "allergens": []
   }
 ]
