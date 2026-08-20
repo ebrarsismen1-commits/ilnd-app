@@ -54,7 +54,7 @@
   "@topulukTagline": {"description": "Community screen tagline"},
   "topulukComingTitle": "ilk buluşma yolda",
   "@topulukComingTitle": {"description": "Community v1 coming-soon headline"},
-  "topulukComingBody": "İstanbul'da küçük, sıcak buluşmalarla başlıyoruz — sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.",
+  "topulukComingBody": "İstanbul'da küçük, sıcak buluşmalarla başlıyoruz: sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.",
   "@topulukComingBody": {"description": "Community v1 coming-soon body"},
   "topulukInviteCta": "arkadaşını şimdiden davet et",
   "@topulukInviteCta": {"description": "Community v1 CTA routing to referral"},
@@ -144,11 +144,11 @@
 
   "crisisTitle": "yanında gerçek biri olsun",
   "@crisisTitle": {"description": "Crisis resource sheet title"},
-  "crisisBody": "Zor bir andan geçiyor olabilirsin ve bunu paylaşman değerli. ILND bir yapay zekâ — böyle anlarda konuşabileceğin gerçek insanlar var:",
+  "crisisBody": "Zor bir andan geçiyor olabilirsin ve bunu paylaşman değerli. ILND bir yapay zekâ. Böyle anlarda konuşabileceğin gerçek insanlar var:",
   "@crisisBody": {"description": "Crisis resource sheet body"},
-  "crisisLine112": "112 — Acil Yardım",
+  "crisisLine112": "112 · Acil Yardım",
   "@crisisLine112": {"description": "Emergency line"},
-  "crisisLine183": "183 — Sosyal Destek Hattı (7/24, ücretsiz)",
+  "crisisLine183": "183 · Sosyal Destek Hattı (7/24, ücretsiz)",
   "@crisisLine183": {"description": "Psychosocial support line"},
   "crisisDismiss": "anladım",
   "@crisisDismiss": {"description": "Crisis sheet dismiss button"},
@@ -243,7 +243,7 @@
   "adanLead": "ada, tamamladığın işlerden büyüyor.",
   "@adanLead": {"description": "Adan (island) surface"},
 
-  "adanBody": "her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez — sessiz geçen günler suyu koyulaştırır, cezalandırmaz.",
+  "adanBody": "her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez. sessiz geçen günler suyu koyulaştırır, cezalandırmaz.",
   "@adanBody": {"description": "Adan (island) surface"},
 
   "adanItemsLabel": "ÖĞELER",
@@ -300,7 +300,7 @@
   "profileStatIslandItems": "ADA ÖĞESİ",
   "@profileStatIslandItems": {"description": "Adan (island) surface"},
 
-  "welcomeBeatIsland": "her gün üç küçük iş — bitince adan büyür",
+  "welcomeBeatIsland": "her gün üç küçük iş, bitince adan büyür",
   "@welcomeBeatIsland": {"description": "Adan (island) surface"},
 
   "adanProgress": "{count} öğe · sıradaki: {next}",
@@ -1323,7 +1323,7 @@
   "yemekEklePortionQuestion": "Tabakta ne kadar vardı?",
   "@yemekEklePortionQuestion": {"description": "Label above the portion multiplier chips — lets the user correct the AI's amount estimate"},
 
-  "yemekEklePortionHint": "Tahmin yanlışsa buradan ayarla — değerler güncellenir.",
+  "yemekEklePortionHint": "Tahmin yanlışsa buradan ayarla, değerler güncellenir.",
   "@yemekEklePortionHint": {"description": "Subtitle explaining the portion multiplier corrects the estimate"},
 
   "yemekEkleSaveButton": "kaydet",
@@ -1407,7 +1407,7 @@
     "placeholders": { "days": {"type": "int"} }
   },
 
-  "streakCopyDayStreak": "{days}. gün — devam ediyorsun.",
+  "streakCopyDayStreak": "{days}. gün, devam ediyorsun.",
   "@streakCopyDayStreak": {
     "description": "Streak banner text for 1-6 day streaks",
     "placeholders": { "days": {"type": "int"} }
@@ -1425,7 +1425,7 @@
   "vibeCardHeadlineFirstStep": "İlk adımı attın bile.",
   "@vibeCardHeadlineFirstStep": {"description": "Vibe card headline for 1-2 journal entries this week"},
 
-  "vibeCardHeadlineQuietWeek": "Bu hafta sessizdi — yeni haftaya hazır mısın?",
+  "vibeCardHeadlineQuietWeek": "Bu hafta sessizdi. Yeni haftaya hazır mısın?",
   "@vibeCardHeadlineQuietWeek": {"description": "Vibe card headline for a week with no entries"},
 
   "vibeCardSublineEmpty": "Her şey küçük bir başlangıçla başlar.",
@@ -1479,7 +1479,7 @@
   "reminderNotificationTitle": "Kendine bir alan aç",
   "@reminderNotificationTitle": {"description": "Local notification title for the daily reminder — warm, non-preachy"},
 
-  "reminderNotificationBody": "Bugün için küçük bir an yeter. Bir cümle, bir nefes — ILND burada.",
+  "reminderNotificationBody": "Bugün için küçük bir an yeter. Bir cümle, bir nefes. ILND burada.",
   "@reminderNotificationBody": {"description": "Local notification body for the daily reminder — invitation, never guilt"},
 
   "reminderPermissionDenied": "Bildirim izni verilmedi. Cihaz ayarlarından izin verirsen hatırlatabilirim.",

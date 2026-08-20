@@ -71,7 +71,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get topulukComingBody =>
-      'We\'re starting with small, warm gatherings in Istanbul — morning walks, workshops, conversations. The first event announcement will land right here.';
+      'We\'re starting with small, warm gatherings in Istanbul: morning walks, workshops, conversations. The first event announcement will land right here.';
 
   @override
   String get topulukInviteCta => 'invite a friend ahead of time';
@@ -206,13 +206,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get crisisBody =>
-      'It sounds like you might be going through a hard moment, and sharing that matters. ILND is an AI — there are real people you can talk to right now:';
+      'It sounds like you might be going through a hard moment, and sharing that matters. ILND is an AI. There are real people you can talk to right now:';
 
   @override
-  String get crisisLine112 => '112 — Emergency (Türkiye)';
+  String get crisisLine112 => '112 · Emergency (Türkiye)';
 
   @override
-  String get crisisLine183 => '183 — Social Support Line (24/7, free)';
+  String get crisisLine183 => '183 · Social Support Line (24/7, free)';
 
   @override
   String get crisisDismiss => 'got it';
@@ -313,7 +313,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adanBody =>
-      'every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed — quiet days only deepen the water, they do not punish.';
+      'every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed. quiet days only deepen the water, they do not punish.';
 
   @override
   String get adanItemsLabel => 'PIECES';
@@ -371,7 +371,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeBeatIsland =>
-      'three small things a day — finish them and your island grows';
+      'three small things a day, finish them and your island grows';
 
   @override
   String adanProgress(int count, String next) {
@@ -1381,7 +1381,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yemekEklePortionHint =>
-      'If the estimate is off, adjust here — the values update.';
+      'If the estimate is off, adjust here, the values update.';
 
   @override
   String get yemekEkleSaveButton => 'save';
@@ -1476,7 +1476,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String streakCopyDayStreak(int days) {
-    return 'day $days — you\'re keeping it up.';
+    return 'day $days, you\'re keeping it up.';
   }
 
   @override
@@ -1497,7 +1497,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vibeCardHeadlineQuietWeek =>
-      'This week was quiet — ready for a new one?';
+      'This week was quiet. Ready for a new one?';
 
   @override
   String get vibeCardSublineEmpty =>
@@ -1557,7 +1557,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reminderNotificationBody =>
-      'A small moment is enough today. One sentence, one breath — ILND is here.';
+      'A small moment is enough today. One sentence, one breath. ILND is here.';
 
   @override
   String get reminderPermissionDenied =>

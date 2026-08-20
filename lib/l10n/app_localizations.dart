@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// Community v1 coming-soon body
   ///
   /// In tr, this message translates to:
-  /// **'İstanbul\'da küçük, sıcak buluşmalarla başlıyoruz — sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.'**
+  /// **'İstanbul\'da küçük, sıcak buluşmalarla başlıyoruz: sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.'**
   String get topulukComingBody;
 
   /// Community v1 CTA routing to referral
@@ -437,19 +437,19 @@ abstract class AppLocalizations {
   /// Crisis resource sheet body
   ///
   /// In tr, this message translates to:
-  /// **'Zor bir andan geçiyor olabilirsin ve bunu paylaşman değerli. ILND bir yapay zekâ — böyle anlarda konuşabileceğin gerçek insanlar var:'**
+  /// **'Zor bir andan geçiyor olabilirsin ve bunu paylaşman değerli. ILND bir yapay zekâ. Böyle anlarda konuşabileceğin gerçek insanlar var:'**
   String get crisisBody;
 
   /// Emergency line
   ///
   /// In tr, this message translates to:
-  /// **'112 — Acil Yardım'**
+  /// **'112 · Acil Yardım'**
   String get crisisLine112;
 
   /// Psychosocial support line
   ///
   /// In tr, this message translates to:
-  /// **'183 — Sosyal Destek Hattı (7/24, ücretsiz)'**
+  /// **'183 · Sosyal Destek Hattı (7/24, ücretsiz)'**
   String get crisisLine183;
 
   /// Crisis sheet dismiss button
@@ -641,7 +641,7 @@ abstract class AppLocalizations {
   /// Adan (island) surface
   ///
   /// In tr, this message translates to:
-  /// **'her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez — sessiz geçen günler suyu koyulaştırır, cezalandırmaz.'**
+  /// **'her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez. sessiz geçen günler suyu koyulaştırır, cezalandırmaz.'**
   String get adanBody;
 
   /// Adan (island) surface
@@ -755,7 +755,7 @@ abstract class AppLocalizations {
   /// Adan (island) surface
   ///
   /// In tr, this message translates to:
-  /// **'her gün üç küçük iş — bitince adan büyür'**
+  /// **'her gün üç küçük iş, bitince adan büyür'**
   String get welcomeBeatIsland;
 
   /// Island progress line
@@ -2603,7 +2603,7 @@ abstract class AppLocalizations {
   /// Subtitle explaining the portion multiplier corrects the estimate
   ///
   /// In tr, this message translates to:
-  /// **'Tahmin yanlışsa buradan ayarla — değerler güncellenir.'**
+  /// **'Tahmin yanlışsa buradan ayarla, değerler güncellenir.'**
   String get yemekEklePortionHint;
 
   /// Save food entry button
@@ -2759,7 +2759,7 @@ abstract class AppLocalizations {
   /// Streak banner text for 1-6 day streaks
   ///
   /// In tr, this message translates to:
-  /// **'{days}. gün — devam ediyorsun.'**
+  /// **'{days}. gün, devam ediyorsun.'**
   String streakCopyDayStreak(int days);
 
   /// Streak banner text shown after a streak breaks but a longest streak exists
@@ -2789,7 +2789,7 @@ abstract class AppLocalizations {
   /// Vibe card headline for a week with no entries
   ///
   /// In tr, this message translates to:
-  /// **'Bu hafta sessizdi — yeni haftaya hazır mısın?'**
+  /// **'Bu hafta sessizdi. Yeni haftaya hazır mısın?'**
   String get vibeCardHeadlineQuietWeek;
 
   /// Vibe card subline when there's no journal or habit activity
@@ -2867,7 +2867,7 @@ abstract class AppLocalizations {
   /// Local notification body for the daily reminder — invitation, never guilt
   ///
   /// In tr, this message translates to:
-  /// **'Bugün için küçük bir an yeter. Bir cümle, bir nefes — ILND burada.'**
+  /// **'Bugün için küçük bir an yeter. Bir cümle, bir nefes. ILND burada.'**
   String get reminderNotificationBody;
 
   /// Toast shown when the notification permission is declined

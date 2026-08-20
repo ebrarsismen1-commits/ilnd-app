@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -171,35 +173,33 @@ void main() {
     }
   });
 
-  test('ILND yedek cümleleri ILND\'nin tire yasağına uyar', () {
-    // Bu cümleler AI çağrısı başarısız olduğunda ILND ağzından gösterilir.
-    // IlndCharacter persona'sı tire/çizgi kullanımını istisnasız yasaklıyor
-    // (ilnd_character.dart "Yazım kuralların"); yedek metinler bu kurala
-    // uymazsa kullanıcı ILND'nin sesinin değiştiğini fark eder.
-    for (final l in [tr, en]) {
-      final fallbacks = <String, String>{
-        'ilndFallbackGreeting1': l.ilndFallbackGreeting1,
-        'ilndFallbackGreeting2': l.ilndFallbackGreeting2,
-        'ilndFallbackGreeting3': l.ilndFallbackGreeting3,
-        'ilndFallbackChat1': l.ilndFallbackChat1,
-        'ilndFallbackChat2': l.ilndFallbackChat2,
-        'ilndFallbackChat3': l.ilndFallbackChat3,
-        'ilndFallbackChat4': l.ilndFallbackChat4,
-        'ilndFallbackJournal1': l.ilndFallbackJournal1,
-        'ilndFallbackJournal2': l.ilndFallbackJournal2,
-        'ilndFallbackJournal3': l.ilndFallbackJournal3,
-        'ilndFallbackFood1': l.ilndFallbackFood1,
-        'ilndFallbackFood2': l.ilndFallbackFood2,
-        'ilndFallbackFood3': l.ilndFallbackFood3,
-        'ilndFallbackFood4': l.ilndFallbackFood4,
-      };
-      for (final e in fallbacks.entries) {
-        expect(
-          e.value.contains('—') || e.value.contains('–'),
-          isFalse,
-          reason: '${e.key} tire içeriyor, ILND tire kullanmaz: ${e.value}',
-        );
-      }
+  test('hiçbir kullanıcı metninde uzun tire yok', () {
+    // Kural önce yalnız ILND'nin ağzı için vardı (ilnd_character.dart
+    // "Yazım kuralların" bölümü tireyi istisnasız yasaklıyor), sonra tüm
+    // uygulamaya genişledi: owner 2026-08-20'de uzun tirenin metni yapay
+    // gösterdiğini söyledi. Kural kafada kalırsa bir sonraki metin bloğu
+    // yine getirir, o yüzden .arb doğrudan taranıyor.
+    //
+    // Yalnız KULLANICI metinleri taranır: @-anahtarları geliştiriciye bakan
+    // açıklamalar taşır, orada tire serbest.
+    for (final path in ['lib/l10n/app_tr.arb', 'lib/l10n/app_en.arb']) {
+      final map =
+          jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+      final offenders = <String>[];
+      map.forEach((key, value) {
+        if (key.startsWith('@') || value is! String) return;
+        if (value.contains('—') || value.contains('–')) {
+          offenders.add('$key: $value');
+        }
+      });
+      expect(
+        offenders,
+        isEmpty,
+        reason:
+            'Uzun tire kullanılmış. Yerine virgül, iki nokta, '
+            'orta nokta veya ayrı bir cümle kullan: '
+            '${offenders.join(" | ")}',
+      );
     }
   });
 

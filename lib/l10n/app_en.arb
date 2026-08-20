@@ -23,7 +23,7 @@
   "topulukTitle": "community.",
   "topulukTagline": "in your city, by your side",
   "topulukComingTitle": "the first meetup is on its way",
-  "topulukComingBody": "We're starting with small, warm gatherings in Istanbul — morning walks, workshops, conversations. The first event announcement will land right here.",
+  "topulukComingBody": "We're starting with small, warm gatherings in Istanbul: morning walks, workshops, conversations. The first event announcement will land right here.",
   "topulukInviteCta": "invite a friend ahead of time",
   "topulukUpcomingLabel": "UPCOMING MEETUPS",
   "topulukRsvpJoin": "Join",
@@ -64,9 +64,9 @@
   "authErrorDeleteFailed": "Couldn't delete your account. Try again?",
 
   "crisisTitle": "you deserve real support",
-  "crisisBody": "It sounds like you might be going through a hard moment, and sharing that matters. ILND is an AI — there are real people you can talk to right now:",
-  "crisisLine112": "112 — Emergency (Türkiye)",
-  "crisisLine183": "183 — Social Support Line (24/7, free)",
+  "crisisBody": "It sounds like you might be going through a hard moment, and sharing that matters. ILND is an AI. There are real people you can talk to right now:",
+  "crisisLine112": "112 · Emergency (Türkiye)",
+  "crisisLine183": "183 · Social Support Line (24/7, free)",
   "crisisDismiss": "got it",
 
   "registerTagline": "create an account.",
@@ -111,7 +111,7 @@
   "adanLead": "your island grows from what you finish.",
   "@adanLead": {"description": "Adan (island) surface"},
 
-  "adanBody": "every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed — quiet days only deepen the water, they do not punish.",
+  "adanBody": "every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed. quiet days only deepen the water, they do not punish.",
   "@adanBody": {"description": "Adan (island) surface"},
 
   "adanItemsLabel": "PIECES",
@@ -168,7 +168,7 @@
   "profileStatIslandItems": "PIECES",
   "@profileStatIslandItems": {"description": "Adan (island) surface"},
 
-  "welcomeBeatIsland": "three small things a day — finish them and your island grows",
+  "welcomeBeatIsland": "three small things a day, finish them and your island grows",
   "@welcomeBeatIsland": {"description": "Adan (island) surface"},
 
   "adanProgress": "{count} pieces · next: {next}",
@@ -598,7 +598,7 @@
   "yemekEkleFat": "FAT",
   "yemekEkleIngredients": "INGREDIENTS",
   "yemekEklePortionQuestion": "How much was on the plate?",
-  "yemekEklePortionHint": "If the estimate is off, adjust here — the values update.",
+  "yemekEklePortionHint": "If the estimate is off, adjust here, the values update.",
   "yemekEkleSaveButton": "save",
   "yemekEkleRetryButton": "try again",
   "yemekEkleErrorTitle": "something went wrong",
@@ -635,7 +635,7 @@
   "@streakCopyWeekStreak": {
     "placeholders": { "days": {"type": "int"} }
   },
-  "streakCopyDayStreak": "day {days} — you're keeping it up.",
+  "streakCopyDayStreak": "day {days}, you're keeping it up.",
   "@streakCopyDayStreak": {
     "placeholders": { "days": {"type": "int"} }
   },
@@ -644,7 +644,7 @@
   "vibeCardHeadlineWeekStreak": "You've shown up for yourself all week.",
   "vibeCardHeadlineActiveWeek": "You made time for yourself this week.",
   "vibeCardHeadlineFirstStep": "You've already taken the first step.",
-  "vibeCardHeadlineQuietWeek": "This week was quiet — ready for a new one?",
+  "vibeCardHeadlineQuietWeek": "This week was quiet. Ready for a new one?",
   "vibeCardSublineEmpty": "Everything starts with a small beginning.",
   "vibeCardSublineJournalCount": "{count, plural, =1{wrote 1 journal entry} other{wrote {count} journal entries}}",
   "@vibeCardSublineJournalCount": {
@@ -669,7 +669,7 @@
   "reminderSettingSubtitle": "A gentle nudge before the day slips by",
   "reminderTimeLabel": "Time: {time}",
   "reminderNotificationTitle": "Make a little room for yourself",
-  "reminderNotificationBody": "A small moment is enough today. One sentence, one breath — ILND is here.",
+  "reminderNotificationBody": "A small moment is enough today. One sentence, one breath. ILND is here.",
   "reminderPermissionDenied": "Notification permission was declined. Allow it in device settings and I can remind you.",
 
   "planShelfLabel": "PLANS",

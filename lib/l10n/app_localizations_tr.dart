@@ -72,7 +72,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get topulukComingBody =>
-      'İstanbul\'da küçük, sıcak buluşmalarla başlıyoruz — sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.';
+      'İstanbul\'da küçük, sıcak buluşmalarla başlıyoruz: sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.';
 
   @override
   String get topulukInviteCta => 'arkadaşını şimdiden davet et';
@@ -194,13 +194,13 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get crisisBody =>
-      'Zor bir andan geçiyor olabilirsin ve bunu paylaşman değerli. ILND bir yapay zekâ — böyle anlarda konuşabileceğin gerçek insanlar var:';
+      'Zor bir andan geçiyor olabilirsin ve bunu paylaşman değerli. ILND bir yapay zekâ. Böyle anlarda konuşabileceğin gerçek insanlar var:';
 
   @override
-  String get crisisLine112 => '112 — Acil Yardım';
+  String get crisisLine112 => '112 · Acil Yardım';
 
   @override
-  String get crisisLine183 => '183 — Sosyal Destek Hattı (7/24, ücretsiz)';
+  String get crisisLine183 => '183 · Sosyal Destek Hattı (7/24, ücretsiz)';
 
   @override
   String get crisisDismiss => 'anladım';
@@ -300,7 +300,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get adanBody =>
-      'her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez — sessiz geçen günler suyu koyulaştırır, cezalandırmaz.';
+      'her iş bir öğe kazandırır: fener, fırın, ay ışığı. öğeler adaya yerleşir, ada hafızanın haritası olur. hiçbir şey silinmez. sessiz geçen günler suyu koyulaştırır, cezalandırmaz.';
 
   @override
   String get adanItemsLabel => 'ÖĞELER';
@@ -357,7 +357,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileStatIslandItems => 'ADA ÖĞESİ';
 
   @override
-  String get welcomeBeatIsland => 'her gün üç küçük iş — bitince adan büyür';
+  String get welcomeBeatIsland => 'her gün üç küçük iş, bitince adan büyür';
 
   @override
   String adanProgress(int count, String next) {
@@ -1363,7 +1363,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get yemekEklePortionHint =>
-      'Tahmin yanlışsa buradan ayarla — değerler güncellenir.';
+      'Tahmin yanlışsa buradan ayarla, değerler güncellenir.';
 
   @override
   String get yemekEkleSaveButton => 'kaydet';
@@ -1459,7 +1459,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String streakCopyDayStreak(int days) {
-    return '$days. gün — devam ediyorsun.';
+    return '$days. gün, devam ediyorsun.';
   }
 
   @override
@@ -1477,7 +1477,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get vibeCardHeadlineQuietWeek =>
-      'Bu hafta sessizdi — yeni haftaya hazır mısın?';
+      'Bu hafta sessizdi. Yeni haftaya hazır mısın?';
 
   @override
   String get vibeCardSublineEmpty => 'Her şey küçük bir başlangıçla başlar.';
@@ -1535,7 +1535,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reminderNotificationBody =>
-      'Bugün için küçük bir an yeter. Bir cümle, bir nefes — ILND burada.';
+      'Bugün için küçük bir an yeter. Bir cümle, bir nefes. ILND burada.';
 
   @override
   String get reminderPermissionDenied =>
