@@ -41,6 +41,10 @@ class _BreathAnimationState extends State<BreathAnimation>
 
   late String _label = widget.inhaleLabel;
 
+  /// Bilerek "hareketi azalt" ayarını DİNLEMEZ: buradaki hareket dekorasyon
+  /// değil, egzersizin kendisidir (nefes temposunu halka anlatıyor). Durdurmak
+  /// özelliği kaldırmak olurdu. Dekoratif olan nefes halkası (BreathRing)
+  /// ayarı dinler — ayrım kasıtlı.
   @override
   void initState() {
     super.initState();
@@ -316,6 +320,7 @@ class _BreathScreenState extends State<BreathScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.close_rounded, color: p.text),
+          tooltip: l10n.a11yClose,
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(

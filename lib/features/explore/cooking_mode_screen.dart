@@ -34,6 +34,7 @@ class _CookingModeScreenState extends ConsumerState<CookingModeScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.close_rounded, color: p.text),
+          tooltip: l10n.a11yClose,
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(

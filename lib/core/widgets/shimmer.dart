@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/theme/app_palette.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 
 /// Gradient shimmer efekti — yükleme sırasında placeholder olarak kullan.
 class ShimmerBox extends StatefulWidget {
@@ -22,7 +24,21 @@ class _ShimmerBoxState extends State<ShimmerBox>
   late final AnimationController _ctrl = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1400),
-  )..repeat();
+  );
+
+  /// Döngü burada başlar, initState'te değil: "hareketi azalt" ayarı
+  /// MediaQuery'den okunur ve initState'te henüz güvenilir değildir.
+  /// Azaltılmış modda hiç başlamaz — sonsuz tekrar eden bir denetleyici
+  /// testte sahnenin hiç durulmamasına da yol açar.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (prefersReducedMotion(context)) {
+      if (_ctrl.isAnimating) _ctrl.stop();
+    } else if (!_ctrl.isAnimating) {
+      _ctrl.repeat();
+    }
+  }
 
   @override
   void dispose() {
@@ -33,10 +49,24 @@ class _ShimmerBoxState extends State<ShimmerBox>
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final base = isDark ? const Color(0xFF1C211C) : const Color(0xFFEBE8E1);
+    final p = isDark ? AppPalette.dark : AppPalette.light;
+    final base = p.surfaceStrong;
     final highlight = isDark
-        ? const Color(0xFF262C24)
-        : const Color(0xFFFFFFFF);
+        ? const Color(0xFF262C24) // surfaceStrong'un bir tık üstü, palette yok
+        : p.surface;
+
+    // Sürekli parıltı dekoratiftir: "hareketi azalt" açıkken düz bir zemin
+    // kalır, yükleme yine anlaşılır (kural: erişilebilirlik > cila).
+    if (prefersReducedMotion(context)) {
+      return Container(
+        width: widget.width,
+        height: widget.height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          color: base,
+        ),
+      );
+    }
 
     return AnimatedBuilder(
       animation: _ctrl,
@@ -70,7 +100,10 @@ class ShimmerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final surface = isDark ? const Color(0xFF1A1528) : Colors.white;
+    // Eski lavanta paletinden kalan mor (#1A1528) buradaydı — palete alındı.
+    final surface = isDark
+        ? AppPalette.dark.surfaceStrong
+        : AppPalette.light.surface;
 
     return Container(
       padding: const EdgeInsets.all(12),

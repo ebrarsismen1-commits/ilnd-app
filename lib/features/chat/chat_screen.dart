@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -320,7 +321,19 @@ class _TypingDotsState extends State<_TypingDots>
   late final AnimationController _c = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 900),
-  )..repeat();
+  );
+
+  /// Azaltılmış modda noktalar sabit durur: üç noktanın varlığı "yazıyor"u
+  /// zaten anlatıyor, dalgalanma yalnız cila.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (prefersReducedMotion(context)) {
+      if (_c.isAnimating) _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat();
+    }
+  }
 
   @override
   void dispose() {

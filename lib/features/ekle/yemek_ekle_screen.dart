@@ -861,14 +861,10 @@ class _ErrorView extends StatelessWidget {
             width: 100,
             height: 100,
             decoration: BoxDecoration(
-              color: const Color(0xFFB3554A).withValues(alpha: 0.12),
+              color: p.danger.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.error_outline_rounded,
-              size: 44,
-              color: Color(0xFFB3554A),
-            ),
+            child: Icon(Icons.error_outline_rounded, size: 44, color: p.danger),
           ),
           const SizedBox(height: 24),
           Text(

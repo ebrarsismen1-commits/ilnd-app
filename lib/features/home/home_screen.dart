@@ -333,17 +333,25 @@ class _HeroIconButton extends StatelessWidget {
       label: label,
       child: Pressable(
         onTap: onTap,
-        child: Container(
-          width: 34,
-          height: 34,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.75),
-              width: 1.2,
+        // Görsel çap 34 ama dokunma hedefi 44 olmalı (Apple HIG / Material
+        // 48dp). Halka aynı boyutta kalır, tıklanabilir alan büyür.
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: Center(
+            child: Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.75),
+                  width: 1.2,
+                ),
+              ),
+              child: Icon(icon, size: 17, color: Colors.white),
             ),
           ),
-          child: Icon(icon, size: 17, color: Colors.white),
         ),
       ),
     );

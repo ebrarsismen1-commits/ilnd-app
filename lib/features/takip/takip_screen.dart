@@ -488,7 +488,7 @@ class _ActivitySection extends ConsumerWidget {
                         value: waterPct,
                         minHeight: 3,
                         backgroundColor: p.border,
-                        color: const Color(0xFF93D5FF),
+                        color: p.water,
                       ),
                     ),
                     const SizedBox(height: 4),

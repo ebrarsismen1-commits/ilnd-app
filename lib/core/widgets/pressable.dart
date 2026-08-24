@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 
 /// Wraps [child] with a satisfying press animation:
 /// scale 0.95 + slight brightness dim on tap down, spring back on release.
@@ -45,6 +46,10 @@ class _PressableState extends State<Pressable>
     super.dispose();
   }
 
+  /// Azaltılmış modda ölçek yerine sönümleme kullanılır: geri bildirim
+  /// kaybolmaz ama hareket kalkar (Apple HIG'in önerdiği takas).
+  bool get _reduced => prefersReducedMotion(context);
+
   void _onDown(TapDownDetails _) => _ctrl.forward();
   void _onUp(TapUpDetails _) => _ctrl.reverse();
   void _onCancel() => _ctrl.reverse();
@@ -66,9 +71,10 @@ class _PressableState extends State<Pressable>
         duration: const Duration(milliseconds: 150),
         opacity: disabled ? 0.45 : 1.0,
         child: AnimatedBuilder(
-          animation: _scale,
-          builder: (context, child) =>
-              Transform.scale(scale: _scale.value, child: child),
+          animation: _ctrl,
+          builder: (context, child) => _reduced
+              ? Opacity(opacity: 1.0 - 0.35 * _ctrl.value, child: child)
+              : Transform.scale(scale: _scale.value, child: child),
           child: widget.child,
         ),
       ),

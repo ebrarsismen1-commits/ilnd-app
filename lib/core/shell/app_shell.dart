@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -189,7 +190,9 @@ class _NavItemState extends State<_NavItem>
   @override
   void didUpdateWidget(_NavItem old) {
     super.didUpdateWidget(old);
-    if (!old.active && widget.active) {
+    // Zıplama tamamen dekoratif: sekmenin seçildiğini zaten renk, kalınlık
+    // ve hap zemini anlatıyor. "Hareketi azalt" açıkken hiç oynamaz.
+    if (!old.active && widget.active && !prefersReducedMotion(context)) {
       _bounce.forward(from: 0);
     }
   }
@@ -206,49 +209,60 @@ class _NavItemState extends State<_NavItem>
     final color = widget.active ? p.accent : p.textMuted;
 
     return Expanded(
-      child: Pressable(
-        onTap: widget.onTap,
-        child: SizedBox(
-          height: 64,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedBuilder(
-                animation: _scale,
-                builder: (context, child) => Transform.scale(
-                  scale: widget.active ? _scale.value : 1.0,
-                  child: child,
+      // Ekran okuyucu hangi sekmede olduğumuzu söylemeliydi ama söylemiyordu:
+      // aktiflik yalnız renk ve kalınlıkla anlatılıyordu (renk tek başına
+      // anlam taşıyamaz).
+      child: Semantics(
+        button: true,
+        selected: widget.active,
+        label: widget.label,
+        child: Pressable(
+          onTap: widget.onTap,
+          child: SizedBox(
+            height: 64,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedBuilder(
+                  animation: _scale,
+                  builder: (context, child) => Transform.scale(
+                    scale: widget.active ? _scale.value : 1.0,
+                    child: child,
+                  ),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: widget.active ? 12 : 0,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: widget.active
+                          ? p.accent.withValues(alpha: 0.12)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Icon(
+                      widget.active ? widget.activeIcon : widget.icon,
+                      color: color,
+                      size: 22,
+                    ),
+                  ),
                 ),
-                child: AnimatedContainer(
+                const SizedBox(height: 3),
+                AnimatedDefaultTextStyle(
                   duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeOut,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: widget.active ? 12 : 0,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: widget.active
-                        ? p.accent.withValues(alpha: 0.12)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Icon(
-                    widget.active ? widget.activeIcon : widget.icon,
-                    color: color,
-                    size: 22,
-                  ),
+                  style: AppTextStyles.label(fontSize: 10, color: color)
+                      .copyWith(
+                        letterSpacing: 0,
+                        fontWeight: widget.active
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                      ),
+                  child: Text(widget.label),
                 ),
-              ),
-              const SizedBox(height: 3),
-              AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 200),
-                style: AppTextStyles.label(fontSize: 10, color: color).copyWith(
-                  letterSpacing: 0,
-                  fontWeight: widget.active ? FontWeight.w600 : FontWeight.w400,
-                ),
-                child: Text(widget.label),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

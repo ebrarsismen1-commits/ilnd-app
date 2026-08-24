@@ -8,12 +8,18 @@ Kod karşılığı: `core/theme/` (palette+colors+text_styles+theme) · UI işi 
 |---|---|---|---|
 | base | #F5F4F1 | #10120F | zemin |
 | surface / strong | #FFFFFF / #EBE8E1 | α-beyaz / #1C211C | kart / dolgu |
-| text / muted | #111827 / #6B7280 | #F1F3EF / #9AA39A | metin |
+| text / muted | #111827 / #5F6875 | #F1F3EF / #9AA39A | metin |
 | border | #E3E0D8 | α-beyaz %16 | 0.5px hairline |
-| **accent** | **#1F9D57** | **#34C77A** | marka, CTA, aktif |
+| **accent** | **#13763E** | **#34C77A** | marka, CTA, aktif |
 | accentSoft | #DCF3E4 | #1E3A2A | seçili dolgu, halka zemini |
-| amber (pop) | #E2611C | #F2794A | enerji anı, niyet, kutlama |
+| amber (pop) | #A84711 | #F2794A | enerji anı, niyet, kutlama |
+| danger | #A54A40 | #DA8578 | hata, yıkıcı eylem |
+| water | #2E86B8 | #93D5FF | su ilerlemesi |
 Kural: yeni hex önce palete girer; gece = yeşile çalan koyular, nötr gri YASAK.
+Kural: her yeni/değişen renk WCAG AA'yı geçmeli (metin 4.5:1, ikon-çubuk 3:1);
+test/core/contrast_test.dart kilitler. Gündüz tonları 2026-08-24'te bir tık
+koyulaştı: eski değerlerle (#1F9D57 / #E2611C) beyaz metinli birincil buton
+3.49:1 idi. Gece paleti zaten geçiyordu, dokunulmadı.
 Pano ek tonları (editoryal kartlar): deep #274D33 · matcha #9BAA6F · krem #EFEBDD.
 
 ## 2. Tipografi

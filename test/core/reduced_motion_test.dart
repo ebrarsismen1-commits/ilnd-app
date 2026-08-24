@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
+import 'package:ilnd_app/core/widgets/shimmer.dart';
 
 /// Erişilebilirlik: kullanıcı sistemde "hareketi azalt" dediğinde sürekli ve
 /// dekoratif animasyonlar DURMALI. Vestibüler rahatsızlığı olan kullanıcıda
@@ -54,6 +55,45 @@ void main() {
       );
       // Zamanlayıcıyı ve 550 ms'lik animasyonu tükete.
       await tester.pump(const Duration(milliseconds: 900));
+    });
+  });
+
+  group('ShimmerBox', () {
+    testWidgets('azaltılmış modda parıltı hiç dönmez', (tester) async {
+      await tester.pumpWidget(
+        _wrap(const ShimmerBox(width: 100, height: 20), reduced: true),
+      );
+      await tester.pump();
+
+      final box = tester.widget<Container>(
+        find.descendant(
+          of: find.byType(ShimmerBox),
+          matching: find.byType(Container),
+        ),
+      );
+      final deco = box.decoration as BoxDecoration;
+      expect(
+        deco.gradient,
+        isNull,
+        reason: 'Sürekli parıltı dekoratif — azaltılmış modda düz zemin kalır',
+      );
+      // Sonsuz tekrar eden denetleyici de başlamamalı: başlarsa hem pil
+      // yakar hem testte sahne hiç durulmaz (CLAUDE.md #12 komşusu).
+    });
+
+    testWidgets('normal modda degrade vardır', (tester) async {
+      await tester.pumpWidget(
+        _wrap(const ShimmerBox(width: 100, height: 20), reduced: false),
+      );
+      await tester.pump();
+
+      final box = tester.widget<Container>(
+        find.descendant(
+          of: find.byType(ShimmerBox),
+          matching: find.byType(Container),
+        ),
+      );
+      expect((box.decoration as BoxDecoration).gradient, isNotNull);
     });
   });
 

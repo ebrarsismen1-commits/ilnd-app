@@ -34,8 +34,6 @@ class AuthInputField extends ConsumerStatefulWidget {
 }
 
 class _AuthInputFieldState extends ConsumerState<AuthInputField> {
-  static const _danger = Color(0xFFB3554A);
-
   final _focus = FocusNode();
   bool _focused = false;
 
@@ -59,12 +57,12 @@ class _AuthInputFieldState extends ConsumerState<AuthInputField> {
   Widget build(BuildContext context) {
     final p = ref.watch(paletteProvider);
     final borderColor = widget.hasError
-        ? _danger
+        ? p.danger
         : _focused
         ? p.accent
         : Colors.transparent;
     final iconTextColor = widget.hasError
-        ? _danger
+        ? p.danger
         : _focused
         ? p.accent
         : p.textMuted;

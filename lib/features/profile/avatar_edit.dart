@@ -174,7 +174,7 @@ class _AvatarOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = danger ? const Color(0xFFB3554A) : p.text;
+    final color = danger ? p.danger : p.text;
     return Pressable(
       onTap: onTap,
       child: Container(

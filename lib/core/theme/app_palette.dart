@@ -17,6 +17,8 @@ class AppPalette {
     required this.accent,
     required this.accentSoft,
     required this.amber,
+    required this.danger,
+    required this.water,
     required this.onAccent,
   });
 
@@ -41,6 +43,14 @@ class AppPalette {
   /// İkincil vurgu / pop (sıcak turuncu — ilnd.app).
   final Color amber;
 
+  /// Hata / yıkıcı eylem. Dört ekranda ayrı ayrı sabit yazılmıştı, tek
+  /// kaynağa alındı (kural #6).
+  final Color danger;
+
+  /// Su ilerlemesi. Açık modda kendi rayına (border) karşı en az 3:1
+  /// olmalı — anlam taşıyan grafik, dekorasyon değil.
+  final Color water;
+
   final Color onAccent;
 
   // ── Gündüz · açık/havadar/gri-tonlu wellness ─────────────────────────────────
@@ -51,11 +61,16 @@ class AppPalette {
     surface: Color(0xFFFFFFFF),
     surfaceStrong: Color(0xFFEBE8E1),
     text: Color(0xFF111827), // slate
-    textMuted: Color(0xFF6B7280),
+    textMuted: Color(0xFF5F6875), // WCAG AA: 6B7280 zeminde 4.40 kalıyordu
     border: Color(0xFFE3E0D8),
-    accent: Color(0xFF1F9D57), // ilnd.app green
+    // Yeşil ve turuncu açık modda birer ton koyulaştı: eski değerlerde
+    // (1F9D57 / E2611C) beyaz metinli birincil buton 3.49:1 idi, AA sınırı
+    // 4.5. Ton aynı, parlaklık düştü. Koyu palet zaten geçiyordu, dokunulmadı.
+    accent: Color(0xFF13763E), // ilnd.app green, AA-safe
     accentSoft: Color(0xFFDCF3E4),
-    amber: Color(0xFFE2611C), // warm orange pop
+    amber: Color(0xFFA84711), // warm orange pop, AA-safe
+    danger: Color(0xFFA54A40),
+    water: Color(0xFF2E86B8),
     onAccent: Color(0xFFFFFFFF),
   );
 
@@ -72,6 +87,8 @@ class AppPalette {
     accent: Color(0xFF34C77A), // brighter green for dark-mode contrast
     accentSoft: Color(0xFF1E3A2A),
     amber: Color(0xFFF2794A), // lighter orange for dark-mode contrast
+    danger: Color(0xFFDA8578),
+    water: Color(0xFF93D5FF),
     onAccent: Color(0xFF0B140D),
   );
 }

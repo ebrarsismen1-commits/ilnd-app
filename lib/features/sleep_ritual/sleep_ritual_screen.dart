@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ilnd_app/core/theme/app_palette.dart';
@@ -46,6 +47,7 @@ class _SleepRitualScreenState extends ConsumerState<SleepRitualScreen> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.close_rounded, color: p.text),
+          tooltip: l10n.a11yClose,
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -197,7 +199,18 @@ class _StepIconSceneState extends State<_StepIconScene>
   late final AnimationController _c = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 10),
-  )..repeat();
+  );
+
+  /// Sahne nefesi dekoratif — azaltılmış modda hiç başlamaz.
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (prefersReducedMotion(context)) {
+      if (_c.isAnimating) _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat();
+    }
+  }
 
   late final Animation<double> _scale = TweenSequence<double>([
     TweenSequenceItem(

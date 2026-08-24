@@ -20,8 +20,6 @@ import 'package:ilnd_app/features/profile/avatar_edit.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
-const _danger = Color(0xFFB3554A);
-
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
@@ -780,8 +778,8 @@ class _SettingsSection extends ConsumerWidget {
           child: _SettingsRow(
             icon: Icons.logout_rounded,
             label: l10n.profileSignOut,
-            labelColor: _danger,
-            iconColor: _danger,
+            labelColor: p.danger,
+            iconColor: p.danger,
             showChevron: false,
             p: p,
           ),
@@ -792,8 +790,8 @@ class _SettingsSection extends ConsumerWidget {
           child: _SettingsRow(
             icon: Icons.delete_forever_rounded,
             label: l10n.profileDeleteAccount,
-            labelColor: _danger,
-            iconColor: _danger,
+            labelColor: p.danger,
+            iconColor: p.danger,
             showChevron: false,
             p: p,
           ),
@@ -807,6 +805,7 @@ class _SettingsSection extends ConsumerWidget {
     WidgetRef ref,
   ) async {
     final l10n = AppLocalizations.of(context)!;
+    final p = ref.read(paletteProvider);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -821,7 +820,7 @@ class _SettingsSection extends ConsumerWidget {
             onPressed: () => Navigator.of(dialogContext).pop(true),
             child: Text(
               l10n.profileDeleteAccountConfirm,
-              style: const TextStyle(color: _danger),
+              style: TextStyle(color: p.danger),
             ),
           ),
         ],

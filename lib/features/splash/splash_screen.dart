@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_text_styles.dart';
@@ -26,10 +27,20 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     end: 1.0,
   ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutQuart));
 
+  bool _started = false;
+
+  /// Giriş animasyonu tek seferlik ve mekânsal bağlam taşıyor; yine de
+  /// azaltılmış modda oynatılmaz, doğrudan bitmiş hâline atlanır.
   @override
-  void initState() {
-    super.initState();
-    _ctrl.forward();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    if (prefersReducedMotion(context)) {
+      _ctrl.value = 1.0;
+    } else {
+      _ctrl.forward();
+    }
   }
 
   @override

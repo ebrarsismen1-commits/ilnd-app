@@ -85,7 +85,7 @@ class _SuEkleSheet extends ConsumerWidget {
                           value: pct,
                           minHeight: 8,
                           backgroundColor: p.border,
-                          color: const Color(0xFF93D5FF),
+                          color: p.water,
                         ),
                       ),
                       const SizedBox(height: 6),
