@@ -71,6 +71,31 @@ in the JSON. The schema is documented at the top of
 
 ---
 
+## Web Hosting
+
+```bash
+flutter build web --release --dart-define-from-file=.env
+firebase deploy --only hosting --project ilnd-app-8dcbd
+```
+
+`--dart-define-from-file=.env` is NOT optional. Every value in `AppConfig`
+falls back to an empty string, so a build without it compiles cleanly, passes
+analysis, deploys successfully, and then fails silently at runtime: Supabase
+never initializes, no session is restored, and every user is redirected to the
+login screen. Nothing in the build output warns about this.
+
+Verify before deploying:
+
+```bash
+grep -c "supabase.co" build/web/main.dart.js
+```
+
+Anything other than `1` means the config was not baked in. Do not deploy.
+
+Known gap: `.env` currently has no `RECAPTCHA_SITE_KEY` (App Check on web) or
+`REVENUECAT_API_KEY` (paywall). Both fall back to empty, so App Check tokens
+fail on web and the paywall stays inert until they are added.
+
 ## Environment Setup
 
 Copy `.env.example` to `.env` and fill in:
