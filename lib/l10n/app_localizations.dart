@@ -1358,6 +1358,12 @@ abstract class AppLocalizations {
   /// **'Pt,Sa,Ça,Pe,Cu,Ct,Pa'**
   String get profileWeekdaysShort;
 
+  /// Kind empty state when no activity in the week
+  ///
+  /// In tr, this message translates to:
+  /// **'bu hafta henüz iz yok. acelesi de yok.'**
+  String get profileWeekEmpty;
+
   /// Weekly summary card section label
   ///
   /// In tr, this message translates to:

@@ -693,6 +693,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileWeekdaysShort => 'Mon,Tue,Wed,Thu,Fri,Sat,Sun';
 
   @override
+  String get profileWeekEmpty => 'no marks this week yet. no rush either.';
+
+  @override
   String get profileWeeklySummaryLabel => 'WEEKLY SUMMARY';
 
   @override

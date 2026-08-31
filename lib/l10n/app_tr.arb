@@ -617,6 +617,8 @@
   "profileWeekdaysShort": "Pt,Sa,Ça,Pe,Cu,Ct,Pa",
   "@profileWeekdaysShort": {"description": "Comma-separated abbreviated weekday names for the weekly bar chart, Monday through Sunday"},
 
+  "profileWeekEmpty": "bu hafta henüz iz yok. acelesi de yok.",
+  "@profileWeekEmpty": {"description": "Kind empty state when no activity in the week"},
   "profileWeeklySummaryLabel": "HAFTALIK ÖZET",
   "@profileWeeklySummaryLabel": {"description": "Weekly summary card section label"},
 

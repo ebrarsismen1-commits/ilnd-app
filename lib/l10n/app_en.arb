@@ -303,6 +303,7 @@
   "profileBadgeThirtyDays": "30-day",
 
   "profileWeekdaysShort": "Mon,Tue,Wed,Thu,Fri,Sat,Sun",
+  "profileWeekEmpty": "no marks this week yet. no rush either.",
   "profileWeeklySummaryLabel": "WEEKLY SUMMARY",
   "profileThisWeek": "this week",
   "profileMealsAdded": "meals added",

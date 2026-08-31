@@ -680,6 +680,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileWeekdaysShort => 'Pt,Sa,Ça,Pe,Cu,Ct,Pa';
 
   @override
+  String get profileWeekEmpty => 'bu hafta henüz iz yok. acelesi de yok.';
+
+  @override
   String get profileWeeklySummaryLabel => 'HAFTALIK ÖZET';
 
   @override
