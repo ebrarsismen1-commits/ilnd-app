@@ -1,6 +1,6 @@
 # Analitik Olay Sözlüğü
 
-Uygulamanın Firebase Analytics'e gönderdiği **38 olayın** tam listesi: ne zaman
+Uygulamanın Firebase Analytics'e gönderdiği **35 olayın** tam listesi: ne zaman
 ateşlenir, ne taşır, hangi soruyu cevaplar.
 
 Sözlüğün varlık sebebi: olaylar 10 dosyaya dağılmış durumda ve yarısı
@@ -166,23 +166,6 @@ hem `streak_extended` hem `streak_milestone_reached` atılabilir.
 
 ---
 
-## Günlük trio
-
-| Olay | Ne zaman | Parametre | Cevapladığı soru |
-|---|---|---|---|
-| `trio_move_done` | Hareket maddesinin işareti **değişince** | — | Hangi madde tutuyor |
-| `trio_plate_done` | Tabak maddesinin işareti **değişince** | — | Hangi madde tutuyor |
-| `trio_recipe_opened` | Trio'dan tarif detayına gidilince | — | Tarif köprüsü kullanılıyor mu |
-
-Kaynak: `lib/features/daily_trio/daily_trio_section.dart:51,65,69`.
-
-> **Dikkat:** ilk iki olay `toggle()` üzerinde atılıyor, yani kullanıcı işareti
-> **kaldırırken de** ateşleniyor. Ad "done" diyor ama sayı "tamamlama" değil
-> "dokunma" sayısıdır ve tamamlama oranını olduğundan yüksek gösterir. Gerçek
-> tamamlamayı ölçmek için olayın yeni duruma (`done: true`) bağlanması gerekir.
-
----
-
 ## Hareket (video oturumları)
 
 | Olay | Ne zaman | Parametre | Cevapladığı soru |
@@ -240,6 +223,7 @@ sorular:
 | Boşluk | Neden önemli |
 |---|---|
 | **Sohbet: sıfır olay** | Ana AI yüzeyi. Mesaj sayısı, oturum uzunluğu yok |
+| **Günün üçlüsü kaldırıldı** | `trio_move_done` / `trio_plate_done` / `trio_recipe_opened` olayları 31 Ağustos'ta özellikle birlikte silindi. Panelde eski veriler durur ama yeni olay gelmez |
 | **`logEvent` kaçış kapısı** | 16 olay hâlâ serbest metinle gidiyor. Ad yazım hatası derlemede yakalanmaz; sözlük bekçisi testi (`test/core/analytics_dictionary_test.dart`) en azından belgelenmemiş olayı yakalar |
 | **`trio_*_done` yön ayrımı yapmıyor** | İşaret kaldırma da sayılıyor; tamamlama oranı şişik okunur (yukarıdaki not) |
 

@@ -145,6 +145,12 @@ class ArticleDetailScreen extends ConsumerWidget {
                 ],
                 // Tarif makaleleri interaktiftir: tik'lenebilir malzeme
                 // listesi + adım adım pişirme modu.
+                // Kaynakça tarif bölümünden ÖNCE değil sonra gelir; ama
+                // tarif olmayan yazılarda gövdenin hemen ardından çıkar.
+                if (article.sources.isNotEmpty) ...[
+                  const SizedBox(height: 28),
+                  _SourcesSection(sources: article.sources, p: p),
+                ],
                 if (article.isRecipe) ...[
                   const SizedBox(height: 8),
                   _RecipeSection(article: article, p: p),
@@ -361,6 +367,46 @@ class _MacroLine extends StatelessWidget {
           ),
         ),
         Container(height: 0.5, color: p.border),
+      ],
+    );
+  }
+}
+
+// ─── Kaynakça ─────────────────────────────────────────────────────────────────
+
+/// Araştırma temelli yazıların sonundaki kaynak listesi. Okuyucunun iddiayı
+/// doğrulayabilmesi için yazar, dergi ve yıl tam yazılır.
+class _SourcesSection extends StatelessWidget {
+  const _SourcesSection({required this.sources, required this.p});
+
+  final List<ArticleSource> sources;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(height: 0.5, color: p.border),
+        const SizedBox(height: 18),
+        Text(
+          l10n.articleSourcesLabel,
+          style: AppTextStyles.sectionLabel(color: p.textMuted),
+        ),
+        const SizedBox(height: 12),
+        for (final source in sources)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Text(
+              source.citation,
+              style: AppTextStyles.body(
+                fontSize: 12,
+                color: p.textMuted,
+                height: 1.5,
+              ),
+            ),
+          ),
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/auth/login_screen.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -26,11 +27,17 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  Future<void> pumpLoginScreen(WidgetTester tester) async {
+  Future<void> pumpLoginScreen(
+    WidgetTester tester, {
+    List<Override> overrides = const [],
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          ...overrides,
+        ],
         child: const MaterialApp(
           locale: Locale('tr'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -109,4 +116,26 @@ void main() {
     await tester.pump();
     expect(find.text(l10n.validatorEmailRequired), findsOneWidget);
   });
+
+  testWidgets(
+    'çözülemeyen şifre sıfırlama linki sessiz kalmaz, nedeni yazılır',
+    (tester) async {
+      // Regresyon: link takası patladığında router kullanıcıyı giriş ekranına
+      // bırakıyor ama hiçbir şey söylemiyordu — kullanıcı tarafında bu
+      // "şifre yenileme ekranı yerine giriş ekranı çıkıyor" olarak görünüyordu.
+      // Hata ekran açılmadan ÖNCE dolmuş olsa bile gösterilmeli.
+      await pumpLoginScreen(
+        tester,
+        overrides: [
+          authLinkErrorProvider.overrideWith(
+            (ref) => AuthErrorCode.resetLinkInvalid,
+          ),
+        ],
+      );
+      await tester.pump();
+
+      final l10n = lookupAppLocalizations(const Locale('tr'));
+      expect(find.text(l10n.authErrorResetLinkInvalid), findsOneWidget);
+    },
+  );
 }

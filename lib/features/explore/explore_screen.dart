@@ -14,8 +14,7 @@ import 'package:ilnd_app/core/repositories/movement_repository.dart';
 import 'package:ilnd_app/core/repositories/plans_repository.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
-import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
-import 'package:ilnd_app/features/explore/explore_feed.dart';
+import 'package:ilnd_app/features/explore/explore_ordering.dart';
 import 'package:ilnd_app/features/movement/movement_program.dart';
 import 'package:ilnd_app/features/movement/movement_program_screen.dart';
 import 'package:ilnd_app/features/plans/plan_shelf.dart';
@@ -26,13 +25,14 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 /// Etiket rayı doğrudan [ArticleCategory]'yi yansıtır — "hepsi" dışında her
 /// pill bir kategoriye birebir karşılık gelir. Ayrı bir filtre listesi
 /// tutmak, kategori eklendiğinde iki yerin ayrışması demekti.
-enum _Filter { hepsi, meditasyon, beslenme, hareket, ozBakim, gelisim }
+enum _Filter { hepsi, meditasyon, beslenme, tarif, hareket, ozBakim, gelisim }
 
 extension _FilterX on _Filter {
   ArticleCategory? get category => switch (this) {
     _Filter.hepsi => null,
     _Filter.meditasyon => ArticleCategory.meditasyon,
     _Filter.beslenme => ArticleCategory.beslenme,
+    _Filter.tarif => ArticleCategory.tarif,
     _Filter.hareket => ArticleCategory.hareket,
     _Filter.ozBakim => ArticleCategory.ozBakim,
     _Filter.gelisim => ArticleCategory.gelisim,
@@ -42,6 +42,7 @@ extension _FilterX on _Filter {
     _Filter.hepsi => l10n.exploreFilterAll,
     _Filter.meditasyon => l10n.exploreFilterMeditation,
     _Filter.beslenme => l10n.exploreFilterNutrition,
+    _Filter.tarif => l10n.exploreFilterRecipes,
     _Filter.hareket => l10n.exploreFilterMovement,
     _Filter.ozBakim => l10n.exploreFilterSelfCare,
     _Filter.gelisim => l10n.exploreFilterGrowth,
@@ -94,22 +95,19 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         ((fetched == null || fetched.isEmpty) ? kArticles : fetched)
             .map((a) => a.forLocale(l10n.localeName))
             .toList();
-    // Handoff §2: ekranin tek buyuk ani kapak, geri kalan HEPSI tek liste.
-    // Eski duzende araya bir de yatay "one cikanlar" seridi giriyordu —
-    // ayni icerigi ikinci bir bicimde gostermek listeyi zayiflatiyordu.
+    // Sıra iki kez düzeltildi. Firestore `order` alanına göre veriyor ve o
+    // alan EKLEME sırası: içerik kategori kategori girildiği için liste blok
+    // blok diziliyordu ve kaydıran kişi tek kategoride sıkışıyordu.
+    // interleaveByCategory kategorileri dönüşümlü hâle getiriyor.
     //
-    // Sıralama explore_feed.dart'ta: kapak dakikada bir döner, liste
-    // kategorileri dönüşümlü dizer (içerik konu konu tohumlandığı için ham
-    // sıra "15 meditasyon, sonra 12 egzersiz" diye geliyordu) ve
-    // onboarding hedeflerine karşılık gelen konular öne alınır.
-    final goals = ref.watch(onboardingGoalsProvider);
-    final hero = pickHero(
-      library: allArticles,
-      goals: goals,
-      now: DateTime.now(),
-    );
-    final rest = allArticles.where((a) => a.id != hero?.id).toList();
-    final ordered = orderedFeed(library: rest, goals: goals);
+    // Kapak da artık filtreye tabi: önce filtreleniyor, kapak o havuzdan
+    // güne göre seçiliyor. Eskiden kapak listenin ilk elemanıydı ve hangi
+    // etikete basılırsa basılsın aynı içerik duruyordu.
+    final ordered = interleaveByCategory(allArticles);
+    // Büyük kapak kartı 2026-08-31'de kaldırıldı (owner kararı): ekranın
+    // tek büyük anı olması gerekiyordu ama listeden bir yazıyı çekip
+    // ayrıcalıklı kılıyordu ve aynı içerik iki biçimde görünüyordu.
+    // Artık süzülmüş liste doğrudan çiziliyor.
     final filtered = ordered.where((a) => _selected.matches(a)).toList();
     // Yalnız oynatılabilir seansı olan programlar (ADR-0004). Makalelerdeki
     // kArticles gibi bir offline yedeği YOK: video içeriğinin yerel karşılığı
@@ -215,35 +213,31 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-            // ── Hero card ─────────────────────────────────────────────────
-            if (hero != null) ...[
+            // ── Ritüeller ────────────────────────────────────────────────
+            // Yalnız "hepsi" seçiliyken çizilir (owner kararı 2026-08-31):
+            // bir kategoriye süzülmüşken ritüel şeridi konuyla ilgisiz bir
+            // araya girmek oluyordu.
+            //
+            // Büyük kapak kartı aynı kararla kaldırıldı; ekranın ilk şeyi
+            // artık etiket rayı ve hemen altındaki ritüeller.
+            if (_selected == _Filter.hepsi) ...[
               SliverToBoxAdapter(
-                child: Entrance(
-                  index: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.screenPadding,
-                    ),
-                    child: _HeroCard(article: hero, p: p, onTap: _open),
-                  ),
-                ),
+                child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
             ],
 
-            // ── Ritüeller (eski emoji "stories" şeridinin yerine — vizyon
-            // kararı: her kart gerçek bir deneyime açılır, dekoratif emoji
-            // dairesi değil).
-            //
-            // Hero'nun hemen altında: iki dokunuşluk hızlı eylemler, uzun
-            // yazı akışının ARKASINDA kalmamalı. Önceden akışın, planların
-            // ve hareket rafının altındaydı, yani pratikte görünmüyordu
-            // ────────────────────────────────────────────────────────────
-            SliverToBoxAdapter(
-              child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
+            // ── Programlar (ADR-0005) ────────────────────────────────────
+            // Owner kararı: 7 ve 21 günlük programlar Keşfet'te görünür
+            // olsun. Kapağın hemen altında, listeden önce: bir program
+            // taahhüt, tek yazı bir okuma.
+            if (plans.isNotEmpty) ...[
+              SliverToBoxAdapter(
+                child: PlanShelf(plans: plans, p: p),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
+            ],
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
@@ -304,16 +298,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             // bakarak yazıldı. Ekranın tasarımdaki okunuşunu bozmasınlar
             // diye listenin ALTINA alındılar; silinmeleri söz verilmiş
             // özellikleri kaldırmak olurdu.
-            // ── Planlar (ADR-0005). Hareket rafının üstünde: plan bir
-            // taahhüt, tek seans bir deneme — kullanıcıya önce taahhüdü
-            // gösteriyoruz ────────────────────────────────────────────────
-            if (plans.isNotEmpty) ...[
-              SliverToBoxAdapter(
-                child: PlanShelf(plans: plans, p: p),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 28)),
-            ],
-
             // ── Hareket programları (ADR-0004) — vizyonun "grid'e yeni
             // içerik tipleri raf olarak girer" maddesi. Yayınlanabilir
             // program yoksa raf HİÇ çizilmez: boş bir raf, olmayan bir
@@ -677,137 +661,7 @@ class _RitualTitle extends StatelessWidget {
   }
 }
 
-// ─── Hero card ────────────────────────────────────────────────────────────────
-
-class _HeroCard extends StatelessWidget {
-  const _HeroCard({
-    required this.article,
-    required this.p,
-    required this.onTap,
-  });
-  final Article article;
-  final AppPalette p;
-  final void Function(Article) onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Pressable(
-      onTap: () => onTap(article),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-        child: SizedBox(
-          // Ekranin tek buyuk ani (handoff §2): 3:4'e yakin, dolu bir kapak.
-          height: 400,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // fotoğraf
-              CoverImage(
-                imageUrl: article.imageUrl,
-                palette: article.category.palette,
-              ),
-              // gradient overlay
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.25),
-                      Colors.black.withValues(alpha: 0.7),
-                    ],
-                    stops: const [0.3, 0.6, 1.0],
-                  ),
-                ),
-              ),
-              // içerik
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // üst: kategori chip
-                    Row(children: [_CategoryChip(article.category)]),
-                    // alt: başlık + excerpt. Kapak sabit 400px ama başlık
-                    // Firestore'dan geliyor; uzun başlıkta bu blok esner,
-                    // metinler maxLines ile kırpılır (Bugün'ün okuma
-                    // kartında yaşanan taşmanın aynı sınıfı).
-                    Flexible(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            article.title,
-                            style: AppTextStyles.display(
-                              fontSize: 32,
-                              color: Colors.white,
-                              height: 1.1,
-                            ),
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            article.excerpt,
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.85),
-                              fontSize: 13,
-                              height: 1.4,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 // ─── Category chip ────────────────────────────────────────────────────────────
-
-class _CategoryChip extends StatelessWidget {
-  const _CategoryChip(this.category);
-  final ArticleCategory category;
-
-  Color get _color => switch (category) {
-    ArticleCategory.meditasyon => const Color(0xFF5B8C7B),
-    ArticleCategory.beslenme => const Color(0xFF34D399),
-    ArticleCategory.hareket => const Color(0xFF7FA05B),
-    ArticleCategory.ozBakim => const Color(0xFF8FA8B5),
-    ArticleCategory.gelisim => const Color(0xFFC17A63),
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: _color.withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        category.tag.toUpperCase(),
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 10,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.5,
-        ),
-      ),
-    );
-  }
-}
 
 // ─── Feed row ─────────────────────────────────────────────────────────────────
 

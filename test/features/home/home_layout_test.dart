@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
 
-  testWidgets('mood kartı selamlamanın altında, çakışma yok', (tester) async {
+  Future<void> pumpHome(WidgetTester tester) async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
 
@@ -61,6 +61,10 @@ void main() {
     );
     // Entrance animasyonları otursun.
     await tester.pump(const Duration(milliseconds: 900));
+  }
+
+  testWidgets('mood kartı selamlamanın altında, çakışma yok', (tester) async {
+    await pumpHome(tester);
 
     final l10n = lookupAppLocalizations(const Locale('tr'));
     final moodFinder = find.text(l10n.homeMoodQuestion);

@@ -75,6 +75,10 @@ class _RouterNotifier extends ChangeNotifier {
       profileHydrationProvider,
       (prev, next) => notifyListeners(),
     );
+    _ref.listen<AuthErrorCode?>(
+      authLinkErrorProvider,
+      (prev, next) => notifyListeners(),
+    );
   }
 
   final Ref _ref;
@@ -88,6 +92,7 @@ class _RouterNotifier extends ChangeNotifier {
       hydration: _ref.read(profileHydrationProvider),
       onboardingDone: _ref.read(onboardingDoneProvider),
       firstEntryDone: _ref.read(firstEntryDoneProvider),
+      linkFailed: _ref.read(authLinkErrorProvider) != null,
       location: state.matchedLocation,
     );
   }
@@ -102,6 +107,7 @@ String? resolveRedirect({
   required bool onboardingDone,
   required bool firstEntryDone,
   required String location,
+  bool linkFailed = false,
 }) {
   // Gizlilik Politikası / Kullanım Şartları her zaman erişilebilir olmalı —
   // App Store/Play Store gereksinimi, kayıt formundan (henüz auth yok) ya
@@ -157,7 +163,12 @@ String? resolveRedirect({
   // zaten kayıtlı bir kullanıcı (yeni cihaz) welcome'dan "giriş yap" ile
   // login'e ulaşıp hidratlanabilsin.
   if (isOnAuthRoute) return null;
-  if (!onboardingDone) {
+  // E-posta linki çözülemedi (süresi dolmuş / daha önce kullanılmış).
+  // Kullanıcı buraya kimlik doğrulamak için geldi; onboarding duvarına bırakmak
+  // hem hatayı göstermeyi imkânsız kılıyor hem de "şifremi unuttum"u ekrandan
+  // kaldırıyordu — geçersiz linkten gelen gerçek ekran /onboarding/welcome'dı.
+  // O yüzden onboarding bayrağından bağımsız olarak giriş ekranına.
+  if (!onboardingDone && !linkFailed) {
     if (isOnboarding) return null;
     return routeWelcome;
   }

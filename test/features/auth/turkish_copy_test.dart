@@ -77,12 +77,12 @@ void main() {
 
   test('bölüm etiketleri ALL CAPS yazılır', () {
     // AppTextStyles.sectionLabel metni büyütmez; büyük harf .arb'den gelir.
-    // trioSectionTitle "Bugünün Üçlüsü" diye Title Case yazılmıştı ve aynı
-    // stildeki diğer etiketlerin yanında tek başına farklı görünüyordu.
-    // Ayrıca Türkçede tamlama zaten Title Case almaz.
+    // Kural bir Title Case sapmasından doğdu (ana ekranın "Bugünün
+    // Üçlüsü" bölümü): aynı stildeki etiketlerin yanında tek başına farklı
+    // görünüyordu. Ayrıca Türkçede tamlama zaten Title Case almaz.
     final labels = <String, String>{
       'homeTodaysReadTitle': tr.homeTodaysReadTitle,
-      'trioSectionTitle': tr.trioSectionTitle,
+      'articleSourcesLabel': tr.articleSourcesLabel,
       'exploreMoreLabel': tr.exploreMoreLabel,
       'exploreRitualsLabel': tr.exploreRitualsLabel,
       'profileGoalsLabel': tr.profileGoalsLabel,

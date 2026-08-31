@@ -3,7 +3,7 @@
     "id": "klasik-sporcu-icecegi",
     "order": 0,
     "title": "uzun kardiyolar için klasik sporcu içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Su, şeker, tuz ve bir tutam turunçgil. Rafta aradığın şey mutfağında.",
     "imageUrl": "",
@@ -65,7 +65,7 @@
     "id": "akcaagacli-elektrolit",
     "order": 1,
     "title": "hassas mideler için akçaağaçlı içecek",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Rafine şeker yerine akçaağaç: daha yavaş, daha yumuşak bir enerji.",
     "imageUrl": "",
@@ -125,7 +125,7 @@
     "id": "hizli-hidrasyon",
     "order": 2,
     "title": "kısa ve sert seanslar için ballı hidrasyon içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Az karbonhidrat, yeterli sodyum. Terle gideni en kısa yoldan geri koyar.",
     "imageUrl": "",
@@ -184,7 +184,7 @@
     "id": "hindistan-cevizi-turuncgil",
     "order": 3,
     "title": "antrenman sonrası için hindistan cevizli içecek",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Potasyumu yüksek, serinletici. Bitişten sonraki ilk saatin içeceği.",
     "imageUrl": "",
@@ -244,7 +244,7 @@
     "id": "salatalik-lime",
     "order": 4,
     "title": "sıcak günler için salatalıklı lime içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Salatalık, lime, nane. Enerji değil, sıcakta kaybettiğini geri koymak için.",
     "imageUrl": "",
@@ -307,7 +307,7 @@
     "id": "portakal-zencefil",
     "order": 5,
     "title": "uzun mesafe koşuları için portakallı zencefil içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Portakal suyu enerjiyi, zencefil mideyi taşır. Saatler süren tempolarda.",
     "imageUrl": "",
@@ -367,7 +367,7 @@
     "id": "karpuzlu-potasyum",
     "order": 6,
     "title": "yaz antrenmanları için karpuzlu potasyum içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Karpuz, bal, bir tutam tuz. Sıcakta terleyerek kaybettiğinin karşılığı.",
     "imageUrl": "",
@@ -426,7 +426,7 @@
     "id": "uzum-limon",
     "order": 7,
     "title": "hızlı enerji için üzüm limon içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Üzüm suyu, limon, tuz. Kana en çabuk karışan karbonhidrat.",
     "imageUrl": "",
@@ -486,7 +486,7 @@
     "id": "hurmali-kakao",
     "order": 8,
     "title": "dayanıklılık için hurmalı kakao içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "İki hurma, bir kaşık kakao, tuz. Doğal şeker ve magnezyum bir arada.",
     "imageUrl": "",
@@ -547,7 +547,7 @@
     "id": "yesil-cay-sporcu",
     "order": 9,
     "title": "hafif kafein için yeşil çay içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Soğuk demlenmiş yeşil çay, bal, limon. Sert bir kafein değil, yumuşak bir uyanış.",
     "imageUrl": "",
@@ -606,7 +606,7 @@
     "id": "cilekli-kefir",
     "order": 10,
     "title": "ağırlık antrenmanı sonrası çilekli kefir içeceği",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Çilek, kefir, bal. Protein ve karbonhidrat aynı bardakta.",
     "imageUrl": "",
@@ -665,7 +665,7 @@
     "id": "yaban-mersinli-antioksidan",
     "order": 11,
     "title": "yoğun günler sonrası yaban mersinli içecek",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Yaban mersini, su, bal. Sert seansın ardından gelen onarım.",
     "imageUrl": "",
@@ -723,7 +723,7 @@
     "id": "muzlu-tarcinli-smoothie",
     "order": 12,
     "title": "kas toparlanması için muzlu tarçınlı smoothie",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Muz, süt, tarçın. Boşalan glikojen deposunu dolduran en sade karışım.",
     "imageUrl": "",
@@ -783,7 +783,7 @@
     "id": "espresso-tarcin",
     "order": 13,
     "title": "antrenman öncesi için tarçınlı espresso",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Tek shot espresso, su, tarçın. Başlamadan yirmi dakika önce.",
     "imageUrl": "",
@@ -841,7 +841,7 @@
     "id": "kakaolu-enerji-shotu",
     "order": 14,
     "title": "hafif enerji için kakaolu enerji shotu",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Kakao, süt, bal, bir tutam deniz tuzu. Küçük bardak, yeterli itki.",
     "imageUrl": "",
@@ -1281,7 +1281,7 @@
   {
     "id": "lor-kasesi",
     "title": "çırpılmış lor kâsesi",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "3 dk",
     "excerpt": "Lor peyniri blenderdan geçince kremaya dönüşüyor. Porsiyon başına 33 gram protein.",
     "body": [
@@ -1334,7 +1334,7 @@
   {
     "id": "edamame-nohut",
     "title": "edamame nohut salatası",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "3 dk",
     "excerpt": "Soya, meta-analizde süt proteinine denk çıkan tek bitkisel kaynak. Kâsede 27 gram protein, 17 gram lif.",
     "body": [
@@ -1388,7 +1388,7 @@
   {
     "id": "firinda-tofu-kinoa",
     "title": "fırında baharatlı tofu ve kinoa",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "4 dk",
     "excerpt": "Tofunun sorunu tadı değil suyu. Sıkılmadan pişen tofu yumuşak kalıyor.",
     "body": [
@@ -1446,7 +1446,7 @@
   {
     "id": "ton-fasulye-piyaz",
     "title": "ton balıklı fasulye piyazı",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "3 dk",
     "excerpt": "Piyaz zaten var olan bir tarif. Ton balığı eklendiğinde protein iki katına çıkıyor.",
     "body": [
@@ -1498,7 +1498,7 @@
   {
     "id": "tuzlu-yulaf",
     "title": "yumurtalı tuzlu yulaf",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "3 dk",
     "excerpt": "Yulaf tatlı yenmek zorunda değil. Tuzlu hâli, kahvaltıya protein sokmanın en hızlı yolu.",
     "body": [
@@ -1551,7 +1551,7 @@
   {
     "id": "kefirli-protein-smoothie",
     "title": "kefirli fıstık ezmeli smoothie",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Kefir hem protein hem fermente gıda. Bağırsak florası bulgusuyla aynı öğünde buluşuyor.",
     "body": [
@@ -4000,7 +4000,7 @@
   {
     "id": "cirpilmis-peynir-tost",
     "title": "çırpılmış beyaz peynirli tost",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "3 dk",
     "excerpt": "Beyaz peyniri çırpınca krema kıvamına geliyor. Üstüne bal, karabiber, taze kekik.",
     "body": [
@@ -4052,7 +4052,7 @@
   {
     "id": "firinda-yulaf",
     "title": "fırında yulaf",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "4 dk",
     "excerpt": "Kaşık batırınca ortası akan, kek kıvamında bir kahvaltı. Tek kapta, on beş dakika fırında.",
     "body": [
@@ -4109,7 +4109,7 @@
   {
     "id": "yesil-tanrica-kase",
     "title": "yeşil tanrıça kâsesi",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "4 dk",
     "excerpt": "Sosu blenderdan çıkınca fosforlu yeşil oluyor. Lahana, salatalık ve bir avuç ot.",
     "body": [
@@ -4170,7 +4170,7 @@
   {
     "id": "tahinli-hurma-smoothie",
     "title": "tahinli hurma smoothie",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Tadı çikolatalı bara benziyor ama içinde sadece hurma, tahin ve muz var.",
     "body": [
@@ -4221,7 +4221,7 @@
   {
     "id": "yogun-fasulye-salatasi",
     "title": "yoğun fasulye salatası",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "4 dk",
     "excerpt": "Üç çeşit bakliyat, bir kavanoz sos. Buzdolabında üç gün, her gün daha iyi.",
     "body": [
@@ -4282,7 +4282,7 @@
   {
     "id": "firinda-peynirli-makarna",
     "title": "fırında peynirli domates makarna",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "4 dk",
     "excerpt": "Bir blok peynir, bir tepsi kiraz domates. Fırından çıkınca çatalla eziyorsun, sos kendiliğinden oluyor.",
     "body": [
@@ -4338,7 +4338,7 @@
   {
     "id": "pancar-humusu",
     "title": "pancar humusu",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "3 dk",
     "excerpt": "Fuşya. Tadı klasik humus, rengi tamamen başka bir şey.",
     "body": [
@@ -4395,7 +4395,7 @@
   {
     "id": "tepside-balli-tavuk",
     "title": "tepside ballı hardallı tavuk",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "4 dk",
     "excerpt": "Tek tepsi, tek bulaşık. Tavuk ve sebzeler aynı anda karamelize oluyor.",
     "body": [
@@ -4452,7 +4452,7 @@
   {
     "id": "karpuz-peynir-salata",
     "title": "karpuz peynir salatası",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "2 dk",
     "excerpt": "Yaz akşamlarının en kolay tarifi. Doğra, üst üste koy, nane at.",
     "body": [
@@ -4503,7 +4503,7 @@
   {
     "id": "firinda-baharatli-nohut",
     "title": "fırında baharatlı nohut",
-    "category": "beslenme",
+    "category": "tarif",
     "readTime": "3 dk",
     "excerpt": "Cips yerine geçen, çıtır, baharatlı bir atıştırmalık. Kavanozda bir hafta duruyor.",
     "body": [

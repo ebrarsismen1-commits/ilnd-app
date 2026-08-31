@@ -97,6 +97,7 @@ enum AuthErrorCode {
   googleFailed,
   appleFailed,
   resetFailed,
+  resetLinkInvalid,
   updatePasswordFailed,
   deleteUnavailable,
   deleteFailed,
@@ -113,27 +114,81 @@ final firebaseAuthUidProvider = StreamProvider<String?>(
   (ref) => fb_auth.FirebaseAuth.instance.authStateChanges().map((u) => u?.uid),
 );
 
+/// E-posta linkinden (şifre sıfırlama / hesap onayı) dönen oturum hiç
+/// kurulamadığında dolan tek seferlik kanal. Router bu durumda kullanıcıyı
+/// giriş ekranında bırakır; ekran burayı dinleyip NEDEN olduğunu söyler.
+/// [AuthState] yerine ayrı bir kanal: giriş denemesi hatalarıyla aynı toast
+/// yolunu paylaşırsa ikisi birbirini tetikler.
+final authLinkErrorProvider = StateProvider<AuthErrorCode?>((ref) => null);
+
 final authNotifierProvider = StateNotifierProvider<AuthNotifier, AuthState>(
-  (ref) => AuthNotifier(),
+  (ref) => AuthNotifier(ref),
 );
+
+/// E-posta linkindeki tek kullanımlık sıfırlama token’ı.
+///
+/// Supabase’in varsayılan `{{ .ConfirmationURL }}` şablonu linki önce kendi
+/// `/auth/v1/verify` ucuna götürür; o uç token’ı ORADA tüketir ve uygulamaya
+/// yalnızca sonucu yollar. Linki bir mail tarayıcısı ya da güvenlik servisi
+/// sen tıklamadan önce açarsa token ölür, kullanıcıya
+/// `?error=access_denied&error_code=otp_expired` döner (yaşandı).
+///
+/// `{{ .TokenHash }}` şablonunda link doğrudan uygulamaya gelir ve token
+/// YALNIZCA burada, verifyOTP çağrısında tüketilir: linki önden açan bir
+/// tarayıcı hiçbir şeyi harcamamış olur.
+///
+/// Hem query hem fragment okunur; şablonun parametreleri `?` ya da `#`
+/// arkasına koyması ayrımı kullanıcıya yansımasın.
+@visibleForTesting
+String? recoveryTokenHashFrom(Uri uri) {
+  final fragment = Uri.splitQueryString(uri.fragment);
+  String? param(String key) => uri.queryParameters[key] ?? fragment[key];
+
+  if (param('type') != 'recovery') return null;
+  final tokenHash = param('token_hash');
+  if (tokenHash == null || tokenHash.isEmpty) return null;
+  return tokenHash;
+}
 
 // ─── Notifier ─────────────────────────────────────────────────────────────────
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(const AuthInitial()) {
+  AuthNotifier(this._ref) : super(const AuthInitial()) {
     _init();
   }
 
+  final Ref _ref;
+
   StreamSubscription<AuthState>? _sub;
+
+  /// token_hash doğrulanırken true. Bu sırada gelen ara olaylar (initialSession
+  /// gibi) durumu kimliksize çekip router’ı onboarding duvarına atmasın diye
+  /// dinleyici bekletilir; akış passwordRecovery ile kapanır.
+  bool _verifyingRecoveryLink = false;
 
   SupabaseClient get _client => Supabase.instance.client;
 
   void _init() {
     // Resolve synchronously so the router redirect has a concrete state on first build.
     final session = _client.auth.currentSession;
-    state = session != null
-        ? AuthAuthenticated(session.user)
-        : const AuthUnauthenticated();
+
+    // Sıfırlama linki uygulamaya token_hash ile geldiyse önce onu tüket.
+    // Oturum zaten varsa (başarılı sıfırlamadan sonra sayfa yenilendi) tekrar
+    // denemenin anlamı yok: token tek kullanımlık, ikinci deneme hata verir.
+    // Mobilde link https olduğu için tarayıcıda açılır; bu yol web’e özgü.
+    final tokenHash = (kIsWeb && session == null)
+        ? recoveryTokenHashFrom(Uri.base)
+        : null;
+    _verifyingRecoveryLink = tokenHash != null;
+
+    // Doğrulama bitene kadar durum AuthInitial kalır, yani kullanıcı splash
+    // görür. Aksi hâlde ilk karede kimliksiz sayılıp welcome’a atılır ve
+    // doğrulama bitince ekran altından kayardı.
+    if (!_verifyingRecoveryLink) {
+      state = session != null
+          ? AuthAuthenticated(session.user)
+          : const AuthUnauthenticated();
+    }
     if (session != null) {
       unawaited(FirebaseAuthBridge.syncFromSupabase(session.accessToken));
       unawaited(RevenueCatService.identify(session.user.id));
@@ -154,6 +209,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         })
         .listen((s) {
           if (!mounted) return;
+          if (_verifyingRecoveryLink && s is! AuthPasswordRecovery) return;
           // Recovery akışı sürerken sonradan gelen tokenRefreshed/signedIn
           // olayları kullanıcıyı yeni-şifre ekranından koparmasın; akış
           // updatePassword ile kapanır.
@@ -172,16 +228,55 @@ class AuthNotifier extends StateNotifier<AuthState> {
             unawaited(RevenueCatService.forget());
           }
         }, onError: _onAuthStreamError);
+
+    if (tokenHash != null) unawaited(_verifyRecoveryLink(tokenHash));
+  }
+
+  /// Sıfırlama linkindeki token_hash’i oturuma çevirir. Başarılı olursa gotrue
+  /// passwordRecovery yayar ve durum dinleyicide kurulur; router kullanıcıyı
+  /// yeni-şifre ekranına kilitler.
+  Future<void> _verifyRecoveryLink(String tokenHash) async {
+    try {
+      await _client.auth
+          .verifyOTP(type: OtpType.recovery, tokenHash: tokenHash)
+          .timeout(const Duration(seconds: 15));
+    } catch (e) {
+      debugPrint('[Auth] recovery token_hash verify failed: $e');
+      if (!mounted) return;
+      _ref.read(authLinkErrorProvider.notifier).state =
+          AuthErrorCode.resetLinkInvalid;
+      state = const AuthUnauthenticated();
+    } finally {
+      _verifyingRecoveryLink = false;
+    }
   }
 
   /// E-posta linkinden (sıfırlama/onay) dönen oturum kurulamazsa gotrue hatayı
   /// veri değil **stream hatası** olarak yayar. onError yoksa hata zone'a kaçar
   /// ve release'de fatal Crashlytics kaydına dönüşürdü; kullanıcı ise sessizce
-  /// giriş ekranında kalırdı. Hata yutulmaz: durum kimliksize çekilir ki router
-  /// kullanıcıyı yarım bir recovery ekranında bırakmasın.
+  /// giriş ekranında kalırdı.
+  ///
+  /// Eski sürüm hatayı yalnızca `state is AuthPasswordRecovery` iken işliyordu;
+  /// o koşul pratikte hiç oluşmuyor, çünkü recovery durumuna ancak takas
+  /// BAŞARILI olunca geçiliyor. Takas patlarsa durum hâlâ kimliksiz oluyor,
+  /// koşul tutmuyor ve router kullanıcıyı sessizce giriş ekranına bırakıyordu:
+  /// "linke bastım, şifre yenileme yerine giriş ekranı çıkıyor" şikâyetinin
+  /// görünen yüzü tam olarak buydu. Artık [authLinkErrorProvider] doluyor ve
+  /// giriş ekranı nedeni söylüyor.
   void _onAuthStreamError(Object error, StackTrace stackTrace) {
     debugPrint('[Auth] onAuthStateChange error: $error\n$stackTrace');
     if (!mounted) return;
+    // Oturum yokken gelen hata = e-posta linki çözülemedi: kod tükenmiş ya
+    // da süresi dolmuş; link, sıfırlamayı isteyenden başka bir
+    // cihazda/tarayıcıda açıldığı için PKCE code verifier yerel depoda yok;
+    // ya da bir e-posta tarayıcısı linki önden tüketmiş. Oturum VARKEN gelen
+    // stream hataları token yenileme/ağ kaynaklı, sıfırlamayla ilgisi yok.
+    if (_client.auth.currentSession == null) {
+      _ref.read(authLinkErrorProvider.notifier).state =
+          AuthErrorCode.resetLinkInvalid;
+      state = const AuthUnauthenticated();
+      return;
+    }
     if (state is AuthPasswordRecovery) {
       state = const AuthError(AuthErrorCode.resetFailed);
     }

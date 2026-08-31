@@ -18,12 +18,14 @@ void main() {
     ProfileHydrationStatus hydration = ProfileHydrationStatus.done,
     bool onboardingDone = true,
     bool firstEntryDone = true,
+    bool linkFailed = false,
     required String location,
   }) => resolveRedirect(
     authState: authState ?? AuthAuthenticated(user),
     hydration: hydration,
     onboardingDone: onboardingDone,
     firstEntryDone: firstEntryDone,
+    linkFailed: linkFailed,
     location: location,
   );
 
@@ -113,6 +115,41 @@ void main() {
         location: routePrivacyPolicy,
       ),
       isNull,
+    );
+  });
+
+  test('çözülemeyen e-posta linki: onboarding duvarı değil giriş ekranı', () {
+    // Gerçek olay: süresi dolmuş sıfırlama linki
+    // /?error=access_denied&error_code=otp_expired ile dönüyor. Tarayıcı
+    // yeniyse onboardingDone=false oluyordu ve kullanıcı /onboarding/welcome'a
+    // düşüyordu: ne hatayı görebiliyor ne de "şifremi unuttum"a ulaşabiliyordu.
+    expect(
+      redirect(
+        authState: const AuthUnauthenticated(),
+        onboardingDone: false,
+        linkFailed: true,
+        location: routeHome,
+      ),
+      routeLogin,
+    );
+    // Giriş ekranına varınca orada kalır — toast gösterilebilsin.
+    expect(
+      redirect(
+        authState: const AuthUnauthenticated(),
+        onboardingDone: false,
+        linkFailed: true,
+        location: routeLogin,
+      ),
+      isNull,
+    );
+    // Link hatası yokken davranış değişmez: onboarding duvarı durur.
+    expect(
+      redirect(
+        authState: const AuthUnauthenticated(),
+        onboardingDone: false,
+        location: routeHome,
+      ),
+      routeWelcome,
     );
   });
 }

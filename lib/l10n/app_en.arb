@@ -62,6 +62,7 @@
   "authErrorGoogleFailed": "Couldn't sign in with Google. Try again?",
   "authErrorAppleFailed": "Couldn't sign in with Apple. Try again?",
   "authErrorResetFailed": "Couldn't send the email. Check your internet connection.",
+  "authErrorResetLinkInvalid": "This password reset link has expired or was already used. Request a new one.",
   "authErrorDeleteUnavailable": "Account deletion is unavailable right now.",
   "authErrorDeleteFailed": "Couldn't delete your account. Try again?",
 
@@ -341,6 +342,9 @@
   "exploreFilterMeditation": "meditation",
   "@exploreFilterMeditation": {"description": "Explore category filter"},
 
+  "exploreFilterRecipes": "recipes",
+  "@exploreFilterRecipes": {"description": "Explore category filter"},
+
   "exploreFilterNutrition": "eating",
   "@exploreFilterNutrition": {"description": "Explore category filter"},
 
@@ -374,6 +378,9 @@
 
   "recipeNutritionFiber": "fibre",
   "@recipeNutritionFiber": {"description": "Recipe nutrition row"},
+
+  "articleSourcesLabel": "SOURCES",
+  "@articleSourcesLabel": {"description": "Section label above the reference list"},
 
   "recipeIngredientsTitle": "ingredients",
   "recipeStartCooking": "start cooking",
@@ -447,14 +454,6 @@
   "vibeCardShareText": "sharing my mood on ilnd",
   "vibeCardShareTextWithCode": "sharing my mood on ilnd my invite code: {code}",
   "vibeCardInviteCode": "my invite code: {code}",
-  "trioSectionTitle": "TODAY'S THREE",
-  "trioMoveTitle": "Move",
-  "trioPlateTitle": "Plate",
-  "trioMindTitle": "Mind",
-  "trioMinutes": "{m} min",
-  "trioMindPending": "Your evening check-in is waiting",
-  "trioMindDone": "You came back to yourself today",
-  "trioMarkDone": "Mark as done",
   "streakCardHeadlineWeek": "A week of showing up for yourself, every day.",
   "streakCardHeadlineMonth": "A month of being here, every day. Few people do this.",
   "streakCardHeadlineHundred": "100 days. Quietly, steadily.",

@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ilnd_app/core/repositories/explore_repository.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
 import 'package:ilnd_app/features/explore/explore_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
 /// Etiket rayı gerçekten filtreliyor mu?
 ///
@@ -16,17 +15,16 @@ import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
 
-  Future<void> pump(WidgetTester tester) async {
-    SharedPreferences.setMockInitialValues({});
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> pump(WidgetTester tester, {List<Article>? articles}) async {
     await tester.binding.setSurfaceSize(const Size(420, 2400));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
     await tester.pumpWidget(
       ProviderScope(
-        // Keşfet artık onboarding hedeflerini okuyor (kişiselleştirilmiş
-        // sıralama), yani SharedPreferences'a bağımlı.
-        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        overrides: [
+          if (articles != null)
+            articlesProvider.overrideWith((ref) => Stream.value(articles)),
+        ],
         child: const MaterialApp(
           locale: Locale('tr'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -67,13 +65,8 @@ void main() {
 
     // Görsel sayısı ölçüt olamaz: ağ yokken CoverImage editoryal degradeye
     // düşer ve hiç Image çizmez. Makale BAŞLIKLARINI sayıyoruz.
-    //
-    // Kapak filtrenin dışındadır, ekranın büyük anı hep durur. Eskiden kapak
-    // listenin ilk yazısıydı ve `skip(1)` ile eleniyordu; 2026-08-31'den beri
-    // dakikaya bağlı olarak dönüyor (explore_feed.dart), yani hangi yazının
-    // kapak olduğu zamana bağlı. Testin hangi dakikada koştuğuna bağlı bir
-    // sayı beklemek onu kırılgan yapardı, bu yüzden "kapak kadar" tolerans
-    // bırakılıyor.
+    // Kapak da 2026-08-20'den beri filtreye tabi (bkz. explore_ordering),
+    // yani hariç tutulacak sabit bir ilk eleman yok.
     int visibleArticles() => kArticles
         .map((a) => a.forLocale('tr').title)
         .where((t) => find.text(t).evaluate().isNotEmpty)
@@ -81,26 +74,69 @@ void main() {
 
     expect(
       visibleArticles(),
-      greaterThan(2),
+      greaterThan(1),
       reason: '"tümü" seçiliyken liste dolu olmalı',
     );
 
-    // Yerleşik içeriğin tamamı "beslenme" (eski tarifler); meditasyon
+    // Yerleşik içeriğin tamamı "tarif"; meditasyon
     // kategorisinde henüz makale YOK. Eskiden bu dokunuş listeyi hiçbir
     // açıklama bırakmadan siliyordu ve ekran bozulmuş gibi görünüyordu.
     await tester.tap(find.text(l10n.exploreFilterMeditation));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
-    expect(
-      visibleArticles(),
-      lessThanOrEqualTo(1),
-      reason: 'yalnız kapak kalabilir, liste boşalmış olmalı',
-    );
+    expect(visibleArticles(), 0);
     expect(
       find.text(l10n.exploreFilterEmpty),
       findsOneWidget,
       reason: 'Boş sonuç bir cümleyle açıklanmalı, sessiz kalmamalı',
     );
+  });
+
+  testWidgets('kapak da seçili etikete uyar', (tester) async {
+    // Eskiden kapak listenin ilk elemanıydı ve filtreden bağımsızdı:
+    // "meditasyon"a basan kişi en tepede bir tarif görüyordu.
+    const meditasyon = Article(
+      id: 'm1',
+      title: 'akşam nefesi',
+      category: ArticleCategory.meditasyon,
+      readTime: '4 dk',
+      excerpt: 'kısa özet',
+      body: ['gövde'],
+    );
+    const meditasyon2 = Article(
+      id: 'm2',
+      title: 'sabah taraması',
+      category: ArticleCategory.meditasyon,
+      readTime: '4 dk',
+      excerpt: 'kısa özet',
+      body: ['gövde'],
+    );
+    const tarif = Article(
+      id: 't1',
+      title: 'ballı hidrasyon',
+      category: ArticleCategory.tarif,
+      readTime: '2 dk',
+      excerpt: 'kısa özet',
+      body: ['gövde'],
+      ingredients: ['su', 'bal'],
+      steps: ['karıştır'],
+    );
+
+    await pump(tester, articles: const [tarif, meditasyon, meditasyon2]);
+    final l10n = lookupAppLocalizations(const Locale('tr'));
+
+    await tester.tap(find.text(l10n.exploreFilterMeditation));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    // Eski düzende tarif, kapak olduğu için filtreye rağmen ekranda
+    // kalıyordu: bu satır tam olarak onu kilitler.
+    expect(find.text(tarif.title), findsNothing);
+
+    // Kapak + liste: filtreden geçen içeriğin tamamı ekranda.
+    expect(find.text(meditasyon.title), findsOneWidget);
+    expect(find.text(meditasyon2.title), findsOneWidget);
+    expect(find.text(l10n.exploreFilterEmpty), findsNothing);
   });
 }
