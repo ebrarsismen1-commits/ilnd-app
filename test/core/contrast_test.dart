@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ilnd_app/core/theme/app_colors.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
+import 'package:ilnd_app/features/adan/adan_model.dart';
+import 'package:ilnd_app/features/adan/island_painter.dart';
 
 /// Erişilebilirlik: paletin metin/zemin çiftleri WCAG AA'yı geçmeli.
 ///
@@ -126,6 +128,56 @@ void main() {
           reason: 'Dolgu ile ray aynı tonda olursa çubuk hiç okunmaz',
         );
       });
+
+      // Ada illüstrasyonu zemini sessiz günlerde koyulaşıyor. Zemin
+      // değişken olduğu için üç kademenin ÜÇÜ de ayrı ölçülür: yalnız
+      // berrak hâli ölçmek, kuralın doğduğu hatayı tekrarlamak olurdu
+      // (tek modda geçen renk aylarca fark edilmemişti).
+      for (final depth in WaterDepth.values) {
+        final ground = _over(IslandPainter.groundColor(p, depth), p.base);
+
+        test('ada zemini (${depth.name}) metni taşıyor', () {
+          expect(
+            contrast(p.text, ground),
+            greaterThanOrEqualTo(aa),
+            reason: 'İlerleme satırı illüstrasyonun üstünde duruyor',
+          );
+        });
+
+        test('ada çizgileri (${depth.name}) zeminden ayrışıyor', () {
+          // Ay burada yok çünkü `text` ile çiziliyor — üstteki metin
+          // testi onu zaten 4.5:1'de tutuyor. `water` ile çizilseydi
+          // koyulaşan zeminle 2.99:1'e düşerdi.
+          for (final fg in {
+            'kıyı (accent)': p.accent,
+            'fener (amber)': p.amber,
+            'kilitli yer (textMuted)': p.textMuted,
+          }.entries) {
+            expect(
+              contrast(fg.value, ground),
+              greaterThanOrEqualTo(aaGraphic),
+              reason: '${fg.key} / ada zemini ${depth.name}',
+            );
+          }
+        });
+
+        test('su halkaları (${depth.name}) alfayla birlikte ölçülür', () {
+          // Halkalar yarı saydam: alfayı yok sayarak ölçmek yalan sonuç
+          // verir (kural #19'un ikinci yarısı). Eşik 3:1 değil, çünkü
+          // halkalar ortam dokusu — taşıdıkları bilgi (sessizlik) zaten
+          // metinde de var. Yine de görünmek zorundalar: 1.43:1 ile
+          // başlamıştı, yani hiç yoktular.
+          final ring = _over(
+            p.water.withValues(alpha: IslandPainter.seaOpacity(depth)),
+            ground,
+          );
+          expect(
+            contrast(ring, ground),
+            greaterThanOrEqualTo(1.6),
+            reason: 'En açık halka bile zeminden seçilebilmeli',
+          );
+        });
+      }
     });
   }
 

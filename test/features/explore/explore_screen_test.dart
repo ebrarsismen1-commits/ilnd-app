@@ -6,6 +6,8 @@ import 'package:ilnd_app/core/repositories/movement_repository.dart';
 import 'package:ilnd_app/features/explore/explore_screen.dart';
 import 'package:ilnd_app/features/movement/movement_program.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
@@ -14,6 +16,8 @@ void main() {
     WidgetTester tester, {
     List<MovementProgram>? programs,
   }) async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
     // Keşfet artık 400px'lik kapakla açılıyor (handoff §2: ekranın tek büyük
     // anı önce gelir), raflar onun altında. Varsayılan 800x600 viewport'ta
     // raflar sliver önbelleğinin dışında kalıp hiç kurulmuyor — testin
@@ -23,6 +27,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           if (programs != null)
             publishableMovementProgramsProvider.overrideWithValue(programs),
         ],

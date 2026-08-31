@@ -14,6 +14,8 @@ import 'package:ilnd_app/core/repositories/movement_repository.dart';
 import 'package:ilnd_app/core/repositories/plans_repository.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
+import 'package:ilnd_app/features/explore/explore_feed.dart';
 import 'package:ilnd_app/features/movement/movement_program.dart';
 import 'package:ilnd_app/features/movement/movement_program_screen.dart';
 import 'package:ilnd_app/features/plans/plan_shelf.dart';
@@ -95,9 +97,20 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     // Handoff §2: ekranin tek buyuk ani kapak, geri kalan HEPSI tek liste.
     // Eski duzende araya bir de yatay "one cikanlar" seridi giriyordu —
     // ayni icerigi ikinci bir bicimde gostermek listeyi zayiflatiyordu.
-    final hero = allArticles.isNotEmpty ? allArticles.first : null;
-    final rest = allArticles.length > 1 ? allArticles.sublist(1) : <Article>[];
-    final filtered = rest.where((a) => _selected.matches(a)).toList();
+    //
+    // Sıralama explore_feed.dart'ta: kapak dakikada bir döner, liste
+    // kategorileri dönüşümlü dizer (içerik konu konu tohumlandığı için ham
+    // sıra "15 meditasyon, sonra 12 egzersiz" diye geliyordu) ve
+    // onboarding hedeflerine karşılık gelen konular öne alınır.
+    final goals = ref.watch(onboardingGoalsProvider);
+    final hero = pickHero(
+      library: allArticles,
+      goals: goals,
+      now: DateTime.now(),
+    );
+    final rest = allArticles.where((a) => a.id != hero?.id).toList();
+    final ordered = orderedFeed(library: rest, goals: goals);
+    final filtered = ordered.where((a) => _selected.matches(a)).toList();
     // Yalnız oynatılabilir seansı olan programlar (ADR-0004). Makalelerdeki
     // kArticles gibi bir offline yedeği YOK: video içeriğinin yerel karşılığı
     // olamaz, içerik gelmeden raf da olmaz.
@@ -218,6 +231,19 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
             ],
 
+            // ── Ritüeller (eski emoji "stories" şeridinin yerine — vizyon
+            // kararı: her kart gerçek bir deneyime açılır, dekoratif emoji
+            // dairesi değil).
+            //
+            // Hero'nun hemen altında: iki dokunuşluk hızlı eylemler, uzun
+            // yazı akışının ARKASINDA kalmamalı. Önceden akışın, planların
+            // ve hareket rafının altındaydı, yani pratikte görünmüyordu
+            // ────────────────────────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 28)),
+
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
@@ -278,14 +304,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             // bakarak yazıldı. Ekranın tasarımdaki okunuşunu bozmasınlar
             // diye listenin ALTINA alındılar; silinmeleri söz verilmiş
             // özellikleri kaldırmak olurdu.
-            // ── Ritüeller (eski emoji "stories" şeridinin yerine — vizyon
-            // kararı: her kart gerçek bir deneyime açılır, dekoratif emoji
-            // dairesi değil) ────────────────────────────────────────────
-            SliverToBoxAdapter(
-              child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
             // ── Planlar (ADR-0005). Hareket rafının üstünde: plan bir
             // taahhüt, tek seans bir deneme — kullanıcıya önce taahhüdü
             // gösteriyoruz ────────────────────────────────────────────────
@@ -306,20 +324,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
             ],
-
-            // ── Günün alıntısı ────────────────────────────────────────────
-            SliverToBoxAdapter(
-              child: Entrance(
-                index: 3,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenPadding,
-                  ),
-                  child: _QuoteBanner(p: p),
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 28)),
           ],
         ),
       ),
@@ -765,72 +769,6 @@ class _HeroCard extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-// ─── Quote banner ─────────────────────────────────────────────────────────────
-
-class _QuoteBanner extends StatelessWidget {
-  const _QuoteBanner({required this.p});
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            p.accent.withValues(alpha: 0.12),
-            p.amber.withValues(alpha: 0.08),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: p.accent.withValues(alpha: 0.2), width: 0.5),
-      ),
-      child: Row(
-        children: [
-          Text(
-            '✨',
-            style: TextStyle(
-              fontSize: 28,
-              shadows: [
-                Shadow(color: p.accent.withValues(alpha: 0.4), blurRadius: 8),
-              ],
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.exploreQuote,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: p.text,
-                    height: 1.4,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  l10n.exploreQuoteSubtitle,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    color: p.textMuted,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

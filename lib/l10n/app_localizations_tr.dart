@@ -81,14 +81,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get topulukUpcomingLabel => 'YAKLAŞAN BULUŞMALAR';
 
   @override
-  String get topulukRsvpJoin => 'Katıl';
+  String get topulukRsvpJoin => 'katıl';
 
   @override
-  String get topulukRsvpGoing => 'Geliyorum';
+  String get topulukRsvpGoing => 'geliyorum';
+
+  @override
+  String get topulukRsvpFull => 'kontenjan doldu';
 
   @override
   String topulukGoingCount(int count) {
     return '$count kişi geliyor';
+  }
+
+  @override
+  String topulukGoingCountOfCapacity(int count, int capacity) {
+    return '$count/$capacity kişi geliyor';
   }
 
   @override
@@ -362,6 +370,11 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String adanProgress(int count, String next) {
     return '$count öğe · sıradaki: $next';
+  }
+
+  @override
+  String adanCanvasSemantics(int count) {
+    return 'ada görseli, $count öğe yerleşti';
   }
 
   @override
@@ -687,6 +700,46 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileGoPremium => 'ILND+\'a geç';
 
   @override
+  String get profilePreferences => 'bilgilerin ve tercihlerin';
+
+  @override
+  String get preferencesTitle => 'tercihler';
+
+  @override
+  String get preferencesNameLabel => 'AD';
+
+  @override
+  String get preferencesGoalsLabel => 'HEDEFLER';
+
+  @override
+  String get preferencesBodyLabel => 'BEDEN';
+
+  @override
+  String get preferencesActivityLabel => 'HAREKET';
+
+  @override
+  String get preferencesDietLabel => 'BESLENME';
+
+  @override
+  String get preferencesAllergiesLabel => 'ALERJİLER';
+
+  @override
+  String get preferencesAllergiesHelp => 'ILND tarif önerirken bunları eler.';
+
+  @override
+  String get preferencesGoalsHelp =>
+      'Bugün ekranındaki okuma bunlara göre seçilir.';
+
+  @override
+  String get preferencesSave => 'kaydet';
+
+  @override
+  String get preferencesSaved => 'Tercihlerin güncellendi.';
+
+  @override
+  String get preferencesSaveFailed => 'Kaydedilemedi. Tekrar dener misin?';
+
+  @override
   String get profileSettingsLabel => 'AYARLAR';
 
   @override
@@ -888,12 +941,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get sleepRitualHomeCardSubtitle => 'birkaç dakika, sonra uyku';
-
-  @override
-  String get exploreQuote => '\"Bugün küçük bir adım, yarının büyük farkı.\"';
-
-  @override
-  String get exploreQuoteSubtitle => 'günün alıntısı';
 
   @override
   String get paywallSubtitle =>

@@ -18,9 +18,10 @@ import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/adan/adan_model.dart';
 import 'package:ilnd_app/features/adan/adan_repository.dart';
 import 'package:ilnd_app/features/adan/adan_screen.dart';
-import 'package:ilnd_app/features/daily_trio/daily_trio_section.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
+import 'package:ilnd_app/core/repositories/explore_repository.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/features/home/daily_read.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/plans/plan_detail_screen.dart';
 import 'package:ilnd_app/features/plans/plan_model.dart';
@@ -58,10 +59,19 @@ class HomeScreen extends ConsumerWidget {
           ),
     );
 
-    // Günün düzenli ama kişiye özel "okuması" — uygulama dilinde.
-    final read = kArticles[DateTime.now().day % kArticles.length].forLocale(
-      l10n.localeName,
-    );
+    // Bu saatin okuması: Firestore kütüphanesinden, onboarding hedeflerine
+    // öncelik vererek, saat başı değişerek (daily_read.dart). Firestore
+    // henüz gelmediyse kod-içi yedeğe düşer, ekran boş kalmaz.
+    final fetched = ref.watch(articlesProvider).valueOrNull;
+    final library = (fetched == null || fetched.isEmpty) ? kArticles : fetched;
+    final read =
+        (pickHourlyRead(
+                  library: library,
+                  goals: ref.watch(onboardingGoalsProvider),
+                  now: DateTime.now(),
+                ) ??
+                kArticles.first)
+            .forLocale(l10n.localeName);
 
     return Scaffold(
       backgroundColor: p.base,
@@ -80,8 +90,9 @@ class HomeScreen extends ConsumerWidget {
               ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate.fixed([
-                  // Sıra handoff §1'den: hero → mood → takip → günün üçü →
-                  // okuma → sessiz satırlar. Mood hero'nun hemen altında
+                  // Sıra: hero → mood → adan → plan → sessiz satırlar →
+                  // okuma. "Günün üçlüsü" 2026-08-31'de owner kararıyla
+                  // kaldırıldı; sessiz satırlar okumanın üstüne alındı. Mood hero'nun hemen altında
                   // yaşar; bindirme (Transform.translate) denenip
                   // bırakılmıştı — layout'u etkilemediği için fontlar geç
                   // yüklenince selamlamanın üstüne biniyordu.
@@ -97,7 +108,17 @@ class HomeScreen extends ConsumerWidget {
                   // çizilmez (ADR-0005).
                   const _ActivePlanRow(),
                   const SizedBox(height: 18),
-                  Entrance(index: 9, child: DailyTrioSection(p: p)),
+                  // Sessiz satırlar okuma kartının ÜSTÜNDE: eyleme çağıran
+                  // satırlar (gece ritüeli, takip, haftalık kart) uzun bir
+                  // kartın arkasında kalmamalı. Kart değil, hairline ile
+                  // ayrılmış satırlar (handoff §1).
+                  Entrance(
+                    index: 9,
+                    child: _QuietRows(
+                      p: p,
+                      hour: hourOverride ?? DateTime.now().hour,
+                    ),
+                  ),
                   const SizedBox(height: 26),
                   Entrance(
                     index: 10,
@@ -107,17 +128,6 @@ class HomeScreen extends ConsumerWidget {
                   Entrance(
                     index: 11,
                     child: _DailyReadCard(article: read, p: p),
-                  ),
-                  const SizedBox(height: 26),
-                  // Üç sessiz satır (handoff §1): kart değil, hairline ile
-                  // ayrılmış satırlar. "takip" satırı yok — o içerik zaten
-                  // yukarıda, ekranın içinde.
-                  Entrance(
-                    index: 12,
-                    child: _QuietRows(
-                      p: p,
-                      hour: hourOverride ?? DateTime.now().hour,
-                    ),
                   ),
                 ]),
               ),

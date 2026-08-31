@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 import 'app_palette.dart';
@@ -50,28 +49,30 @@ class AppTheme {
       ),
 
       // ── Typography ──────────────────────────────────────────────────────
-      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).copyWith(
-        // Display — Playfair italic (screen titles / hero text)
-        displayLarge: AppTextStyles.display(fontSize: 56),
-        displayMedium: AppTextStyles.display(fontSize: 40),
-        displaySmall: AppTextStyles.display(fontSize: 28),
+      textTheme: base.textTheme
+          .apply(fontFamily: AppTextStyles.sansFont)
+          .copyWith(
+            // Display — Playfair italic (screen titles / hero text)
+            displayLarge: AppTextStyles.display(fontSize: 56),
+            displayMedium: AppTextStyles.display(fontSize: 40),
+            displaySmall: AppTextStyles.display(fontSize: 28),
 
-        // Heading — Playfair regular (card titles, article titles)
-        headlineLarge: AppTextStyles.heading(fontSize: 26),
-        headlineMedium: AppTextStyles.heading(fontSize: 22),
-        headlineSmall: AppTextStyles.heading(fontSize: 18),
-        titleLarge: AppTextStyles.heading(fontSize: 16),
+            // Heading — Playfair regular (card titles, article titles)
+            headlineLarge: AppTextStyles.heading(fontSize: 26),
+            headlineMedium: AppTextStyles.heading(fontSize: 22),
+            headlineSmall: AppTextStyles.heading(fontSize: 18),
+            titleLarge: AppTextStyles.heading(fontSize: 16),
 
-        // Body — DM Sans 400
-        bodyLarge: AppTextStyles.body(fontSize: 16),
-        bodyMedium: AppTextStyles.body(fontSize: 14),
-        bodySmall: AppTextStyles.body(fontSize: 13, color: AppColors.muted),
+            // Body — DM Sans 400
+            bodyLarge: AppTextStyles.body(fontSize: 16),
+            bodyMedium: AppTextStyles.body(fontSize: 14),
+            bodySmall: AppTextStyles.body(fontSize: 13, color: AppColors.muted),
 
-        // Label — DM Sans 500, uppercase, tracked
-        labelLarge: AppTextStyles.label(fontSize: 13),
-        labelMedium: AppTextStyles.label(fontSize: 11),
-        labelSmall: AppTextStyles.label(fontSize: 10),
-      ),
+            // Label — DM Sans 500, uppercase, tracked
+            labelLarge: AppTextStyles.label(fontSize: 13),
+            labelMedium: AppTextStyles.label(fontSize: 11),
+            labelSmall: AppTextStyles.label(fontSize: 10),
+          ),
 
       dividerTheme: const DividerThemeData(
         color: AppColors.border,
@@ -103,7 +104,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontFamily: AppTextStyles.sansFont,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -120,7 +122,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontFamily: AppTextStyles.sansFont,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -137,7 +140,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontFamily: AppTextStyles.sansFont,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -147,7 +151,8 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.sage,
-          textStyle: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontFamily: AppTextStyles.sansFont,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -246,21 +251,23 @@ class AppTheme {
         error: const Color(0xFFE08A80),
       ),
 
-      textTheme: GoogleFonts.dmSansTextTheme(base.textTheme).copyWith(
-        displayLarge: AppTextStyles.display(fontSize: 56, color: p.text),
-        displayMedium: AppTextStyles.display(fontSize: 40, color: p.text),
-        displaySmall: AppTextStyles.display(fontSize: 28, color: p.text),
-        headlineLarge: AppTextStyles.heading(fontSize: 26, color: p.text),
-        headlineMedium: AppTextStyles.heading(fontSize: 22, color: p.text),
-        headlineSmall: AppTextStyles.heading(fontSize: 18, color: p.text),
-        titleLarge: AppTextStyles.heading(fontSize: 16, color: p.text),
-        bodyLarge: AppTextStyles.body(fontSize: 16, color: p.text),
-        bodyMedium: AppTextStyles.body(fontSize: 14, color: p.text),
-        bodySmall: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-        labelLarge: AppTextStyles.label(fontSize: 13, color: p.textMuted),
-        labelMedium: AppTextStyles.label(fontSize: 11, color: p.textMuted),
-        labelSmall: AppTextStyles.label(fontSize: 10, color: p.textMuted),
-      ),
+      textTheme: base.textTheme
+          .apply(fontFamily: AppTextStyles.sansFont)
+          .copyWith(
+            displayLarge: AppTextStyles.display(fontSize: 56, color: p.text),
+            displayMedium: AppTextStyles.display(fontSize: 40, color: p.text),
+            displaySmall: AppTextStyles.display(fontSize: 28, color: p.text),
+            headlineLarge: AppTextStyles.heading(fontSize: 26, color: p.text),
+            headlineMedium: AppTextStyles.heading(fontSize: 22, color: p.text),
+            headlineSmall: AppTextStyles.heading(fontSize: 18, color: p.text),
+            titleLarge: AppTextStyles.heading(fontSize: 16, color: p.text),
+            bodyLarge: AppTextStyles.body(fontSize: 16, color: p.text),
+            bodyMedium: AppTextStyles.body(fontSize: 14, color: p.text),
+            bodySmall: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+            labelLarge: AppTextStyles.label(fontSize: 13, color: p.textMuted),
+            labelMedium: AppTextStyles.label(fontSize: 11, color: p.textMuted),
+            labelSmall: AppTextStyles.label(fontSize: 10, color: p.textMuted),
+          ),
 
       dividerTheme: DividerThemeData(
         color: p.border,
@@ -298,7 +305,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontFamily: AppTextStyles.sansFont,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -314,7 +322,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 0,
-          textStyle: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontFamily: AppTextStyles.sansFont,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -330,7 +339,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          textStyle: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontFamily: AppTextStyles.sansFont,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
@@ -340,7 +350,8 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: p.accent,
-          textStyle: GoogleFonts.dmSans(
+          textStyle: TextStyle(
+            fontFamily: AppTextStyles.sansFont,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),

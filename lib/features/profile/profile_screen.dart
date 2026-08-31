@@ -679,7 +679,9 @@ class _SettingsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Pressable(
-          onTap: isPremium ? null : () => PaywallScreen.show(context),
+          onTap: isPremium
+              ? null
+              : () => PaywallScreen.show(context, source: 'profile'),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
@@ -727,6 +729,14 @@ class _SettingsSection extends ConsumerWidget {
         const SizedBox(height: 10),
         // Takip tekrar kendi ekrani (tasarim handoff §5 ayarlar listesi):
         // Bugun'deki sessiz satirin yaninda buradan da acilir.
+        Pressable(
+          onTap: () => context.push(routePreferences),
+          child: _SettingsRow(
+            icon: Icons.tune_rounded,
+            label: l10n.profilePreferences,
+            p: p,
+          ),
+        ),
         Pressable(
           onTap: () => context.push(routeTakip),
           child: _SettingsRow(

@@ -61,6 +61,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  # Yalnız test için: yemek analizi testlerinde ImagePickerPlatform.instance
+  # sahte bir uygulamayla değiştiriliyor (test/features/ekle/).
+  image_picker_platform_interface: ^2.11.1
   flutter_native_splash: ^2.4.5
 
 # For information on the generic Dart part of this file, see the
@@ -69,6 +72,37 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   generate: true
+
+  # Üç aile de pakete GÖMÜLÜ, hiçbiri çalışma anında indirilmiyor.
+  #
+  # google_fonts ile indirildikleri sürece ağsız ilk açılışta hepsi sistem
+  # fontlarına düşüyordu, yani uygulama kimliğini kaybediyordu. App Store
+  # incelemesi de aynı riski taşıyordu.
+  fonts:
+    - family: NotoSerif
+      fonts:
+        - asset: assets/fonts/NotoSerif-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/NotoSerif-SemiBold.ttf
+          weight: 600
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/DMSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/DMSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/DMSans-Bold.ttf
+          weight: 700
+    # DM Mono yalnız 500'e kadar çıkıyor (600/700 kesimi ÜRETİLMEMİŞ).
+    # Sayı stilleri buna göre 500'e sabitlendi; kodun 700 deyip 500 çizmesi
+    # istenmedi. Monospace olduğu için hizalama zaten garanti, tabular
+    # rakam özelliğine (tnum) ihtiyaç yok.
+    - family: DMMono
+      fonts:
+        - asset: assets/fonts/DMMono-Medium.ttf
+          weight: 500
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

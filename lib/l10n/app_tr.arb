@@ -60,14 +60,21 @@
   "@topulukInviteCta": {"description": "Community v1 CTA routing to referral"},
   "topulukUpcomingLabel": "YAKLAŞAN BULUŞMALAR",
   "@topulukUpcomingLabel": {"description": "Section label above event list"},
-  "topulukRsvpJoin": "Katıl",
+  "topulukRsvpJoin": "katıl",
   "@topulukRsvpJoin": {"description": "RSVP button, not joined yet"},
-  "topulukRsvpGoing": "Geliyorum",
+  "topulukRsvpGoing": "geliyorum",
   "@topulukRsvpGoing": {"description": "RSVP button, already joined"},
+  "topulukRsvpFull": "kontenjan doldu",
+  "@topulukRsvpFull": {"description": "RSVP button when the event is at capacity"},
   "topulukGoingCount": "{count} kişi geliyor",
   "@topulukGoingCount": {
     "description": "Attendee count under an event",
     "placeholders": { "count": {"type": "int"} }
+  },
+  "topulukGoingCountOfCapacity": "{count}/{capacity} kişi geliyor",
+  "@topulukGoingCountOfCapacity": {
+    "description": "Attendee count with the event capacity",
+    "placeholders": { "count": {"type": "int"}, "capacity": {"type": "int"} }
   },
   "topulukRsvpFailed": "Kaydedilemedi. Tekrar dener misin?",
   "@topulukRsvpFailed": {"description": "RSVP write failed toast"},
@@ -305,6 +312,9 @@
 
   "adanProgress": "{count} öğe · sıradaki: {next}",
   "@adanProgress": {"description": "Island progress line", "placeholders": {"count": {"type": "int"}, "next": {"type": "String"}}},
+
+  "adanCanvasSemantics": "ada görseli, {count} öğe yerleşti",
+  "@adanCanvasSemantics": {"description": "Screen reader label for the island illustration", "placeholders": {"count": {"type": "int"}}},
 
   "adanNextNote": "{next} {how} tamamlandığında yerleşecek.",
   "@adanNextNote": {"description": "Note about the next island piece", "placeholders": {"next": {"type": "String"}, "how": {"type": "String"}}},
@@ -629,6 +639,32 @@
   "profileGoPremium": "ILND+'a geç",
   "@profileGoPremium": {"description": "CTA to upgrade to premium"},
 
+  "profilePreferences": "bilgilerin ve tercihlerin",
+  "@profilePreferences": {"description": "Settings row opening the preferences screen"},
+  "preferencesTitle": "tercihler",
+  "@preferencesTitle": {"description": "Preferences screen title"},
+  "preferencesNameLabel": "AD",
+  "@preferencesNameLabel": {"description": "Section label above the name field"},
+  "preferencesGoalsLabel": "HEDEFLER",
+  "@preferencesGoalsLabel": {"description": "Section label above goal chips"},
+  "preferencesBodyLabel": "BEDEN",
+  "@preferencesBodyLabel": {"description": "Section label above age/height/weight"},
+  "preferencesActivityLabel": "HAREKET",
+  "@preferencesActivityLabel": {"description": "Section label above activity level"},
+  "preferencesDietLabel": "BESLENME",
+  "@preferencesDietLabel": {"description": "Section label above diet options"},
+  "preferencesAllergiesLabel": "ALERJİLER",
+  "@preferencesAllergiesLabel": {"description": "Section label above allergy chips"},
+  "preferencesAllergiesHelp": "ILND tarif önerirken bunları eler.",
+  "@preferencesAllergiesHelp": {"description": "Why allergies matter, under the allergy chips"},
+  "preferencesGoalsHelp": "Bugün ekranındaki okuma bunlara göre seçilir.",
+  "@preferencesGoalsHelp": {"description": "Why goals matter, under the goal chips"},
+  "preferencesSave": "kaydet",
+  "@preferencesSave": {"description": "Save button on the preferences screen"},
+  "preferencesSaved": "Tercihlerin güncellendi.",
+  "@preferencesSaved": {"description": "Toast after a successful save"},
+  "preferencesSaveFailed": "Kaydedilemedi. Tekrar dener misin?",
+  "@preferencesSaveFailed": {"description": "Toast after a failed save"},
   "profileSettingsLabel": "AYARLAR",
   "@profileSettingsLabel": {"description": "Settings section label"},
 
@@ -815,11 +851,7 @@
   "sleepRitualHomeCardSubtitle": "birkaç dakika, sonra uyku",
   "@sleepRitualHomeCardSubtitle": {"description": "Evening invitation card subtitle on home"},
 
-  "exploreQuote": "\"Bugün küçük bir adım, yarının büyük farkı.\"",
-  "@exploreQuote": {"description": "Daily quote on explore screen"},
 
-  "exploreQuoteSubtitle": "günün alıntısı",
-  "@exploreQuoteSubtitle": {"description": "Daily quote section label"},
 
   "paywallSubtitle": "sınırsız sohbet, daha derin hafıza, kişisel plan.",
   "@paywallSubtitle": {"description": "Paywall subtitle under the ILND+ heading"},

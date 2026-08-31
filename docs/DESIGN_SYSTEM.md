@@ -28,7 +28,24 @@ Pano ek tonları (editoryal kartlar): deep #274D33 · matcha #9BAA6F · krem #EF
 | Display/başlık | Noto Serif | sıkı aralık (−%2/em); **italik kelime vurgusu imzadır** ("uyku *ritüeli*") |
 | Gövde | DM Sans 400/500 | 13-16px, lh 1.4-1.5 |
 | Etiket | DM Sans 500 CAPS | 9-11px, tracking 1-2px, az kullan |
-| Sayı/istatistik | IBM Plex Mono | makro, streak, saat |
+| Sayı/istatistik | DM Mono 500 | makro, streak, saat |
+
+Üç aile de **pakete gömülüdür** (`assets/fonts/`, pubspec `fonts:` bölümü),
+hiçbiri çalışma anında indirilmez. İndirilen font ağsız ilk açılışta sistem
+fontuna düşer: uygulama açılır, hata görünmez, sadece kimliği kaybolur.
+
+DM Mono, DM Sans'ın kendi monospace kardeşidir; eşleşme IBM Plex Mono'dan
+daha doğal. **En kalın kesimi 500'dür**, 600/700 üretilmemiş. Sayı stilleri
+bu yüzden 500'e kırpılır (`AppTextStyles.monoMaxWeight`): aksi halde kod 700
+der, ekran 500 çizerdi. Vurgu ağırlıktan değil boyuttan gelir.
+
+Sayılarda monospace bir süs değil hizalama aracıdır: alt alta gelen makro
+değerleri ve 999'dan 1000'e geçen sayaçlar satırı zıplatmamalı. DM Sans bunu
+veremez, `tnum` (tabular rakam) özelliği yok; ölçüldü.
+
+`lib/` içinde hiç `GoogleFonts` çağrısı yok ve
+`test/core/typography_test.dart` hem bunu, hem dosyaların varlığını, hem de
+gerçekten TrueType olduklarını kilitliyor.
 
 ## 3. Boşluk & Şekil
 **Ayrım kutuyla değil boşlukla kurulur** (2026-08-19 editoryal geçiş): içerik

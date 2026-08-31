@@ -190,6 +190,34 @@ class IlndMemoryNotifier extends StateNotifier<IlndMemory> {
     await _persist();
   }
 
+  /// Yapısal profilden gelen gerçekleri EKLEMEZ, DEĞİŞTİRİR.
+  ///
+  /// [addFact] yalnız birebir aynı dizeyi eler. Profil gerçekleri ("Kilo:
+  /// 70 kg") güncellendiğinde eskisi de listede kalıyordu, yani ILND aynı
+  /// anda iki kiloyu biliyordu. Burada verilen [prefixes] ile başlayan
+  /// mevcut gerçekler önce temizlenir.
+  ///
+  /// Sohbetten öğrenilen gerçekler (ör. "sabahları koşuyor") korunur:
+  /// yalnız önekle eşleşenler değiştirilir.
+  Future<void> replaceFacts({
+    required List<String> prefixes,
+    required List<String> facts,
+  }) async {
+    final kept = state.facts.where((f) => !prefixes.any(f.startsWith)).toList();
+    final next = [...kept, ...facts.where((f) => f.trim().isNotEmpty)];
+    if (_sameList(next, state.facts)) return;
+    state = state.copyWith(facts: next);
+    await _persist();
+  }
+
+  static bool _sameList(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
   /// Yeni bir etkileşim notu ekler; ücretsiz katmanda pencereyi kırpar.
   Future<void> addNote(
     String note, {

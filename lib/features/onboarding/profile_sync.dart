@@ -84,9 +84,10 @@ class ProfileHydrationNotifier extends StateNotifier<ProfileHydrationStatus> {
     // AI-görünür gerçekler yeni cihazda boştur — yapısal profilden yeniden kur.
     final memory = _ref.read(ilndMemoryProvider.notifier);
     if (s.name != null) await memory.setName(s.name!);
-    for (final fact in _profileFacts(s)) {
-      await memory.addFact(fact);
-    }
+    await memory.replaceFacts(
+      prefixes: kProfileFactPrefixes,
+      facts: profileFacts(s),
+    );
 
     if (s.firstEntryDone) {
       await _ref.read(firstEntryDoneProvider.notifier).setDone();
@@ -97,9 +98,32 @@ class ProfileHydrationNotifier extends StateNotifier<ProfileHydrationStatus> {
   Future<void> _flushIfOnboarded() async {
     // Onboarding henüz yapılmamışsa flush edilecek bir şey yok.
     if (!_ref.read(onboardingDoneProvider)) return;
+    await pushLocalProfile();
+  }
+
+  /// Yerel profili sunucuya VE ILND hafızasına yazar.
+  ///
+  /// Hafıza kısmı şart: profil gerçekleri yalnız [_hydrate] içinde
+  /// işleniyordu, o da sunucuda hazır bir profil varsa çalışır. Yani
+  /// onboarding'i İLK cihazında dolduran kullanıcının boyu, kilosu, alerjisi
+  /// ILND'ye hiç ulaşmıyordu; ancak başka bir cihazda giriş yaparsa
+  /// öğreniliyordu. Ayarlar ekranı da kaydederken buradan geçer, böylece
+  /// güncelleme iki yere birden gider.
+  Future<void> pushLocalProfile() async {
+    final snapshot = _snapshotLocal();
+
+    await _ref
+        .read(ilndMemoryProvider.notifier)
+        .replaceFacts(
+          prefixes: kProfileFactPrefixes,
+          facts: profileFacts(snapshot),
+        );
+
+    // Sunucu yazımı hafızadan SONRA: köprü hazır değilse repo null döner ve
+    // erken çıkarız, ama hafıza yine de güncel kalmalı (cihaz-yerel).
     final repo = _ref.read(profileRepositoryProvider);
     if (repo == null) return;
-    await repo.upsert(_snapshotLocal());
+    await repo.upsert(snapshot);
   }
 
   ProfileData _snapshotLocal() {
@@ -143,7 +167,22 @@ const _activityLabels = {
   'aktif': 'aktif',
 };
 
-List<String> _profileFacts(ProfileData s) {
+/// [profileFacts] dizelerinin önekleri.
+///
+/// Bir alan güncellendiğinde eski gerçeğin silinebilmesi için gerekli
+/// (IlndMemoryNotifier.replaceFacts). Yeni bir profil gerçeği eklenirse
+/// öneki buraya da yazılmalı, yoksa eskisi hafızada takılı kalır.
+const kProfileFactPrefixes = <String>[
+  'Yaş:',
+  'Boy:',
+  'Kilo:',
+  'Beslenme tercihi:',
+  'Alerjiler:',
+  'Aktivite seviyesi:',
+];
+
+/// Yapısal profilin ILND'ye görünen "bilinen gerçekler" hâli.
+List<String> profileFacts(ProfileData s) {
   final facts = <String>[];
   if (s.age != null) facts.add('Yaş: ${s.age}');
   if (s.height != null) facts.add('Boy: ${s.height} cm');

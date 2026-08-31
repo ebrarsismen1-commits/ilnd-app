@@ -1,58 +1,26 @@
-import 'dart:convert';
-// SocketException web'de hiç fırlatılmaz ama mobilde ağ hatasını yakalamak
-// için gerekli. `File` bilerek import edilmiyor: dart:io File web'de çalışmaz,
-// fotoğraf XFile.readAsBytes ile platformdan bağımsız okunur (bkz. avatar_edit).
-import 'dart:io' show SocketException;
+// `File` bilerek import edilmiyor: dart:io File web'de çalışmaz, fotoğraf
+// XFile.readAsBytes ile platformdan bağımsız okunur (bkz. avatar_edit).
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:ilnd_app/core/billing/usage_meter.dart';
-import 'package:ilnd_app/core/ilnd/ai_json.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
-import 'package:ilnd_app/core/ilnd/image_media_type.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
-import 'package:ilnd_app/core/services/app_check_headers.dart';
+import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/repositories/food_repository.dart';
+import 'package:ilnd_app/features/ekle/food_analysis.dart';
+import 'package:ilnd_app/features/ekle/food_analysis_l10n.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
-
-// ─── Data model ───────────────────────────────────────────────────────────────
-
-class _FoodResult {
-  const _FoodResult({
-    required this.yemekAdi,
-    required this.kalori,
-    required this.protein,
-    required this.karbonhidrat,
-    required this.yag,
-    required this.malzemeler,
-  });
-
-  final String yemekAdi;
-  final int kalori;
-  final double protein;
-  final double karbonhidrat;
-  final double yag;
-  final List<String> malzemeler;
-
-  factory _FoodResult.fromJson(Map<String, dynamic> j) => _FoodResult(
-    yemekAdi: j['yemek_adi'] as String,
-    kalori: (j['kalori'] as num).toInt(),
-    protein: (j['protein'] as num).toDouble(),
-    karbonhidrat: (j['karbonhidrat'] as num).toDouble(),
-    yag: (j['yag'] as num).toDouble(),
-    malzemeler: List<String>.from(j['malzemeler'] as List),
-  );
-}
 
 // ─── Screen state ─────────────────────────────────────────────────────────────
 
@@ -72,7 +40,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
 
   _Phase _phase = _Phase.picker;
   Uint8List? _photoBytes;
-  _FoodResult? _result;
+  FoodResult? _result;
   String _errorMsg = '';
   String? _comment;
 
@@ -86,7 +54,12 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
   Future<void> _pick(ImageSource source, AppLocalizations l10n) async {
     // Ücretsiz katman limiti — dolduysa paywall göster, analiz başlatma.
     if (!ref.read(usageGateProvider).isAllowed(UsageKind.food)) {
-      await PaywallScreen.show(context, reason: l10n.yemekEklePaywallReason);
+      unawaited(AnalyticsService.logFreeLimitReached(UsageKind.food.name));
+      await PaywallScreen.show(
+        context,
+        reason: l10n.yemekEklePaywallReason,
+        source: 'food',
+      );
       return;
     }
 
@@ -101,6 +74,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       // web'de UnsupportedError fırlatır.
       final bytes = await xFile.readAsBytes();
       if (!mounted) return;
+      unawaited(AnalyticsService.logFoodAnalysisStarted());
       setState(() {
         _photoBytes = bytes;
         _phase = _Phase.loading;
@@ -126,185 +100,65 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         _portion = 1.0;
         _phase = _Phase.result;
       });
+      // Demo dalı kotayı düşüyor, yani bunu gerçek bir analiz sayıyor;
+      // olay da aynı şekilde atılır ki iki dal panelde tutarlı okunsun.
+      unawaited(AnalyticsService.logFoodAnalysisCompleted());
       ref.read(usageGateProvider).record(UsageKind.food);
       await _addIlndComment(demo, l10n);
       return;
     }
 
-    // media_type görüntünün GERÇEK biçiminden gelmek zorunda: picker web'de
-    // PNG/WebP döndürebilir ve yanlış bildirim Anthropic'ten 400 döndürür
-    // ("media type mismatch" — 2026-07-08'de üretimde yaşandı).
-    final mediaType = detectImageMediaType(_photoBytes!);
-    if (mediaType == null) {
-      _setError(l10n.yemekEkleUnsupportedImage);
-      return;
-    }
-    // Anthropic görsel sınırı 5MB; web'de picker'ın maxWidth küçültmesi
-    // garanti değil, bu yüzden istemci tarafında da koru.
-    if (_photoBytes!.length > 4 * 1024 * 1024) {
-      _setError(l10n.yemekEklePhotoTooLarge);
-      return;
-    }
+    final outcome = await ref
+        .read(foodAnalyzerProvider)
+        .analyse(
+          photoBytes: _photoBytes!,
+          idToken: () async =>
+              await fb_auth.FirebaseAuth.instance.currentUser?.getIdToken(),
+          turkish: l10n.localeName.startsWith('tr'),
+        );
 
-    try {
-      final base64Image = base64Encode(_photoBytes!);
-
-      final idToken = await fb_auth.FirebaseAuth.instance.currentUser
-          ?.getIdToken();
-      if (idToken == null) {
-        _setError(l10n.yemekEkleAnalysisFailed);
-        return;
-      }
-
-      // Prompt structured per Anthropic's enterprise prompt-engineering guide:
-      // (1) task + role in the system prompt, (2) background/image, (3) detailed
-      // rules, (4) a few-shot example, (5) output format. Assistant-prefill
-      // bilerek YOK: Claude 4.6+ modeller prefill'i 400 ile reddeder — JSON,
-      // yanıt metninden extractJsonObject ile ayıklanır.
-      // Tier 'deep' (Sonnet) balances vision quality, cost and low latency
-      // for this high-throughput, user-facing scan (guide, Stage 2). The
-      // request goes through functions/index.js's anthropicProxy, which
-      // holds the Anthropic API key server-side and never ships it in the
-      // client binary.
-      final body = jsonEncode({
-        'tier': 'deep',
-        // Hesabın haftalık ücretsiz katman kotasından düşsün (sunucuda).
-        'kind': 'food',
-        // 1 — Task + role
-        'system':
-            'Sen dikkatli, dürüst bir beslenme analiz uzmanısın. Bir yemek '
-            'fotoğrafına bakarak yemeği tanımlar ve makroları FOTOĞRAFTA '
-            'GÖRÜNEN GERÇEK MİKTAR için tahmin edersin — standart bir porsiyon '
-            'DEĞİL. Tabağın ne kadar dolu olduğuna, yarım/az kalmış olup '
-            'olmadığına, çatal-kaşık-tabak gibi ölçek ipuçlarına bak. Yalnızca '
-            'gözünle GÖRDÜĞÜN malzemeleri yaz; görmediğin bir eti/tavuğu/'
-            'malzemeyi VARSAYMA. Emin değilsen abartma, düşük-orta tahmin yap. '
-            'Yalnızca istenen JSON formatında yanıt ver.',
-        'messages': [
-          {
-            'role': 'user',
-            'content': [
-              // 2 — Background data / image
-              {
-                'type': 'image',
-                'source': {
-                  'type': 'base64',
-                  'media_type': mediaType,
-                  'data': base64Image,
-                },
-              },
-              // 3 — Detailed task description & rules
-              // 4 — Few-shot example
-              // 5 — Output formatting
-              {
-                'type': 'text',
-                'text':
-                    'Yukarıdaki fotoğraftaki yemeği analiz et.\n\n'
-                    'Kurallar:\n'
-                    '- "yemek_adi" yemeğin yaygın '
-                    '${l10n.localeName.startsWith('tr') ? 'Türkçe' : 'İngilizce (English)'} '
-                    'adı olsun.\n'
-                    '- "kalori" FOTOĞRAFTA GÖRÜNEN miktar için tam sayı (kcal) '
-                    'olsun — standart porsiyon değil. Tabak yarımsa yarım '
-                    'miktarı hesapla.\n'
-                    '- "protein", "karbonhidrat" ve "yag" gram cinsinden, '
-                    'ondalıklı sayı olsun ve yine GÖRÜNEN miktara göre.\n'
-                    '- "malzemeler" yalnızca fotoğrafta GERÇEKTEN GÖRDÜĞÜN ana '
-                    'malzemeleri içersin (2-6 adet). Görmediğin bir '
-                    'et/tavuk/malzeme EKLEME.\n'
-                    '- Emin olamadığın bir malzemeyi uydurmaktansa listeye '
-                    'katma; miktarda kararsızsan düşük-orta tahmin yap.\n\n'
-                    'Örnek (mercimek çorbası için):\n'
-                    '{"yemek_adi": "Mercimek Çorbası", "kalori": 180, '
-                    '"protein": 9.0, "karbonhidrat": 27.0, "yag": 4.5, '
-                    '"malzemeler": ["kırmızı mercimek", "soğan", "havuç", '
-                    '"tereyağı"]}\n\n'
-                    'Şimdi fotoğraftaki yemek için yalnızca aynı yapıda bir JSON '
-                    'nesnesi döndür. Başka hiçbir metin, açıklama veya markdown '
-                    'ekleme.',
-              },
-            ],
-          },
-        ],
-      });
-
-      final response = await http
-          .post(
-            Uri.parse(AppConfig.anthropicProxyUrl),
-            headers: {
-              'Authorization': 'Bearer $idToken',
-              'content-type': 'application/json',
-              ...await appCheckHeaders(),
-            },
-            body: body,
-          )
-          // Görsel analizi yavaş olabilir ama sınırsız değil — timeout yoksa
-          // ekran sonsuza dek "analiz ediliyor"da kalır.
-          .timeout(const Duration(seconds: 60));
-
-      if (response.statusCode == 429) {
-        // Haftalık ücretsiz hak dolduysa bu bir hata değil, paywall anıdır —
-        // hak başka bir cihazda harcanmış olabileceği için yerel sayaç bunu
-        // önceden bilemez.
-        if (isFreeWeeklyLimit(response)) {
-          ref.read(usageGateProvider).markExhausted(UsageKind.food);
-          if (!mounted) return;
+    switch (outcome) {
+      case FoodAnalysisSuccess(:final result):
+        if (mounted) {
           setState(() {
-            _photoBytes = null;
-            _phase = _Phase.picker;
+            _result = result;
+            _portion = 1.0;
+            _phase = _Phase.result;
           });
-          await PaywallScreen.show(
-            context,
-            reason: l10n.yemekEklePaywallReason,
-          );
-          return;
         }
-        _setError(l10n.yemekEkleAnalysisFailed);
-        return;
-      }
-      if (response.statusCode != 200) {
-        _setError(l10n.yemekEkleAnalysisFailedStatus(response.statusCode));
-        return;
-      }
+        // Başarılı analizi say (premium'da sayılmaz). Ekran kapanmış olsa da
+        // çağrı yapıldı, maliyet doğdu, sayaç ondan bağımsız artar.
+        unawaited(AnalyticsService.logFoodAnalysisCompleted());
+        ref.read(usageGateProvider).record(UsageKind.food);
 
-      final decoded =
-          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      final text = (decoded['content'] as List).first['text'] as String;
-
-      final jsonStr = extractJsonObject(text);
-      if (jsonStr == null) {
-        _setError(l10n.yemekEkleAnalysisFailed);
-        return;
-      }
-
-      final foodJson = jsonDecode(jsonStr) as Map<String, dynamic>;
-      final result = _FoodResult.fromJson(foodJson);
-
-      if (mounted) {
+        // ILND'nin diyetisyen-dost yorumu (sayaç değil, karşılık).
+        await _addIlndComment(result, l10n);
+      case FoodAnalysisFreeLimit():
+        // Haftalık hak sunucuda dolmuş: hata değil, paywall anı.
+        unawaited(AnalyticsService.logFreeLimitReached(UsageKind.food.name));
+        ref.read(usageGateProvider).markExhausted(UsageKind.food);
+        if (!mounted) return;
         setState(() {
-          _result = result;
-          _portion = 1.0;
-          _phase = _Phase.result;
+          _photoBytes = null;
+          _phase = _Phase.picker;
         });
-      }
-
-      // Başarılı analizi say (premium'da sayılmaz).
-      ref.read(usageGateProvider).record(UsageKind.food);
-
-      // ILND'nin diyetisyen-dost yorumu (sayaç değil, karşılık).
-      await _addIlndComment(result, l10n);
-    } on SocketException {
-      _setError(l10n.yemekEkleNoInternet);
-    } catch (_) {
-      _setError(l10n.yemekEkleAnalysisFailed);
+        await PaywallScreen.show(
+          context,
+          reason: l10n.yemekEklePaywallReason,
+          source: 'food',
+        );
+      case FoodAnalysisFailure(:final code):
+        // Hata KODU gider, kullanıcı metni değil: panelde dil bağımsız okunur.
+        unawaited(AnalyticsService.logFoodAnalysisFailed(code.name));
+        _setError(outcome.localized(l10n));
     }
   }
 
   // ── Demo sonucu ──────────────────────────────────────────────────────────────
 
-  _FoodResult _demoFoodResult() {
+  FoodResult _demoFoodResult() {
     const samples = [
-      _FoodResult(
+      FoodResult(
         yemekAdi: 'Avokadolu Tost',
         kalori: 320,
         protein: 12,
@@ -312,7 +166,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         yag: 18,
         malzemeler: ['tam buğday ekmek', 'avokado', 'yumurta', 'kiraz domates'],
       ),
-      _FoodResult(
+      FoodResult(
         yemekAdi: 'Izgara Tavuk Salata',
         kalori: 380,
         protein: 34,
@@ -320,7 +174,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         yag: 16,
         malzemeler: ['tavuk göğsü', 'marul', 'zeytinyağı', 'roka', 'mısır'],
       ),
-      _FoodResult(
+      FoodResult(
         yemekAdi: 'Yoğurtlu Granola',
         kalori: 290,
         protein: 14,
@@ -334,7 +188,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
 
   // ── ILND'nin yemek yorumu ────────────────────────────────────────────────────
 
-  Future<void> _addIlndComment(_FoodResult food, AppLocalizations l10n) async {
+  Future<void> _addIlndComment(FoodResult food, AppLocalizations l10n) async {
     try {
       final memory = ref.read(ilndMemoryProvider);
       final service = ref.read(ilndServiceProvider);
@@ -387,6 +241,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
           ),
         );
       }
+      unawaited(AnalyticsService.logFoodEntrySaved(_portion));
     }
     if (ctx.mounted) Navigator.of(ctx).pop();
   }
@@ -608,7 +463,7 @@ class _ResultView extends StatelessWidget {
   });
 
   final Uint8List photo;
-  final _FoodResult result;
+  final FoodResult result;
   final String? comment;
   final double portion;
   final ValueChanged<double> onPortion;

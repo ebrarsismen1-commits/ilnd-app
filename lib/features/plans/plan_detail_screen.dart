@@ -80,7 +80,11 @@ class PlanDetailScreen extends ConsumerWidget {
     // Kilit kontrolü her girişte, tek kapıdan: kart üzerinden de gün
     // satırından da aynı yer (ADR-0005 — ikinci bir premium kontrolü yok).
     if (_locked(ref)) {
-      await PaywallScreen.show(context, reason: l10n.planPaywallReason);
+      await PaywallScreen.show(
+        context,
+        reason: l10n.planPaywallReason,
+        source: 'plan',
+      );
       return;
     }
     if (!context.mounted) return;

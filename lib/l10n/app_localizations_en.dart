@@ -80,10 +80,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topulukUpcomingLabel => 'UPCOMING MEETUPS';
 
   @override
-  String get topulukRsvpJoin => 'Join';
+  String get topulukRsvpJoin => 'join';
 
   @override
-  String get topulukRsvpGoing => 'I\'m going';
+  String get topulukRsvpGoing => 'going';
+
+  @override
+  String get topulukRsvpFull => 'event is full';
 
   @override
   String topulukGoingCount(int count) {
@@ -94,6 +97,11 @@ class AppLocalizationsEn extends AppLocalizations {
       one: '1 person going',
     );
     return '$_temp0';
+  }
+
+  @override
+  String topulukGoingCountOfCapacity(int count, int capacity) {
+    return '$count/$capacity going';
   }
 
   @override
@@ -376,6 +384,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String adanProgress(int count, String next) {
     return '$count pieces · next: $next';
+  }
+
+  @override
+  String adanCanvasSemantics(int count) {
+    return 'island illustration, $count pieces settled';
   }
 
   @override
@@ -700,6 +713,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileGoPremium => 'upgrade to ILND+';
 
   @override
+  String get profilePreferences => 'your details and preferences';
+
+  @override
+  String get preferencesTitle => 'preferences';
+
+  @override
+  String get preferencesNameLabel => 'NAME';
+
+  @override
+  String get preferencesGoalsLabel => 'GOALS';
+
+  @override
+  String get preferencesBodyLabel => 'BODY';
+
+  @override
+  String get preferencesActivityLabel => 'ACTIVITY';
+
+  @override
+  String get preferencesDietLabel => 'NUTRITION';
+
+  @override
+  String get preferencesAllergiesLabel => 'ALLERGIES';
+
+  @override
+  String get preferencesAllergiesHelp =>
+      'ILND filters recipe suggestions by these.';
+
+  @override
+  String get preferencesGoalsHelp =>
+      'Your daily read on Today is picked from these.';
+
+  @override
+  String get preferencesSave => 'save';
+
+  @override
+  String get preferencesSaved => 'Your preferences are updated.';
+
+  @override
+  String get preferencesSaveFailed => 'Couldn\'t save that. Try again?';
+
+  @override
   String get profileSettingsLabel => 'SETTINGS';
 
   @override
@@ -903,13 +957,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sleepRitualHomeCardSubtitle => 'a few minutes, then sleep';
-
-  @override
-  String get exploreQuote =>
-      '\"A small step today, a big difference tomorrow.\"';
-
-  @override
-  String get exploreQuoteSubtitle => 'quote of the day';
 
   @override
   String get paywallSubtitle =>

@@ -112,9 +112,18 @@ void main() {
     );
     expect(altMetin, findsOneWidget);
 
-    // Sessiz satırlar ekranın kapanışı: günün okumasının ALTINDA dururlar.
+    // Sessiz satırlar günün okumasının ÜSTÜNDE durur.
+    //
+    // 2026-08-31'e kadar bunun tersiydi (satırlar kapanış notuydu). Owner
+    // canlı web derlemesine bakıp değiştirdi: eyleme çağıran üç satır
+    // (gece ritüeli, takip, haftalık kart) tam ekran yüksekliğinde bir
+    // okuma kartının arkasında kalıyor, pratikte görünmüyordu.
     final okuma = find.text(l10n.homeTodaysReadTitle);
     expect(okuma, findsOneWidget);
-    expect(tester.getRect(satir).top, greaterThan(tester.getRect(okuma).top));
+    expect(
+      tester.getRect(satir).top,
+      lessThan(tester.getRect(okuma).top),
+      reason: 'sessiz satırlar okuma kartının arkasında kalmamalı',
+    );
   });
 }

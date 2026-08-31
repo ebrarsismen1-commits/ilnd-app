@@ -98,6 +98,18 @@ class _EventRow extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final going = ref.watch(myRsvpProvider(event.id)).valueOrNull ?? false;
     final count = ref.watch(rsvpCountProvider(event.id)).valueOrNull ?? 0;
+
+    // Kontenjan etkinlik başına gelir ve olmayabilir (capacity nullable).
+    // Katılanlar için kapı kapanmaz: dolu bir etkinlikten çıkabilmeliler.
+    //
+    // BU KONTROL İSTEMCİDE: Firestore kuralları doküman sayamaz, yani
+    // kapasite kuralda uygulanamıyor. Eşzamanlı iki kayıt sınırı bir iki
+    // kişi aşabilir; ücretsiz ve küçük buluşmalarda bu kabul edildi
+    // (bkz. docs/decisions.md, 2026-08-31). Kontenjanın gerçekten
+    // bağlayıcı olması gerekirse RSVP bir Cloud Function'a taşınmalı.
+    final capacity = event.capacity;
+    final isFull = capacity != null && count >= capacity;
+    final locked = isFull && !going;
     final locale = l10n.localeName;
     final day = DateFormat('d', locale).format(event.startsAt);
     final month = DateFormat(
@@ -110,6 +122,10 @@ class _EventRow extends ConsumerWidget {
       if (repo == null) return;
       try {
         going ? await repo.cancelRsvp(event.id) : await repo.rsvp(event.id);
+        // Sayı tek seferlik bir Future; yenilenmezse kullanıcı katıldıktan
+        // sonra eski sayıyı görür ve kontenjan dolduğu halde dolmamış
+        // görünebilir.
+        ref.invalidate(rsvpCountProvider(event.id));
       } catch (_) {
         if (context.mounted) IlndToast.error(context, l10n.topulukRsvpFailed);
       }
@@ -162,7 +178,12 @@ class _EventRow extends ConsumerWidget {
                     if (count > 0)
                       Expanded(
                         child: Text(
-                          l10n.topulukGoingCount(count),
+                          capacity == null
+                              ? l10n.topulukGoingCount(count)
+                              : l10n.topulukGoingCountOfCapacity(
+                                  count,
+                                  capacity,
+                                ),
                           style: AppTextStyles.body(
                             fontSize: 10.5,
                             color: p.textMuted,
@@ -172,7 +193,7 @@ class _EventRow extends ConsumerWidget {
                     else
                       const Spacer(),
                     Pressable(
-                      onTap: toggle,
+                      onTap: locked ? null : toggle,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         padding: const EdgeInsets.symmetric(
@@ -182,15 +203,24 @@ class _EventRow extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: going ? p.accent : Colors.transparent,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: p.accent, width: 1),
+                          border: Border.all(
+                            color: locked ? p.border : p.accent,
+                            width: 1,
+                          ),
                         ),
                         child: Text(
-                          going ? l10n.topulukRsvpGoing : l10n.topulukRsvpJoin,
+                          locked
+                              ? l10n.topulukRsvpFull
+                              : (going
+                                    ? l10n.topulukRsvpGoing
+                                    : l10n.topulukRsvpJoin),
                           softWrap: false,
                           overflow: TextOverflow.fade,
                           style: AppTextStyles.body(
                             fontSize: 11.5,
-                            color: going ? p.onAccent : p.accent,
+                            color: locked
+                                ? p.textMuted
+                                : (going ? p.onAccent : p.accent),
                           ).copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),

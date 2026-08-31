@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/billing/entitlement.dart';
-import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
+import 'package:ilnd_app/core/billing/billing_gateway.dart';
+import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
@@ -18,7 +21,15 @@ class PaywallScreen extends ConsumerStatefulWidget {
 
   final String? reason;
 
-  static Future<void> show(BuildContext context, {String? reason}) {
+  /// [source] paywall'ın hangi ekrandan açıldığı (food, chat, movement, plan,
+  /// profile). Zorunlu: hangi duvarın ödemeye dönüştüğü ancak bu ayrımla
+  /// okunabiliyor.
+  static Future<void> show(
+    BuildContext context, {
+    String? reason,
+    required String source,
+  }) {
+    unawaited(AnalyticsService.logPaywallViewed(source));
     return showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -38,8 +49,16 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
 
   Future<void> _purchase(AppLocalizations l10n) async {
     setState(() => _purchasing = true);
+    unawaited(AnalyticsService.logPurchaseStarted());
     try {
-      final success = await RevenueCatService.purchase();
+      final success = await ref.read(billingGatewayProvider).purchase();
+      // Sonuç ekrandan bağımsız kaydedilir: kullanıcı akış biterken çıkmış
+      // olabilir ama satın alma yine de olmuş olabilir.
+      unawaited(
+        success
+            ? AnalyticsService.logPurchaseCompleted()
+            : AnalyticsService.logPurchaseFailed('cancelled'),
+      );
       if (!mounted) return;
       if (success) {
         await ref.read(isPremiumProvider.notifier).setPremium(true);
@@ -48,6 +67,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         IlndToast.error(context, l10n.paywallPurchaseCancelled);
       }
     } catch (_) {
+      unawaited(AnalyticsService.logPurchaseFailed('error'));
       if (mounted) IlndToast.error(context, l10n.paywallPurchaseFailed);
     } finally {
       if (mounted) setState(() => _purchasing = false);
@@ -57,7 +77,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   Future<void> _restore(AppLocalizations l10n) async {
     setState(() => _restoring = true);
     try {
-      final success = await RevenueCatService.restorePurchases();
+      final success = await ref.read(billingGatewayProvider).restorePurchases();
+      unawaited(AnalyticsService.logRestoreCompleted(success));
       if (!mounted) return;
       if (success) {
         await ref.read(isPremiumProvider.notifier).setPremium(true);
@@ -68,6 +89,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
         IlndToast.error(context, l10n.paywallNoActiveSubscription);
       }
     } catch (_) {
+      unawaited(AnalyticsService.logRestoreFailed());
       if (mounted) IlndToast.error(context, l10n.paywallRestoreFailed);
     } finally {
       if (mounted) setState(() => _restoring = false);
@@ -238,18 +260,23 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  // Flexible şart: iki bağlantı yan yana dar ekranda satıra
+                  // sığmıyor ve Row 320px'te taşıyordu (kural #14). Geniş
+                  // ekranda görünüm aynı — Flexible yalnız gerekince daraltır.
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Pressable(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            l10n.paywallNotNow,
-                            style: AppTextStyles.body(
-                              fontSize: 13,
-                              color: p.textMuted,
+                      Flexible(
+                        child: Pressable(
+                          onTap: () => Navigator.of(context).pop(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              l10n.paywallNotNow,
+                              style: AppTextStyles.body(
+                                fontSize: 13,
+                                color: p.textMuted,
+                              ),
                             ),
                           ),
                         ),
@@ -261,28 +288,30 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                           color: p.textMuted,
                         ),
                       ),
-                      Pressable(
-                        onTap: (_purchasing || _restoring)
-                            ? null
-                            : () => _restore(l10n),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: _restoring
-                              ? SizedBox(
-                                  width: 14,
-                                  height: 14,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 1.5,
-                                    color: p.textMuted,
+                      Flexible(
+                        child: Pressable(
+                          onTap: (_purchasing || _restoring)
+                              ? null
+                              : () => _restore(l10n),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: _restoring
+                                ? SizedBox(
+                                    width: 14,
+                                    height: 14,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1.5,
+                                      color: p.textMuted,
+                                    ),
+                                  )
+                                : Text(
+                                    l10n.paywallRestore,
+                                    style: AppTextStyles.body(
+                                      fontSize: 13,
+                                      color: p.textMuted,
+                                    ),
                                   ),
-                                )
-                              : Text(
-                                  l10n.paywallRestore,
-                                  style: AppTextStyles.body(
-                                    fontSize: 13,
-                                    color: p.textMuted,
-                                  ),
-                                ),
+                          ),
                         ),
                       ),
                     ],

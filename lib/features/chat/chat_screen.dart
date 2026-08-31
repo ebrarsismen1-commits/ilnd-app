@@ -93,7 +93,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       _scrollToBottomSoon();
       if (next.limitReached) {
         ref.read(chatProvider.notifier).acknowledgeLimit();
-        PaywallScreen.show(context, reason: l10n.chatPaywallReason);
+        PaywallScreen.show(
+          context,
+          reason: l10n.chatPaywallReason,
+          source: 'chat',
+        );
       }
     });
 

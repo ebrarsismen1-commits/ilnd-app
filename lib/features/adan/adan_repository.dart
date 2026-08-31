@@ -29,9 +29,29 @@ final islandStateProvider = StreamProvider<IslandState>((ref) {
         // Sert Kural #3: doc.data()! yasak, her alanda varsayilan var.
         final data = doc.data() ?? const <String, dynamic>{};
         final raw = data['earned'] as List<dynamic>? ?? const [];
-        return IslandState(earned: raw.map((e) => '$e').toSet());
+        return IslandState(
+          earned: raw.map((e) => '$e').toSet(),
+          quietDays: _quietDaysSince(data['lastActiveDate']),
+        );
       });
 });
+
+/// `lastActiveDate` (YYYY-MM-DD, sunucu yazar) → bugüne kadar geçen sessiz
+/// gün sayısı. Alan yoksa ya da bozuksa 0 döner: su berrak kalır. Bilinmeyen
+/// bir durumda suyu koyulaştırmak, olmamış bir sessizliği kullanıcıya
+/// göstermek olurdu.
+int _quietDaysSince(Object? rawDate) {
+  if (rawDate is! String) return 0;
+  final last = DateTime.tryParse(rawDate);
+  if (last == null) return 0;
+  final now = DateTime.now();
+  final days = DateTime(
+    now.year,
+    now.month,
+    now.day,
+  ).difference(DateTime(last.year, last.month, last.day)).inDays;
+  return days < 0 ? 0 : days;
+}
 
 /// Kazanımı sunucuya hesaplatır. İdempotent — kazanılmış öğe geri alınmaz,
 /// bu yüzden gereğinden fazla çağrılması zararsızdır (yalnız maliyet).
