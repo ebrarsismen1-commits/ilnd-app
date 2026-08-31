@@ -765,6 +765,38 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileDeleteAccount => 'hesabımı sil';
 
   @override
+  String get journalDeleteTitle => 'Bu girdiyi sil';
+
+  @override
+  String get journalDeleteBody =>
+      'Bu yazı kalıcı olarak silinecek. O günü yazmış olman değişmiyor, serin bozulmuyor.';
+
+  @override
+  String get journalDeleted => 'Girdi silindi.';
+
+  @override
+  String get journalDeleteFailed => 'Silinemedi. Tekrar dener misin?';
+
+  @override
+  String get habitDeleteTitle => 'Bu alışkanlığı sil';
+
+  @override
+  String get habitDeleteBody =>
+      'Alışkanlık ve geçmiş işaretlemeleri listeden kalkacak.';
+
+  @override
+  String get habitDeleted => 'Alışkanlık silindi.';
+
+  @override
+  String get habitDeleteFailed => 'Silinemedi. Tekrar dener misin?';
+
+  @override
+  String get deleteAction => 'sil';
+
+  @override
+  String get cancelAction => 'vazgeç';
+
+  @override
   String get profileDeleteAccountDialogTitle => 'Hesabını sil';
 
   @override

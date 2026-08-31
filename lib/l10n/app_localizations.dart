@@ -1526,6 +1526,66 @@ abstract class AppLocalizations {
   /// **'hesabımı sil'**
   String get profileDeleteAccount;
 
+  /// Journal entry delete confirmation title
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu girdiyi sil'**
+  String get journalDeleteTitle;
+
+  /// Journal entry delete confirmation body
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yazı kalıcı olarak silinecek. O günü yazmış olman değişmiyor, serin bozulmuyor.'**
+  String get journalDeleteBody;
+
+  /// Toast after deleting a journal entry
+  ///
+  /// In tr, this message translates to:
+  /// **'Girdi silindi.'**
+  String get journalDeleted;
+
+  /// Toast when deleting a journal entry fails
+  ///
+  /// In tr, this message translates to:
+  /// **'Silinemedi. Tekrar dener misin?'**
+  String get journalDeleteFailed;
+
+  /// Habit delete confirmation title
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu alışkanlığı sil'**
+  String get habitDeleteTitle;
+
+  /// Habit delete confirmation body
+  ///
+  /// In tr, this message translates to:
+  /// **'Alışkanlık ve geçmiş işaretlemeleri listeden kalkacak.'**
+  String get habitDeleteBody;
+
+  /// Toast after deleting a habit
+  ///
+  /// In tr, this message translates to:
+  /// **'Alışkanlık silindi.'**
+  String get habitDeleted;
+
+  /// Toast when deleting a habit fails
+  ///
+  /// In tr, this message translates to:
+  /// **'Silinemedi. Tekrar dener misin?'**
+  String get habitDeleteFailed;
+
+  /// Destructive confirm button in delete dialogs
+  ///
+  /// In tr, this message translates to:
+  /// **'sil'**
+  String get deleteAction;
+
+  /// Dismiss button in delete dialogs
+  ///
+  /// In tr, this message translates to:
+  /// **'vazgeç'**
+  String get cancelAction;
+
   /// Delete account confirmation dialog title
   ///
   /// In tr, this message translates to:

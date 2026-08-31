@@ -61,6 +61,13 @@ class JournalRepository {
     await _col.add(entry.toMap(_userId));
     unawaited(CheckinRepository.markActiveToday(_userId));
   }
+
+  /// Bir girdiyi siler.
+  ///
+  /// Check-in kaydı BİLEREK geri alınmıyor: kullanıcı o gün gerçekten yazdı,
+  /// yazdığını sonradan silmesi o günü yaşamamış saymaz. Seri de bu yüzden
+  /// bozulmaz.
+  Future<void> delete(String entryId) => _col.doc(entryId).delete();
 }
 
 // ─── Provider ─────────────────────────────────────────────────────────────────

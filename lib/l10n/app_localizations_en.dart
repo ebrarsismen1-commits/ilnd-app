@@ -779,6 +779,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileDeleteAccount => 'delete my account';
 
   @override
+  String get journalDeleteTitle => 'Delete this entry';
+
+  @override
+  String get journalDeleteBody =>
+      'This note will be gone for good. It does not change that you wrote that day, and your streak stays.';
+
+  @override
+  String get journalDeleted => 'Entry deleted.';
+
+  @override
+  String get journalDeleteFailed => 'Couldn\'t delete that. Try again?';
+
+  @override
+  String get habitDeleteTitle => 'Delete this habit';
+
+  @override
+  String get habitDeleteBody =>
+      'The habit and its past check marks will leave the list.';
+
+  @override
+  String get habitDeleted => 'Habit deleted.';
+
+  @override
+  String get habitDeleteFailed => 'Couldn\'t delete that. Try again?';
+
+  @override
+  String get deleteAction => 'delete';
+
+  @override
+  String get cancelAction => 'cancel';
+
+  @override
   String get profileDeleteAccountDialogTitle => 'Delete your account';
 
   @override
