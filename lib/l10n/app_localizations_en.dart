@@ -194,6 +194,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t send the email. Check your internet connection.';
 
   @override
+  String get authErrorResetLinkInvalid =>
+      'This password reset link has expired or was already used. Request a new one.';
+
+  @override
   String get authErrorDeleteUnavailable =>
       'Account deletion is unavailable right now.';
 

@@ -60,6 +60,7 @@
   "authErrorGoogleFailed": "Couldn't sign in with Google. Try again?",
   "authErrorAppleFailed": "Couldn't sign in with Apple. Try again?",
   "authErrorResetFailed": "Couldn't send the email. Check your internet connection.",
+  "authErrorResetLinkInvalid": "This password reset link has expired or was already used. Request a new one.",
   "authErrorDeleteUnavailable": "Account deletion is unavailable right now.",
   "authErrorDeleteFailed": "Couldn't delete your account. Try again?",
 

@@ -416,6 +416,12 @@ abstract class AppLocalizations {
   /// **'E-posta gönderilemedi. İnternet bağlantını kontrol et.'**
   String get authErrorResetFailed;
 
+  /// Auth error: password reset link could not be exchanged for a session
+  ///
+  /// In tr, this message translates to:
+  /// **'Şifre sıfırlama bağlantısının süresi dolmuş ya da daha önce kullanılmış. Yeni bir bağlantı iste.'**
+  String get authErrorResetLinkInvalid;
+
   /// Auth error: delete account service unavailable
   ///
   /// In tr, this message translates to:

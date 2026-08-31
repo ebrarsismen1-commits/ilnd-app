@@ -42,6 +42,40 @@ Before tagging `v1.0.0`, all of the following must pass:
 4. Verify App Check is configured (Play Integrity / App Attest) in console
 5. Register debug App Check token for CI (`FIREBASE_APP_CHECK_TEST_APP_ID`)
 
+### Supabase (password reset e-mail)
+
+The "Reset Password" e-mail template **must** link straight into the app with a
+token hash. The default `{{ .ConfirmationURL }}` template sends the user through
+Supabase's own `/auth/v1/verify` endpoint, which burns the one-time token on the
+first HTTP GET. Mail scanners and corporate "safe links" services follow that URL
+before the user does, so by the time the user clicks, the token is gone and the
+app receives `?error=access_denied&error_code=otp_expired`. This happened in
+production on 2026-08-31.
+
+Dashboard → Authentication → Emails → **Reset Password**, set the link to:
+
+```html
+<a href="https://ilnd-app-8dcbd.web.app/?token_hash={{ .TokenHash }}&type=recovery">
+  sifreni sifirla
+</a>
+```
+
+With this template the link points at our own page and the token is consumed only
+when the app calls `verifyOTP` (see `recoveryTokenHashFrom` and
+`_verifyRecoveryLink` in `lib/features/auth/auth_provider.dart`). A scanner that
+opens the URL consumes nothing.
+
+Notes:
+
+- The app handles both templates. Until this change is made the old flow stays
+  in effect, so shipping the code first is safe.
+- Password reset now completes **on the web**. A mobile user opens the link in a
+  browser, sets the new password there, and signs into the app with it.
+- Do not change the **Confirm signup** template: account confirmation still uses
+  `{{ .ConfirmationURL }}` plus the `com.ilnd.app://login-callback` deep link.
+- Verify after changing: request a reset, then check Dashboard → Logs → Auth.
+  There must be exactly one `/verify` call, made when you click the link.
+
 ### Content
 ```bash
 cd functions

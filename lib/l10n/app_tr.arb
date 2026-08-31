@@ -137,6 +137,8 @@
   "@authErrorAppleFailed": {"description": "Auth error: Apple sign-in failed"},
   "authErrorResetFailed": "E-posta gönderilemedi. İnternet bağlantını kontrol et.",
   "@authErrorResetFailed": {"description": "Auth error: password reset email failed"},
+  "authErrorResetLinkInvalid": "Şifre sıfırlama bağlantısının süresi dolmuş ya da daha önce kullanılmış. Yeni bir bağlantı iste.",
+  "@authErrorResetLinkInvalid": {"description": "Auth error: password reset link could not be exchanged for a session"},
   "authErrorDeleteUnavailable": "Hesap silme şu an kullanılamıyor.",
   "@authErrorDeleteUnavailable": {"description": "Auth error: delete account service unavailable"},
   "authErrorDeleteFailed": "Hesap silinemedi. Tekrar dener misin?",

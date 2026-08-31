@@ -18,6 +18,7 @@ extension AuthErrorCodeL10n on AuthErrorCode {
     AuthErrorCode.googleFailed => l10n.authErrorGoogleFailed,
     AuthErrorCode.appleFailed => l10n.authErrorAppleFailed,
     AuthErrorCode.resetFailed => l10n.authErrorResetFailed,
+    AuthErrorCode.resetLinkInvalid => l10n.authErrorResetLinkInvalid,
     AuthErrorCode.updatePasswordFailed => l10n.authErrorUpdatePasswordFailed,
     AuthErrorCode.deleteUnavailable => l10n.authErrorDeleteUnavailable,
     AuthErrorCode.deleteFailed => l10n.authErrorDeleteFailed,

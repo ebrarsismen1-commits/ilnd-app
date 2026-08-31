@@ -184,6 +184,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'E-posta gönderilemedi. İnternet bağlantını kontrol et.';
 
   @override
+  String get authErrorResetLinkInvalid =>
+      'Şifre sıfırlama bağlantısının süresi dolmuş ya da daha önce kullanılmış. Yeni bir bağlantı iste.';
+
+  @override
   String get authErrorDeleteUnavailable => 'Hesap silme şu an kullanılamıyor.';
 
   @override

@@ -30,6 +30,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool _passwordError = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Şifre sıfırlama linki çözülemediğinde router kullanıcıyı buraya
+    // bırakır. Hata bu ekran açılmadan ÖNCE de gelmiş olabilir (soğuk
+    // açılışta link takası ilk kareden önce biter), o yüzden dinlemenin
+    // yanında ilk karede bir kez de okunur — yoksa kullanıcı neden şifre
+    // yenileme ekranı yerine burada olduğunu hiç öğrenemez.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showLinkError());
+  }
+
+  // Toast tek sefer: bayrak provider'da DEĞİL burada tutulur. Provider'ı
+  // temizlemek router'ı tekrar değerlendirir ve onboarding duvarı kullanıcıyı
+  // giriş ekranından geri koparırdı (bkz. resolveRedirect/linkFailed).
+  bool _linkErrorShown = false;
+
+  void _showLinkError() {
+    if (!mounted || _linkErrorShown) return;
+    final code = ref.read(authLinkErrorProvider);
+    if (code == null) return;
+    _linkErrorShown = true;
+    IlndToast.error(context, code.localized(AppLocalizations.of(context)!));
+  }
+
+  @override
   void dispose() {
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
@@ -109,6 +133,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AuthErrorCode?>(authLinkErrorProvider, (_, next) {
+      if (next != null) _showLinkError();
+    });
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final authState = ref.watch(authNotifierProvider);
