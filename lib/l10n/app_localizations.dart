@@ -2288,6 +2288,24 @@ abstract class AppLocalizations {
   /// **'henüz alışkanlık eklenmedi'**
   String get takipNoHabitsYet;
 
+  /// Tracking history range toggle: week
+  ///
+  /// In tr, this message translates to:
+  /// **'hafta'**
+  String get takipRangeWeek;
+
+  /// Tracking history range toggle: month
+  ///
+  /// In tr, this message translates to:
+  /// **'ay'**
+  String get takipRangeMonth;
+
+  /// Average daily water intake across the selected range
+  ///
+  /// In tr, this message translates to:
+  /// **'{range} ort. {ml}ml'**
+  String takipWaterAverage(String range, int ml);
+
   /// Error when no Firebase ID token is available for the AI proxy
   ///
   /// In tr, this message translates to:
@@ -2599,6 +2617,102 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'kaydet'**
   String get yemekEkleSaveButton;
+
+  /// Picker CTA that opens the manual entry form
+  ///
+  /// In tr, this message translates to:
+  /// **'elle ekle'**
+  String get yemekEkleManualButton;
+
+  /// Manual entry form heading
+  ///
+  /// In tr, this message translates to:
+  /// **'ne yedin?'**
+  String get yemekEkleManualTitle;
+
+  /// Manual entry form subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'fotoğraf olmadan da ekleyebilirsin. malzemeleri sonraki adımda yazarsın.'**
+  String get yemekEkleManualBody;
+
+  /// Manual entry: food name field label
+  ///
+  /// In tr, this message translates to:
+  /// **'yemek adı'**
+  String get yemekEkleManualNameLabel;
+
+  /// Manual entry: calorie field label
+  ///
+  /// In tr, this message translates to:
+  /// **'kalori (kcal)'**
+  String get yemekEkleManualCalorieLabel;
+
+  /// Manual entry: hint that macro fields may stay empty
+  ///
+  /// In tr, this message translates to:
+  /// **'makrolar isteğe bağlı, bilmiyorsan boş bırak.'**
+  String get yemekEkleManualMacroHint;
+
+  /// Manual entry: submit button
+  ///
+  /// In tr, this message translates to:
+  /// **'devam'**
+  String get yemekEkleManualContinue;
+
+  /// Manual entry: empty name validation
+  ///
+  /// In tr, this message translates to:
+  /// **'yemek adı gerekli'**
+  String get yemekEkleManualNameError;
+
+  /// Manual entry: invalid calorie validation
+  ///
+  /// In tr, this message translates to:
+  /// **'geçerli bir kalori yaz'**
+  String get yemekEkleManualCalorieError;
+
+  /// Add ingredient button
+  ///
+  /// In tr, this message translates to:
+  /// **'malzeme ekle'**
+  String get yemekEkleIngredientAdd;
+
+  /// Ingredient text field placeholder
+  ///
+  /// In tr, this message translates to:
+  /// **'ör. zeytinyağı'**
+  String get yemekEkleIngredientHint;
+
+  /// Accessibility label of the remove button on an ingredient chip
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} malzemesini çıkar'**
+  String yemekEkleIngredientRemove(String name);
+
+  /// Recalculate macros after the ingredient list changed
+  ///
+  /// In tr, this message translates to:
+  /// **'makroları yeniden hesapla'**
+  String get yemekEkleRecalculate;
+
+  /// Warns that recalculation consumes one weekly free analysis
+  ///
+  /// In tr, this message translates to:
+  /// **'malzemeleri değiştirdin. yeniden hesaplama haftalık analiz hakkından bir tane düşer.'**
+  String get yemekEkleRecalculateHint;
+
+  /// Recalculation in progress label
+  ///
+  /// In tr, this message translates to:
+  /// **'yeniden hesaplanıyor'**
+  String get yemekEkleRecalculating;
+
+  /// Recalculation failed toast
+  ///
+  /// In tr, this message translates to:
+  /// **'makrolar yeniden hesaplanamadı'**
+  String get yemekEkleRecalculateFailed;
 
   /// Retry button
   ///

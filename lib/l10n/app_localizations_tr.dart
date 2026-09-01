@@ -1188,6 +1188,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get takipNoHabitsYet => 'henüz alışkanlık eklenmedi';
 
   @override
+  String get takipRangeWeek => 'hafta';
+
+  @override
+  String get takipRangeMonth => 'ay';
+
+  @override
+  String takipWaterAverage(String range, int ml) {
+    return '$range ort. ${ml}ml';
+  }
+
+  @override
   String get ilndServiceSessionError => 'Oturum doğrulanamadı.';
 
   @override
@@ -1361,6 +1372,59 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get yemekEkleSaveButton => 'kaydet';
+
+  @override
+  String get yemekEkleManualButton => 'elle ekle';
+
+  @override
+  String get yemekEkleManualTitle => 'ne yedin?';
+
+  @override
+  String get yemekEkleManualBody =>
+      'fotoğraf olmadan da ekleyebilirsin. malzemeleri sonraki adımda yazarsın.';
+
+  @override
+  String get yemekEkleManualNameLabel => 'yemek adı';
+
+  @override
+  String get yemekEkleManualCalorieLabel => 'kalori (kcal)';
+
+  @override
+  String get yemekEkleManualMacroHint =>
+      'makrolar isteğe bağlı, bilmiyorsan boş bırak.';
+
+  @override
+  String get yemekEkleManualContinue => 'devam';
+
+  @override
+  String get yemekEkleManualNameError => 'yemek adı gerekli';
+
+  @override
+  String get yemekEkleManualCalorieError => 'geçerli bir kalori yaz';
+
+  @override
+  String get yemekEkleIngredientAdd => 'malzeme ekle';
+
+  @override
+  String get yemekEkleIngredientHint => 'ör. zeytinyağı';
+
+  @override
+  String yemekEkleIngredientRemove(String name) {
+    return '$name malzemesini çıkar';
+  }
+
+  @override
+  String get yemekEkleRecalculate => 'makroları yeniden hesapla';
+
+  @override
+  String get yemekEkleRecalculateHint =>
+      'malzemeleri değiştirdin. yeniden hesaplama haftalık analiz hakkından bir tane düşer.';
+
+  @override
+  String get yemekEkleRecalculating => 'yeniden hesaplanıyor';
+
+  @override
+  String get yemekEkleRecalculateFailed => 'makrolar yeniden hesaplanamadı';
 
   @override
   String get yemekEkleRetryButton => 'tekrar dene';

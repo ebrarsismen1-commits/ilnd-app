@@ -1135,6 +1135,21 @@
   "takipNoHabitsYet": "henüz alışkanlık eklenmedi",
   "@takipNoHabitsYet": {"description": "Empty habits list message"},
 
+  "takipRangeWeek": "hafta",
+  "@takipRangeWeek": {"description": "Tracking history range toggle: week"},
+
+  "takipRangeMonth": "ay",
+  "@takipRangeMonth": {"description": "Tracking history range toggle: month"},
+
+  "takipWaterAverage": "{range} ort. {ml}ml",
+  "@takipWaterAverage": {
+    "description": "Average daily water intake across the selected range",
+    "placeholders": {
+      "range": {"type": "String"},
+      "ml": {"type": "int"}
+    }
+  },
+
   "ilndServiceSessionError": "Oturum doğrulanamadı.",
   "@ilndServiceSessionError": {"description": "Error when no Firebase ID token is available for the AI proxy"},
 
@@ -1316,6 +1331,59 @@
 
   "yemekEkleSaveButton": "kaydet",
   "@yemekEkleSaveButton": {"description": "Save food entry button"},
+
+  "yemekEkleManualButton": "elle ekle",
+  "@yemekEkleManualButton": {"description": "Picker CTA that opens the manual entry form"},
+
+  "yemekEkleManualTitle": "ne yedin?",
+  "@yemekEkleManualTitle": {"description": "Manual entry form heading"},
+
+  "yemekEkleManualBody": "fotoğraf olmadan da ekleyebilirsin. malzemeleri sonraki adımda yazarsın.",
+  "@yemekEkleManualBody": {"description": "Manual entry form subtitle"},
+
+  "yemekEkleManualNameLabel": "yemek adı",
+  "@yemekEkleManualNameLabel": {"description": "Manual entry: food name field label"},
+
+  "yemekEkleManualCalorieLabel": "kalori (kcal)",
+  "@yemekEkleManualCalorieLabel": {"description": "Manual entry: calorie field label"},
+
+  "yemekEkleManualMacroHint": "makrolar isteğe bağlı, bilmiyorsan boş bırak.",
+  "@yemekEkleManualMacroHint": {"description": "Manual entry: hint that macro fields may stay empty"},
+
+  "yemekEkleManualContinue": "devam",
+  "@yemekEkleManualContinue": {"description": "Manual entry: submit button"},
+
+  "yemekEkleManualNameError": "yemek adı gerekli",
+  "@yemekEkleManualNameError": {"description": "Manual entry: empty name validation"},
+
+  "yemekEkleManualCalorieError": "geçerli bir kalori yaz",
+  "@yemekEkleManualCalorieError": {"description": "Manual entry: invalid calorie validation"},
+
+  "yemekEkleIngredientAdd": "malzeme ekle",
+  "@yemekEkleIngredientAdd": {"description": "Add ingredient button"},
+
+  "yemekEkleIngredientHint": "ör. zeytinyağı",
+  "@yemekEkleIngredientHint": {"description": "Ingredient text field placeholder"},
+
+  "yemekEkleIngredientRemove": "{name} malzemesini çıkar",
+  "@yemekEkleIngredientRemove": {
+    "description": "Accessibility label of the remove button on an ingredient chip",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+
+  "yemekEkleRecalculate": "makroları yeniden hesapla",
+  "@yemekEkleRecalculate": {"description": "Recalculate macros after the ingredient list changed"},
+
+  "yemekEkleRecalculateHint": "malzemeleri değiştirdin. yeniden hesaplama haftalık analiz hakkından bir tane düşer.",
+  "@yemekEkleRecalculateHint": {"description": "Warns that recalculation consumes one weekly free analysis"},
+
+  "yemekEkleRecalculating": "yeniden hesaplanıyor",
+  "@yemekEkleRecalculating": {"description": "Recalculation in progress label"},
+
+  "yemekEkleRecalculateFailed": "makrolar yeniden hesaplanamadı",
+  "@yemekEkleRecalculateFailed": {"description": "Recalculation failed toast"},
 
   "yemekEkleRetryButton": "tekrar dene",
   "@yemekEkleRetryButton": {"description": "Retry button"},

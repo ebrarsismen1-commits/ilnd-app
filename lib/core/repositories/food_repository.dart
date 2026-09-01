@@ -14,6 +14,7 @@ class FoodEntry {
     required this.karbonhidrat,
     required this.yag,
     required this.createdAt,
+    this.malzemeler = const [],
   });
 
   final String id;
@@ -23,6 +24,10 @@ class FoodEntry {
   final int karbonhidrat;
   final int yag;
   final DateTime createdAt;
+
+  /// Öğünün malzemeleri. Analizden gelir, kullanıcı ekleyip çıkarabilir.
+  /// Eski kayıtlarda bu alan yok: onlar boş listeyle okunur.
+  final List<String> malzemeler;
 
   factory FoodEntry.fromDoc(DocumentSnapshot doc) {
     final d = doc.data() as Map<String, dynamic>? ?? const {};
@@ -34,6 +39,7 @@ class FoodEntry {
       karbonhidrat: (d['karbonhidrat'] as num?)?.toInt() ?? 0,
       yag: (d['yag'] as num?)?.toInt() ?? 0,
       createdAt: (d['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      malzemeler: List<String>.from((d['malzemeler'] as List?) ?? const []),
     );
   }
 
@@ -45,6 +51,7 @@ class FoodEntry {
     'karbonhidrat': karbonhidrat,
     'yag': yag,
     'createdAt': Timestamp.fromDate(createdAt),
+    'malzemeler': malzemeler,
   };
 }
 

@@ -364,6 +364,21 @@ class _FoodEntryRow extends StatelessWidget {
                   ),
                   style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
                 ),
+                // Malzemeler kaydın parçası: "ne yedim" sorusuna makro
+                // satırından daha iyi cevap veriyor. Eski kayıtlarda boş.
+                if (entry.malzemeler.isNotEmpty) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    entry.malzemeler.join(', '),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.body(
+                      fontSize: 11,
+                      color: p.textMuted,
+                      height: 1.35,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
@@ -423,6 +438,11 @@ class _ActivitySection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final waterMl = ref.watch(waterTodayProvider);
     final waterPct = (waterMl / _kSuHedef).clamp(0.0, 1.0);
+    final range = ref.watch(trackingRangeProvider);
+    final history = ref.watch(waterHistoryProvider(range));
+    final waterAverage = history.isEmpty
+        ? 0
+        : (history.reduce((a, b) => a + b) / history.length).round();
     // Sahte "4.2k adım" yer tutucusu kaldırıldı — adım verisi ancak sensör
     // entegrasyonuyla gelir (post-MVP). Yerine elimizde GERÇEKTEN olan
     // metrik: bugünkü alışkanlık tamamlama sayısı.
@@ -499,6 +519,19 @@ class _ActivitySection extends ConsumerWidget {
                         color: p.textMuted,
                       ),
                     ),
+                    const SizedBox(height: 2),
+                    // Seçili pencerenin (hafta/ay) günlük ortalaması: tek
+                    // günün iyi ya da kötü geçmesi alışkanlığı anlatmıyor.
+                    Text(
+                      l10n.takipWaterAverage(
+                        rangeLabel(range, l10n),
+                        waterAverage,
+                      ),
+                      style: AppTextStyles.label(
+                        fontSize: 10,
+                        color: p.textMuted,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -510,7 +543,7 @@ class _ActivitySection extends ConsumerWidget {
   }
 }
 
-// ─── SECTION 4: Habits — Firestore'dan gerçek veri ───────────────────────────
+// ─── SECTION 4: Habits — Firestore'den gerçek veri ─────────────────────
 
 class _HabitsSection extends ConsumerWidget {
   const _HabitsSection({required this.p, required this.l10n});
@@ -519,19 +552,29 @@ class _HabitsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final range = ref.watch(trackingRangeProvider);
     final habitsAsync = ref.watch(habitsProvider);
-    final completionsAsync = ref.watch(last7DaysCompletionsProvider);
+    final completionsAsync = ref.watch(rangeCompletionsProvider(range));
     final todayCompletions =
         ref.watch(todayCompletionsProvider).valueOrNull ?? {};
     final toggle = ref.read(toggleHabitCompletionProvider);
 
     final habits = habitsAsync.valueOrNull ?? [];
-    final last7 = completionsAsync.valueOrNull ?? {};
+    final completions = completionsAsync.valueOrNull ?? {};
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionLabel(l10n.takipHabitsLabel, color: p.textMuted),
+        // Başlık satırı pencere seçimini taşır: ızgara ayrı bir ekrana gitmeden
+        // yakınlaşıp uzaklaşır.
+        Row(
+          children: [
+            Expanded(
+              child: _SectionLabel(l10n.takipHabitsLabel, color: p.textMuted),
+            ),
+            _RangeToggle(p: p, l10n: l10n),
+          ],
+        ),
         if (habitsAsync.isLoading)
           Center(
             child: Padding(
@@ -565,7 +608,8 @@ class _HabitsSection extends ConsumerWidget {
                   _HabitRow(
                     habitId: habit.id,
                     name: habit.name,
-                    last7: last7,
+                    completions: completions,
+                    range: range,
                     isTodayDone: isToday,
                     onToggle: () => toggle(habit.id),
                     p: p,
@@ -580,11 +624,64 @@ class _HabitsSection extends ConsumerWidget {
   }
 }
 
+/// Hafta / ay seçimi. İki değerlik bir seçim için açılır menü fazla: iki hap,
+/// seçili olan dolu.
+class _RangeToggle extends ConsumerWidget {
+  const _RangeToggle({required this.p, required this.l10n});
+  final AppPalette p;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selected = ref.watch(trackingRangeProvider);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: TrackingRange.values.map((range) {
+          final isSelected = range == selected;
+          final label = rangeLabel(range, l10n);
+          return Padding(
+            padding: const EdgeInsets.only(left: 6),
+            child: Semantics(
+              button: true,
+              selected: isSelected,
+              label: label,
+              child: Pressable(
+                onTap: () =>
+                    ref.read(trackingRangeProvider.notifier).state = range,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected ? p.accent : p.surfaceStrong,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    label,
+                    style: AppTextStyles.label(
+                      fontSize: 11,
+                      color: isSelected ? p.onAccent : p.textMuted,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
 class _HabitRow extends StatelessWidget {
   const _HabitRow({
     required this.habitId,
     required this.name,
-    required this.last7,
+    required this.completions,
+    required this.range,
     required this.isTodayDone,
     required this.onToggle,
     required this.p,
@@ -592,62 +689,118 @@ class _HabitRow extends StatelessWidget {
 
   final String habitId;
   final String name;
-  final Map<String, Set<String>> last7;
+  final Map<String, Set<String>> completions;
+  final TrackingRange range;
   final bool isTodayDone;
   final VoidCallback onToggle;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    // Build 7-day grid: oldest → newest (today is last)
+    // Izgara eskiden yeniye kurulur; son hücre her zaman bugün.
     final now = DateTime.now();
-    final dates = List.generate(7, (i) {
-      final d = now.subtract(Duration(days: 6 - i));
-      return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-    });
+    final dates = List.generate(
+      range.days,
+      (i) => _dayKey(now.subtract(Duration(days: range.days - 1 - i))),
+    );
+    bool doneOn(String date) => date == dates.last
+        ? isTodayDone
+        : (completions[date]?.contains(habitId) ?? false);
+    final doneCount = dates.where(doneOn).length;
+
+    // Hafta yedi hücre: isimle aynı satıra sığar. Ay otuz hücre: ızgara alt
+    // satıra geçer ve hücreler küçülür.
+    final isWeek = range == TrackingRange.week;
+    final cells = [
+      for (final date in dates)
+        _DayCell(
+          done: doneOn(date),
+          isToday: date == dates.last,
+          size: isWeek ? 18 : 10,
+          p: p,
+        ),
+    ];
+
+    final title = Row(
+      children: [
+        Expanded(
+          child: Text(
+            name,
+            style: AppTextStyles.body(
+              fontSize: 14,
+              color: p.text,
+            ).copyWith(fontWeight: FontWeight.w500),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          '$doneCount/${range.days}',
+          style: AppTextStyles.mono(fontSize: 12.5, color: p.textMuted),
+        ),
+      ],
+    );
 
     return Pressable(
       onTap: onToggle,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 14),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                name,
-                style: AppTextStyles.body(
-                  fontSize: 14,
-                  color: p.text,
-                ).copyWith(fontWeight: FontWeight.w500),
+        child: isWeek
+            ? Row(
+                children: [
+                  Expanded(child: title),
+                  const SizedBox(width: 12),
+                  Row(children: cells),
+                ],
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  title,
+                  const SizedBox(height: 10),
+                  Wrap(spacing: 4, runSpacing: 4, children: cells),
+                ],
               ),
-            ),
-            const SizedBox(width: 12),
-            Row(
-              children: dates.map((date) {
-                final isToday = date == dates.last;
-                final done = isToday
-                    ? isTodayDone
-                    : (last7[date]?.contains(habitId) ?? false);
-                return Container(
-                  width: 18,
-                  height: 18,
-                  margin: const EdgeInsets.only(left: 4),
-                  decoration: BoxDecoration(
-                    color: done ? p.accent : p.surfaceStrong,
-                    borderRadius: BorderRadius.circular(4),
-                    border: isToday
-                        ? Border.all(color: p.accent, width: 1.5)
-                        : null,
-                  ),
-                  child: done
-                      ? Icon(Icons.check_rounded, size: 11, color: p.onAccent)
-                      : null,
-                );
-              }).toList(),
-            ),
-          ],
-        ),
       ),
     );
   }
 }
+
+class _DayCell extends StatelessWidget {
+  const _DayCell({
+    required this.done,
+    required this.isToday,
+    required this.size,
+    required this.p,
+  });
+
+  final bool done;
+  final bool isToday;
+  final double size;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    final isLarge = size >= 18;
+    return Container(
+      width: size,
+      height: size,
+      margin: EdgeInsets.only(left: isLarge ? 4 : 0),
+      decoration: BoxDecoration(
+        color: done ? p.accent : p.surfaceStrong,
+        borderRadius: BorderRadius.circular(isLarge ? 4 : 2),
+        border: isToday ? Border.all(color: p.accent, width: 1.5) : null,
+      ),
+      child: done && isLarge
+          ? Icon(Icons.check_rounded, size: 11, color: p.onAccent)
+          : null,
+    );
+  }
+}
+
+// ─── Helpers ────────────────────────────────────────────────────
+
+String rangeLabel(TrackingRange range, AppLocalizations l10n) =>
+    range == TrackingRange.week ? l10n.takipRangeWeek : l10n.takipRangeMonth;
+
+String _dayKey(DateTime d) =>
+    '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';

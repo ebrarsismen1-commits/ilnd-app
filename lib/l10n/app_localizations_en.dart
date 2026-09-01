@@ -1205,6 +1205,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takipNoHabitsYet => 'no habits added yet';
 
   @override
+  String get takipRangeWeek => 'week';
+
+  @override
+  String get takipRangeMonth => 'month';
+
+  @override
+  String takipWaterAverage(String range, int ml) {
+    return '$range avg. ${ml}ml';
+  }
+
+  @override
   String get ilndServiceSessionError => 'Couldn\'t verify your session.';
 
   @override
@@ -1378,6 +1389,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yemekEkleSaveButton => 'save';
+
+  @override
+  String get yemekEkleManualButton => 'add manually';
+
+  @override
+  String get yemekEkleManualTitle => 'what did you eat?';
+
+  @override
+  String get yemekEkleManualBody =>
+      'you can add a meal without a photo. ingredients come in the next step.';
+
+  @override
+  String get yemekEkleManualNameLabel => 'food name';
+
+  @override
+  String get yemekEkleManualCalorieLabel => 'calories (kcal)';
+
+  @override
+  String get yemekEkleManualMacroHint =>
+      'macros are optional, leave them blank if you don\'t know.';
+
+  @override
+  String get yemekEkleManualContinue => 'continue';
+
+  @override
+  String get yemekEkleManualNameError => 'food name is required';
+
+  @override
+  String get yemekEkleManualCalorieError => 'enter a valid calorie value';
+
+  @override
+  String get yemekEkleIngredientAdd => 'add ingredient';
+
+  @override
+  String get yemekEkleIngredientHint => 'e.g. olive oil';
+
+  @override
+  String yemekEkleIngredientRemove(String name) {
+    return 'remove $name';
+  }
+
+  @override
+  String get yemekEkleRecalculate => 'recalculate macros';
+
+  @override
+  String get yemekEkleRecalculateHint =>
+      'you changed the ingredients. recalculating uses one of your weekly analyses.';
+
+  @override
+  String get yemekEkleRecalculating => 'recalculating';
+
+  @override
+  String get yemekEkleRecalculateFailed => 'couldn\'t recalculate the macros';
 
   @override
   String get yemekEkleRetryButton => 'try again';

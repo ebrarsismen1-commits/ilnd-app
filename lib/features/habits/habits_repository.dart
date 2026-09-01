@@ -42,16 +42,26 @@ class HabitsRepository {
       .map((s) => s.docs.map((d) => d['habitId'] as String).toSet());
 
   // Returns completions for the last 7 days: { 'YYYY-MM-DD': { habitId, ... } }
-  Stream<Map<String, Set<String>>> last7DaysStream(String userId) {
+  Stream<Map<String, Set<String>>> last7DaysStream(String userId) =>
+      completionsRangeStream(userId, 7);
+
+  /// Son [days] günün tamamlamaları: { 'YYYY-MM-DD': { habitId, ... } }.
+  ///
+  /// `whereIn` yerine tarih aralığı kullanılıyor: hafta görünümü için 7 değer
+  /// sorun değildi ama ay görünümü `whereIn`'in 30 değer tavanına dayanıyor ve
+  /// bir gün daha eklemek sorguyu sessizce patlatırdı. YYYY-MM-DD dizesinde
+  /// sözlüksel sıra takvim sırasıyla aynı olduğu için `>=` karşılaştırması
+  /// güvenli; sorgu zaten var olan (userId, date) indeksini kullanır.
+  Stream<Map<String, Set<String>>> completionsRangeStream(
+    String userId,
+    int days,
+  ) {
     final now = DateTime.now();
-    final dates = List.generate(7, (i) {
-      final d = now.subtract(Duration(days: 6 - i));
-      return _fmt(d);
-    });
+    final start = _fmt(now.subtract(Duration(days: days - 1)));
     return _db
         .collection('habit_completions')
         .where('userId', isEqualTo: userId)
-        .where('date', whereIn: dates)
+        .where('date', isGreaterThanOrEqualTo: start)
         .snapshots()
         .map((s) {
           final result = <String, Set<String>>{};

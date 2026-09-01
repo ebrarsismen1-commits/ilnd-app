@@ -3,6 +3,10 @@ const {setGlobalOptions} = require("firebase-functions/v2");
 const {defineSecret} = require("firebase-functions/params");
 const admin = require("firebase-admin");
 const {createRemoteJWKSet, jwtVerify} = require("jose");
+const {
+  createUsageCollector,
+  buildUsageIncrements,
+} = require("./tokenUsage");
 
 admin.initializeApp();
 setGlobalOptions({maxInstances: 10});
@@ -113,6 +117,52 @@ async function requireFirebaseAuth(req) {
     null;
   if (!idToken) throw new Error("Missing bearer token");
   return admin.auth().verifyIdToken(idToken);
+}
+
+// ─── Token muhasebesi ───────────────────────────────────────────────────────
+
+/**
+ * Ic ice duz sayilari Firestore artislarina cevirir.
+ * @param {object} node sayi ya da ic ice nesne
+ * @return {object} FieldValue.increment agaci
+ */
+function toIncrements(node) {
+  const out = {};
+  for (const [key, value] of Object.entries(node)) {
+    out[key] = typeof value === "number" ?
+      admin.firestore.FieldValue.increment(value) :
+      toIncrements(value);
+  }
+  return out;
+}
+
+/**
+ * Bir cagrinin gercek token kullanimini gunluk dokumana ekler.
+ *
+ * ai_usage CAGRI sayar, burasi TOKEN sayar: 20 kelimelik bir mesajla 20 bin
+ * karakterlik bir yapistirma orada ayni "1 mesaj", faturada 50 kat farkli.
+ * Sinir koymadan once gercek dagilimi gormek icin toplaniyor (owner karari
+ * 2026-09-01). Kayit hicbir kosulda istegi bozmaz: cagri zaten yanitlandi,
+ * buradaki bir hata yalnizca loga duser.
+ * @param {string} uid cagiran
+ * @param {string} tier "quick" | "deep"
+ * @param {string} kind "message" | "food" | "system"
+ * @param {object} usage toplanmis token kaydi
+ * @return {Promise<void>} yazma sozu
+ */
+async function recordTokenUsage(uid, tier, kind, usage) {
+  if (!usage || (!usage.inputTokens && !usage.outputTokens)) return;
+  const day = new Date().toISOString().slice(0, 10);
+  try {
+    await db.collection("ai_token_usage").doc(`${uid}_${day}`).set({
+      uid,
+      day,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      ...toIncrements(buildUsageIncrements({tier, kind, usage})),
+    }, {merge: true});
+  } catch (err) {
+    console.error("recordTokenUsage failed:", err);
+  }
 }
 
 // ─── AI proxy ───────────────────────────────────────────────────────────────
@@ -325,7 +375,7 @@ async function hasRevenueCatPremium(uid) {
 // farklı: 1MB metin ~250k token (pahalı), 1MB görsel ~1.6k token (ucuz).
 // Tek bir "gövde boyutu" sınırı ya fotoğrafı bloklar ya metni serbest bırakır.
 const MAX_BODY_BYTES = 8 * 1024 * 1024; // fotoğraf (istemci 4MB'a kırpar) + pay
-const MAX_MESSAGES = 30; // sohbet penceresi 8 tur; 30 fazlasıyla yeterli
+const MAX_MESSAGES = 30; // sohbet penceresi 4 tur; 30 fazlasıyla yeterli
 const MAX_TEXT_CHARS = 100000; // ~25k token → çağrı başı girdi maliyeti sınırlı
 const MAX_IMAGES = 2;
 
@@ -460,6 +510,13 @@ exports.anthropicProxy = onRequest(
         return;
       }
 
+      // stream=true: yanit parca parca aksin. Akissiz cagrida kullanici
+      // cevabin SONU gelene kadar bos balona bakiyor; Sonnet'te bu birkac
+      // saniye. Akista ilk kelime saniyenin altinda ekranda oluyor ve model,
+      // kalite, kota ayni kaliyor.
+      const wantsStream = (req.body || {}).stream === true;
+      const usageCollector = createUsageCollector();
+
       try {
         const upstream = await fetch("https://api.anthropic.com/v1/messages", {
           method: "POST",
@@ -486,11 +543,42 @@ exports.anthropicProxy = onRequest(
                 system) :
               undefined,
             messages,
+            ...(wantsStream ? {stream: true} : {}),
           }),
         });
 
-        const data = await upstream.json();
-        res.status(upstream.status).json(data);
+        // Hata govdesi JSON'dur (429 kota, 400 gecersiz istek): istemcinin
+        // paywall ayrimi buna bakiyor, akisa cevirmeden aynen gecir.
+        if (!wantsStream || upstream.status !== 200) {
+          const data = await upstream.json();
+          res.status(upstream.status).json(data);
+          usageCollector.feedJson(data);
+          await recordTokenUsage(uid, tier, kind, usageCollector.result());
+          return;
+        }
+
+        // Akis: Anthropic'in SSE govdesi oldugu gibi istemciye tasinir.
+        // Ara katman parse etmez; parse istemcide, tek yerde.
+        res.status(200);
+        res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+        res.setHeader("Cache-Control", "no-cache, no-transform");
+        res.setHeader("Connection", "keep-alive");
+        if (typeof res.flushHeaders === "function") {
+          res.flushHeaders();
+        }
+
+        const reader = upstream.body.getReader();
+        const decoder = new TextDecoder();
+        for (;;) {
+          const {done, value} = await reader.read();
+          if (done) break;
+          // Once istemciye yaz, sonra muhasebe: olcum kullaniciyi
+          // bekletmemeli.
+          res.write(Buffer.from(value));
+          usageCollector.feedSse(decoder.decode(value, {stream: true}));
+        }
+        res.end();
+        await recordTokenUsage(uid, tier, kind, usageCollector.result());
       } catch (err) {
         console.error("anthropicProxy upstream failed:", err);
         res.status(502).json({error: "Upstream AI request failed"});

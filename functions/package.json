@@ -13,7 +13,8 @@
     "seed:articles": "node scripts/seedArticles.js",
     "seed:movement": "node scripts/seedMovementPrograms.js",
     "seed:plans": "node scripts/seedPlans.js",
-    "check:plans": "node scripts/checkPlans.js"
+    "check:plans": "node scripts/checkPlans.js",
+    "report:tokens": "node scripts/tokenReport.js"
   },
   "dependencies": {
     "firebase-admin": "^12.1.0",

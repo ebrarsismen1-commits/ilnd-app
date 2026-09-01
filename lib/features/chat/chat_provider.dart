@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/billing/usage_meter.dart';
@@ -8,7 +9,9 @@ import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_learner.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_service.dart';
+import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Sohbetteki tek mesaj.
 class ChatMessage {
@@ -26,6 +29,15 @@ class ChatMessage {
 
   ChatMessage toResolved(String text) =>
       ChatMessage(fromUser: false, text: text);
+
+  /// Diske yazılan biçim. [pending] taşınmaz: bekleyen balon bir arayüz
+  /// durumudur, geçmişin parçası değildir.
+  Map<String, dynamic> toJson() => {'fromUser': fromUser, 'text': text};
+
+  factory ChatMessage.fromJson(Map<String, dynamic> j) => ChatMessage(
+    fromUser: (j['fromUser'] as bool?) ?? false,
+    text: (j['text'] as String?) ?? '',
+  );
 }
 
 class ChatState {
@@ -52,20 +64,34 @@ class ChatState {
   );
 }
 
+/// Sohbet geçmişinin SharedPreferences anahtarı. ILND hafızasıyla aynı
+/// desen: kayıt kullanıcıya aittir, uid anahtara girer.
+const _kChatHistory = 'chat_history';
+
 final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>((ref) {
   // Hesap değişiminde sohbet sıfırlanır — önceki kullanıcının konuşması
   // ekranda ya da AI bağlamında yeni kullanıcıya taşınmaz. select(uid)
   // sayesinde token yenilemeleri (aynı uid) sohbeti sıfırlamaz.
-  ref.watch(
+  final uid = ref.watch(
     authNotifierProvider.select(
       (s) => s is AuthAuthenticated ? s.user.id : null,
     ),
   );
-  return ChatNotifier(ref);
+  return ChatNotifier(
+    ref,
+    prefs: ref.watch(sharedPreferencesProvider),
+    uid: uid,
+  );
 });
 
 class ChatNotifier extends StateNotifier<ChatState> {
-  ChatNotifier(this._ref) : super(_initialState());
+  /// [prefs] verilmezse geçmiş yalnız bellekte tutulur; testler sohbeti
+  /// diske dokunmadan kurabilsin diye opsiyonel.
+  ChatNotifier(this._ref, {this._prefs, String? uid})
+    : _key = uid == null ? _kChatHistory : '${_kChatHistory}_$uid',
+      super(_initialState()) {
+    _restore();
+  }
 
   static ChatState _initialState() {
     if (!kDemoMode) return const ChatState();
@@ -78,9 +104,70 @@ class ChatNotifier extends StateNotifier<ChatState> {
   }
 
   final Ref _ref;
+  final SharedPreferences? _prefs;
+  final String _key;
 
-  /// Geçmişi prompt'a verirken kaç tur taşıyacağımız (maliyet sınırı).
-  static const _historyWindow = 8;
+  /// Geçmişi prompt'a verirken kaç tur taşıyacağımız.
+  ///
+  /// Sekizden dörde indi (owner kararı 2026-09-02: "modelin eski
+  /// konuşmaları çok iyi hatırlamasına gerek yok, kritik şeyleri tutsun
+  /// yeter"). Uzun vadeli hatırlama zaten burada değil [IlndMemory]'de:
+  /// hedefler, gerçekler ve tarihli notlar her çağrıda gidiyor. Bu pencere
+  /// yalnız "şu an neyi konuşuyoruz" bağlamı.
+  ///
+  /// EKRANDAKİ geçmiş kısalmaz: kullanıcı bütün konuşmayı görmeye devam
+  /// eder, kısalan yalnız modele gönderdiğimiz kısımdır.
+  static const _historyWindow = 4;
+
+  /// Modele giden eski turların karakter tavanı. Yapıştırılan uzun bir
+  /// metin, pencereden çıkana kadar her mesajda yeniden fatura ediyordu.
+  static const _historyTurnChars = 400;
+
+  /// Diskte tutulan en fazla mesaj sayısı. Sohbet sınırsız büyürse
+  /// SharedPreferences kaydı da büyür; ekranda gerçekten okunan pencere bu.
+  static const _historyLimit = 50;
+
+  /// Diskteki geçmişi yükler.
+  ///
+  /// Demo modunda dokunmaz: demo sohbeti sabit bir sahnedir, kullanıcının
+  /// gerçek konuşmasıyla karışmamalı. Bozuk kayıt sessizce atılır, sohbet
+  /// boş açılır: burada atılan bir hata ekranı komple kapatırdı.
+  void _restore() {
+    final prefs = _prefs;
+    if (kDemoMode || prefs == null) return;
+    final raw = prefs.getString(_key);
+    if (raw == null || raw.isEmpty) return;
+    try {
+      final restored = [
+        for (final entry in jsonDecode(raw) as List)
+          ChatMessage.fromJson(Map<String, dynamic>.from(entry as Map)),
+      ].where((m) => m.text.isNotEmpty).toList();
+      if (restored.isNotEmpty) state = state.copyWith(messages: restored);
+    } catch (_) {
+      // bozuk veri — sohbet boş açılır
+    }
+  }
+
+  Future<void> _persist() async {
+    final prefs = _prefs;
+    if (kDemoMode || prefs == null) return;
+    final settled = state.messages.where((m) => !m.pending).toList();
+    final windowed = settled.length > _historyLimit
+        ? settled.sublist(settled.length - _historyLimit)
+        : settled;
+    await prefs.setString(
+      _key,
+      jsonEncode([for (final m in windowed) m.toJson()]),
+    );
+  }
+
+  /// Sohbeti ve diskteki geçmişi siler. Kullanıcının konuşması cihazda
+  /// kalıyorsa onu silmenin bir yolu da olmalı.
+  Future<void> clearHistory() async {
+    state = const ChatState();
+    _greeted = false;
+    await _prefs?.remove(_key);
+  }
 
   /// Kaç kullanıcı mesajında bir hafıza çıkarımı yapılacağı (maliyet sınırı).
   static const _learnEvery = 4;
@@ -148,6 +235,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
       resolved[pendingIdx] = ChatMessage(fromUser: false, text: reply);
     }
     state = state.copyWith(messages: resolved, sending: false);
+    // Karşılama da geçmişin parçası: kaydedilmezse ILND her açılışta
+    // yeniden karşılar ve kullanıcı dün konuştuklarını bulamaz.
+    await _persist();
   }
 
   Future<void> send(String text, AppLocalizations l10n) async {
@@ -182,21 +272,46 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final windowed = history.length > _historyWindow
         ? history.sublist(history.length - _historyWindow)
         : history;
-    // Son kullanıcı mesajını userMessage olarak ayır.
+    // Son kullanıcı mesajını userMessage olarak ayır; ondan öncekiler
+    // yalnız bağlam olduğu için kırpılarak gider.
     final priorTurns = windowed.isNotEmpty
-        ? windowed.sublist(0, windowed.length - 1)
+        ? [
+            for (final turn in windowed.sublist(0, windowed.length - 1))
+              IlndTurn(
+                fromUser: turn.fromUser,
+                text: turn.text.length > _historyTurnChars
+                    ? '${turn.text.substring(0, _historyTurnChars)}...'
+                    : turn.text,
+              ),
+          ]
         : <IlndTurn>[];
 
-    String reply;
+    String reply = '';
     try {
-      reply = await service.respond(
+      // Akan yanıt: her olayda birikmiş metnin tamamı gelir ve bekleyen
+      // balon onunla dolar. Balon 'pending' kalır, çünkü cümle bitmeden
+      // altındaki paylaşım kapısını göstermek yarım cümleyi kart yapmaya
+      // davet ederdi.
+      await for (final chunk in service.respondStream(
         memory: memory,
         userMessage: trimmed,
         history: priorTurns,
         fallback: IlndFallbacks.chat(l10n),
         l10n: l10n,
         meterAs: UsageKind.message,
-      );
+      )) {
+        reply = chunk;
+        if (!mounted) return;
+        final growing = [...state.messages];
+        final growingIdx = growing.lastIndexWhere((m) => m.pending);
+        if (growingIdx == -1) break;
+        growing[growingIdx] = ChatMessage(
+          fromUser: false,
+          text: reply,
+          pending: true,
+        );
+        state = state.copyWith(messages: growing);
+      }
     } on IlndFreeLimitException {
       // Sunucu son sözü söyler: hak başka bir cihazda harcanmış olabilir,
       // yerel sayaç geride kalmış. Mesajı geri al, sayacı doluya çek ve
@@ -211,6 +326,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
         sending: false,
         limitReached: true,
       );
+      await _persist();
       return;
     } catch (e) {
       reply = IlndService.friendlyError(e, l10n);
@@ -229,6 +345,9 @@ class ChatNotifier extends StateNotifier<ChatState> {
     // Kullanımı say (premium'da sayılmaz). Gerçek sayaç sunucuda arttı;
     // bu, snapshot gelene kadar arayüzün doğru kalması için.
     gate.record(UsageKind.message);
+
+    // Geçmiş diske yazılır: uygulama kapansa da konuşma kaldığı yerde durur.
+    await _persist();
 
     // Hafızaya kısa bir iz bırak (ILND'nin "hatırlaması" için).
     await _ref.read(ilndMemoryProvider.notifier).addNote('Kullanıcı: $trimmed');

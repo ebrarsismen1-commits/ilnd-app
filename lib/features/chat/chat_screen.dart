@@ -233,7 +233,8 @@ class _Bubble extends StatelessWidget {
       final l10n = AppLocalizations.of(context)!;
       return Padding(
         padding: const EdgeInsets.only(bottom: 14, right: 24),
-        child: message.pending
+        // Akarken metin zaten var: noktalar yalnız ilk kelime gelene kadar.
+        child: message.pending && message.text.isEmpty
             ? _TypingDots(p: p)
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,8 +250,10 @@ class _Bubble extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   // "ILND bana ne dedi" paylaşım kapısı: cümleyi karta çevir.
-                  // Çok sessiz bir dokunuş — editoryal akışı bozmaz.
-                  Pressable(
+                  // Çok sessiz bir dokunuş — editoryal akışı bozmaz. Cümle
+                  // akarken gizli: yarım cümle karta çevrilmemeli.
+                  if (!message.pending)
+                    Pressable(
                     onTap: () =>
                         context.push(routeQuoteCard, extra: message.text),
                     child: Row(

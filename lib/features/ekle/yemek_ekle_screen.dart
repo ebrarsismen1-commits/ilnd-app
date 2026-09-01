@@ -6,6 +6,7 @@ import 'dart:io' show SocketException;
 import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +21,7 @@ import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
+import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
@@ -35,6 +37,7 @@ class _FoodResult {
     required this.karbonhidrat,
     required this.yag,
     required this.malzemeler,
+    this.yorum = '',
   });
 
   final String yemekAdi;
@@ -44,6 +47,32 @@ class _FoodResult {
   final double yag;
   final List<String> malzemeler;
 
+  /// ILND'nin bu öğüne tek cümlelik yorumu.
+  ///
+  /// Analizle AYNI yanıtta gelir. Eskiden ayrı bir çağrıydı: her fotoğraftan
+  /// sonra kişilik prompt'u baştan gönderilip karşılığında bir cümle
+  /// alınıyordu, yani her öğün iki tam çağrı ediyordu. Model tabağa zaten
+  /// bakıyor; yorumu da orada yazıyor.
+  final String yorum;
+
+  _FoodResult copyWith({
+    String? yemekAdi,
+    int? kalori,
+    double? protein,
+    double? karbonhidrat,
+    double? yag,
+    List<String>? malzemeler,
+    String? yorum,
+  }) => _FoodResult(
+    yemekAdi: yemekAdi ?? this.yemekAdi,
+    kalori: kalori ?? this.kalori,
+    protein: protein ?? this.protein,
+    karbonhidrat: karbonhidrat ?? this.karbonhidrat,
+    yag: yag ?? this.yag,
+    malzemeler: malzemeler ?? this.malzemeler,
+    yorum: yorum ?? this.yorum,
+  );
+
   factory _FoodResult.fromJson(Map<String, dynamic> j) => _FoodResult(
     yemekAdi: j['yemek_adi'] as String,
     kalori: (j['kalori'] as num).toInt(),
@@ -51,12 +80,14 @@ class _FoodResult {
     karbonhidrat: (j['karbonhidrat'] as num).toDouble(),
     yag: (j['yag'] as num).toDouble(),
     malzemeler: List<String>.from(j['malzemeler'] as List),
+    // Yeniden hesaplama yanıtında yorum istenmez: alan yoksa boş kalır.
+    yorum: (j['yorum'] as String?)?.trim() ?? '',
   );
 }
 
 // ─── Screen state ─────────────────────────────────────────────────────────────
 
-enum _Phase { picker, loading, result, error }
+enum _Phase { picker, manual, loading, result, error }
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
 
@@ -81,6 +112,20 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
   /// göre çarpılır. Her yeni analizde 1.0'a döner.
   double _portion = 1.0;
 
+  /// Makroların hesaplandığı andaki malzeme listesi. Ekrandaki liste bundan
+  /// ayrıldığı an makrolar artık listeyi anlatmıyor demektir.
+  List<String> _computedIngredients = const [];
+
+  bool _recalculating = false;
+
+  /// Kullanıcı listeyi değiştirdi mi? Boş listeyle yeniden hesaplama
+  /// anlamsız olduğu için o durumda düğme gösterilmez.
+  bool get _macrosStale {
+    final result = _result;
+    if (result == null || result.malzemeler.isEmpty) return false;
+    return !listEquals(result.malzemeler, _computedIngredients);
+  }
+
   // ── Image selection ────────────────────────────────────────────────────────
 
   Future<void> _pick(ImageSource source, AppLocalizations l10n) async {
@@ -91,10 +136,15 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
     }
 
     try {
+      // Uzun kenar 1024, kalite 75. Anthropic 1.15 megapikselin üstünü
+      // zaten kendi küçültüyor: 1280x1700'lük bir dikey kare gönderdiğimizde
+      // fazlalığın görüntü token'ını ödüyor ama modele hiç ulaşmıyordu.
+      // Analizin gördüğü şey değişmez, ödediğimiz piksel azalır.
       final xFile = await _picker.pickImage(
         source: source,
-        imageQuality: 85,
-        maxWidth: 1280,
+        imageQuality: 75,
+        maxWidth: 1024,
+        maxHeight: 1024,
       );
       if (xFile == null) return;
       // XFile.readAsBytes her platformda çalışır (web dahil); dart:io File
@@ -123,11 +173,13 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       if (!mounted) return;
       setState(() {
         _result = demo;
+        _computedIngredients = [...demo.malzemeler];
         _portion = 1.0;
+        _comment = demo.yorum;
         _phase = _Phase.result;
       });
       ref.read(usageGateProvider).record(UsageKind.food);
-      await _addIlndComment(demo, l10n);
+      await _noteMeal(demo);
       return;
     }
 
@@ -179,7 +231,10 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
             'olmadığına, çatal-kaşık-tabak gibi ölçek ipuçlarına bak. Yalnızca '
             'gözünle GÖRDÜĞÜN malzemeleri yaz; görmediğin bir eti/tavuğu/'
             'malzemeyi VARSAYMA. Emin değilsen abartma, düşük-orta tahmin yap. '
-            'Yalnızca istenen JSON formatında yanıt ver.',
+            'Aynı yanıtta kullanıcıya sıcak, yargısız, tek cümlelik bir '
+            'diyetisyen-dost yorumu da yazarsın: nutuk çekmez, suçluluk '
+            'yüklemez, tire kullanmazsın. Yalnızca istenen JSON formatında '
+            'yanıt ver.',
         'messages': [
           {
             'role': 'user',
@@ -213,12 +268,17 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
                     'malzemeleri içersin (2-6 adet). Görmediğin bir '
                     'et/tavuk/malzeme EKLEME.\n'
                     '- Emin olamadığın bir malzemeyi uydurmaktansa listeye '
-                    'katma; miktarda kararsızsan düşük-orta tahmin yap.\n\n'
+                    'katma; miktarda kararsızsan düşük-orta tahmin yap.\n'
+                    '- "yorum" bu öğüne sıcak, yargısız, TEK cümlelik bir '
+                    'diyetisyen-dost yorumu olsun. Suçluluk yükleme, liste '
+                    'yapma, gerekirse küçük bir öneri ekle.\n\n'
                     'Örnek (mercimek çorbası için):\n'
                     '{"yemek_adi": "Mercimek Çorbası", "kalori": 180, '
                     '"protein": 9.0, "karbonhidrat": 27.0, "yag": 4.5, '
                     '"malzemeler": ["kırmızı mercimek", "soğan", "havuç", '
-                    '"tereyağı"]}\n\n'
+                    '"tereyağı"], "yorum": "sıcacık ve doyurucu bir başlangıç, '
+                    'yanına biraz protein eklersen akşama kadar tok tutar"}'
+                    '\n\n'
                     'Şimdi fotoğraftaki yemek için yalnızca aynı yapıda bir JSON '
                     'nesnesi döndür. Başka hiçbir metin, açıklama veya markdown '
                     'ekleme.',
@@ -283,6 +343,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       if (mounted) {
         setState(() {
           _result = result;
+          _computedIngredients = [...result.malzemeler];
           _portion = 1.0;
           _phase = _Phase.result;
         });
@@ -291,8 +352,9 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
       // Başarılı analizi say (premium'da sayılmaz).
       ref.read(usageGateProvider).record(UsageKind.food);
 
-      // ILND'nin diyetisyen-dost yorumu (sayaç değil, karşılık).
-      await _addIlndComment(result, l10n);
+      // Yorum analizin içinde geldi; burada yalnız hafıza izi kalır.
+      if (mounted) setState(() => _comment = result.yorum);
+      await _noteMeal(result);
     } on SocketException {
       _setError(l10n.yemekEkleNoInternet);
     } catch (_) {
@@ -311,6 +373,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         karbonhidrat: 30,
         yag: 18,
         malzemeler: ['tam buğday ekmek', 'avokado', 'yumurta', 'kiraz domates'],
+        yorum: 'iyi bir başlangıç, avokadonun yağı seni öğlene kadar tok tutar',
       ),
       _FoodResult(
         yemekAdi: 'Izgara Tavuk Salata',
@@ -319,6 +382,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         karbonhidrat: 18,
         yag: 16,
         malzemeler: ['tavuk göğsü', 'marul', 'zeytinyağı', 'roka', 'mısır'],
+        yorum: 'proteini yerinde, bunu sevdim',
       ),
       _FoodResult(
         yemekAdi: 'Yoğurtlu Granola',
@@ -327,6 +391,7 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         karbonhidrat: 38,
         yag: 9,
         malzemeler: ['yoğurt', 'yulaf', 'bal', 'yaban mersini'],
+        yorum: 'hafif ve dengeli, sabahlar için güzel bir alışkanlık',
       ),
     ];
     return samples[DateTime.now().second % samples.length];
@@ -334,6 +399,22 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
 
   // ── ILND'nin yemek yorumu ────────────────────────────────────────────────────
 
+  /// Öğünü hafızaya not eder. AI çağrısı yoktur: ILND'nin "dün akşam ne
+  /// yediğini" hatırlaması bu satırdan gelir.
+  Future<void> _noteMeal(_FoodResult food) async {
+    try {
+      await ref
+          .read(ilndMemoryProvider.notifier)
+          .addNote('Yemek: ${food.yemekAdi} (${food.kalori} kcal)');
+    } catch (_) {
+      // Hafıza opsiyoneldir; kayıt akışını bozmaz.
+    }
+  }
+
+  /// Elle eklenen öğün için ILND yorumu.
+  ///
+  /// Yalnız fotoğrafsız yolda çağrılır: analizde yorum zaten aynı yanıtta
+  /// geliyor, burada bakılacak bir tabak yok.
   Future<void> _addIlndComment(_FoodResult food, AppLocalizations l10n) async {
     try {
       final memory = ref.read(ilndMemoryProvider);
@@ -352,12 +433,226 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
         l10n: l10n,
       );
       if (mounted) setState(() => _comment = comment);
-      await ref
-          .read(ilndMemoryProvider.notifier)
-          .addNote('Yemek: ${food.yemekAdi} (${food.kalori} kcal)');
+      await _noteMeal(food);
     } catch (_) {
       // Yorum opsiyoneldir; başarısız olursa sessizce geç.
     }
+  }
+
+  // ── Elle ekleme ────────────────────────────────────────────────────────────
+
+  /// Fotoğrafsız kayıt. AI çalışmadığı için haftalık analiz hakkından
+  /// düşmez; kullanıcı sayıları kendisi yazar.
+  Future<void> _submitManual({
+    required String name,
+    required int kalori,
+    required double protein,
+    required double karbonhidrat,
+    required double yag,
+    required AppLocalizations l10n,
+  }) async {
+    final result = _FoodResult(
+      yemekAdi: name,
+      kalori: kalori,
+      protein: protein,
+      karbonhidrat: karbonhidrat,
+      yag: yag,
+      malzemeler: const [],
+    );
+    setState(() {
+      _photoBytes = null;
+      _result = result;
+      _computedIngredients = const [];
+      _portion = 1.0;
+      _comment = null;
+      _phase = _Phase.result;
+    });
+    await _addIlndComment(result, l10n);
+  }
+
+  // ── Malzeme düzenleme ──────────────────────────────────────────────────────
+
+  void _addIngredient(String raw) {
+    final value = raw.trim();
+    final result = _result;
+    if (value.isEmpty || result == null) return;
+    final exists = result.malzemeler.any(
+      (m) => m.toLowerCase() == value.toLowerCase(),
+    );
+    if (exists) return;
+    setState(
+      () => _result = result.copyWith(
+        malzemeler: [...result.malzemeler, value],
+      ),
+    );
+  }
+
+  void _removeIngredient(String value) {
+    final result = _result;
+    if (result == null) return;
+    final kept = [...result.malzemeler]..remove(value);
+    setState(() => _result = result.copyWith(malzemeler: kept));
+  }
+
+  /// Düzeltilmiş malzeme listesine göre makroları yeniden tahmin eder.
+  ///
+  /// Bu ikinci bir analizdir ve owner kararıyla haftalık ücretsiz haktan
+  /// düşer: gövdedeki `kind: food` sunucudaki sayacı, [UsageGate.record]
+  /// arayüzdeki sayacı ilerletir. Her çip değişiminde değil, kullanıcı
+  /// bilerek bastığında çalışır; yoksa tek bir düzeltme kotayı bitirirdi.
+  Future<void> _recalculate(AppLocalizations l10n) async {
+    final result = _result;
+    if (result == null || _recalculating) return;
+
+    // Yerel kapı önce sorulur ki kullanıcı boşuna beklemesin; asıl sınırı
+    // yine sunucu uygular.
+    if (!ref.read(usageGateProvider).isAllowed(UsageKind.food)) {
+      await PaywallScreen.show(context, reason: l10n.yemekEklePaywallReason);
+      return;
+    }
+
+    setState(() => _recalculating = true);
+
+    // Proxy yapılandırılmamışsa (demo/ön izleme) çağrı yapılmaz: makrolar
+    // malzeme sayısıyla orantılı ölçeklenir, demoda hata ekranı çıkmaz.
+    if (!AppConfig.isAnthropicProxyConfigured) {
+      await Future<void>.delayed(const Duration(milliseconds: 900));
+      if (!mounted) return;
+      final before = _computedIngredients.length;
+      final ratio = before == 0 ? 1.0 : result.malzemeler.length / before;
+      setState(() {
+        _result = result.copyWith(
+          kalori: (result.kalori * ratio).round(),
+          protein: result.protein * ratio,
+          karbonhidrat: result.karbonhidrat * ratio,
+          yag: result.yag * ratio,
+        );
+        _computedIngredients = [...result.malzemeler];
+        _recalculating = false;
+      });
+      ref.read(usageGateProvider).record(UsageKind.food);
+      return;
+    }
+
+    try {
+      final idToken = await fb_auth.FirebaseAuth.instance.currentUser
+          ?.getIdToken();
+      if (idToken == null) {
+        _recalculateFailed(l10n.yemekEkleRecalculateFailed);
+        return;
+      }
+
+      // Görsel yok: metin tabanlı tahmin için 'quick' katmanı yeterli.
+      final body = jsonEncode({
+        'tier': 'quick',
+        'kind': 'food',
+        'system':
+            'Sen dikkatli, dürüst bir beslenme analiz uzmanısın. Verilen '
+            'malzeme listesine göre tek porsiyonluk makroları tahmin eder ve '
+            'yalnızca istenen JSON formatında yanıt verirsin. Listede '
+            'olmayan bir malzemeyi hesaba KATMAZSIN.',
+        'messages': [
+          {
+            'role': 'user',
+            'content': [
+              {
+                'type': 'text',
+                'text':
+                    'Kullanıcı kaydettiği öğünün malzeme listesini kendisi '
+                    'düzeltti.\n\n'
+                    'Yemek: ${result.yemekAdi}\n'
+                    'Güncel malzemeler: ${result.malzemeler.join(', ')}\n\n'
+                    'Kurallar:\n'
+                    '- Makroları YALNIZCA bu listeye göre, tek porsiyon için '
+                    'tahmin et.\n'
+                    '- "kalori" tam sayı (kcal); "protein", "karbonhidrat" ve '
+                    '"yag" gram cinsinden ondalıklı sayı olsun.\n'
+                    '- "yemek_adi" aynı kalsın: ${result.yemekAdi}\n'
+                    '- "malzemeler" kullanıcının verdiği listeyi aynen '
+                    'içersin.\n'
+                    '- Emin değilsen abartma, düşük-orta tahmin yap.\n\n'
+                    'Örnek:\n'
+                    '{"yemek_adi": "Mercimek Çorbası", "kalori": 180, '
+                    '"protein": 9.0, "karbonhidrat": 27.0, "yag": 4.5, '
+                    '"malzemeler": ["kırmızı mercimek", "soğan"]}\n\n'
+                    'Yalnızca aynı yapıda bir JSON nesnesi döndür. Başka '
+                    'hiçbir metin, açıklama veya markdown ekleme.',
+              },
+            ],
+          },
+        ],
+      });
+
+      final response = await http
+          .post(
+            Uri.parse(AppConfig.anthropicProxyUrl),
+            headers: {
+              'Authorization': 'Bearer $idToken',
+              'content-type': 'application/json',
+              ...await appCheckHeaders(),
+            },
+            body: body,
+          )
+          .timeout(const Duration(seconds: 45));
+
+      if (response.statusCode == 429) {
+        // Hak başka bir cihazda harcanmış olabilir: son sözü sunucu söyler.
+        if (isFreeWeeklyLimit(response)) {
+          ref.read(usageGateProvider).markExhausted(UsageKind.food);
+          if (!mounted) return;
+          setState(() => _recalculating = false);
+          await PaywallScreen.show(
+            context,
+            reason: l10n.yemekEklePaywallReason,
+          );
+          return;
+        }
+        _recalculateFailed(l10n.yemekEkleRecalculateFailed);
+        return;
+      }
+      if (response.statusCode != 200) {
+        _recalculateFailed(l10n.yemekEkleRecalculateFailed);
+        return;
+      }
+
+      final decoded =
+          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      final text = (decoded['content'] as List).first['text'] as String;
+      final jsonStr = extractJsonObject(text);
+      if (jsonStr == null) {
+        _recalculateFailed(l10n.yemekEkleRecalculateFailed);
+        return;
+      }
+      final fresh = _FoodResult.fromJson(
+        jsonDecode(jsonStr) as Map<String, dynamic>,
+      );
+      if (!mounted) return;
+      setState(() {
+        // Malzeme listesi kullanıcınındır: modelin döndürdüğü liste değil,
+        // ekrandaki liste geçerlidir.
+        _result = fresh.copyWith(
+          yemekAdi: result.yemekAdi,
+          malzemeler: [...result.malzemeler],
+          // Yorum tabağa aitti, malzeme düzeltmesi onu geçersiz kılmaz.
+          yorum: result.yorum,
+        );
+        _computedIngredients = [...result.malzemeler];
+        _recalculating = false;
+      });
+      ref.read(usageGateProvider).record(UsageKind.food);
+    } on SocketException {
+      _recalculateFailed(l10n.yemekEkleNoInternet);
+    } catch (_) {
+      _recalculateFailed(l10n.yemekEkleRecalculateFailed);
+    }
+  }
+
+  /// Yeniden hesaplama başarısızsa sonuç ekranı korunur: kullanıcının
+  /// analizi ve düzeltmeleri bir hata ekranı yüzünden kaybolmamalı.
+  void _recalculateFailed(String message) {
+    if (!mounted) return;
+    setState(() => _recalculating = false);
+    IlndToast.error(context, message);
   }
 
   void _setError(String msg) {
@@ -384,6 +679,9 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
             karbonhidrat: (result.karbonhidrat * _portion).round(),
             yag: (result.yag * _portion).round(),
             createdAt: DateTime.now(),
+            // Kullanıcının düzelttiği liste kaydın parçasıdır: bir daha
+            // baktığında ne yediğini malzemesiyle görsün.
+            malzemeler: result.malzemeler,
           ),
         );
       }
@@ -395,6 +693,8 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
     setState(() {
       _photoBytes = null;
       _result = null;
+      _computedIngredients = const [];
+      _recalculating = false;
       _portion = 1.0;
       _comment = null;
       _errorMsg = '';
@@ -444,6 +744,26 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
               child: switch (_phase) {
                 _Phase.picker => _PickerView(
                   onPick: (s) => _pick(s, l10n),
+                  onManual: () => setState(() => _phase = _Phase.manual),
+                  p: p,
+                  l10n: l10n,
+                ),
+                _Phase.manual => _ManualEntryView(
+                  onSubmit:
+                      ({
+                        required name,
+                        required kalori,
+                        required protein,
+                        required karbonhidrat,
+                        required yag,
+                      }) => _submitManual(
+                        name: name,
+                        kalori: kalori,
+                        protein: protein,
+                        karbonhidrat: karbonhidrat,
+                        yag: yag,
+                        l10n: l10n,
+                      ),
                   p: p,
                   l10n: l10n,
                 ),
@@ -453,11 +773,16 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
                   l10n: l10n,
                 ),
                 _Phase.result => _ResultView(
-                  photo: _photoBytes!,
+                  photo: _photoBytes,
                   result: _result!,
                   comment: _comment,
                   portion: _portion,
                   onPortion: (v) => setState(() => _portion = v),
+                  onAddIngredient: _addIngredient,
+                  onRemoveIngredient: _removeIngredient,
+                  onRecalculate: () => _recalculate(l10n),
+                  macrosStale: _macrosStale,
+                  recalculating: _recalculating,
                   onRetry: _retry,
                   onSave: () => _saveAndPop(context),
                   p: p,
@@ -483,10 +808,12 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
 class _PickerView extends StatelessWidget {
   const _PickerView({
     required this.onPick,
+    required this.onManual,
     required this.p,
     required this.l10n,
   });
   final void Function(ImageSource) onPick;
+  final VoidCallback onManual;
   final AppPalette p;
   final AppLocalizations l10n;
 
@@ -534,6 +861,15 @@ class _PickerView extends StatelessWidget {
             icon: Icons.photo_library_outlined,
             label: l10n.yemekEkleChooseFromGallery,
             onTap: () => onPick(ImageSource.gallery),
+            p: p,
+          ),
+          const SizedBox(height: 12),
+          // Fotoğrafsız yol: karanlık restoran, çekilmemiş öğün, ambalajın
+          // üstündeki hazır değerler. Analiz her zaman doğru araç değil.
+          _SecondaryButton(
+            icon: Icons.edit_outlined,
+            label: l10n.yemekEkleManualButton,
+            onTap: onManual,
             p: p,
           ),
           const SizedBox(height: 32),
@@ -601,17 +937,28 @@ class _ResultView extends StatelessWidget {
     required this.comment,
     required this.portion,
     required this.onPortion,
+    required this.onAddIngredient,
+    required this.onRemoveIngredient,
+    required this.onRecalculate,
+    required this.macrosStale,
+    required this.recalculating,
     required this.onRetry,
     required this.onSave,
     required this.p,
     required this.l10n,
   });
 
-  final Uint8List photo;
+  /// Elle eklenen öğünde fotoğraf yoktur.
+  final Uint8List? photo;
   final _FoodResult result;
   final String? comment;
   final double portion;
   final ValueChanged<double> onPortion;
+  final ValueChanged<String> onAddIngredient;
+  final ValueChanged<String> onRemoveIngredient;
+  final VoidCallback onRecalculate;
+  final bool macrosStale;
+  final bool recalculating;
   final VoidCallback onRetry;
   final VoidCallback onSave;
   final AppPalette p;
@@ -629,17 +976,19 @@ class _ResultView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Photo
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.memory(
-              photo,
-              width: double.infinity,
-              height: 220,
-              fit: BoxFit.cover,
+          // Photo (elle eklemede yok)
+          if (photo != null) ...[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.memory(
+                photo!,
+                width: double.infinity,
+                height: 220,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
+            const SizedBox(height: 20),
+          ],
 
           // Food name
           Text(
@@ -707,38 +1056,15 @@ class _ResultView extends StatelessWidget {
             style: AppTextStyles.sectionLabel(color: p.accent),
           ),
           const SizedBox(height: 10),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(AppSpacing.cardPadding),
-            decoration: BoxDecoration(
-              color: p.surface,
-              borderRadius: BorderRadius.circular(AppSpacing.radius),
-            ),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: result.malzemeler
-                  .map(
-                    (m) => Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: p.amber.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        m,
-                        style: AppTextStyles.label(
-                          fontSize: 11.5,
-                          color: p.amber,
-                        ).copyWith(letterSpacing: 0),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
+          _IngredientEditor(
+            ingredients: result.malzemeler,
+            onAdd: onAddIngredient,
+            onRemove: onRemoveIngredient,
+            onRecalculate: onRecalculate,
+            macrosStale: macrosStale,
+            recalculating: recalculating,
+            p: p,
+            l10n: l10n,
           ),
           const SizedBox(height: 28),
 
@@ -755,6 +1081,394 @@ class _ResultView extends StatelessWidget {
             label: l10n.yemekEkleRetryButton,
             onTap: onRetry,
             p: p,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Malzeme editörü ─────────────────────────────────────────────────────────
+
+/// Malzemeler artık salt okunur bir liste değil: AI yanlış gördüyse ya da
+/// kullanıcı elle eklediyse liste düzeltilebilir. Düzeltme makroları
+/// kendiliğinden değiştirmez; yeniden hesaplama bir analiz çağrısıdır ve
+/// haftalık haktan düştüğü için kullanıcının açık onayıyla çalışır.
+class _IngredientEditor extends StatefulWidget {
+  const _IngredientEditor({
+    required this.ingredients,
+    required this.onAdd,
+    required this.onRemove,
+    required this.onRecalculate,
+    required this.macrosStale,
+    required this.recalculating,
+    required this.p,
+    required this.l10n,
+  });
+
+  final List<String> ingredients;
+  final ValueChanged<String> onAdd;
+  final ValueChanged<String> onRemove;
+  final VoidCallback onRecalculate;
+  final bool macrosStale;
+  final bool recalculating;
+  final AppPalette p;
+  final AppLocalizations l10n;
+
+  @override
+  State<_IngredientEditor> createState() => _IngredientEditorState();
+}
+
+class _IngredientEditorState extends State<_IngredientEditor> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final value = _controller.text;
+    if (value.trim().isEmpty) return;
+    widget.onAdd(value);
+    _controller.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.p;
+    final l10n = widget.l10n;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(AppSpacing.cardPadding),
+          decoration: BoxDecoration(
+            color: p.surface,
+            borderRadius: BorderRadius.circular(AppSpacing.radius),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.ingredients.isNotEmpty)
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: widget.ingredients
+                      .map(
+                        (m) => Container(
+                          padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
+                          decoration: BoxDecoration(
+                            color: p.amber.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                m,
+                                style: AppTextStyles.label(
+                                  fontSize: 11.5,
+                                  color: p.amber,
+                                ).copyWith(letterSpacing: 0),
+                              ),
+                              const SizedBox(width: 4),
+                              Semantics(
+                                button: true,
+                                label: l10n.yemekEkleIngredientRemove(m),
+                                child: Pressable(
+                                  onTap: () => widget.onRemove(m),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2),
+                                    child: Icon(
+                                      Icons.close_rounded,
+                                      size: 14,
+                                      color: p.amber,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+              if (widget.ingredients.isNotEmpty) const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 44,
+                      child: TextField(
+                        controller: _controller,
+                        textInputAction: TextInputAction.done,
+                        onSubmitted: (_) => _submit(),
+                        style: AppTextStyles.body(fontSize: 14, color: p.text),
+                        decoration: InputDecoration(
+                          hintText: l10n.yemekEkleIngredientHint,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Semantics(
+                    button: true,
+                    label: l10n.yemekEkleIngredientAdd,
+                    child: Pressable(
+                      onTap: _submit,
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: p.surfaceStrong,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.add_rounded,
+                          size: 20,
+                          color: p.text,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        if (widget.macrosStale || widget.recalculating) ...[
+          const SizedBox(height: 12),
+          Text(
+            l10n.yemekEkleRecalculateHint,
+            style: AppTextStyles.body(
+              fontSize: 11.5,
+              color: p.textMuted,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 10),
+          if (widget.recalculating)
+            Row(
+              children: [
+                SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: p.amber,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  l10n.yemekEkleRecalculating,
+                  style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+                ),
+              ],
+            )
+          else
+            _SecondaryButton(
+              icon: Icons.calculate_outlined,
+              label: l10n.yemekEkleRecalculate,
+              onTap: widget.onRecalculate,
+              p: p,
+            ),
+        ],
+      ],
+    );
+  }
+}
+
+// ─── Elle ekleme formu ───────────────────────────────────────────────────────
+
+/// Fotoğrafsız kayıt. Yalnız ad ve kalori zorunlu: kullanıcı üç makroyu
+/// bilmiyorsa öğünü hiç eklememesindense kalorisiyle eklesin.
+class _ManualEntryView extends StatefulWidget {
+  const _ManualEntryView({
+    required this.onSubmit,
+    required this.p,
+    required this.l10n,
+  });
+
+  final void Function({
+    required String name,
+    required int kalori,
+    required double protein,
+    required double karbonhidrat,
+    required double yag,
+  })
+  onSubmit;
+  final AppPalette p;
+  final AppLocalizations l10n;
+
+  @override
+  State<_ManualEntryView> createState() => _ManualEntryViewState();
+}
+
+class _ManualEntryViewState extends State<_ManualEntryView> {
+  final _name = TextEditingController();
+  final _kalori = TextEditingController();
+  final _protein = TextEditingController();
+  final _karbonhidrat = TextEditingController();
+  final _yag = TextEditingController();
+
+  String? _error;
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _kalori.dispose();
+    _protein.dispose();
+    _karbonhidrat.dispose();
+    _yag.dispose();
+    super.dispose();
+  }
+
+  /// Boş alan 0 sayılır; virgüllü giriş de kabul edilir ("12,5").
+  double _number(TextEditingController c) =>
+      double.tryParse(c.text.trim().replaceAll(',', '.')) ?? 0;
+
+  void _submit() {
+    final name = _name.text.trim();
+    if (name.isEmpty) {
+      setState(() => _error = widget.l10n.yemekEkleManualNameError);
+      return;
+    }
+    final kalori = int.tryParse(_kalori.text.trim());
+    if (kalori == null || kalori <= 0) {
+      setState(() => _error = widget.l10n.yemekEkleManualCalorieError);
+      return;
+    }
+    setState(() => _error = null);
+    widget.onSubmit(
+      name: name,
+      kalori: kalori,
+      protein: _number(_protein),
+      karbonhidrat: _number(_karbonhidrat),
+      yag: _number(_yag),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.p;
+    final l10n = widget.l10n;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenPadding,
+        8,
+        AppSpacing.screenPadding,
+        32,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.yemekEkleManualTitle,
+            style: AppTextStyles.display(fontSize: 24, color: p.text),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.yemekEkleManualBody,
+            style: AppTextStyles.body(
+              fontSize: 13,
+              color: p.textMuted,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 24),
+          _ManualField(
+            label: l10n.yemekEkleManualNameLabel,
+            controller: _name,
+            textCapitalization: TextCapitalization.sentences,
+            p: p,
+          ),
+          _ManualField(
+            label: l10n.yemekEkleManualCalorieLabel,
+            controller: _kalori,
+            numeric: true,
+            p: p,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            l10n.yemekEkleManualMacroHint,
+            style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
+          ),
+          const SizedBox(height: 12),
+          _ManualField(
+            label: l10n.yemekEkleProtein,
+            controller: _protein,
+            numeric: true,
+            p: p,
+          ),
+          _ManualField(
+            label: l10n.yemekEkleCarbs,
+            controller: _karbonhidrat,
+            numeric: true,
+            p: p,
+          ),
+          _ManualField(
+            label: l10n.yemekEkleFat,
+            controller: _yag,
+            numeric: true,
+            p: p,
+          ),
+          if (_error != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              _error!,
+              style: AppTextStyles.body(fontSize: 12.5, color: p.danger),
+            ),
+          ],
+          const SizedBox(height: 24),
+          _PrimaryButton(
+            icon: Icons.arrow_forward_rounded,
+            label: l10n.yemekEkleManualContinue,
+            onTap: _submit,
+            p: p,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ManualField extends StatelessWidget {
+  const _ManualField({
+    required this.label,
+    required this.controller,
+    required this.p,
+    this.numeric = false,
+    this.textCapitalization = TextCapitalization.none,
+  });
+
+  final String label;
+  final TextEditingController controller;
+  final AppPalette p;
+  final bool numeric;
+  final TextCapitalization textCapitalization;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: AppTextStyles.sectionLabel(color: p.textMuted)),
+          const SizedBox(height: 6),
+          SizedBox(
+            height: 48,
+            child: TextField(
+              controller: controller,
+              keyboardType: numeric
+                  ? const TextInputType.numberWithOptions(decimal: true)
+                  : TextInputType.text,
+              textCapitalization: textCapitalization,
+              style: AppTextStyles.body(fontSize: 15, color: p.text),
+            ),
           ),
         ],
       ),

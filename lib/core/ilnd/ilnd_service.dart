@@ -138,6 +138,124 @@ class IlndService {
     }
   }
 
+  /// Yanıtı parça parça verir: akan sohbet.
+  ///
+  /// Neden: akışsız çağrıda kullanıcı cevabın SONU gelene kadar boş balona
+  /// bakıyor, Sonnet'te bu birkaç saniye sürüyor. Akışta ilk kelime
+  /// saniyenin altında ekranda oluyor; model, kalite ve kota aynı kalıyor.
+  ///
+  /// Her olayda **birikmiş metnin tamamı** yayınlanır, yalnız yeni parça
+  /// değil: ad jetonu ($kNamePlaceholder) iki parçaya bölünebiliyor ve
+  /// kişiselleştirme ancak bütün metin üzerinde doğru çalışıyor.
+  ///
+  /// Akış kurulamaz ya da boş dönerse tek atımlık [respond] sonucuna düşer:
+  /// ara katman SSE'yi kesse bile sohbet çalışmaya devam eder.
+  Stream<String> respondStream({
+    required IlndMemory memory,
+    required String userMessage,
+    required AppLocalizations l10n,
+    List<IlndTurn> history = const [],
+    String? task,
+    IlndTier tier = IlndTier.quick,
+    String? fallback,
+    UsageKind? meterAs,
+  }) async* {
+    Future<String> once() => respond(
+      memory: memory,
+      userMessage: userMessage,
+      l10n: l10n,
+      history: history,
+      task: task,
+      tier: tier,
+      fallback: fallback,
+      meterAs: meterAs,
+    );
+
+    if (!AppConfig.isAnthropicProxyConfigured) {
+      yield await once();
+      return;
+    }
+
+    final client = http.Client();
+    try {
+      final idToken = await fb_auth.FirebaseAuth.instance.currentUser
+          ?.getIdToken();
+      if (idToken == null) {
+        throw IlndServiceException(l10n.ilndServiceSessionError);
+      }
+
+      final request =
+          http.Request('POST', Uri.parse(AppConfig.anthropicProxyUrl))
+            ..headers.addAll({
+              'Authorization': 'Bearer $idToken',
+              'content-type': 'application/json',
+              'accept': 'text/event-stream',
+              ...await appCheckHeaders(),
+            })
+            ..body = jsonEncode({
+              'tier': tier.name,
+              'stream': true,
+              if (meterAs != null) 'kind': meterAs.name,
+              'system': IlndCharacter.systemPrompt(
+                memory: memory,
+                task: task,
+                languageCode: l10n.localeName.split('_').first,
+              ),
+              'messages': [
+                for (final t in history)
+                  {'role': t.fromUser ? 'user' : 'assistant', 'content': t.text},
+                {'role': 'user', 'content': userMessage},
+              ],
+            });
+
+      final response = await client
+          .send(request)
+          .timeout(const Duration(seconds: 30));
+
+      if (response.statusCode != 200) {
+        // Hata yolunda sunucu JSON döner; kota duvarını burada ayırmazsak
+        // paywall yerine genel hata gösterilir.
+        final body = await response.stream.bytesToString();
+        if (response.statusCode == 429) {
+          if (meterAs != null && isFreeWeeklyLimitBody(body)) {
+            throw IlndFreeLimitException(meterAs);
+          }
+          throw IlndServiceException(l10n.ilndServiceDailyLimitReached);
+        }
+        throw IlndServiceException(
+          l10n.ilndServiceResponseFailed(response.statusCode),
+        );
+      }
+
+      final buffer = StringBuffer();
+      await for (final line
+          in response.stream
+              .transform(utf8.decoder)
+              .transform(const LineSplitter())
+              // Olaylar arasında 60 saniye sessizlik: bağlantı asılı
+              // kalmış demektir, sohbeti kilitte bırakma.
+              .timeout(const Duration(seconds: 60))) {
+        final delta = sseTextDelta(line);
+        if (delta == null) continue;
+        buffer.write(delta);
+        yield personalize(buffer.toString(), memory.name);
+      }
+
+      // Akış tek kelime getirmediyse boş balon bırakma.
+      if (buffer.isEmpty) yield await once();
+    } on IlndFreeLimitException {
+      rethrow;
+    } catch (e) {
+      if (fallback != null) {
+        yield fallback;
+        return;
+      }
+      rethrow;
+    } finally {
+      client.close();
+    }
+  }
+
   /// Bir metinden ILND'nin kalıcı olarak hatırlaması gereken hedef ve
   /// gerçekleri çıkarır. Ucuz modelle çalışır; "beni gerçekten tanıyor"
   /// hissinin temelidir.
@@ -322,13 +440,38 @@ String personalize(String text, String name) {
 
 /// 429 yanıtının, hesabın ücretsiz katman kotasından mı (paywall) yoksa
 /// günlük kötüye-kullanım tavanından mı (yarın tekrar dene) geldiğini söyler.
-bool isFreeWeeklyLimit(http.Response response) {
+bool isFreeWeeklyLimit(http.Response response) =>
+    isFreeWeeklyLimitBody(utf8.decode(response.bodyBytes));
+
+/// Aynı karar, gövde metni üzerinden. Akan istekte elimizde [http.Response]
+/// yok: gövde parça parça geldiği için önce dizeye çevriliyor.
+bool isFreeWeeklyLimitBody(String body) {
   try {
-    final body =
-        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-    return body['reason'] == 'free-weekly-limit';
+    final decoded = jsonDecode(body) as Map<String, dynamic>;
+    return decoded['reason'] == 'free-weekly-limit';
   } catch (_) {
     return false;
+  }
+}
+
+/// Anthropic SSE akışındaki bir satırdan metin parçasını ayıklar.
+///
+/// Akışta yalnız `content_block_delta` olayları metin taşır; `event:`
+/// satırları, `ping`, `message_start`, `[DONE]` ve bozuk satırlar atlanır.
+/// Bozuk tek bir satır akışı öldürmemeli, o yüzden ayrıştırma hatası da
+/// null döner.
+String? sseTextDelta(String line) {
+  if (!line.startsWith('data:')) return null;
+  final payload = line.substring(5).trim();
+  if (payload.isEmpty || payload == '[DONE]') return null;
+  try {
+    final event = jsonDecode(payload) as Map<String, dynamic>;
+    if (event['type'] != 'content_block_delta') return null;
+    final delta = event['delta'] as Map<String, dynamic>?;
+    if (delta == null || delta['type'] != 'text_delta') return null;
+    return delta['text'] as String?;
+  } catch (_) {
+    return null;
   }
 }
 

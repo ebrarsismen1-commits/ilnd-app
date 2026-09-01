@@ -43,8 +43,8 @@ void main() {
           sharedPreferencesProvider.overrideWithValue(prefs),
           habitsProvider.overrideWith((ref) => Stream.value(habits)),
           todayCompletionsProvider.overrideWith((ref) => Stream.value({'h1'})),
-          last7DaysCompletionsProvider.overrideWith(
-            (ref) => Stream.value(const {}),
+          rangeCompletionsProvider.overrideWith(
+            (ref, range) => Stream.value(const {}),
           ),
           todayFoodEntriesProvider.overrideWith(
             (ref) => Stream.value(const []),
@@ -77,5 +77,21 @@ void main() {
 
     // Su kartı gerçek prefs verisi (boş gün = 0ml).
     expect(find.text('0ml'), findsOneWidget);
+  });
+
+  testWidgets('hafta/ay seçimi ızgarayı ve sayacı büyütür', (tester) async {
+    await pumpTakip(tester);
+
+    // Varsayılan pencere hafta: h1 bugün tamam, h2 değil.
+    expect(find.text('1/7'), findsOneWidget);
+    expect(find.text('0/7'), findsOneWidget);
+    expect(find.text('0/30'), findsNothing);
+
+    await tester.tap(find.text(l10n.takipRangeMonth));
+    await tester.pumpAndSettle();
+
+    expect(find.text('1/30'), findsOneWidget);
+    expect(find.text('0/30'), findsOneWidget);
+    expect(find.text('1/7'), findsNothing);
   });
 }

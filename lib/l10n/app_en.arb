@@ -525,6 +525,15 @@
   },
   "takipHabitsLabel": "HABITS",
   "takipNoHabitsYet": "no habits added yet",
+  "takipRangeWeek": "week",
+  "takipRangeMonth": "month",
+  "takipWaterAverage": "{range} avg. {ml}ml",
+  "@takipWaterAverage": {
+    "placeholders": {
+      "range": {"type": "String"},
+      "ml": {"type": "int"}
+    }
+  },
 
   "ilndServiceSessionError": "Couldn't verify your session.",
   "ilndServiceUnavailable": "ILND can't respond right now.",
@@ -608,6 +617,27 @@
   "yemekEklePortionQuestion": "How much was on the plate?",
   "yemekEklePortionHint": "If the estimate is off, adjust here, the values update.",
   "yemekEkleSaveButton": "save",
+  "yemekEkleManualButton": "add manually",
+  "yemekEkleManualTitle": "what did you eat?",
+  "yemekEkleManualBody": "you can add a meal without a photo. ingredients come in the next step.",
+  "yemekEkleManualNameLabel": "food name",
+  "yemekEkleManualCalorieLabel": "calories (kcal)",
+  "yemekEkleManualMacroHint": "macros are optional, leave them blank if you don't know.",
+  "yemekEkleManualContinue": "continue",
+  "yemekEkleManualNameError": "food name is required",
+  "yemekEkleManualCalorieError": "enter a valid calorie value",
+  "yemekEkleIngredientAdd": "add ingredient",
+  "yemekEkleIngredientHint": "e.g. olive oil",
+  "yemekEkleIngredientRemove": "remove {name}",
+  "@yemekEkleIngredientRemove": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "yemekEkleRecalculate": "recalculate macros",
+  "yemekEkleRecalculateHint": "you changed the ingredients. recalculating uses one of your weekly analyses.",
+  "yemekEkleRecalculating": "recalculating",
+  "yemekEkleRecalculateFailed": "couldn't recalculate the macros",
   "yemekEkleRetryButton": "try again",
   "yemekEkleErrorTitle": "something went wrong",
   "yemekEkleIlndThinking": "ILND is thinking...",
