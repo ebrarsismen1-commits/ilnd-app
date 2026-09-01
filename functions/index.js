@@ -395,10 +395,22 @@ function validateInputSize(req, system, messages) {
 // token'ı kaydedip enforceAppCheck: true'ya geri dön (bkz. 2026-07-07
 // decisions.md notu).
 exports.anthropicProxy = onRequest(
-    // REVENUECAT_SECRET_KEY burada da bildirilmek zorunda: resolvePremium
+    // REVENUECAT_SECRET_KEY normalde burada da bildirilmeli: resolvePremium
     // ücretsiz katman kotasını bu fonksiyonun içinde uyguluyor ve aboneyi
     // tanıyabilmesi için anahtara erişmesi gerekiyor.
-    {cors: true, secrets: [ANTHROPIC_API_KEY, REVENUECAT_SECRET_KEY]},
+    //
+    // GEÇİCİ (2026-09-02): anahtar henüz alınmadı ve bağlı bir secret'ın
+    // Secret Manager'da bir sürümü olmak zorunda, yoksa `firebase deploy`
+    // değer sorup deploy'u kilitliyor. Bağ kaldırıldı: hasRevenueCatPremium
+    // boş anahtarla sessizce false dönüyor, yani bugünkü davranış değişmiyor
+    // (mağaza aboneliği zaten canlıda değil, referral premium'u çalışıyor).
+    //
+    // Anahtar alınır alınmaz GERİ EKLE, yoksa parasını ödemiş abone ücretsiz
+    // katman kotasına takılır ve hiçbir yerde hata görünmez:
+    //   1. firebase functions:secrets:set REVENUECAT_SECRET_KEY
+    //   2. bu satırı `secrets: [ANTHROPIC_API_KEY, REVENUECAT_SECRET_KEY]`
+    //      hâline döndür
+    {cors: true, secrets: [ANTHROPIC_API_KEY]},
     async (req, res) => {
       if (req.method !== "POST") {
         res.status(405).json({error: "Method Not Allowed"});

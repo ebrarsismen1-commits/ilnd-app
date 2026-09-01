@@ -571,7 +571,9 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
     unawaited(
       ref
           .read(ilndMemoryProvider.notifier)
-          .addNote('Bugünkü ruh hali: ${_moodLabel(l10n, moodKey)}'),
+          // "Bugünkü" YAZILMAZ: not kalıcı, yarın da "bugünkü" derdi.
+          // Zamanı notun kendi damgası taşıyor (MemoryNote.at).
+          .addNote('Ruh hali: ${_moodLabel(l10n, moodKey)}'),
     );
     await Future.delayed(const Duration(milliseconds: 320));
     if (!mounted) return;

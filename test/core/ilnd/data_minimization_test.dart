@@ -15,7 +15,12 @@ void main() {
     name: gizliAd,
     goals: const ['erken kalkmak'],
     facts: const ['vejetaryen'],
-    recentNotes: [for (var i = 1; i <= noteCount; i++) 'not $i'],
+    // Notlar artık zaman damgalı; tarihsiz olanlar prompt'a hiç girmiyor
+    // (IlndMemory.freshNotes), o yüzden test verisi de tarihli.
+    recentNotes: [
+      for (var i = 1; i <= noteCount; i++)
+        MemoryNote('not $i', at: DateTime.now()),
+    ],
   );
 
   group('Ad cihazdan çıkmaz', () {

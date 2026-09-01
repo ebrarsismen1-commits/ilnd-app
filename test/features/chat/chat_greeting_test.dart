@@ -115,6 +115,52 @@ void main() {
     // Son not göreve birebir gömülür — geri-referans modele rica değil şarttır.
     expect(service.capturedTask, contains('Bugünkü ruh hali: yorgun'));
     expect(service.capturedTask, contains('mutlaka'));
+    // Notun YAŞI da göreve girer. Girmediğinde model her notu bugüne ait
+    // sanıyordu: iki hafta önceki erik için "bugün erikler nasıldı" diye
+    // soruldu (2026-08-31).
+    expect(
+      service.capturedTask,
+      contains('bugün'),
+      reason: 'notun ne zaman alındığı göreve yazılmalı',
+    );
+  });
+
+  test('bayat not karşılamada zorlanmaz', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final service = _FakeIlndService(reply: 'selam');
+    final container = ProviderContainer(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        ilndMemoryProvider.overrideWith(
+          (ref) => IlndMemoryNotifier(prefs, '', null),
+        ),
+        ilndServiceProvider.overrideWithValue(service),
+        chatProvider.overrideWith((ref) => ChatNotifier(ref)),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // İki hafta önceki bir öğün. Eskiden koşulsuz zorlanıyordu ve ILND
+    // "bugün erikler nasıldı" diye soruyordu.
+    final memory = container.read(ilndMemoryProvider.notifier);
+    memory.state = memory.state.copyWith(
+      recentNotes: [
+        MemoryNote(
+          'Yemek: Erik (120 kcal)',
+          at: DateTime.now().subtract(const Duration(days: 14)),
+        ),
+      ],
+    );
+
+    await container.read(chatProvider.notifier).greetIfNeeded(l10n);
+
+    expect(
+      service.capturedTask,
+      isNot(contains('Erik')),
+      reason: 'iki haftalık öğün selamlamada gündeme getirilmemeli',
+    );
+    expect(service.capturedTask, isNot(contains('en son not')));
   });
 
   test('hafıza boşken karşılama görevi not referansı içermez', () async {
