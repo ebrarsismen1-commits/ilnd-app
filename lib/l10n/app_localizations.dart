@@ -239,20 +239,32 @@ abstract class AppLocalizations {
   /// RSVP button, not joined yet
   ///
   /// In tr, this message translates to:
-  /// **'Katıl'**
+  /// **'katıl'**
   String get topulukRsvpJoin;
 
   /// RSVP button, already joined
   ///
   /// In tr, this message translates to:
-  /// **'Geliyorum'**
+  /// **'geliyorum'**
   String get topulukRsvpGoing;
+
+  /// RSVP button when the event is at capacity
+  ///
+  /// In tr, this message translates to:
+  /// **'kontenjan doldu'**
+  String get topulukRsvpFull;
 
   /// Attendee count under an event
   ///
   /// In tr, this message translates to:
   /// **'{count} kişi geliyor'**
   String topulukGoingCount(int count);
+
+  /// Attendee count with the event capacity
+  ///
+  /// In tr, this message translates to:
+  /// **'{count}/{capacity} kişi geliyor'**
+  String topulukGoingCountOfCapacity(int count, int capacity);
 
   /// RSVP write failed toast
   ///
@@ -769,6 +781,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'{count} öğe · sıradaki: {next}'**
   String adanProgress(int count, String next);
+
+  /// Screen reader label for the island illustration
+  ///
+  /// In tr, this message translates to:
+  /// **'ada görseli, {count} öğe yerleşti'**
+  String adanCanvasSemantics(int count);
 
   /// Note about the next island piece
   ///
@@ -1340,6 +1358,12 @@ abstract class AppLocalizations {
   /// **'Pt,Sa,Ça,Pe,Cu,Ct,Pa'**
   String get profileWeekdaysShort;
 
+  /// Kind empty state when no activity in the week
+  ///
+  /// In tr, this message translates to:
+  /// **'bu hafta henüz iz yok. acelesi de yok.'**
+  String get profileWeekEmpty;
+
   /// Weekly summary card section label
   ///
   /// In tr, this message translates to:
@@ -1388,6 +1412,84 @@ abstract class AppLocalizations {
   /// **'ILND+\'a geç'**
   String get profileGoPremium;
 
+  /// Settings row opening the preferences screen
+  ///
+  /// In tr, this message translates to:
+  /// **'bilgilerin ve tercihlerin'**
+  String get profilePreferences;
+
+  /// Preferences screen title
+  ///
+  /// In tr, this message translates to:
+  /// **'tercihler'**
+  String get preferencesTitle;
+
+  /// Section label above the name field
+  ///
+  /// In tr, this message translates to:
+  /// **'AD'**
+  String get preferencesNameLabel;
+
+  /// Section label above goal chips
+  ///
+  /// In tr, this message translates to:
+  /// **'HEDEFLER'**
+  String get preferencesGoalsLabel;
+
+  /// Section label above age/height/weight
+  ///
+  /// In tr, this message translates to:
+  /// **'BEDEN'**
+  String get preferencesBodyLabel;
+
+  /// Section label above activity level
+  ///
+  /// In tr, this message translates to:
+  /// **'HAREKET'**
+  String get preferencesActivityLabel;
+
+  /// Section label above diet options
+  ///
+  /// In tr, this message translates to:
+  /// **'BESLENME'**
+  String get preferencesDietLabel;
+
+  /// Section label above allergy chips
+  ///
+  /// In tr, this message translates to:
+  /// **'ALERJİLER'**
+  String get preferencesAllergiesLabel;
+
+  /// Why allergies matter, under the allergy chips
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND tarif önerirken bunları eler.'**
+  String get preferencesAllergiesHelp;
+
+  /// Why goals matter, under the goal chips
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün ekranındaki okuma bunlara göre seçilir.'**
+  String get preferencesGoalsHelp;
+
+  /// Save button on the preferences screen
+  ///
+  /// In tr, this message translates to:
+  /// **'kaydet'**
+  String get preferencesSave;
+
+  /// Toast after a successful save
+  ///
+  /// In tr, this message translates to:
+  /// **'Tercihlerin güncellendi.'**
+  String get preferencesSaved;
+
+  /// Toast after a failed save
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilemedi. Tekrar dener misin?'**
+  String get preferencesSaveFailed;
+
   /// Settings section label
   ///
   /// In tr, this message translates to:
@@ -1429,6 +1531,66 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'hesabımı sil'**
   String get profileDeleteAccount;
+
+  /// Journal entry delete confirmation title
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu girdiyi sil'**
+  String get journalDeleteTitle;
+
+  /// Journal entry delete confirmation body
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu yazı kalıcı olarak silinecek. O günü yazmış olman değişmiyor, serin bozulmuyor.'**
+  String get journalDeleteBody;
+
+  /// Toast after deleting a journal entry
+  ///
+  /// In tr, this message translates to:
+  /// **'Girdi silindi.'**
+  String get journalDeleted;
+
+  /// Toast when deleting a journal entry fails
+  ///
+  /// In tr, this message translates to:
+  /// **'Silinemedi. Tekrar dener misin?'**
+  String get journalDeleteFailed;
+
+  /// Habit delete confirmation title
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu alışkanlığı sil'**
+  String get habitDeleteTitle;
+
+  /// Habit delete confirmation body
+  ///
+  /// In tr, this message translates to:
+  /// **'Alışkanlık ve geçmiş işaretlemeleri listeden kalkacak.'**
+  String get habitDeleteBody;
+
+  /// Toast after deleting a habit
+  ///
+  /// In tr, this message translates to:
+  /// **'Alışkanlık silindi.'**
+  String get habitDeleted;
+
+  /// Toast when deleting a habit fails
+  ///
+  /// In tr, this message translates to:
+  /// **'Silinemedi. Tekrar dener misin?'**
+  String get habitDeleteFailed;
+
+  /// Destructive confirm button in delete dialogs
+  ///
+  /// In tr, this message translates to:
+  /// **'sil'**
+  String get deleteAction;
+
+  /// Dismiss button in delete dialogs
+  ///
+  /// In tr, this message translates to:
+  /// **'vazgeç'**
+  String get cancelAction;
 
   /// Delete account confirmation dialog title
   ///
@@ -1777,18 +1939,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'birkaç dakika, sonra uyku'**
   String get sleepRitualHomeCardSubtitle;
-
-  /// Daily quote on explore screen
-  ///
-  /// In tr, this message translates to:
-  /// **'\"Bugün küçük bir adım, yarının büyük farkı.\"'**
-  String get exploreQuote;
-
-  /// Daily quote section label
-  ///
-  /// In tr, this message translates to:
-  /// **'günün alıntısı'**
-  String get exploreQuoteSubtitle;
 
   /// Paywall subtitle under the ILND+ heading
   ///

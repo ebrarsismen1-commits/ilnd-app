@@ -137,6 +137,43 @@ describe("syncIslandItems", () => {
         .collection("rsvps").doc(UID).delete();
   });
 
+  test("son etkin gün sunucuda hesaplanır ve yazılır", async () => {
+    // Su bu alandan koyulaşıyor (ADR-0006 §5). Gün SAYISI değil, gün
+    // DİZESİ yazılır: sayı iki senkron arasında bayatlardı.
+    await db.collection("daily_checkins").doc(`${UID}_2026-08-20`)
+        .set({userId: UID, date: "2026-08-20"});
+
+    const token = await getIdTokenForUid(UID);
+    const {body} = await callSync(token);
+
+    expect(body.metrics.lastActiveDate).toBe("2026-08-20");
+    const doc = await db.collection("island").doc(UID).get();
+    expect(doc.data().lastActiveDate).toBe("2026-08-20");
+  });
+
+  test("öğün, check-in yazmasa bile son etkin günü ilerletir", async () => {
+    await db.collection("daily_checkins").doc(`${UID}_2026-08-10`)
+        .set({userId: UID, date: "2026-08-10"});
+    await db.collection("users").doc(UID).collection("food_entries").add({
+      kalori: 300,
+      createdAt: admin.firestore.Timestamp.fromDate(
+          new Date("2026-08-22T10:00:00Z")),
+    });
+
+    const token = await getIdTokenForUid(UID);
+    const {body} = await callSync(token);
+
+    // Yalnız check-in'e bakılsaydı bu kullanıcının suyu 12 gün sessizmiş
+    // gibi koyulaşacaktı — oysa dün yemeğini yazmış.
+    expect(body.metrics.lastActiveDate).toBe("2026-08-22");
+  });
+
+  test("hiç veri yoksa son etkin gün null, su berrak kalır", async () => {
+    const token = await getIdTokenForUid(UID);
+    const {body} = await callSync(token);
+    expect(body.metrics.lastActiveDate).toBeNull();
+  });
+
   test("çağrı idempotent — ikinci çağrı yeni öğe vermez", async () => {
     await db
         .collection("users").doc(UID)

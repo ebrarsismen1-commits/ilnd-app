@@ -81,6 +81,17 @@ final toggleHabitCompletionProvider =
       };
     });
 
+/// Alışkanlığı siler.
+///
+/// `HabitsRepository.deleteHabit` yazılmıştı ama hiçbir yerden
+/// çağrılmıyordu: arka uç ve Firestore kuralı hazırdı, arayüzde kapı yoktu.
+final deleteHabitProvider = Provider<Future<void> Function(String habitId)>((
+  ref,
+) {
+  final repo = ref.read(habitsRepositoryProvider);
+  return (habitId) => repo.deleteHabit(habitId);
+});
+
 // ── Water ────────────────────────────────────────────────────────────────────
 
 /// Bir günün su kaydının SharedPreferences anahtarı.

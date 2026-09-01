@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ilnd_app/core/theme/app_text_styles.dart';
 
 /// Tipografi koruması.
 ///
@@ -13,8 +15,11 @@ import 'package:flutter_test/flutter_test.dart';
 /// (owner kararı: handoff birebir uygulanacak) o kilit kalktı. Yerine iki
 /// daha zayıf ama hâlâ işe yarayan koruma var:
 ///
-/// 1. **Aile kilidi** — lib/ içinde yalnız üç aile kullanılabilir. Dördüncü
-///    bir font ya da eski Sora/Inter'e sessiz dönüş CI'da kırılır.
+/// 1. **İndirme yasağı** — 2026-08-31'de üç aile de (Noto Serif, DM Sans,
+///    DM Mono) pakete gömüldü. Artık lib/ içinde hiç GoogleFonts çağrısı
+///    olmamalı, ve gömülü dosyaların yerinde ve geçerli olduğu ayrıca
+///    doğrulanıyor: ikisinden biri kaçarsa metin sessizce sistem fontuna
+///    kayar.
 /// 2. **Ölçek kümesi** — puntolar handoff'un belgelenmiş kümesinden gelmeli.
 ///    Serbest bırakılan şey ölçeğin genişliği, keyfîliği değil: rastgele bir
 ///    37 hâlâ kırılır.
@@ -27,8 +32,13 @@ void main() {
       .where((f) => !f.path.contains('app_localizations'))
       .toList();
 
-  test('lib/ yalnız Noto Serif + DM Sans + IBM Plex Mono kullanır', () {
-    const allowed = {'notoSerif', 'dmSans', 'ibmPlexMono'};
+  test('lib/ çalışma anında font İNDİRMEZ', () {
+    // 2026-08-31: üç aile de pakete gömüldü, artık lib/ içinde hiç
+    // GoogleFonts çağrısı olmamalı.
+    //
+    // Bu yalnız bir stil kuralı değil: indirilen font, ağsız ilk açılışta
+    // sistem fontuna düşer. Uygulama açılır, hiçbir hata görünmez, sadece
+    // kimliği kaybolur. App Store incelemesi de aynı riski taşır.
     final pattern = RegExp(r'GoogleFonts\.([a-zA-Z]+)\(');
     final offenders = <String>[];
 
@@ -36,11 +46,7 @@ void main() {
       final lines = file.readAsLinesSync();
       for (var i = 0; i < lines.length; i++) {
         for (final m in pattern.allMatches(lines[i])) {
-          // `dmSansTextTheme` gibi çağrılar da aynı aileye sayılır.
-          final family = m.group(1)!.replaceFirst(RegExp(r'TextTheme$'), '');
-          if (!allowed.contains(family)) {
-            offenders.add('${file.path}:${i + 1} → $family');
-          }
+          offenders.add('${file.path}:${i + 1} → ${m.group(1)}');
         }
       }
     }
@@ -49,9 +55,70 @@ void main() {
       offenders,
       isEmpty,
       reason:
-          'Onaylı üçlü dışında font kullanımı var. Başlık/editoryal an →\n'
-          'notoSerif, gövde/etiket → dmSans, sayı → ibmPlexMono.\n\n'
-          '${offenders.join('\n')}',
+          'lib/ içinde GoogleFonts çağrısı var. Üç aile de pakete gömülü: '
+          'AppTextStyles.serifFont / sansFont / monoFont kullan. '
+          'İhlaller: ${offenders.join(', ')}',
+    );
+  });
+
+  test('üç aile de pakete gömülü ve dosyaları geçerli', () {
+    // Kilidin ikinci yarısı: çağrı doğru olsa da asset düşerse metin
+    // sessizce sistem fontuna kayar.
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+
+    const bundled = <String, List<String>>{
+      'NotoSerif': ['Regular', 'SemiBold'],
+      'DMSans': ['Regular', 'Medium', 'SemiBold', 'Bold'],
+      // DM Mono 500'de bitiyor; 600/700 kesimi ÜRETİLMEMİŞ.
+      'DMMono': ['Medium'],
+    };
+
+    for (final family in bundled.entries) {
+      expect(
+        pubspec,
+        contains('family: ${family.key}'),
+        reason: 'pubspec.yaml ${family.key} ailesini bildirmiyor',
+      );
+
+      for (final cut in family.value) {
+        final path = 'assets/fonts/${family.key}-$cut.ttf';
+        final file = File(path);
+        expect(file.existsSync(), isTrue, reason: '$path yok');
+        expect(
+          pubspec,
+          contains(path),
+          reason: '$path pubspec.yaml içinde bildirilmemiş',
+        );
+        // TrueType imzası: 0x00010000. EOT/WOFF yanlışlıkla indirilirse
+        // Flutter fontu sessizce yok sayar (bir kez yaşandı: Google Fonts
+        // eski tarayıcı UA'sına EOT döndürüyor).
+        final head = file.readAsBytesSync().take(4).toList();
+        expect(head, [0, 1, 0, 0], reason: '$path geçerli bir TTF değil');
+      }
+    }
+  });
+
+  test('sayı stilleri DM Mono nun üst ağırlığını aşmaz', () {
+    // DM Mono 500'ün üstünde kesim taşımıyor. Daha kalın istenirse Flutter
+    // sessizce en yakınına düşer, yani kod 700 der ekran 500 çizer.
+    // `mono()` bu yüzden ağırlığı kırpıyor; kırpma kalkarsa burada görülür.
+    expect(AppTextStyles.monoMaxWeight, FontWeight.w500);
+
+    final clamped = AppTextStyles.mono(
+      color: const Color(0xFF000000),
+      fontWeight: FontWeight.w900,
+    );
+    expect(
+      clamped.fontWeight,
+      FontWeight.w500,
+      reason: 'var olmayan bir kesim istenirse ağırlık kırpılmalı',
+    );
+    expect(clamped.fontFamily, AppTextStyles.monoFont);
+
+    // Kalori/streak kahramanı da aynı tavanda.
+    expect(
+      AppTextStyles.metric(color: const Color(0xFF000000)).fontWeight,
+      FontWeight.w500,
     );
   });
 

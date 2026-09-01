@@ -71,11 +71,27 @@ const kIslandItems = <IslandItem>[
   ),
 ];
 
+/// Suyun derinliği. Üç kademe var, dördüncü yok: handoff §7'nin tek
+/// davranış kuralı "sessiz geçen günler suyu koyulaştırır, cezalandırmaz".
+/// Dipsiz bir kademe eklemek onu cezaya çevirirdi; dönüş de tek gün sürer.
+enum WaterDepth { clear, deep, deepest }
+
 /// Kazanılmış öğeler + türetilen "sıradaki öğe".
 class IslandState {
-  const IslandState({this.earned = const {}});
+  const IslandState({this.earned = const {}, this.quietDays = 0});
 
   final Set<String> earned;
+
+  /// Son etkin günden bu yana geçen gün sayısı. Sunucu `lastActiveDate`
+  /// yazar, istemci farkı alır — böylece sayı iki senkron arasında
+  /// bayatlamaz (ADR-0006 §5).
+  final int quietDays;
+
+  WaterDepth get water => switch (quietDays) {
+    < 3 => WaterDepth.clear,
+    < 7 => WaterDepth.deep,
+    _ => WaterDepth.deepest,
+  };
 
   int get earnedCount => earned.length;
 

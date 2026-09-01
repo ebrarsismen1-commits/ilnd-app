@@ -104,7 +104,7 @@ Kod tabanında **mevcut olmayan** ve gönderim öncesinde oluşturulması gereke
 
 | Materyal | Durum | Notlar |
 |----------|-------|--------|
-| Uygulama simgesi (1024×1024) | ❌ Oluşturulmadı | `#8B5CF6` marka vurgu rengiyle eşleşmeli |
+| Uygulama simgesi (1024×1024) | ❌ Oluşturulmadı | marka vurgu rengi `#13763E` (koyu tema `#34C77A`) — DESIGN_SYSTEM.md ile eşleşmeli |
 | Öne çıkan grafik (Google Play 1024×500) | ❌ Oluşturulmadı | |
 | Telefon ekran görüntüleri (5-8 mağaza başına) | ❌ Oluşturulmadı | Temel akışları göster: günlük, sohbet, vibe card |
 | Tablet ekran görüntüleri | ❌ Oluşturulmadı | iPad / Google Play tablet için gerekli |

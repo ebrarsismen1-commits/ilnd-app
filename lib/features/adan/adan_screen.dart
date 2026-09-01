@@ -6,13 +6,13 @@ import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/adan/adan_model.dart';
 import 'package:ilnd_app/features/adan/adan_repository.dart';
+import 'package:ilnd_app/features/adan/island_painter.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// Adan — ilerleme sayı değil yer olarak (ADR-0006, handoff §7).
 ///
-/// Ada illüstrasyonu bu turda YOK (owner kararı): görsel alanı sade bir
-/// yüzey olarak durur. Öğe listesi ve kazanım mantığı görselsiz de tam
-/// çalışır; illüstrasyon geldiğinde yalnız bu kutunun içi değişir.
+/// İllüstrasyon topografik yönde çizilir ([IslandPainter]); bu ekranda
+/// prototipteki gibi tam genişlikte, köşesiz durur — kart değil, yer.
 class AdanScreen extends ConsumerStatefulWidget {
   const AdanScreen({super.key});
 
@@ -40,90 +40,103 @@ class _AdanScreenState extends ConsumerState<AdanScreen> {
       backgroundColor: p.base,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.screenPadding,
-            8,
-            AppSpacing.screenPadding,
-            40,
-          ),
+          padding: const EdgeInsets.only(top: 8, bottom: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Pressable(
-                    onTap: () => Navigator.of(context).maybePop(),
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10, bottom: 4),
-                      child: Icon(
-                        Icons.chevron_left_rounded,
-                        size: 26,
-                        color: p.textMuted,
+              _Gutter(
+                child: Row(
+                  children: [
+                    Pressable(
+                      onTap: () => Navigator.of(context).maybePop(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10, bottom: 4),
+                        child: Icon(
+                          Icons.chevron_left_rounded,
+                          size: 26,
+                          color: p.textMuted,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    l10n.adanTitle,
-                    style: AppTextStyles.screenTitle(
-                      color: p.text,
-                      fontSize: 28,
+                    Text(
+                      l10n.adanTitle,
+                      style: AppTextStyles.screenTitle(
+                        color: p.text,
+                        fontSize: 28,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
+              // Tek büyük an: tam genişlikte, köşesiz (prototip §7).
               Entrance(
                 index: 0,
-                child: AdanCanvas(state: state, p: p, showWordmark: false),
-              ),
-              const SizedBox(height: 24),
-              Entrance(
-                index: 1,
-                child: Text(
-                  l10n.adanLead,
-                  style: AppTextStyles.heading(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: p.text,
+                child: SizedBox(
+                  height: 330,
+                  child: AdanCanvas(
+                    state: state,
+                    p: p,
+                    showWordmark: false,
+                    rounded: false,
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              Entrance(
-                index: 2,
-                child: Text(
-                  l10n.adanBody,
-                  style: AppTextStyles.body(
-                    fontSize: 13,
-                    color: p.textMuted,
-                    height: 1.55,
-                  ),
+              const SizedBox(height: 26),
+              _Gutter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Entrance(
+                      index: 1,
+                      child: Text(
+                        l10n.adanLead,
+                        style: AppTextStyles.heading(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: p.text,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Entrance(
+                      index: 2,
+                      child: Text(
+                        l10n.adanBody,
+                        style: AppTextStyles.body(
+                          fontSize: 13,
+                          color: p.textMuted,
+                          height: 1.55,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 28),
+                    Text(
+                      l10n.adanItemsLabel,
+                      style: AppTextStyles.sectionLabel(color: p.textMuted),
+                    ),
+                    const SizedBox(height: 10),
+                    for (final (i, item) in kIslandItems.indexed)
+                      Entrance(
+                        index: 3 + i,
+                        child: _ItemRow(item: item, state: state, p: p),
+                      ),
+                    const SizedBox(height: 18),
+                    if (state.nextItem case final next?)
+                      Text(
+                        l10n.adanNextNote(
+                          adanItemName(l10n, next.id),
+                          adanItemHow(l10n, next.id),
+                        ),
+                        style: AppTextStyles.body(
+                          fontSize: 12.5,
+                          color: p.textMuted,
+                          height: 1.55,
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 28),
-              Text(
-                l10n.adanItemsLabel,
-                style: AppTextStyles.sectionLabel(color: p.textMuted),
-              ),
-              const SizedBox(height: 10),
-              for (final (i, item) in kIslandItems.indexed)
-                Entrance(
-                  index: 3 + i,
-                  child: _ItemRow(item: item, state: state, p: p),
-                ),
-              const SizedBox(height: 18),
-              if (state.nextItem case final next?)
-                Text(
-                  l10n.adanNextNote(
-                    adanItemName(l10n, next.id),
-                    adanItemHow(l10n, next.id),
-                  ),
-                  style: AppTextStyles.body(
-                    fontSize: 12.5,
-                    color: p.textMuted,
-                    height: 1.55,
-                  ),
-                ),
             ],
           ),
         ),
@@ -132,14 +145,18 @@ class _AdanScreenState extends ConsumerState<AdanScreen> {
   }
 }
 
-/// Ada yüzeyi. İllüstrasyon gelene kadar sade bir alan — kazanılan öğe
-/// sayısını taşır. Boş bir çerçeveye "ada" demek yerine ne olduğunu söyler.
+/// Ada yüzeyi — illüstrasyon + üstündeki iki satır metin.
+///
+/// Yüksekliği vermez, ebeveyninin verdiği alanı doldurur: Bugün'de 150,
+/// Adan ekranında 330. İllüstrasyon "cover" oturduğu için ada iki ölçekte
+/// de aynı yerde durur, yalnız gökyüzü kırpılır.
 class AdanCanvas extends StatelessWidget {
   const AdanCanvas({
     super.key,
     required this.state,
     required this.p,
     this.showWordmark = true,
+    this.rounded = true,
   });
 
   final IslandState state;
@@ -150,44 +167,78 @@ class AdanCanvas extends StatelessWidget {
   /// tek şey bu (prototip §1: sol üstte Noto Serif 19 "adan.").
   final bool showWordmark;
 
+  /// Bugün'de kart (yuvarlak köşe), Adan ekranında tam genişlikte yer.
+  final bool rounded;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final next = state.nextItem;
-    return Container(
-      height: 330,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: p.accentSoft,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-      ),
-      padding: const EdgeInsets.all(18),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    // Hepsi kazanıldıysa sıradaki yok: yalnız sayı kalır.
+    final progress = next == null
+        ? '${state.earnedCount}'
+        : (state.earnedCount == 0
+              ? l10n.adanEmptyProgress
+              : l10n.adanProgress(
+                  state.earnedCount,
+                  adanItemName(l10n, next.id),
+                ));
+
+    return ClipRRect(
+      borderRadius: rounded
+          ? BorderRadius.circular(AppSpacing.radius)
+          : BorderRadius.zero,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
+          // Etiket yalnız illüstrasyonun kendisinde: üstteki iki satır
+          // ekran okuyucuya kendi düğümleriyle gitmeye devam etsin.
+          Positioned.fill(
+            child: Semantics(
+              image: true,
+              label: l10n.adanCanvasSemantics(state.earnedCount),
+              child: CustomPaint(
+                painter: IslandPainter(state: state, p: p),
+              ),
+            ),
+          ),
           if (showWordmark)
-            Text(
-              l10n.adanTitle,
-              style: AppTextStyles.heading(fontSize: 19, color: p.accent),
-            )
-          else
-            const SizedBox.shrink(),
-          Text(
-            next == null
-                ? '${state.earnedCount}'
-                : (state.earnedCount == 0
-                      ? l10n.adanEmptyProgress
-                      : l10n.adanProgress(
-                          state.earnedCount,
-                          adanItemName(l10n, next.id),
-                        )),
-            style: AppTextStyles.body(fontSize: 11.5, color: p.accent),
+            Positioned(
+              left: 16,
+              top: 13,
+              child: Text(
+                l10n.adanTitle,
+                style: AppTextStyles.heading(fontSize: 19, color: p.text),
+              ),
+            ),
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 13,
+            child: Text(
+              progress,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.body(fontSize: 11.5, color: p.text),
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+/// Ekran kenar boşluğu. İllüstrasyon tam genişlikte durduğu için padding
+/// artık ekranın tamamında değil, tek tek bloklarda.
+class _Gutter extends StatelessWidget {
+  const _Gutter({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPadding),
+    child: child,
+  );
 }
 
 class _ItemRow extends StatelessWidget {

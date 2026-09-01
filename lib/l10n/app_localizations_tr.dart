@@ -81,14 +81,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get topulukUpcomingLabel => 'YAKLAŞAN BULUŞMALAR';
 
   @override
-  String get topulukRsvpJoin => 'Katıl';
+  String get topulukRsvpJoin => 'katıl';
 
   @override
-  String get topulukRsvpGoing => 'Geliyorum';
+  String get topulukRsvpGoing => 'geliyorum';
+
+  @override
+  String get topulukRsvpFull => 'kontenjan doldu';
 
   @override
   String topulukGoingCount(int count) {
     return '$count kişi geliyor';
+  }
+
+  @override
+  String topulukGoingCountOfCapacity(int count, int capacity) {
+    return '$count/$capacity kişi geliyor';
   }
 
   @override
@@ -366,6 +374,11 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String adanProgress(int count, String next) {
     return '$count öğe · sıradaki: $next';
+  }
+
+  @override
+  String adanCanvasSemantics(int count) {
+    return 'ada görseli, $count öğe yerleşti';
   }
 
   @override
@@ -667,6 +680,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileWeekdaysShort => 'Pt,Sa,Ça,Pe,Cu,Ct,Pa';
 
   @override
+  String get profileWeekEmpty => 'bu hafta henüz iz yok. acelesi de yok.';
+
+  @override
   String get profileWeeklySummaryLabel => 'HAFTALIK ÖZET';
 
   @override
@@ -691,6 +707,46 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileGoPremium => 'ILND+\'a geç';
 
   @override
+  String get profilePreferences => 'bilgilerin ve tercihlerin';
+
+  @override
+  String get preferencesTitle => 'tercihler';
+
+  @override
+  String get preferencesNameLabel => 'AD';
+
+  @override
+  String get preferencesGoalsLabel => 'HEDEFLER';
+
+  @override
+  String get preferencesBodyLabel => 'BEDEN';
+
+  @override
+  String get preferencesActivityLabel => 'HAREKET';
+
+  @override
+  String get preferencesDietLabel => 'BESLENME';
+
+  @override
+  String get preferencesAllergiesLabel => 'ALERJİLER';
+
+  @override
+  String get preferencesAllergiesHelp => 'ILND tarif önerirken bunları eler.';
+
+  @override
+  String get preferencesGoalsHelp =>
+      'Bugün ekranındaki okuma bunlara göre seçilir.';
+
+  @override
+  String get preferencesSave => 'kaydet';
+
+  @override
+  String get preferencesSaved => 'Tercihlerin güncellendi.';
+
+  @override
+  String get preferencesSaveFailed => 'Kaydedilemedi. Tekrar dener misin?';
+
+  @override
   String get profileSettingsLabel => 'AYARLAR';
 
   @override
@@ -710,6 +766,38 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get profileDeleteAccount => 'hesabımı sil';
+
+  @override
+  String get journalDeleteTitle => 'Bu girdiyi sil';
+
+  @override
+  String get journalDeleteBody =>
+      'Bu yazı kalıcı olarak silinecek. O günü yazmış olman değişmiyor, serin bozulmuyor.';
+
+  @override
+  String get journalDeleted => 'Girdi silindi.';
+
+  @override
+  String get journalDeleteFailed => 'Silinemedi. Tekrar dener misin?';
+
+  @override
+  String get habitDeleteTitle => 'Bu alışkanlığı sil';
+
+  @override
+  String get habitDeleteBody =>
+      'Alışkanlık ve geçmiş işaretlemeleri listeden kalkacak.';
+
+  @override
+  String get habitDeleted => 'Alışkanlık silindi.';
+
+  @override
+  String get habitDeleteFailed => 'Silinemedi. Tekrar dener misin?';
+
+  @override
+  String get deleteAction => 'sil';
+
+  @override
+  String get cancelAction => 'vazgeç';
 
   @override
   String get profileDeleteAccountDialogTitle => 'Hesabını sil';
@@ -898,12 +986,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get sleepRitualHomeCardSubtitle => 'birkaç dakika, sonra uyku';
-
-  @override
-  String get exploreQuote => '\"Bugün küçük bir adım, yarının büyük farkı.\"';
-
-  @override
-  String get exploreQuoteSubtitle => 'günün alıntısı';
 
   @override
   String get paywallSubtitle =>

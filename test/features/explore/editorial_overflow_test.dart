@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilnd_app/features/explore/explore_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
 /// Sabit yükseklikli editoryal yüzeyler değişken içerikle taşmamalı.
 ///
@@ -24,12 +26,17 @@ void main() {
     testWidgets('Keşfet kapağı ${width.toInt()}px genişlikte taşmaz', (
       tester,
     ) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
       await tester.binding.setSurfaceSize(Size(width, 2400));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
       await tester.pumpWidget(
-        const ProviderScope(
-          child: MaterialApp(
+        ProviderScope(
+          // Keşfet artık onboarding hedeflerini okuyor (kişiselleştirilmiş
+          // sıralama), yani SharedPreferences'a bağımlı.
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+          child: const MaterialApp(
             locale: Locale('tr'),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,

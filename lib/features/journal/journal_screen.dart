@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
+import 'package:ilnd_app/core/widgets/confirm_delete.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_fallbacks.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_learner.dart';
@@ -278,55 +280,80 @@ class _NewEntryButton extends StatelessWidget {
 
 // ─── Entry card ───────────────────────────────────────────────────────────────
 
-class _EntryCard extends StatelessWidget {
+class _EntryCard extends ConsumerWidget {
   const _EntryCard({required this.entry, required this.p});
   final JournalEntry entry;
   final AppPalette p;
 
-  @override
-  Widget build(BuildContext context) {
+  /// Uzun basma silme kapısı.
+  ///
+  /// Kart kısa dokunuşa bilerek tepkisiz: eskiden boş `onTap`'li bir
+  /// Pressable basma efekti verip hiçbir şey yapmıyordu (yanıltıcı dokunma
+  /// hedefi). Silme geri alınamadığı için onay şart.
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
-    // Kart bilerek tıklanabilir DEĞİL: boş onTap'li Pressable basma efekti
-    // verip hiçbir şey yapmıyordu (yanıltıcı dokunma hedefi).
-    return Container(
-      padding: const EdgeInsets.all(AppSpacing.cardPadding),
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            _formatDate(entry.createdAt, l10n),
-            style: AppTextStyles.sectionLabel(color: p.textMuted),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            entry.body,
-            style: AppTextStyles.heading(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              height: 1.3,
-              color: p.text,
-            ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          if (entry.ilndReply.isNotEmpty) ...[
-            const SizedBox(height: 5),
+    final ok = await confirmDelete(
+      context,
+      title: l10n.journalDeleteTitle,
+      body: l10n.journalDeleteBody,
+    );
+    if (!ok || !context.mounted) return;
+
+    final repo = ref.read(journalRepositoryProvider);
+    if (repo == null) return;
+    try {
+      await repo.delete(entry.id);
+      if (context.mounted) IlndToast.success(context, l10n.journalDeleted);
+    } catch (_) {
+      if (context.mounted) IlndToast.error(context, l10n.journalDeleteFailed);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    return GestureDetector(
+      onLongPress: () => _confirmDelete(context, ref),
+      child: Container(
+        padding: const EdgeInsets.all(AppSpacing.cardPadding),
+        decoration: BoxDecoration(
+          color: p.surface,
+          borderRadius: BorderRadius.circular(AppSpacing.radius),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Text(
-              entry.ilndReply,
-              style: AppTextStyles.body(
-                fontSize: 13,
-                color: p.textMuted,
-                height: 1.5,
+              _formatDate(entry.createdAt, l10n),
+              style: AppTextStyles.sectionLabel(color: p.textMuted),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              entry.body,
+              style: AppTextStyles.heading(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                height: 1.3,
+                color: p.text,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            if (entry.ilndReply.isNotEmpty) ...[
+              const SizedBox(height: 5),
+              Text(
+                entry.ilndReply,
+                style: AppTextStyles.body(
+                  fontSize: 13,
+                  color: p.textMuted,
+                  height: 1.5,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

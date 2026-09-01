@@ -1,26 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
 /// ILND tipografi sistemi.
 ///
-/// **Noto Serif** (başlık/editoryal an) + **DM Sans** (gövde/etiket) +
-/// **IBM Plex Mono** (sayı). Tasarım handoff'unun (2026-08-18,
-/// "editoryal ekran yenilemesi") birebir uygulanması — owner kararı.
+/// **Noto Serif** (başlık) + **DM Sans** (gövde, etiket) + **DM Mono** (sayı).
+/// Üçü de pakete gömülüdür (pubspec.yaml `fonts:`), hiçbiri çalışma anında
+/// indirilmez.
 ///
-/// Tarihçe, çünkü bu ikinci kez değişti ve gerekçeler birbirini iptal ediyor:
-/// 2026-08-14'te bu üçlü Sora + Inter'e çevrilmişti (gerekçe: eski eşleşme
-/// başka bir ürünün arayüzünü hatırlatıyordu, Plex'in noktalı sıfırı
-/// sevilmiyordu). 2026-08-18'de owner handoff'u birebir istedi ve üçlü geri
-/// geldi. Yeniden değiştirmeden önce ikisini de oku — ikisi de savunulabilir,
-/// karar estetik ve owner'ın.
+/// Tarihçe, çünkü bu dördüncü kez değişiyor ve gerekçeler birbirini iptal
+/// ediyor: 2026-08-14'te Noto Serif + DM Sans + IBM Plex Mono üçlüsü
+/// Sora + Inter'e çevrildi (eski eşleşme başka bir ürünün arayüzünü
+/// hatırlatıyordu, Plex'in noktalı sıfırı sevilmiyordu). 2026-08-18'de owner
+/// handoff'u birebir istedi, üçlü geri geldi. 2026-08-31'de dağıtım yalnız
+/// iOS olunca gövde ve sayılar bir süre sistem fontuna (SF Pro) alındı, sonra
+/// aynı gün owner eski tipografiye dönmeyi seçti; sayılar bu kez IBM Plex
+/// Mono yerine DM Mono'ya bağlandı (DM Sans'ın kendi monospace kardeşi,
+/// eşleşme daha doğal). Yeniden değiştirmeden önce hepsini oku: her biri
+/// savunulabilir, karar estetik ve owner'ın.
 ///
-/// - display / heading → Noto Serif — ekran adı, kart başlığı, editoryal an
-/// - body / label      → DM Sans — gövde, alt satır, etiket
-/// - mono              → IBM Plex Mono — kalori, streak, makro, sayaç
+/// - display / heading → Noto Serif, ILND'nin editoryal imzası
+/// - body / label      → DM Sans
+/// - mono              → DM Mono, kalori ve sayaç
+///
+/// **DM Mono 500'de biter** (600/700 kesimi üretilmemiş). Sayı stilleri bu
+/// yüzden 500'e sabitlendi; daha kalın istemek Flutter'ı en yakın kesime
+/// düşürür, yani kod 700 der ekran 500 çizerdi. Sayıların hizalaması
+/// monospace olmasından gelir, `tabularFigures` gerekmiyor.
+///
 class AppTextStyles {
   AppTextStyles._();
+
+  /// Başlıkların ailesi. Pakete gömülü, indirilmiyor.
+  static const String serifFont = 'NotoSerif';
+
+  /// Gövde ve etiketlerin ailesi. Pakete gömülü.
+  static const String sansFont = 'DMSans';
+
+  /// Sayıların ailesi: DM Sans'ın monospace kardeşi. Pakete gömülü.
+  /// En kalın kesimi 500'dür (bkz. sınıf açıklaması).
+  static const String monoFont = 'DMMono';
+
+  /// Sayı stillerinin üst ağırlığı. DM Mono'da 500'ün üstü yok; sabit olarak
+  /// durması, çağrı yerlerinin var olmayan bir kalınlık istemesini önlüyor.
+  static const FontWeight monoMaxWeight = FontWeight.w500;
 
   // ── Ölçek — VARSAYILAN roller ────────────────────────────────────────────
   //
@@ -29,9 +52,9 @@ class AppTextStyles {
   // kendi puntolarını getirdiği için kilit kaldırıldı (owner kararı).
   //
   // Kilidin yerine iki daha zayıf ama hâlâ işe yarayan koruma kondu
-  // (test/core/typography_test.dart): (1) lib/ içinde bu üç aile dışında font
-  // kullanılamaz, (2) fontSize değerleri handoff'un belgelenmiş kümesinden
-  // gelmeli — rastgele bir 37 hâlâ CI'da kırılır.
+  // (test/core/typography_test.dart): (1) lib/ içinde Noto Serif dışında
+  // indirilen font kullanılamaz, (2) fontSize değerleri handoff'un
+  // belgelenmiş kümesinden gelmeli, rastgele bir 37 hâlâ CI'da kırılır.
   //
   // Adlandırılmış rol varsa onu kullan; handoff bir ekran için özel punto
   // veriyorsa çağrı yerinde açıkça yaz.
@@ -48,7 +71,7 @@ class AppTextStyles {
   static const double sizeMetric = 28;
   static const double sizeMetricLarge = 40;
 
-  // ── Display — Playfair Display italic ───────────────────────────────────
+  // ── Display — Noto Serif (ILND'nin imzası) ──────────────────────────────
 
   static TextStyle display({
     double fontSize = 32,
@@ -58,7 +81,8 @@ class AppTextStyles {
   }) {
     // Noto Serif, roman (italik değil), sıkı negatif aralık — ilnd.app'teki
     // büyük editoryal başlık dili.
-    return GoogleFonts.notoSerif(
+    return TextStyle(
+      fontFamily: serifFont,
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -79,7 +103,8 @@ class AppTextStyles {
     Color color = AppColors.charcoal,
     double height = 1.2,
   }) {
-    return GoogleFonts.notoSerif(
+    return TextStyle(
+      fontFamily: serifFont,
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -88,15 +113,26 @@ class AppTextStyles {
     );
   }
 
-  // ── Body — DM Sans 400 ───────────────────────────────────────────────────
+  // ── Body — DM Sans ──────────────────────────────────────────────────────
 
+  /// Gövde metni sistemin kendi fontuyla çizilir.
+  ///
+  /// `fontFamily` BİLEREK boş: Flutter, aile verilmediğinde platformun
+  /// varsayılanını kullanır ve iOS'ta bu San Francisco'dur. Apple'ın
+  /// `.SF Pro Text` gibi nokta önekli adları özeldir, belgelenmemiştir ve
+  /// sürümle değişebilir; aileyi hiç vermemek aynı sonucu güvenle verir.
+  ///
+  /// Karar (31 Ağustos 2026): ILND'nin tipografik karakterini yalnız
+  /// başlıklar ve logo taşır. Gövde yerli iOS metni gibi okunur, bu da
+  /// Dynamic Type ve sistem hinting'iyle doğal uyum demektir.
   static TextStyle body({
     double fontSize = 14,
     FontWeight fontWeight = FontWeight.w400,
     Color color = AppColors.charcoal,
     double height = 1.5,
   }) {
-    return GoogleFonts.dmSans(
+    return TextStyle(
+      fontFamily: sansFont,
       fontSize: fontSize,
       fontWeight: fontWeight,
       color: color,
@@ -104,14 +140,15 @@ class AppTextStyles {
     );
   }
 
-  // ── Label — DM Sans 500, uppercase, tracked ─────────────────────────────
+  // ── Label — DM Sans 500, büyük harf, aralıklı ───────────────────────────
 
   static TextStyle label({
     double fontSize = 11,
     Color color = AppColors.muted,
     double letterSpacingEm = 0.08,
   }) {
-    return GoogleFonts.dmSans(
+    return TextStyle(
+      fontFamily: sansFont,
       fontSize: fontSize,
       fontWeight: FontWeight.w500,
       letterSpacing: fontSize * letterSpacingEm,
@@ -119,28 +156,35 @@ class AppTextStyles {
     );
   }
 
-  /// Section labels — all caps, DM Sans 500, letter-spacing 0.12em, muted,
-  /// font-size 11px.
+  /// Bölüm etiketleri — ALL CAPS, 500, 0.12em aralık, muted, 11px.
   static TextStyle sectionLabel({Color color = AppColors.muted}) {
     return label(fontSize: 11, color: color, letterSpacingEm: 0.12);
   }
 
-  // ── Mono — IBM Plex Mono ─────────────────────────────────────────────────
+  // ── Sayılar — DM Mono ───────────────────────────────────────────────────
 
-  /// Sayılar — IBM Plex Mono. Kalori, streak, makro, etkinlik günü, sayaç.
+  /// Sayılar: kalori, streak, makro, etkinlik günü, sayaç.
   ///
-  /// Monospace burada süs değil hizalama aracı: alt alta gelen makro değerleri
-  /// ve 999→1000'e geçen sayaçlar satırı zıplatmaz. (Aynı hizayı Inter'de
-  /// `tabularFigures` veriyordu; handoff monospace istediği için geri döndük.)
+  /// Buradaki asıl gereksinim hizalamaydı, monospace ailenin kendisi değil:
+  /// alt alta gelen makro değerleri ve 999'dan 1000'e geçen sayaçlar satırı
+  /// zıplatmamalı. `FontFeature.tabularFigures()` bunu sistem fontunda da
+  /// verir, çünkü SF Pro sabit genişlikli rakam setini taşır. Böylece
+  /// üçüncü bir aile indirmeye gerek kalmıyor.
   static TextStyle mono({
     double fontSize = 16,
     FontWeight fontWeight = FontWeight.w500,
     Color color = AppColors.charcoal,
     double height = 1.0,
   }) {
-    return GoogleFonts.ibmPlexMono(
+    return TextStyle(
+      fontFamily: monoFont,
       fontSize: fontSize,
-      fontWeight: fontWeight,
+      // DM Mono 500'de bitiyor: daha kalın istenirse sessizce 500 çizilirdi.
+      // Sabitlemek, kodun söylediğiyle ekranda görülenin aynı kalmasını
+      // sağlıyor.
+      fontWeight: fontWeight.value > monoMaxWeight.value
+          ? monoMaxWeight
+          : fontWeight,
       color: color,
       height: height,
     );
@@ -159,7 +203,7 @@ class AppTextStyles {
         height: 1.1,
       );
 
-  /// Editoryal an — selamlama, makale başlığı. Serifin kaldığı tek yer.
+  /// Editoryal an — selamlama, makale başlığı.
   static TextStyle editorial({
     required Color color,
     double fontSize = sizeHeadline,
@@ -186,7 +230,8 @@ class AppTextStyles {
   /// Büyük sayı anı — kalori, streak. Ekranın kahramanı.
   static TextStyle metric({required Color color, bool large = false}) => mono(
     fontSize: large ? sizeMetricLarge : sizeMetric,
-    fontWeight: FontWeight.w700,
+    // DM Mono'nun en kalın kesimi. Vurgu ağırlıktan değil boyuttan geliyor.
+    fontWeight: monoMaxWeight,
     color: color,
   ).copyWith(letterSpacing: -1.2);
 }

@@ -84,6 +84,13 @@ final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>((ref) {
   );
 });
 
+/// Karşılamada geri-referans verilebilecek en eski not.
+///
+/// İki günden eskisine selamlamada değinmek "seni hatırlıyorum" değil
+/// "takip mi ediyorsun" hissi veriyor. Hafızada kalmaya devam eder, yalnız
+/// açılış cümlesinde zorlanmaz.
+const int _greetingCallbackMaxAgeDays = 2;
+
 class ChatNotifier extends StateNotifier<ChatState> {
   /// [prefs] verilmezse geçmiş yalnız bellekte tutulur; testler sohbeti
   /// diske dokunmadan kurabilsin diye opsiyonel.
@@ -200,19 +207,22 @@ class ChatNotifier extends StateNotifier<ChatState> {
     // Garantili geri-referans: "seni hatırlıyorum" anı şansa bırakılmaz.
     // Son not sistem bağlamında zaten var ama modelden ona değinmesini
     // AÇIKÇA istemezsek çoğu zaman genel bir selamla geçiştiriyor.
-    final lastNote = memory.recentNotes.isNotEmpty
-        ? memory.recentNotes.last
-        : null;
-    // Notun zamanı da görevin içine girer: tarihsiz verildiğinde model
-    // haftalık bir notu "bu sabah" diye karşılıyordu.
-    final callback = lastNote == null
+    //
+    // AMA yalnız not TAZEYSE. Eskiden son not koşulsuz zorlanıyordu ve notun
+    // yaşı da yazılmıyordu: iki hafta önce yenen bir erik için ILND
+    // "bugün erikler nasıldı" diye soruyordu (2026-08-31'de yaşandı).
+    // Geçen haftaki bir öğüne selamlamada değinmek sıcak değil, tuhaf.
+    final now = DateTime.now();
+    final fresh = memory.freshNotes(now);
+    final lastNote = fresh.isNotEmpty ? fresh.last : null;
+    final noteAge = lastNote?.ageInDays(now) ?? 0;
+    final callback = (lastNote == null || noteAge > _greetingCallbackMaxAgeDays)
         ? ''
-        : ' Hafızandaki en son not (${lastNote.ageLabel()}) şu: '
+        : ' Hafızandaki en son not (${lastNote.whenLabel(now)}): '
               '"${lastNote.text}". Karşılamanda bu nota mutlaka doğal bir '
-              'cümleyle değin — birebir alıntılama, kendi sözlerinle '
-              'hatırladığını göster. Notun ne zaman düşüldüğüne sadık kal: '
-              'eskiyse bugün olmuş gibi anlatma, zamanı belirsizse ne zaman '
-              'olduğunu söyleme.';
+              'cümleyle değin — notun ZAMANINI doğru kullan (bugünse bugün, '
+              'dünse dün de), birebir alıntılama, kendi sözlerinle '
+              'hatırladığını göster.';
 
     String reply;
     try {

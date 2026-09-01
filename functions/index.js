@@ -26,12 +26,19 @@ const ANTHROPIC_API_KEY = defineSecret("ANTHROPIC_API_KEY");
 const SUPABASE_SERVICE_ROLE_KEY = defineSecret("SUPABASE_SERVICE_ROLE_KEY");
 
 // RevenueCat "secret" (v1) API anahtarı — hesabın gerçekten abone olup
-// olmadığını SUNUCUDAN doğrulamak için. functions/.env üzerinden gelir
-// (SUPABASE_URL ile aynı mekanizma) ve İSTEĞE BAĞLIDIR: yoksa abonelik
-// doğrulanamaz, yalnız sunucunun kendi yazdığı ödül-premium'u (referral)
-// bilinir. Mağaza aboneliği canlıya alınmadan ÖNCE bu anahtar girilmeli,
-// yoksa gerçek aboneler ücretsiz katman sınırına takılır.
-const REVENUECAT_SECRET_KEY = process.env.REVENUECAT_SECRET_KEY || "";
+// olmadığını SUNUCUDAN doğrulamak için.
+//
+// ANTHROPIC_API_KEY ile aynı yoldan gelir (defineSecret + fonksiyonun
+// `secrets` listesi). Daha önce `process.env` ile okunuyordu; Functions v2'de
+// bu, secret bildirilmediği sürece BOŞ gelir ve hasRevenueCatPremium sessizce
+// false döner. Sonucu şudur: parasını ödemiş bir abone ücretsiz katman
+// kotasına takılır ve hiçbir yerde hata görünmez. Bu yüzden anahtar artık
+// gerçek bir secret olarak tanımlı.
+//
+// İSTEĞE BAĞLI olmaya devam ediyor: değeri yoksa abonelik doğrulanamaz,
+// yalnız sunucunun kendi yazdığı ödül-premium'u (referral) bilinir. Mağaza
+// aboneliği canlıya alınmadan ÖNCE girilmeli.
+const REVENUECAT_SECRET_KEY = defineSecret("REVENUECAT_SECRET_KEY");
 // lib/core/billing/revenue_cat_service.dart'taki _kEntitlement ile aynı.
 const REVENUECAT_ENTITLEMENT = "premium";
 
@@ -345,13 +352,15 @@ async function hasReferralPremium(uid) {
  * @return {Promise<boolean>} true if an active premium entitlement exists
  */
 async function hasRevenueCatPremium(uid) {
-  if (!REVENUECAT_SECRET_KEY) return false;
+  // defineSecret parametresi: bildirilmemişse .value() boş dize döner.
+  const key = REVENUECAT_SECRET_KEY.value();
+  if (!key) return false;
   try {
     const res = await fetch(
         `https://api.revenuecat.com/v1/subscribers/${encodeURIComponent(uid)}`,
         {
           headers: {
-            "Authorization": `Bearer ${REVENUECAT_SECRET_KEY}`,
+            "Authorization": `Bearer ${key}`,
             "content-type": "application/json",
           },
           signal: AbortSignal.timeout(10000),
@@ -436,6 +445,21 @@ function validateInputSize(req, system, messages) {
 // token'ı kaydedip enforceAppCheck: true'ya geri dön (bkz. 2026-07-07
 // decisions.md notu).
 exports.anthropicProxy = onRequest(
+    // REVENUECAT_SECRET_KEY normalde burada da bildirilmeli: resolvePremium
+    // ücretsiz katman kotasını bu fonksiyonun içinde uyguluyor ve aboneyi
+    // tanıyabilmesi için anahtara erişmesi gerekiyor.
+    //
+    // GEÇİCİ (2026-09-02): anahtar henüz alınmadı ve bağlı bir secret'ın
+    // Secret Manager'da bir sürümü olmak zorunda, yoksa `firebase deploy`
+    // değer sorup deploy'u kilitliyor. Bağ kaldırıldı: hasRevenueCatPremium
+    // boş anahtarla sessizce false dönüyor, yani bugünkü davranış değişmiyor
+    // (mağaza aboneliği zaten canlıda değil, referral premium'u çalışıyor).
+    //
+    // Anahtar alınır alınmaz GERİ EKLE, yoksa parasını ödemiş abone ücretsiz
+    // katman kotasına takılır ve hiçbir yerde hata görünmez:
+    //   1. firebase functions:secrets:set REVENUECAT_SECRET_KEY
+    //   2. bu satırı `secrets: [ANTHROPIC_API_KEY, REVENUECAT_SECRET_KEY]`
+    //      hâline döndür
     {cors: true, secrets: [ANTHROPIC_API_KEY]},
     async (req, res) => {
       if (req.method !== "POST") {
@@ -815,18 +839,27 @@ function islandDateKey(date) {
 async function collectIslandMetrics(uid) {
   const userRef = db.collection("users").doc(uid);
 
-  const [journalAgg, foodAgg, checkinSnap, ritualAgg, rsvpAgg] =
-    await Promise.all([
-      userRef.collection("journal_entries").count().get(),
-      userRef.collection("food_entries").count().get(),
-      // Seri hesabı için son 60 günün check-in'leri yeter: en uzun eşik 7 gün.
-      db.collection("daily_checkins").where("userId", "==", uid).get(),
-      // Gece ritüeli: gün başına tek doküman (istemci deterministik id yazar).
-      userRef.collection("sleep_rituals").count().get(),
-      // RSVP'ler events/{id}/rsvps/{uid} altında; collectionGroup + userId
-      // alanı tek indeksle sayılabiliyor (firestore.indexes.json).
-      db.collectionGroup("rsvps").where("userId", "==", uid).count().get(),
-    ]);
+  const [
+    journalAgg, foodAgg, checkinSnap, ritualAgg, rsvpAgg,
+    lastFoodSnap, lastRitualSnap,
+  ] = await Promise.all([
+    userRef.collection("journal_entries").count().get(),
+    userRef.collection("food_entries").count().get(),
+    // Seri hesabı için son 60 günün check-in'leri yeter: en uzun eşik 7 gün.
+    db.collection("daily_checkins").where("userId", "==", uid).get(),
+    // Gece ritüeli: gün başına tek doküman (istemci deterministik id yazar).
+    userRef.collection("sleep_rituals").count().get(),
+    // RSVP'ler events/{id}/rsvps/{uid} altında; collectionGroup + userId
+    // alanı tek indeksle sayılabiliyor (firestore.indexes.json).
+    db.collectionGroup("rsvps").where("userId", "==", uid).count().get(),
+    // Son etkinlik için iki hafif okuma. Öğün ve gece ritüeli check-in
+    // yazmıyor; yalnız check-in'e bakmak, yemeğini yazıp günlük tutmayan
+    // kullanıcının suyunu haksız yere koyulaştırırdı.
+    userRef.collection("food_entries")
+        .orderBy("createdAt", "desc").limit(1).get(),
+    userRef.collection("sleep_rituals")
+        .orderBy("date", "desc").limit(1).get(),
+  ]);
 
   const dates = new Set();
   checkinSnap.docs.forEach((d) => {
@@ -846,12 +879,32 @@ async function collectIslandMetrics(uid) {
     cursor.setUTCDate(cursor.getUTCDate() - 1);
   }
 
+  // Son etkin gün: check-in'lerin en yenisi, son öğün ve son gece ritüeli
+  // arasından en geç olan. YYYY-MM-DD dizeleri sözlük sırasıyla
+  // karşılaştırılabildiği için ayrıca tarihe çevirmeye gerek yok.
+  const activeDays = [...dates];
+  const lastFood = lastFoodSnap.docs[0];
+  if (lastFood) {
+    const createdAt = (lastFood.data() || {}).createdAt;
+    if (createdAt && typeof createdAt.toDate === "function") {
+      activeDays.push(islandDateKey(createdAt.toDate()));
+    }
+  }
+  const lastRitual = lastRitualSnap.docs[0];
+  if (lastRitual) {
+    const date = (lastRitual.data() || {}).date;
+    if (typeof date === "string") activeDays.push(date);
+  }
+  activeDays.sort();
+
   return {
     journalCount: journalAgg.data().count || 0,
     mealCount: foodAgg.data().count || 0,
     streakDays,
     nightRituals: ritualAgg.data().count || 0,
     meetups: rsvpAgg.data().count || 0,
+    lastActiveDate: activeDays.length > 0 ?
+      activeDays[activeDays.length - 1] : null,
   };
 }
 
@@ -896,10 +949,16 @@ exports.syncIslandItems = onRequest({cors: true}, async (req, res) => {
     }
 
     const gained = nextEarned.filter((id) => !earned.includes(id));
-    if (gained.length > 0 || !snap.exists) {
+    // Su, son etkin günden bu yana koyulaşır (handoff §7). Gün DİZESİ
+    // yazılır, gün SAYISI değil: sayı iki senkron arasında bayatlar, dize
+    // bayatlamaz — istemci farkı kendi alır.
+    const lastActiveDate = metrics.lastActiveDate || null;
+    const dateChanged = (existing.lastActiveDate || null) !== lastActiveDate;
+    if (gained.length > 0 || dateChanged || !snap.exists) {
       await ref.set({
         uid,
         earned: nextEarned,
+        lastActiveDate,
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       }, {merge: true});
     }

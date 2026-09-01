@@ -4,12 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilnd_app/core/repositories/movement_repository.dart';
 import 'package:ilnd_app/core/repositories/plans_repository.dart';
-import 'package:ilnd_app/features/explore/article_model.dart';
-import 'package:ilnd_app/features/explore/explore_ordering.dart';
 import 'package:ilnd_app/features/explore/explore_screen.dart';
 import 'package:ilnd_app/features/plans/plan_model.dart';
 import 'package:ilnd_app/features/movement/movement_program.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
@@ -29,6 +29,8 @@ void main() {
     List<MovementProgram>? programs,
     List<Plan>? plans,
   }) async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
     // Keşfet artık 400px'lik kapakla açılıyor (handoff §2: ekranın tek büyük
     // anı önce gelir), raflar onun altında. Varsayılan 800x600 viewport'ta
     // raflar sliver önbelleğinin dışında kalıp hiç kurulmuyor — testin
@@ -38,6 +40,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          sharedPreferencesProvider.overrideWithValue(prefs),
           if (programs != null)
             publishableMovementProgramsProvider.overrideWithValue(programs),
           if (plans != null) publishablePlansProvider.overrideWithValue(plans),
@@ -107,32 +110,42 @@ void main() {
     // Owner kararı 2026-08-20: planlar hareket rafının yanında değil,
     // kapağın hemen altında duruyor — bir plan taahhüt, tek yazı okuma.
     // Raf aşağı kaydığında kimse görmüyordu.
-    testWidgets('raf kapağın altında, DAHA FAZLA listesinden önce', (
+    testWidgets('raf ritüellerin altında, DAHA FAZLA listesinden önce', (
       tester,
     ) async {
       await pump(tester, plans: [plan('7-gun', order: 0)]);
       final l10n = lookupAppLocalizations(const Locale('tr'));
 
-      // Kapak, ekrandakiyle aynı kuralla hesaplanır: sıralanmış havuzdan
-      // güne göre. Sabit "ilk makale" varsayımı artık yanlış.
-      final hero = pickCover(
-        interleaveByCategory(kArticles.map((a) => a.forLocale('tr')).toList()),
-      )!;
-
-      final heroTitle = find.text(hero.title);
+      // Büyük kapak kartı 2026-08-31'de kaldırıldı (owner kararı), yani
+      // "raf kapağın altında" ölçütü artık yok. Kararın özü duruyor: raf
+      // listenin ÜSTÜNDE kalmalı, aşağı kayarsa kimse görmüyor.
+      final rituals = find.text(l10n.exploreRitualsLabel);
       final shelf = find.text(l10n.planShelfLabel);
       final moreLabel = find.text(l10n.exploreMoreLabel);
 
-      expect(heroTitle, findsOneWidget);
       expect(shelf, findsOneWidget);
       expect(
-        tester.getRect(heroTitle).bottom,
+        tester.getRect(rituals).bottom,
         lessThan(tester.getRect(shelf).top),
       );
       expect(
         tester.getRect(shelf).top,
         lessThan(tester.getRect(moreLabel).top),
       );
+    });
+
+    testWidgets('ritüeller yalnız "hepsi" seçiliyken çizilir', (tester) async {
+      await pump(tester, plans: const []);
+      final l10n = lookupAppLocalizations(const Locale('tr'));
+
+      expect(find.text(l10n.exploreRitualsLabel), findsOneWidget);
+
+      // Bir kategoriye süzülünce ritüel şeridi konuyla ilgisiz kalıyordu.
+      await tester.tap(find.text(l10n.exploreFilterNutrition));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(find.text(l10n.exploreRitualsLabel), findsNothing);
     });
 
     testWidgets('yayınlanabilir plan yokken raf HİÇ çizilmez', (tester) async {

@@ -138,6 +138,13 @@ void main() {
       'movementPlayerRetry': tr.movementPlayerRetry,
       'movementPlayerError': tr.movementPlayerError,
       'movementSessionDone': tr.movementSessionDone,
+      // Topluluk RSVP etiketleri 2026-08-31'e kadar "Katıl" / "Geliyorum"
+      // diye büyük harfle duruyordu: kural vardı ama bu üçlü listeye hiç
+      // eklenmemişti, yani kimse kırmızı görmedi. Kontenjan durumu
+      // eklenirken düzeltildi ve kilide alındı.
+      'topulukRsvpJoin': tr.topulukRsvpJoin,
+      'topulukRsvpGoing': tr.topulukRsvpGoing,
+      'topulukRsvpFull': tr.topulukRsvpFull,
     };
 
     for (final e in buttons.entries) {

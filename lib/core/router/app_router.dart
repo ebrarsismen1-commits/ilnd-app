@@ -16,6 +16,7 @@ import 'package:ilnd_app/features/onboarding/profile_sync.dart';
 import 'package:ilnd_app/features/onboarding/screens/first_entry_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/quick_setup_screen.dart';
 import 'package:ilnd_app/features/onboarding/screens/welcome_screen.dart';
+import 'package:ilnd_app/features/profile/preferences_screen.dart';
 import 'package:ilnd_app/features/ekle/yemek_ekle_screen.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_screen.dart';
 import 'package:ilnd_app/features/splash/splash_screen.dart';
@@ -38,6 +39,7 @@ const routeHome = '/home';
 const routeChat = '/chat';
 const routeExplore = '/explore';
 const routeTopluluk = '/topluluk';
+const routePreferences = '/profil/tercihler';
 const routeProfile = '/profile';
 const routeAdan = '/adan';
 const routeTakip = '/takip';
@@ -222,6 +224,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         // satirindan ve Sen'deki ayarlar listesinden acilir.
         path: routeTakip,
         pageBuilder: (context, state) => _fade(state, const TakipScreen()),
+      ),
+      GoRoute(
+        // Onboarding'de verilen bilgilerin sonradan duzenlendigi ekran.
+        path: routePreferences,
+        pageBuilder: (context, state) =>
+            _fade(state, const PreferencesScreen()),
       ),
       GoRoute(
         path: routeYemekEkle,

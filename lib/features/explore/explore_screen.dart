@@ -104,9 +104,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     // güne göre seçiliyor. Eskiden kapak listenin ilk elemanıydı ve hangi
     // etikete basılırsa basılsın aynı içerik duruyordu.
     final ordered = interleaveByCategory(allArticles);
-    final matching = ordered.where((a) => _selected.matches(a)).toList();
-    final hero = pickCover(matching);
-    final filtered = matching.where((a) => a.id != hero?.id).toList();
+    // Büyük kapak kartı 2026-08-31'de kaldırıldı (owner kararı): ekranın
+    // tek büyük anı olması gerekiyordu ama listeden bir yazıyı çekip
+    // ayrıcalıklı kılıyordu ve aynı içerik iki biçimde görünüyordu.
+    // Artık süzülmüş liste doğrudan çiziliyor.
+    final filtered = ordered.where((a) => _selected.matches(a)).toList();
     // Yalnız oynatılabilir seansı olan programlar (ADR-0004). Makalelerdeki
     // kArticles gibi bir offline yedeği YOK: video içeriğinin yerel karşılığı
     // olamaz, içerik gelmeden raf da olmaz.
@@ -211,20 +213,18 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-            // ── Hero card ─────────────────────────────────────────────────
-            if (hero != null) ...[
+            // ── Ritüeller ────────────────────────────────────────────────
+            // Yalnız "hepsi" seçiliyken çizilir (owner kararı 2026-08-31):
+            // bir kategoriye süzülmüşken ritüel şeridi konuyla ilgisiz bir
+            // araya girmek oluyordu.
+            //
+            // Büyük kapak kartı aynı kararla kaldırıldı; ekranın ilk şeyi
+            // artık etiket rayı ve hemen altındaki ritüeller.
+            if (_selected == _Filter.hepsi) ...[
               SliverToBoxAdapter(
-                child: Entrance(
-                  index: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.screenPadding,
-                    ),
-                    child: _HeroCard(article: hero, p: p, onTap: _open),
-                  ),
-                ),
+                child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
             ],
 
             // ── Programlar (ADR-0005) ────────────────────────────────────
@@ -298,14 +298,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             // bakarak yazıldı. Ekranın tasarımdaki okunuşunu bozmasınlar
             // diye listenin ALTINA alındılar; silinmeleri söz verilmiş
             // özellikleri kaldırmak olurdu.
-            // ── Ritüeller (eski emoji "stories" şeridinin yerine — vizyon
-            // kararı: her kart gerçek bir deneyime açılır, dekoratif emoji
-            // dairesi değil) ────────────────────────────────────────────
-            SliverToBoxAdapter(
-              child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 28)),
-
             // ── Hareket programları (ADR-0004) — vizyonun "grid'e yeni
             // içerik tipleri raf olarak girer" maddesi. Yayınlanabilir
             // program yoksa raf HİÇ çizilmez: boş bir raf, olmayan bir
@@ -316,20 +308,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 28)),
             ],
-
-            // ── Günün alıntısı ────────────────────────────────────────────
-            SliverToBoxAdapter(
-              child: Entrance(
-                index: 3,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.screenPadding,
-                  ),
-                  child: _QuoteBanner(p: p),
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 28)),
           ],
         ),
       ),
@@ -683,204 +661,7 @@ class _RitualTitle extends StatelessWidget {
   }
 }
 
-// ─── Hero card ────────────────────────────────────────────────────────────────
-
-class _HeroCard extends StatelessWidget {
-  const _HeroCard({
-    required this.article,
-    required this.p,
-    required this.onTap,
-  });
-  final Article article;
-  final AppPalette p;
-  final void Function(Article) onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Pressable(
-      onTap: () => onTap(article),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-        child: SizedBox(
-          // Ekranin tek buyuk ani (handoff §2): 3:4'e yakin, dolu bir kapak.
-          height: 400,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // fotoğraf
-              CoverImage(
-                imageUrl: article.imageUrl,
-                palette: article.category.palette,
-              ),
-              // gradient overlay
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.25),
-                      Colors.black.withValues(alpha: 0.7),
-                    ],
-                    stops: const [0.3, 0.6, 1.0],
-                  ),
-                ),
-              ),
-              // içerik
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // üst: kategori chip
-                    Row(children: [_CategoryChip(article.category)]),
-                    // alt: başlık + excerpt. Kapak sabit 400px ama başlık
-                    // Firestore'dan geliyor; uzun başlıkta bu blok esner,
-                    // metinler maxLines ile kırpılır (Bugün'ün okuma
-                    // kartında yaşanan taşmanın aynı sınıfı).
-                    Flexible(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            article.title,
-                            style: AppTextStyles.display(
-                              fontSize: 32,
-                              color: Colors.white,
-                              height: 1.1,
-                            ),
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            article.excerpt,
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.85),
-                              fontSize: 13,
-                              height: 1.4,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Quote banner ─────────────────────────────────────────────────────────────
-
-class _QuoteBanner extends StatelessWidget {
-  const _QuoteBanner({required this.p});
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            p.accent.withValues(alpha: 0.12),
-            p.amber.withValues(alpha: 0.08),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: p.accent.withValues(alpha: 0.2), width: 0.5),
-      ),
-      child: Row(
-        children: [
-          Text(
-            '✨',
-            style: TextStyle(
-              fontSize: 28,
-              shadows: [
-                Shadow(color: p.accent.withValues(alpha: 0.4), blurRadius: 8),
-              ],
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.exploreQuote,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: p.text,
-                    height: 1.4,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  l10n.exploreQuoteSubtitle,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    color: p.textMuted,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 // ─── Category chip ────────────────────────────────────────────────────────────
-
-class _CategoryChip extends StatelessWidget {
-  const _CategoryChip(this.category);
-  final ArticleCategory category;
-
-  Color get _color => switch (category) {
-    ArticleCategory.meditasyon => const Color(0xFF5B8C7B),
-    ArticleCategory.beslenme => const Color(0xFF34D399),
-    ArticleCategory.tarif => const Color(0xFFC98B3F),
-    ArticleCategory.hareket => const Color(0xFF7FA05B),
-    ArticleCategory.ozBakim => const Color(0xFF8FA8B5),
-    ArticleCategory.gelisim => const Color(0xFFC17A63),
-  };
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: _color.withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        category.tag.toUpperCase(),
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 10,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.5,
-        ),
-      ),
-    );
-  }
-}
 
 // ─── Feed row ─────────────────────────────────────────────────────────────────
 

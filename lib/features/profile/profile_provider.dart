@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ilnd_app/features/profile/activity_stats.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 import 'package:ilnd_app/core/services/streak_tracker.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
@@ -31,101 +32,96 @@ class ProfileStats {
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
-final profileStatsProvider = FutureProvider<ProfileStats>((ref) async {
+/// Aktivite geçmişinin çekildiği TEK yer.
+///
+/// Hem haftalık/aylık gezinme hem de [profileStatsProvider] bunu paylaşır;
+/// eskiden yalnız stats vardı ve her ekran açılışında kendi sorgusunu
+/// atıyordu. Pencere 120 gün: seri 60 gün yetiyor ama ay gezinmesi için
+/// daha geriye bakmak gerekiyor.
+const int kActivityWindowDays = 120;
+
+final activityHistoryProvider = FutureProvider<ActivityHistory>((ref) async {
   final fbUid = ref.watch(firebaseAuthUidProvider).valueOrNull;
-  if (fbUid == null) return ProfileStats.zero; // köprü girişi bekleniyor
+  if (fbUid == null) return ActivityHistory.empty; // köprü girişi bekleniyor
   final auth = ref.watch(authNotifierProvider);
-  if (auth is! AuthAuthenticated) return ProfileStats.zero;
+  if (auth is! AuthAuthenticated) return ActivityHistory.empty;
 
   final uid = auth.user.id;
   final db = FirebaseService.firestore;
-
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
-  final weekStart = today.subtract(
-    Duration(days: today.weekday - 1),
-  ); // Pazartesi
+  final since = Timestamp.fromDate(
+    today.subtract(const Duration(days: kActivityWindowDays)),
+  );
 
-  // ── Son 60 günün tarihlerini çek (streak için yeterli) ────────────────────
-  final since60 = Timestamp.fromDate(today.subtract(const Duration(days: 60)));
-
-  final journalFuture = db
+  Future<QuerySnapshot<Map<String, dynamic>>> fetch(String col) => db
       .collection('users')
       .doc(uid)
-      .collection('journal_entries')
-      .where('createdAt', isGreaterThanOrEqualTo: since60)
+      .collection(col)
+      .where('createdAt', isGreaterThanOrEqualTo: since)
       .get();
 
-  final foodFuture = db
-      .collection('users')
-      .doc(uid)
-      .collection('food_entries')
-      .where('createdAt', isGreaterThanOrEqualTo: since60)
-      .get();
+  final results = await Future.wait([
+    fetch('journal_entries'),
+    fetch('food_entries'),
+  ]);
 
-  final results = await Future.wait([journalFuture, foodFuture]);
-  final journalDocs = results[0].docs;
-  final foodDocs = results[1].docs;
+  Set<DateTime> days(QuerySnapshot<Map<String, dynamic>> snap) => snap.docs
+      .map((d) {
+        final ts = (d.data())['createdAt'] as Timestamp?;
+        if (ts == null) return null;
+        final dt = ts.toDate();
+        return DateTime(dt.year, dt.month, dt.day);
+      })
+      .whereType<DateTime>()
+      .toSet();
 
-  // ── Aktif günleri DateOnly seti olarak topla ──────────────────────────────
-  Set<DateTime> activeDays(List<QueryDocumentSnapshot> docs) {
-    return docs
-        .map((d) {
-          final data = d.data() as Map<String, dynamic>?;
-          final ts = data?['createdAt'] as Timestamp?;
-          if (ts == null) return null;
-          final dt = ts.toDate();
-          return DateTime(dt.year, dt.month, dt.day);
-        })
-        .whereType<DateTime>()
-        .toSet();
-  }
+  return ActivityHistory(
+    journalDays: days(results[0]),
+    foodDays: days(results[1]),
+  );
+});
 
-  final journalDays = activeDays(journalDocs);
-  final foodDays = activeDays(foodDocs);
-  final allActiveDays = {...journalDays, ...foodDays};
+/// [offset] 0 = bu hafta, -1 = geçen hafta.
+final weekStatsProvider = Provider.family<WeekStats, int>((ref, offset) {
+  final history =
+      ref.watch(activityHistoryProvider).valueOrNull ?? ActivityHistory.empty;
+  return weekStats(history, today: DateTime.now(), offset: offset);
+});
 
-  // ── Streak: bugünden geriye ardışık gün say ───────────────────────────────
+/// [offset] 0 = bu ay, -1 = geçen ay.
+final monthStatsProvider = Provider.family<MonthStats, int>((ref, offset) {
+  final history =
+      ref.watch(activityHistoryProvider).valueOrNull ?? ActivityHistory.empty;
+  return monthStats(history, today: DateTime.now(), offset: offset);
+});
+
+/// Kaç hafta/ay geriye gidilebilir. Pencerenin dışına çıkan bir ekran boş
+/// veri gösterir ve kullanıcı bunu "kayıtlarım silinmiş" diye okur.
+int get maxWeeksBack => kActivityWindowDays ~/ 7 - 1;
+int get maxMonthsBack => kActivityWindowDays ~/ 31;
+
+final profileStatsProvider = FutureProvider<ProfileStats>((ref) async {
+  final history = await ref.watch(activityHistoryProvider.future);
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final active = history.activeDays;
+
+  // Seri: bugünden geriye ardışık gün say.
   var streak = 0;
   var check = today;
-  while (allActiveDays.contains(check)) {
+  while (active.contains(check)) {
     streak++;
     check = check.subtract(const Duration(days: 1));
   }
 
-  // ── Bu haftaki (Pzt-bugün) sayılar ───────────────────────────────────────
-  final weekEnd = today.add(const Duration(days: 1));
-  final weekStartTs = Timestamp.fromDate(weekStart);
-  final weekEndTs = Timestamp.fromDate(weekEnd);
-
-  int weeklyJournal = journalDocs.where((d) {
-    final data2 = d.data() as Map<String, dynamic>?;
-    final ts = data2?['createdAt'] as Timestamp?;
-    if (ts == null) return false;
-    return ts.compareTo(weekStartTs) >= 0 && ts.compareTo(weekEndTs) < 0;
-  }).length;
-
-  int weeklyFood = foodDocs.where((d) {
-    final data2 = d.data() as Map<String, dynamic>?;
-    final ts = data2?['createdAt'] as Timestamp?;
-    if (ts == null) return false;
-    return ts.compareTo(weekStartTs) >= 0 && ts.compareTo(weekEndTs) < 0;
-  }).length;
-
-  // ── Bar chart: haftanın her günü aktivite var mı? ─────────────────────────
-  final barValues = List<double>.generate(7, (i) {
-    final day = weekStart.add(Duration(days: i));
-    if (day.isAfter(today)) return 0.0;
-    final hasActivity = allActiveDays.contains(day);
-    return hasActivity ? 1.0 : 0.0;
-  });
-
+  final week = weekStats(history, today: today);
   unawaited(ref.read(longestStreakProvider.notifier).observe(streak));
 
   return ProfileStats(
     streakDays: streak,
-    weeklyJournalCount: weeklyJournal,
-    weeklyFoodCount: weeklyFood,
-    weeklyActivityByDay: barValues,
+    weeklyJournalCount: week.journalCount,
+    weeklyFoodCount: week.foodCount,
+    weeklyActivityByDay: week.bars,
   );
 });

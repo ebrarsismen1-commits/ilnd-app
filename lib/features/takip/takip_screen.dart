@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
+import 'package:ilnd_app/core/widgets/confirm_delete.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ilnd_app/core/repositories/food_repository.dart';
@@ -612,6 +614,16 @@ class _HabitsSection extends ConsumerWidget {
                     range: range,
                     isTodayDone: isToday,
                     onToggle: () => toggle(habit.id),
+                    // Uzun basma silme kapısı. `deleteHabit` repository'de
+                    // yazılıydı ve kural izin veriyordu ama hiçbir yerden
+                    // çağrılmıyordu: kullanıcı eklediği alışkanlığı
+                    // kaldıramıyordu.
+                    onDelete: () => _confirmDeleteHabit(
+                      context,
+                      ref,
+                      habitId: habit.id,
+                      name: habit.name,
+                    ),
                     p: p,
                   ),
                   if (!isLast) _Hairline(p: p),
@@ -676,6 +688,32 @@ class _RangeToggle extends ConsumerWidget {
   }
 }
 
+/// Alışkanlığı onaylı olarak siler.
+///
+/// Onay şart: silme geri alınamıyor ve geçmiş işaretlemeler de listeden
+/// kalkıyor.
+Future<void> _confirmDeleteHabit(
+  BuildContext context,
+  WidgetRef ref, {
+  required String habitId,
+  required String name,
+}) async {
+  final l10n = AppLocalizations.of(context)!;
+  final ok = await confirmDelete(
+    context,
+    title: l10n.habitDeleteTitle,
+    body: l10n.habitDeleteBody,
+  );
+  if (!ok || !context.mounted) return;
+
+  try {
+    await ref.read(deleteHabitProvider)(habitId);
+    if (context.mounted) IlndToast.success(context, l10n.habitDeleted);
+  } catch (_) {
+    if (context.mounted) IlndToast.error(context, l10n.habitDeleteFailed);
+  }
+}
+
 class _HabitRow extends StatelessWidget {
   const _HabitRow({
     required this.habitId,
@@ -684,6 +722,7 @@ class _HabitRow extends StatelessWidget {
     required this.range,
     required this.isTodayDone,
     required this.onToggle,
+    required this.onDelete,
     required this.p,
   });
 
@@ -693,6 +732,7 @@ class _HabitRow extends StatelessWidget {
   final TrackingRange range;
   final bool isTodayDone;
   final VoidCallback onToggle;
+  final VoidCallback onDelete;
   final AppPalette p;
 
   @override
@@ -742,6 +782,7 @@ class _HabitRow extends StatelessWidget {
 
     return Pressable(
       onTap: onToggle,
+      onLongPress: onDelete,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 14),
         child: isWeek

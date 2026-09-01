@@ -7,11 +7,7 @@ import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 const bool kDemoMode = false;
 
 /// Demo kullanıcısının önceden "hatırlanan" profili.
-///
-/// Notlar sabit tarih taşımaz, demoda hep "dün / bugün" görünsünler diye
-/// çalışma zamanında tarihlenir: sunumda bir haftalık nota "bugün" denmesi
-/// tam da düzeltilen hataydı.
-IlndMemory get kDemoMemory => IlndMemory(
+final IlndMemory kDemoMemory = IlndMemory(
   name: 'Ela',
   goals: [
     'akşamları daha az şeker',
@@ -24,22 +20,10 @@ IlndMemory get kDemoMemory => IlndMemory(
     'sabah kahvesini seviyor',
     'laktoza hassas',
   ],
-  recentNotes: [
-    MemoryNote(
-      'Günlük: bugün işte yoğundum ama akşam yürüyüşü iyi geldi',
-      day: _demoDay(1),
-    ),
-    MemoryNote('Yemek: Mercimek Çorbası (180 kcal)', day: _demoDay(1)),
-    MemoryNote('Kullanıcı: bu aralar uykum biraz düzensiz', day: _demoDay(0)),
-  ],
+  // Demo notlarına da zaman gerekiyor: tarihsiz not prompt'a hiç girmiyor
+  // (bkz. IlndMemory.freshNotes) ve demo sohbeti hafızasız görünürdü.
+  recentNotes: _demoNotes,
 );
-
-/// [back] gün önceki günün YYYY-MM-DD karşılığı.
-String _demoDay(int back) {
-  final d = DateTime.now().subtract(Duration(days: back));
-  return '${d.year}-${d.month.toString().padLeft(2, '0')}-'
-      '${d.day.toString().padLeft(2, '0')}';
-}
 
 /// Sohbet ekranını "ilişki zaten sürüyor" hissiyle açan örnek diyalog.
 const List<({bool fromUser, String text})> kDemoChatOpening = [
@@ -52,3 +36,19 @@ const List<({bool fromUser, String text})> kDemoChatOpening = [
         'kendine küçük bir şey ayarlamak ister misin?',
   ),
 ];
+
+/// Demo hafıza notları, bugüne göre tarihlenmiş.
+List<MemoryNote> get _demoNotes {
+  final now = DateTime.now();
+  return [
+    MemoryNote(
+      'Günlük: bugün işte yoğundum ama akşam yürüyüşü iyi geldi',
+      at: now.subtract(const Duration(days: 2)),
+    ),
+    MemoryNote(
+      'Yemek: Mercimek Çorbası (180 kcal)',
+      at: now.subtract(const Duration(days: 1)),
+    ),
+    MemoryNote('Kullanıcı: bu aralar uykum biraz düzensiz', at: now),
+  ];
+}

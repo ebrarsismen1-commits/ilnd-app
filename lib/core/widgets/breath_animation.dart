@@ -9,6 +9,12 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 ///
 /// Faz etiketleri l10n'dan enjekte edilir (varsayılanlar TR) — İngilizce
 /// kullanıcı "in / hold / out" görür.
+///
+/// Sert Kural #19 istisnası — bilerek `prefersReducedMotion` sorulmuyor:
+/// burada hareket süslemesi değil, içeriğin kendisi. Pulse durursa kullanıcı
+/// nefesini neye göre ayarlayacağını kaybeder; egzersiz anlamsızlaşır. Süre
+/// (14 sn döngü) ve ritim sabit, hızlanma/flaş yok. Dekoratif nefes halkası
+/// (breath_ring.dart) bu istisnaya girmez ve azaltılmış modda durur.
 class BreathAnimation extends StatefulWidget {
   const BreathAnimation({
     super.key,

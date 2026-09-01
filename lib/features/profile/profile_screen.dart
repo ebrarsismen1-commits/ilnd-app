@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -409,48 +410,65 @@ class _BadgesSection extends StatelessWidget {
           style: AppTextStyles.sectionLabel(color: p.textMuted),
         ),
         const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: _BadgeCard(
-                icon: Icons.star_border_rounded,
-                label: l10n.profileBadgeFirstStep,
-                color: p.accent,
-                locked: !hasFirstEntry,
-                p: p,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _BadgeCard(
-                icon: Icons.local_fire_department_rounded,
-                label: l10n.profileBadgeSevenDays,
-                color: p.amber,
-                locked: !hasWeekStreak,
-                p: p,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _BadgeCard(
-                icon: Icons.menu_book_rounded,
-                label: l10n.profileBadgeReader,
-                color: p.accent,
-                locked: true,
-                p: p,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _BadgeCard(
-                icon: Icons.emoji_events_rounded,
-                label: l10n.profileBadgeThirtyDays,
-                color: p.amber,
-                locked: stats.streakDays < 30,
-                p: p,
-              ),
-            ),
-          ],
+        // Rozetler geniş ekranda GERİLMEMELİ: dört Expanded, masaüstü
+        // web'de her rozeti ~470px'lik boş bir kutuya çeviriyordu (telefon
+        // düzeninin gerilmiş hâli, Adan'daki hatanın aynı sınıfı). Genişlik
+        // hesaplanıp bir tavanla sınırlanıyor.
+        LayoutBuilder(
+          builder: (context, constraints) {
+            const gap = 10.0;
+            final itemWidth = math.min(
+              120.0,
+              (constraints.maxWidth - gap * 3) / 4,
+            );
+            return Row(
+              children: [
+                SizedBox(
+                  width: itemWidth,
+                  child: _BadgeCard(
+                    icon: Icons.star_border_rounded,
+                    label: l10n.profileBadgeFirstStep,
+                    color: p.accent,
+                    locked: !hasFirstEntry,
+                    p: p,
+                  ),
+                ),
+                const SizedBox(width: gap),
+                SizedBox(
+                  width: itemWidth,
+                  child: _BadgeCard(
+                    icon: Icons.local_fire_department_rounded,
+                    label: l10n.profileBadgeSevenDays,
+                    color: p.amber,
+                    locked: !hasWeekStreak,
+                    p: p,
+                  ),
+                ),
+                const SizedBox(width: gap),
+                SizedBox(
+                  width: itemWidth,
+                  child: _BadgeCard(
+                    icon: Icons.menu_book_rounded,
+                    label: l10n.profileBadgeReader,
+                    color: p.accent,
+                    locked: true,
+                    p: p,
+                  ),
+                ),
+                const SizedBox(width: gap),
+                SizedBox(
+                  width: itemWidth,
+                  child: _BadgeCard(
+                    icon: Icons.emoji_events_rounded,
+                    label: l10n.profileBadgeThirtyDays,
+                    color: p.amber,
+                    locked: stats.streakDays < 30,
+                    p: p,
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ],
     );
@@ -575,53 +593,70 @@ class _WeeklySummaryCard extends StatelessWidget {
         const SizedBox(height: 20),
         Divider(height: 0.5, thickness: 0.5, color: p.border),
         const SizedBox(height: 16),
-        SizedBox(
-          height: 96,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: List.generate(barValues.length, (i) {
-              final value = barValues[i];
-              final isEmpty = value == 0.0;
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            AnimatedContainer(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeOut,
-                              width: double.infinity,
-                              height: isEmpty ? 4 : 76 * value,
-                              decoration: BoxDecoration(
-                                color: isEmpty ? p.surfaceStrong : p.accent,
-                                borderRadius: BorderRadius.circular(4),
+        // Boş haftada grafik 96px yer ayırıp içini boş bırakıyordu: bütün
+        // çubuklar 4px, üstünde 86px hiçlik. Ekran bozulmuş gibi duruyordu.
+        // Hafta tamamen boşsa çubuk yerine tek bir cümle çiziliyor —
+        // suçlandırmayan dilde (DESIGN_SYSTEM editoryal kuralları).
+        if (barValues.every((v) => v == 0.0))
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            child: Text(
+              l10n.profileWeekEmpty,
+              style: AppTextStyles.body(
+                fontSize: 13,
+                color: p.textMuted,
+                height: 1.5,
+              ),
+            ),
+          )
+        else
+          SizedBox(
+            height: 96,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: List.generate(barValues.length, (i) {
+                final value = barValues[i];
+                final isEmpty = value == 0.0;
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 400),
+                                curve: Curves.easeOut,
+                                width: double.infinity,
+                                height: isEmpty ? 4 : 76 * value,
+                                decoration: BoxDecoration(
+                                  color: isEmpty ? p.surfaceStrong : p.accent,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        dayLabels[i],
-                        style: AppTextStyles.mono(
-                          fontSize: 9.5,
-                          color: isEmpty
-                              ? p.textMuted.withValues(alpha: 0.5)
-                              : p.accent,
+                        const SizedBox(height: 6),
+                        Text(
+                          dayLabels[i],
+                          style: AppTextStyles.mono(
+                            fontSize: 9.5,
+                            color: isEmpty
+                                ? p.textMuted.withValues(alpha: 0.5)
+                                : p.accent,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
-        ),
       ],
     );
   }
@@ -679,7 +714,9 @@ class _SettingsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Pressable(
-          onTap: isPremium ? null : () => PaywallScreen.show(context),
+          onTap: isPremium
+              ? null
+              : () => PaywallScreen.show(context, source: 'profile'),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
@@ -727,6 +764,14 @@ class _SettingsSection extends ConsumerWidget {
         const SizedBox(height: 10),
         // Takip tekrar kendi ekrani (tasarim handoff §5 ayarlar listesi):
         // Bugun'deki sessiz satirin yaninda buradan da acilir.
+        Pressable(
+          onTap: () => context.push(routePreferences),
+          child: _SettingsRow(
+            icon: Icons.tune_rounded,
+            label: l10n.profilePreferences,
+            p: p,
+          ),
+        ),
         Pressable(
           onTap: () => context.push(routeTakip),
           child: _SettingsRow(

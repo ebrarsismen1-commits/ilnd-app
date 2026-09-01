@@ -34,7 +34,11 @@ class MovementProgramScreen extends ConsumerWidget {
     // Kilitli programda seans açılmaz — paywall açılır. Kontrol her girişte
     // yapılır (kart üzerinden de, "devam et" üzerinden de aynı kapı).
     if (program.premium && !ref.read(hasPremiumAccessProvider)) {
-      await PaywallScreen.show(context, reason: l10n.movementPaywallReason);
+      await PaywallScreen.show(
+        context,
+        reason: l10n.movementPaywallReason,
+        source: 'movement',
+      );
       return;
     }
     if (!context.mounted) return;

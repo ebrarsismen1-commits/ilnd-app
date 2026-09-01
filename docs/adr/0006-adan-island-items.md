@@ -74,6 +74,53 @@ bir sprite istiyor. Owner kararı (2026-08-19): görsel sonra hazırlanacak,
 şimdilik ada alanı sade bir yüzey olarak durur. Öğe listesi ve kazanım
 mantığı görselsiz de tam çalışır.
 
+**Güncelleme (2026-08-26, illüstrasyon geldi):** üç yön mockup'ı owner'a
+gösterildi (kesik kâğıt / topografik harita / alacakaranlık); seçim
+**topografik harita** oldu. Ada artık `IslandPainter` ile çiziliyor:
+
+- Üç katman çizgi diliyle kuruluyor — su eş yükselti halkaları, kara kıyı
+  konturu, öğeler harita işareti. Gerekçe metnin kendisi: "ada hafızanın
+  haritası olur".
+- **Asset yok, animasyon yok.** Her şey `Path`; karanlık mod ayrı varyant,
+  ölçek ayrı dosya istemiyor. Hareket bilinçli olarak dışarıda (Sert Kural
+  #12): yeni öğe bir sonraki açılışta yerinde durur, kıpırdamaz.
+- Öğelerin adadaki yerleri **sabit**: kilitliyken kesik çizgili boşluk,
+  kazanılınca aynı noktada öğenin kendisi (owner kararı: kilitli öğe
+  görünür kalsın, "burada büyüyecek bir şey var" desin). Ada büyürken
+  hiçbir şey yer değiştirmiyor.
+- Çizim 362x330'luk sabit tasarım uzayında yapılıp hedefe "cover" ile
+  oturuyor: Bugün'de 150, Adan ekranında 330, ada iki ölçekte de aynı
+  yerde. Çizgi kalınlıkları ölçeğe bölünüyor, yani dar telefonda
+  incelmiyor (topografik yönün bilinen riski buydu).
+- **Sapma notu (Sert Kural #18):** Adan ekranındaki yüzey artık prototipteki
+  gibi tam genişlikte ve köşesiz. Önceki sürümde kenar boşluklu, yuvarlak
+  köşeli bir kart olarak duruyordu; illüstrasyon gelirken prototipe
+  döndürüldü. Bugün kartı yuvarlak köşeli kalmaya devam ediyor (prototipte
+  de öyle).
+
+### 5. Su, `lastActiveDate` ile koyulaşır (2026-08-26)
+
+Handoff §7'nin tek davranış kuralı vardı ve kodda karşılığı yoktu: "sessiz
+geçen günler suyu koyulaştırır, cezalandırmaz." Artık var.
+
+`syncIslandItems` kullanıcının kendi verisinden (check-in, son öğün, son
+gece ritüeli) en geç etkin günü bulur ve `island/{uid}.lastActiveDate`
+alanına **gün dizesi** olarak yazar. İstemci farkı kendi alır.
+
+**Neden sayı değil dize:** sessiz gün sayısı yazılsaydı iki senkron
+arasında bayatlardı — ekran açılmadan sayı artmaz, yani kullanıcı üç gün
+sonra dönse bile su berrak görünürdü. Dize bayatlamaz.
+
+**Neden yalnız check-in'e bakılmıyor:** check-in'i günlük ve alışkanlık
+yazıyor, öğün yazmıyor. Yalnız ona bakan bir hesap, her gün yemeğini
+yazan ama günlük tutmayan kullanıcının suyunu haksız yere koyulaştırırdı.
+
+Kademe üç tane (0-2 gün berrak, 3-6 koyu, 7+ en koyu) ve dördüncüsü yok:
+dipsiz bir kademe eklemek kuralı cezaya çevirirdi. Dönüş tek gün sürer.
+
+Alan da öğeler gibi sunucu-otoritatif; `firestore.rules` içindeki
+`allow write: if false` bunu zaten kapsıyor, yeni kural gerekmedi.
+
 ## Sonuçlar
 
 **İyi:** ödül sistemi ilk günden sunucu-otoritatif; istemci sürümü eski kalsa

@@ -45,9 +45,7 @@ void main() {
     );
     expect(
       recoveryTokenHashFrom(
-        Uri.parse(
-          'https://ilnd-app-8dcbd.web.app/?token_hash=&type=recovery',
-        ),
+        Uri.parse('https://ilnd-app-8dcbd.web.app/?token_hash=&type=recovery'),
       ),
       isNull,
     );
