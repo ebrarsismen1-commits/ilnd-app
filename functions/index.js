@@ -26,19 +26,27 @@ const ANTHROPIC_API_KEY = defineSecret("ANTHROPIC_API_KEY");
 const SUPABASE_SERVICE_ROLE_KEY = defineSecret("SUPABASE_SERVICE_ROLE_KEY");
 
 // RevenueCat "secret" (v1) API anahtarı — hesabın gerçekten abone olup
-// olmadığını SUNUCUDAN doğrulamak için.
+// olmadığını SUNUCUDAN doğrulamak için. SUPABASE_URL ile aynı yoldan gelir:
+// functions/.env dosyasından, yani process.env üzerinden.
 //
-// ANTHROPIC_API_KEY ile aynı yoldan gelir (defineSecret + fonksiyonun
-// `secrets` listesi). Daha önce `process.env` ile okunuyordu; Functions v2'de
-// bu, secret bildirilmediği sürece BOŞ gelir ve hasRevenueCatPremium sessizce
-// false döner. Sonucu şudur: parasını ödemiş bir abone ücretsiz katman
-// kotasına takılır ve hiçbir yerde hata görünmez. Bu yüzden anahtar artık
-// gerçek bir secret olarak tanımlı.
+// NEDEN defineSecret DEĞİL (2026-09-02): anahtar henüz alınmadı ve
+// `defineSecret` ile BİLDİRİLEN her secret, hiçbir fonksiyona bağlı olmasa
+// bile deploy sırasında değer soruyor; boş geçilemiyor (Secret Manager boş
+// payload'ı 400 ile reddediyor). Yani bildirim, anahtar gelene kadar tüm
+// deploy'u kilitliyordu.
 //
-// İSTEĞE BAĞLI olmaya devam ediyor: değeri yoksa abonelik doğrulanamaz,
-// yalnız sunucunun kendi yazdığı ödül-premium'u (referral) bilinir. Mağaza
-// aboneliği canlıya alınmadan ÖNCE girilmeli.
-const REVENUECAT_SECRET_KEY = defineSecret("REVENUECAT_SECRET_KEY");
+// İSTEĞE BAĞLI: değeri yoksa abonelik doğrulanamaz, yalnız sunucunun kendi
+// yazdığı ödül-premium'u (referral) bilinir. Mağaza aboneliği canlıya
+// alınmadan ÖNCE doldurulmalı, yoksa parasını ödemiş abone ücretsiz katman
+// kotasına takılır ve hiçbir yerde hata görünmez.
+//
+// Anahtar alınınca iki yol var:
+//   a) functions/.env içine REVENUECAT_SECRET_KEY=... yaz (en hızlısı,
+//      değer depoda değil ama .env'i görebilen herkes okur),
+//   b) `firebase functions:secrets:set REVENUECAT_SECRET_KEY` ile Secret
+//      Manager'a koy, burayı defineSecret'a çevir ve anthropicProxy'nin
+//      `secrets` listesine ekle (yönetimi daha güvenli olan yol).
+const REVENUECAT_SECRET_KEY = process.env.REVENUECAT_SECRET_KEY || "";
 // lib/core/billing/revenue_cat_service.dart'taki _kEntitlement ile aynı.
 const REVENUECAT_ENTITLEMENT = "premium";
 
@@ -352,8 +360,7 @@ async function hasReferralPremium(uid) {
  * @return {Promise<boolean>} true if an active premium entitlement exists
  */
 async function hasRevenueCatPremium(uid) {
-  // defineSecret parametresi: bildirilmemişse .value() boş dize döner.
-  const key = REVENUECAT_SECRET_KEY.value();
+  const key = REVENUECAT_SECRET_KEY;
   if (!key) return false;
   try {
     const res = await fetch(
@@ -445,21 +452,10 @@ function validateInputSize(req, system, messages) {
 // token'ı kaydedip enforceAppCheck: true'ya geri dön (bkz. 2026-07-07
 // decisions.md notu).
 exports.anthropicProxy = onRequest(
-    // REVENUECAT_SECRET_KEY normalde burada da bildirilmeli: resolvePremium
-    // ücretsiz katman kotasını bu fonksiyonun içinde uyguluyor ve aboneyi
-    // tanıyabilmesi için anahtara erişmesi gerekiyor.
-    //
-    // GEÇİCİ (2026-09-02): anahtar henüz alınmadı ve bağlı bir secret'ın
-    // Secret Manager'da bir sürümü olmak zorunda, yoksa `firebase deploy`
-    // değer sorup deploy'u kilitliyor. Bağ kaldırıldı: hasRevenueCatPremium
-    // boş anahtarla sessizce false dönüyor, yani bugünkü davranış değişmiyor
-    // (mağaza aboneliği zaten canlıda değil, referral premium'u çalışıyor).
-    //
-    // Anahtar alınır alınmaz GERİ EKLE, yoksa parasını ödemiş abone ücretsiz
-    // katman kotasına takılır ve hiçbir yerde hata görünmez:
-    //   1. firebase functions:secrets:set REVENUECAT_SECRET_KEY
-    //   2. bu satırı `secrets: [ANTHROPIC_API_KEY, REVENUECAT_SECRET_KEY]`
-    //      hâline döndür
+    // RevenueCat anahtarı burada YOK: process.env üzerinden geliyor (bkz.
+    // dosyanın başındaki not). Secret Manager'a taşınırsa bu listeye de
+    // eklenmeli, çünkü resolvePremium ücretsiz katman kotasını bu
+    // fonksiyonun içinde uyguluyor.
     {cors: true, secrets: [ANTHROPIC_API_KEY]},
     async (req, res) => {
       if (req.method !== "POST") {
