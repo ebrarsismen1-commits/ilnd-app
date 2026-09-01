@@ -194,7 +194,11 @@ void main() {
         );
         expect(container.read(sleepRitualDoneTonightProvider), isTrue);
         expect(
-          container.read(ilndMemoryProvider).recentNotes.join(),
+          container
+              .read(ilndMemoryProvider)
+              .recentNotes
+              .map((n) => n.text)
+              .join(),
           contains('toplantılar yordu'),
         );
       },

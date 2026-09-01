@@ -9,6 +9,52 @@ import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 /// isteğinde cihazdan çıkmaz — model bunu yazar, istemci ekranda değiştirir.
 const kNamePlaceholder = '{ad}';
 
+/// Tek bir hafıza notu ve ne zaman düşüldüğü.
+///
+/// Notlar eskiden düz metindi ve prompt'a yalnız "Son notlar" başlığıyla
+/// giriyordu. Model bu yüzden bir haftalık notu bugün olmuş sanıyordu:
+/// kullanıcı bir hafta önce erik eklemişti, ILND bugün "sabah yediğin erik"
+/// dedi. Notun kendisi doğruydu, zamanı yoktu. O yüzden her not gününü
+/// taşır ve prompt'a zaman etiketiyle girer.
+class MemoryNote {
+  const MemoryNote(this.text, {this.day = ''});
+
+  factory MemoryNote.fromJson(Map<String, dynamic> j) => MemoryNote(
+    (j['text'] as String?) ?? '',
+    day: (j['day'] as String?) ?? '',
+  );
+
+  /// Notun metni (ör. "Yemek: erik (30 kcal)").
+  final String text;
+
+  /// Notun düşüldüğü gün, YYYY-MM-DD. Boş dize: tarih bilinmiyor. Bu alan
+  /// eklenmeden önce yazılmış kayıtlar böyle okunur; onlara tarih
+  /// uydurmuyoruz, "belirsiz" demek yanlış tarihten iyidir.
+  final String day;
+
+  DateTime? get date => day.isEmpty ? null : DateTime.tryParse(day);
+
+  /// Prompt'a giren zaman etiketi: "bugün", "dün", "3 gün önce"...
+  String ageLabel({DateTime? now}) {
+    final at = date;
+    if (at == null) return 'tarihi belirsiz';
+    final today = DateTime.now();
+    final reference = now ?? today;
+    final days = DateTime(
+      reference.year,
+      reference.month,
+      reference.day,
+    ).difference(DateTime(at.year, at.month, at.day)).inDays;
+    if (days <= 0) return 'bugün';
+    if (days == 1) return 'dün';
+    if (days < 7) return '$days gün önce';
+    if (days < 30) return '${days ~/ 7} hafta önce';
+    return '${days ~/ 30} ay önce';
+  }
+
+  Map<String, dynamic> toJson() => {'text': text, 'day': day};
+}
+
 /// ILND'nin kullanıcı hakkında "hatırladıkları".
 ///
 /// Dostluğun temeli budur: her AI etkileşimine bağlam olarak verilir, böylece
@@ -34,7 +80,7 @@ class IlndMemory {
   final List<String> facts;
 
   /// Son etkileşimlerden kısa notlar (kayan pencere, en yeni en sonda).
-  final List<String> recentNotes;
+  final List<MemoryNote> recentNotes;
 
   /// Ücretsiz katmanda hafıza kısa tutulur (maliyet + premium ayrımı).
   static const int freeRecentNotesLimit = 6;
@@ -51,7 +97,7 @@ class IlndMemory {
     String? name,
     List<String>? goals,
     List<String>? facts,
-    List<String>? recentNotes,
+    List<MemoryNote>? recentNotes,
   }) {
     return IlndMemory(
       name: name ?? this.name,
@@ -71,7 +117,7 @@ class IlndMemory {
   ///    cihazdan hiç çıkmaz ama ILND ona adıyla hitap etmeye devam eder.
   /// 2. **Not penceresi kırpılır** ([promptNotesLimit]). Saklanan geçmiş daha
   ///    uzun olabilir; dışarı yalnız son notlar gider.
-  String toPromptContext({int maxNotes = promptNotesLimit}) {
+  String toPromptContext({int maxNotes = promptNotesLimit, DateTime? now}) {
     final parts = <String>[];
     if (name.isNotEmpty) parts.add('Adı: $kNamePlaceholder');
     if (goals.isNotEmpty) parts.add('Hedefleri: ${goals.join(', ')}');
@@ -80,7 +126,16 @@ class IlndMemory {
       final notes = recentNotes.length > maxNotes
           ? recentNotes.sublist(recentNotes.length - maxNotes)
           : recentNotes;
-      parts.add('Son notlar: ${notes.join(' | ')}');
+      // Zaman etiketi notun yanından ayrılmaz: modelin elinde tarih yoksa
+      // eski bir notu bugüne çekiyor ("sabah yediğin erik").
+      final rendered = notes
+          .map((n) => '[${n.ageLabel(now: now)}] ${n.text}')
+          .join(' | ');
+      parts.add(
+        'Son notlar (köşeli parantez notun ne zaman düşüldüğünü söyler; o '
+        'zamanı olduğu gibi kullan, eski bir notu bugün olmuş gibi anlatma, '
+        'tarihi belirsizse ne zaman olduğunu uydurma): $rendered',
+      );
     }
     return parts.join('\n');
   }
@@ -89,14 +144,22 @@ class IlndMemory {
     'name': name,
     'goals': goals,
     'facts': facts,
-    'recentNotes': recentNotes,
+    'recentNotes': [for (final note in recentNotes) note.toJson()],
   };
 
+  /// Eski kayıtlarda notlar düz metindi; onlar tarihsiz not olarak okunur.
+  /// Kullanıcının biriktirdiği hafıza sürüm değiştirdi diye silinmez.
   factory IlndMemory.fromJson(Map<String, dynamic> j) => IlndMemory(
     name: (j['name'] as String?) ?? '',
     goals: List<String>.from((j['goals'] as List?) ?? const []),
     facts: List<String>.from((j['facts'] as List?) ?? const []),
-    recentNotes: List<String>.from((j['recentNotes'] as List?) ?? const []),
+    recentNotes: [
+      for (final raw in (j['recentNotes'] as List?) ?? const [])
+        if (raw is String)
+          MemoryNote(raw)
+        else if (raw is Map)
+          MemoryNote.fromJson(Map<String, dynamic>.from(raw)),
+    ],
   );
 }
 
@@ -194,9 +257,19 @@ class IlndMemoryNotifier extends StateNotifier<IlndMemory> {
   Future<void> addNote(
     String note, {
     int limit = IlndMemory.freeRecentNotesLimit,
+    DateTime? at,
   }) async {
     if (note.trim().isEmpty) return;
-    final notes = [...state.recentNotes, note.trim()];
+    final day = at ?? DateTime.now();
+    final notes = [
+      ...state.recentNotes,
+      MemoryNote(
+        note.trim(),
+        day:
+            '${day.year}-${day.month.toString().padLeft(2, '0')}-'
+            '${day.day.toString().padLeft(2, '0')}',
+      ),
+    ];
     final trimmed = notes.length > limit
         ? notes.sublist(notes.length - limit)
         : notes;

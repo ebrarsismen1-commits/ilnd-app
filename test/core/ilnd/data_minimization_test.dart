@@ -15,7 +15,9 @@ void main() {
     name: gizliAd,
     goals: const ['erken kalkmak'],
     facts: const ['vejetaryen'],
-    recentNotes: [for (var i = 1; i <= noteCount; i++) 'not $i'],
+    recentNotes: [
+      for (var i = 1; i <= noteCount; i++) MemoryNote('not $i'),
+    ],
   );
 
   group('Ad cihazdan çıkmaz', () {

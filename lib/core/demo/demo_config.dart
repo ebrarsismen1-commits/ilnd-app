@@ -7,7 +7,11 @@ import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 const bool kDemoMode = false;
 
 /// Demo kullanıcısının önceden "hatırlanan" profili.
-const IlndMemory kDemoMemory = IlndMemory(
+///
+/// Notlar sabit tarih taşımaz, demoda hep "dün / bugün" görünsünler diye
+/// çalışma zamanında tarihlenir: sunumda bir haftalık nota "bugün" denmesi
+/// tam da düzeltilen hataydı.
+IlndMemory get kDemoMemory => IlndMemory(
   name: 'Ela',
   goals: [
     'akşamları daha az şeker',
@@ -21,11 +25,21 @@ const IlndMemory kDemoMemory = IlndMemory(
     'laktoza hassas',
   ],
   recentNotes: [
-    'Günlük: bugün işte yoğundum ama akşam yürüyüşü iyi geldi',
-    'Yemek: Mercimek Çorbası (180 kcal)',
-    'Kullanıcı: bu aralar uykum biraz düzensiz',
+    MemoryNote(
+      'Günlük: bugün işte yoğundum ama akşam yürüyüşü iyi geldi',
+      day: _demoDay(1),
+    ),
+    MemoryNote('Yemek: Mercimek Çorbası (180 kcal)', day: _demoDay(1)),
+    MemoryNote('Kullanıcı: bu aralar uykum biraz düzensiz', day: _demoDay(0)),
   ],
 );
+
+/// [back] gün önceki günün YYYY-MM-DD karşılığı.
+String _demoDay(int back) {
+  final d = DateTime.now().subtract(Duration(days: back));
+  return '${d.year}-${d.month.toString().padLeft(2, '0')}-'
+      '${d.day.toString().padLeft(2, '0')}';
+}
 
 /// Sohbet ekranını "ilişki zaten sürüyor" hissiyle açan örnek diyalog.
 const List<({bool fromUser, String text})> kDemoChatOpening = [

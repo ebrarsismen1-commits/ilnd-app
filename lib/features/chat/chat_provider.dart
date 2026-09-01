@@ -203,11 +203,16 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final lastNote = memory.recentNotes.isNotEmpty
         ? memory.recentNotes.last
         : null;
+    // Notun zamanı da görevin içine girer: tarihsiz verildiğinde model
+    // haftalık bir notu "bu sabah" diye karşılıyordu.
     final callback = lastNote == null
         ? ''
-        : ' Hafızandaki en son not şu: "$lastNote". Karşılamanda bu nota '
-              'mutlaka doğal bir cümleyle değin — birebir alıntılama, kendi '
-              'sözlerinle hatırladığını göster.';
+        : ' Hafızandaki en son not (${lastNote.ageLabel()}) şu: '
+              '"${lastNote.text}". Karşılamanda bu nota mutlaka doğal bir '
+              'cümleyle değin — birebir alıntılama, kendi sözlerinle '
+              'hatırladığını göster. Notun ne zaman düşüldüğüne sadık kal: '
+              'eskiyse bugün olmuş gibi anlatma, zamanı belirsizse ne zaman '
+              'olduğunu söyleme.';
 
     String reply;
     try {
