@@ -178,19 +178,38 @@ class _Header extends StatelessWidget {
           ),
           // Kayıtlı sohbetler. Tek akışta eski bir konuşmaya dönmenin yolu
           // yukarı kaydırmaktı; artık listeden açılıyor.
+          //
+          // İKON DEĞİL, ETİKET: release derlemesi ikon fontunu budadığı ve
+          // font uzun süre önbellekte kaldığı için yeni eklenen bir glif
+          // kullanıcıda boş çıkabiliyor (2026-09-02'de tam olarak bu oldu,
+          // bkz. firebase.json /assets/** notu). Metin uygulamanın kendi
+          // yazı tipinden gelir, o riski hiç taşımaz. Üstelik çıplak bir
+          // saat ikonu "geçmiş" demiyordu; kelime diyor.
           Align(
             alignment: Alignment.centerRight,
-            child: Semantics(
-              button: true,
-              label: l10n.chatSessionsTitle,
-              child: Pressable(
-                onTap: () => showChatSessionsSheet(context),
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Icon(
-                    Icons.history_rounded,
-                    size: 22,
-                    color: p.textMuted,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Semantics(
+                button: true,
+                child: Pressable(
+                  onTap: () => showChatSessionsSheet(context),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: p.surfaceStrong,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: p.border),
+                    ),
+                    child: Text(
+                      l10n.chatSessionsTitle,
+                      style: AppTextStyles.label(
+                        fontSize: 11.5,
+                        color: p.text,
+                      ).copyWith(letterSpacing: 0),
+                    ),
                   ),
                 ),
               ),
