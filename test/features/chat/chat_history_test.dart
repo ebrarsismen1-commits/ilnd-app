@@ -150,11 +150,11 @@ void main() {
 
     final container = containerFor(prefs, uid: 'user-1');
     await container.read(chatProvider.notifier).send('sil beni', l10n);
-    expect(prefs.getString('chat_history_user-1'), isNotNull);
+    expect(prefs.getString('chat_sessions_user-1'), isNotNull);
 
     await container.read(chatProvider.notifier).clearHistory();
     expect(container.read(chatProvider).messages, isEmpty);
-    expect(prefs.getString('chat_history_user-1'), isNull);
+    expect(prefs.getString('chat_sessions_user-1'), isNull);
     container.dispose();
   });
 

@@ -1169,6 +1169,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatListening => 'ilnd · listening';
 
   @override
+  String get chatSessionsTitle => 'chats';
+
+  @override
+  String get chatSessionsNew => 'new chat';
+
+  @override
+  String get chatSessionUntitled => 'untitled chat';
+
+  @override
+  String get chatSessionsEmpty => 'no saved chats yet';
+
+  @override
+  String get chatSessionToday => 'today';
+
+  @override
+  String get chatSessionYesterday => 'yesterday';
+
+  @override
+  String chatSessionDaysAgo(int days) {
+    return '$days days ago';
+  }
+
+  @override
+  String get chatSessionDeleteTitle => 'Delete this chat';
+
+  @override
+  String get chatSessionDeleteBody =>
+      'This conversation will be permanently deleted from your device. What ILND remembers about you stays.';
+
+  @override
+  String get chatSessionDeleted => 'Chat deleted.';
+
+  @override
+  String get chatSessionDeleteFailed =>
+      'Couldn\'t delete it. Want to try again?';
+
+  @override
   String get redeemCodeSuccess => 'Invite code redeemed!';
 
   @override

@@ -492,6 +492,22 @@
   "chatEmptyPrompt": "what's on your mind? I'm here with you.",
   "chatComposerHint": "write something...",
   "chatListening": "ilnd · listening",
+  "chatSessionsTitle": "chats",
+  "chatSessionsNew": "new chat",
+  "chatSessionUntitled": "untitled chat",
+  "chatSessionsEmpty": "no saved chats yet",
+  "chatSessionToday": "today",
+  "chatSessionYesterday": "yesterday",
+  "chatSessionDaysAgo": "{days} days ago",
+  "@chatSessionDaysAgo": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+  "chatSessionDeleteTitle": "Delete this chat",
+  "chatSessionDeleteBody": "This conversation will be permanently deleted from your device. What ILND remembers about you stays.",
+  "chatSessionDeleted": "Chat deleted.",
+  "chatSessionDeleteFailed": "Couldn't delete it. Want to try again?",
 
   "redeemCodeSuccess": "Invite code redeemed!",
   "redeemCodeInvalid": "No such invite code. Double-check it.",

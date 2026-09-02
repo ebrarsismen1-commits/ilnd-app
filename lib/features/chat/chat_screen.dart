@@ -11,6 +11,7 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/chat/chat_provider.dart';
+import 'package:ilnd_app/features/chat/chat_sessions_sheet.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
@@ -174,6 +175,26 @@ class _Header extends StatelessWidget {
                 style: AppTextStyles.body(fontSize: 10.5, color: p.textMuted),
               ),
             ],
+          ),
+          // Kayıtlı sohbetler. Tek akışta eski bir konuşmaya dönmenin yolu
+          // yukarı kaydırmaktı; artık listeden açılıyor.
+          Align(
+            alignment: Alignment.centerRight,
+            child: Semantics(
+              button: true,
+              label: l10n.chatSessionsTitle,
+              child: Pressable(
+                onTap: () => showChatSessionsSheet(context),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Icon(
+                    Icons.history_rounded,
+                    size: 22,
+                    color: p.textMuted,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

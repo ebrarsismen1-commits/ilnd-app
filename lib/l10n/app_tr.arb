@@ -1060,6 +1060,44 @@
   "chatComposerHint": "bir şey yaz...",
   "chatListening": "ilnd · seni dinliyor",
   "@chatListening": {"description": "Chat header subtitle under the breath ring"},
+
+  "chatSessionsTitle": "sohbetler",
+  "@chatSessionsTitle": {"description": "Title of the saved chat sessions sheet"},
+
+  "chatSessionsNew": "yeni sohbet",
+  "@chatSessionsNew": {"description": "Button that starts a fresh chat session"},
+
+  "chatSessionUntitled": "adsız sohbet",
+  "@chatSessionUntitled": {"description": "Fallback name for a session with no user message yet"},
+
+  "chatSessionsEmpty": "henüz kayıtlı sohbet yok",
+  "@chatSessionsEmpty": {"description": "Empty state of the chat sessions list"},
+
+  "chatSessionToday": "bugün",
+  "@chatSessionToday": {"description": "Relative date label for a session touched today"},
+
+  "chatSessionYesterday": "dün",
+  "@chatSessionYesterday": {"description": "Relative date label for a session touched yesterday"},
+
+  "chatSessionDaysAgo": "{days} gün önce",
+  "@chatSessionDaysAgo": {
+    "description": "Relative date label for an older session",
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+
+  "chatSessionDeleteTitle": "Bu sohbeti sil",
+  "@chatSessionDeleteTitle": {"description": "Chat session delete confirmation title"},
+
+  "chatSessionDeleteBody": "Bu konuşma cihazından kalıcı olarak silinecek. ILND'nin senin hakkında hatırladıkları silinmez.",
+  "@chatSessionDeleteBody": {"description": "Chat session delete confirmation body"},
+
+  "chatSessionDeleted": "Sohbet silindi.",
+  "@chatSessionDeleted": {"description": "Toast after deleting a chat session"},
+
+  "chatSessionDeleteFailed": "Silinemedi. Tekrar dener misin?",
+  "@chatSessionDeleteFailed": {"description": "Toast when deleting a chat session fails"},
   "@chatComposerHint": {"description": "Chat message composer hint"},
 
   "redeemCodeSuccess": "Davet kodu kullanıldı!",

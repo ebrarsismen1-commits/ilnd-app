@@ -2228,6 +2228,72 @@ abstract class AppLocalizations {
   /// **'ilnd · seni dinliyor'**
   String get chatListening;
 
+  /// Title of the saved chat sessions sheet
+  ///
+  /// In tr, this message translates to:
+  /// **'sohbetler'**
+  String get chatSessionsTitle;
+
+  /// Button that starts a fresh chat session
+  ///
+  /// In tr, this message translates to:
+  /// **'yeni sohbet'**
+  String get chatSessionsNew;
+
+  /// Fallback name for a session with no user message yet
+  ///
+  /// In tr, this message translates to:
+  /// **'adsız sohbet'**
+  String get chatSessionUntitled;
+
+  /// Empty state of the chat sessions list
+  ///
+  /// In tr, this message translates to:
+  /// **'henüz kayıtlı sohbet yok'**
+  String get chatSessionsEmpty;
+
+  /// Relative date label for a session touched today
+  ///
+  /// In tr, this message translates to:
+  /// **'bugün'**
+  String get chatSessionToday;
+
+  /// Relative date label for a session touched yesterday
+  ///
+  /// In tr, this message translates to:
+  /// **'dün'**
+  String get chatSessionYesterday;
+
+  /// Relative date label for an older session
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün önce'**
+  String chatSessionDaysAgo(int days);
+
+  /// Chat session delete confirmation title
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu sohbeti sil'**
+  String get chatSessionDeleteTitle;
+
+  /// Chat session delete confirmation body
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu konuşma cihazından kalıcı olarak silinecek. ILND\'nin senin hakkında hatırladıkları silinmez.'**
+  String get chatSessionDeleteBody;
+
+  /// Toast after deleting a chat session
+  ///
+  /// In tr, this message translates to:
+  /// **'Sohbet silindi.'**
+  String get chatSessionDeleted;
+
+  /// Toast when deleting a chat session fails
+  ///
+  /// In tr, this message translates to:
+  /// **'Silinemedi. Tekrar dener misin?'**
+  String get chatSessionDeleteFailed;
+
   /// Toast shown when a referral code is redeemed successfully
   ///
   /// In tr, this message translates to:

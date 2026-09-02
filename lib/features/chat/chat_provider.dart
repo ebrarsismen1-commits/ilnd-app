@@ -40,14 +40,78 @@ class ChatMessage {
   );
 }
 
+/// Tek bir konuşma: kendi mesajları, kendi kimliği, kendi son dokunma anı.
+///
+/// Sohbet önce tek bir sonsuz akıştı. Owner 2026-09-02'de "sekme sekme
+/// olsun" dedi: konuşmalar birbirinden ayrılır, listeden eskiye dönülür,
+/// yeni bir konuya temiz sayfayla başlanır.
+class ChatSession {
+  const ChatSession({
+    required this.id,
+    required this.messages,
+    required this.updatedAt,
+  });
+
+  final String id;
+  final List<ChatMessage> messages;
+
+  /// Listenin sıralaması buna göre: en son dokunulan en üstte.
+  final DateTime updatedAt;
+
+  /// Listede görünen ad. Kullanıcının ilk cümlesinden türer, çünkü bir
+  /// konuşmayı hatırlatan şey onu neyle açtığındır.
+  String get title {
+    for (final m in messages) {
+      final text = m.text.trim().replaceAll('\n', ' ');
+      if (m.fromUser && text.isNotEmpty) {
+        return text.length > 42 ? '${text.substring(0, 42)}...' : text;
+      }
+    }
+    return '';
+  }
+
+  ChatSession copyWith({List<ChatMessage>? messages, DateTime? updatedAt}) =>
+      ChatSession(
+        id: id,
+        messages: messages ?? this.messages,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'updatedAt': updatedAt.toIso8601String(),
+    'messages': [for (final m in messages) m.toJson()],
+  };
+
+  factory ChatSession.fromJson(Map<String, dynamic> j) => ChatSession(
+    id: (j['id'] as String?) ?? '',
+    updatedAt:
+        DateTime.tryParse((j['updatedAt'] as String?) ?? '') ?? DateTime.now(),
+    messages: [
+      for (final entry in (j['messages'] as List?) ?? const [])
+        ChatMessage.fromJson(Map<String, dynamic>.from(entry as Map)),
+    ].where((m) => m.text.isNotEmpty).toList(),
+  );
+}
+
 class ChatState {
   const ChatState({
     this.messages = const [],
+    this.sessions = const [],
+    this.activeId = '',
     this.sending = false,
     this.limitReached = false,
   });
 
+  /// Açık olan sohbetin mesajları.
   final List<ChatMessage> messages;
+
+  /// Diskteki bütün sohbetler, en yenisi başta. Açık olan da içindedir.
+  final List<ChatSession> sessions;
+
+  /// Açık sohbetin kimliği.
+  final String activeId;
+
   final bool sending;
 
   /// Ücretsiz haftalık limit doldu — ekran paywall göstermeli (tek seferlik).
@@ -55,17 +119,25 @@ class ChatState {
 
   ChatState copyWith({
     List<ChatMessage>? messages,
+    List<ChatSession>? sessions,
+    String? activeId,
     bool? sending,
     bool? limitReached,
   }) => ChatState(
     messages: messages ?? this.messages,
+    sessions: sessions ?? this.sessions,
+    activeId: activeId ?? this.activeId,
     sending: sending ?? this.sending,
     limitReached: limitReached ?? this.limitReached,
   );
 }
 
-/// Sohbet geçmişinin SharedPreferences anahtarı. ILND hafızasıyla aynı
+/// Sohbet listesinin SharedPreferences anahtarı. ILND hafızasıyla aynı
 /// desen: kayıt kullanıcıya aittir, uid anahtara girer.
+const _kChatSessions = 'chat_sessions';
+
+/// Tek akışlı sürümün anahtarı. Yalnız göç için okunur, sonra silinir:
+/// kullanıcının konuşması sürüm değişti diye kaybolmaz.
 const _kChatHistory = 'chat_history';
 
 final chatProvider = StateNotifierProvider<ChatNotifier, ChatState>((ref) {
@@ -95,7 +167,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
   /// [prefs] verilmezse geçmiş yalnız bellekte tutulur; testler sohbeti
   /// diske dokunmadan kurabilsin diye opsiyonel.
   ChatNotifier(this._ref, {this._prefs, String? uid})
-    : _key = uid == null ? _kChatHistory : '${_kChatHistory}_$uid',
+    : _key = uid == null ? _kChatSessions : '${_kChatSessions}_$uid',
+      _legacyKey = uid == null ? _kChatHistory : '${_kChatHistory}_$uid',
       super(_initialState()) {
     _restore();
   }
@@ -113,6 +186,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
   final Ref _ref;
   final SharedPreferences? _prefs;
   final String _key;
+  final String _legacyKey;
 
   /// Geçmişi prompt'a verirken kaç tur taşıyacağımız.
   ///
@@ -130,9 +204,19 @@ class ChatNotifier extends StateNotifier<ChatState> {
   /// metin, pencereden çıkana kadar her mesajda yeniden fatura ediyordu.
   static const _historyTurnChars = 400;
 
-  /// Diskte tutulan en fazla mesaj sayısı. Sohbet sınırsız büyürse
-  /// SharedPreferences kaydı da büyür; ekranda gerçekten okunan pencere bu.
+  /// Bir sohbette diskte tutulan en fazla mesaj sayısı.
   static const _historyLimit = 50;
+
+  /// Diskte tutulan en fazla sohbet sayısı. Eskiler baştan düşer;
+  /// SharedPreferences bir veritabanı değil, sınırsız büyüyemez.
+  static const _maxSessions = 20;
+
+  int _idCounter = 0;
+
+  String _newId() {
+    _idCounter++;
+    return '${DateTime.now().microsecondsSinceEpoch}_$_idCounter';
+  }
 
   /// Diskteki geçmişi yükler.
   ///
@@ -141,39 +225,178 @@ class ChatNotifier extends StateNotifier<ChatState> {
   /// boş açılır: burada atılan bir hata ekranı komple kapatırdı.
   void _restore() {
     final prefs = _prefs;
-    if (kDemoMode || prefs == null) return;
+    if (kDemoMode || prefs == null) {
+      state = state.copyWith(activeId: _newId());
+      return;
+    }
+
+    var sessions = <ChatSession>[];
     final raw = prefs.getString(_key);
-    if (raw == null || raw.isEmpty) return;
+    if (raw != null && raw.isNotEmpty) {
+      try {
+        sessions = [
+          for (final entry in jsonDecode(raw) as List)
+            ChatSession.fromJson(Map<String, dynamic>.from(entry as Map)),
+        ].where((s) => s.messages.isNotEmpty && s.id.isNotEmpty).toList();
+      } catch (_) {
+        // bozuk veri — sohbet boş açılır
+      }
+    } else {
+      sessions = _migrateLegacy(prefs);
+    }
+
+    sessions.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    if (sessions.isEmpty) {
+      state = state.copyWith(activeId: _newId());
+      return;
+    }
+
+    // En son konuşulan sohbet açık gelir: kullanıcı kaldığı yerden devam
+    // eder, eskilere listeden döner.
+    final active = sessions.first;
+    state = state.copyWith(
+      messages: active.messages,
+      sessions: sessions,
+      activeId: active.id,
+    );
+  }
+
+  /// Tek akışlı sürümde biriken konuşmayı tek bir sohbete taşır.
+  List<ChatSession> _migrateLegacy(SharedPreferences prefs) {
+    final legacy = prefs.getString(_legacyKey);
+    if (legacy == null || legacy.isEmpty) return [];
     try {
-      final restored = [
-        for (final entry in jsonDecode(raw) as List)
+      final messages = [
+        for (final entry in jsonDecode(legacy) as List)
           ChatMessage.fromJson(Map<String, dynamic>.from(entry as Map)),
       ].where((m) => m.text.isNotEmpty).toList();
-      if (restored.isNotEmpty) state = state.copyWith(messages: restored);
+      prefs.remove(_legacyKey);
+      if (messages.isEmpty) return [];
+      return [
+        ChatSession(
+          id: _newId(),
+          messages: messages,
+          updatedAt: DateTime.now(),
+        ),
+      ];
     } catch (_) {
-      // bozuk veri — sohbet boş açılır
+      return [];
     }
   }
 
-  Future<void> _persist() async {
-    final prefs = _prefs;
-    if (kDemoMode || prefs == null) return;
+  /// Açık sohbetin son hâlini listeye işler. Bekleyen balon taşınmaz.
+  List<ChatSession> _foldActive() {
     final settled = state.messages.where((m) => !m.pending).toList();
     final windowed = settled.length > _historyLimit
         ? settled.sublist(settled.length - _historyLimit)
         : settled;
+    final now = DateTime.now();
+
+    final out = <ChatSession>[];
+    var found = false;
+    for (final session in state.sessions) {
+      if (session.id == state.activeId) {
+        found = true;
+        out.add(session.copyWith(messages: windowed, updatedAt: now));
+      } else {
+        out.add(session);
+      }
+    }
+    if (!found && windowed.isNotEmpty) {
+      out.add(
+        ChatSession(id: state.activeId, messages: windowed, updatedAt: now),
+      );
+    }
+    out.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    return out;
+  }
+
+  Future<void> _persist() async {
+    final sessions = _foldActive();
+    state = state.copyWith(sessions: sessions);
+    await _save(sessions);
+  }
+
+  Future<void> _save(List<ChatSession> sessions) async {
+    final prefs = _prefs;
+    if (kDemoMode || prefs == null) return;
+    final kept = sessions.where((s) => s.messages.isNotEmpty).toList();
+    final capped = kept.length > _maxSessions
+        ? kept.sublist(0, _maxSessions)
+        : kept;
     await prefs.setString(
       _key,
-      jsonEncode([for (final m in windowed) m.toJson()]),
+      jsonEncode([for (final s in capped) s.toJson()]),
     );
   }
 
-  /// Sohbeti ve diskteki geçmişi siler. Kullanıcının konuşması cihazda
-  /// kalıyorsa onu silmenin bir yolu da olmalı.
-  Future<void> clearHistory() async {
-    state = const ChatState();
+  /// Temiz sayfa. Açık sohbet zaten boşsa yeni bir boş kayıt üretmez.
+  Future<void> newSession() async {
+    if (state.messages.isEmpty) return;
+    await _persist();
     _greeted = false;
+    _userMessageCount = 0;
+    state = state.copyWith(messages: const [], activeId: _newId());
+  }
+
+  /// Listeden bir sohbeti açar.
+  Future<void> openSession(String id) async {
+    if (id == state.activeId) return;
+    await _persist();
+    ChatSession? target;
+    for (final session in state.sessions) {
+      if (session.id == id) target = session;
+    }
+    if (target == null) return;
+    // Eski bir sohbete dönerken ILND yeniden karşılamaz: konuşma zaten
+    // başlamış.
+    _greeted = true;
+    _userMessageCount = 0;
+    state = state.copyWith(messages: target.messages, activeId: target.id);
+  }
+
+  /// Bir sohbeti kalıcı olarak siler.
+  ///
+  /// ILND'nin hafızası (hedefler, gerçekler, notlar) bundan etkilenmez:
+  /// silinen konuşmanın metnidir, kullanıcı hakkında öğrenilenler değil.
+  Future<void> deleteSession(String id) async {
+    final remaining = state.sessions.where((s) => s.id != id).toList();
+
+    if (id != state.activeId) {
+      state = state.copyWith(sessions: remaining);
+      await _save(remaining);
+      return;
+    }
+
+    // Açık sohbet silindi: en yenisine geç, hiç kalmadıysa temiz sayfa aç.
+    if (remaining.isEmpty) {
+      _greeted = false;
+      _userMessageCount = 0;
+      state = state.copyWith(
+        messages: const [],
+        sessions: const [],
+        activeId: _newId(),
+      );
+    } else {
+      _greeted = true;
+      _userMessageCount = 0;
+      state = state.copyWith(
+        messages: remaining.first.messages,
+        sessions: remaining,
+        activeId: remaining.first.id,
+      );
+    }
+    await _save(remaining);
+  }
+
+  /// Bütün sohbetleri ve diskteki kaydı siler. Kullanıcının konuşması
+  /// cihazda kalıyorsa onu silmenin bir yolu da olmalı.
+  Future<void> clearHistory() async {
+    _greeted = false;
+    _userMessageCount = 0;
+    state = ChatState(activeId: _newId());
     await _prefs?.remove(_key);
+    await _prefs?.remove(_legacyKey);
   }
 
   /// Kaç kullanıcı mesajında bir hafıza çıkarımı yapılacağı (maliyet sınırı).

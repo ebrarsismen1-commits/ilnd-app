@@ -1153,6 +1153,42 @@ class AppLocalizationsTr extends AppLocalizations {
   String get chatListening => 'ilnd · seni dinliyor';
 
   @override
+  String get chatSessionsTitle => 'sohbetler';
+
+  @override
+  String get chatSessionsNew => 'yeni sohbet';
+
+  @override
+  String get chatSessionUntitled => 'adsız sohbet';
+
+  @override
+  String get chatSessionsEmpty => 'henüz kayıtlı sohbet yok';
+
+  @override
+  String get chatSessionToday => 'bugün';
+
+  @override
+  String get chatSessionYesterday => 'dün';
+
+  @override
+  String chatSessionDaysAgo(int days) {
+    return '$days gün önce';
+  }
+
+  @override
+  String get chatSessionDeleteTitle => 'Bu sohbeti sil';
+
+  @override
+  String get chatSessionDeleteBody =>
+      'Bu konuşma cihazından kalıcı olarak silinecek. ILND\'nin senin hakkında hatırladıkları silinmez.';
+
+  @override
+  String get chatSessionDeleted => 'Sohbet silindi.';
+
+  @override
+  String get chatSessionDeleteFailed => 'Silinemedi. Tekrar dener misin?';
+
+  @override
   String get redeemCodeSuccess => 'Davet kodu kullanıldı!';
 
   @override
