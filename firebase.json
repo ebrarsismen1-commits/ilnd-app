@@ -17,10 +17,10 @@
         ]
       },
       {
-        "//": "Varlıklar (fontlar, canvaskit) icerik-adresli, uzun onbellek guvenli.",
+        "//": "DIKKAT: Flutter web varliklarinin adinda da icerik ozeti (hash) YOK — font hep ayni yolda gelir (assets/fonts/MaterialIcons-Regular.otf). Burasi bir hafta onbellekteydi ve release derlemesi ikon fontunu KULLANILAN ikonlara gore budadigi icin, yeni eklenen bir ikon kullanicida gorunmez oluyordu: tarayici eski budanmis fontu servis ediyor, yeni glif icinde bulunmuyor (2026-09-02, sohbetler ikonu bos cikti). must-revalidate: tarayici her acilista sorar, degismediyse 304 alir, indirme maliyeti yok.",
         "source": "/assets/**",
         "headers": [
-          { "key": "Cache-Control", "value": "public, max-age=604800" }
+          { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
         ]
       }
     ]
