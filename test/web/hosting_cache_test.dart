@@ -28,14 +28,15 @@ void main() {
     expect(
       headers,
       isNotEmpty,
-      reason: 'Cache-Control başlıkları silinirse Hosting varsayılanı '
+      reason:
+          'Cache-Control başlıkları silinirse Hosting varsayılanı '
           '(1 saat) geri gelir ve deploy sonrası eski sürüm görünür.',
     );
 
     for (final rule in headers) {
       final source = rule['source'] as String;
-      for (final header in (rule['headers'] as List)
-          .cast<Map<String, dynamic>>()) {
+      for (final header
+          in (rule['headers'] as List).cast<Map<String, dynamic>>()) {
         if ((header['key'] as String).toLowerCase() != 'cache-control') {
           continue;
         }

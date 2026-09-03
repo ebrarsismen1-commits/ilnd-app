@@ -239,10 +239,7 @@ class FoodAnalyzer {
               'content-type': 'application/json',
               ...await _appCheck(),
             },
-            body: _recalculateBody(
-              yemekAdi: yemekAdi,
-              malzemeler: malzemeler,
-            ),
+            body: _recalculateBody(yemekAdi: yemekAdi, malzemeler: malzemeler),
           )
           .timeout(kFoodAnalysisTimeout);
 

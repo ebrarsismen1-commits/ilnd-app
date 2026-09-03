@@ -298,28 +298,28 @@ class _Bubble extends StatelessWidget {
                   // akarken gizli: yarım cümle karta çevrilmemeli.
                   if (!message.pending)
                     Pressable(
-                    onTap: () =>
-                        context.push(routeQuoteCard, extra: message.text),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.crop_portrait_rounded,
-                          size: 13,
-                          color: p.textMuted,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          l10n.chatQuoteCardButton,
-                          style: AppTextStyles.label(
-                            fontSize: 10,
+                      onTap: () =>
+                          context.push(routeQuoteCard, extra: message.text),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.crop_portrait_rounded,
+                            size: 13,
                             color: p.textMuted,
-                            letterSpacingEm: 0.1,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Text(
+                            l10n.chatQuoteCardButton,
+                            style: AppTextStyles.label(
+                              fontSize: 10,
+                              color: p.textMuted,
+                              letterSpacingEm: 0.1,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
       );

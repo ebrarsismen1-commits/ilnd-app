@@ -203,7 +203,10 @@ class IlndService {
               ),
               'messages': [
                 for (final t in history)
-                  {'role': t.fromUser ? 'user' : 'assistant', 'content': t.text},
+                  {
+                    'role': t.fromUser ? 'user' : 'assistant',
+                    'content': t.text,
+                  },
                 {'role': 'user', 'content': userMessage},
               ],
             });
