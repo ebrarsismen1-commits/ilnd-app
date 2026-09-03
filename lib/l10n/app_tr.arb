@@ -1242,6 +1242,50 @@
     }
   },
 
+  "takipDayToday": "bugün",
+  "@takipDayToday": {"description": "Day navigator label for today"},
+
+  "takipDayYesterday": "dün",
+  "@takipDayYesterday": {"description": "Day navigator label for yesterday"},
+
+  "takipDayPrev": "önceki gün",
+  "@takipDayPrev": {"description": "Accessibility label of the previous-day button"},
+
+  "takipDayNext": "sonraki gün",
+  "@takipDayNext": {"description": "Accessibility label of the next-day button"},
+
+  "takipBackToToday": "bugüne dön",
+  "@takipBackToToday": {"description": "Returns the day navigator to today"},
+
+  "takipPastDayNotice": "geçmiş bir güne bakıyorsun. işaretleme kapalı, kayıtlı öğünü düzeltebilirsin.",
+  "@takipPastDayNotice": {"description": "Explains that a past day is read-only except for meal corrections"},
+
+  "takipNoMealsThatDay": "o gün öğün kaydedilmemiş",
+  "@takipNoMealsThatDay": {"description": "Empty meals list message on a past day"},
+
+  "takipMealEditTitle": "öğünü düzelt",
+  "@takipMealEditTitle": {"description": "Title of the saved-meal edit sheet"},
+
+  "takipMealEditOpen": "{name} öğününü düzelt",
+  "@takipMealEditOpen": {
+    "description": "Accessibility label of a saved meal row that opens the edit sheet",
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+
+  "takipMealEditFreeHint": "malzeme düzeltmek bedava; makrolar olduğu gibi kalır.",
+  "@takipMealEditFreeHint": {"description": "Says that editing the ingredient list costs nothing"},
+
+  "takipMealEditSave": "değişikliği kaydet",
+  "@takipMealEditSave": {"description": "Saves the corrected ingredient list without recalculating"},
+
+  "takipMealUpdated": "öğün güncellendi",
+  "@takipMealUpdated": {"description": "Toast after a saved meal was updated"},
+
+  "takipMealUpdateFailed": "öğün güncellenemedi",
+  "@takipMealUpdateFailed": {"description": "Toast when updating a saved meal failed"},
+
   "ilndServiceSessionError": "Oturum doğrulanamadı.",
   "@ilndServiceSessionError": {"description": "Error when no Firebase ID token is available for the AI proxy"},
 

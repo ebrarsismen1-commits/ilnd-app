@@ -3,6 +3,7 @@ import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/confirm_delete.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
@@ -10,6 +11,8 @@ import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/habits/habits_provider.dart';
+import 'package:ilnd_app/features/takip/meal_edit_sheet.dart';
+import 'package:ilnd_app/features/takip/takip_day.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 // ─── Statik hedefler (ileride kullanıcıya göre ayarlanacak) ──────────────────
@@ -96,26 +99,182 @@ class TakipSections extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Gezgin en üstte: altındaki her bölüm "hangi gün" sorusunun
+        // cevabına bağlı, o yüzden soru önce sorulur.
         Entrance(
           index: startIndex,
-          child: _MacroCard(p: p, l10n: l10n),
+          child: _DayNavigator(p: p, l10n: l10n),
         ),
         const SizedBox(height: AppSpacing.sectionGap),
         Entrance(
           index: startIndex + 1,
-          child: _MealsSection(p: p, l10n: l10n),
+          child: _MacroCard(p: p, l10n: l10n),
         ),
         const SizedBox(height: AppSpacing.sectionGap),
         Entrance(
           index: startIndex + 2,
-          child: _ActivitySection(p: p, l10n: l10n),
+          child: _MealsSection(p: p, l10n: l10n),
         ),
         const SizedBox(height: AppSpacing.sectionGap),
         Entrance(
           index: startIndex + 3,
+          child: _ActivitySection(p: p, l10n: l10n),
+        ),
+        const SizedBox(height: AppSpacing.sectionGap),
+        Entrance(
+          index: startIndex + 4,
           child: _HabitsSection(p: p, l10n: l10n),
         ),
       ],
+    );
+  }
+}
+
+// ─── SECTION 0: Gün gezgini ──────────────────────────────────────────────────
+
+/// Takip ekranının "hangi gün" ekseni.
+///
+/// Ekran bugüne çakılıydı: dün ne yediğini görmek isteyenin hiçbir kapısı
+/// yoktu. Geçmişi ayrı bir ekrana koymak yerine gezgin seçildi (owner
+/// kararı) — aynı ekran, tek eksende geriye gider. Takvim ızgarası
+/// açılmıyor: kullanıcı pratikte bir-iki gün geriye bakar, daha uzağı zaten
+/// alışkanlık ızgarasının hafta/ay penceresi anlatır.
+///
+/// İleri gitmek yok: yaşanmamış günün kaydı da yok, o yüzden bugüne
+/// geldiğinde sağ ok sessizce sönümlenir (kaybolmaz — kaybolan bir düğme
+/// düzeni oynatır).
+class _DayNavigator extends ConsumerWidget {
+  const _DayNavigator({required this.p, required this.l10n});
+  final AppPalette p;
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final day = ref.watch(selectedDayProvider);
+    final isToday = ref.watch(isTodaySelectedProvider);
+    final now = DateTime.now();
+    final isYesterday =
+        dayKey(day) == dayKey(DateTime(now.year, now.month, now.day - 1));
+
+    // Dün ve bugünün adı var; ötesi tarihtir. Alt satır her zaman tam
+    // tarihi verir, yoksa "dün"e bakan kullanıcı hangi güne baktığını
+    // ekranda hiçbir yerde göremiyordu.
+    final label = isToday
+        ? l10n.takipDayToday
+        : isYesterday
+        ? l10n.takipDayYesterday
+        : DateFormat('d MMMM', l10n.localeName).format(day);
+    final fullDate = DateFormat(
+      'EEEE · d MMMM',
+      l10n.localeName,
+    ).format(day).toUpperCase();
+
+    // Gün aritmetiği Duration ile değil takvimle yapılır: yaz saati geçişinde
+    // 24 saat eklemek aynı güne geri düşebiliyor.
+    void go(int delta) => ref.read(selectedDayProvider.notifier).state =
+        DateTime(day.year, day.month, day.day + delta);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            _DayArrow(
+              icon: Icons.chevron_left_rounded,
+              label: l10n.takipDayPrev,
+              onTap: () => go(-1),
+              p: p,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Text(
+                    label,
+                    style: AppTextStyles.display(fontSize: 22, color: p.text),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    fullDate,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.label(
+                      fontSize: 10,
+                      color: p.textMuted,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            _DayArrow(
+              icon: Icons.chevron_right_rounded,
+              label: l10n.takipDayNext,
+              onTap: isToday ? null : () => go(1),
+              p: p,
+            ),
+          ],
+        ),
+        if (!isToday) ...[
+          const SizedBox(height: 12),
+          Text(
+            l10n.takipPastDayNotice,
+            style: AppTextStyles.body(
+              fontSize: 11.5,
+              color: p.textMuted,
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Semantics(
+            button: true,
+            child: Pressable(
+              onTap: () => ref.read(selectedDayProvider.notifier).state =
+                  startOfDay(DateTime.now()),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Text(
+                  l10n.takipBackToToday,
+                  style: AppTextStyles.label(fontSize: 11, color: p.accent),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// 44px'lik dokunma hedefi: ok işaretinin kendisi 26px, gerisi boşluk.
+class _DayArrow extends StatelessWidget {
+  const _DayArrow({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    required this.p,
+  });
+
+  final IconData icon;
+  final String label;
+
+  /// null ise ok sönümlenir ve dokunmaz (bugünden ileri gidilmez).
+  final VoidCallback? onTap;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = onTap != null;
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: label,
+      child: Pressable(
+        onTap: onTap,
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: Icon(icon, size: 26, color: enabled ? p.text : p.border),
+        ),
+      ),
     );
   }
 }
@@ -170,7 +329,7 @@ class _SectionLabel extends StatelessWidget {
 
 /// Donut grafiği kaldırıldı (handoff §6, DESIGN_SYSTEM §7.2 "ölçek zıtlığı"):
 /// üç dilimli bir çember, üç sayının hangisinin önemli olduğunu söylemiyordu.
-/// Ekranın kahramanı artık tek bir sayı — bugünkü kalori.
+/// Ekranın kahramanı artık tek bir sayı — seçili günün kalorisi.
 class _MacroCard extends ConsumerWidget {
   const _MacroCard({required this.p, required this.l10n});
   final AppPalette p;
@@ -178,7 +337,7 @@ class _MacroCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final macros = ref.watch(dailyMacrosProvider);
+    final macros = ref.watch(selectedDayMacrosProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,9 +355,15 @@ class _MacroCard extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Text(
-              '/ $_kKaloriHedef kcal',
-              style: AppTextStyles.mono(fontSize: 13, color: p.textMuted),
+            // Hedef etiketi esner: kahraman sayı büyüdükçe (dört haneli
+            // kalori, dar ekran) sabit genişlikte kalırsa satır taşıyor.
+            Flexible(
+              child: Text(
+                '/ $_kKaloriHedef kcal',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.mono(fontSize: 13, color: p.textMuted),
+              ),
             ),
           ],
         ),
@@ -292,8 +457,9 @@ class _MealsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final entriesAsync = ref.watch(todayFoodEntriesProvider);
+    final entriesAsync = ref.watch(selectedDayEntriesProvider);
     final entries = entriesAsync.valueOrNull ?? [];
+    final isToday = ref.watch(isTodaySelectedProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -306,21 +472,36 @@ class _MealsSection extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Text(
-                  l10n.takipNoMealsYet,
+                  // Boş bugün bir davet, boş geçmiş gün bir kayıt: aynı
+                  // cümle ikisini de anlatmıyor.
+                  isToday ? l10n.takipNoMealsYet : l10n.takipNoMealsThatDay,
                   style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
                 ),
               )
             else
-              ...entries.map(
-                (entry) => Column(
+              ...entries.asMap().entries.map((e) {
+                final isLast = e.key == entries.length - 1;
+                return Column(
                   children: [
-                    _FoodEntryRow(entry: entry, p: p, l10n: l10n),
-                    _Hairline(p: p),
+                    _FoodEntryRow(
+                      entry: e.value,
+                      // Kayıtlı öğün her günde düzeltilebilir: düzeltme
+                      // geçmişi değiştirmek değil, yanlış yazılmışı
+                      // doğrultmaktır.
+                      onTap: () => showMealEditSheet(context, e.value),
+                      p: p,
+                      l10n: l10n,
+                    ),
+                    if (!isLast || isToday) _Hairline(p: p),
                   ],
-                ),
-              ),
-            if (entries.isEmpty) _Hairline(p: p),
-            _AddMealRow(p: p, l10n: l10n),
+                );
+              }),
+            // Geçmiş güne öğün EKLENMEZ: eklenen kayıt bugünün saatiyle
+            // yazılırdı ve kullanıcı baktığı güne düştüğünü sanırdı.
+            if (isToday) ...[
+              if (entries.isEmpty) _Hairline(p: p),
+              _AddMealRow(p: p, l10n: l10n),
+            ],
           ],
         ),
       ],
@@ -331,15 +512,27 @@ class _MealsSection extends ConsumerWidget {
 class _FoodEntryRow extends StatelessWidget {
   const _FoodEntryRow({
     required this.entry,
+    required this.onTap,
     required this.p,
     required this.l10n,
   });
   final FoodEntry entry;
+
+  /// Satır malzeme düzeltme sayfasını açar.
+  final VoidCallback onTap;
   final AppPalette p;
   final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: l10n.takipMealEditOpen(entry.yemekAdi),
+      child: Pressable(onTap: onTap, child: _row()),
+    );
+  }
+
+  Widget _row() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 14),
       child: Row(
@@ -392,6 +585,9 @@ class _FoodEntryRow extends StatelessWidget {
               color: p.textMuted,
             ),
           ),
+          // Satırın açılabildiğini söyleyen tek işaret; ok olmadan düzeltme
+          // kapısı görünmez kalıyordu.
+          Icon(Icons.chevron_right_rounded, size: 16, color: p.border),
         ],
       ),
     );
@@ -438,19 +634,19 @@ class _ActivitySection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final waterMl = ref.watch(waterTodayProvider);
+    final waterMl = ref.watch(selectedDayWaterProvider);
     final waterPct = (waterMl / _kSuHedef).clamp(0.0, 1.0);
     final range = ref.watch(trackingRangeProvider);
-    final history = ref.watch(waterHistoryProvider(range));
+    final history = ref.watch(selectedDayWaterHistoryProvider);
     final waterAverage = history.isEmpty
         ? 0
         : (history.reduce((a, b) => a + b) / history.length).round();
     // Sahte "4.2k adım" yer tutucusu kaldırıldı — adım verisi ancak sensör
     // entegrasyonuyla gelir (post-MVP). Yerine elimizde GERÇEKTEN olan
-    // metrik: bugünkü alışkanlık tamamlama sayısı.
+    // metrik: seçili gündeki alışkanlık tamamlama sayısı.
     final habitCount = ref.watch(habitsProvider).valueOrNull?.length ?? 0;
     final doneCount = ref
-        .watch(todayCompletionsProvider)
+        .watch(selectedDayCompletionsProvider)
         .valueOrNull
         ?.length
         .clamp(0, habitCount);
@@ -524,6 +720,7 @@ class _ActivitySection extends ConsumerWidget {
                     const SizedBox(height: 2),
                     // Seçili pencerenin (hafta/ay) günlük ortalaması: tek
                     // günün iyi ya da kötü geçmesi alışkanlığı anlatmıyor.
+                    // Pencere seçili günde biter, bugünde değil.
                     Text(
                       l10n.takipWaterAverage(
                         rangeLabel(range, l10n),
@@ -556,9 +753,11 @@ class _HabitsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final range = ref.watch(trackingRangeProvider);
     final habitsAsync = ref.watch(habitsProvider);
-    final completionsAsync = ref.watch(rangeCompletionsProvider(range));
-    final todayCompletions =
-        ref.watch(todayCompletionsProvider).valueOrNull ?? {};
+    final completionsAsync = ref.watch(selectedDayRangeCompletionsProvider);
+    final dayCompletions =
+        ref.watch(selectedDayCompletionsProvider).valueOrNull ?? {};
+    final isToday = ref.watch(isTodaySelectedProvider);
+    final selectedDay = ref.watch(selectedDayProvider);
     final toggle = ref.read(toggleHabitCompletionProvider);
 
     final habits = habitsAsync.valueOrNull ?? [];
@@ -604,7 +803,7 @@ class _HabitsSection extends ConsumerWidget {
             children: habits.asMap().entries.map((e) {
               final isLast = e.key == habits.length - 1;
               final habit = e.value;
-              final isToday = todayCompletions.contains(habit.id);
+              final isDone = dayCompletions.contains(habit.id);
               return Column(
                 children: [
                   _HabitRow(
@@ -612,8 +811,12 @@ class _HabitsSection extends ConsumerWidget {
                     name: habit.name,
                     completions: completions,
                     range: range,
-                    isTodayDone: isToday,
-                    onToggle: () => toggle(habit.id),
+                    endDay: selectedDay,
+                    isSelectedDayDone: isDone,
+                    // Geçmiş gün işaretlenmez: dünü bugünmüş gibi
+                    // işaretlemek streak'i ve kaydı bozar. Silme açık
+                    // kalır, o güne değil alışkanlığın kendisine aittir.
+                    onToggle: isToday ? () => toggle(habit.id) : null,
                     // Uzun basma silme kapısı. `deleteHabit` repository'de
                     // yazılıydı ve kural izin veriyordu ama hiçbir yerden
                     // çağrılmıyordu: kullanıcı eklediği alışkanlığı
@@ -720,7 +923,8 @@ class _HabitRow extends StatelessWidget {
     required this.name,
     required this.completions,
     required this.range,
-    required this.isTodayDone,
+    required this.endDay,
+    required this.isSelectedDayDone,
     required this.onToggle,
     required this.onDelete,
     required this.p,
@@ -730,21 +934,31 @@ class _HabitRow extends StatelessWidget {
   final String name;
   final Map<String, Set<String>> completions;
   final TrackingRange range;
-  final bool isTodayDone;
-  final VoidCallback onToggle;
+
+  /// Izgaranın son hücresi. Bugün olmak zorunda değil: gezgin geriye
+  /// gittiğinde pencere de onunla birlikte kayar.
+  final DateTime endDay;
+
+  final bool isSelectedDayDone;
+
+  /// Geçmiş günde null: o gün işaretlenemez.
+  final VoidCallback? onToggle;
   final VoidCallback onDelete;
   final AppPalette p;
 
   @override
   Widget build(BuildContext context) {
-    // Izgara eskiden yeniye kurulur; son hücre her zaman bugün.
-    final now = DateTime.now();
+    // Izgara eskiden yeniye kurulur; son hücre seçili gündür. Gün aritmetiği
+    // takvimle yapılır — yaz saati geçişinde Duration ile çıkarma aynı güne
+    // düşebiliyor.
     final dates = List.generate(
       range.days,
-      (i) => _dayKey(now.subtract(Duration(days: range.days - 1 - i))),
+      (i) => _dayKey(
+        DateTime(endDay.year, endDay.month, endDay.day - (range.days - 1 - i)),
+      ),
     );
     bool doneOn(String date) => date == dates.last
-        ? isTodayDone
+        ? isSelectedDayDone
         : (completions[date]?.contains(habitId) ?? false);
     final doneCount = dates.where(doneOn).length;
 
@@ -755,7 +969,7 @@ class _HabitRow extends StatelessWidget {
       for (final date in dates)
         _DayCell(
           done: doneOn(date),
-          isToday: date == dates.last,
+          isSelectedDay: date == dates.last,
           size: isWeek ? 18 : 10,
           p: p,
         ),
@@ -809,13 +1023,15 @@ class _HabitRow extends StatelessWidget {
 class _DayCell extends StatelessWidget {
   const _DayCell({
     required this.done,
-    required this.isToday,
+    required this.isSelectedDay,
     required this.size,
     required this.p,
   });
 
   final bool done;
-  final bool isToday;
+
+  /// Çerçeveli hücre: ızgaranın hangi gününe bakıldığını söyler.
+  final bool isSelectedDay;
   final double size;
   final AppPalette p;
 
@@ -829,7 +1045,7 @@ class _DayCell extends StatelessWidget {
       decoration: BoxDecoration(
         color: done ? p.accent : p.surfaceStrong,
         borderRadius: BorderRadius.circular(isLarge ? 4 : 2),
-        border: isToday ? Border.all(color: p.accent, width: 1.5) : null,
+        border: isSelectedDay ? Border.all(color: p.accent, width: 1.5) : null,
       ),
       child: done && isLarge
           ? Icon(Icons.check_rounded, size: 11, color: p.onAccent)

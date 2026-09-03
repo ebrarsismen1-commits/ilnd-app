@@ -578,6 +578,25 @@
     }
   },
 
+  "takipDayToday": "today",
+  "takipDayYesterday": "yesterday",
+  "takipDayPrev": "previous day",
+  "takipDayNext": "next day",
+  "takipBackToToday": "back to today",
+  "takipPastDayNotice": "you're looking at a past day. checking off is closed, you can still correct a saved meal.",
+  "takipNoMealsThatDay": "no meals logged that day",
+  "takipMealEditTitle": "edit meal",
+  "takipMealEditOpen": "edit {name}",
+  "@takipMealEditOpen": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "takipMealEditFreeHint": "correcting ingredients is free; the macros stay as they are.",
+  "takipMealEditSave": "save changes",
+  "takipMealUpdated": "meal updated",
+  "takipMealUpdateFailed": "couldn't update the meal",
+
   "ilndServiceSessionError": "Couldn't verify your session.",
   "ilndServiceUnavailable": "ILND can't respond right now.",
   "ilndServiceDailyLimitReached": "You've reached today's chat limit with ILND, try again tomorrow.",

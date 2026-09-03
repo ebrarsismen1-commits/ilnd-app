@@ -89,6 +89,14 @@ abstract final class AnalyticsService {
   static Future<void> logFoodEntrySaved(double portion) =>
       _log('food_entry_saved', {'portion': portion});
 
+  /// Kayıtlı bir öğün takip ekranından düzeltildi.
+  ///
+  /// [recalculated] ayrımı para sorusudur: malzeme düzeltmek bedavadır,
+  /// makroları yeniden hesaplatmak bir analiz hakkı yer. İkisinin oranı,
+  /// ücretsiz düzeltmenin kotayı koruyup korumadığını gösterir.
+  static Future<void> logFoodEntryEdited({required bool recalculated}) =>
+      _log('food_entry_edited', {'recalculated': recalculated});
+
   // ── Gelir hunisi ────────────────────────────────────────────────────────────
   // Uygulamanın para kazandığı tek yol. Sırayla okunur: limit doldu →
   // paywall görüldü → satın alma başladı → tamamlandı.

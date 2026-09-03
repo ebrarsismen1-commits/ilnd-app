@@ -87,6 +87,10 @@ void main() {
     expect(find.text('0/7'), findsOneWidget);
     expect(find.text('0/30'), findsNothing);
 
+    // Gün gezgini eklendikten sonra pencere seçimi 800x600 test ekranının
+    // altına düşüyor: dokunmadan önce görünür alana getirilir.
+    await tester.ensureVisible(find.text(l10n.takipRangeMonth));
+    await tester.pumpAndSettle();
     await tester.tap(find.text(l10n.takipRangeMonth));
     await tester.pumpAndSettle();
 

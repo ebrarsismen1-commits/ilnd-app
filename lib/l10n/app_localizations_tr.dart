@@ -1317,6 +1317,49 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get takipDayToday => 'bugün';
+
+  @override
+  String get takipDayYesterday => 'dün';
+
+  @override
+  String get takipDayPrev => 'önceki gün';
+
+  @override
+  String get takipDayNext => 'sonraki gün';
+
+  @override
+  String get takipBackToToday => 'bugüne dön';
+
+  @override
+  String get takipPastDayNotice =>
+      'geçmiş bir güne bakıyorsun. işaretleme kapalı, kayıtlı öğünü düzeltebilirsin.';
+
+  @override
+  String get takipNoMealsThatDay => 'o gün öğün kaydedilmemiş';
+
+  @override
+  String get takipMealEditTitle => 'öğünü düzelt';
+
+  @override
+  String takipMealEditOpen(String name) {
+    return '$name öğününü düzelt';
+  }
+
+  @override
+  String get takipMealEditFreeHint =>
+      'malzeme düzeltmek bedava; makrolar olduğu gibi kalır.';
+
+  @override
+  String get takipMealEditSave => 'değişikliği kaydet';
+
+  @override
+  String get takipMealUpdated => 'öğün güncellendi';
+
+  @override
+  String get takipMealUpdateFailed => 'öğün güncellenemedi';
+
+  @override
   String get ilndServiceSessionError => 'Oturum doğrulanamadı.';
 
   @override

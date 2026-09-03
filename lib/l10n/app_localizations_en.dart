@@ -1335,6 +1335,49 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get takipDayToday => 'today';
+
+  @override
+  String get takipDayYesterday => 'yesterday';
+
+  @override
+  String get takipDayPrev => 'previous day';
+
+  @override
+  String get takipDayNext => 'next day';
+
+  @override
+  String get takipBackToToday => 'back to today';
+
+  @override
+  String get takipPastDayNotice =>
+      'you\'re looking at a past day. checking off is closed, you can still correct a saved meal.';
+
+  @override
+  String get takipNoMealsThatDay => 'no meals logged that day';
+
+  @override
+  String get takipMealEditTitle => 'edit meal';
+
+  @override
+  String takipMealEditOpen(String name) {
+    return 'edit $name';
+  }
+
+  @override
+  String get takipMealEditFreeHint =>
+      'correcting ingredients is free; the macros stay as they are.';
+
+  @override
+  String get takipMealEditSave => 'save changes';
+
+  @override
+  String get takipMealUpdated => 'meal updated';
+
+  @override
+  String get takipMealUpdateFailed => 'couldn\'t update the meal';
+
+  @override
   String get ilndServiceSessionError => 'Couldn\'t verify your session.';
 
   @override

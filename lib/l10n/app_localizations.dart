@@ -2522,6 +2522,84 @@ abstract class AppLocalizations {
   /// **'{range} ort. {ml}ml'**
   String takipWaterAverage(String range, int ml);
 
+  /// Day navigator label for today
+  ///
+  /// In tr, this message translates to:
+  /// **'bugün'**
+  String get takipDayToday;
+
+  /// Day navigator label for yesterday
+  ///
+  /// In tr, this message translates to:
+  /// **'dün'**
+  String get takipDayYesterday;
+
+  /// Accessibility label of the previous-day button
+  ///
+  /// In tr, this message translates to:
+  /// **'önceki gün'**
+  String get takipDayPrev;
+
+  /// Accessibility label of the next-day button
+  ///
+  /// In tr, this message translates to:
+  /// **'sonraki gün'**
+  String get takipDayNext;
+
+  /// Returns the day navigator to today
+  ///
+  /// In tr, this message translates to:
+  /// **'bugüne dön'**
+  String get takipBackToToday;
+
+  /// Explains that a past day is read-only except for meal corrections
+  ///
+  /// In tr, this message translates to:
+  /// **'geçmiş bir güne bakıyorsun. işaretleme kapalı, kayıtlı öğünü düzeltebilirsin.'**
+  String get takipPastDayNotice;
+
+  /// Empty meals list message on a past day
+  ///
+  /// In tr, this message translates to:
+  /// **'o gün öğün kaydedilmemiş'**
+  String get takipNoMealsThatDay;
+
+  /// Title of the saved-meal edit sheet
+  ///
+  /// In tr, this message translates to:
+  /// **'öğünü düzelt'**
+  String get takipMealEditTitle;
+
+  /// Accessibility label of a saved meal row that opens the edit sheet
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} öğününü düzelt'**
+  String takipMealEditOpen(String name);
+
+  /// Says that editing the ingredient list costs nothing
+  ///
+  /// In tr, this message translates to:
+  /// **'malzeme düzeltmek bedava; makrolar olduğu gibi kalır.'**
+  String get takipMealEditFreeHint;
+
+  /// Saves the corrected ingredient list without recalculating
+  ///
+  /// In tr, this message translates to:
+  /// **'değişikliği kaydet'**
+  String get takipMealEditSave;
+
+  /// Toast after a saved meal was updated
+  ///
+  /// In tr, this message translates to:
+  /// **'öğün güncellendi'**
+  String get takipMealUpdated;
+
+  /// Toast when updating a saved meal failed
+  ///
+  /// In tr, this message translates to:
+  /// **'öğün güncellenemedi'**
+  String get takipMealUpdateFailed;
+
   /// Error when no Firebase ID token is available for the AI proxy
   ///
   /// In tr, this message translates to:

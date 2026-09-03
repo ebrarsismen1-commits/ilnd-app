@@ -52,12 +52,19 @@ class HabitsRepository {
   /// bir gün daha eklemek sorguyu sessizce patlatırdı. YYYY-MM-DD dizesinde
   /// sözlüksel sıra takvim sırasıyla aynı olduğu için `>=` karşılaştırması
   /// güvenli; sorgu zaten var olan (userId, date) indeksini kullanır.
+  ///
+  /// [endDay] verilirse pencere o günde biter: takip ekranı geçmiş bir güne
+  /// gidince ızgaranın son hücresi bugün değil, bakılan gündür — pencere de
+  /// onunla birlikte geriye kayar. Üst sınır sorguya konmaz (sonraki günlerin
+  /// gelmesi zararsız, arayüz yalnız ürettiği tarihlere bakar); alt sınırı
+  /// kaydırmamak ise ızgaranın soldaki günlerini boş gösterirdi.
   Stream<Map<String, Set<String>>> completionsRangeStream(
     String userId,
-    int days,
-  ) {
-    final now = DateTime.now();
-    final start = _fmt(now.subtract(Duration(days: days - 1)));
+    int days, {
+    DateTime? endDay,
+  }) {
+    final end = endDay ?? DateTime.now();
+    final start = _fmt(end.subtract(Duration(days: days - 1)));
     return _db
         .collection('habit_completions')
         .where('userId', isEqualTo: userId)

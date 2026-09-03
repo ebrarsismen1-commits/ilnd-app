@@ -17,8 +17,11 @@ import 'package:ilnd_app/core/services/app_config.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
+import 'package:ilnd_app/core/widgets/primary_button.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/core/widgets/secondary_button.dart';
 import 'package:ilnd_app/core/repositories/food_repository.dart';
+import 'package:ilnd_app/features/ekle/ingredient_editor.dart';
 import 'package:ilnd_app/features/ekle/food_analysis.dart';
 import 'package:ilnd_app/features/ekle/food_analysis_l10n.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
@@ -299,9 +302,8 @@ class _YemekEkleScreenState extends ConsumerState<YemekEkleScreen> {
     );
     if (exists) return;
     setState(
-      () => _result = result.copyWith(
-        malzemeler: [...result.malzemeler, value],
-      ),
+      () =>
+          _result = result.copyWith(malzemeler: [...result.malzemeler, value]),
     );
   }
 
@@ -604,14 +606,14 @@ class _PickerView extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const Spacer(flex: 2),
-          _PrimaryButton(
+          PrimaryButton(
             icon: Icons.camera_alt_rounded,
             label: l10n.yemekEkleOpenCamera,
             onTap: () => onPick(ImageSource.camera),
             p: p,
           ),
           const SizedBox(height: 12),
-          _SecondaryButton(
+          SecondaryButton(
             icon: Icons.photo_library_outlined,
             label: l10n.yemekEkleChooseFromGallery,
             onTap: () => onPick(ImageSource.gallery),
@@ -620,7 +622,7 @@ class _PickerView extends StatelessWidget {
           const SizedBox(height: 12),
           // Fotoğrafsız yol: karanlık restoran, çekilmemiş öğün, ambalajın
           // üstündeki hazır değerler. Analiz her zaman doğru araç değil.
-          _SecondaryButton(
+          SecondaryButton(
             icon: Icons.edit_outlined,
             label: l10n.yemekEkleManualButton,
             onTap: onManual,
@@ -810,7 +812,7 @@ class _ResultView extends StatelessWidget {
             style: AppTextStyles.sectionLabel(color: p.accent),
           ),
           const SizedBox(height: 10),
-          _IngredientEditor(
+          IngredientEditor(
             ingredients: result.malzemeler,
             onAdd: onAddIngredient,
             onRemove: onRemoveIngredient,
@@ -823,14 +825,14 @@ class _ResultView extends StatelessWidget {
           const SizedBox(height: 28),
 
           // Buttons
-          _PrimaryButton(
+          PrimaryButton(
             icon: Icons.check_rounded,
             label: l10n.yemekEkleSaveButton,
             onTap: onSave,
             p: p,
           ),
           const SizedBox(height: 12),
-          _SecondaryButton(
+          SecondaryButton(
             icon: Icons.refresh_rounded,
             label: l10n.yemekEkleRetryButton,
             onTap: onRetry,
@@ -838,199 +840,6 @@ class _ResultView extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-// ─── Malzeme editörü ─────────────────────────────────────────────────────────
-
-/// Malzemeler artık salt okunur bir liste değil: AI yanlış gördüyse ya da
-/// kullanıcı elle eklediyse liste düzeltilebilir. Düzeltme makroları
-/// kendiliğinden değiştirmez; yeniden hesaplama bir analiz çağrısıdır ve
-/// haftalık haktan düştüğü için kullanıcının açık onayıyla çalışır.
-class _IngredientEditor extends StatefulWidget {
-  const _IngredientEditor({
-    required this.ingredients,
-    required this.onAdd,
-    required this.onRemove,
-    required this.onRecalculate,
-    required this.macrosStale,
-    required this.recalculating,
-    required this.p,
-    required this.l10n,
-  });
-
-  final List<String> ingredients;
-  final ValueChanged<String> onAdd;
-  final ValueChanged<String> onRemove;
-  final VoidCallback onRecalculate;
-  final bool macrosStale;
-  final bool recalculating;
-  final AppPalette p;
-  final AppLocalizations l10n;
-
-  @override
-  State<_IngredientEditor> createState() => _IngredientEditorState();
-}
-
-class _IngredientEditorState extends State<_IngredientEditor> {
-  final _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final value = _controller.text;
-    if (value.trim().isEmpty) return;
-    widget.onAdd(value);
-    _controller.clear();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final p = widget.p;
-    final l10n = widget.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(AppSpacing.cardPadding),
-          decoration: BoxDecoration(
-            color: p.surface,
-            borderRadius: BorderRadius.circular(AppSpacing.radius),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (widget.ingredients.isNotEmpty)
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: widget.ingredients
-                      .map(
-                        (m) => Container(
-                          padding: const EdgeInsets.fromLTRB(12, 6, 6, 6),
-                          decoration: BoxDecoration(
-                            color: p.amber.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                m,
-                                style: AppTextStyles.label(
-                                  fontSize: 11.5,
-                                  color: p.amber,
-                                ).copyWith(letterSpacing: 0),
-                              ),
-                              const SizedBox(width: 4),
-                              Semantics(
-                                button: true,
-                                label: l10n.yemekEkleIngredientRemove(m),
-                                child: Pressable(
-                                  onTap: () => widget.onRemove(m),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2),
-                                    child: Icon(
-                                      Icons.close_rounded,
-                                      size: 14,
-                                      color: p.amber,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-              if (widget.ingredients.isNotEmpty) const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 44,
-                      child: TextField(
-                        controller: _controller,
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (_) => _submit(),
-                        style: AppTextStyles.body(fontSize: 14, color: p.text),
-                        decoration: InputDecoration(
-                          hintText: l10n.yemekEkleIngredientHint,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Semantics(
-                    button: true,
-                    label: l10n.yemekEkleIngredientAdd,
-                    child: Pressable(
-                      onTap: _submit,
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: p.surfaceStrong,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          Icons.add_rounded,
-                          size: 20,
-                          color: p.text,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        if (widget.macrosStale || widget.recalculating) ...[
-          const SizedBox(height: 12),
-          Text(
-            l10n.yemekEkleRecalculateHint,
-            style: AppTextStyles.body(
-              fontSize: 11.5,
-              color: p.textMuted,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 10),
-          if (widget.recalculating)
-            Row(
-              children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: p.amber,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  l10n.yemekEkleRecalculating,
-                  style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
-                ),
-              ],
-            )
-          else
-            _SecondaryButton(
-              icon: Icons.calculate_outlined,
-              label: l10n.yemekEkleRecalculate,
-              onTap: widget.onRecalculate,
-              p: p,
-            ),
-        ],
-      ],
     );
   }
 }
@@ -1177,7 +986,7 @@ class _ManualEntryViewState extends State<_ManualEntryView> {
             ),
           ],
           const SizedBox(height: 24),
-          _PrimaryButton(
+          PrimaryButton(
             icon: Icons.arrow_forward_rounded,
             label: l10n.yemekEkleManualContinue,
             onTap: _submit,
@@ -1350,7 +1159,7 @@ class _ErrorView extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const Spacer(flex: 2),
-          _PrimaryButton(
+          PrimaryButton(
             icon: Icons.refresh_rounded,
             label: l10n.yemekEkleRetryButton,
             onTap: onRetry,
@@ -1364,93 +1173,6 @@ class _ErrorView extends StatelessWidget {
 }
 
 // ─── Shared button widgets ────────────────────────────────────────────────────
-
-class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    required this.p,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context) {
-    return Pressable(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        height: 52,
-        decoration: BoxDecoration(
-          color: p.accent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: p.onAccent, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: AppTextStyles.body(
-                fontSize: 15,
-                color: p.onAccent,
-              ).copyWith(fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SecondaryButton extends StatelessWidget {
-  const _SecondaryButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    required this.p,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context) {
-    return Pressable(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        height: 52,
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: p.accent, width: 0.5),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: p.accent, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: AppTextStyles.body(
-                fontSize: 15,
-                color: p.accent,
-              ).copyWith(fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 // ─── ILND comment ─────────────────────────────────────────────────────────────
 

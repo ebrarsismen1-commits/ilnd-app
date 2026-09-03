@@ -14,7 +14,11 @@ final habitsRepositoryProvider = Provider<HabitsRepository>(
 
 // ── Auth-derived user ID ─────────────────────────────────────────────────────
 
-final _userIdProvider = Provider<String?>((ref) {
+/// Oturum açmış kullanıcının kimliği (yoksa null).
+///
+/// Takip ekranının gün gezgini de aynı kimliğe ihtiyaç duyuyor; ikinci bir
+/// kopya çıkarmak yerine bu provider dışarı açıldı (tek-doğru-yer).
+final habitsUserIdProvider = Provider<String?>((ref) {
   final auth = ref.watch(authNotifierProvider);
   return auth is AuthAuthenticated ? auth.user.id : null;
 });
@@ -22,7 +26,7 @@ final _userIdProvider = Provider<String?>((ref) {
 // ── Habits list ──────────────────────────────────────────────────────────────
 
 final habitsProvider = StreamProvider<List<Habit>>((ref) {
-  final userId = ref.watch(_userIdProvider);
+  final userId = ref.watch(habitsUserIdProvider);
   if (userId == null) return const Stream.empty();
   return ref.watch(habitsRepositoryProvider).habitsStream(userId);
 });
@@ -30,7 +34,7 @@ final habitsProvider = StreamProvider<List<Habit>>((ref) {
 // ── Today's completions ───────────────────────────────────────────────────────
 
 final todayCompletionsProvider = StreamProvider<Set<String>>((ref) {
-  final userId = ref.watch(_userIdProvider);
+  final userId = ref.watch(habitsUserIdProvider);
   if (userId == null) return const Stream.empty();
   return ref
       .watch(habitsRepositoryProvider)
@@ -62,7 +66,7 @@ final rangeCompletionsProvider =
       ref,
       range,
     ) {
-      final userId = ref.watch(_userIdProvider);
+      final userId = ref.watch(habitsUserIdProvider);
       if (userId == null) return const Stream.empty();
       return ref
           .watch(habitsRepositoryProvider)
@@ -73,7 +77,7 @@ final rangeCompletionsProvider =
 
 final toggleHabitCompletionProvider =
     Provider<Future<void> Function(String habitId)>((ref) {
-      final userId = ref.read(_userIdProvider);
+      final userId = ref.read(habitsUserIdProvider);
       final repo = ref.read(habitsRepositoryProvider);
       return (habitId) async {
         if (userId == null) return;

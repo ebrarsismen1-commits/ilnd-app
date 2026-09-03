@@ -90,9 +90,15 @@ class FoodRepository {
       .doc(_userId)
       .collection('food_entries');
 
-  Stream<List<FoodEntry>> streamToday() {
-    final now = DateTime.now();
-    final start = DateTime(now.year, now.month, now.day);
+  Stream<List<FoodEntry>> streamToday() => streamForDay(DateTime.now());
+
+  /// [day] gününün öğünleri, eskiden yeniye.
+  ///
+  /// Sorgu bugüne sabitlenmiş değil: takip ekranı geçmiş günlerde de gezinir
+  /// ve o günün kayıtlarını aynı sorguyla okur. Alan ve sıralama aynı olduğu
+  /// için ek bir composite index gerekmez.
+  Stream<List<FoodEntry>> streamForDay(DateTime day) {
+    final start = DateTime(day.year, day.month, day.day);
     final end = start.add(const Duration(days: 1));
     return _col
         .where('createdAt', isGreaterThanOrEqualTo: Timestamp.fromDate(start))
@@ -103,6 +109,34 @@ class FoodRepository {
   }
 
   Future<void> add(FoodEntry entry) => _col.add(entry.toMap(_userId));
+
+  /// Kayıtlı öğünün malzeme listesini günceller.
+  ///
+  /// AI çağrısı YOKTUR ve kotadan düşmez: kullanıcının "bunda zeytinyağı da
+  /// vardı" demesi bir düzeltmedir, yeni bir analiz değil. Makrolar bilerek
+  /// olduğu gibi bırakılır; onları tazelemek ayrı ve ücretli bir eylemdir
+  /// (bkz. [updateAfterRecalculate]).
+  Future<void> updateIngredients(String id, List<String> malzemeler) =>
+      _col.doc(id).update({'malzemeler': malzemeler});
+
+  /// Yeniden hesaplanan makroları ve listeyi birlikte yazar.
+  ///
+  /// Tek `update`: makrolar ile malzemeler ayrı yazılsaydı arada kalan bir
+  /// hata kaydı "yeni liste + eski makrolar" halinde bırakırdı.
+  Future<void> updateAfterRecalculate(
+    String id, {
+    required List<String> malzemeler,
+    required int kalori,
+    required int protein,
+    required int karbonhidrat,
+    required int yag,
+  }) => _col.doc(id).update({
+    'malzemeler': malzemeler,
+    'kalori': kalori,
+    'protein': protein,
+    'karbonhidrat': karbonhidrat,
+    'yag': yag,
+  });
 }
 
 // ─── Providers ────────────────────────────────────────────────────────────────

@@ -100,8 +100,10 @@ Kaynaklar: `vibe_card_screen.dart:46,71`, `quote_card_screen.dart:35,52`,
 | `food_analysis_completed` | Analiz geçerli bir sonuç döndürünce | — | Kaçı sonuçlanıyor |
 | `food_analysis_failed` | Analiz hatayla bitince | `reason` | Hangi sebep baskın |
 | `food_entry_saved` | Sonuç "kaydet" ile güne yazılınca | `portion` | Sonucu görenin kaçı kaydediyor |
+| `food_entry_edited` | Kayıtlı öğün takip ekranında düzeltilince | `recalculated` | Düzeltmenin kaçı ücretli hesaplamaya gidiyor |
 
-Kaynak: `lib/features/ekle/yemek_ekle_screen.dart`.
+Kaynak: `lib/features/ekle/yemek_ekle_screen.dart`,
+`lib/features/takip/meal_edit_sheet.dart`.
 
 `reason` bir `FoodAnalysisErrorCode` adıdır (`unsupportedImage`,
 `photoTooLarge`, `failed`, `failedStatus`, `noInternet`), kullanıcı metni
