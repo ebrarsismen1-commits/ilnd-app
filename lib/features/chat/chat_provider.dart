@@ -290,7 +290,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
     final windowed = settled.length > _historyLimit
         ? settled.sublist(settled.length - _historyLimit)
         : settled;
-    final now = DateTime.now();
+    final now = _stampAfterOthers();
 
     final out = <ChatSession>[];
     var found = false;
@@ -309,6 +309,31 @@ class ChatNotifier extends StateNotifier<ChatState> {
     }
     out.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return out;
+  }
+
+  /// Açık sohbete, diğerlerinin hepsinden KESİN olarak sonra gelen bir
+  /// damga üretir.
+  ///
+  /// Sıralamanın tek dayanağı [DateTime.now()] idi ve bu, saatin
+  /// çözünürlüğünden daha hızlı yapılan iki yazmada çöküyordu: Windows'ta
+  /// saat ~15ms adımlarla ilerlediği için arka arkaya açılan iki sohbet
+  /// AYNI damgayı alıyor, eşitlikte sıralama girdi sırasına düşüyor ve
+  /// uygulama yeniden açıldığında en son konuşulan sohbet değil en eskisi
+  /// açılıyordu (test: "sohbetler yeniden açılışta listede durur").
+  ///
+  /// Saatin hassasiyetine güvenmek yerine sıra burada garanti altına
+  /// alınıyor: damga hep en yeni diğer sohbetin bir mikrosaniye ötesinde.
+  /// Görünen tarihi (bugün / dün / 5 gün önce) etkilemez.
+  DateTime _stampAfterOthers() {
+    var latest = DateTime.fromMillisecondsSinceEpoch(0);
+    for (final session in state.sessions) {
+      if (session.id == state.activeId) continue;
+      if (session.updatedAt.isAfter(latest)) latest = session.updatedAt;
+    }
+    final now = DateTime.now();
+    return now.isAfter(latest)
+        ? now
+        : latest.add(const Duration(microseconds: 1));
   }
 
   Future<void> _persist() async {

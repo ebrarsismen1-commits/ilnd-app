@@ -153,6 +153,31 @@ void main() {
     second.dispose();
   });
 
+  test('iki sohbet aynı saat adımına düşse de sırası kesin', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final container = containerFor(prefs, uid: 'user-1');
+    final chat = container.read(chatProvider.notifier);
+
+    await chat.send('birinci konu', l10n);
+    await chat.newSession();
+    await chat.send('ikinci konu', l10n);
+
+    // Sıra saatin çözünürlüğüne bırakılamaz: Windows'ta DateTime.now()
+    // ~15ms adımlarla ilerliyor ve arka arkaya yazılan iki sohbet aynı
+    // damgayı alıyordu. Eşitlikte sıralama girdi sırasına düşüp en son
+    // konuşulan sohbet listenin altında kalıyordu.
+    final sessions = container.read(chatProvider).sessions;
+    expect(sessions, hasLength(2));
+    expect(
+      sessions.first.updatedAt.isAfter(sessions.last.updatedAt),
+      isTrue,
+      reason: 'Damgalar eşit kalırsa liste sırası rastgeleye düşer',
+    );
+    expect(sessions.first.messages.first.text, 'ikinci konu');
+    container.dispose();
+  });
+
   test('sohbet silinir, açıktaki silinince en yenisine geçilir', () async {
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
