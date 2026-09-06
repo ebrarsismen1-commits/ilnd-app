@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Apple ile giriş. Paket bağımlılığı (sign_in_with_apple) ve ekrandaki
+	     "Apple ile devam et" düğmesi var ama yetki dosyası yoktu: imzalı
+	     derlemede düğme çalışmaz, ASAuthorization isteği hata döner.
+	     Ayrıca App Store kuralı 4.8 gereği ZORUNLU — uygulama Google ile
+	     girişi sunduğu için Apple ile giriş de sunulmak zorunda, yoksa
+	     inceleme reddediyor. -->
+	<key>com.apple.developer.applesignin</key>
+	<array>
+		<string>Default</string>
+	</array>
+
+	<!-- App Attest (Firebase App Check). main.dart yayın derlemesinde
+	     AppleProvider.appAttest kullanıyor; bu yetki olmadan App Check
+	     token üretemez. Sonucu sessiz değil ama geç fark edilen bir
+	     kırılma: functions/index.js'te enforceAppCheck: true olan
+	     fonksiyonlar (anthropicProxy, redeemReferralCode, deleteAccount)
+	     isteği reddeder, yani TestFlight derlemesinde yemek analizi,
+	     davet kodu ve hesap silme çalışmaz.
+
+	     Değer "production": debug derlemeleri App Attest'e hiç girmiyor
+	     (kDebugMode'da AppleProvider.debug kullanılıyor), TestFlight ve
+	     App Store ise production ortamındadır. -->
+	<key>com.apple.developer.devicecheck.appattest-environment</key>
+	<string>production</string>
+</dict>
+</plist>

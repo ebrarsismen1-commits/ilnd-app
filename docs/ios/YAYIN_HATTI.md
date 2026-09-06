@@ -1,7 +1,14 @@
-# Mac Olmadan iOS Yayını
+# iOS Yayın Hattı
 
-Geliştirme makinesi Windows. iOS derlemesi macOS ister ama **yalnız derleme**
-ister: geri kalan her şey ya tarayıcıda ya repo dosyasında yapılır.
+> **7 Eylül 2026: Mac var.** Bu belge "Mac olmadan" varsayımıyla yazılmıştı;
+> artık derleme ve arşiv yerelde yapılabiliyor (`flutter build ipa`, Xcode).
+> Bulut macOS koşucusu (Codemagic) zorunlu değil, yalnızca bir seçenek —
+> aşağıdaki tabloda "kiralık" yazan satır artık kendi makinende.
+> Claude oturumları hâlâ Windows'ta koşuyor, yani iOS derlemesini
+> **kullanıcı kendi Mac'inde** yapar.
+
+Geri kalan her şey ya tarayıcıda ya repo dosyasında yapılır; aşağıdaki tablo
+neyin nerede olduğunu gösterir.
 
 ## Neyin nerede yapıldığı
 
@@ -89,18 +96,35 @@ boş yapılandırmayla çıkılmış bir sürümü mağazaya göndermek en pahal
 **Şu an `.env` içinde `REVENUECAT_API_KEY` ve `RECAPTCHA_SITE_KEY` yok.**
 Birincisi olmadan paywall her derlemede etkisizdir ve satın alma hiç başlamaz.
 
-### 5. Push için repo tarafı
+### 5. Yetkiler (entitlements) — repo tarafı hazır
 
-Push kullanılacaksa şunlar gerekir, üçü de dosya düzenlemesi:
+`ios/Runner/Runner.entitlements` **artık var** ve `project.pbxproj` içindeki
+üç Runner yapılandırmasına (Debug, Release, Profile) `CODE_SIGN_ENTITLEMENTS`
+ile bağlı. İçinde iki yetki duruyor:
 
-- `ios/Runner/Runner.entitlements` (yok, oluşturulacak): `aps-environment`
-  anahtarı, geliştirmede `development`, yayında `production`
-- `project.pbxproj` içinde `CODE_SIGN_ENTITLEMENTS` bu dosyaya bağlanır
-- `Info.plist` içine `UIBackgroundModes` → `remote-notification`
+- `com.apple.developer.applesignin` — "Apple ile devam et" düğmesi imzalı
+  derlemede ancak bununla çalışır. Aynı zamanda App Store kuralı 4.8 gereği
+  zorunlu, çünkü uygulama Google ile girişi sunuyor.
+- `com.apple.developer.devicecheck.appattest-environment` = `production` —
+  `main.dart` yayın derlemesinde `AppleProvider.appAttest` kullanıyor. Bu
+  yetki olmadan App Check token üretilemez ve `enforceAppCheck: true` olan
+  fonksiyonlar (yemek analizi, davet kodu, hesap silme) TestFlight
+  derlemesinde isteği reddeder.
 
-Dart tarafı (`firebase_messaging`, izin akışı, token'ın hesaba yazılması) ve
-gönderim tarafı (zamanlanmış Cloud Function) bunlardan bağımsız yazılabilir
-ama **cihaz olmadan doğrulanamaz**: push simülatörde hiç çalışmaz.
+Bunlar `test/ios/ios_release_config_test.dart` ile kilitli: dosya silinirse
+ya da bağ koparsa test kırılır.
+
+**Apple panelinde ayrıca açılması gerekenler** (dosya düzenlemesi değil,
+App ID ayarı): Sign in with Apple ve In-App Purchase.
+
+#### Push (şu an YOK)
+
+Uygulamada `firebase_messaging` bağımlılığı bulunmuyor; bildirimler
+`flutter_local_notifications` ile **yerel** olarak kuruluyor ve yerel bildirim
+ne `aps-environment` yetkisi ne de arka plan modu ister. Uzak bildirim
+istenirse üçü birden gerekir: `firebase_messaging` paketi, entitlements'a
+`aps-environment`, `Info.plist`'e `UIBackgroundModes` → `remote-notification`.
+Push simülatörde hiç çalışmaz, doğrulaması cihaz ister.
 
 ### 6. TestFlight
 
@@ -121,10 +145,13 @@ Gerçek cihazda doğrulanacaklar, çünkü hiçbiri testte yakalanmaz:
 
 1. Apple Developer üyeliği (onay beklenir, bu yüzden ilk)
 2. Bundle kimliği + App Store Connect API anahtarı
-3. Codemagic bağlanır, `.env` secret olarak konur, ilk `.ipa` üretilir
+3. Mac'te ilk `.ipa`: repo klonlanır, `.env` elle taşınır (gizli anahtar,
+   repoya girmez), `flutter build ipa` çalıştırılır. Bulut koşucusu
+   isteniyorsa Codemagic aynı adımları CI'da yapar.
 4. App Store Connect kaydı, ilk TestFlight derlemesi
 5. Cihazda doğrulama listesi
-6. Push istenirse: APNs anahtarı, entitlements, Dart ve sunucu tarafı
+6. Push istenirse: `firebase_messaging`, APNs anahtarı, `aps-environment`,
+   arka plan modu, Dart ve sunucu tarafı
 
 1 ve 2 tamamlanana kadar iOS'a özgü hiçbir iş ilerleyemez. O sırada
 `docs/ios/README.md` içindeki "Apple hesabı gerektirmeyen işler" listesi

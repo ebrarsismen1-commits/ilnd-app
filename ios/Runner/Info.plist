@@ -14,6 +14,15 @@
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
+		<!-- Uygulama iki dilli (tr + en) ama pakette .lproj klasörü yok: dil
+		     listesi Flutter'ın kendi l10n'undan geliyor ve iOS bunu görmüyor.
+		     Bu anahtar olmadan App Store ürünü yalnız İngilizce sayar,
+		     mağaza sayfasında Türkçe görünmez. -->
+		<key>CFBundleLocalizations</key>
+		<array>
+			<string>tr</string>
+			<string>en</string>
+		</array>
 		<key>CFBundleName</key>
 		<string>ilnd</string>
 		<!-- Supabase e-posta bağlantıları (şifre sıfırlama, hesap onayı)
@@ -45,6 +54,11 @@
 		<string>????</string>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<!-- İhracat uyumluluğu. Uygulama yalnız standart HTTPS/TLS kullanıyor,
+		     özel şifreleme yok. Bu anahtar olmadan HER TestFlight yüklemesinde
+		     App Store Connect aynı soruyu elle sordurup derlemeyi bekletiyor. -->
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>UIApplicationSceneManifest</key>
