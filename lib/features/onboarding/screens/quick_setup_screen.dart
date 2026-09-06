@@ -7,15 +7,39 @@ import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/services/analytics_service.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
+import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
-/// 4 eski onboarding ekranını (value-props + questions + name-input) tek
-/// ekrana indirger: isim + hedefler + yaş/boy/kilo + aktivite seviyesi +
-/// beslenme tercihi + alerjiler + opsiyonel davet kodu. Yaş/boy/kilo/kod
-/// dışındaki tüm alanlar opsiyoneldir (boş bırakılabilir).
+/// Kurulumun adımları. Sıra bilerek şu: önce isim (tek zorunlu alan ve
+/// ekranı kişiselleştiren şey), sonra niyet, sonra sayılar, en sonda
+/// beslenme. Ağırlaşan sorular sona bırakılır.
+enum _SetupStep {
+  name('quick_setup_name'),
+  goals('quick_setup_goals'),
+  body('quick_setup_body'),
+  food('quick_setup_food');
+
+  const _SetupStep(this.analyticsName);
+
+  /// Terk/tamamlama olaylarında bu adımı temsil eden ad.
+  final String analyticsName;
+}
+
+/// Kurulum: isim + hedefler + yaş/boy/kilo + aktivite + beslenme tercihi +
+/// alerjiler + opsiyonel davet kodu.
+///
+/// Eskiden dört ekran vardı, sonra hepsi TEK bir uzun sayfaya indirildi. Tek
+/// sayfa da kendi sorununu getirdi: yeni kullanıcı, daha hiçbir şey görmediği
+/// uygulamada yedi alan grubu birden görüyordu ve ilk izlenim "form doldur"
+/// oluyordu. Artık aynı alanlar dört adıma bölünmüş durumda — sorular aynı,
+/// bir seferde görünen yük daha az.
+///
+/// Zorunluluk kuralı değişmedi: yalnız isim zorunlu. Kalan üç adım tek tek
+/// geçilebilir, çünkü hiçbiri ürünün çalışması için şart değil; hepsi
+/// önerileri kişiselleştiriyor.
 class QuickSetupScreen extends ConsumerStatefulWidget {
   const QuickSetupScreen({super.key});
 
@@ -31,6 +55,9 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
   final _weightController = TextEditingController();
   bool _canProceed = false;
   bool _showCodeField = false;
+
+  /// Görünen adım.
+  _SetupStep _step = _SetupStep.name;
 
   // Internal keys (used for state/toggle logic) — display labels are
   // resolved via l10n in build() through _goalLabel().
@@ -132,12 +159,7 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
       final canProceed = _nameController.text.trim().isNotEmpty;
       if (canProceed != _canProceed) setState(() => _canProceed = canProceed);
     });
-    Future.microtask(
-      () => ref.read(currentOnboardingStepProvider.notifier).state = (
-        1,
-        'quick_setup',
-      ),
-    );
+    Future.microtask(_markStep);
   }
 
   @override
@@ -148,6 +170,52 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
     _heightController.dispose();
     _weightController.dispose();
     super.dispose();
+  }
+
+  // ── Adım gezinmesi ─────────────────────────────────────────────────────────
+
+  /// Terk edilme olayı hangi adımda olduğumuzu bilsin diye her geçişte
+  /// güncellenir (bkz. [currentOnboardingStepProvider], main.dart).
+  ///
+  /// Adım indeksi kurulumun İÇİNDEKİ sıradır (1-4); ekranlar arası sıra
+  /// (karşılama 0, ilk giriş 2) ada bakılarak ayrılır.
+  void _markStep() {
+    if (!mounted) return;
+    ref.read(currentOnboardingStepProvider.notifier).state = (
+      _step.index + 1,
+      _step.analyticsName,
+    );
+  }
+
+  /// Bir sonraki adım. Son adımdaysa kurulumu bitirir.
+  ///
+  /// Geçilen adım tamamlanmış sayılır: huni ancak her adımın kendi olayı
+  /// varsa kurulabiliyor, tek sabit çağrı yalnız "kurulumu bitirenler"i
+  /// gösteriyordu (ANALITIK_SOZLUGU notu).
+  Future<void> _next(AppLocalizations l10n) async {
+    if (_step == _SetupStep.name && !_canProceed) return;
+    unawaited(
+      AnalyticsService.logOnboardingStepCompleted(
+        _step.index + 1,
+        _step.analyticsName,
+      ),
+    );
+    final next = _step.index + 1;
+    if (next >= _SetupStep.values.length) {
+      await _proceed(l10n);
+      return;
+    }
+    // Klavye bir sonraki adımın üstünde asılı kalmasın.
+    FocusScope.of(context).unfocus();
+    setState(() => _step = _SetupStep.values[next]);
+    _markStep();
+  }
+
+  void _back() {
+    if (_step.index == 0) return;
+    FocusScope.of(context).unfocus();
+    setState(() => _step = _SetupStep.values[_step.index - 1]);
+    _markStep();
   }
 
   Future<void> _proceed(AppLocalizations l10n) async {
@@ -201,9 +269,10 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
     if (!mounted) return;
     context.go(routeRegister);
 
-    unawaited(AnalyticsService.logOnboardingStepCompleted(1, 'quick_setup'));
     await ref.read(onboardingDoneProvider.notifier).setDone();
   }
+
+  // ── Parçalar ───────────────────────────────────────────────────────────────
 
   Widget _chipRow(
     AppPalette p, {
@@ -255,234 +324,357 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
     );
   }
 
+  /// Adım başlığı: büyük satır + varsa açıklama. Her adımın kendi tek büyük
+  /// anı olur, alt başlık onu açar.
+  Widget _stepHeading(
+    AppPalette p, {
+    required String title,
+    String? subtitle,
+    String? secondaryTitle,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: AppTextStyles.display(fontSize: 28, color: p.text)),
+        // Bkz. welcome_screen: iki dilli başlık yalnız Türkçede. Boşluk da
+        // koşula dahil, yoksa İngilizcede sarkan bir aralık kalır.
+        if (secondaryTitle != null) ...[
+          const SizedBox(height: 6),
+          Text(
+            secondaryTitle,
+            style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+          ),
+        ],
+        if (subtitle != null) ...[
+          const SizedBox(height: 6),
+          Text(
+            subtitle,
+            style: AppTextStyles.body(
+              fontSize: 13,
+              color: p.textMuted,
+              height: 1.4,
+            ),
+          ),
+        ],
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  /// İlerleme çizgisi: adım başına bir dilim. Sayı da veriliyor, çünkü çizgi
+  /// "ne kadar kaldı" sorusunu yaklaşık, sayı kesin cevaplıyor.
+  Widget _progress(AppPalette p, AppLocalizations l10n) {
+    final total = _SetupStep.values.length;
+    return Row(
+      children: [
+        SizedBox(
+          width: 44,
+          height: 44,
+          child: _step.index == 0
+              ? null
+              : Semantics(
+                  button: true,
+                  label: l10n.quickSetupBack,
+                  child: Pressable(
+                    onTap: _back,
+                    child: Icon(
+                      Icons.chevron_left_rounded,
+                      size: 26,
+                      color: p.textMuted,
+                    ),
+                  ),
+                ),
+        ),
+        Expanded(
+          child: Row(
+            children: [
+              for (var i = 0; i < total; i++) ...[
+                if (i > 0) const SizedBox(width: 4),
+                Expanded(
+                  child: Container(
+                    height: 2,
+                    decoration: BoxDecoration(
+                      color: i <= _step.index ? p.accent : p.border,
+                      borderRadius: BorderRadius.circular(1),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          l10n.quickSetupStepCounter(_step.index + 1, total),
+          style: AppTextStyles.mono(fontSize: 11, color: p.textMuted),
+        ),
+      ],
+    );
+  }
+
+  // ── Adım gövdeleri ─────────────────────────────────────────────────────────
+
+  Widget _nameStep(AppPalette p, AppLocalizations l10n) {
+    return Column(
+      key: const ValueKey(_SetupStep.name),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _stepHeading(
+          p,
+          title: l10n.quickSetupTitle,
+          secondaryTitle: l10n.localeName.startsWith('tr')
+              ? l10n.quickSetupTitleEn
+              : null,
+        ),
+        SizedBox(
+          height: 52,
+          child: TextField(
+            controller: _nameController,
+            autofocus: true,
+            textCapitalization: TextCapitalization.words,
+            textInputAction: TextInputAction.done,
+            onSubmitted: (_) => _next(l10n),
+            style: AppTextStyles.body(
+              fontSize: 15,
+              color: p.text,
+            ).copyWith(fontWeight: FontWeight.w500),
+            decoration: InputDecoration(hintText: l10n.quickSetupNameHint),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _goalsStep(AppPalette p, AppLocalizations l10n) {
+    final goals = ref.watch(onboardingGoalsProvider);
+    return Column(
+      key: const ValueKey(_SetupStep.goals),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _stepHeading(
+          p,
+          title: l10n.quickSetupGoalsTitle,
+          subtitle: l10n.quickSetupGoalsSubtitle,
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: _goals.map((item) {
+            final on = goals.contains(item.$1);
+            return Pressable(
+              onTap: () =>
+                  ref.read(onboardingGoalsProvider.notifier).toggle(item.$1),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: on ? p.accent.withValues(alpha: 0.08) : p.surface,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: on ? p.accent : p.textMuted.withValues(alpha: 0.2),
+                    width: on ? 1.5 : 1,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(item.$2, size: 16, color: on ? p.accent : p.textMuted),
+                    const SizedBox(width: 6),
+                    // İkonun yanındaki etiket esner: dar ekranda ya da
+                    // büyütülmüş yazı tipinde "kalori/besin takibi" çipi
+                    // satırı taşırıyordu.
+                    Flexible(
+                      child: Text(
+                        _goalLabel(l10n, item.$1),
+                        style:
+                            AppTextStyles.body(
+                              fontSize: 13,
+                              color: on ? p.accent : p.text,
+                            ).copyWith(
+                              fontWeight: on
+                                  ? FontWeight.w600
+                                  : FontWeight.normal,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _bodyStep(AppPalette p, AppLocalizations l10n) {
+    final activity = ref.watch(onboardingFrequencyProvider);
+    return Column(
+      key: const ValueKey(_SetupStep.body),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _stepHeading(
+          p,
+          title: l10n.quickSetupBodyTitle,
+          subtitle: l10n.quickSetupBodySubtitle,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: _numberField(p, _ageController, l10n.quickSetupAgeHint),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _numberField(
+                p,
+                _heightController,
+                l10n.quickSetupHeightHint,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _numberField(
+                p,
+                _weightController,
+                l10n.quickSetupWeightHint,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 28),
+        Text(
+          l10n.quickSetupActivityTitle,
+          style: AppTextStyles.heading(fontSize: 19, color: p.text),
+        ),
+        const SizedBox(height: 12),
+        _chipRow(
+          p,
+          keys: _activityLevels,
+          isSelected: (key) => activity == key,
+          onTap: (key) =>
+              ref.read(onboardingFrequencyProvider.notifier).select(key),
+          label: (key) => _activityLabel(l10n, key),
+        ),
+      ],
+    );
+  }
+
+  Widget _foodStep(AppPalette p, AppLocalizations l10n) {
+    final diet = ref.watch(onboardingDietProvider);
+    final allergies = ref.watch(onboardingAllergiesProvider);
+    return Column(
+      key: const ValueKey(_SetupStep.food),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _stepHeading(p, title: l10n.quickSetupDietTitle),
+        _chipRow(
+          p,
+          keys: _diets,
+          isSelected: (key) => diet == key,
+          onTap: (key) => ref.read(onboardingDietProvider.notifier).select(key),
+          label: (key) => _dietLabel(l10n, key),
+        ),
+        const SizedBox(height: 28),
+        Text(
+          l10n.quickSetupAllergiesTitle,
+          style: AppTextStyles.heading(fontSize: 19, color: p.text),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          l10n.quickSetupAllergiesSubtitle,
+          style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+        ),
+        const SizedBox(height: 12),
+        _chipRow(
+          p,
+          keys: _allergies,
+          isSelected: (key) => allergies.contains(key),
+          onTap: (key) =>
+              ref.read(onboardingAllergiesProvider.notifier).toggle(key),
+          label: (key) => _allergyLabel(l10n, key),
+        ),
+        const SizedBox(height: 28),
+        // Davet kodu son adımda: kodu olan azınlık, herkesin önüne bir alan
+        // daha koymaya değmiyor.
+        if (_showCodeField) ...[
+          Text(
+            l10n.quickSetupInviteCodeTitle,
+            style: AppTextStyles.heading(fontSize: 15, color: p.text),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 48,
+            child: TextField(
+              controller: _codeController,
+              textCapitalization: TextCapitalization.characters,
+              style: AppTextStyles.body(fontSize: 15, color: p.text),
+              decoration: InputDecoration(
+                hintText: l10n.quickSetupInviteCodeHint,
+              ),
+            ),
+          ),
+        ] else
+          Pressable(
+            onTap: () => setState(() => _showCodeField = true),
+            child: Text(
+              l10n.quickSetupHaveInviteCode,
+              style: AppTextStyles.body(
+                fontSize: 13,
+                color: p.textMuted,
+              ).copyWith(decoration: TextDecoration.underline),
+            ),
+          ),
+      ],
+    );
+  }
+
+  // ── Build ──────────────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
-    final goals = ref.watch(onboardingGoalsProvider);
-    final activity = ref.watch(onboardingFrequencyProvider);
-    final diet = ref.watch(onboardingDietProvider);
-    final allergies = ref.watch(onboardingAllergiesProvider);
+    final isLast = _step.index == _SetupStep.values.length - 1;
+    // Yalnız isim zorunlu; kalan adımlar boş bırakılabilir.
+    final canAdvance = _step != _SetupStep.name || _canProceed;
 
     return Scaffold(
       backgroundColor: p.base,
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 24),
-              Text(
-                l10n.quickSetupTitle,
-                style: AppTextStyles.display(fontSize: 28, color: p.text),
-              ),
-              // Bkz. welcome_screen: iki dilli başlık yalnız Türkçede.
-              // Boşluk da koşula dahil, yoksa İngilizcede sarkan bir
-              // aralık kalır.
-              if (l10n.localeName.startsWith('tr')) ...[
-                const SizedBox(height: 6),
-                Text(
-                  l10n.quickSetupTitleEn,
-                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-                ),
-              ],
-              const SizedBox(height: 24),
-              SizedBox(
-                height: 52,
-                child: TextField(
-                  controller: _nameController,
-                  autofocus: true,
-                  textCapitalization: TextCapitalization.words,
-                  style: AppTextStyles.body(
-                    fontSize: 15,
-                    color: p.text,
-                  ).copyWith(fontWeight: FontWeight.w500),
-                  decoration: InputDecoration(
-                    hintText: l10n.quickSetupNameHint,
+              const SizedBox(height: 12),
+              _progress(p, l10n),
+              const SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: AnimatedSwitcher(
+                    duration: motionDuration(
+                      context,
+                      full: const Duration(milliseconds: 320),
+                    ),
+                    switchInCurve: Curves.easeOut,
+                    switchOutCurve: Curves.easeOut,
+                    // Adımlar aynı yükseklikte değil: geçişte iki gövde
+                    // üst üste ölçülmesin diye yalnız gelen çizilir.
+                    layoutBuilder: (current, previous) =>
+                        current ?? const SizedBox.shrink(),
+                    child: switch (_step) {
+                      _SetupStep.name => _nameStep(p, l10n),
+                      _SetupStep.goals => _goalsStep(p, l10n),
+                      _SetupStep.body => _bodyStep(p, l10n),
+                      _SetupStep.food => _foodStep(p, l10n),
+                    },
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-              Text(
-                l10n.quickSetupGoalsTitle,
-                style: AppTextStyles.heading(fontSize: 19, color: p.text),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                l10n.quickSetupGoalsSubtitle,
-                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
               ),
               const SizedBox(height: 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _goals.map((item) {
-                  final on = goals.contains(item.$1);
-                  return Pressable(
-                    onTap: () => ref
-                        .read(onboardingGoalsProvider.notifier)
-                        .toggle(item.$1),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 160),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: on
-                            ? p.accent.withValues(alpha: 0.08)
-                            : p.surface,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: on
-                              ? p.accent
-                              : p.textMuted.withValues(alpha: 0.2),
-                          width: on ? 1.5 : 1,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            item.$2,
-                            size: 16,
-                            color: on ? p.accent : p.textMuted,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            _goalLabel(l10n, item.$1),
-                            style:
-                                AppTextStyles.body(
-                                  fontSize: 13,
-                                  color: on ? p.accent : p.text,
-                                ).copyWith(
-                                  fontWeight: on
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 32),
-              Text(
-                l10n.quickSetupBodyTitle,
-                style: AppTextStyles.heading(fontSize: 19, color: p.text),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                l10n.quickSetupBodySubtitle,
-                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: _numberField(
-                      p,
-                      _ageController,
-                      l10n.quickSetupAgeHint,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _numberField(
-                      p,
-                      _heightController,
-                      l10n.quickSetupHeightHint,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _numberField(
-                      p,
-                      _weightController,
-                      l10n.quickSetupWeightHint,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 28),
-              Text(
-                l10n.quickSetupActivityTitle,
-                style: AppTextStyles.heading(fontSize: 19, color: p.text),
-              ),
-              const SizedBox(height: 12),
-              _chipRow(
-                p,
-                keys: _activityLevels,
-                isSelected: (key) => activity == key,
-                onTap: (key) =>
-                    ref.read(onboardingFrequencyProvider.notifier).select(key),
-                label: (key) => _activityLabel(l10n, key),
-              ),
-              const SizedBox(height: 28),
-              Text(
-                l10n.quickSetupDietTitle,
-                style: AppTextStyles.heading(fontSize: 19, color: p.text),
-              ),
-              const SizedBox(height: 12),
-              _chipRow(
-                p,
-                keys: _diets,
-                isSelected: (key) => diet == key,
-                onTap: (key) =>
-                    ref.read(onboardingDietProvider.notifier).select(key),
-                label: (key) => _dietLabel(l10n, key),
-              ),
-              const SizedBox(height: 28),
-              Text(
-                l10n.quickSetupAllergiesTitle,
-                style: AppTextStyles.heading(fontSize: 19, color: p.text),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                l10n.quickSetupAllergiesSubtitle,
-                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-              ),
-              const SizedBox(height: 12),
-              _chipRow(
-                p,
-                keys: _allergies,
-                isSelected: (key) => allergies.contains(key),
-                onTap: (key) =>
-                    ref.read(onboardingAllergiesProvider.notifier).toggle(key),
-                label: (key) => _allergyLabel(l10n, key),
-              ),
-              const SizedBox(height: 24),
-              if (_showCodeField) ...[
-                Text(
-                  l10n.quickSetupInviteCodeTitle,
-                  style: AppTextStyles.heading(fontSize: 15, color: p.text),
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  height: 48,
-                  child: TextField(
-                    controller: _codeController,
-                    textCapitalization: TextCapitalization.characters,
-                    style: AppTextStyles.body(fontSize: 15, color: p.text),
-                    decoration: InputDecoration(
-                      hintText: l10n.quickSetupInviteCodeHint,
-                    ),
-                  ),
-                ),
-              ] else
-                Pressable(
-                  onTap: () => setState(() => _showCodeField = true),
-                  child: Text(
-                    l10n.quickSetupHaveInviteCode,
-                    style: AppTextStyles.body(
-                      fontSize: 13,
-                      color: p.textMuted,
-                    ).copyWith(decoration: TextDecoration.underline),
-                  ),
-                ),
-              const SizedBox(height: 32),
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -490,11 +682,36 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                 // ElevatedButtonThemeData zaten aktif moda göre doğru
                 // rengi (disabled dahil) veriyor, manuel override gerekmiyor.
                 child: ElevatedButton(
-                  onPressed: _canProceed ? () => _proceed(l10n) : null,
-                  child: Text(l10n.quickSetupContinue),
+                  onPressed: canAdvance ? () => _next(l10n) : null,
+                  child: Text(
+                    isLast ? l10n.quickSetupFinish : l10n.quickSetupContinue,
+                  ),
                 ),
               ),
-              const SizedBox(height: 40),
+              // Geçme kapısı yalnız opsiyonel adımlarda: isim adımında
+              // "geç" göstermek, zorunlu olan tek alanı isteğe bağlıymış
+              // gibi gösterirdi.
+              SizedBox(
+                height: 44,
+                child: _step == _SetupStep.name
+                    ? null
+                    : Center(
+                        child: Semantics(
+                          button: true,
+                          child: Pressable(
+                            onTap: () => _next(l10n),
+                            child: Text(
+                              l10n.quickSetupSkipStep,
+                              style: AppTextStyles.body(
+                                fontSize: 13,
+                                color: p.textMuted,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+              const SizedBox(height: 8),
             ],
           ),
         ),

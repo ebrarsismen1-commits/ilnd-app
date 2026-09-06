@@ -438,6 +438,24 @@
   "quickSetupHaveInviteCode": "davet kodum var",
   "@quickSetupHaveInviteCode": {"description": "Link to reveal the invite code field"},
 
+  "quickSetupStepCounter": "{current} / {total}",
+  "@quickSetupStepCounter": {
+    "description": "Onboarding step counter, e.g. 2 / 4",
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+
+  "quickSetupBack": "geri",
+  "@quickSetupBack": {"description": "Accessibility label of the back arrow between setup steps"},
+
+  "quickSetupSkipStep": "şimdilik geç",
+  "@quickSetupSkipStep": {"description": "Skips an optional setup step"},
+
+  "quickSetupFinish": "hazırım",
+  "@quickSetupFinish": {"description": "Finishes the last setup step"},
+
   "quickSetupContinue": "devam et",
   "@quickSetupContinue": {"description": "Quick setup continue button"},
 

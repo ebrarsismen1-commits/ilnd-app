@@ -223,6 +223,17 @@
   "quickSetupInviteCodeTitle": "have an invite code?",
   "quickSetupInviteCodeHint": "invite code",
   "quickSetupHaveInviteCode": "I have an invite code",
+  "quickSetupStepCounter": "{current} / {total}",
+  "@quickSetupStepCounter": {
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "quickSetupBack": "back",
+  "quickSetupSkipStep": "skip for now",
+  "quickSetupFinish": "i'm ready",
+
   "quickSetupContinue": "continue",
 
   "firstEntryHeader": "LET'S BEGIN",

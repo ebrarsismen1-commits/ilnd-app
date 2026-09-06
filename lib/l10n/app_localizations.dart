@@ -1028,6 +1028,30 @@ abstract class AppLocalizations {
   /// **'davet kodum var'**
   String get quickSetupHaveInviteCode;
 
+  /// Onboarding step counter, e.g. 2 / 4
+  ///
+  /// In tr, this message translates to:
+  /// **'{current} / {total}'**
+  String quickSetupStepCounter(int current, int total);
+
+  /// Accessibility label of the back arrow between setup steps
+  ///
+  /// In tr, this message translates to:
+  /// **'geri'**
+  String get quickSetupBack;
+
+  /// Skips an optional setup step
+  ///
+  /// In tr, this message translates to:
+  /// **'şimdilik geç'**
+  String get quickSetupSkipStep;
+
+  /// Finishes the last setup step
+  ///
+  /// In tr, this message translates to:
+  /// **'hazırım'**
+  String get quickSetupFinish;
+
   /// Quick setup continue button
   ///
   /// In tr, this message translates to:

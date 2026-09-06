@@ -40,7 +40,7 @@ bağlar.
 | Olay | Ne zaman | Parametre | Cevapladığı soru |
 |---|---|---|---|
 | `onboarding_started` | Karşılama ekranı açıldığında | — | Kaç kişi akışa giriyor |
-| `onboarding_step_completed` | Hızlı kurulum tamamlanınca | `step_index`, `step_name` | Hangi adım geçiliyor |
+| `onboarding_step_completed` | Kurulumun bir adımı geçilince (dört adım) | `step_index`, `step_name` | Hangi adımda düşülüyor |
 | `onboarding_abandoned_at_step` | Uygulama, onboarding yarıdayken arka plana atılınca | `step_index`, `step_name` | Nerede terk ediliyor |
 | `onboarding_first_need_picked` | Kullanıcı ilk ihtiyacını seçince | — | İlk niyet beyanı oranı |
 | `onboarding_first_entry_skipped` | İlk giriş adımı atlanınca | — | İlk değeri atlayanlar |
@@ -48,11 +48,18 @@ bağlar.
 
 Kaynaklar: `welcome_screen.dart:28`, `quick_setup_screen.dart:204`,
 `main.dart:224`, `first_entry_screen.dart:124,130,139`.
+Kurulum adımlarının olayı: `quick_setup_screen.dart` `_next`.
 
-> **Dikkat:** `onboarding_step_completed` şu an **tek yerden** ve sabit
-> `(1, 'quick_setup')` değeriyle çağrılıyor. Yani adım adım huni kurulamaz —
-> panelde yalnızca "hızlı kurulumu bitirenler" görünür. Çok adımlı huni
-> istiyorsan her adıma birer çağrı eklenmeli.
+> `step_name` kurulumun dört adımını ayırır: `quick_setup_name`,
+> `quick_setup_goals`, `quick_setup_body`, `quick_setup_food` (sırayla
+> `step_index` 1-4). Huni bu adlarla kurulur; `step_index` kurulumun
+> İÇİNDEKİ sıradır, ekranlar arası sıra değil (karşılama `welcome`, ilk
+> giriş `first_entry` adlarıyla gelir).
+>
+> Eskiden bu olay tek yerden ve sabit `(1, 'quick_setup')` değeriyle
+> atılıyordu: panelde yalnız "kurulumu bitirenler" görünüyor, nerede
+> bırakıldığı görünmüyordu. Kurulum dört adıma bölününce her adım kendi
+> olayını atmaya başladı.
 
 ---
 

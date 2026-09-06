@@ -504,6 +504,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get quickSetupHaveInviteCode => 'davet kodum var';
 
   @override
+  String quickSetupStepCounter(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get quickSetupBack => 'geri';
+
+  @override
+  String get quickSetupSkipStep => 'şimdilik geç';
+
+  @override
+  String get quickSetupFinish => 'hazırım';
+
+  @override
   String get quickSetupContinue => 'devam et';
 
   @override

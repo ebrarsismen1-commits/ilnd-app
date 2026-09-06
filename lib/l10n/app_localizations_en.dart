@@ -518,6 +518,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quickSetupHaveInviteCode => 'I have an invite code';
 
   @override
+  String quickSetupStepCounter(int current, int total) {
+    return '$current / $total';
+  }
+
+  @override
+  String get quickSetupBack => 'back';
+
+  @override
+  String get quickSetupSkipStep => 'skip for now';
+
+  @override
+  String get quickSetupFinish => 'i\'m ready';
+
+  @override
   String get quickSetupContinue => 'continue';
 
   @override
