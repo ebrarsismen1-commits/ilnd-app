@@ -40,8 +40,14 @@ void main() {
 
   tearDown(() => AnalyticsService.testSink = null);
 
-  Future<GoRouter> pumpSetup(WidgetTester tester) async {
-    SharedPreferences.setMockInitialValues({});
+  /// [fresh] false ise disk sıfırlanmaz: uygulamanın kapanıp yeniden
+  /// açılması aynı testte taklit edilebilsin diye.
+  Future<GoRouter> pumpSetup(
+    WidgetTester tester, {
+    bool fresh = true,
+    Map<String, Object> prefsSeed = const {},
+  }) async {
+    if (fresh) SharedPreferences.setMockInitialValues(prefsSeed);
     final prefs = await SharedPreferences.getInstance();
 
     final router = GoRouter(
@@ -140,12 +146,14 @@ void main() {
     await enterName(tester, 'ebrar');
     await tapContinue(tester);
 
-    // Hedefler, sayılar ve beslenme: üçü de "şimdilik geç" ile geçilir.
-    for (var i = 0; i < 3; i++) {
+    // Hedefler ve sayılar "şimdilik geç" ile geçilir; son adımda geç yok,
+    // orada "hazırım" hem bitirir hem geçer.
+    for (var i = 0; i < 2; i++) {
       expect(find.text(l10n.quickSetupSkipStep), findsOneWidget);
       await tester.tap(find.text(l10n.quickSetupSkipStep));
       await tester.pumpAndSettle();
     }
+    await tapContinue(tester);
 
     expect(find.text('STUB_REGISTER'), findsOneWidget);
     expect(
@@ -168,6 +176,11 @@ void main() {
     expect(find.text(l10n.quickSetupDietTitle), findsOneWidget);
     expect(find.text(l10n.quickSetupFinish), findsOneWidget);
     expect(find.text(l10n.quickSetupContinue), findsNothing);
+    expect(
+      find.text(l10n.quickSetupSkipStep),
+      findsNothing,
+      reason: '"hazırım" zaten geçmeyi karşılıyor, ikinci kapı gereksiz',
+    );
 
     await tapContinue(tester);
     expect(find.text('STUB_REGISTER'), findsOneWidget);
@@ -177,6 +190,58 @@ void main() {
       prefs.getString('user_name'),
       'ebrar',
       reason: 'adımlara bölünürken kaydetme yolu kopmamalı',
+    );
+  });
+
+  testWidgets('yarıda bırakılan kurulum kaldığı adımdan devam eder', (
+    tester,
+  ) async {
+    await pumpSetup(tester);
+    await enterName(tester, 'ebrar');
+    await tapContinue(tester);
+    expect(find.text(l10n.quickSetupGoalsTitle), findsOneWidget);
+
+    // Uygulama kapandı, kullanıcı geri döndü: disk aynı, ekran yeniden
+    // kuruldu.
+    await pumpSetup(tester, fresh: false);
+
+    expect(
+      find.text(l10n.quickSetupStepCounter(2, 4)),
+      findsOneWidget,
+      reason: 'verdiği cevapları yeniden geçmek zorunda kalmamalı',
+    );
+    expect(find.text(l10n.quickSetupGoalsTitle), findsOneWidget);
+
+    // İsim de duruyor: geri dönünce alan dolu geliyor.
+    await tester.tap(find.bySemanticsLabel(l10n.quickSetupBack));
+    await tester.pumpAndSettle();
+    expect(find.text('ebrar'), findsOneWidget);
+  });
+
+  testWidgets('isim kaydedilmemişse kayıtlı adım yok sayılır', (tester) async {
+    // Elde böyle bir kayıt olabilir (eski sürüm, yarım yazma): adıma dönmek
+    // kullanıcıyı isimsiz halde son adıma düşürür ve "hazırım" hiçbir şey
+    // yapmayan bir düğmeye dönerdi.
+    await pumpSetup(tester, prefsSeed: const {'quick_setup_step': 2});
+
+    expect(find.text(l10n.quickSetupNameHint), findsOneWidget);
+    expect(find.text(l10n.quickSetupStepCounter(1, 4)), findsOneWidget);
+  });
+
+  testWidgets('kurulum bitince kayıtlı adım silinir', (tester) async {
+    await pumpSetup(tester);
+    await enterName(tester, 'ebrar');
+    await tapContinue(tester);
+    await tapContinue(tester);
+    await tapContinue(tester);
+    await tapContinue(tester);
+
+    expect(find.text('STUB_REGISTER'), findsOneWidget);
+    final prefs = await SharedPreferences.getInstance();
+    expect(
+      prefs.getInt('quick_setup_step'),
+      isNull,
+      reason: 'yarım kalmış adım bir sonraki kuruluma sarkmamalı',
     );
   });
 
@@ -194,6 +259,35 @@ void main() {
       await tapContinue(tester);
       expect(tester.takeException(), isNull, reason: 'adım ${i + 2} taştı');
     }
+  });
+
+  testWidgets('375dp telefonda yaş/boy/kilo alanları alt alta iner', (
+    tester,
+  ) async {
+    // Yan yana üç alanda her birine ~100dp düşüyor ve ipucu kırpılıyordu:
+    // ekranda "boy (..." görünüyor, santim mi kilo mu istendiği okunmuyordu.
+    await tester.binding.setSurfaceSize(const Size(375, 812));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await pumpSetup(tester);
+    await enterName(tester, 'ebrar');
+    await tapContinue(tester);
+    await tapContinue(tester);
+
+    final fields = find.byType(TextField);
+    expect(fields, findsNWidgets(3));
+    final first = tester.getRect(fields.at(0));
+    final second = tester.getRect(fields.at(1));
+    expect(
+      second.top,
+      greaterThan(first.top),
+      reason: 'alanlar alt alta olmalı',
+    );
+    expect(
+      first.width,
+      greaterThan(250),
+      reason: 'alt alta inen alan tam genişlik alır, ipucu kırpılmaz',
+    );
   });
 
   testWidgets('her adım kendi analitik olayını atar', (tester) async {

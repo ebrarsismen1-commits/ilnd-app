@@ -155,11 +155,37 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
   @override
   void initState() {
     super.initState();
+    _restore();
     _nameController.addListener(() {
       final canProceed = _nameController.text.trim().isNotEmpty;
       if (canProceed != _canProceed) setState(() => _canProceed = canProceed);
     });
     Future.microtask(_markStep);
+  }
+
+  /// Yarıda bırakılan kurulumu kaldığı yerden açar.
+  ///
+  /// Cevaplar zaten diskteydi (çipler seçildikleri anda yazılıyor, isim ve
+  /// sayılar adım geçilirken) ama ADIM ekranın kendi state'indeydi: uygulama
+  /// kapanınca kullanıcı en baştan başlıyor, verdiği bütün cevapları
+  /// yeniden geçmek zorunda kalıyordu.
+  ///
+  /// İsim boşken kayıtlı adıma dönmek YASAK: zorunluluk kapısı yalnız ilk
+  /// adımda sorulduğu için kullanıcı isimsiz halde son adıma düşer, "hazırım"
+  /// dediğinde [_proceed] sessizce geri döner ve düğme hiçbir şey yapmaz.
+  void _restore() {
+    _nameController.text = ref.read(userNameProvider);
+    final age = ref.read(onboardingAgeProvider);
+    final height = ref.read(onboardingHeightProvider);
+    final weight = ref.read(onboardingWeightProvider);
+    if (age != null) _ageController.text = '$age';
+    if (height != null) _heightController.text = '$height';
+    if (weight != null) _weightController.text = '$weight';
+    _canProceed = _nameController.text.trim().isNotEmpty;
+
+    final saved = ref.read(quickSetupStepProvider);
+    if (saved <= 0 || saved >= _SetupStep.values.length || !_canProceed) return;
+    _step = _SetupStep.values[saved];
   }
 
   @override
@@ -200,22 +226,54 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
         _step.analyticsName,
       ),
     );
+    // Adımın kendi alanları geçilirken yazılır: kurulum yarıda kalırsa
+    // kullanıcı yalnız adımı değil cevaplarını da geri bulsun.
+    await _persistStepInput();
+
     final next = _step.index + 1;
     if (next >= _SetupStep.values.length) {
       await _proceed(l10n);
       return;
     }
+    if (!mounted) return;
     // Klavye bir sonraki adımın üstünde asılı kalmasın.
     FocusScope.of(context).unfocus();
     setState(() => _step = _SetupStep.values[next]);
     _markStep();
+    await ref.read(quickSetupStepProvider.notifier).save(next);
+  }
+
+  /// Görünen adımın metin alanlarını diske yazar. Çipler (hedef, aktivite,
+  /// beslenme, alerji) zaten seçildikleri anda yazılıyor.
+  Future<void> _persistStepInput() async {
+    switch (_step) {
+      case _SetupStep.name:
+        await ref
+            .read(userNameProvider.notifier)
+            .save(_nameController.text.trim());
+      case _SetupStep.body:
+        await ref
+            .read(onboardingAgeProvider.notifier)
+            .save(int.tryParse(_ageController.text.trim()));
+        await ref
+            .read(onboardingHeightProvider.notifier)
+            .save(int.tryParse(_heightController.text.trim()));
+        await ref
+            .read(onboardingWeightProvider.notifier)
+            .save(int.tryParse(_weightController.text.trim()));
+      case _SetupStep.goals:
+      case _SetupStep.food:
+        break;
+    }
   }
 
   void _back() {
     if (_step.index == 0) return;
     FocusScope.of(context).unfocus();
-    setState(() => _step = _SetupStep.values[_step.index - 1]);
+    final previous = _step.index - 1;
+    setState(() => _step = _SetupStep.values[previous]);
     _markStep();
+    unawaited(ref.read(quickSetupStepProvider.notifier).save(previous));
   }
 
   Future<void> _proceed(AppLocalizations l10n) async {
@@ -266,6 +324,9 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
     // Önce register'a git, sonra onboarding'i tamamlandı işaretle — router
     // redirect yeniden değerlendirildiğinde aktif konum zaten /register
     // olsun diye (name_input_screen.dart'taki mount-safety deseninin aynısı).
+    // Yarım kalmış adım bir sonraki kuruluma sarkmasın.
+    await ref.read(quickSetupStepProvider.notifier).clear();
+
     if (!mounted) return;
     context.go(routeRegister);
 
@@ -521,28 +582,36 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
           title: l10n.quickSetupBodyTitle,
           subtitle: l10n.quickSetupBodySubtitle,
         ),
-        Row(
-          children: [
-            Expanded(
-              child: _numberField(p, _ageController, l10n.quickSetupAgeHint),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _numberField(
-                p,
-                _heightController,
-                l10n.quickSetupHeightHint,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _numberField(
-                p,
-                _weightController,
-                l10n.quickSetupWeightHint,
-              ),
-            ),
-          ],
+        // Üç alan yan yana ancak yeterli genişlik varsa durur. 375dp'lik
+        // yaygın telefonda her alana ~100dp düşüyor ve ipucu metni
+        // kırpılıyordu: kullanıcı "boy (..." görüp santim mi kilo mu
+        // istendiğini okuyamıyordu. Dar cihazda alt alta inerler.
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final fields = [
+              (_ageController, l10n.quickSetupAgeHint),
+              (_heightController, l10n.quickSetupHeightHint),
+              (_weightController, l10n.quickSetupWeightHint),
+            ];
+            if (constraints.maxWidth < 330) {
+              return Column(
+                children: [
+                  for (final (c, hint) in fields) ...[
+                    _numberField(p, c, hint),
+                    if (c != fields.last.$1) const SizedBox(height: 10),
+                  ],
+                ],
+              );
+            }
+            return Row(
+              children: [
+                for (final (c, hint) in fields) ...[
+                  Expanded(child: _numberField(p, c, hint)),
+                  if (c != fields.last.$1) const SizedBox(width: 10),
+                ],
+              ],
+            );
+          },
         ),
         const SizedBox(height: 28),
         Text(
@@ -688,12 +757,13 @@ class _QuickSetupScreenState extends ConsumerState<QuickSetupScreen> {
                   ),
                 ),
               ),
-              // Geçme kapısı yalnız opsiyonel adımlarda: isim adımında
-              // "geç" göstermek, zorunlu olan tek alanı isteğe bağlıymış
-              // gibi gösterirdi.
+              // Geçme kapısı yalnız ORTA adımlarda. İsim adımında "geç"
+              // göstermek zorunlu olan tek alanı isteğe bağlıymış gibi
+              // gösterirdi; son adımda ise "hazırım" ile birebir aynı işi
+              // yapan ikinci bir düğme olurdu (ekranda iki kapı, tek yol).
               SizedBox(
                 height: 44,
-                child: _step == _SetupStep.name
+                child: _step == _SetupStep.name || isLast
                     ? null
                     : Center(
                         child: Semantics(

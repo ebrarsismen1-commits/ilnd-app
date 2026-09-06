@@ -12,6 +12,7 @@ const _kOnboardingHeight = 'onboarding_height';
 const _kOnboardingWeight = 'onboarding_weight';
 const _kOnboardingDiet = 'onboarding_diet';
 const _kOnboardingAllergies = 'onboarding_allergies';
+const _kQuickSetupStep = 'quick_setup_step';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Override this provider with the real instance');
@@ -50,6 +51,39 @@ class UserNameNotifier extends StateNotifier<String> {
   Future<void> save(String name) async {
     state = name;
     await _prefs.setString(_kUserName, name);
+  }
+}
+
+// ── Kurulumda kalınan adım ────────────────────────────────────────────────────
+
+/// Hızlı kurulumun kaçıncı adımında kalındığı (0 tabanlı).
+///
+/// Adım yalnız ekranın kendi state'inde tutulsaydı, kurulumu yarıda bırakıp
+/// uygulamayı kapatan kullanıcı geri döndüğünde ilk adımdan başlardı: verdiği
+/// cevaplar diskte duruyor olmasına rağmen hepsini yeniden geçmek zorunda
+/// kalırdı (release_qa_checklist "kaldığı adımdan devam ediyor" maddesi).
+///
+/// Kurulum bitince [clear] ile sıfırlanır; yarım kalmış bir adım, bir sonraki
+/// kuruluma sarkmamalı.
+final quickSetupStepProvider =
+    StateNotifierProvider<QuickSetupStepNotifier, int>((ref) {
+      return QuickSetupStepNotifier(ref.watch(sharedPreferencesProvider));
+    });
+
+class QuickSetupStepNotifier extends StateNotifier<int> {
+  QuickSetupStepNotifier(this._prefs)
+    : super(_prefs.getInt(_kQuickSetupStep) ?? 0);
+
+  final SharedPreferences _prefs;
+
+  Future<void> save(int index) async {
+    state = index;
+    await _prefs.setInt(_kQuickSetupStep, index);
+  }
+
+  Future<void> clear() async {
+    state = 0;
+    await _prefs.remove(_kQuickSetupStep);
   }
 }
 
