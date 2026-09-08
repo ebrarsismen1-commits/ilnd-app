@@ -72,136 +72,154 @@ class _GorevEkleSheetState extends ConsumerState<_GorevEkleSheet> {
       top: false,
       child: Padding(
         padding: EdgeInsets.only(bottom: bottom),
-        child: Container(
-          decoration: BoxDecoration(
-            color: p.base,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.screenPadding,
-            12,
-            AppSpacing.screenPadding,
-            28,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Drag handle
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                    color: p.border,
-                    borderRadius: BorderRadius.circular(2),
+        // Dar ekranlarda yedi gün düğmesi iki satıra iner. Klavye de aynı
+        // anda açıkken sheet'in kullanılabilir yüksekliği iyice azalır;
+        // kaydırma olmazsa kaydet düğmesi ekranın dışında kalırdı.
+        child: SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              color: p.base,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(24),
+              ),
+            ),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.screenPadding,
+              12,
+              AppSpacing.screenPadding,
+              28,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Drag handle
+                Center(
+                  child: Container(
+                    width: 36,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: p.border,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-              ),
 
-              Text(
-                l10n.gorevEkleTitle,
-                style: AppTextStyles.display(fontSize: 24, color: p.text),
-              ),
-              const SizedBox(height: 20),
-
-              // Name input
-              Container(
-                decoration: BoxDecoration(
-                  color: p.surfaceStrong,
-                  borderRadius: BorderRadius.circular(12),
+                Text(
+                  l10n.gorevEkleTitle,
+                  style: AppTextStyles.display(fontSize: 24, color: p.text),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 4,
-                ),
-                child: TextField(
-                  controller: _nameCtrl,
-                  autofocus: true,
-                  style: AppTextStyles.body(fontSize: 15, color: p.text),
-                  decoration: InputDecoration(
-                    hintText: l10n.gorevEkleHint,
-                    hintStyle: AppTextStyles.body(
-                      fontSize: 15,
-                      color: p.textMuted,
-                    ),
-                    border: InputBorder.none,
-                    isDense: true,
-                  ),
-                  onSubmitted: (_) => _save(l10n),
-                ),
-              ),
+                const SizedBox(height: 20),
 
-              const SizedBox(height: 20),
-
-              // Target days per week
-              Text(
-                l10n.gorevEkleDaysPerWeek,
-                style: AppTextStyles.label(fontSize: 11.5, color: p.textMuted),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: List.generate(7, (i) {
-                  final day = i + 1;
-                  final selected = day == _targetDays;
-                  return Pressable(
-                    onTap: () => setState(() => _targetDays = day),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      width: 40,
-                      height: 40,
-                      margin: const EdgeInsets.only(right: 6),
-                      decoration: BoxDecoration(
-                        color: selected ? p.accent : p.surfaceStrong,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        '$day',
-                        style: AppTextStyles.mono(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: selected ? p.onAccent : p.textMuted,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Save button
-              Pressable(
-                onTap: _saving ? null : () => _save(l10n),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
-                  height: 52,
+                // Name input
+                Container(
                   decoration: BoxDecoration(
-                    color: _saving ? p.accent.withValues(alpha: 0.5) : p.accent,
+                    color: p.surfaceStrong,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  alignment: Alignment.center,
-                  child: _saving
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: p.onAccent,
-                          ),
-                        )
-                      : Text(
-                          l10n.gorevEkleSave,
-                          style: AppTextStyles.body(
-                            fontSize: 15,
-                            color: p.onAccent,
-                          ).copyWith(fontWeight: FontWeight.w600),
-                        ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  child: TextField(
+                    controller: _nameCtrl,
+                    autofocus: true,
+                    style: AppTextStyles.body(fontSize: 15, color: p.text),
+                    decoration: InputDecoration(
+                      hintText: l10n.gorevEkleHint,
+                      hintStyle: AppTextStyles.body(
+                        fontSize: 15,
+                        color: p.textMuted,
+                      ),
+                      border: InputBorder.none,
+                      isDense: true,
+                    ),
+                    onSubmitted: (_) => _save(l10n),
+                  ),
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 20),
+
+                // Target days per week
+                Text(
+                  l10n.gorevEkleDaysPerWeek,
+                  style: AppTextStyles.label(
+                    fontSize: 11.5,
+                    color: p.textMuted,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: List.generate(7, (i) {
+                    final day = i + 1;
+                    final selected = day == _targetDays;
+                    return Semantics(
+                      button: true,
+                      selected: selected,
+                      label: '${l10n.gorevEkleDaysPerWeek}: $day',
+                      child: Pressable(
+                        onTap: () => setState(() => _targetDays = day),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 150),
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: selected ? p.accent : p.surfaceStrong,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '$day',
+                            style: AppTextStyles.mono(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: selected ? p.onAccent : p.textMuted,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+
+                const SizedBox(height: 24),
+
+                // Save button
+                Pressable(
+                  onTap: _saving ? null : () => _save(l10n),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 150),
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: _saving
+                          ? p.accent.withValues(alpha: 0.5)
+                          : p.accent,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    alignment: Alignment.center,
+                    child: _saving
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: p.onAccent,
+                            ),
+                          )
+                        : Text(
+                            l10n.gorevEkleSave,
+                            style: AppTextStyles.body(
+                              fontSize: 15,
+                              color: p.onAccent,
+                            ).copyWith(fontWeight: FontWeight.w600),
+                          ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

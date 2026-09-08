@@ -37,7 +37,10 @@ class _EkleSheet extends ConsumerWidget {
 
     return SafeArea(
       top: false,
-      child: Padding(
+      // Küçük telefonlarda ve yatay kullanımda dört aksiyon + kapanış
+      // düğmesi kullanılabilir yüksekliği aşabiliyor. Sheet kendi içinde
+      // kaydırılır; hiçbir aksiyon ekranın altında erişilemez kalmaz.
+      child: SingleChildScrollView(
         padding: EdgeInsets.only(bottom: bottomPadding),
         child: Container(
           decoration: BoxDecoration(
@@ -196,16 +199,20 @@ class _EkleSheet extends ConsumerWidget {
 
               // Close button
               Center(
-                child: Pressable(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: p.accent,
-                      shape: BoxShape.circle,
+                child: Semantics(
+                  button: true,
+                  label: l10n.a11yClose,
+                  child: Pressable(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: p.accent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.close, color: p.onAccent, size: 18),
                     ),
-                    child: Icon(Icons.close, color: p.onAccent, size: 18),
                   ),
                 ),
               ),
