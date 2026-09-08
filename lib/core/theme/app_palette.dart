@@ -20,6 +20,7 @@ class AppPalette {
     required this.danger,
     required this.water,
     required this.onAccent,
+    required this.insight,
   });
 
   final bool isDark;
@@ -53,6 +54,9 @@ class AppPalette {
 
   final Color onAccent;
 
+  /// Yumuşak kart zeminleri (bkz. [InsightTints]).
+  final InsightTints insight;
+
   // ── Gündüz · açık/havadar/gri-tonlu wellness ─────────────────────────────────
   static const light = AppPalette(
     isDark: false,
@@ -72,6 +76,14 @@ class AppPalette {
     danger: Color(0xFFA54A40),
     water: Color(0xFF2E86B8),
     onAccent: Color(0xFFFFFFFF),
+    insight: InsightTints(
+      blush: Color(0xFFF7EBE9),
+      cream: Color(0xFFF5F0E1),
+      peach: Color(0xFFFAEDE0),
+      lavender: Color(0xFFEEECF6),
+      sage: Color(0xFFE8EFE7),
+      neutral: Color(0xFFF1EDE6),
+    ),
   );
 
   // ── Gece · soğuk kömür luxe ───────────────────────────────────────────────────
@@ -90,7 +102,45 @@ class AppPalette {
     danger: Color(0xFFDA8578),
     water: Color(0xFF93D5FF),
     onAccent: Color(0xFF0B140D),
+    insight: InsightTints(
+      blush: Color(0xFF221D1C),
+      cream: Color(0xFF211F17),
+      peach: Color(0xFF241E16),
+      lavender: Color(0xFF1C1C23),
+      sage: Color(0xFF182018),
+      neutral: Color(0xFF1F1E19),
+    ),
   );
+}
+
+/// İçgörü kartlarının yumuşak zeminleri (Keşfet · "Bugün senin için" rafı).
+///
+/// Kart zemini paletin dışında sabit hex olarak yazılsaydı kural #6'ya
+/// takılırdı: renk yalnız paletten gelir. Altı ton tek bir sette duruyor ki
+/// gece karşılığı unutulmasın ve kontrast testi hepsini birden ölçebilsin.
+///
+/// Gündüz tonları neredeyse beyaz, "kutu" değil "kağıt" hissi verir; gece
+/// karşılıkları taban rengin (#10120F) üstüne oturan koyu, hue'su korunmuş
+/// yüzeylerdir (nötr gri YASAK, DESIGN_SYSTEM §1).
+class InsightTints {
+  const InsightTints({
+    required this.blush,
+    required this.cream,
+    required this.peach,
+    required this.lavender,
+    required this.sage,
+    required this.neutral,
+  });
+
+  final Color blush;
+  final Color cream;
+  final Color peach;
+  final Color lavender;
+  final Color sage;
+  final Color neutral;
+
+  /// Kontrast testi ve raf sırası için sabit sıra.
+  List<Color> get all => [blush, cream, peach, lavender, sage, neutral];
 }
 
 /// Aktif tema parlaklığı — gece/gündüz geçişini yönetir.

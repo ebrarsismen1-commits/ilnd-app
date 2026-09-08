@@ -14,6 +14,7 @@ import 'package:ilnd_app/core/repositories/movement_repository.dart';
 import 'package:ilnd_app/core/repositories/plans_repository.dart';
 import 'package:ilnd_app/features/explore/article_detail_screen.dart';
 import 'package:ilnd_app/features/explore/article_model.dart';
+import 'package:ilnd_app/features/explore/discover_carousel.dart';
 import 'package:ilnd_app/features/explore/explore_ordering.dart';
 import 'package:ilnd_app/features/movement/movement_program.dart';
 import 'package:ilnd_app/features/movement/movement_program_screen.dart';
@@ -104,11 +105,22 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     // güne göre seçiliyor. Eskiden kapak listenin ilk elemanıydı ve hangi
     // etikete basılırsa basılsın aynı içerik duruyordu.
     final ordered = interleaveByCategory(allArticles);
+    // "Bugün senin için" rafının günlük dilimi. Yalnız süzülmemiş görünümde
+    // çizildiği için seçim de orada anlamlı.
+    final todaysPicks = _selected == _Filter.hepsi
+        ? pickDaily(ordered)
+        : const <Article>[];
+    final railIds = todaysPicks.map((a) => a.id).toSet();
     // Büyük kapak kartı 2026-08-31'de kaldırıldı (owner kararı): ekranın
     // tek büyük anı olması gerekiyordu ama listeden bir yazıyı çekip
     // ayrıcalıklı kılıyordu ve aynı içerik iki biçimde görünüyordu.
     // Artık süzülmüş liste doğrudan çiziliyor.
-    final filtered = ordered.where((a) => _selected.matches(a)).toList();
+    // Raftaki yazılar listeden DÜŞÜLÜR. Aynı içeriğin bir ekranda iki biçimde
+    // görünmesi 2026-08-31'de büyük kapak kartının kaldırılma sebebiydi;
+    // raf da aynı tuzağa düşmesin.
+    final filtered = ordered
+        .where((a) => _selected.matches(a) && !railIds.contains(a.id))
+        .toList();
     // Yalnız oynatılabilir seansı olan programlar (ADR-0004). Makalelerdeki
     // kArticles gibi bir offline yedeği YOK: video içeriğinin yerel karşılığı
     // olamaz, içerik gelmeden raf da olmaz.
@@ -221,6 +233,22 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             // Büyük kapak kartı aynı kararla kaldırıldı; ekranın ilk şeyi
             // artık etiket rayı ve hemen altındaki ritüeller.
             if (_selected == _Filter.hepsi) ...[
+              // ── Bugün senin için ───────────────────────────────────────
+              // Kişiselleştirilmiş günlük raf, listenin ÜSTÜNDE ama etiket
+              // rayının ALTINDA duruyor: rayın ekranın ilk öğesi olması
+              // 2026-08-31 owner kararı, o karara dokunulmadı. Ritüeller
+              // gibi yalnız süzülmemiş görünümde çizilir, çünkü bir
+              // kategoriye bakan kullanıcı için kişisel gün özeti araya
+              // giren bir konu değişikliği olur.
+              SliverToBoxAdapter(
+                child: DiscoverCarousel(
+                  title: l10n.discoverTodayTitle,
+                  articles: todaysPicks,
+                  p: p,
+                  onOpen: _open,
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
               SliverToBoxAdapter(
                 child: _RitualsRow(articles: allArticles, p: p, onOpen: _open),
               ),

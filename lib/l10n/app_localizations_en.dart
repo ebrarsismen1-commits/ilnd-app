@@ -1943,4 +1943,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get a11yMovementPause => 'Pause the video';
+
+  @override
+  String get discoverTodayTitle => 'Today, for you';
 }

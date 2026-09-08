@@ -839,5 +839,7 @@
   "movementPaywallReason": "this program is for ILND+ members",
   "movementPremiumBadge": "ILND+",
   "a11yMovementPlay": "Play the video",
-  "a11yMovementPause": "Pause the video"
+  "a11yMovementPause": "Pause the video",
+
+  "discoverTodayTitle": "Today, for you"
 }

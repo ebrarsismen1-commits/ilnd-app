@@ -3535,6 +3535,12 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Videoyu duraklat'**
   String get a11yMovementPause;
+
+  /// Explore: header above the daily article rail
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün senin için'**
+  String get discoverTodayTitle;
 }
 
 class _AppLocalizationsDelegate

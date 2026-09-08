@@ -899,8 +899,6 @@
   "sleepRitualHomeCardSubtitle": "birkaç dakika, sonra uyku",
   "@sleepRitualHomeCardSubtitle": {"description": "Evening invitation card subtitle on home"},
 
-
-
   "paywallSubtitle": "sınırsız sohbet, daha derin hafıza, kişisel plan.",
   "@paywallSubtitle": {"description": "Paywall subtitle under the ILND+ heading"},
 
@@ -1855,5 +1853,9 @@
   "@a11yMovementPlay": {"description": "Accessibility label for the play button"},
 
   "a11yMovementPause": "Videoyu duraklat",
-  "@a11yMovementPause": {"description": "Accessibility label for the pause button"}
+  "@a11yMovementPause": {"description": "Accessibility label for the pause button"},
+
+  "discoverTodayTitle": "Bugün senin için",
+  "@discoverTodayTitle": {"description": "Explore: header above the daily article rail"}
 }
+

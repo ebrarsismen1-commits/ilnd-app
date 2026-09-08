@@ -59,3 +59,27 @@ Article? pickCover(List<Article> pool, {DateTime? now}) {
   final day = (now ?? DateTime.now()).day;
   return pool[day % pool.length];
 }
+
+/// "Bugün senin için" rafının içeriği: günlük dönen bir pencere.
+///
+/// [pickCover] tek bir yazı seçer, bu ise [count] tanelik bir dilim verir ve
+/// dilim her gün kayar. Seçim yine DETERMİNİSTİK: gün içinde açılış sayısı
+/// kaç olursa olsun aynı yazılar çıkar, yoksa kullanıcı sabah gördüğü kartı
+/// öğleden sonra bulamazdı.
+///
+/// Havuz tükendiğinde baştan sarar, yani liste kısa olsa da raf hep dolu
+/// gelir; aynı yazı iki kez girmez (pencere havuzdan uzun olamaz).
+List<Article> pickDaily(List<Article> pool, {int count = 6, DateTime? now}) {
+  if (pool.isEmpty) return const [];
+  final size = count < pool.length ? count : pool.length;
+  final today = now ?? DateTime.now();
+  // Yılın günü: ayın günü kullanılsaydı pencere 28-31'de sıçrar, ay
+  // başında hep aynı yere dönerdi.
+  final dayOfYear = DateTime(
+    today.year,
+    today.month,
+    today.day,
+  ).difference(DateTime(today.year)).inDays;
+  final start = (dayOfYear * size) % pool.length;
+  return [for (var i = 0; i < size; i++) pool[(start + i) % pool.length]];
+}

@@ -121,6 +121,44 @@ void main() {
         expect(contrast(p.danger, bgOf(p.surface)), greaterThanOrEqualTo(aa));
       });
 
+      test('içgörü kartı zeminleri metni taşıyor', () {
+        // Keşfet'in "Bugün senin için" rafı altı yumuşak zemin kullanıyor
+        // (AppPalette.insight). Kural #19: yeni renk gözle değil ölçüyle
+        // onaylanır. Kartların üstünde hem gövde hem ikincil metin, hem de
+        // accent renkli CTA duruyor; üçü de ayrı ayrı ölçülür.
+        for (final (i, tint) in p.insight.all.indexed) {
+          final bg = bgOf(tint);
+          expect(
+            contrast(p.text, bg),
+            greaterThanOrEqualTo(aa),
+            reason: 'text / insight tint #$i',
+          );
+          expect(
+            contrast(p.textMuted, bg),
+            greaterThanOrEqualTo(aa),
+            reason: 'textMuted / insight tint #$i',
+          );
+          expect(
+            contrast(p.accent, bg),
+            greaterThanOrEqualTo(aa),
+            reason: 'accent (CTA metni ve işaretler) / insight tint #$i',
+          );
+        }
+      });
+
+      test('içgörü kartının kenarlığı zemininden ayrışır', () {
+        // Kartı ayıran tek şey 0.5px hairline; zeminle aynı tona düşerse
+        // kartın sınırı hiç görünmez. Anlam taşıyan arayüz sınırı: 3:1
+        // değil ama en azından seçilebilir olmalı.
+        for (final (i, tint) in p.insight.all.indexed) {
+          expect(
+            contrast(bgOf(p.border), bgOf(tint)),
+            greaterThan(1.05),
+            reason: 'border / insight tint #$i',
+          );
+        }
+      });
+
       test('su çubuğu kendi rayından ayırt edilebilir', () {
         expect(
           contrast(p.water, bgOf(p.border)),

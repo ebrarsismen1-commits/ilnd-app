@@ -1921,4 +1921,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get a11yMovementPause => 'Videoyu duraklat';
+
+  @override
+  String get discoverTodayTitle => 'Bugün senin için';
 }
