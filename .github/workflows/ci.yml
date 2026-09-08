@@ -115,6 +115,37 @@ jobs:
             build/app/outputs/bundle/release/*.aab
           retention-days: 7
 
+  flutter-build-web:
+    name: Build web (release)
+    runs-on: ubuntu-latest
+    needs: flutter
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate localizations
+        run: flutter gen-l10n
+
+      # The web target was previously unverified: CI built only apk and
+      # appbundle, so a web-only compile break (an unconditional dart:io
+      # import, a plugin without a web implementation) could land on main
+      # unnoticed and only surface at deploy time. Unlike the Android job
+      # this needs no google-services.json: on web the Firebase config is
+      # read at runtime from AppConfig (String.fromEnvironment, see
+      # lib/core/services/app_config.dart), not injected at build time by
+      # the Google Services Gradle plugin. The compile is what is being
+      # verified here, so no --dart-define values are required.
+      - name: Build web (release)
+        run: flutter build web --release
+
   functions:
     name: Cloud Functions lint + emulator tests
     runs-on: ubuntu-latest

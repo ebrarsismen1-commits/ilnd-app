@@ -1,5 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
+// Yalnizca SocketException icin. Web derlemesi bu import ile calisiyor,
+// ama `show` olmadan birinin File/Platform'a uzanmasi ve web'i kirmasi
+// kolay; yemek_ekle_screen.dart ile ayni daraltma uygulandi.
+import 'dart:io' show SocketException;
 
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
