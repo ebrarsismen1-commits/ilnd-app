@@ -7,8 +7,9 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log",
+    "deploy": "echo 'No default target. Use: npm run deploy:prod, or firebase deploy --only functions --project <alias>' && exit 1",
+    "deploy:prod": "firebase deploy --only functions --project prod",
+    "logs": "firebase functions:log --project prod",
     "test": "jest --runInBand",
     "seed:articles": "node scripts/seedArticles.js",
     "seed:movement": "node scripts/seedMovementPrograms.js",

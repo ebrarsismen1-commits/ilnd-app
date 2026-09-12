@@ -61,8 +61,9 @@ cd functions && npm install && cd ..
 # Start Firebase emulators
 firebase emulators:start
 
-# Seed article content
-cd functions && npm run seed:articles && cd ..
+# Seed article content (into the emulator — the script refuses to run without
+# an explicit target, see functions/scripts/lib/target.js)
+cd functions && FIRESTORE_EMULATOR_HOST=localhost:8080 npm run seed:articles && cd ..
 
 # Run the app
 flutter run
@@ -130,11 +131,13 @@ Articles are managed via JSON and seeded to Firestore:
 ```bash
 cd functions
 
-# Add/update articles (idempotent)
-npm run seed:articles
+# Add/update articles (idempotent). A target is required; production also
+# needs --confirm-prod.
+npm run seed:articles -- --project=<project-id>
 
-# Also remove deleted articles
-npm run seed:articles -- --prune
+# Also remove deleted articles (on production this is a dry run unless
+# --confirm-prune is added)
+npm run seed:articles -- --project=<project-id> --prune
 ```
 
 Edit [`content/articles.json`](content/articles.json) to add content. No app update required — Firestore is the live source.
@@ -257,8 +260,9 @@ To publish content changes:
 ```bash
 cd functions
 npm install
-npm run seed:articles            # upserts content/articles.json into Firestore
-npm run seed:articles -- --prune # also deletes articles removed from the JSON
+npm run seed:articles -- --project=ilnd-app-8dcbd --confirm-prod            # upsert
+npm run seed:articles -- --project=ilnd-app-8dcbd --confirm-prod --prune    # dry run: lists orphans
+npm run seed:articles -- --project=ilnd-app-8dcbd --confirm-prod --prune --confirm-prune  # deletes
 ```
 
 This requires Application Default Credentials for the target Firebase

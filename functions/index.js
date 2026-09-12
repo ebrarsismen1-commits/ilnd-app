@@ -7,6 +7,8 @@ const {
   createUsageCollector,
   buildUsageIncrements,
 } = require("./tokenUsage");
+const {parseAiRequest, METERED_KINDS} = require("./aiRequest");
+const {getAiConfig} = require("./aiConfig");
 
 admin.initializeApp();
 setGlobalOptions({maxInstances: 10});
@@ -198,12 +200,22 @@ const TIER_CONFIG = {
 // verilir.
 const FREE_WEEKLY_LIMITS = {message: 20, food: 5};
 
-// Kotadan düşen (kullanıcının bilerek başlattığı) eylem türleri. Bunun
-// dışındaki her çağrı "system" sayılır: karşılama mesajı, hafıza çıkarımı,
-// öneri üretimi gibi kullanıcının saymadığı yardımcı çağrılar — bunlar
-// haftalık kotadan düşmez, yalnız aşağıdaki günlük kademe tavanına tabidir.
-const METERED_KINDS = ["message", "food"];
-const KNOWN_KINDS = ["system", ...METERED_KINDS];
+// Kotadan düşen (kullanıcının bilerek başlattığı) eylem türleri aiRequest.js'te
+// (METERED_KINDS). Bunun dışındaki her çağrı "system" sayılır: karşılama,
+// günlük yanıtı, hafıza çıkarımı, öneri. Bunlar haftalık kotadan düşmez ama
+// artık bedava da değil (denetim C-1, 2026-09-13): `kind` alanını göndermemek
+// eskiden tek başına haftalık kotayı atlatıyordu. Üç tavan birlikte çalışır:
+//   1. SYSTEM_DAILY_LIMIT: günlük "system" çağrı adedi,
+//   2. aiRequest.js: "system" için dar metin bütçesi, görsel yasağı,
+//   3. günlük tahmini dolar tavanı (tüm türler, ai_token_usage'dan).
+const SYSTEM_DAILY_LIMIT = 80;
+
+// Kullanıcı başı günlük tahmini harcama tavanı (USD). `config/ai.dailyUsdLimit`
+// ile konsoldan değiştirilebilir. Yoğun bir premium kullanıcının gerçek
+// harcaması bunun çok altında; tavan yalnız kötüye kullanımı keser.
+const DEFAULT_DAILY_USD_LIMIT = Number(process.env.AI_DAILY_USD_LIMIT) > 0 ?
+  Number(process.env.AI_DAILY_USD_LIMIT) :
+  5;
 
 // Doğrulanmış premium sonucu bu kadar süre önbelleklenir. Yalnız POZİTİF
 // sonuç önbelleklenir: "premium değil" saklansaydı, aboneliği yeni satın
@@ -262,6 +274,10 @@ async function checkAndIncrementUsage(uid, tier, kind, freeQuotaApplies) {
     if (dayUsed >= TIER_CONFIG[tier].dailyLimit) {
       return {allowed: false, reason: "daily-tier-limit"};
     }
+    const systemUsed = dayCounts.system || 0;
+    if (kind === "system" && systemUsed >= SYSTEM_DAILY_LIMIT) {
+      return {allowed: false, reason: "daily-system-limit"};
+    }
 
     if (metered) {
       const weekCounts = weekSnap.exists ? (weekSnap.data().counts || {}) : {};
@@ -280,6 +296,7 @@ async function checkAndIncrementUsage(uid, tier, kind, freeQuotaApplies) {
     }
 
     dayCounts[tier] = dayUsed + 1;
+    if (kind === "system") dayCounts.system = systemUsed + 1;
     tx.set(dayRef, {
       uid,
       day,
@@ -387,55 +404,27 @@ async function hasRevenueCatPremium(uid) {
   }
 }
 
-// Girdi tavanları. Metin ve görsel AYRI sınırlanır çünkü maliyetleri çok
-// farklı: 1MB metin ~250k token (pahalı), 1MB görsel ~1.6k token (ucuz).
-// Tek bir "gövde boyutu" sınırı ya fotoğrafı bloklar ya metni serbest bırakır.
-const MAX_BODY_BYTES = 8 * 1024 * 1024; // fotoğraf (istemci 4MB'a kırpar) + pay
-const MAX_MESSAGES = 30; // sohbet penceresi 4 tur; 30 fazlasıyla yeterli
-const MAX_TEXT_CHARS = 100000; // ~25k token → çağrı başı girdi maliyeti sınırlı
-const MAX_IMAGES = 2;
+// Girdi doğrulaması (boyut, blok izin listesi, görsel, metin bütçesi)
+// aiRequest.js'te: saf fonksiyon, emülatörsüz test edilir.
 
 /**
- * Rejects oversized payloads before they reach Anthropic. Returns null when
- * the request is fine, or `{status, error}` describing the violation.
- * @param {import("firebase-functions/v2/https").Request} req incoming request
- * @param {unknown} system system prompt from the body (may be absent)
- * @param {Array<unknown>} messages the messages array from the body
- * @return {{status: number, error: string}|null} violation, or null if OK
+ * Kullanıcının bugünkü tahmini AI harcaması tavanı aştı mı?
+ * ai_token_usage her çağrıdan SONRA yazılır, yani tavan en fazla bir çağrı
+ * kadar aşılabilir; kötüye kullanımı kesmek için yeterli.
+ * @param {string} uid Firebase uid
+ * @param {number} limitUsd tavan
+ * @return {Promise<boolean>} true ise çağrı reddedilmeli
  */
-function validateInputSize(req, system, messages) {
-  const bytes = req.rawBody ?
-    req.rawBody.length :
-    Buffer.byteLength(JSON.stringify(req.body || {}));
-  if (bytes > MAX_BODY_BYTES) {
-    return {status: 413, error: "Payload too large"};
+async function dailySpendExceeded(uid, limitUsd) {
+  const day = new Date().toISOString().slice(0, 10);
+  try {
+    const snap = await db.collection("ai_token_usage").doc(`${uid}_${day}`).get();
+    const spent = snap.exists ? Number((snap.data() || {}).estimatedUsd) || 0 : 0;
+    return spent >= limitUsd;
+  } catch (err) {
+    console.warn("dailySpendExceeded read failed:", err.message || err);
+    return false;
   }
-  if (messages.length > MAX_MESSAGES) {
-    return {status: 400, error: "Too many messages"};
-  }
-
-  let textChars = typeof system === "string" ? system.length : 0;
-  let images = 0;
-  for (const msg of messages) {
-    const content = msg && msg.content;
-    if (typeof content === "string") {
-      textChars += content.length;
-      continue;
-    }
-    if (!Array.isArray(content)) continue;
-    for (const block of content) {
-      if (!block || typeof block !== "object") continue;
-      if (block.type === "image") images++;
-      if (typeof block.text === "string") textChars += block.text.length;
-    }
-  }
-  if (textChars > MAX_TEXT_CHARS) {
-    return {status: 400, error: "Input text too long"};
-  }
-  if (images > MAX_IMAGES) {
-    return {status: 400, error: "Too many images"};
-  }
-  return null;
 }
 
 /**
@@ -472,29 +461,38 @@ exports.anthropicProxy = onRequest(
         return;
       }
 
-      const {tier, system, messages} = req.body || {};
+      // Girdi kapısı: yalnız bilinen alanlar ve blok türleri geçer; iletilen
+      // gövde istemcinin nesnesinden değil bu temiz kopyadan kurulur. Model
+      // ve max_tokens her zaman sunucudaki TIER_CONFIG'den gelir.
+      const parsed = parseAiRequest(req.body, {
+        rawBytes: req.rawBody ? req.rawBody.length : undefined,
+        tiers: Object.keys(TIER_CONFIG),
+      });
+      if (!parsed.ok) {
+        res.status(parsed.status).json({error: parsed.error});
+        return;
+      }
+      const {tier, kind, system, messages} = parsed;
       const config = TIER_CONFIG[tier];
-      if (!config || !Array.isArray(messages) || messages.length === 0) {
-        res.status(400).json({error: "Invalid request body"});
+
+      // Acil durum anahtarı ve günlük dolar tavanı (config/ai).
+      const aiConfig = await getAiConfig(db);
+      if (aiConfig.enabled === false) {
+        res.status(503).json({
+          error: "AI is temporarily unavailable",
+          reason: "ai-disabled",
+        });
         return;
       }
-
-      // kind = ücretsiz katman kotasından düşecek eylem türü. Belirtilmezse
-      // "system" (yardımcı çağrı) sayılır — kotadan düşmez.
-      const kind = typeof (req.body || {}).kind === "string" ?
-        req.body.kind :
-        "system";
-      if (!KNOWN_KINDS.includes(kind)) {
-        res.status(400).json({error: "Invalid usage kind"});
-        return;
-      }
-
-      // Girdi sınırları — max_tokens yalnız ÇIKTIYI sınırlar. Bu olmadan
-      // geçerli bir hesap günlük çağrı hakkını devasa bağlamlarla harcayıp
-      // ciddi fatura çıkarabilir (denetim bulgusu, 2026-07-24).
-      const sizeErr = validateInputSize(req, system, messages);
-      if (sizeErr) {
-        res.status(sizeErr.status).json({error: sizeErr.error});
+      const usdLimit = Number(aiConfig.dailyUsdLimit) > 0 ?
+        Number(aiConfig.dailyUsdLimit) :
+        DEFAULT_DAILY_USD_LIMIT;
+      if (await dailySpendExceeded(uid, usdLimit)) {
+        res.status(429).json({
+          error: "Daily AI usage limit reached",
+          reason: "daily-cost-limit",
+          kind,
+        });
         return;
       }
 
@@ -534,7 +532,7 @@ exports.anthropicProxy = onRequest(
       // cevabin SONU gelene kadar bos balona bakiyor; Sonnet'te bu birkac
       // saniye. Akista ilk kelime saniyenin altinda ekranda oluyor ve model,
       // kalite, kota ayni kaliyor.
-      const wantsStream = (req.body || {}).stream === true;
+      const wantsStream = parsed.stream;
       const usageCollector = createUsageCollector();
 
       try {

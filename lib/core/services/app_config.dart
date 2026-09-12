@@ -115,4 +115,17 @@ abstract final class AppConfig {
 
   static bool get isFirebaseConfigured =>
       firebaseApiKey.isNotEmpty && firebaseProjectId.isNotEmpty;
+
+  // ── Ortam ayrımı (güvenlik denetimi C-2) ────────────────────────────────────
+  // Tek bir Firebase/Supabase projesi var ve `.env` hem debug hem release
+  // derlemesine gidiyor: `flutter run` canlı veriye yazıyor. Staging projesi
+  // kurulana kadar en azından GÖRÜNÜR olsun: debug derleme canlı projeye
+  // bağlıysa ekranda "PROD" bandı çıkar ve analitik toplanmaz.
+  static const prodFirebaseProjectIds = {'ilnd-app-8dcbd'};
+
+  /// Debug derleme canlı Firebase projesine mi bağlı?
+  static bool isDebugBuildOnProd({
+    required bool isDebug,
+    required String projectId,
+  }) => isDebug && prodFirebaseProjectIds.contains(projectId);
 }

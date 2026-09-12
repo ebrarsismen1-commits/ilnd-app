@@ -23,7 +23,13 @@ abstract final class AnalyticsService {
 
   static Future<void> initialize() async {
     if (!AppConfig.isFirebaseConfigured) return;
-    await _guard(() => _analytics.setAnalyticsCollectionEnabled(true));
+    // Canlı projeye bağlı debug derlemesi geliştirici olaylarıyla gerçek
+    // huniyi kirletmesin (denetim C-2).
+    final devOnProd = AppConfig.isDebugBuildOnProd(
+      isDebug: kDebugMode,
+      projectId: AppConfig.firebaseProjectId,
+    );
+    await _guard(() => _analytics.setAnalyticsCollectionEnabled(!devOnProd));
   }
 
   static Future<void> setUserId(String? userId) =>

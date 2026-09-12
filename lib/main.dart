@@ -250,6 +250,18 @@ class _IlndAppState extends ConsumerState<IlndApp> with WidgetsBindingObserver {
           ? ThemeMode.dark
           : ThemeMode.light,
       debugShowCheckedModeBanner: false,
+      // Debug derleme canlı veriye yazıyorsa bunu herkes görsün (denetim C-2).
+      builder: (context, child) =>
+          AppConfig.isDebugBuildOnProd(
+            isDebug: kDebugMode,
+            projectId: AppConfig.firebaseProjectId,
+          )
+          ? Banner(
+              message: 'PROD',
+              location: BannerLocation.topStart,
+              child: child ?? const SizedBox.shrink(),
+            )
+          : child ?? const SizedBox.shrink(),
       routerConfig: router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
