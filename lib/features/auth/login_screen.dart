@@ -5,6 +5,7 @@ import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/utils/validators.dart';
+import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/auth/auth_error_l10n.dart';
@@ -141,6 +142,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final authState = ref.watch(authNotifierProvider);
     final isLoading = authState is AuthLoading;
 
+    final canPop = Navigator.of(context).canPop();
+
     return Scaffold(
       backgroundColor: p.base,
       body: SafeArea(
@@ -151,25 +154,55 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 64),
+              // Karşılamadan gelindiyse geri ok; router'ın doğrudan bıraktığı
+              // durumda (oturum düştü) dönülecek bir yer yok, yalnız boşluk.
+              Align(
+                alignment: Alignment.centerLeft,
+                child: canPop
+                    ? Semantics(
+                        button: true,
+                        label: l10n.a11yBack,
+                        child: Pressable(
+                          onTap: () => Navigator.of(context).maybePop(),
+                          child: SizedBox(
+                            width: 44,
+                            height: 44,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Icon(
+                                Icons.chevron_left_rounded,
+                                size: 28,
+                                color: p.text,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(height: 44),
+              ),
+              const SizedBox(height: 4),
 
               Text(
                 'ilnd.',
-                style: AppTextStyles.display(fontSize: 44, color: p.text),
+                style: AppTextStyles.display(fontSize: 38, color: p.text),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 14),
               Text(
                 l10n.loginTagline,
-                style: AppTextStyles.body(
-                  fontSize: 15,
-                  color: p.textMuted,
-                ).copyWith(letterSpacing: 0.2),
+                style: AppTextStyles.display(fontSize: 25, color: p.text),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                l10n.loginSubtitle,
+                style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 52),
+              const SizedBox(height: 32),
 
+              _FieldLabel(l10n.authEmailLabel, p: p),
               AuthInputField(
                 controller: _emailCtrl,
                 hint: l10n.loginEmailHint,
@@ -181,8 +214,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   if (_emailError) setState(() => _emailError = false);
                 },
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
 
+              _FieldLabel(l10n.authPasswordLabel, p: p),
               AuthInputField(
                 controller: _passwordCtrl,
                 hint: l10n.loginPasswordHint,
@@ -207,58 +241,36 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
 
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Align(
                 alignment: Alignment.centerRight,
                 child: Pressable(
                   onTap: isLoading ? null : () => _forgotPassword(l10n),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
                       l10n.loginForgotPassword,
-                      style: AppTextStyles.body(fontSize: 13, color: p.accent),
+                      style: AppTextStyles.body(
+                        fontSize: 12.5,
+                        color: p.accent,
+                      ),
                     ),
                   ),
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
 
-              Pressable(
-                onTap: isLoading ? null : () => _submit(l10n),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: 52,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: isLoading
-                        ? p.accent.withValues(alpha: 0.5)
-                        : p.accent,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  alignment: Alignment.center,
-                  child: isLoading
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: p.onAccent,
-                          ),
-                        )
-                      : Text(
-                          l10n.loginSubmit,
-                          style: AppTextStyles.body(
-                            fontSize: 15,
-                            color: p.onAccent,
-                          ).copyWith(fontWeight: FontWeight.w600),
-                        ),
-                ),
+              IlndButton(
+                p: p,
+                label: l10n.loginSubmit,
+                loading: isLoading,
+                onTap: () => _submit(l10n),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 22),
               AuthDivider(label: l10n.authOrDivider),
-              const SizedBox(height: 24),
+              const SizedBox(height: 22),
 
               SocialSignInButton(
                 provider: SocialProvider.google,
@@ -304,6 +316,30 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(height: 40),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Alanın üstündeki kalın etiket ("e-posta", "şifre").
+class _FieldLabel extends StatelessWidget {
+  const _FieldLabel(this.text, {required this.p});
+  final String text;
+  final AppPalette p;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: AppTextStyles.body(
+            fontSize: 13,
+            color: p.text,
+          ).copyWith(fontWeight: FontWeight.w700),
         ),
       ),
     );

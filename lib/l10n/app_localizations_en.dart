@@ -58,7 +58,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navYou => 'You';
 
   @override
-  String get navRing => 'ilnd';
+  String get navRing => 'Chat';
 
   @override
   String get topulukTitle => 'community.';
@@ -1946,4 +1946,256 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get discoverTodayTitle => 'Today, for you';
+
+  @override
+  String homeIslandOwned(String owner) {
+    return '$owner island';
+  }
+
+  @override
+  String get homeIslandVisit => 'see your island';
+
+  @override
+  String get homePracticeLabel => 'TODAY\'S SMALL PRACTICE';
+
+  @override
+  String get practiceBreathTitle => 'a pause for breath';
+
+  @override
+  String get practiceBreathMeta => 'breathing practice · 2 min';
+
+  @override
+  String get homeShortcutFocus => 'focus';
+
+  @override
+  String get focusTitle => 'a little focus';
+
+  @override
+  String get focusSubtitle => 'what would you like to give this time to?';
+
+  @override
+  String get focusIntentLabel => 'your intention';
+
+  @override
+  String get focusIntentWork => 'work';
+
+  @override
+  String get focusIntentRead => 'reading';
+
+  @override
+  String get focusIntentOwn => 'my own';
+
+  @override
+  String get focusIntentHint => 'write your intention';
+
+  @override
+  String get focusDurationLabel => 'your time';
+
+  @override
+  String focusMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get focusNote => 'this time is yours. pause whenever you like.';
+
+  @override
+  String get focusStart => 'start focusing';
+
+  @override
+  String focusSessionMeta(int minutes) {
+    return '$minutes-minute focus break';
+  }
+
+  @override
+  String get focusPause => 'pause';
+
+  @override
+  String get focusResume => 'resume';
+
+  @override
+  String get focusEnd => 'end session';
+
+  @override
+  String get focusSessionFooter => 'one task, one moment.';
+
+  @override
+  String get focusDoneTitle => 'you made time for yourself.';
+
+  @override
+  String focusDoneMeta(int minutes, String intent) {
+    return '$minutes min · $intent';
+  }
+
+  @override
+  String get focusFeelQuestion => 'how did it feel?';
+
+  @override
+  String get focusFeelGood => 'it helped';
+
+  @override
+  String get focusFeelUnsure => 'not sure';
+
+  @override
+  String get focusFeelHard => 'it was hard';
+
+  @override
+  String get focusBackToToday => 'back to today';
+
+  @override
+  String get focusDoneFooter => 'however short, it has a place here.';
+
+  @override
+  String a11yFocusTimeLeft(String time) {
+    return 'Time left $time';
+  }
+
+  @override
+  String get chatPageTitle => 'let\'s talk a little.';
+
+  @override
+  String get chatEmptyTitle => 'what\'s on your mind today?';
+
+  @override
+  String get chatEmptySubtitle => 'we can start somewhere, if you like.';
+
+  @override
+  String get chatSuggestTired => 'feeling a bit tired today';
+
+  @override
+  String get chatSuggestSort => 'want to sort out my thoughts';
+
+  @override
+  String get chatSuggestShare => 'want to share something good';
+
+  @override
+  String get profileTagline => 'at your own pace.';
+
+  @override
+  String get profileWeekLabel => 'FROM THIS WEEK';
+
+  @override
+  String profileWeekLine(int journal, int meals) {
+    String _temp0 = intl.Intl.pluralLogic(
+      journal,
+      locale: localeName,
+      other: '$journal entries',
+      one: '1 entry',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      meals,
+      locale: localeName,
+      other: '$meals meals',
+      one: '1 meal',
+    );
+    return '$_temp0 · $_temp1';
+  }
+
+  @override
+  String get profileWeekHint => 'look back and remember your week.';
+
+  @override
+  String get profileIslandRowSubtitle => 'back to your objects and memories';
+
+  @override
+  String get profileNotificationsRow => 'your notifications';
+
+  @override
+  String get profileNotificationsRowSubtitle => 'choose when you\'re reminded';
+
+  @override
+  String get profileDataRow => 'your data & privacy';
+
+  @override
+  String get profileDataRowSubtitle =>
+      'what ILND remembers, your account, documents';
+
+  @override
+  String get profileNightView => 'night view';
+
+  @override
+  String get dataTitle => 'your data is yours';
+
+  @override
+  String get dataSubtitle => 'see where and why it\'s used.';
+
+  @override
+  String get dataMemoryEmpty =>
+      'ILND doesn\'t remember anything about you yet.';
+
+  @override
+  String get notifTitle => 'at a time that suits you';
+
+  @override
+  String get notifSubtitle => 'you set the rhythm of your reminders.';
+
+  @override
+  String get takipSubtitle => 'how did you look after yourself today?';
+
+  @override
+  String takipWaterProgress(String ml, String goal) {
+    return '$ml / $goal ml';
+  }
+
+  @override
+  String takipWaterAdd(int ml) {
+    return '+ $ml ml';
+  }
+
+  @override
+  String get takipNutritionLabel => 'NUTRITION SUMMARY';
+
+  @override
+  String takipKcalProgress(String kcal, String goal) {
+    return '$kcal / $goal kcal';
+  }
+
+  @override
+  String get journalSubtitle => 'make room for what stays with you.';
+
+  @override
+  String get journalQuestionLabel => 'TODAY\'S QUESTION';
+
+  @override
+  String get journalQuestion => 'what small thing did you good today?';
+
+  @override
+  String get journalNoWrongAnswer =>
+      'there are no right or wrong answers here.';
+
+  @override
+  String get topulukCityTitle => 'Istanbul';
+
+  @override
+  String get topulukCitySubtitle => 'new meetups will show up here.';
+
+  @override
+  String get topulukTogetherTitle => 'more familiar together.';
+
+  @override
+  String get topulukTogetherBody => 'bring a friend along.';
+
+  @override
+  String get adanSubtitle => 'your own order, traces of you.';
+
+  @override
+  String get adanItemsTitle => 'on your island';
+
+  @override
+  String get welcomeHeadline => 'an island of your own.';
+
+  @override
+  String get loginSubtitle => 'pick up where you left off.';
+
+  @override
+  String get authEmailLabel => 'email';
+
+  @override
+  String get authPasswordLabel => 'password';
+
+  @override
+  String get exploreStartLabel => 'A GENTLE PLACE TO START';
+
+  @override
+  String get chatSendA11y => 'Send';
 }

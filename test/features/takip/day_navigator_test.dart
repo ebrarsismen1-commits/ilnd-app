@@ -127,8 +127,16 @@ void main() {
 
     expect(find.text(l10n.takipDayToday), findsOneWidget);
     expect(find.text('bugün çorbası'), findsOneWidget);
-    expect(find.text('500'), findsOneWidget, reason: 'bugünün kalorisi');
-    expect(find.text('750ml'), findsOneWidget, reason: 'bugünün suyu');
+    expect(
+      find.text(l10n.takipKcalProgress('500', '2.000')),
+      findsOneWidget,
+      reason: 'bugünün kalorisi',
+    );
+    expect(
+      find.text(l10n.takipWaterProgress('750', '2.000')),
+      findsOneWidget,
+      reason: 'bugünün suyu',
+    );
     expect(find.text('1 / 2'), findsOneWidget, reason: 'bugün 1 alışkanlık');
 
     await tapArrow(tester, l10n.takipDayPrev);
@@ -136,8 +144,16 @@ void main() {
     expect(find.text(l10n.takipDayYesterday), findsOneWidget);
     expect(find.text('dün mercimeği'), findsOneWidget);
     expect(find.text('bugün çorbası'), findsNothing);
-    expect(find.text('700'), findsOneWidget, reason: 'dünün kalorisi');
-    expect(find.text('1250ml'), findsOneWidget, reason: 'dünün suyu');
+    expect(
+      find.text(l10n.takipKcalProgress('700', '2.000')),
+      findsOneWidget,
+      reason: 'dünün kalorisi',
+    );
+    expect(
+      find.text(l10n.takipWaterProgress('1.250', '2.000')),
+      findsOneWidget,
+      reason: 'dünün suyu',
+    );
     expect(
       find.text('2 / 2'),
       findsOneWidget,

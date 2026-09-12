@@ -56,11 +56,13 @@ class _AuthInputFieldState extends ConsumerState<AuthInputField> {
   @override
   Widget build(BuildContext context) {
     final p = ref.watch(paletteProvider);
+    // Ada tasarımı: kağıt dolgu + her zaman görünen 1px kenarlık; odakta
+    // Orman, hatada danger ve bir tık kalın.
     final borderColor = widget.hasError
         ? p.danger
         : _focused
         ? p.accent
-        : Colors.transparent;
+        : p.border;
     final iconTextColor = widget.hasError
         ? p.danger
         : _focused
@@ -69,13 +71,13 @@ class _AuthInputFieldState extends ConsumerState<AuthInputField> {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 150),
-      height: 52,
+      height: 54,
       decoration: BoxDecoration(
-        color: p.surfaceStrong,
-        borderRadius: BorderRadius.circular(12),
+        color: p.surface,
+        borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
         border: Border.all(
           color: borderColor,
-          width: (widget.hasError || _focused) ? 1.5 : 0,
+          width: (widget.hasError || _focused) ? 1.5 : 1,
         ),
       ),
       child: Row(
@@ -99,12 +101,12 @@ class _AuthInputFieldState extends ConsumerState<AuthInputField> {
               style: AppTextStyles.body(fontSize: 15, color: p.text),
               decoration: InputDecoration(
                 hintText: widget.hint,
-                hintStyle: AppTextStyles.display(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                  color: p.textMuted,
-                ),
+                hintStyle: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+                filled: false,
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
               ),

@@ -4,6 +4,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -19,6 +20,14 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Lora OFL ile geliyor: lisans metni fontla birlikte dağıtılmak zorunda.
+  // Uygulamanın lisans ekranında (showLicensePage) görünür.
+  LicenseRegistry.addLicense(() async* {
+    yield LicenseEntryWithLineBreaks([
+      'Lora',
+    ], await rootBundle.loadString('assets/fonts/Lora-OFL.txt'));
+  });
 
   // Her dış servis kendi try/catch'inde başlatılır: biri başarısız olsa da
   // (ağ yok, yanlış key, ilk açılışta kota) diğerleri ve runApp() devam eder.

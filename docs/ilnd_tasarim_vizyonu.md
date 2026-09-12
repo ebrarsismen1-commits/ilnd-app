@@ -301,6 +301,11 @@ Kurucunun panosu incelendi; görsel yön şu şekilde kalibre edildi:
   zemin + serif beyaz metin (panodaki DTC marka kartları gibi).
 
 Figma dosyası: https://www.figma.com/design/dMUmZ7PzUFYem6LJeS9lPG — v2 gündüz+gece
+
+GÜNCEL TASARIM: aynı dosyanın **Page 2**'si (node 8:2) — 01 Marka ve
+temeller, 02 Ana ekranlar (10), 03 Akışlar ve durumlar (14), 04 Widget ve
+bildirimler, 05-06 Yavaş Sonbahar. Page 1 (halka konsepti) eskidir.
+Uygulamaya geçirilen dil: ADR-0008, docs/DESIGN_SYSTEM.md.
 ekran script'i hazır, Starter planın MCP limiti açıldığında tek çağrıyla kurulacak.
 
 ---

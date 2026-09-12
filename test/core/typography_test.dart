@@ -15,8 +15,8 @@ import 'package:ilnd_app/core/theme/app_text_styles.dart';
 /// (owner kararı: handoff birebir uygulanacak) o kilit kalktı. Yerine iki
 /// daha zayıf ama hâlâ işe yarayan koruma var:
 ///
-/// 1. **İndirme yasağı** — 2026-08-31'de üç aile de (Noto Serif, DM Sans,
-///    DM Mono) pakete gömüldü. Artık lib/ içinde hiç GoogleFonts çağrısı
+/// 1. **İndirme yasağı** — 2026-08-31'de üç aile de pakete gömüldü
+///    (2026-09-12'den beri Lora, DM Sans, DM Mono). Artık lib/ içinde hiç GoogleFonts çağrısı
 ///    olmamalı, ve gömülü dosyaların yerinde ve geçerli olduğu ayrıca
 ///    doğrulanıyor: ikisinden biri kaçarsa metin sessizce sistem fontuna
 ///    kayar.
@@ -33,7 +33,8 @@ void main() {
       .toList();
 
   test('lib/ çalışma anında font İNDİRMEZ', () {
-    // 2026-08-31: üç aile de pakete gömüldü, artık lib/ içinde hiç
+    // 2026-08-31: üç aile de pakete gömüldü; 2026-09-12'de Noto Serif'in
+    // yerini Ada tasarımının fontu Lora aldı. Artık lib/ içinde hiç
     // GoogleFonts çağrısı olmamalı.
     //
     // Bu yalnız bir stil kuralı değil: indirilen font, ağsız ilk açılışta
@@ -67,7 +68,9 @@ void main() {
     final pubspec = File('pubspec.yaml').readAsStringSync();
 
     const bundled = <String, List<String>>{
-      'NotoSerif': ['Regular', 'SemiBold'],
+      // Lora italik kesimi de taşır: italik kelime vurgusu marka imzası
+      // ve taklit eğik yazı serifte gözle görülür biçimde bozuk çıkıyor.
+      'Lora': ['Regular', 'SemiBold', 'Italic'],
       'DMSans': ['Regular', 'Medium', 'SemiBold', 'Bold'],
       // DM Mono 500'de bitiyor; 600/700 kesimi ÜRETİLMEMİŞ.
       'DMMono': ['Medium'],
@@ -131,11 +134,15 @@ void main() {
       15.5, 16, 16.5, 17, 18, 19, 20, 22, 24, 26, 28, 29, 30, 31, 32, 34, //
       42, 56,
     };
+    // 2026-09-11 "Ada" tasarımı (Figma Page 2) kendi başlık puntolarını
+    // getirdi: wordmark 35/38, selamlama 27, karşılama 25, kart başlığı
+    // 21, özet sayısı 23. Değerler tasarım dosyasından birebir okundu.
+    final ada = <double>{21, 23, 25, 27, 35, 38};
     // Handoff öncesinden kalan iki metrik boyutu (AppTextStyles.sizeMetric*).
     // İlgili ekranlar handoff'a çevrildikçe bu ikisi listeden düşecek.
     final legacy = <double>{40, 44};
 
-    final allowed = {...handoff, ...legacy};
+    final allowed = {...handoff, ...ada, ...legacy};
     final pattern = RegExp(r'fontSize:\s*([0-9]+(?:\.[0-9]+)?)');
     final offenders = <String>[];
 

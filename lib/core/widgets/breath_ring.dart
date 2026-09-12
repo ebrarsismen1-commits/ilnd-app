@@ -9,12 +9,26 @@ import 'package:ilnd_app/core/theme/app_palette.dart';
 /// 6 sn daral. Navigasyon merkezi, sohbet başlığı ve yükleme durumları
 /// aynı ritmi paylaşır — jest her yerde tek.
 class BreathRing extends ConsumerStatefulWidget {
-  const BreathRing({super.key, this.size = 56, this.onTap, this.semanticLabel});
+  const BreathRing({
+    super.key,
+    this.size = 56,
+    this.onTap,
+    this.semanticLabel,
+    this.strokeWidth = 2.5,
+    this.hollow = false,
+  });
 
   /// Dış (yumuşak) dairenin çapı; iç halka orana göre ölçeklenir.
   final double size;
   final VoidCallback? onTap;
   final String? semanticLabel;
+
+  /// İç halkanın çizgi kalınlığı. Ada tasarımının sekme halkası 1.5.
+  final double strokeWidth;
+
+  /// true ise iç daire boş kalır ve dış zemin içinden görünür (sekme
+  /// çubuğundaki halka); false ise iç daire ekran zemini ile dolar.
+  final bool hollow;
 
   @override
   ConsumerState<BreathRing> createState() => _BreathRingState();
@@ -81,9 +95,9 @@ class _BreathRingState extends ConsumerState<BreathRing>
           width: inner,
           height: inner,
           decoration: BoxDecoration(
-            color: p.base,
+            color: widget.hollow ? Colors.transparent : p.base,
             shape: BoxShape.circle,
-            border: Border.all(color: p.accent, width: 2.5),
+            border: Border.all(color: p.accent, width: widget.strokeWidth),
           ),
         ),
       ),

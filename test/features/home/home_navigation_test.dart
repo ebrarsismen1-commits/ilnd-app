@@ -52,6 +52,10 @@ void main() {
           path: routeStreakCard,
           builder: (_, _) => const Scaffold(body: Text('STUB_STREAK')),
         ),
+        GoRoute(
+          path: routeFocus,
+          builder: (_, _) => const Scaffold(body: Text('STUB_ODAK')),
+        ),
       ],
     );
 
@@ -103,58 +107,53 @@ void main() {
     });
   }
 
-  testWidgets('takip satırına dokununca Takip ekranı açılır', (tester) async {
+  testWidgets('takip karosuna dokununca Takip ekranı açılır', (tester) async {
     await pumpHome(tester);
     final l10n = lookupAppLocalizations(const Locale('tr'));
 
-    await tester.tap(find.text(l10n.homeTrackRowSubtitle));
+    await tester.tap(find.text(l10n.takipTitle));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
     expect(find.text('STUB_TAKIP'), findsOneWidget);
   });
 
-  testWidgets('ADAN bloğuna dokununca Adan ekranı açılır', (tester) async {
+  testWidgets('odaklan karosuna dokununca Odaklan ekranı açılır', (
+    tester,
+  ) async {
     await pumpHome(tester);
     final l10n = lookupAppLocalizations(const Locale('tr'));
 
-    await tester.tap(find.text(l10n.adanLabel));
+    await tester.tap(find.text(l10n.homeShortcutFocus));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(find.text('STUB_ODAK'), findsOneWidget);
+  });
+
+  testWidgets('ada kartındaki hap Adan ekranını açar', (tester) async {
+    await pumpHome(tester);
+    final l10n = lookupAppLocalizations(const Locale('tr'));
+
+    await tester.tap(find.text(l10n.homeIslandVisit));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
     expect(find.text('STUB_ADAN'), findsOneWidget);
   });
 
-  testWidgets('haftalık kart satırı streak kartını açar', (tester) async {
-    await pumpHome(tester);
-    final l10n = lookupAppLocalizations(const Locale('tr'));
-
-    await tester.tap(find.text(l10n.homeWeeklyCardRowTitle));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
-
-    expect(find.text('STUB_STREAK'), findsOneWidget);
-  });
-
-  testWidgets('ada boşken ilerleme satırı "henüz öğe yok" der', (tester) async {
-    await pumpHome(tester);
-    final l10n = lookupAppLocalizations(const Locale('tr'));
-
-    // Sayı uydurmuyoruz: kazanılmış öğe yokken "0 öğe" demek yerine
-    // durumu söyleyen bir cümle çıkar.
-    expect(find.text(l10n.adanEmptyProgress), findsOneWidget);
-  });
-
-  testWidgets('kazanılmış öğe varsa ilerleme satırı sıradakini söyler', (
+  testWidgets('ada kartı adı olmayan kullanıcıda yüzeyin adını taşır', (
     tester,
   ) async {
-    await pumpHome(tester, island: const IslandState(earned: {'lantern'}));
+    // İsim geldiğinde başlık "Ela'nın adası" olur (possessive_test); isim
+    // yokken sahiplik uydurulmaz, kart yalnız yüzeyin adını söyler.
+    //
+    // İlerleme cümlesi ("henüz öğe yok") artık Bugün'de değil Adan
+    // ekranında yaşıyor: Bugün'ün ada kartı bir özet değil, bir kapı.
+    await pumpHome(tester);
     final l10n = lookupAppLocalizations(const Locale('tr'));
 
-    expect(
-      find.text(l10n.adanProgress(1, l10n.adanItemPine)),
-      findsOneWidget,
-      reason: 'Bir öğe kazanılmışsa sıradaki öğe çam olmalı',
-    );
+    expect(find.text(l10n.adanTitle), findsOneWidget);
+    expect(find.text(l10n.adanEmptyProgress), findsNothing);
   });
 }

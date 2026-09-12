@@ -13,6 +13,7 @@ import 'package:ilnd_app/core/repositories/journal_repository.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
+import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/widgets/shimmer.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -40,59 +41,36 @@ class JournalScreen extends ConsumerWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenPadding - 12,
-                  12,
-                  AppSpacing.screenPadding,
-                  0,
-                ),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Semantics(
-                    button: true,
-                    label: l10n.a11yBack,
-                    child: Pressable(
-                      onTap: () => Navigator.of(context).maybePop(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          size: 18,
-                          color: p.textMuted,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
                   AppSpacing.screenPadding,
                   8,
                   AppSpacing.screenPadding,
                   0,
                 ),
-                child: Text(
-                  l10n.journalTitle,
-                  style: AppTextStyles.display(fontSize: 30, color: p.text),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.screenPadding,
-                  20,
-                  AppSpacing.screenPadding,
-                  0,
-                ),
-                child: _NewEntryButton(
+                child: IlndPageHeader(
                   p: p,
-                  onTap: () => _showWriteSheet(context, ref),
+                  title: l10n.journalTitle,
+                  subtitle: l10n.journalSubtitle,
                 ),
               ),
             ),
+            // Boş günlükte üstte ayrıca "yeni yaz" durmaz: boş durumun
+            // kendi daveti ve düğmesi var (Ada tasarımı 05).
+            if (entriesAsync.valueOrNull?.isNotEmpty ?? false)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPadding,
+                    20,
+                    AppSpacing.screenPadding,
+                    0,
+                  ),
+                  child: IlndButton(
+                    p: p,
+                    label: l10n.journalNewEntry,
+                    onTap: () => _showWriteSheet(context, ref),
+                  ),
+                ),
+              ),
             entriesAsync.when(
               loading: () => SliverPadding(
                 padding: const EdgeInsets.fromLTRB(
@@ -191,88 +169,88 @@ class _ErrorState extends StatelessWidget {
 
 // ─── Empty state ─────────────────────────────────────────────────────────────
 
+/// Boş günlük (Ada tasarımı 05): davet kartı, günün sorusu, ilk yazı.
+/// Boş durum bir özür değil, davet (DESIGN_SYSTEM §6).
 class _EmptyJournal extends StatelessWidget {
   const _EmptyJournal({required this.p, required this.onTap});
-  final dynamic p;
+  final AppPalette p;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(32, 0, 32, 80),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.screenPadding,
+        20,
+        AppSpacing.screenPadding,
+        32,
+      ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Icon(Icons.edit_note_rounded, size: 36, color: p.textMuted),
-          const SizedBox(height: 20),
+          IlndCard(
+            p: p,
+            color: p.surfaceStrong,
+            padding: const EdgeInsets.fromLTRB(20, 26, 20, 26),
+            child: Column(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: p.surface,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.menu_book_outlined,
+                    size: 26,
+                    color: p.accent,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.journalEmptyTitle,
+                  style: AppTextStyles.serifTitle(color: p.text),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.journalEmptyBody,
+                  style: AppTextStyles.body(
+                    fontSize: 13,
+                    color: p.textMuted,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
           Text(
-            l10n.journalEmptyTitle,
-            style: AppTextStyles.display(fontSize: 24, color: p.text),
-            textAlign: TextAlign.center,
+            l10n.journalQuestionLabel,
+            style: AppTextStyles.caption(color: p.textMuted),
           ),
           const SizedBox(height: 10),
-          Text(
-            l10n.journalEmptyBody,
-            style: AppTextStyles.body(
-              fontSize: 13,
-              color: p.textMuted,
-              height: 1.5,
+          IlndCard(
+            p: p,
+            onTap: onTap,
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 22),
+            child: Text(
+              l10n.journalQuestion,
+              style: AppTextStyles.serifTitle(color: p.text),
             ),
+          ),
+          const SizedBox(height: 20),
+          IlndButton(p: p, label: l10n.journalWriteFirst, onTap: onTap),
+          const SizedBox(height: 14),
+          Text(
+            l10n.journalNoWrongAnswer,
+            style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 32),
-          Pressable(
-            onTap: onTap,
-            child: Container(
-              height: 52,
-              padding: const EdgeInsets.symmetric(horizontal: 28),
-              decoration: BoxDecoration(
-                color: p.accent,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                l10n.journalWriteFirst,
-                style: AppTextStyles.body(
-                  fontSize: 15,
-                  color: p.onAccent,
-                ).copyWith(fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
         ],
-      ),
-    );
-  }
-}
-
-// ─── New entry button ─────────────────────────────────────────────────────────
-
-class _NewEntryButton extends StatelessWidget {
-  const _NewEntryButton({required this.onTap, required this.p});
-  final VoidCallback onTap;
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Pressable(
-      onTap: onTap,
-      child: Container(
-        height: 52,
-        decoration: BoxDecoration(
-          color: p.accent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          l10n.journalNewEntry,
-          style: AppTextStyles.body(
-            fontSize: 15,
-            color: p.onAccent,
-          ).copyWith(fontWeight: FontWeight.w600),
-        ),
       ),
     );
   }
@@ -314,37 +292,28 @@ class _EntryCard extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onLongPress: () => _confirmDelete(context, ref),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.cardPadding),
-        decoration: BoxDecoration(
-          color: p.surface,
-          borderRadius: BorderRadius.circular(AppSpacing.radius),
-        ),
+      child: IlndCard(
+        p: p,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              _formatDate(entry.createdAt, l10n),
-              style: AppTextStyles.sectionLabel(color: p.textMuted),
+              _formatDate(entry.createdAt, l10n).toUpperCase(),
+              style: AppTextStyles.caption(color: p.textMuted),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
               entry.body,
-              style: AppTextStyles.heading(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                height: 1.3,
-                color: p.text,
-              ),
+              style: AppTextStyles.serifTitle(color: p.text, fontSize: 18),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
             if (entry.ilndReply.isNotEmpty) ...[
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               Text(
                 entry.ilndReply,
                 style: AppTextStyles.body(
-                  fontSize: 13,
+                  fontSize: 12.5,
                   color: p.textMuted,
                   height: 1.5,
                 ),

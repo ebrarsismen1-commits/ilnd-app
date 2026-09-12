@@ -9,15 +9,16 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-/// Sen ekranının yerleşimi.
+/// Sen ekranının yerleşimi (Ada tasarımı 10).
 ///
-/// İki sorun vardı ve ikisi de ekranı bozuk gösteriyordu:
+/// Ekran 2026-09-11'de sadeleşti: sayı şeridi, rozetler ve haftalık çubuk
+/// grafik kalktı; yerine haftanın tek cümlelik özeti ve dört kapı geldi.
+/// Eski testler o üç bileşeni koruyordu — bu testler yenisini koruyor:
+/// kapılar duruyor mu, ekran dar ve geniş viewport'ta bozulmuyor mu.
 ///
-/// 1. Rozetler dört `Expanded` ile eşit paylaşıyordu; masaüstü web'de her
-///    rozet ~470px'lik boş bir kutuya dönüşüyordu (telefon düzeninin
-///    gerilmiş hâli, Adan yüzeyindeki hatanın aynı sınıfı).
-/// 2. Haftalık grafik boş haftada 96px yer ayırıp içini boş bırakıyordu:
-///    bütün çubuklar 4px, üstünde 86px hiçlik.
+/// Genişlik testi tarihsel: rozetler dört `Expanded` ile eşit paylaşıyordu
+/// ve masaüstü web'de her biri ~470px'lik boş bir kutuya dönüşüyordu. Kart
+/// düzeni aynı tuzağa düşebilir, o yüzden iki uçta da ölçülüyor.
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
 
@@ -31,18 +32,14 @@ void main() {
 
   final l10n = lookupAppLocalizations(const Locale('tr'));
 
-  ProfileStats stats({List<double>? week}) => ProfileStats(
+  const stats = ProfileStats(
     streakDays: 3,
     weeklyJournalCount: 2,
     weeklyFoodCount: 4,
-    weeklyActivityByDay: week ?? List.filled(7, 0.0),
+    weeklyActivityByDay: [0, 0, 0, 0, 0, 0, 0],
   );
 
-  Future<void> pump(
-    WidgetTester tester, {
-    required double width,
-    List<double>? week,
-  }) async {
+  Future<void> pump(WidgetTester tester, {required double width}) async {
     await tester.binding.setSurfaceSize(Size(width, 2200));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -52,7 +49,7 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
-          profileStatsProvider.overrideWith((ref) async => stats(week: week)),
+          profileStatsProvider.overrideWith((ref) async => stats),
         ],
         child: MaterialApp(
           locale: const Locale('tr'),
@@ -66,63 +63,31 @@ void main() {
     await tester.pump(const Duration(milliseconds: 800));
   }
 
-  group('rozetler', () {
-    testWidgets('geniş ekranda gerilmez', (tester) async {
-      await pump(tester, width: 1400);
+  testWidgets('haftanın özeti gerçek sayıları söyler', (tester) async {
+    await pump(tester, width: 390);
 
-      final badge = tester.getRect(find.text(l10n.profileBadgeFirstStep));
-      // Rozet kutusu metinden geniştir ama 120px tavanını aşmamalı.
-      final card = tester.getRect(
-        find
-            .ancestor(
-              of: find.text(l10n.profileBadgeFirstStep),
-              matching: find.byType(SizedBox),
-            )
-            .first,
-      );
-      expect(
-        card.width,
-        lessThanOrEqualTo(121),
-        reason: '1400px ekranda rozet dev bir kutuya dönüşmemeli',
-      );
-      expect(badge.width, greaterThan(0));
-    });
+    expect(find.text(l10n.profileWeekLabel), findsOneWidget);
+    expect(find.text(l10n.profileWeekLine(2, 4)), findsOneWidget);
+  });
 
-    testWidgets('dar ekranda dördü de sığar ve taşmaz', (tester) async {
-      await pump(tester, width: 320);
+  testWidgets('dört kapı da duruyor', (tester) async {
+    await pump(tester, width: 390);
 
-      expect(find.text(l10n.profileBadgeFirstStep), findsOneWidget);
-      expect(find.text(l10n.profileBadgeSevenDays), findsOneWidget);
+    // Ada, bildirimler ve veriler; ayarların altında çıkış.
+    expect(find.text(l10n.adanTitle), findsOneWidget);
+    expect(find.text(l10n.profileNotificationsRow), findsOneWidget);
+    expect(find.text(l10n.profileDataRow), findsOneWidget);
+    expect(find.text(l10n.profileSignOut), findsOneWidget);
+  });
+
+  for (final width in const [320.0, 390.0, 1200.0]) {
+    testWidgets('${width.toInt()}px genişlikte taşmaz', (tester) async {
+      await pump(tester, width: width);
       expect(
         tester.takeException(),
         isNull,
-        reason: '320px ekranda rozet satırı taşmamalı',
+        reason: '${width.toInt()}px genişlikte bir kart taşıyor',
       );
     });
-  });
-
-  group('haftalık özet', () {
-    testWidgets('boş haftada grafik yerine cümle çıkar', (tester) async {
-      await pump(tester, width: 800, week: List.filled(7, 0.0));
-
-      expect(
-        find.text(l10n.profileWeekEmpty),
-        findsOneWidget,
-        reason: 'boş hafta bozuk bir grafik değil, bir cümle olmalı',
-      );
-    });
-
-    testWidgets('hareket varsa grafik çizilir', (tester) async {
-      await pump(
-        tester,
-        width: 800,
-        week: const [0.0, 0.5, 0.0, 1.0, 0.0, 0.0, 0.25],
-      );
-
-      expect(find.text(l10n.profileWeekEmpty), findsNothing);
-      // Gün etiketleri grafiğin parçası; grafik çizilmişse duruyorlar.
-      expect(find.text('Pt'), findsOneWidget);
-      expect(find.text('Pa'), findsOneWidget);
-    });
-  });
+  }
 }

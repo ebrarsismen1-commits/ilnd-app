@@ -9,6 +9,7 @@ import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
+import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/habits/habits_provider.dart';
 import 'package:ilnd_app/features/takip/meal_edit_sheet.dart';
@@ -55,29 +56,12 @@ class TakipScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Pressable(
-                    onTap: () => Navigator.of(context).maybePop(),
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10, bottom: 4),
-                      child: Icon(
-                        Icons.chevron_left_rounded,
-                        size: 26,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    l10n.takipTitle,
-                    style: AppTextStyles.screenTitle(
-                      color: p.text,
-                      fontSize: 28,
-                    ),
-                  ),
-                ],
+              IlndPageHeader(
+                p: p,
+                title: l10n.takipTitle,
+                subtitle: l10n.takipSubtitle,
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               const TakipSections(),
             ],
           ),
@@ -105,10 +89,13 @@ class TakipSections extends ConsumerWidget {
           index: startIndex,
           child: _DayNavigator(p: p, l10n: l10n),
         ),
-        const SizedBox(height: AppSpacing.sectionGap),
+        const SizedBox(height: 20),
+        // Ada tasarımı 06 sırası: su → öğünler → alışkanlıklar → beslenme
+        // özeti. Günün sorusu "kendine nasıl baktın?", yani önce yapılanlar,
+        // sonra sayılar.
         Entrance(
           index: startIndex + 1,
-          child: _MacroCard(p: p, l10n: l10n),
+          child: _WaterCard(p: p, l10n: l10n),
         ),
         const SizedBox(height: AppSpacing.sectionGap),
         Entrance(
@@ -118,12 +105,12 @@ class TakipSections extends ConsumerWidget {
         const SizedBox(height: AppSpacing.sectionGap),
         Entrance(
           index: startIndex + 3,
-          child: _ActivitySection(p: p, l10n: l10n),
+          child: _HabitsSection(p: p, l10n: l10n),
         ),
         const SizedBox(height: AppSpacing.sectionGap),
         Entrance(
           index: startIndex + 4,
-          child: _HabitsSection(p: p, l10n: l10n),
+          child: _MacroCard(p: p, l10n: l10n),
         ),
       ],
     );
@@ -279,29 +266,6 @@ class _DayArrow extends StatelessWidget {
   }
 }
 
-// ─── Shared card wrapper ──────────────────────────────────────────────────────
-
-class _Card extends StatelessWidget {
-  const _Card({required this.child, required this.p});
-  final Widget child;
-  final AppPalette p;
-
-  static const padding = EdgeInsets.all(AppSpacing.cardPadding);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: padding,
-      decoration: BoxDecoration(
-        color: p.surface,
-        borderRadius: BorderRadius.circular(AppSpacing.radius),
-      ),
-      child: child,
-    );
-  }
-}
-
 /// 0.5px ayırıcı — bölüm içi satırları kart yerine bu ayırır.
 class _Hairline extends StatelessWidget {
   const _Hairline({required this.p});
@@ -327,9 +291,9 @@ class _SectionLabel extends StatelessWidget {
 
 // ─── SECTION 1: Makro — tek büyük sayı ────────────────────────────────────────
 
-/// Donut grafiği kaldırıldı (handoff §6, DESIGN_SYSTEM §7.2 "ölçek zıtlığı"):
-/// üç dilimli bir çember, üç sayının hangisinin önemli olduğunu söylemiyordu.
-/// Ekranın kahramanı artık tek bir sayı — seçili günün kalorisi.
+/// Beslenme özeti (Ada tasarımı 06): Adaçayı kart, serif "kalori / hedef",
+/// altında üç ince makro çizgisi. Donut grafiği handoff §6'da kalkmıştı;
+/// kahraman yine tek bir sayı.
 class _MacroCard extends ConsumerWidget {
   const _MacroCard({required this.p, required this.l10n});
   final AppPalette p;
@@ -338,58 +302,50 @@ class _MacroCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final macros = ref.watch(selectedDayMacrosProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _SectionLabel(l10n.takipMacrosLabel, color: p.accent),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
-          children: [
-            Text(
-              '${macros.kalori}',
-              style: AppTextStyles.mono(
-                fontSize: 56,
-                fontWeight: FontWeight.w600,
-                color: p.text,
-              ),
+    final nf = NumberFormat.decimalPattern(l10n.localeName);
+    return IlndCard(
+      p: p,
+      color: p.surfaceStrong,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.takipNutritionLabel,
+            style: AppTextStyles.caption(color: p.textMuted),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            l10n.takipKcalProgress(
+              nf.format(macros.kalori),
+              nf.format(_kKaloriHedef),
             ),
-            const SizedBox(width: 8),
-            // Hedef etiketi esner: kahraman sayı büyüdükçe (dört haneli
-            // kalori, dar ekran) sabit genişlikte kalırsa satır taşıyor.
-            Flexible(
-              child: Text(
-                '/ $_kKaloriHedef kcal',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.mono(fontSize: 13, color: p.textMuted),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 18),
-        _MacroBar(
-          label: l10n.takipProtein,
-          current: macros.protein,
-          goal: _kProteinHedef,
-          color: p.accent,
-          p: p,
-        ),
-        _MacroBar(
-          label: l10n.takipCarbs,
-          current: macros.karbonhidrat,
-          goal: _kKarbHedef,
-          color: p.amber,
-          p: p,
-        ),
-        _MacroBar(
-          label: l10n.takipFat,
-          current: macros.yag,
-          goal: _kYagHedef,
-          color: p.textMuted,
-          p: p,
-        ),
-      ],
+            style: AppTextStyles.serifTitle(color: p.text, fontSize: 23),
+          ),
+          const SizedBox(height: 16),
+          _MacroBar(
+            label: l10n.takipProtein,
+            current: macros.protein,
+            goal: _kProteinHedef,
+            color: p.accent,
+            p: p,
+          ),
+          _MacroBar(
+            label: l10n.takipCarbs,
+            current: macros.karbonhidrat,
+            goal: _kKarbHedef,
+            color: p.amber,
+            p: p,
+          ),
+          _MacroBar(
+            label: l10n.takipFat,
+            current: macros.yag,
+            goal: _kYagHedef,
+            color: p.textMuted,
+            p: p,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -465,44 +421,48 @@ class _MealsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionLabel(l10n.takipMealsLabel, color: p.textMuted),
-        // Kart yok: satırları 0.5px hairline ayırır (handoff §6).
-        Column(
-          children: [
-            if (entries.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                child: Text(
-                  // Boş bugün bir davet, boş geçmiş gün bir kayıt: aynı
-                  // cümle ikisini de anlatmıyor.
-                  isToday ? l10n.takipNoMealsYet : l10n.takipNoMealsThatDay,
-                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
-                ),
-              )
-            else
-              ...entries.asMap().entries.map((e) {
-                final isLast = e.key == entries.length - 1;
-                return Column(
-                  children: [
-                    _FoodEntryRow(
-                      entry: e.value,
-                      // Kayıtlı öğün her günde düzeltilebilir: düzeltme
-                      // geçmişi değiştirmek değil, yanlış yazılmışı
-                      // doğrultmaktır.
-                      onTap: () => showMealEditSheet(context, e.value),
-                      p: p,
-                      l10n: l10n,
-                    ),
-                    if (!isLast || isToday) _Hairline(p: p),
-                  ],
-                );
-              }),
-            // Geçmiş güne öğün EKLENMEZ: eklenen kayıt bugünün saatiyle
-            // yazılırdı ve kullanıcı baktığı güne düştüğünü sanırdı.
-            if (isToday) ...[
-              if (entries.isEmpty) _Hairline(p: p),
-              _AddMealRow(p: p, l10n: l10n),
+        // Tek kart, içinde hairline'la ayrılmış satırlar (Ada tasarımı).
+        IlndCard(
+          p: p,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+          child: Column(
+            children: [
+              if (entries.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    // Boş bugün bir davet, boş geçmiş gün bir kayıt: aynı
+                    // cümle ikisini de anlatmıyor.
+                    isToday ? l10n.takipNoMealsYet : l10n.takipNoMealsThatDay,
+                    style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+                  ),
+                )
+              else
+                ...entries.asMap().entries.map((e) {
+                  final isLast = e.key == entries.length - 1;
+                  return Column(
+                    children: [
+                      _FoodEntryRow(
+                        entry: e.value,
+                        // Kayıtlı öğün her günde düzeltilebilir: düzeltme
+                        // geçmişi değiştirmek değil, yanlış yazılmışı
+                        // doğrultmaktır.
+                        onTap: () => showMealEditSheet(context, e.value),
+                        p: p,
+                        l10n: l10n,
+                      ),
+                      if (!isLast || isToday) _Hairline(p: p),
+                    ],
+                  );
+                }),
+              // Geçmiş güne öğün EKLENMEZ: eklenen kayıt bugünün saatiyle
+              // yazılırdı ve kullanıcı baktığı güne düştüğünü sanırdı.
+              if (isToday) ...[
+                if (entries.isEmpty) _Hairline(p: p),
+                _AddMealRow(p: p, l10n: l10n),
+              ],
             ],
-          ],
+          ),
         ),
       ],
     );
@@ -625,12 +585,17 @@ class _AddMealRow extends StatelessWidget {
   }
 }
 
-// ─── SECTION 3: Activity (alışkanlık + su — ikisi de gerçek veri) ────────────
+// ─── SECTION 3: Su (gerçek veri, SharedPreferences) ──────────────────────────
 
-class _ActivitySection extends ConsumerWidget {
-  const _ActivitySection({required this.p, required this.l10n});
+/// Su kartı (Ada tasarımı 06): Su zemini, serif başlık, "ml / hedef" ve
+/// bugün için tek dokunuşluk "+ 250 ml". Geçmiş güne su eklenmez: eklenen
+/// miktar bugüne yazılırdı ve kullanıcı baktığı güne düştüğünü sanırdı.
+class _WaterCard extends ConsumerWidget {
+  const _WaterCard({required this.p, required this.l10n});
   final AppPalette p;
   final AppLocalizations l10n;
+
+  static const _quickAdd = 250;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -641,103 +606,90 @@ class _ActivitySection extends ConsumerWidget {
     final waterAverage = history.isEmpty
         ? 0
         : (history.reduce((a, b) => a + b) / history.length).round();
-    // Sahte "4.2k adım" yer tutucusu kaldırıldı — adım verisi ancak sensör
-    // entegrasyonuyla gelir (post-MVP). Yerine elimizde GERÇEKTEN olan
-    // metrik: seçili gündeki alışkanlık tamamlama sayısı.
-    final habitCount = ref.watch(habitsProvider).valueOrNull?.length ?? 0;
-    final doneCount = ref
-        .watch(selectedDayCompletionsProvider)
-        .valueOrNull
-        ?.length
-        .clamp(0, habitCount);
+    final isToday = ref.watch(isTodaySelectedProvider);
+    final nf = NumberFormat.decimalPattern(l10n.localeName);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _SectionLabel(l10n.takipActivityLabel, color: p.textMuted),
-        Row(
-          children: [
-            Expanded(
-              child: _Card(
-                p: p,
+    return IlndCard(
+      p: p,
+      color: p.sea,
+      padding: const EdgeInsets.fromLTRB(16, 16, 14, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.water_drop_outlined, size: 24, color: p.accent),
+              const SizedBox(width: 12),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${doneCount ?? 0} / $habitCount',
-                      style: AppTextStyles.mono(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: p.text,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      l10n.takipHabitsDoneLabel,
-                      style: AppTextStyles.label(
-                        fontSize: 11.5,
-                        color: p.textMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(width: 12),
-            // Water — real data from SharedPreferences
-            Expanded(
-              child: _Card(
-                p: p,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${waterMl}ml',
-                      style: AppTextStyles.mono(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
-                        color: p.text,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(2),
-                      child: LinearProgressIndicator(
-                        value: waterPct,
-                        minHeight: 3,
-                        backgroundColor: p.border,
-                        color: p.water,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      l10n.takipWaterGoal(_kSuHedef),
-                      style: AppTextStyles.label(
-                        fontSize: 10,
-                        color: p.textMuted,
-                      ),
+                      l10n.ekleWaterTitle,
+                      style: AppTextStyles.serifTitle(color: p.text),
                     ),
                     const SizedBox(height: 2),
-                    // Seçili pencerenin (hafta/ay) günlük ortalaması: tek
-                    // günün iyi ya da kötü geçmesi alışkanlığı anlatmıyor.
-                    // Pencere seçili günde biter, bugünde değil.
                     Text(
-                      l10n.takipWaterAverage(
-                        rangeLabel(range, l10n),
-                        waterAverage,
+                      l10n.takipWaterProgress(
+                        nf.format(waterMl),
+                        nf.format(_kSuHedef),
                       ),
-                      style: AppTextStyles.label(
-                        fontSize: 10,
+                      style: AppTextStyles.body(
+                        fontSize: 14,
                         color: p.textMuted,
                       ),
                     ),
                   ],
                 ),
               ),
+              if (isToday)
+                Semantics(
+                  button: true,
+                  child: Pressable(
+                    onTap: () =>
+                        ref.read(waterTodayProvider.notifier).add(_quickAdd),
+                    child: Container(
+                      constraints: const BoxConstraints(minHeight: 36),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 9,
+                      ),
+                      decoration: BoxDecoration(
+                        color: p.surface,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        l10n.takipWaterAdd(_quickAdd),
+                        style: AppTextStyles.body(
+                          fontSize: 12.5,
+                          color: p.accent,
+                        ).copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: LinearProgressIndicator(
+              value: waterPct,
+              minHeight: 4,
+              backgroundColor: p.border,
+              color: p.water,
             ),
-          ],
-        ),
-      ],
+          ),
+          const SizedBox(height: 8),
+          // Seçili pencerenin (hafta/ay) günlük ortalaması: tek günün iyi ya
+          // da kötü geçmesi alışkanlığı anlatmıyor. Pencere seçili günde
+          // biter, bugünde değil.
+          Text(
+            l10n.takipWaterAverage(rangeLabel(range, l10n), waterAverage),
+            style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -776,64 +728,90 @@ class _HabitsSection extends ConsumerWidget {
             _RangeToggle(p: p, l10n: l10n),
           ],
         ),
-        if (habitsAsync.isLoading)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: CircularProgressIndicator(
-                color: p.accent,
-                strokeWidth: 1.5,
-              ),
-            ),
-          )
-        else if (habits.isEmpty)
+        // Sahte "4.2k adım" yer tutucusu kaldırılmıştı; yerine elimizde
+        // GERÇEKTEN olan metrik: seçili gündeki tamamlama sayısı.
+        if (habits.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            child: Text(
-              l10n.takipNoHabitsYet,
-              style: AppTextStyles.body(
-                fontSize: 13,
-                color: p.textMuted,
-                height: 1.5,
-              ),
-            ),
-          )
-        else
-          Column(
-            children: habits.asMap().entries.map((e) {
-              final isLast = e.key == habits.length - 1;
-              final habit = e.value;
-              final isDone = dayCompletions.contains(habit.id);
-              return Column(
-                children: [
-                  _HabitRow(
-                    habitId: habit.id,
-                    name: habit.name,
-                    completions: completions,
-                    range: range,
-                    endDay: selectedDay,
-                    isSelectedDayDone: isDone,
-                    // Geçmiş gün işaretlenmez: dünü bugünmüş gibi
-                    // işaretlemek streak'i ve kaydı bozar. Silme açık
-                    // kalır, o güne değil alışkanlığın kendisine aittir.
-                    onToggle: isToday ? () => toggle(habit.id) : null,
-                    // Uzun basma silme kapısı. `deleteHabit` repository'de
-                    // yazılıydı ve kural izin veriyordu ama hiçbir yerden
-                    // çağrılmıyordu: kullanıcı eklediği alışkanlığı
-                    // kaldıramıyordu.
-                    onDelete: () => _confirmDeleteHabit(
-                      context,
-                      ref,
-                      habitId: habit.id,
-                      name: habit.name,
-                    ),
-                    p: p,
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              children: [
+                Text(
+                  '${dayCompletions.length.clamp(0, habits.length)} / '
+                  '${habits.length}',
+                  style: AppTextStyles.mono(fontSize: 13, color: p.text),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  l10n.takipHabitsDoneLabel,
+                  style: AppTextStyles.label(
+                    fontSize: 10.5,
+                    color: p.textMuted,
                   ),
-                  if (!isLast) _Hairline(p: p),
-                ],
-              );
-            }).toList(),
+                ),
+              ],
+            ),
           ),
+        IlndCard(
+          p: p,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+          child: habitsAsync.isLoading
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: CircularProgressIndicator(
+                      color: p.accent,
+                      strokeWidth: 1.5,
+                    ),
+                  ),
+                )
+              : habits.isEmpty
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  child: Text(
+                    l10n.takipNoHabitsYet,
+                    style: AppTextStyles.body(
+                      fontSize: 13,
+                      color: p.textMuted,
+                      height: 1.5,
+                    ),
+                  ),
+                )
+              : Column(
+                  children: habits.asMap().entries.map((e) {
+                    final isLast = e.key == habits.length - 1;
+                    final habit = e.value;
+                    final isDone = dayCompletions.contains(habit.id);
+                    return Column(
+                      children: [
+                        _HabitRow(
+                          habitId: habit.id,
+                          name: habit.name,
+                          completions: completions,
+                          range: range,
+                          endDay: selectedDay,
+                          isSelectedDayDone: isDone,
+                          // Geçmiş gün işaretlenmez: dünü bugünmüş gibi
+                          // işaretlemek streak'i ve kaydı bozar. Silme açık
+                          // kalır, o güne değil alışkanlığın kendisine aittir.
+                          onToggle: isToday ? () => toggle(habit.id) : null,
+                          // Uzun basma silme kapısı. `deleteHabit` repository'de
+                          // yazılıydı ve kural izin veriyordu ama hiçbir yerden
+                          // çağrılmıyordu: kullanıcı eklediği alışkanlığı
+                          // kaldıramıyordu.
+                          onDelete: () => _confirmDeleteHabit(
+                            context,
+                            ref,
+                            habitId: habit.id,
+                            name: habit.name,
+                          ),
+                          p: p,
+                        ),
+                        if (!isLast) _Hairline(p: p),
+                      ],
+                    );
+                  }).toList(),
+                ),
+        ),
       ],
     );
   }

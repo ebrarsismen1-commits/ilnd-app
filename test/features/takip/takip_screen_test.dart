@@ -76,7 +76,7 @@ void main() {
     expect(find.text(l10n.takipHabitsDoneLabel), findsOneWidget);
 
     // Su kartı gerçek prefs verisi (boş gün = 0ml).
-    expect(find.text('0ml'), findsOneWidget);
+    expect(find.text(l10n.takipWaterProgress('0', '2.000')), findsOneWidget);
   });
 
   testWidgets('hafta/ay seçimi ızgarayı ve sayacı büyütür', (tester) async {
