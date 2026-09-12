@@ -152,8 +152,9 @@ jobs:
 
       - name: Run tests against the Firebase Emulator Suite
         env:
-          # Optional — see README's "Testing" section. Without it, the three
-          # App-Check-enforced function tests (anthropicProxy,
-          # redeemReferralCode, deleteAccount) will 401.
+          # Optional. There is no App Check emulator; App Check is verified
+          # manually (functions/appCheck.js) and defaults to "monitor", so the
+          # suite passes without it. Enforce-mode rejection is covered by
+          # test/backendAuth.test.js.
           FIREBASE_APP_CHECK_TEST_APP_ID: ${{ secrets.FIREBASE_APP_CHECK_TEST_APP_ID }}
         run: firebase emulators:exec --project demo-ilnd-test "npm test"

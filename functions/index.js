@@ -12,6 +12,8 @@ const {
 } = require("./tokenUsage");
 const {parseAiRequest, METERED_KINDS} = require("./aiRequest");
 const {getAiConfig} = require("./aiConfig");
+const {appCheckMode, checkAppCheck} = require("./appCheck");
+const {validateSupabaseClaims, isBridgedSession} = require("./supabaseClaims");
 
 admin.initializeApp();
 setGlobalOptions({maxInstances: 10});
@@ -79,6 +81,15 @@ exports.mintFirebaseToken = onRequest({cors: true}, async (req, res) => {
     return;
   }
 
+  // Oturum açmanın ilk adımı: App Check burada ASLA reddetmez (bir
+  // yapılandırma hatası kimseyi giriş yapamaz hale getirmesin), yalnız
+  // izlenir. Asıl sınır Supabase JWT doğrulaması + aşağıdaki claim kontrolü.
+  await checkAppCheck(req, {
+    mode: appCheckMode() === "off" ? "off" : "monitor",
+    verify: (token) => admin.appCheck().verifyToken(token),
+    fn: "mintFirebaseToken",
+  });
+
   const authHeader = req.headers.authorization || "";
   const supabaseToken = authHeader.startsWith("Bearer ") ?
     authHeader.slice(7) :
@@ -102,11 +113,14 @@ exports.mintFirebaseToken = onRequest({cors: true}, async (req, res) => {
       issuer: `${SUPABASE_URL}/auth/v1`,
     });
 
-    const uid = payload.sub;
-    if (!uid) {
-      res.status(401).json({error: "Token has no subject"});
+    // aud/role/anonim oturum kontrolü (denetim L-6).
+    const claims = validateSupabaseClaims(payload);
+    if (!claims.ok) {
+      console.warn(JSON.stringify({event: "mint_rejected", reason: claims.reason}));
+      res.status(401).json({error: "Invalid Supabase token"});
       return;
     }
+    const uid = claims.uid;
 
     const firebaseToken = await admin.auth().createCustomToken(uid, {
       provider: "supabase",
@@ -136,7 +150,40 @@ async function requireFirebaseAuth(req) {
     authHeader.slice(7) :
     null;
   if (!idToken) throw new Error("Missing bearer token");
-  return admin.auth().verifyIdToken(idToken);
+  const decoded = await admin.auth().verifyIdToken(idToken);
+  // Yalnız Supabase köprüsünün ürettiği oturum (denetim H-5).
+  if (!isBridgedSession(decoded)) {
+    throw new Error("Unsupported sign-in provider");
+  }
+  return decoded;
+}
+
+/**
+ * Hassas her ucun ortak kapısı: App Check (moda göre) + kimlik. Başarısızsa
+ * yanıtı kendisi yazar ve null döner. Dönen uid DOĞRULANMIŞ token'dan gelir;
+ * istek gövdesindeki hiçbir kimlik alanına bakılmaz, yani her uç yalnız
+ * çağıranın kendi verisine dokunur.
+ * @param {import("firebase-functions/v2/https").Request} req istek
+ * @param {import("express").Response} res yanıt
+ * @return {Promise<string|null>} uid
+ */
+async function authorizeCaller(req, res) {
+  const appCheck = await checkAppCheck(req, {
+    mode: appCheckMode(),
+    verify: (token) => admin.appCheck().verifyToken(token),
+    fn: process.env.K_SERVICE || "unknown",
+  });
+  if (!appCheck.ok) {
+    res.status(401).json({error: "App Check verification failed"});
+    return null;
+  }
+  try {
+    const decoded = await requireFirebaseAuth(req);
+    return decoded.uid;
+  } catch (err) {
+    res.status(401).json({error: "Invalid or missing auth token"});
+    return null;
+  }
 }
 
 // ─── Token muhasebesi ───────────────────────────────────────────────────────
@@ -455,14 +502,8 @@ exports.anthropicProxy = onRequest(
         return;
       }
 
-      let uid;
-      try {
-        const decoded = await requireFirebaseAuth(req);
-        uid = decoded.uid;
-      } catch (err) {
-        res.status(401).json({error: "Invalid or missing auth token"});
-        return;
-      }
+      const uid = await authorizeCaller(req, res);
+      if (!uid) return;
 
       // Girdi kapısı: yalnız bilinen alanlar ve blok türleri geçer; iletilen
       // gövde istemcinin nesnesinden değil bu temiz kopyadan kurulur. Model
@@ -631,14 +672,8 @@ exports.redeemReferralCode = onRequest(
     return;
   }
 
-  let uid;
-  try {
-    const decoded = await requireFirebaseAuth(req);
-    uid = decoded.uid;
-  } catch (err) {
-    res.status(401).json({error: "Invalid or missing auth token"});
-    return;
-  }
+  const uid = await authorizeCaller(req, res);
+  if (!uid) return;
 
   const code = String((req.body || {}).code || "").trim().toUpperCase();
   if (!code) {
@@ -746,14 +781,8 @@ exports.deleteAccount = onRequest(
         return;
       }
 
-      let uid;
-      try {
-        const decoded = await requireFirebaseAuth(req);
-        uid = decoded.uid;
-      } catch (err) {
-        res.status(401).json({error: "Invalid or missing auth token"});
-        return;
-      }
+      const uid = await authorizeCaller(req, res);
+      if (!uid) return;
 
       try {
         await deleteFirestoreSubtree(db.collection("users").doc(uid));
@@ -920,14 +949,8 @@ exports.syncIslandItems = onRequest({cors: true}, async (req, res) => {
     return;
   }
 
-  let uid;
-  try {
-    const decoded = await requireFirebaseAuth(req);
-    uid = decoded.uid;
-  } catch (err) {
-    res.status(401).json({error: "Invalid or missing auth token"});
-    return;
-  }
+  const uid = await authorizeCaller(req, res);
+  if (!uid) return;
 
   try {
     const metrics = await collectIslandMetrics(uid);

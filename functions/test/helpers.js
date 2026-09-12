@@ -9,8 +9,10 @@ const admin = require("firebase-admin");
  * @param {string} uid Firebase uid to mint a token for.
  * @return {Promise<string>} a verifiable Firebase ID token for that uid.
  */
-async function getIdTokenForUid(uid) {
-  const customToken = await admin.auth().createCustomToken(uid);
+async function getIdTokenForUid(uid, claims = {provider: "supabase"}) {
+  // Üretimde her Firebase oturumu mintFirebaseToken'dan gelir ve bu claim'i
+  // taşır; uçlar başka oturumu reddeder (denetim H-5).
+  const customToken = await admin.auth().createCustomToken(uid, claims);
   const authEmulatorHost = process.env.FIREBASE_AUTH_EMULATOR_HOST;
   if (!authEmulatorHost) {
     throw new Error(
@@ -37,18 +39,32 @@ async function getIdTokenForUid(uid) {
 }
 
 /**
- * Mints a real App Check token via the Admin SDK for tests, since
- * `anthropicProxy`/`redeemReferralCode`/`deleteAccount` now run with
- * `enforceAppCheck: true` (functions/index.js). The Admin SDK can mint
- * these directly server-side — no client App Check SDK round-trip needed,
- * same pattern as `createCustomToken` for Auth above.
- *
- * Requires a real Firebase App ID via the FIREBASE_APP_CHECK_TEST_APP_ID
- * env var (the same app id from google-services.json /
- * GoogleService-Info.plist — NOT verified working against the emulator
- * suite in this environment; flagging as unconfirmed). If unset, returns
- * an empty header object and the App-Check-enforced calls will 401 — set
- * this in CI once a real app id is available.
+ * Anonim bir Firebase oturumu açar (Auth emülatörü REST). Uçların yalnız
+ * Supabase köprüsünden gelen oturumu kabul ettiğini kanıtlamak için.
+ * @return {Promise<string>} anonim kullanıcının ID token'ı
+ */
+async function getAnonymousIdToken() {
+  const host = process.env.FIREBASE_AUTH_EMULATOR_HOST;
+  const res = await fetch(
+      `http://${host}/identitytoolkit.googleapis.com/v1/accounts:signUp?key=fake-api-key`,
+      {
+        method: "POST",
+        headers: {"content-type": "application/json"},
+        body: JSON.stringify({returnSecureToken: true}),
+      },
+  );
+  const data = await res.json();
+  if (!data.idToken) throw new Error(`Anonymous sign-up failed: ${JSON.stringify(data)}`);
+  return data.idToken;
+}
+
+/**
+ * Mints a real App Check token via the Admin SDK for tests. App Check is
+ * verified manually in functions/appCheck.js (onRequest functions cannot use
+ * `enforceAppCheck`) and defaults to "monitor" mode, so tests pass without a
+ * token. There is no App Check emulator: minting needs a real Firebase App
+ * ID via FIREBASE_APP_CHECK_TEST_APP_ID and real credentials. If unset,
+ * returns an empty header object.
  * @return {Promise<Object<string,string>>} headers object, possibly empty.
  */
 async function getAppCheckHeaderForTests() {
@@ -63,4 +79,4 @@ async function getAppCheckHeaderForTests() {
   }
 }
 
-module.exports = {getIdTokenForUid, getAppCheckHeaderForTests};
+module.exports = {getIdTokenForUid, getAnonymousIdToken, getAppCheckHeaderForTests};

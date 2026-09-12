@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
 
 /// ILND auth Supabase üzerinden yapılıyor, ama Firestore güvenlik kuralları
@@ -23,7 +24,12 @@ abstract final class FirebaseAuthBridge {
       final response = await http
           .post(
             Uri.parse(AppConfig.authBridgeUrl),
-            headers: {'Authorization': 'Bearer $supabaseAccessToken'},
+            headers: {
+              'Authorization': 'Bearer $supabaseAccessToken',
+              // Sunucu bu uçta App Check'i yalnız izler, reddetmez; token
+              // gönderilmezse doğrulanmış istek oranı ölçülemez (denetim H-5).
+              ...await appCheckHeaders(),
+            },
           )
           .timeout(const Duration(seconds: 10));
 
