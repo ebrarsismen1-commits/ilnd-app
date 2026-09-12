@@ -28,6 +28,13 @@ class AppSpacing {
 
   /// Small corner radius — inputs, pills, small cards.
   static const double radiusSmall = 8;
+
+  /// Kontrol köşesi: buton, giriş alanı, öneri satırı (Ada tasarımı "Köşe ·
+  /// Kontrol 14 / Kart 16 / Ana görsel 24").
+  static const double radiusControl = 14;
+
+  /// Ana görsel köşesi: ada kartı.
+  static const double radiusHero = 24;
 }
 
 class AppTheme {
@@ -87,7 +94,7 @@ class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          side: const BorderSide(color: AppColors.border, width: 0.5),
+          side: const BorderSide(color: AppColors.border),
         ),
       ),
 
@@ -101,7 +108,7 @@ class AppTheme {
           disabledForegroundColor: AppColors.white.withValues(alpha: 0.7),
           minimumSize: const Size(double.infinity, 52),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           ),
           elevation: 0,
           textStyle: TextStyle(
@@ -119,7 +126,7 @@ class AppTheme {
           foregroundColor: AppColors.charcoal,
           minimumSize: const Size(double.infinity, 52),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           ),
           elevation: 0,
           textStyle: TextStyle(
@@ -138,7 +145,7 @@ class AppTheme {
           minimumSize: const Size(double.infinity, 52),
           side: const BorderSide(color: AppColors.sage, width: 0.5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           ),
           textStyle: TextStyle(
             fontFamily: AppTextStyles.sansFont,
@@ -160,39 +167,34 @@ class AppTheme {
       ),
 
       // ── Inputs ──────────────────────────────────────────────────────────
-      // Cream-dark background, no border, radius 12, height 52.
-      // Focus: 1px sage border.
+      // Ada tasarımı: kağıt dolgu, 1px kenarlık, köşe 14. Focus: Orman.
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.creamDark,
+        fillColor: AppColors.white,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 16,
         ),
-        hintStyle: AppTextStyles.display(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: AppColors.muted,
-        ),
+        hintStyle: AppTextStyles.body(fontSize: 14, color: AppColors.muted),
         labelStyle: AppTextStyles.body(fontSize: 14, color: AppColors.muted),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           borderSide: const BorderSide(color: AppColors.sage, width: 1),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           borderSide: const BorderSide(color: Color(0xFFB3554A), width: 1),
         ),
       ),
@@ -281,7 +283,7 @@ class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          side: BorderSide(color: p.border, width: 0.5),
+          side: BorderSide(color: p.border),
         ),
       ),
 
@@ -302,7 +304,7 @@ class AppTheme {
           disabledForegroundColor: p.onAccent.withValues(alpha: 0.7),
           minimumSize: const Size(double.infinity, 52),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           ),
           elevation: 0,
           textStyle: TextStyle(
@@ -319,7 +321,7 @@ class AppTheme {
           foregroundColor: p.text,
           minimumSize: const Size(double.infinity, 52),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           ),
           elevation: 0,
           textStyle: TextStyle(
@@ -337,7 +339,7 @@ class AppTheme {
           minimumSize: const Size(double.infinity, 52),
           side: BorderSide(color: p.accent, width: 0.5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           ),
           textStyle: TextStyle(
             fontFamily: AppTextStyles.sansFont,
@@ -365,30 +367,26 @@ class AppTheme {
           horizontal: 16,
           vertical: 16,
         ),
-        hintStyle: AppTextStyles.display(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: p.textMuted,
-        ),
+        hintStyle: AppTextStyles.body(fontSize: 14, color: p.textMuted),
         labelStyle: AppTextStyles.body(fontSize: 14, color: p.textMuted),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
+          borderSide: BorderSide(color: p.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
+          borderSide: BorderSide(color: p.border),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           borderSide: BorderSide(color: p.accent, width: 1),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
           borderSide: const BorderSide(color: Color(0xFFE08A80), width: 1),
         ),
       ),

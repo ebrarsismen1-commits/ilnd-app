@@ -44,16 +44,17 @@ class UserAvatar extends ConsumerWidget {
       );
     }
 
+    // Ada tasarımı: Adaçayı daire, Orman renginde serif baş harf.
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(color: p.accent, shape: BoxShape.circle),
+      decoration: BoxDecoration(color: p.surfaceStrong, shape: BoxShape.circle),
       alignment: Alignment.center,
       child: Text(
         initial,
         style: AppTextStyles.display(
           fontSize: fontSize ?? size * 0.42,
-          color: p.onAccent,
+          color: p.accent,
         ),
       ),
     );

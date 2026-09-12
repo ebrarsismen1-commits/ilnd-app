@@ -5,16 +5,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ilnd_app/core/ilnd/crisis_guard.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
-import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/breath_ring.dart';
+import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/chat/chat_provider.dart';
 import 'package:ilnd_app/features/chat/chat_sessions_sheet.dart';
 import 'package:ilnd_app/features/premium/paywall_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
+/// Sohbet (Ada tasarımı 07): başlık, halka, üç konuşma önerisi, mesaj alanı.
+///
+/// Öneriler kullanıcı henüz bir şey yazmadıkça görünür. ILND sohbeti kendi
+/// karşılamasıyla açtığı için "hiç mesaj yok" anı çoğu zaman bir kare
+/// sürer; o yüzden öneriler karşılamanın ALTINDA da durur, yalnız boş
+/// ekrana bağlı kalmaz.
 class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({super.key, this.seedMessage});
 
@@ -64,6 +69,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final text = _controller.text;
     if (text.trim().isEmpty) return;
     _controller.clear();
+    _sendText(text);
+  }
+
+  void _sendText(String text) {
     final l10n = AppLocalizations.of(context)!;
     ref.read(chatProvider.notifier).send(text, l10n);
     // Mesaj gönderilmeye devam eder — destek dayatılmaz, sunulur.
@@ -88,7 +97,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final state = ref.watch(chatProvider);
-    final name = ref.watch(ilndMemoryProvider).name;
+    final showSuggestions = !state.messages.any((m) => m.fromUser);
 
     ref.listen(chatProvider, (prev, next) {
       _scrollToBottomSoon();
@@ -107,21 +116,43 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _Header(p: p, l10n: l10n),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.screenPadding,
+                8,
+                AppSpacing.screenPadding - 4,
+                4,
+              ),
+              child: IlndPageHeader(
+                p: p,
+                title: l10n.chatPageTitle,
+                subtitle: l10n.chatListening,
+                trailing: _SessionsGate(p: p, l10n: l10n),
+              ),
+            ),
             Expanded(
               child: state.messages.isEmpty
-                  ? _EmptyState(name: name, p: p, l10n: l10n)
+                  ? _Starter(p: p, l10n: l10n, onPick: _sendText)
                   : ListView.builder(
                       controller: _scrollController,
                       padding: const EdgeInsets.fromLTRB(
                         AppSpacing.screenPadding,
-                        12,
+                        16,
                         AppSpacing.screenPadding,
                         12,
                       ),
-                      itemCount: state.messages.length,
-                      itemBuilder: (context, i) =>
-                          _Bubble(message: state.messages[i], p: p),
+                      itemCount:
+                          state.messages.length + (showSuggestions ? 1 : 0),
+                      itemBuilder: (context, i) => i < state.messages.length
+                          ? _Bubble(message: state.messages[i], p: p)
+                          : Padding(
+                              padding: const EdgeInsets.only(top: 12),
+                              child: _Suggestions(
+                                p: p,
+                                l10n: l10n,
+                                onPick: _sendText,
+                              ),
+                            ),
                     ),
             ),
             _Composer(
@@ -137,125 +168,231 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 }
 
-// ─── Header — nefes halkası burada da yaşar (marka jesti tek yerde değil) ─────
+// ─── Kayıtlı sohbetler kapısı ─────────────────────────────────────────────────
 
-class _Header extends StatelessWidget {
-  const _Header({required this.p, required this.l10n});
+/// Tek akışta eski bir konuşmaya dönmenin yolu yukarı kaydırmaktı; artık
+/// listeden açılıyor.
+///
+/// İKON DEĞİL, ETİKET: release derlemesi ikon fontunu budadığı ve font uzun
+/// süre önbellekte kaldığı için yeni eklenen bir glif kullanıcıda boş
+/// çıkabiliyor (2026-09-02'de tam olarak bu oldu, bkz. firebase.json
+/// /assets/** notu). Metin uygulamanın kendi yazı tipinden gelir.
+class _SessionsGate extends StatelessWidget {
+  const _SessionsGate({required this.p, required this.l10n});
   final AppPalette p;
   final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 10, 4, 6),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Pressable(
-              onTap: () => Navigator.of(context).maybePop(),
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  size: 24,
-                  color: p.textMuted,
-                ),
-              ),
-            ),
+    return Semantics(
+      button: true,
+      child: Pressable(
+        onTap: () => showChatSessionsSheet(context),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          decoration: BoxDecoration(
+            color: p.surface,
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: p.border),
           ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const BreathRing(size: 40),
-              const SizedBox(height: 6),
-              Text(
-                l10n.chatListening,
-                style: AppTextStyles.body(fontSize: 10.5, color: p.textMuted),
-              ),
-            ],
+          child: Text(
+            l10n.chatSessionsTitle,
+            style: AppTextStyles.body(
+              fontSize: 12,
+              color: p.text,
+            ).copyWith(fontWeight: FontWeight.w500),
           ),
-          // Kayıtlı sohbetler. Tek akışta eski bir konuşmaya dönmenin yolu
-          // yukarı kaydırmaktı; artık listeden açılıyor.
-          //
-          // İKON DEĞİL, ETİKET: release derlemesi ikon fontunu budadığı ve
-          // font uzun süre önbellekte kaldığı için yeni eklenen bir glif
-          // kullanıcıda boş çıkabiliyor (2026-09-02'de tam olarak bu oldu,
-          // bkz. firebase.json /assets/** notu). Metin uygulamanın kendi
-          // yazı tipinden gelir, o riski hiç taşımaz. Üstelik çıplak bir
-          // saat ikonu "geçmiş" demiyordu; kelime diyor.
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Semantics(
-                button: true,
-                child: Pressable(
-                  onTap: () => showChatSessionsSheet(context),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: p.surfaceStrong,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: p.border),
-                    ),
-                    child: Text(
-                      l10n.chatSessionsTitle,
-                      style: AppTextStyles.label(
-                        fontSize: 11.5,
-                        color: p.text,
-                      ).copyWith(letterSpacing: 0),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
-// ─── Empty state ──────────────────────────────────────────────────────────────
+// ─── Başlangıç: halka + soru + öneriler ──────────────────────────────────────
 
-class _EmptyState extends StatelessWidget {
-  const _EmptyState({required this.name, required this.p, required this.l10n});
-  final String name;
+class _Starter extends StatelessWidget {
+  const _Starter({required this.p, required this.l10n, required this.onPick});
   final AppPalette p;
   final AppLocalizations l10n;
+  final ValueChanged<String> onPick;
 
   @override
   Widget build(BuildContext context) {
-    final greeting = name.isNotEmpty
-        ? l10n.chatGreetingWithName(name)
-        : l10n.chatGreeting;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPadding),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            greeting,
-            style: AppTextStyles.display(fontSize: 30, color: p.text),
-            textAlign: TextAlign.center,
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.screenPadding,
+          vertical: 16,
+        ),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight - 32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _ListeningRing(p: p),
+              const SizedBox(height: 22),
+              Text(
+                l10n.chatEmptyTitle,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.pageTitle(color: p.text, fontSize: 25),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                l10n.chatEmptySubtitle,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+              ),
+              const SizedBox(height: 28),
+              _Suggestions(p: p, l10n: l10n, onPick: onPick),
+            ],
           ),
-          const SizedBox(height: 10),
-          Text(
-            l10n.chatEmptyPrompt,
-            style: AppTextStyles.body(
-              fontSize: 15,
-              color: p.textMuted,
-              height: 1.5,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+        ),
       ),
+    );
+  }
+}
+
+/// Sohbet halkası: Su zemin, soluk hale, Orman çizgi. Nefes ritmiyle
+/// büyüyüp küçülür; azaltılmış hareket modunda durur.
+class _ListeningRing extends StatefulWidget {
+  const _ListeningRing({required this.p});
+  final AppPalette p;
+
+  @override
+  State<_ListeningRing> createState() => _ListeningRingState();
+}
+
+class _ListeningRingState extends State<_ListeningRing>
+    with SingleTickerProviderStateMixin {
+  // 4 sn al + 6 sn ver (DESIGN_SYSTEM §4 "nefes").
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(seconds: 10),
+  );
+  late final Animation<double> _scale = TweenSequence<double>([
+    TweenSequenceItem(
+      tween: Tween(
+        begin: 1.0,
+        end: 1.08,
+      ).chain(CurveTween(curve: Curves.easeInOut)),
+      weight: 40,
+    ),
+    TweenSequenceItem(
+      tween: Tween(
+        begin: 1.08,
+        end: 1.0,
+      ).chain(CurveTween(curve: Curves.easeInOut)),
+      weight: 60,
+    ),
+  ]).animate(_c);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (prefersReducedMotion(context)) {
+      if (_c.isAnimating) _c.stop();
+    } else if (!_c.isAnimating) {
+      _c.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = widget.p;
+    return ExcludeSemantics(
+      child: ScaleTransition(
+        scale: _scale,
+        child: Container(
+          width: 114,
+          height: 114,
+          decoration: BoxDecoration(color: p.sea, shape: BoxShape.circle),
+          alignment: Alignment.center,
+          child: Container(
+            width: 89,
+            height: 89,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: p.accent.withValues(alpha: 0.28)),
+            ),
+            alignment: Alignment.center,
+            child: Container(
+              width: 72,
+              height: 72,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: p.accent, width: 2),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Suggestions extends StatelessWidget {
+  const _Suggestions({
+    required this.p,
+    required this.l10n,
+    required this.onPick,
+  });
+  final AppPalette p;
+  final AppLocalizations l10n;
+  final ValueChanged<String> onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        for (final text in [
+          l10n.chatSuggestTired,
+          l10n.chatSuggestSort,
+          l10n.chatSuggestShare,
+        ]) ...[
+          Semantics(
+            button: true,
+            child: Pressable(
+              onTap: () => onPick(text),
+              scaleDown: 0.98,
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 48),
+                padding: const EdgeInsets.fromLTRB(16, 10, 10, 10),
+                decoration: BoxDecoration(
+                  color: p.surface,
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
+                  border: Border.all(color: p.border),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        text,
+                        style: AppTextStyles.body(
+                          fontSize: 13.5,
+                          color: p.text,
+                          height: 1.3,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      size: 20,
+                      color: p.textMuted,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ],
     );
   }
 }
@@ -287,7 +424,6 @@ class _Bubble extends StatelessWidget {
                     message.text,
                     style: AppTextStyles.display(
                       fontSize: 16.5,
-                      fontWeight: FontWeight.w400,
                       color: p.text,
                       height: 1.45,
                     ),
@@ -422,6 +558,8 @@ class _TypingDotsState extends State<_TypingDots>
 
 // ─── Composer ────────────────────────────────────────────────────────────────
 
+/// Mesaj alanı: kenarlıklı kağıt kutu, gönder düğmesi kutunun İÇİNDE
+/// (Ada tasarımı). Enter = gönder, Shift+Enter = yeni satır.
 class _Composer extends StatelessWidget {
   const _Composer({
     required this.controller,
@@ -438,32 +576,27 @@ class _Composer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Container(
+    return Padding(
       padding: EdgeInsets.fromLTRB(
         AppSpacing.screenPadding,
-        8,
+        6,
         AppSpacing.screenPadding,
         MediaQuery.viewInsetsOf(context).bottom > 0 ? 8 : 12,
       ),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: p.border, width: 0.5)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Expanded(
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 48, maxHeight: 120),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: p.surface,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: p.border, width: 0.5),
-              ),
+      child: Container(
+        constraints: const BoxConstraints(minHeight: 56, maxHeight: 140),
+        padding: const EdgeInsets.fromLTRB(16, 4, 8, 4),
+        decoration: BoxDecoration(
+          color: p.surface,
+          borderRadius: BorderRadius.circular(AppSpacing.radius),
+          border: Border.all(color: p.border),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
               // Çok satırlı TextField'da Enter varsayılan olarak yeni satır
               // ekler ve onSubmitted hiç tetiklenmez (web/masaüstü klavye).
-              // Enter = gönder, Shift+Enter = yeni satır.
               child: Focus(
                 onKeyEvent: (node, event) {
                   final isEnter =
@@ -484,46 +617,65 @@ class _Composer extends StatelessWidget {
                   decoration: InputDecoration(
                     hintText: l10n.chatComposerHint,
                     hintStyle: AppTextStyles.body(
-                      fontSize: 15,
+                      fontSize: 14.5,
                       color: p.textMuted,
                     ),
+                    filled: false,
                     border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   onSubmitted: (_) => onSend(),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 10),
-          Pressable(
-            onTap: sending ? null : onSend,
-            child: Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: sending ? p.accent.withValues(alpha: 0.5) : p.accent,
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: sending
-                  ? SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: p.onAccent,
+            const SizedBox(width: 8),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Semantics(
+                button: true,
+                label: l10n.chatSendA11y,
+                child: Pressable(
+                  onTap: sending ? null : onSend,
+                  // Görsel çap 40, dokunma hedefi 44.
+                  child: SizedBox(
+                    width: 44,
+                    height: 44,
+                    child: Center(
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: sending
+                              ? p.accent.withValues(alpha: 0.5)
+                              : p.accent,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: sending
+                            ? SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: p.onAccent,
+                                ),
+                              )
+                            : Icon(
+                                Icons.arrow_upward_rounded,
+                                color: p.onAccent,
+                                size: 20,
+                              ),
                       ),
-                    )
-                  : Icon(
-                      Icons.arrow_upward_rounded,
-                      color: p.onAccent,
-                      size: 22,
                     ),
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

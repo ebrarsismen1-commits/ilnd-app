@@ -8,6 +8,7 @@ import 'package:ilnd_app/core/widgets/breath_animation.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/cover_image.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
+import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/core/repositories/explore_repository.dart';
 import 'package:ilnd_app/core/repositories/movement_repository.dart';
@@ -156,12 +157,12 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                         children: [
                           Text(
                             l10n.exploreTitle,
-                            style: AppTextStyles.display(
-                              fontSize: 30,
+                            style: AppTextStyles.pageTitle(
                               color: p.text,
+                              fontSize: 28,
                             ),
                           ),
-                          const SizedBox(height: 2),
+                          const SizedBox(height: 4),
                           Text(
                             l10n.exploreSubtitle,
                             style: AppTextStyles.body(
@@ -190,35 +191,15 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 child: Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: _Filter.values.map((f) {
-                    final active = _selected == f;
-                    return Pressable(
-                      onTap: () => setState(() => _selected = f),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 180),
-                        curve: Curves.easeOut,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 7,
-                        ),
-                        decoration: BoxDecoration(
-                          color: active ? p.accent : Colors.transparent,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(
-                            color: active ? p.accent : p.border,
-                            width: 0.5,
-                          ),
-                        ),
-                        child: Text(
-                          f.label(l10n),
-                          style: AppTextStyles.label(
-                            fontSize: 10.5,
-                            color: active ? p.onAccent : p.textMuted,
-                          ),
-                        ),
+                  children: [
+                    for (final f in _Filter.values)
+                      IlndChip(
+                        p: p,
+                        label: f.label(l10n),
+                        selected: _selected == f,
+                        onTap: () => setState(() => _selected = f),
                       ),
-                    );
-                  }).toList(),
+                  ],
                 ),
               ),
             ),
@@ -240,6 +221,27 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               // gibi yalnız süzülmemiş görünümde çizilir, çünkü bir
               // kategoriye bakan kullanıcı için kişisel gün özeti araya
               // giren bir konu değişikliği olur.
+              // Ada tasarımı 08: rayın altında tek bir "başlangıç" önerisi,
+              // Bugün'deki pratik kartının aynısı.
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.screenPadding,
+                  ),
+                  child: PracticeCard(
+                    p: p,
+                    label: l10n.exploreStartLabel,
+                    title: l10n.practiceBreathTitle,
+                    meta: l10n.practiceBreathMeta,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => BreathScreen(p: p),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 28)),
               SliverToBoxAdapter(
                 child: DiscoverCarousel(
                   title: l10n.discoverTodayTitle,

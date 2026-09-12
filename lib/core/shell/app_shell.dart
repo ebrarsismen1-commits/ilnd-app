@@ -10,14 +10,15 @@ import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
-/// Navigasyon v2 (docs/ilnd_tasarim_vizyonu.md §2):
-/// Bugün · Keşfet · [nefes halkası → sohbet] · Topluluk · Sen
+/// Navigasyon v3 ("Ada" tasarımı, Figma Page 2):
+/// Bugün · Keşfet · [Sohbet halkası] · Topluluk · Sen
 ///
-/// Merkez, ürünün kalbi olan ILND sohbetine aittir — halka bir buton değil,
-/// markanın jestidir. Eski [+] (ekle sheet) Bugün ekranının üst çubuğuna
-/// taşındı; "Takip" sekmesi kaldırıldı, verisine **Bugün ekranındaki takip
-/// kartından** erişilir (roadmap NEXT-4 devamı). Profildeki eski giriş de
-/// kaldırıldı — takibin tek kapısı Bugün'dür, ikinci bir giriş açılmaz.
+/// Merkez yine ürünün kalbi olan ILND sohbetine aittir, ama artık adıyla:
+/// tasarım halkanın altına "Sohbet" yazıyor. Bu yüzden kısa basış doğrudan
+/// sohbeti açar. Ekle sheet'i (yemek/günlük/alışkanlık/su) uzun basışa
+/// geçti; aynı eylemlerin hepsinin görünür kapısı zaten var: Bugün'deki
+/// Günlük ve Takip karoları, Takip ekranındaki öğün/su/alışkanlık satırları.
+/// Uzun basış yalnız ikincil bir kısayoldur (bkz. [Pressable.onLongPress]).
 class AppShell extends ConsumerWidget {
   const AppShell({super.key, required this.navigationShell});
 
@@ -59,8 +60,8 @@ class _BottomNav extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
-        color: p.isDark ? p.base : Colors.white.withValues(alpha: 0.85),
-        border: Border(top: BorderSide(color: p.border, width: 0.5)),
+        color: p.isDark ? p.base : p.surface,
+        border: Border(top: BorderSide(color: p.border)),
       ),
       child: SafeArea(
         top: false,
@@ -71,7 +72,6 @@ class _BottomNav extends StatelessWidget {
               _NavItem(
                 p: p,
                 icon: Icons.wb_sunny_outlined,
-                activeIcon: Icons.wb_sunny_rounded,
                 label: l10n.navHome,
                 active: currentIndex == 0,
                 onTap: () => onTap(0),
@@ -79,7 +79,6 @@ class _BottomNav extends StatelessWidget {
               _NavItem(
                 p: p,
                 icon: Icons.explore_outlined,
-                activeIcon: Icons.explore_rounded,
                 label: l10n.navExplore,
                 active: currentIndex == 1,
                 onTap: () => onTap(1),
@@ -88,15 +87,13 @@ class _BottomNav extends StatelessWidget {
               _NavItem(
                 p: p,
                 icon: Icons.people_outline_rounded,
-                activeIcon: Icons.people_rounded,
                 label: l10n.navCommunity,
                 active: currentIndex == 2,
                 onTap: () => onTap(2),
               ),
               _NavItem(
                 p: p,
-                icon: Icons.person_outline,
-                activeIcon: Icons.person_rounded,
+                icon: Icons.person_outline_rounded,
                 label: l10n.navYou,
                 active: currentIndex == 3,
                 onTap: () => onTap(3),
@@ -109,14 +106,8 @@ class _BottomNav extends StatelessWidget {
   }
 }
 
-/// Merkez: ILND yüzeyini açan nefes halkası. Sekme değil — her sekmenin
-/// üzerinden erişilebilen, markanın kalbine giden kapı.
-///
-/// Kısa basış **ekle sheet'ini** açar (ILND'ye sor + yemek/günlük/alışkanlık/
-/// su). Eskiden doğrudan sohbete gidiyordu ve ekleme hero'nun sağ üstündeydi;
-/// ekleme günlük kullanımın merkezi olduğu için ikisi yer değiştirdi.
-/// Uzun basış doğrudan sohbeti açar — ikincil bir kısayol; kullanıcı hiç
-/// bulamasa da sohbet sheet'in ilk maddesi olarak duruyor.
+/// Merkez: sohbeti açan nefes halkası. Sekme değil, her sekmenin üzerinden
+/// erişilen kapı; bu yüzden hiçbir zaman "aktif" boyanmaz.
 class _RingItem extends StatelessWidget {
   const _RingItem({required this.p, required this.l10n});
   final AppPalette p;
@@ -125,28 +116,34 @@ class _RingItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Pressable(
-        onTap: () => showEkleSheet(context),
-        onLongPress: () => context.push(routeChat),
-        child: SizedBox(
-          height: 64,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Semantics(
-                button: true,
-                label: l10n.a11yOpenIlnd,
-                child: const BreathRing(size: 44),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                l10n.navRing,
-                style: AppTextStyles.body(
-                  fontSize: 10,
-                  color: p.accent,
-                ).copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.2),
-              ),
-            ],
+      child: Semantics(
+        button: true,
+        label: l10n.a11yOpenIlnd,
+        child: Pressable(
+          onTap: () => context.push(routeChat),
+          onLongPress: () => showEkleSheet(context),
+          child: SizedBox(
+            height: 64,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const BreathRing(size: 40, strokeWidth: 1.5, hollow: true),
+                const SizedBox(height: 3),
+                ExcludeSemantics(
+                  child: Text(
+                    l10n.navRing,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: AppTextStyles.body(
+                      fontSize: 10,
+                      color: p.textMuted,
+                      height: 1.2,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -158,7 +155,6 @@ class _NavItem extends StatefulWidget {
   const _NavItem({
     required this.p,
     required this.icon,
-    required this.activeIcon,
     required this.label,
     required this.active,
     required this.onTap,
@@ -166,7 +162,6 @@ class _NavItem extends StatefulWidget {
 
   final AppPalette p;
   final IconData icon;
-  final IconData activeIcon;
   final String label;
   final bool active;
   final VoidCallback onTap;
@@ -182,9 +177,9 @@ class _NavItemState extends State<_NavItem>
     duration: const Duration(milliseconds: 300),
   );
   late final Animation<double> _scale = TweenSequence([
-    TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.28), weight: 40),
-    TweenSequenceItem(tween: Tween(begin: 1.28, end: 0.90), weight: 30),
-    TweenSequenceItem(tween: Tween(begin: 0.90, end: 1.0), weight: 30),
+    TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.16), weight: 40),
+    TweenSequenceItem(tween: Tween(begin: 1.16, end: 0.94), weight: 30),
+    TweenSequenceItem(tween: Tween(begin: 0.94, end: 1.0), weight: 30),
   ]).animate(CurvedAnimation(parent: _bounce, curve: Curves.easeOut));
 
   @override
@@ -209,9 +204,8 @@ class _NavItemState extends State<_NavItem>
     final color = widget.active ? p.accent : p.textMuted;
 
     return Expanded(
-      // Ekran okuyucu hangi sekmede olduğumuzu söylemeliydi ama söylemiyordu:
-      // aktiflik yalnız renk ve kalınlıkla anlatılıyordu (renk tek başına
-      // anlam taşıyamaz).
+      // Ekran okuyucu hangi sekmede olduğumuzu söylemeli: aktiflik yalnız
+      // renkle anlatılamaz.
       child: Semantics(
         button: true,
         selected: widget.active,
@@ -229,37 +223,43 @@ class _NavItemState extends State<_NavItem>
                     scale: widget.active ? _scale.value : 1.0,
                     child: child,
                   ),
+                  // Tasarımdaki aktif hap: 48 × 30, halka zemini tonunda.
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.easeOut,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: widget.active ? 12 : 0,
-                      vertical: 4,
-                    ),
+                    width: 48,
+                    height: 30,
                     decoration: BoxDecoration(
                       color: widget.active
-                          ? p.accent.withValues(alpha: 0.12)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(20),
+                          ? p.accentSoft
+                          : p.accentSoft.withValues(alpha: 0),
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Icon(
-                      widget.active ? widget.activeIcon : widget.icon,
-                      color: color,
-                      size: 22,
-                    ),
+                    alignment: Alignment.center,
+                    child: Icon(widget.icon, color: color, size: 22),
                   ),
                 ),
                 const SizedBox(height: 3),
-                AnimatedDefaultTextStyle(
-                  duration: const Duration(milliseconds: 200),
-                  style: AppTextStyles.label(fontSize: 10, color: color)
-                      .copyWith(
-                        letterSpacing: 0,
-                        fontWeight: widget.active
-                            ? FontWeight.w600
-                            : FontWeight.w400,
-                      ),
-                  child: Text(widget.label),
+                ExcludeSemantics(
+                  child: AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 200),
+                    style:
+                        AppTextStyles.body(
+                          fontSize: 10,
+                          color: color,
+                          height: 1.2,
+                        ).copyWith(
+                          fontWeight: widget.active
+                              ? FontWeight.w700
+                              : FontWeight.w400,
+                        ),
+                    child: Text(
+                      widget.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                    ),
+                  ),
                 ),
               ],
             ),

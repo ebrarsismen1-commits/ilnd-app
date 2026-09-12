@@ -73,18 +73,34 @@ dev_dependencies:
 flutter:
   generate: true
 
+  # Lora'nın OFL metni uygulamanın lisans listesine kaydediliyor
+  # (main.dart, LicenseRegistry): OFL fontun lisansıyla dağıtılmasını
+  # şart koşuyor.
+  assets:
+    - assets/fonts/Lora-OFL.txt
+
   # Üç aile de pakete GÖMÜLÜ, hiçbiri çalışma anında indirilmiyor.
   #
   # google_fonts ile indirildikleri sürece ağsız ilk açılışta hepsi sistem
   # fontlarına düşüyordu, yani uygulama kimliğini kaybediyordu. App Store
   # incelemesi de aynı riski taşıyordu.
   fonts:
-    - family: NotoSerif
+    # Lora: Ada tasarımının başlık fontu (OFL, assets/fonts/Lora-OFL.txt).
+    # Google Fonts yalnız değişken kesim yayınlıyor; statik 400/600 ve
+    # italik 400 fonttools varLib.instancer ile üretildi. Değişken dosyayı
+    # doğrudan gömseydik pubspec'teki ağırlık bir şey ifade etmezdi:
+    # kod 600 der, ekran 400 çizerdi.
+    - family: Lora
       fonts:
-        - asset: assets/fonts/NotoSerif-Regular.ttf
+        - asset: assets/fonts/Lora-Regular.ttf
           weight: 400
-        - asset: assets/fonts/NotoSerif-SemiBold.ttf
+        - asset: assets/fonts/Lora-SemiBold.ttf
           weight: 600
+        # İtalik kelime vurgusu markanın imzası (DESIGN_SYSTEM §2). Noto
+        # Serif'te italik kesim YOKTU, Flutter eğik taklit çiziyordu.
+        - asset: assets/fonts/Lora-Italic.ttf
+          weight: 400
+          style: italic
     - family: DMSans
       fonts:
         - asset: assets/fonts/DMSans-Regular.ttf

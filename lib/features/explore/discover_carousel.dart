@@ -50,7 +50,7 @@ class DiscoverCarousel extends StatelessWidget {
           ),
           child: Text(
             title,
-            style: AppTextStyles.heading(fontSize: 20, color: p.text),
+            style: AppTextStyles.serifTitle(color: p.text, fontSize: 22),
           ),
         ),
         const SizedBox(height: 14),

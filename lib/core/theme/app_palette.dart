@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// ILND'nin çift kimliği — ilnd.app'ten birebir türetilmiş:
-/// gündüz açık/havadar/gri-tonlu + nokta atışı yeşil-turuncu vurgu,
-/// gece soğuk kömür luxe. Renk fotoğraflardan gelir, arayüzden değil.
+/// ILND'nin çift kimliği.
+///
+/// Gündüz paleti 2026-09-11'de Figma "Ada" tasarımına (Page 2, 01 Marka ve
+/// temeller) geçti: Kâğıt zemin, Mürekkep metin, Orman vurgu; yumuşak
+/// yüzeyler Adaçayı / Su / Kil. Değerler tasarımın SVG dolgularından
+/// okundu, gözle seçilmedi. Gece paleti aynı rolleri koyu karşılıklarıyla
+/// taşır.
 class AppPalette {
   const AppPalette({
     required this.isDark,
@@ -20,6 +24,9 @@ class AppPalette {
     required this.danger,
     required this.water,
     required this.onAccent,
+    required this.sea,
+    required this.sky,
+    required this.clay,
     required this.insight,
   });
 
@@ -54,28 +61,43 @@ class AppPalette {
 
   final Color onAccent;
 
+  /// Su: ada kartının deniz katmanı, ILND+ kartı, sohbet halkasının zemini.
+  final Color sea;
+
+  /// Ada kartının gökyüzü katmanı. İllüstrasyon gelene kadar ada kartı
+  /// yalnız gökyüzü + deniz iki tonuyla çizilir (bkz. IslandFrame).
+  final Color sky;
+
+  /// Kil: sıcak vurgu zemini (hata/uyarı kartı, döngü takvimi).
+  final Color clay;
+
   /// Yumuşak kart zeminleri (bkz. [InsightTints]).
   final InsightTints insight;
 
-  // ── Gündüz · açık/havadar/gri-tonlu wellness ─────────────────────────────────
+  // ── Gündüz · Ada (Figma Page 2) ──────────────────────────────────────────────
   static const light = AppPalette(
     isDark: false,
-    base: Color(0xFFF5F4F1), // barely-there off-white
-    aura: [Color(0xFFF5F4F1), Color(0xFFEEEDE6), Color(0xFFF2F1EA)],
-    surface: Color(0xFFFFFFFF),
-    surfaceStrong: Color(0xFFEBE8E1),
-    text: Color(0xFF111827), // slate
-    textMuted: Color(0xFF5F6875), // WCAG AA: 6B7280 zeminde 4.40 kalıyordu
-    border: Color(0xFFE3E0D8),
+    base: Color(0xFFF6F5F1), // Kâğıt
+    aura: [Color(0xFFF6F5F1), Color(0xFFF6F5F1), Color(0xFFF6F5F1)],
+    surface: Color(0xFFFCFCF8), // kart ve giriş alanı dolgusu
+    surfaceStrong: Color(0xFFE9EDDF), // Adaçayı: yumuşak kart, ikon karosu
+    text: Color(0xFF22382E), // Mürekkep
+    textMuted: Color(0xFF59675E), // Adaçayı üstünde de 5.0:1
+    border: Color(0xFFDDDFD6),
     // Yeşil ve turuncu açık modda birer ton koyulaştı: eski değerlerde
     // (1F9D57 / E2611C) beyaz metinli birincil buton 3.49:1 idi, AA sınırı
     // 4.5. Ton aynı, parlaklık düştü. Koyu palet zaten geçiyordu, dokunulmadı.
-    accent: Color(0xFF13763E), // ilnd.app green, AA-safe
-    accentSoft: Color(0xFFDCF3E4),
+    accent: Color(0xFF13763E), // Orman
+    accentSoft: Color(0xFFE1EEDF), // aktif sekme hapı, halka zemini
     amber: Color(0xFFA84711), // warm orange pop, AA-safe
     danger: Color(0xFFA54A40),
-    water: Color(0xFF2E86B8),
+    // Kenarlık #DDDFD6'ya koyulaşınca eski su mavisi (#2E86B8) kendi rayına
+    // karşı 2.99:1'e düştü; bir tık koyulaştı.
+    water: Color(0xFF2B7DAB),
     onAccent: Color(0xFFFFFFFF),
+    sea: Color(0xFFDCECE7), // Su
+    sky: Color(0xFFE6EEDE),
+    clay: Color(0xFFECD1C5), // Kil
     insight: InsightTints(
       blush: Color(0xFFF7EBE9),
       cream: Color(0xFFF5F0E1),
@@ -102,6 +124,9 @@ class AppPalette {
     danger: Color(0xFFDA8578),
     water: Color(0xFF93D5FF),
     onAccent: Color(0xFF0B140D),
+    sea: Color(0xFF16211E),
+    sky: Color(0xFF1A2119),
+    clay: Color(0xFF2A211D),
     insight: InsightTints(
       blush: Color(0xFF221D1C),
       cream: Color(0xFF211F17),

@@ -32,21 +32,27 @@ class SocialSignInButton extends ConsumerWidget {
         height: 52,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: p.surfaceStrong,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: p.border, width: 1),
+          color: p.surface,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusControl),
+          border: Border.all(color: p.border),
         ),
+        // İşaret kalıyor: tasarımda yalnız yazı var ama Apple, özel "Apple
+        // ile giriş" butonunda logoyu şart koşuyor (HIG, Sign in with Apple).
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _ProviderMark(provider: provider, color: p.text),
             const SizedBox(width: 10),
-            Text(
-              label,
-              style: AppTextStyles.body(
-                fontSize: 13,
-                color: p.text,
-              ).copyWith(fontWeight: FontWeight.w600),
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.body(
+                  fontSize: 14,
+                  color: p.text,
+                ).copyWith(fontWeight: FontWeight.w600),
+              ),
             ),
           ],
         ),

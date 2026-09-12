@@ -8,12 +8,13 @@ import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
+import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
-/// Topluluk v2 (ADR-0002): gerçek etkinlik listesi + RSVP.
-/// Etkinlik yoksa v1 davet içeriği görünür — sekme hiçbir durumda boş değil.
+/// Topluluk (Ada tasarımı 09, ADR-0002): gerçek etkinlik listesi + RSVP.
+/// Etkinlik yoksa davet içeriği görünür — sekme hiçbir durumda boş değil.
 class TopulukScreen extends ConsumerWidget {
   const TopulukScreen({super.key});
 
@@ -26,70 +27,65 @@ class TopulukScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: p.base,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.screenPadding,
+        bottom: false,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.screenPadding,
+            12,
+            AppSpacing.screenPadding,
+            32,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 28),
-              Entrance(
-                index: 0,
-                child: Text(
-                  l10n.topulukTitle,
-                  style: AppTextStyles.display(fontSize: 30, color: p.text),
-                ),
+          children: [
+            Entrance(
+              index: 0,
+              child: IlndPageHeader(
+                p: p,
+                title: l10n.topulukTitle,
+                subtitle: l10n.topulukTagline,
+                showBack: false,
+                titleSize: 28,
               ),
-              const SizedBox(height: 4),
+            ),
+            const SizedBox(height: 22),
+            if (events.isEmpty)
+              _EmptyInvite(l10n: l10n, p: p)
+            else ...[
               Entrance(
                 index: 1,
                 child: Text(
-                  l10n.topulukTagline,
-                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+                  l10n.topulukUpcomingLabel,
+                  style: AppTextStyles.caption(color: p.textMuted),
                 ),
               ),
-              const SizedBox(height: 24),
-              if (events.isEmpty)
-                _EmptyInvite(l10n: l10n, p: p)
-              else ...[
+              const SizedBox(height: 10),
+              for (final (i, e) in events.indexed) ...[
                 Entrance(
-                  index: 2,
-                  child: Text(
-                    l10n.topulukUpcomingLabel,
-                    style: AppTextStyles.sectionLabel(color: p.textMuted),
-                  ),
+                  index: 2 + i,
+                  child: _EventCard(event: e, p: p),
                 ),
                 const SizedBox(height: 12),
-                for (final (i, e) in events.indexed) ...[
-                  Entrance(
-                    index: 3 + i,
-                    child: _EventRow(event: e, p: p),
-                  ),
-                  Container(height: 0.5, color: p.border),
-                  const SizedBox(height: 20),
-                ],
-                const SizedBox(height: 12),
-                Entrance(
-                  index: 3 + events.length,
-                  child: _InviteRow(l10n: l10n, p: p),
-                ),
               ],
-              const SizedBox(height: 40),
+              const SizedBox(height: 8),
+              Entrance(
+                index: 2 + events.length,
+                child: IlndButton(
+                  p: p,
+                  label: l10n.topulukInviteCta,
+                  onTap: () => context.push(routeReferral),
+                ),
+              ),
             ],
-          ),
+          ],
         ),
       ),
     );
   }
 }
 
-// ─── Etkinlik satırı ───────────────────────────────────────────────────────────
+// ─── Etkinlik kartı ────────────────────────────────────────────────────────────
 
-/// Kart değil satır (handoff §4): ayrımı kutu değil, tarih monogramının
-/// boşluğu ve alttaki hairline kurar.
-class _EventRow extends ConsumerWidget {
-  const _EventRow({required this.event, required this.p});
+class _EventCard extends ConsumerWidget {
+  const _EventCard({required this.event, required this.p});
   final CommunityEvent event;
   final AppPalette p;
 
@@ -131,48 +127,71 @@ class _EventRow extends ConsumerWidget {
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+    return IlndCard(
+      p: p,
+      padding: const EdgeInsets.all(14),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          // Tarih karosu: Adaçayı zemin, Orman rakam.
+          Container(
             width: 52,
+            height: 56,
+            decoration: BoxDecoration(
+              color: p.surfaceStrong,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   day,
                   style: AppTextStyles.mono(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
                     color: p.accent,
-                  ).copyWith(height: 1.05),
+                  ).copyWith(height: 1.1),
                 ),
+                const SizedBox(height: 2),
                 Text(
                   month,
-                  style: AppTextStyles.label(fontSize: 8.5, color: p.accent),
+                  style: AppTextStyles.label(fontSize: 9.5, color: p.accent),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   event.title,
-                  style: AppTextStyles.heading(fontSize: 17, color: p.text),
+                  style: AppTextStyles.serifTitle(color: p.text, fontSize: 18),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  '${event.venue} · ${event.city}',
-                  style: AppTextStyles.body(fontSize: 11.5, color: p.textMuted),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      size: 14,
+                      color: p.textMuted,
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        '${event.venue} · ${event.city}',
+                        style: AppTextStyles.body(
+                          fontSize: 12,
+                          color: p.textMuted,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     if (count > 0)
@@ -185,7 +204,7 @@ class _EventRow extends ConsumerWidget {
                                   capacity,
                                 ),
                           style: AppTextStyles.body(
-                            fontSize: 10.5,
+                            fontSize: 11.5,
                             color: p.textMuted,
                           ),
                         ),
@@ -196,16 +215,16 @@ class _EventRow extends ConsumerWidget {
                       onTap: locked ? null : toggle,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
+                        constraints: const BoxConstraints(minHeight: 36),
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
-                          vertical: 8,
+                          vertical: 9,
                         ),
                         decoration: BoxDecoration(
-                          color: going ? p.accent : Colors.transparent,
-                          borderRadius: BorderRadius.circular(16),
+                          color: going ? p.accent : p.surface,
+                          borderRadius: BorderRadius.circular(999),
                           border: Border.all(
                             color: locked ? p.border : p.accent,
-                            width: 1,
                           ),
                         ),
                         child: Text(
@@ -217,7 +236,7 @@ class _EventRow extends ConsumerWidget {
                           softWrap: false,
                           overflow: TextOverflow.fade,
                           style: AppTextStyles.body(
-                            fontSize: 11.5,
+                            fontSize: 12,
                             color: locked
                                 ? p.textMuted
                                 : (going ? p.onAccent : p.accent),
@@ -236,7 +255,7 @@ class _EventRow extends ConsumerWidget {
   }
 }
 
-// ─── Boş durum: v1 davet içeriği ─────────────────────────────────────────────
+// ─── Boş durum: davet ─────────────────────────────────────────────────────────
 
 class _EmptyInvite extends StatelessWidget {
   const _EmptyInvite({required this.l10n, required this.p});
@@ -246,64 +265,92 @@ class _EmptyInvite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // İllüstrasyon gelene kadar adanın ortasında nefes halkası durur.
+        Entrance(
+          index: 1,
+          child: IslandFrame(
+            p: p,
+            height: 170,
+            child: const Center(child: BreathRing(size: 64)),
+          ),
+        ),
         const SizedBox(height: 24),
-        const Entrance(index: 2, child: Center(child: BreathRing(size: 96))),
-        const SizedBox(height: 32),
+        Entrance(
+          index: 2,
+          child: Text(
+            l10n.topulukComingTitle,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.display(fontSize: 25, color: p.text),
+          ),
+        ),
+        const SizedBox(height: 8),
         Entrance(
           index: 3,
           child: Text(
-            l10n.topulukComingTitle,
-            style: AppTextStyles.heading(fontSize: 24, color: p.text),
+            l10n.topulukComingBody,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.body(
+              fontSize: 13,
+              color: p.textMuted,
+              height: 1.55,
+            ),
+          ),
+        ),
+        const SizedBox(height: 22),
+        Entrance(
+          index: 4,
+          child: IlndListRow(
+            p: p,
+            icon: Icons.location_on_outlined,
+            title: l10n.topulukCityTitle,
+            subtitle: l10n.topulukCitySubtitle,
           ),
         ),
         const SizedBox(height: 10),
         Entrance(
-          index: 4,
-          child: Text(
-            l10n.topulukComingBody,
-            style: AppTextStyles.body(
-              fontSize: 13,
-              color: p.textMuted,
-            ).copyWith(height: 1.6),
+          index: 5,
+          child: IlndCard(
+            p: p,
+            color: p.surfaceStrong,
+            child: Row(
+              children: [
+                Icon(Icons.people_outline_rounded, size: 26, color: p.accent),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.topulukTogetherTitle,
+                        style: AppTextStyles.rowTitle(color: p.text),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        l10n.topulukTogetherBody,
+                        style: AppTextStyles.body(
+                          fontSize: 12,
+                          color: p.textMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        const SizedBox(height: 28),
+        const SizedBox(height: 22),
         Entrance(
-          index: 5,
-          child: _InviteRow(l10n: l10n, p: p),
+          index: 6,
+          child: IlndButton(
+            p: p,
+            label: l10n.topulukInviteCta,
+            onTap: () => context.push(routeReferral),
+          ),
         ),
       ],
-    );
-  }
-}
-
-class _InviteRow extends StatelessWidget {
-  const _InviteRow({required this.l10n, required this.p});
-  final AppLocalizations l10n;
-  final AppPalette p;
-
-  @override
-  Widget build(BuildContext context) {
-    return Pressable(
-      onTap: () => context.push(routeReferral),
-      child: Container(
-        height: 52,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: p.accent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          l10n.topulukInviteCta,
-          style: AppTextStyles.body(
-            fontSize: 15,
-            color: p.onAccent,
-          ).copyWith(fontWeight: FontWeight.w600),
-        ),
-      ),
     );
   }
 }

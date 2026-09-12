@@ -197,7 +197,7 @@ abstract class AppLocalizations {
   /// Center breathing ring label
   ///
   /// In tr, this message translates to:
-  /// **'ilnd'**
+  /// **'Sohbet'**
   String get navRing;
 
   /// Community screen title
@@ -3541,6 +3541,444 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Bugün senin için'**
   String get discoverTodayTitle;
+
+  /// Home island card title, owner is the possessive form of the name (Ela'nın)
+  ///
+  /// In tr, this message translates to:
+  /// **'{owner} adası'**
+  String homeIslandOwned(String owner);
+
+  /// Home island card pill opening the island screen
+  ///
+  /// In tr, this message translates to:
+  /// **'adanı gör'**
+  String get homeIslandVisit;
+
+  /// Home: label above the daily practice card
+  ///
+  /// In tr, this message translates to:
+  /// **'BUGÜNÜN KÜÇÜK PRATİĞİ'**
+  String get homePracticeLabel;
+
+  /// Breathing practice card title
+  ///
+  /// In tr, this message translates to:
+  /// **'bir nefeslik mola'**
+  String get practiceBreathTitle;
+
+  /// Breathing practice card meta line
+  ///
+  /// In tr, this message translates to:
+  /// **'nefes pratiği · 2 dk'**
+  String get practiceBreathMeta;
+
+  /// Home shortcut tile opening the focus timer
+  ///
+  /// In tr, this message translates to:
+  /// **'odaklan'**
+  String get homeShortcutFocus;
+
+  /// Focus setup screen title
+  ///
+  /// In tr, this message translates to:
+  /// **'biraz odaklan'**
+  String get focusTitle;
+
+  /// Focus setup screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'bu zamanı neye ayırmak istersin?'**
+  String get focusSubtitle;
+
+  /// Focus setup: intention section title
+  ///
+  /// In tr, this message translates to:
+  /// **'niyetin'**
+  String get focusIntentLabel;
+
+  /// Focus intention option
+  ///
+  /// In tr, this message translates to:
+  /// **'çalışmak'**
+  String get focusIntentWork;
+
+  /// Focus intention option
+  ///
+  /// In tr, this message translates to:
+  /// **'okumak'**
+  String get focusIntentRead;
+
+  /// Focus intention option revealing a text field
+  ///
+  /// In tr, this message translates to:
+  /// **'kendim seçeyim'**
+  String get focusIntentOwn;
+
+  /// Focus custom intention field hint
+  ///
+  /// In tr, this message translates to:
+  /// **'niyetini yaz'**
+  String get focusIntentHint;
+
+  /// Focus setup: duration section title
+  ///
+  /// In tr, this message translates to:
+  /// **'süren'**
+  String get focusDurationLabel;
+
+  /// Focus duration option
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dakika'**
+  String focusMinutes(int minutes);
+
+  /// Focus setup footnote
+  ///
+  /// In tr, this message translates to:
+  /// **'bu süre sana ait. istediğinde ara verebilirsin.'**
+  String get focusNote;
+
+  /// Focus setup primary button
+  ///
+  /// In tr, this message translates to:
+  /// **'odaklanmaya başla'**
+  String get focusStart;
+
+  /// Focus session line under the timer
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dakikalık odak molası'**
+  String focusSessionMeta(int minutes);
+
+  /// Focus session pause button
+  ///
+  /// In tr, this message translates to:
+  /// **'duraklat'**
+  String get focusPause;
+
+  /// Focus session resume button
+  ///
+  /// In tr, this message translates to:
+  /// **'sürdür'**
+  String get focusResume;
+
+  /// Focus session end button
+  ///
+  /// In tr, this message translates to:
+  /// **'seansı bitir'**
+  String get focusEnd;
+
+  /// Focus session footnote
+  ///
+  /// In tr, this message translates to:
+  /// **'bir iş, bir an.'**
+  String get focusSessionFooter;
+
+  /// Focus completed title
+  ///
+  /// In tr, this message translates to:
+  /// **'kendine zaman ayırdın.'**
+  String get focusDoneTitle;
+
+  /// Focus completed summary
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dakika · {intent}'**
+  String focusDoneMeta(int minutes, String intent);
+
+  /// Focus completed feeling question
+  ///
+  /// In tr, this message translates to:
+  /// **'sana nasıl geldi?'**
+  String get focusFeelQuestion;
+
+  /// Focus feeling option
+  ///
+  /// In tr, this message translates to:
+  /// **'iyi geldi'**
+  String get focusFeelGood;
+
+  /// Focus feeling option
+  ///
+  /// In tr, this message translates to:
+  /// **'kararsızım'**
+  String get focusFeelUnsure;
+
+  /// Focus feeling option
+  ///
+  /// In tr, this message translates to:
+  /// **'zorlandım'**
+  String get focusFeelHard;
+
+  /// Focus completed primary button
+  ///
+  /// In tr, this message translates to:
+  /// **'bugüne dön'**
+  String get focusBackToToday;
+
+  /// Focus completed footnote
+  ///
+  /// In tr, this message translates to:
+  /// **'süren kısa da olsa burada bir yeri var.'**
+  String get focusDoneFooter;
+
+  /// Accessibility label for the focus timer
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalan süre {time}'**
+  String a11yFocusTimeLeft(String time);
+
+  /// Chat screen title
+  ///
+  /// In tr, this message translates to:
+  /// **'biraz konuşalım.'**
+  String get chatPageTitle;
+
+  /// Chat starter headline
+  ///
+  /// In tr, this message translates to:
+  /// **'bugün aklında ne var?'**
+  String get chatEmptyTitle;
+
+  /// Chat starter subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'istersen bir yerden başlayalım.'**
+  String get chatEmptySubtitle;
+
+  /// Chat starter suggestion sent as a message
+  ///
+  /// In tr, this message translates to:
+  /// **'bugün biraz yorgunum'**
+  String get chatSuggestTired;
+
+  /// Chat starter suggestion sent as a message
+  ///
+  /// In tr, this message translates to:
+  /// **'aklımdakileri toparlamak istiyorum'**
+  String get chatSuggestSort;
+
+  /// Chat starter suggestion sent as a message
+  ///
+  /// In tr, this message translates to:
+  /// **'güzel bir şey paylaşmak istiyorum'**
+  String get chatSuggestShare;
+
+  /// You screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'kendi ritminde.'**
+  String get profileTagline;
+
+  /// You screen weekly card label
+  ///
+  /// In tr, this message translates to:
+  /// **'BU HAFTADAN KALANLAR'**
+  String get profileWeekLabel;
+
+  /// You screen weekly card headline
+  ///
+  /// In tr, this message translates to:
+  /// **'{journal} yazı · {meals} öğün'**
+  String profileWeekLine(int journal, int meals);
+
+  /// You screen weekly card hint
+  ///
+  /// In tr, this message translates to:
+  /// **'kayıtlarına dön, haftanı hatırla.'**
+  String get profileWeekHint;
+
+  /// You screen island row subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'nesnelerine ve anılarına dön'**
+  String get profileIslandRowSubtitle;
+
+  /// You screen notifications row
+  ///
+  /// In tr, this message translates to:
+  /// **'bildirim tercihlerin'**
+  String get profileNotificationsRow;
+
+  /// You screen notifications row subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'hatırlatmanın saatini seç'**
+  String get profileNotificationsRowSubtitle;
+
+  /// You screen data and privacy row
+  ///
+  /// In tr, this message translates to:
+  /// **'verilerin ve gizlilik'**
+  String get profileDataRow;
+
+  /// You screen data and privacy row subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND\'nin hatırladıkları, hesabın, belgeler'**
+  String get profileDataRowSubtitle;
+
+  /// You screen dark theme toggle row
+  ///
+  /// In tr, this message translates to:
+  /// **'gece görünümü'**
+  String get profileNightView;
+
+  /// Data and privacy screen title
+  ///
+  /// In tr, this message translates to:
+  /// **'verilerin sana ait'**
+  String get dataTitle;
+
+  /// Data and privacy screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'nerede, ne için kullanıldığını gör.'**
+  String get dataSubtitle;
+
+  /// Data and privacy: empty memory state
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND henüz senin hakkında bir şey hatırlamıyor.'**
+  String get dataMemoryEmpty;
+
+  /// Notification preferences screen title
+  ///
+  /// In tr, this message translates to:
+  /// **'sana uygun zamanda'**
+  String get notifTitle;
+
+  /// Notification preferences screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'hatırlatmaların ritmini sen belirle.'**
+  String get notifSubtitle;
+
+  /// Tracking screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'bugün kendine nasıl baktın?'**
+  String get takipSubtitle;
+
+  /// Water card progress, numbers are pre-formatted
+  ///
+  /// In tr, this message translates to:
+  /// **'{ml} / {goal} ml'**
+  String takipWaterProgress(String ml, String goal);
+
+  /// Water card quick add pill
+  ///
+  /// In tr, this message translates to:
+  /// **'+ {ml} ml'**
+  String takipWaterAdd(int ml);
+
+  /// Tracking nutrition summary card label
+  ///
+  /// In tr, this message translates to:
+  /// **'BESLENME ÖZETİ'**
+  String get takipNutritionLabel;
+
+  /// Tracking nutrition summary headline, numbers are pre-formatted
+  ///
+  /// In tr, this message translates to:
+  /// **'{kcal} / {goal} kcal'**
+  String takipKcalProgress(String kcal, String goal);
+
+  /// Journal screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'aklında kalanlara bir yer aç.'**
+  String get journalSubtitle;
+
+  /// Journal: label above the daily question
+  ///
+  /// In tr, this message translates to:
+  /// **'BUGÜNÜN SORUSU'**
+  String get journalQuestionLabel;
+
+  /// Journal daily question
+  ///
+  /// In tr, this message translates to:
+  /// **'bugün sana iyi gelen küçük şey neydi?'**
+  String get journalQuestion;
+
+  /// Journal empty state footnote
+  ///
+  /// In tr, this message translates to:
+  /// **'burada doğru ya da yanlış bir cevap yok.'**
+  String get journalNoWrongAnswer;
+
+  /// Community: city row title
+  ///
+  /// In tr, this message translates to:
+  /// **'İstanbul'**
+  String get topulukCityTitle;
+
+  /// Community: city row subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'yeni buluşmalar burada görünecek.'**
+  String get topulukCitySubtitle;
+
+  /// Community: bring a friend card title
+  ///
+  /// In tr, this message translates to:
+  /// **'birlikte daha tanıdık.'**
+  String get topulukTogetherTitle;
+
+  /// Community: bring a friend card body
+  ///
+  /// In tr, this message translates to:
+  /// **'bir arkadaşını da yanına çağır.'**
+  String get topulukTogetherBody;
+
+  /// Island screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'kendi düzenin, sana ait izler.'**
+  String get adanSubtitle;
+
+  /// Island screen items section title
+  ///
+  /// In tr, this message translates to:
+  /// **'adandaki öğeler'**
+  String get adanItemsTitle;
+
+  /// Welcome screen headline under the island card
+  ///
+  /// In tr, this message translates to:
+  /// **'sana ait bir ada.'**
+  String get welcomeHeadline;
+
+  /// Login screen subtitle
+  ///
+  /// In tr, this message translates to:
+  /// **'adana kaldığın yerden dön.'**
+  String get loginSubtitle;
+
+  /// Label above the email field
+  ///
+  /// In tr, this message translates to:
+  /// **'e-posta'**
+  String get authEmailLabel;
+
+  /// Label above the password field
+  ///
+  /// In tr, this message translates to:
+  /// **'şifre'**
+  String get authPasswordLabel;
+
+  /// Explore: label above the starter practice card
+  ///
+  /// In tr, this message translates to:
+  /// **'SANA UYGUN BİR BAŞLANGIÇ'**
+  String get exploreStartLabel;
+
+  /// Accessibility label for the chat send button
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönder'**
+  String get chatSendA11y;
 }
 
 class _AppLocalizationsDelegate

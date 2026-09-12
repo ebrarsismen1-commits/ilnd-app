@@ -9,6 +9,9 @@ import 'package:ilnd_app/features/auth/new_password_screen.dart';
 import 'package:ilnd_app/features/auth/register_screen.dart';
 import 'package:ilnd_app/features/chat/chat_screen.dart';
 import 'package:ilnd_app/features/explore/explore_screen.dart';
+import 'package:ilnd_app/features/focus/focus_screen.dart';
+import 'package:ilnd_app/features/profile/data_privacy_screen.dart';
+import 'package:ilnd_app/features/profile/notification_prefs_screen.dart';
 import 'package:ilnd_app/features/home/home_screen.dart';
 import 'package:ilnd_app/features/legal/legal_screen.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
@@ -52,6 +55,9 @@ const routeNewPassword = '/yeni-sifre';
 const routeReferral = '/referral';
 const routePrivacyPolicy = '/legal/privacy';
 const routeTermsOfService = '/legal/terms';
+const routeFocus = '/odaklan';
+const routeDataPrivacy = '/profil/veriler';
+const routeNotificationPrefs = '/profil/bildirimler';
 
 // ─── Auth-aware router notifier ───────────────────────────────────────────────
 
@@ -259,6 +265,22 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: routeSleepRitual,
         pageBuilder: (context, state) =>
             _fade(state, const SleepRitualScreen()),
+      ),
+      GoRoute(
+        // Odaklan: hazırlık → seans → tamamlandı, tek ekran (Ada tasarımı
+        // 11-13). Bugün'deki "odaklan" karosundan açılır.
+        path: routeFocus,
+        pageBuilder: (context, state) => _fade(state, const FocusScreen()),
+      ),
+      GoRoute(
+        path: routeDataPrivacy,
+        pageBuilder: (context, state) =>
+            _fade(state, const DataPrivacyScreen()),
+      ),
+      GoRoute(
+        path: routeNotificationPrefs,
+        pageBuilder: (context, state) =>
+            _fade(state, const NotificationPrefsScreen()),
       ),
       GoRoute(
         path: routePrivacyPolicy,

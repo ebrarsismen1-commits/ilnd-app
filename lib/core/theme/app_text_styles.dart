@@ -4,7 +4,7 @@ import 'app_colors.dart';
 
 /// ILND tipografi sistemi.
 ///
-/// **Noto Serif** (başlık) + **DM Sans** (gövde, etiket) + **DM Mono** (sayı).
+/// **Lora** (başlık) + **DM Sans** (gövde, etiket) + **DM Mono** (sayı).
 /// Üçü de pakete gömülüdür (pubspec.yaml `fonts:`), hiçbiri çalışma anında
 /// indirilmez.
 ///
@@ -19,9 +19,15 @@ import 'app_colors.dart';
 /// eşleşme daha doğal). Yeniden değiştirmeden önce hepsini oku: her biri
 /// savunulabilir, karar estetik ve owner'ın.
 ///
-/// - display / heading → Noto Serif, ILND'nin editoryal imzası
+/// - display / heading → Lora, ILND'nin editoryal imzası
 /// - body / label      → DM Sans
 /// - mono              → DM Mono, kalori ve sayaç
+///
+/// 2026-09-12: Ada tasarımının başlık fontu **Lora** pakete gömüldü ve
+/// Noto Serif kaldırıldı (owner onayı). Google Fonts Lora'yı yalnız
+/// değişken kesim olarak yayınlıyor; 400/600 ve italik 400 statik
+/// kesimleri fonttools ile üretildi. display/heading varsayılan ağırlığı
+/// da 600'den 400'e indi: tasarımın başlıkları kalın değil, hafif.
 ///
 /// **DM Mono 500'de biter** (600/700 kesimi üretilmemiş). Sayı stilleri bu
 /// yüzden 500'e sabitlendi; daha kalın istemek Flutter'ı en yakın kesime
@@ -32,7 +38,7 @@ class AppTextStyles {
   AppTextStyles._();
 
   /// Başlıkların ailesi. Pakete gömülü, indirilmiyor.
-  static const String serifFont = 'NotoSerif';
+  static const String serifFont = 'Lora';
 
   /// Gövde ve etiketlerin ailesi. Pakete gömülü.
   static const String sansFont = 'DMSans';
@@ -52,8 +58,8 @@ class AppTextStyles {
   // kendi puntolarını getirdiği için kilit kaldırıldı (owner kararı).
   //
   // Kilidin yerine iki daha zayıf ama hâlâ işe yarayan koruma kondu
-  // (test/core/typography_test.dart): (1) lib/ içinde Noto Serif dışında
-  // indirilen font kullanılamaz, (2) fontSize değerleri handoff'un
+  // (test/core/typography_test.dart): (1) lib/ içinde indirilen font
+  // kullanılamaz, (2) fontSize değerleri handoff'un
   // belgelenmiş kümesinden gelmeli, rastgele bir 37 hâlâ CI'da kırılır.
   //
   // Adlandırılmış rol varsa onu kullan; handoff bir ekran için özel punto
@@ -71,15 +77,15 @@ class AppTextStyles {
   static const double sizeMetric = 28;
   static const double sizeMetricLarge = 40;
 
-  // ── Display — Noto Serif (ILND'nin imzası) ──────────────────────────────
+  // ── Display — Lora (ILND'nin imzası) ────────────────────────────────────
 
   static TextStyle display({
     double fontSize = 32,
-    FontWeight fontWeight = FontWeight.w600,
+    FontWeight fontWeight = FontWeight.w400,
     Color color = AppColors.charcoal,
     double height = 1.05,
   }) {
-    // Noto Serif, roman (italik değil), sıkı negatif aralık — ilnd.app'teki
+    // Lora, roman (italik değil), sıkı negatif aralık — ilnd.app'teki
     // büyük editoryal başlık dili.
     return TextStyle(
       fontFamily: serifFont,
@@ -93,13 +99,13 @@ class AppTextStyles {
 
   /// Large hero display, e.g. the "ilnd." splash wordmark.
   static TextStyle displayHero({Color color = AppColors.charcoal}) =>
-      display(fontSize: 56, fontWeight: FontWeight.w600, color: color);
+      display(fontSize: 56, color: color);
 
-  // ── Heading — Noto Serif ─────────────────────────────────────────────────
+  // ── Heading — Lora ───────────────────────────────────────────────────────
 
   static TextStyle heading({
     double fontSize = 20,
-    FontWeight fontWeight = FontWeight.w600,
+    FontWeight fontWeight = FontWeight.w400,
     Color color = AppColors.charcoal,
     double height = 1.2,
   }) {
@@ -196,12 +202,26 @@ class AppTextStyles {
   /// Noto Serif 600, sıkı negatif aralık. Ekran başına punto farkı için
   /// (30 / 28 / 26) `fontSize` geçilebilir.
   static TextStyle screenTitle({required Color color, double? fontSize}) =>
-      display(
-        fontSize: fontSize ?? sizeTitle,
-        fontWeight: FontWeight.w600,
-        color: color,
-        height: 1.1,
-      );
+      display(fontSize: fontSize ?? sizeTitle, color: color, height: 1.15);
+
+  /// Ada tasarımının sayfa başlığı ("Takibin", "Günlük", "Sen"): serif 26.
+  static TextStyle pageTitle({required Color color, double fontSize = 26}) =>
+      display(fontSize: fontSize, color: color, height: 1.2);
+
+  /// Kart/bölüm içindeki serif başlık ("Bir nefeslik mola", "Su").
+  static TextStyle serifTitle({required Color color, double fontSize = 20}) =>
+      heading(fontSize: fontSize, color: color, height: 1.25);
+
+  /// Liste satırı başlığı: DM Sans kalın 15 (Ada tasarımı satırları).
+  static TextStyle rowTitle({required Color color}) => body(
+    fontSize: 15,
+    color: color,
+    height: 1.3,
+  ).copyWith(fontWeight: FontWeight.w700);
+
+  /// Kart üstündeki küçük büyük-harf etiket ("BUGÜNÜN KÜÇÜK PRATİĞİ").
+  static TextStyle caption({required Color color}) =>
+      label(fontSize: 11, color: color, letterSpacingEm: 0.06);
 
   /// Editoryal an — selamlama, makale başlığı.
   static TextStyle editorial({

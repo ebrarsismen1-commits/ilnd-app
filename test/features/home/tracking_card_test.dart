@@ -89,9 +89,7 @@ void main() {
     expect(find.text(l10n.takipHabitsLabel), findsNothing);
   });
 
-  testWidgets('ana ekranda Takip ekranına giden sessiz satır var', (
-    tester,
-  ) async {
+  testWidgets('ana ekranda Takip ekranına giden karo var', (tester) async {
     SharedPreferences.resetStatic();
     SharedPreferences.setMockInitialValues({});
     final prefs = await SharedPreferences.getInstance();
@@ -103,27 +101,20 @@ void main() {
     );
 
     final l10n = lookupAppLocalizations(const Locale('tr'));
-    final satir = find.text(l10n.takipTitle);
-    final altMetin = find.text(l10n.homeTrackRowSubtitle);
+    // Ada tasarımı 03: ruh halinin altında üç kapı — günlük, odaklan, takip.
+    // Takip yüzeyi bu depoda iki kez kayboldu (önce sekmeden, sonra
+    // profilden); kapısı Bugün'de kalmalı.
     expect(
-      satir,
+      find.text(l10n.takipTitle),
       findsOneWidget,
       reason: 'Takip ekranına giden kapı ana ekrandan kaybolmamalı',
     );
-    expect(altMetin, findsOneWidget);
+    expect(find.text(l10n.journalTitle), findsOneWidget);
+    expect(find.text(l10n.homeShortcutFocus), findsOneWidget);
 
-    // Sessiz satırlar günün okumasının ÜSTÜNDE durur.
-    //
-    // 2026-08-31'e kadar bunun tersiydi (satırlar kapanış notuydu). Owner
-    // canlı web derlemesine bakıp değiştirdi: eyleme çağıran üç satır
-    // (gece ritüeli, takip, haftalık kart) tam ekran yüksekliğinde bir
-    // okuma kartının arkasında kalıyor, pratikte görünmüyordu.
-    final okuma = find.text(l10n.homeTodaysReadTitle);
-    expect(okuma, findsOneWidget);
-    expect(
-      tester.getRect(satir).top,
-      lessThan(tester.getRect(okuma).top),
-      reason: 'sessiz satırlar okuma kartının arkasında kalmamalı',
-    );
+    // Günün okuması Bugün'den çıktı: Keşfet'teki "Bugün senin için" rafı
+    // aynı işi kişiselleştirilmiş olarak yapıyor, iki yerde iki farklı
+    // öneri kullanıcının kafasını karıştırıyordu.
+    expect(find.text(l10n.homeTodaysReadTitle), findsNothing);
   });
 }

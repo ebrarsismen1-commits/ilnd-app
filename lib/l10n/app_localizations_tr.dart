@@ -59,7 +59,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navYou => 'Sen';
 
   @override
-  String get navRing => 'ilnd';
+  String get navRing => 'Sohbet';
 
   @override
   String get topulukTitle => 'topluluk.';
@@ -1924,4 +1924,243 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get discoverTodayTitle => 'Bugün senin için';
+
+  @override
+  String homeIslandOwned(String owner) {
+    return '$owner adası';
+  }
+
+  @override
+  String get homeIslandVisit => 'adanı gör';
+
+  @override
+  String get homePracticeLabel => 'BUGÜNÜN KÜÇÜK PRATİĞİ';
+
+  @override
+  String get practiceBreathTitle => 'bir nefeslik mola';
+
+  @override
+  String get practiceBreathMeta => 'nefes pratiği · 2 dk';
+
+  @override
+  String get homeShortcutFocus => 'odaklan';
+
+  @override
+  String get focusTitle => 'biraz odaklan';
+
+  @override
+  String get focusSubtitle => 'bu zamanı neye ayırmak istersin?';
+
+  @override
+  String get focusIntentLabel => 'niyetin';
+
+  @override
+  String get focusIntentWork => 'çalışmak';
+
+  @override
+  String get focusIntentRead => 'okumak';
+
+  @override
+  String get focusIntentOwn => 'kendim seçeyim';
+
+  @override
+  String get focusIntentHint => 'niyetini yaz';
+
+  @override
+  String get focusDurationLabel => 'süren';
+
+  @override
+  String focusMinutes(int minutes) {
+    return '$minutes dakika';
+  }
+
+  @override
+  String get focusNote => 'bu süre sana ait. istediğinde ara verebilirsin.';
+
+  @override
+  String get focusStart => 'odaklanmaya başla';
+
+  @override
+  String focusSessionMeta(int minutes) {
+    return '$minutes dakikalık odak molası';
+  }
+
+  @override
+  String get focusPause => 'duraklat';
+
+  @override
+  String get focusResume => 'sürdür';
+
+  @override
+  String get focusEnd => 'seansı bitir';
+
+  @override
+  String get focusSessionFooter => 'bir iş, bir an.';
+
+  @override
+  String get focusDoneTitle => 'kendine zaman ayırdın.';
+
+  @override
+  String focusDoneMeta(int minutes, String intent) {
+    return '$minutes dakika · $intent';
+  }
+
+  @override
+  String get focusFeelQuestion => 'sana nasıl geldi?';
+
+  @override
+  String get focusFeelGood => 'iyi geldi';
+
+  @override
+  String get focusFeelUnsure => 'kararsızım';
+
+  @override
+  String get focusFeelHard => 'zorlandım';
+
+  @override
+  String get focusBackToToday => 'bugüne dön';
+
+  @override
+  String get focusDoneFooter => 'süren kısa da olsa burada bir yeri var.';
+
+  @override
+  String a11yFocusTimeLeft(String time) {
+    return 'Kalan süre $time';
+  }
+
+  @override
+  String get chatPageTitle => 'biraz konuşalım.';
+
+  @override
+  String get chatEmptyTitle => 'bugün aklında ne var?';
+
+  @override
+  String get chatEmptySubtitle => 'istersen bir yerden başlayalım.';
+
+  @override
+  String get chatSuggestTired => 'bugün biraz yorgunum';
+
+  @override
+  String get chatSuggestSort => 'aklımdakileri toparlamak istiyorum';
+
+  @override
+  String get chatSuggestShare => 'güzel bir şey paylaşmak istiyorum';
+
+  @override
+  String get profileTagline => 'kendi ritminde.';
+
+  @override
+  String get profileWeekLabel => 'BU HAFTADAN KALANLAR';
+
+  @override
+  String profileWeekLine(int journal, int meals) {
+    return '$journal yazı · $meals öğün';
+  }
+
+  @override
+  String get profileWeekHint => 'kayıtlarına dön, haftanı hatırla.';
+
+  @override
+  String get profileIslandRowSubtitle => 'nesnelerine ve anılarına dön';
+
+  @override
+  String get profileNotificationsRow => 'bildirim tercihlerin';
+
+  @override
+  String get profileNotificationsRowSubtitle => 'hatırlatmanın saatini seç';
+
+  @override
+  String get profileDataRow => 'verilerin ve gizlilik';
+
+  @override
+  String get profileDataRowSubtitle =>
+      'ILND\'nin hatırladıkları, hesabın, belgeler';
+
+  @override
+  String get profileNightView => 'gece görünümü';
+
+  @override
+  String get dataTitle => 'verilerin sana ait';
+
+  @override
+  String get dataSubtitle => 'nerede, ne için kullanıldığını gör.';
+
+  @override
+  String get dataMemoryEmpty =>
+      'ILND henüz senin hakkında bir şey hatırlamıyor.';
+
+  @override
+  String get notifTitle => 'sana uygun zamanda';
+
+  @override
+  String get notifSubtitle => 'hatırlatmaların ritmini sen belirle.';
+
+  @override
+  String get takipSubtitle => 'bugün kendine nasıl baktın?';
+
+  @override
+  String takipWaterProgress(String ml, String goal) {
+    return '$ml / $goal ml';
+  }
+
+  @override
+  String takipWaterAdd(int ml) {
+    return '+ $ml ml';
+  }
+
+  @override
+  String get takipNutritionLabel => 'BESLENME ÖZETİ';
+
+  @override
+  String takipKcalProgress(String kcal, String goal) {
+    return '$kcal / $goal kcal';
+  }
+
+  @override
+  String get journalSubtitle => 'aklında kalanlara bir yer aç.';
+
+  @override
+  String get journalQuestionLabel => 'BUGÜNÜN SORUSU';
+
+  @override
+  String get journalQuestion => 'bugün sana iyi gelen küçük şey neydi?';
+
+  @override
+  String get journalNoWrongAnswer => 'burada doğru ya da yanlış bir cevap yok.';
+
+  @override
+  String get topulukCityTitle => 'İstanbul';
+
+  @override
+  String get topulukCitySubtitle => 'yeni buluşmalar burada görünecek.';
+
+  @override
+  String get topulukTogetherTitle => 'birlikte daha tanıdık.';
+
+  @override
+  String get topulukTogetherBody => 'bir arkadaşını da yanına çağır.';
+
+  @override
+  String get adanSubtitle => 'kendi düzenin, sana ait izler.';
+
+  @override
+  String get adanItemsTitle => 'adandaki öğeler';
+
+  @override
+  String get welcomeHeadline => 'sana ait bir ada.';
+
+  @override
+  String get loginSubtitle => 'adana kaldığın yerden dön.';
+
+  @override
+  String get authEmailLabel => 'e-posta';
+
+  @override
+  String get authPasswordLabel => 'şifre';
+
+  @override
+  String get exploreStartLabel => 'SANA UYGUN BİR BAŞLANGIÇ';
+
+  @override
+  String get chatSendA11y => 'Gönder';
 }
