@@ -57,10 +57,13 @@ class EventsRepository {
   Stream<bool> myRsvpStream(String eventId) =>
       _myRsvp(eventId).snapshots().map((d) => d.exists);
 
-  /// Katılımcı sayısı — aggregate count(), doküman okumaz.
+  /// Katılımcı sayısı. RSVP listesi artık yalnız sahibine okunur (güvenlik
+  /// denetimi H-1: kimin hangi buluşmaya gittiği herkese açıktı); sayıyı
+  /// sunucu `events/{id}.rsvpCount` alanına yazar (onRsvpWritten).
   Future<int> rsvpCount(String eventId) async {
-    final agg = await _col.doc(eventId).collection('rsvps').count().get();
-    return agg.count ?? 0;
+    final doc = await _col.doc(eventId).get();
+    final count = (doc.data() ?? const <String, dynamic>{})['rsvpCount'];
+    return count is num ? count.toInt() : 0;
   }
 
   Future<void> rsvp(String eventId) => _myRsvp(

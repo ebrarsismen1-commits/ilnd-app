@@ -33,13 +33,17 @@ abstract final class CheckinRepository {
   }
 
   /// Son 7 gün içinde aktif olan benzersiz kullanıcı sayısı.
+  ///
+  /// `daily_checkins` artık istemciye okunamaz (güvenlik denetimi H-6: tüm
+  /// uid'leri ve aktif günleri sızdırıyordu). Sayıyı sunucu saatte bir
+  /// `public_stats/weekly_active` dokümanına yazar (weeklyActiveStats).
   static Future<int> weeklyActiveCount() async {
-    final dates = List.generate(
-      7,
-      (i) => _fmt(DateTime.now().subtract(Duration(days: i))),
-    );
-    final agg = await _col.where('date', whereIn: dates).count().get();
-    return agg.count ?? 0;
+    final doc = await FirebaseService.firestore
+        .collection('public_stats')
+        .doc('weekly_active')
+        .get();
+    final count = (doc.data() ?? const <String, dynamic>{})['count'];
+    return count is num ? count.toInt() : 0;
   }
 
   static String _fmt(DateTime d) =>

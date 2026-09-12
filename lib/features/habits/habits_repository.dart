@@ -39,7 +39,15 @@ class HabitsRepository {
       .where('userId', isEqualTo: userId)
       .where('date', isEqualTo: date)
       .snapshots()
-      .map((s) => s.docs.map((d) => d['habitId'] as String).toSet());
+      .map((s) => s.docs.map(_completionHabitId).whereType<String>().toSet());
+
+  /// Bozuk bir doküman (eksik/yanlış tipte alan) tüm akışı düşürmesin: eskiden
+  /// `d['habitId'] as String` fırlatıyor, takip ekranı kalıcı hataya
+  /// düşüyordu (güvenlik denetimi H-1). Geçersiz kayıt atlanır.
+  static String? _completionHabitId(DocumentSnapshot<Map<String, dynamic>> d) {
+    final v = (d.data() ?? const <String, dynamic>{})['habitId'];
+    return v is String ? v : null;
+  }
 
   // Returns completions for the last 7 days: { 'YYYY-MM-DD': { habitId, ... } }
   Stream<Map<String, Set<String>>> last7DaysStream(String userId) =>
@@ -73,8 +81,9 @@ class HabitsRepository {
         .map((s) {
           final result = <String, Set<String>>{};
           for (final doc in s.docs) {
-            final date = doc['date'] as String;
-            final habitId = doc['habitId'] as String;
+            final date = doc.data()['date'];
+            final habitId = _completionHabitId(doc);
+            if (date is! String || habitId == null) continue;
             result.putIfAbsent(date, () => {}).add(habitId);
           }
           return result;

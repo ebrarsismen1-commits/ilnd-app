@@ -1,4 +1,7 @@
 const {onRequest} = require("firebase-functions/v2/https");
+const {onDocumentWritten} = require("firebase-functions/v2/firestore");
+const {onSchedule} = require("firebase-functions/v2/scheduler");
+const {recomputeRsvpCount, recomputeWeeklyActive} = require("./counters");
 const {setGlobalOptions} = require("firebase-functions/v2");
 const {defineSecret} = require("firebase-functions/params");
 const admin = require("firebase-admin");
@@ -963,3 +966,28 @@ exports.syncIslandItems = onRequest({cors: true}, async (req, res) => {
     res.status(500).json({error: "Internal error"});
   }
 });
+
+// ─── Toplu sayaçlar (denetim H-1/H-6) ───────────────────────────────────────
+
+/**
+ * RSVP eklenince/silinince etkinliğin katılımcı sayısını yeniden hesaplar.
+ * RSVP listesi artık istemciye kapalı; sayı events/{id}.rsvpCount'ta.
+ */
+exports.onRsvpWritten = onDocumentWritten(
+    "events/{eventId}/rsvps/{userId}",
+    async (event) => {
+      await recomputeRsvpCount(db, event.params.eventId);
+    },
+);
+
+/**
+ * Sosyal kanıt rozetinin "bu hafta N kişi" sayısı. daily_checkins artık
+ * istemciye kapalı; saatte bir count() ile (1000 dizin girdisi başına 1
+ * okuma) public_stats/weekly_active'e yazılır.
+ */
+exports.weeklyActiveStats = onSchedule(
+    {schedule: "every 60 minutes", timeZone: "Etc/UTC"},
+    async () => {
+      await recomputeWeeklyActive(db);
+    },
+);
