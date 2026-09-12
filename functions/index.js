@@ -14,6 +14,11 @@ const {parseAiRequest, METERED_KINDS} = require("./aiRequest");
 const {getAiConfig} = require("./aiConfig");
 const {appCheckMode, checkAppCheck} = require("./appCheck");
 const {validateSupabaseClaims, isBridgedSession} = require("./supabaseClaims");
+const {
+  hasDeletionRequest,
+  runAccountDeletion,
+  retryPendingDeletions,
+} = require("./accountDeletion");
 
 admin.initializeApp();
 setGlobalOptions({maxInstances: 10});
@@ -121,6 +126,16 @@ exports.mintFirebaseToken = onRequest({cors: true}, async (req, res) => {
       return;
     }
     const uid = claims.uid;
+
+    // Silinmesi istenmiş hesap yeniden oturum açamaz (denetim H-3): yarım kalan
+    // bir silmeden sonra geride kalan veriye geri bağlanılmasın.
+    if (await hasDeletionRequest(db, uid)) {
+      res.status(403).json({
+        error: "Account deletion in progress",
+        reason: "account-deletion-pending",
+      });
+      return;
+    }
 
     const firebaseToken = await admin.auth().createCustomToken(uid, {
       provider: "supabase",
@@ -743,36 +758,34 @@ exports.redeemReferralCode = onRequest(
 // ─── Account deletion ───────────────────────────────────────────────────────
 
 /**
- * Recursively deletes a document and every subcollection beneath it, in
- * batches of 200 to stay well under Firestore's per-batch write limit.
- * @param {admin.firestore.DocumentReference} docRef root document to wipe
- * @return {Promise<void>}
+ * functions/accountDeletion.js için gerçek bağımlılıklar.
+ * @return {object} runAccountDeletion deps
  */
-async function deleteFirestoreSubtree(docRef) {
-  const collections = await docRef.listCollections();
-  for (const col of collections) {
-    let snap = await col.limit(200).get();
-    while (!snap.empty) {
-      const batch = db.batch();
-      snap.docs.forEach((d) => batch.delete(d.ref));
-      await batch.commit();
-      snap = await col.limit(200).get();
-    }
-  }
-  await docRef.delete();
+function deletionDeps() {
+  return {
+    db,
+    auth: admin.auth(),
+    getBucket: () => admin.storage().bucket(),
+    supabase: {url: SUPABASE_URL, serviceKey: SUPABASE_SERVICE_ROLE_KEY.value()},
+    revenueCatKey: REVENUECAT_SECRET_KEY,
+    fetchImpl: fetch,
+  };
 }
 
 /**
- * Permanently and irreversibly deletes a user's account: their Firestore
- * `users/{uid}` subtree, `user_growth` doc, any `referrals` rows where they
- * are the referred party, Storage files under `users/{uid}/`, their
- * Supabase auth identity (best-effort), and finally the Firebase Auth user
- * itself. The client only reaches this after an explicit in-app
- * confirmation step.
+ * Kalıcı hesap silme (denetim H-3). Ayrıntılar accountDeletion.js'te:
+ * Firebase kullanıcısı önce kilitlenir, Supabase profili ve kimliği, tüm
+ * Firestore kayıtları, Storage ve RevenueCat silinir; Firebase kullanıcısı
+ * yalnız her adım başarılıysa en son silinir.
+ *
+ * Yanıtlar:
+ *   200 {deleted: true}                         tamam (tekrar çağrı da 200)
+ *   500 {error, failedSteps, retryable: true}  yarım; kullanıcı kilitli,
+ *                                               tekrar çağrı ya da
+ *                                               retryAccountDeletions bitirir
  *
  * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
  */
-// GEÇİCİ: enforceAppCheck kapalı — bkz. anthropicProxy üstündeki not.
 exports.deleteAccount = onRequest(
     {cors: true, secrets: [SUPABASE_SERVICE_ROLE_KEY]},
     async (req, res) => {
@@ -785,48 +798,35 @@ exports.deleteAccount = onRequest(
       if (!uid) return;
 
       try {
-        await deleteFirestoreSubtree(db.collection("users").doc(uid));
-        await db.collection("user_growth").doc(uid).delete().catch(() => {});
-
-        const referredSnap = await db.collection("referrals")
-            .where("referred_id", "==", uid).get();
-        await Promise.all(referredSnap.docs.map((d) => d.ref.delete()));
-
-        // Kullanım sayaçları da hesaba bağlı kişisel veridir — hesapla
-        // birlikte gider (gün/hafta dokümanları + premium önbelleği).
-        const usageSnap = await db.collection("ai_usage")
-            .where("uid", "==", uid).get();
-        await Promise.all(usageSnap.docs.map((d) => d.ref.delete()));
-
-        try {
-          const bucket = admin.storage().bucket();
-          await bucket.deleteFiles({prefix: `users/${uid}/`});
-        } catch (err) {
-          console.warn("deleteAccount: storage cleanup failed:", err);
+        const result = await runAccountDeletion(uid, deletionDeps());
+        if (result.complete) {
+          res.status(200).json({deleted: true});
+          return;
         }
-
-        const serviceKey = SUPABASE_SERVICE_ROLE_KEY.value();
-        if (SUPABASE_URL && serviceKey) {
-          try {
-            await fetch(`${SUPABASE_URL}/auth/v1/admin/users/${uid}`, {
-              method: "DELETE",
-              headers: {
-                apikey: serviceKey,
-                Authorization: `Bearer ${serviceKey}`,
-              },
-            });
-          } catch (err) {
-            console.warn("deleteAccount: supabase user deletion failed:", err);
-          }
-        }
-
-        await admin.auth().deleteUser(uid);
-
-        res.status(200).json({deleted: true});
+        const failedSteps = result.steps.filter((s) => !s.ok).map((s) => s.name);
+        console.error(JSON.stringify({event: "account_deletion_incomplete", failedSteps}));
+        res.status(500).json({
+          error: "Account deletion incomplete",
+          failedSteps,
+          retryable: true,
+        });
       } catch (err) {
         console.error("deleteAccount failed:", err);
-        res.status(500).json({error: "Account deletion failed"});
+        res.status(500).json({error: "Account deletion failed", retryable: true});
       }
+    },
+);
+
+/**
+ * Yarım kalan silmeleri 6 saatte bir yeniden dener. İstemci token'ı iptal
+ * edildiği için kullanıcı bir saat sonra kendisi tekrar deneyemez; bu görev
+ * silme isteğinin sessizce yarım kalmamasını sağlar.
+ */
+exports.retryAccountDeletions = onSchedule(
+    {schedule: "every 6 hours", timeZone: "Etc/UTC", secrets: [SUPABASE_SERVICE_ROLE_KEY]},
+    async () => {
+      const summary = await retryPendingDeletions(deletionDeps());
+      console.log(JSON.stringify({event: "account_deletion_retry", ...summary}));
     },
 );
 
