@@ -4,6 +4,7 @@ import 'package:ilnd_app/core/billing/entitlement.dart';
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/repositories/profile_repository.dart';
 import 'package:ilnd_app/core/services/local_data_guard.dart';
+import 'package:ilnd_app/core/services/streak_tracker.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/habits/habits_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
@@ -91,7 +92,10 @@ void main() {
   late _FakeAuth auth;
   late Map<String, _FakeProfileRepository> repos;
 
-  Future<void> setUpContainer(Map<String, Object> initial) async {
+  Future<void> setUpContainer(
+    Map<String, Object> initial, {
+    ProfileData? serverB,
+  }) async {
     SharedPreferences.resetStatic();
     SharedPreferences.setMockInitialValues(initial);
     prefs = await SharedPreferences.getInstance();
@@ -111,7 +115,7 @@ void main() {
         'uid-A',
       ),
       // B yeni hesap: sunucuda profili yok.
-      'uid-B': _FakeProfileRepository(null, 'uid-B'),
+      'uid-B': _FakeProfileRepository(serverB, 'uid-B'),
     };
 
     c = ProviderContainer(
@@ -275,4 +279,56 @@ void main() {
       expect(c.read(onboardingWeightProvider), 72);
     },
   );
+
+  // Staging doğrulaması (2026-09-13): A'nın oturumu uygulama KAPALIYKEN
+  // bitti (token süresi, başka cihazda silme). Uygulama oturumsuz açılır,
+  // çıkış olayı hiç görülmez; sonra sunucuda profili OLAN B girer. Hidratlama
+  // yalnız sunucuda dolu alanları yazdığı için A'nın adı, aktivite seviyesi,
+  // yerel premium bayrağı, su/seri kayıtları ve bekleyen davet kodu B'de
+  // kalıyordu.
+  test('soğuk açılış: A\'nın oturumu kapalıyken bitti, B sunucu profiliyle '
+      'girer; A\'nın yerel verisi B\'de görünmez', () async {
+    final now = DateTime.now();
+    final today =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}'
+        '-${now.day.toString().padLeft(2, '0')}';
+    await setUpContainer(
+      {
+        'onboarding_done': true,
+        'first_entry_done': true,
+        'local_data_schema': 2,
+        'local_profile_owner': 'uid-A',
+        'user_name': 'Ela',
+        'onboarding_frequency': 'aktif',
+        'onboarding_weight': 72,
+        'is_premium': true,
+        'pending_referral_code': 'ABCDEFGH',
+        'longest_streak': 12,
+        waterKey(today): 1500,
+      },
+      serverB: const ProfileData(
+        onboardingDone: true,
+        firstEntryDone: true,
+        weight: 80,
+      ),
+    );
+
+    auth.emit(AuthAuthenticated(_user('uid-B')));
+    await settle();
+
+    // Hidratlama çalıştı: B'nin sunucu verisi yerinde.
+    expect(c.read(onboardingWeightProvider), 80);
+    expect(c.read(onboardingDoneProvider), isTrue);
+    expect(prefs.getString('local_profile_owner'), 'uid-B');
+
+    // A'nın, B'nin sunucusunda karşılığı olmayan verisi kalmadı.
+    expect(c.read(userNameProvider), isEmpty);
+    expect(c.read(onboardingFrequencyProvider), isNull);
+    expect(c.read(isPremiumProvider), isFalse);
+    expect(c.read(referralCodeInputProvider), isNull);
+    expect(c.read(waterTodayProvider), 0);
+    expect(c.read(longestStreakProvider), 0);
+    expect(c.read(ilndMemoryProvider).name, isEmpty);
+    expect(repos['uid-B']!.upserts, isEmpty);
+  });
 }

@@ -68,9 +68,18 @@ class ProfileHydrationNotifier extends StateNotifier<ProfileHydrationStatus> {
   /// Sunucu gerçeğini yerel cache'e uygular. `onboarding_done` en sona bırakılır
   /// ki router redirect'i her şey yerine oturduktan sonra tetiklensin.
   Future<void> _hydrate(ProfileData s, String uid) async {
-    // Önce sahiplen: hidratlama başka hesabın cevaplarının üstüne yazıyor
-    // olabilir, bundan sonra yerel profil bu hesabındır.
-    await claimLocalProfile(_ref.read(sharedPreferencesProvider), uid);
+    final prefs = _ref.read(sharedPreferencesProvider);
+    // Yerel veri başka bir hesaba aitse önce silinir (staging doğrulaması,
+    // 2026-09-13). A'nın oturumu uygulama kapalıyken bitince çıkış olayı hiç
+    // görülmüyor; aşağıdaki hidratlama yalnız sunucuda dolu alanları yazdığı
+    // için A'nın adı, yerel premium bayrağı, su/seri kayıtları ve bekleyen
+    // davet kodu B'nin hesabında kalıyordu.
+    if (!localProfileBelongsTo(prefs, uid)) {
+      await clearPersonalLocalData(prefs);
+      resetPersonalProviders(_ref);
+    }
+    // Sahiplen: bundan sonra yerel profil bu hesabındır.
+    await claimLocalProfile(prefs, uid);
     if (s.name != null) {
       await _ref.read(userNameProvider.notifier).save(s.name!);
     }

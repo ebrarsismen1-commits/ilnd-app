@@ -218,3 +218,52 @@ describe("M-2: kullanıcı başına eşzamanlılık", () => {
     expect((await db.collection("ai_leases").doc(uid).get()).data().leases).toEqual([]);
   });
 });
+
+// Staging doğrulaması (2026-09-13): günlük dolar tavanı kiralamadan ÖNCE
+// okunuyordu. Sırada bekleyen istekler harcamanın eski değerini (4,99 $)
+// görüp birer birer geçti: 5 isteğin 5'i de Anthropic'e ulaştı. Harcama artık
+// kiralama alındıktan SONRA okunuyor; önceki çağrı harcamasını kiralamayı
+// bırakmadan önce yazdığı için aşım en fazla eşzamanlı çağrı kadar.
+describe("günlük dolar tavanı kiralama sırası", () => {
+  test("harcama kiralama alındıktan sonra okunur", async () => {
+    const uid = "rel-spend-order";
+    const idToken = await getIdTokenForUid(uid);
+    upstreamImpl = async () => ({status: 200, json: async () => ({content: [{type: "text", text: "ok"}]})});
+
+    const order = [];
+    const spy = jest.spyOn(db, "collection").mockImplementation(function(name) {
+      order.push(name);
+      return Object.getPrototypeOf(db).collection.call(this, name);
+    });
+    try {
+      await callProxy(idToken, message);
+    } finally {
+      spy.mockRestore();
+    }
+
+    const lease = order.indexOf("ai_leases");
+    const spend = order.indexOf("ai_token_usage");
+    expect(lease).toBeGreaterThan(-1);
+    expect(spend).toBeGreaterThan(-1);
+    expect(spend).toBeGreaterThan(lease);
+  });
+
+  test("önceki çağrı harcamayı tavana taşıdıysa sonraki çağrı reddedilir ve kiralama bırakılır", async () => {
+    const uid = "rel-spend-release";
+    const idToken = await getIdTokenForUid(uid);
+    await db.collection("ai_token_usage").doc(`${uid}_${today()}`).set({uid, day: today(), estimatedUsd: 4.99});
+    // İlk çağrı ~0,03 $ harcar (10.000 girdi token'ı) ve tavanı geçirir.
+    upstreamImpl = async () => ({
+      status: 200,
+      json: async () => ({content: [{type: "text", text: "ok"}], usage: {input_tokens: 10000, output_tokens: 0}}),
+    });
+
+    expect((await callProxy(idToken, message)).statusCode).toBe(200);
+    const second = await callProxy(idToken, message);
+
+    expect(second.statusCode).toBe(429);
+    expect(second.json().reason).toBe("daily-cost-limit");
+    expect(global.fetch.mock.calls.filter(([u]) => String(u).includes("api.anthropic.com"))).toHaveLength(1);
+    expect((await db.collection("ai_leases").doc(uid).get()).data().leases).toEqual([]);
+  });
+});

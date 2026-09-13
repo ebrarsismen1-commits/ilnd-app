@@ -655,14 +655,6 @@ exports.anthropicProxy = onRequest(
       const usdLimit = Number(aiConfig.dailyUsdLimit) > 0 ?
         Number(aiConfig.dailyUsdLimit) :
         DEFAULT_DAILY_USD_LIMIT;
-      if (await dailySpendExceeded(uid, usdLimit)) {
-        res.status(429).json({
-          error: "Daily AI usage limit reached",
-          reason: "daily-cost-limit",
-          kind,
-        });
-        return;
-      }
 
       // Kullanıcı başına eşzamanlı çağrı sınırı (denetim M-2). Kota sayacından
       // ÖNCE: sınıra takılan çağrı hak yemesin.
@@ -684,6 +676,19 @@ exports.anthropicProxy = onRequest(
       }
 
       try {
+        // Günlük dolar tavanı kiralama ALINDIKTAN sonra okunur (staging
+        // doğrulaması, 2026-09-13). Önce okunduğunda sıradaki istekler
+        // harcamanın eski değerini görüp tavanı topluca aşıyordu (4,99 $'da
+        // 5/5 çağrı geçti). Çağrı harcamasını kiralamayı bırakmadan önce
+        // yazdığı için aşım en fazla eşzamanlı çağrı sayısı kadar.
+        if (await dailySpendExceeded(uid, usdLimit)) {
+          res.status(429).json({
+            error: "Daily AI usage limit reached",
+            reason: "daily-cost-limit",
+            kind,
+          });
+          return;
+        }
         await runProxiedCall({
           res, uid, tier, kind, system, messages, config,
           wantsStream: parsed.stream,
