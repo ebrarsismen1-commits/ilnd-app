@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ilnd_app/core/services/local_user_data.dart';
 
 const _kOnboardingDone = 'onboarding_done';
 const _kUserName = 'user_name';
@@ -33,6 +34,9 @@ class OnboardingDoneNotifier extends StateNotifier<bool> {
 
   Future<void> setDone() async {
     await _prefs.setBool(_kOnboardingDone, true);
+    // Bu sürümün yazdığı işaret: oturumsuz tamamlanan onboarding "sahibi
+    // bilinmeyen eski kurulum" sanılıp silinmesin (local_user_data.dart).
+    await _prefs.setInt(kLocalDataSchema, kLocalDataSchemaVersion);
     state = true; // router'ı anında tetikler
   }
 }

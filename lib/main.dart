@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
+import 'package:ilnd_app/core/services/local_data_guard.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
@@ -238,6 +239,8 @@ class _IlndAppState extends ConsumerState<IlndApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
+    // Çıkışta / hesap değişiminde önceki kişinin yerel verisini siler (H-2).
+    ref.watch(localDataGuardProvider);
     // Tema geçişi hem özel paleti hem Material bileşenlerini (dialog,
     // bottom sheet, picker) birlikte karartsın — bkz. AppTheme.dark notu.
     final brightness = ref.watch(themeModeProvider);

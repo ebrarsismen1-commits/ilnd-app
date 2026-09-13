@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:ilnd_app/core/ilnd/ilnd_memory.dart';
 import 'package:ilnd_app/core/repositories/profile_repository.dart';
+import 'package:ilnd_app/core/services/local_data_guard.dart';
+import 'package:ilnd_app/core/services/local_user_data.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
@@ -46,26 +48,29 @@ class ProfileHydrationNotifier extends StateNotifier<ProfileHydrationStatus> {
     _handledUid = uid;
     if (mounted) state = ProfileHydrationStatus.syncing;
     try {
-      await _sync();
+      await _sync(uid);
     } finally {
       if (mounted) state = ProfileHydrationStatus.done;
     }
   }
 
-  Future<void> _sync() async {
+  Future<void> _sync(String uid) async {
     final repo = _ref.read(profileRepositoryProvider);
     if (repo == null) return;
     final server = await repo.fetch();
     if (server != null && server.onboardingDone) {
-      await _hydrate(server);
+      await _hydrate(server, uid);
     } else {
-      await _flushIfOnboarded();
+      await _flushIfOnboarded(uid);
     }
   }
 
   /// Sunucu gerçeğini yerel cache'e uygular. `onboarding_done` en sona bırakılır
   /// ki router redirect'i her şey yerine oturduktan sonra tetiklensin.
-  Future<void> _hydrate(ProfileData s) async {
+  Future<void> _hydrate(ProfileData s, String uid) async {
+    // Önce sahiplen: hidratlama başka hesabın cevaplarının üstüne yazıyor
+    // olabilir, bundan sonra yerel profil bu hesabındır.
+    await claimLocalProfile(_ref.read(sharedPreferencesProvider), uid);
     if (s.name != null) {
       await _ref.read(userNameProvider.notifier).save(s.name!);
     }
@@ -95,9 +100,18 @@ class ProfileHydrationNotifier extends StateNotifier<ProfileHydrationStatus> {
     await _ref.read(onboardingDoneProvider.notifier).setDone();
   }
 
-  Future<void> _flushIfOnboarded() async {
+  Future<void> _flushIfOnboarded(String uid) async {
     // Onboarding henüz yapılmamışsa flush edilecek bir şey yok.
     if (!_ref.read(onboardingDoneProvider)) return;
+    // Güvenlik denetimi H-2: yerel cevaplar BAŞKA bir hesaba aitse bu hesabın
+    // profiline ve AI hafızasına yazılmaz; silinir ve bu hesap kendi
+    // onboarding'ini yapar.
+    final prefs = _ref.read(sharedPreferencesProvider);
+    if (!localProfileBelongsTo(prefs, uid)) {
+      await clearPersonalLocalData(prefs);
+      resetPersonalProviders(_ref);
+      return;
+    }
     await pushLocalProfile();
   }
 
@@ -110,6 +124,13 @@ class ProfileHydrationNotifier extends StateNotifier<ProfileHydrationStatus> {
   /// öğreniliyordu. Ayarlar ekranı da kaydederken buradan geçer, böylece
   /// güncelleme iki yere birden gider.
   Future<void> pushLocalProfile() async {
+    final auth = _ref.read(authNotifierProvider);
+    if (auth is AuthAuthenticated) {
+      final prefs = _ref.read(sharedPreferencesProvider);
+      // Başka hesabın cevapları ne sunucuya ne bu hesabın hafızasına gider.
+      if (!localProfileBelongsTo(prefs, auth.user.id)) return;
+      await claimLocalProfile(prefs, auth.user.id);
+    }
     final snapshot = _snapshotLocal();
 
     await _ref
