@@ -30,7 +30,7 @@ A Gen-Z wellness journaling app powered by an AI companion that learns from your
 | Database | Firebase Firestore |
 | AI | Anthropic Claude (haiku-4-5 / sonnet-4-6) via Cloud Function proxy |
 | Subscriptions | RevenueCat / purchases_flutter 8.x |
-| Functions | Firebase Cloud Functions v2 (Node 20) |
+| Functions | Firebase Cloud Functions v2 (Node 22) |
 | Security | Firebase App Check (Play Integrity / App Attest) |
 | Observability | Firebase Crashlytics + Analytics |
 | i18n | flutter_localizations + intl (.arb files, TR + EN) |
@@ -43,7 +43,7 @@ A Gen-Z wellness journaling app powered by an AI companion that learns from your
 ### Prerequisites
 
 - Flutter 3.44.1 ([install](https://flutter.dev/install))
-- Node.js 20.x
+- Node.js 22.x (Cloud Functions runtime; Node 20 is decommissioned on 2026-10-30)
 - Firebase CLI: `npm install -g firebase-tools`
 
 ### Setup
@@ -93,7 +93,7 @@ ilnd_app/
 │   ├── main.dart                    # App entry, Crashlytics, App Check
 │   ├── core/                        # Shared: billing, AI, repos, router, theme, utils
 │   └── features/                    # Auth, chat, ekle, explore, habits, home, …
-├── functions/                       # Firebase Cloud Functions (Node 20)
+├── functions/                       # Firebase Cloud Functions (Node 22)
 │   ├── index.js                     # mintFirebaseToken, anthropicProxy, referral, delete
 │   ├── scripts/seedArticles.js      # Content pipeline
 │   └── test/                        # Jest test suite (14 tests)
@@ -201,7 +201,7 @@ Private — all rights reserved.
 - Flutter + Riverpod + go_router
 - Supabase (auth) bridged to Firebase Auth (Firestore security rules need
   `request.auth`) — see `lib/core/services/firebase_auth_bridge.dart`
-- Firebase Firestore (data) + Cloud Functions (`functions/`, Node 20)
+- Firebase Firestore (data) + Cloud Functions (`functions/`, Node 22)
 - Anthropic Claude via a server-side proxy (`functions/index.js`'s
   `anthropicProxy`) — the API key never ships in the client
 - RevenueCat (subscriptions)

@@ -20,7 +20,7 @@ ilnd, Gen-Z refahı için geliştirilmiş bir Flutter mobil uygulamasıdır. Çi
           └─────────┬────────┘          └──────────┬──────────┘
                     │  JWT                         │
           ┌─────────▼────────────────────────────┐ │
-          │  Cloud Functions (Firebase v2/Node 20)│ │
+          │  Cloud Functions (Firebase v2/Node 22)│ │
           │                                      │ │
           │  mintFirebaseToken ◄──── Supabase JWT │ │
           │  anthropicProxy   ──────────────────────┘

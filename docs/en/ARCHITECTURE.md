@@ -20,7 +20,7 @@ ilnd is a Flutter mobile application for Gen-Z wellness journaling. It uses a du
           └─────────┬────────┘          └──────────┬──────────┘
                     │  JWT                         │
           ┌─────────▼────────────────────────────┐ │
-          │  Cloud Functions (Firebase v2/Node 20)│ │
+          │  Cloud Functions (Firebase v2/Node 22)│ │
           │                                      │ │
           │  mintFirebaseToken ◄──── Supabase JWT │ │
           │  anthropicProxy   ──────────────────────┘
@@ -239,7 +239,7 @@ ilnd_app/
 │   │   ├── takip/                   # Tracking: macros, meals, activity, habits
 │   │   └── vibe_card/               # Weekly wellness card (9:16, PNG share)
 │   └── l10n/                        # app_tr.arb (template), app_en.arb
-├── functions/                       # Firebase Cloud Functions (Node 20)
+├── functions/                       # Firebase Cloud Functions (Node 22)
 │   ├── index.js                     # All 4 functions
 │   ├── scripts/seedArticles.js      # Admin SDK article upsert
 │   └── test/                        # Jest test suite
