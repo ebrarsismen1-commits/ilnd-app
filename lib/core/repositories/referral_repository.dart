@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
@@ -74,39 +73,58 @@ class ReferralRepository {
 
   final String _userId;
 
-  static const _codeChars =
-      'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 0/O, 1/I/L hariç
-  // 8 karakter = 32^8 ≈ 1.1 trilyon kombinasyon. Uzunluk 6'dan 8'e çıktı
-  // çünkü çakışma kontrolü kaldırıldı: o kontrol koleksiyon-geneli okuma
-  // gerektiriyordu ve bu, herkesin davet kodunu görünür kılıyordu (güvenlik
-  // denetimi 2026-07-24). 8 karakterde 100 bin kullanıcıda bile çakışma
-  // olasılığı binde 5'in altında. Mevcut 6 karakterli kodlar geçerli kalır.
-  static const _codeLength = 8;
-
   CollectionReference<Map<String, dynamic>> get _userGrowthCol =>
       FirebaseService.firestore.collection('user_growth');
 
-  /// Kullanıcının zaten bir referral kodu varsa onu döner; yoksa benzersiz
-  /// bir kod üretip user_growth/{userId} dokümanını oluşturur. Kayıt
-  /// sırasında bir kez çağrılması yeterlidir, idempotent'tir.
+  /// Kullanıcının davet kodunu döner; yoksa kodu SUNUCU ayırır
+  /// (functions/index.js → ensureReferralCode). İdempotent.
+  ///
+  /// Güvenlik denetimi H-4 (2026-09-13): kod eskiden burada üretilip
+  /// user_growth'a istemciden yazılıyordu. Kurallar kodun biçimini ve
+  /// benzersizliğini denetleyemediği için biri başkasının paylaştığı kodu kendi
+  /// dokümanına yazıp o kişinin ödüllerini alabiliyordu. Artık istemci
+  /// user_growth'a hiç yazamaz; kod sunucuda `referral_codes` eşlemesiyle,
+  /// transaction içinde ayrılır. Önce davet kodu kullanan kişinin kendi kodunu
+  /// hiç alamaması hatası da böylece kapandı.
   Future<String> ensureReferralCode() async {
     final existing = await _userGrowthCol.doc(_userId).get();
     final existingCode = existing.data()?['referral_code'] as String?;
-    if (existingCode != null && existingCode.isNotEmpty) return existingCode;
+    try {
+      return await _requestServerCode();
+    } catch (_) {
+      // Sunucuya ulaşılamadı: eski kod varsa göster (kullanımda sahipliği
+      // sunucu yine doğrular), yoksa hata çağırana gitsin — ekran tekrar dener.
+      if (existingCode != null && existingCode.isNotEmpty) return existingCode;
+      rethrow;
+    }
+  }
 
-    // Çakışma sorgusu bilerek YOK: koleksiyon-geneli okuma gerektiriyordu,
-    // o da tüm kullanıcıların davet kodunu okunabilir yapıyordu. Kod uzunluğu
-    // 8'e çıkarılarak çakışma olasılığı ihmal edilebilir seviyeye indirildi.
-    final code = _generateCode();
+  Future<String> _requestServerCode() async {
+    if (!AppConfig.isAuthBridgeConfigured) {
+      throw StateError('Auth bridge is not configured');
+    }
+    final idToken = await fb_auth.FirebaseAuth.instance.currentUser
+        ?.getIdToken();
+    if (idToken == null) throw StateError('No Firebase session yet');
 
-    await _userGrowthCol.doc(_userId).set({
-      'referral_code': code,
-      'referred_by_code': null,
-      'founding_member': false,
-      'premium_access_until': null,
-      'created_at': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-
+    final response = await http
+        .post(
+          Uri.parse(AppConfig.ensureReferralCodeUrl),
+          headers: {
+            'Authorization': 'Bearer $idToken',
+            'content-type': 'application/json',
+            ...await appCheckHeaders(),
+          },
+          body: '{}',
+        )
+        .timeout(const Duration(seconds: 15));
+    if (response.statusCode != 200) {
+      throw StateError('ensureReferralCode HTTP ${response.statusCode}');
+    }
+    final code = (jsonDecode(response.body) as Map<String, dynamic>?)?['code'];
+    if (code is! String || code.isEmpty) {
+      throw const FormatException('ensureReferralCode returned no code');
+    }
     return code;
   }
 
@@ -163,14 +181,6 @@ class ReferralRepository {
       // Ağ/timeout/parse — geçici, kod korunmalı.
       return RedeemResult.failed;
     }
-  }
-
-  static String _generateCode() {
-    final rand = Random.secure();
-    return List.generate(
-      _codeLength,
-      (_) => _codeChars[rand.nextInt(_codeChars.length)],
-    ).join();
   }
 }
 

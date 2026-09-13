@@ -27,6 +27,7 @@ const ENDPOINTS = [
   ["redeemReferralCode", {code: "ABCDEFGH"}],
   ["deleteAccount", {}],
   ["syncIslandItems", {}],
+  ["ensureReferralCode", {}],
 ];
 
 describe("backend kimlik kapısı", () => {

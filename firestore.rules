@@ -71,14 +71,18 @@ service cloud.firestore {
     // çakışma kontrolü için gereken koleksiyon-geneli sorgu kaldırıldı;
     // yerine daha uzun (8 karakter) kod üretiliyor — bkz.
     // referral_repository.ensureReferralCode.
+    // Denetim H-4 (2026-09-13): create kuralı referral_code'u hiç
+    // denetlemiyordu; biri başkasının paylaştığı kodu kendi dokümanına yazıp
+    // ödülünü çalabiliyordu. Kod artık yalnız sunucuda (ensureReferralCode,
+    // Admin SDK) ayrılıyor: istemci user_growth'a HİÇ yazamaz.
     match /user_growth/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null
-        && request.auth.uid == userId
-        && request.resource.data.founding_member == false
-        && request.resource.data.premium_access_until == null
-        && request.resource.data.referred_by_code == null;
-      allow update, delete: if false;
+      allow write: if false;
+    }
+
+    // Kod → sahip eşlemesi ve ödül tavanı sayacı. Yalnız Admin SDK.
+    match /referral_codes/{code} {
+      allow read, write: if false;
     }
 
     // Append-only referral kayıtları — sadece redeemReferralCode (Admin SDK)

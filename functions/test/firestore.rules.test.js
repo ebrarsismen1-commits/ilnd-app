@@ -316,6 +316,30 @@ describe("mevcut sahiplik ve kapalı koleksiyonlar", () => {
     await assertSucceeds(getDoc(doc(a, "users/A/journal_entries/j1")));
   });
 
+  // ── Phase 8 (denetim H-4): davet kodu istemcide yazılamaz ──────────────
+  test("A kendi user_growth dokümanını, eski kuralın izin verdiği biçimde bile oluşturamaz", async () => {
+    await assertFails(setDoc(doc(as("A"), "user_growth/A"), {
+      referral_code: "B0BSC0DE", // başkasının paylaştığı kod (gasp denemesi)
+      referred_by_code: null,
+      founding_member: false,
+      premium_access_until: null,
+    }));
+  });
+
+  test("A kendi user_growth dokümanını okuyabilir ama güncelleyemez", async () => {
+    await seed("user_growth/A", {referral_code: "ABCD2345", founding_member: false});
+    const a = as("A");
+    await assertSucceeds(getDoc(doc(a, "user_growth/A")));
+    await assertFails(updateDoc(doc(a, "user_growth/A"), {referral_code: "B0BSC0DE"}));
+  });
+
+  test("referral_codes eşlemesi okunamaz ve yazılamaz", async () => {
+    await seed("referral_codes/ABCD2345", {uid: "B"});
+    const a = as("A");
+    await assertFails(getDoc(doc(a, "referral_codes/ABCD2345")));
+    await assertFails(setDoc(doc(a, "referral_codes/ZZZZ2345"), {uid: "A"}));
+  });
+
   test.each([
     ["island/B", {earned: ["pine"]}],
     ["user_growth/B", {referral_code: "ABCDEFGH"}],

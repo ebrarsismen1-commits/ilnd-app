@@ -19,6 +19,7 @@ const {
   runAccountDeletion,
   retryPendingDeletions,
 } = require("./accountDeletion");
+const {ensureReferralCodeFor, redeemReferral} = require("./referrals");
 
 admin.initializeApp();
 setGlobalOptions({maxInstances: 10});
@@ -665,23 +666,18 @@ exports.anthropicProxy = onRequest(
 
 // ─── Referral redemption ────────────────────────────────────────────────────
 
-const REFERRAL_REWARD_DAYS = 7;
-
 /**
- * Atomically redeems a referral code. Runs entirely server-side inside a
- * single transaction: validates the code, blocks self-referral and
- * double-redemption, writes the `referrals` record, and grants the
- * referrer's reward. firestore.rules denies clients write access to
- * `founding_member`/`premium_access_until`/`referred_by_code` after
- * creation — this function (Admin SDK) is the only path that can set them.
+ * Davet kodunu kullanır (denetim H-4). Tüm karar referrals.js'te, tek
+ * transaction içinde: kod `referral_codes` eşlemesinden çözülür, kendi kodu
+ * ve ikinci kullanım reddedilir, ödül davet eden başına 30 günde 3 ve
+ * premium bitişi en fazla "şimdi + 30 gün" ile sınırlıdır.
  *
  * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
- * Body: { "code": "ABC123" }
+ * Body: { "code": "ABCD2345" }
+ * Yanıt: 200 {redeemed: true, referrerRewarded} | 200 {redeemed: false,
+ *   reason} | 400 geçersiz biçim
  */
-// GEÇİCİ: enforceAppCheck kapalı — bkz. anthropicProxy üstündeki not.
-exports.redeemReferralCode = onRequest(
-    {cors: true},
-    async (req, res) => {
+exports.redeemReferralCode = onRequest({cors: true}, async (req, res) => {
   if (req.method !== "POST") {
     res.status(405).json({error: "Method Not Allowed"});
     return;
@@ -690,67 +686,37 @@ exports.redeemReferralCode = onRequest(
   const uid = await authorizeCaller(req, res);
   if (!uid) return;
 
-  const code = String((req.body || {}).code || "").trim().toUpperCase();
-  if (!code) {
-    res.status(400).json({error: "Missing code"});
+  try {
+    const result = await redeemReferral(db, uid, (req.body || {}).code);
+    res.status(result.status).json(result.body);
+  } catch (err) {
+    console.error("redeemReferralCode failed:", err);
+    res.status(500).json({error: "Internal error"});
+  }
+});
+
+/**
+ * Çağıranın davet kodunu döner; yoksa sunucuda benzersiz bir kod ayırır
+ * (denetim H-4). İstemci artık kodu kendisi üretmiyor ve user_growth'a
+ * yazamıyor. İdempotent.
+ *
+ * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
+ * Yanıt: 200 {code}
+ */
+exports.ensureReferralCode = onRequest({cors: true}, async (req, res) => {
+  if (req.method !== "POST") {
+    res.status(405).json({error: "Method Not Allowed"});
     return;
   }
 
-  const userGrowthCol = db.collection("user_growth");
-  const referralsCol = db.collection("referrals");
+  const uid = await authorizeCaller(req, res);
+  if (!uid) return;
 
   try {
-    const result = await db.runTransaction(async (tx) => {
-      const myRef = userGrowthCol.doc(uid);
-      const mySnap = await tx.get(myRef);
-      if (mySnap.exists && mySnap.data().referred_by_code) {
-        return {redeemed: false, reason: "already-redeemed"};
-      }
-
-      const matchSnap = await tx.get(
-          userGrowthCol.where("referral_code", "==", code).limit(1),
-      );
-      if (matchSnap.empty) {
-        return {redeemed: false, reason: "invalid-code"};
-      }
-
-      const referrerDoc = matchSnap.docs[0];
-      const referrerId = referrerDoc.id;
-      if (referrerId === uid) {
-        return {redeemed: false, reason: "self-referral"};
-      }
-
-      const referralRef = referralsCol.doc();
-      tx.set(referralRef, {
-        referrer_id: referrerId,
-        referred_id: uid,
-        referral_code: code,
-        status: "completed",
-        reward_claimed: true,
-        created_at: admin.firestore.FieldValue.serverTimestamp(),
-      });
-
-      tx.set(myRef, {referred_by_code: code}, {merge: true});
-
-      const currentUntil = referrerDoc.data().premium_access_until;
-      const now = Date.now();
-      const base = currentUntil && currentUntil.toMillis() > now ?
-        currentUntil.toMillis() :
-        now;
-      const newUntil = new Date(
-          base + REFERRAL_REWARD_DAYS * 24 * 60 * 60 * 1000,
-      );
-      tx.set(referrerDoc.ref, {
-        founding_member: true,
-        premium_access_until: admin.firestore.Timestamp.fromDate(newUntil),
-      }, {merge: true});
-
-      return {redeemed: true};
-    });
-
-    res.status(200).json(result);
+    const code = await ensureReferralCodeFor(db, uid);
+    res.status(200).json({code});
   } catch (err) {
-    console.error("redeemReferralCode failed:", err);
+    console.error("ensureReferralCode failed:", err);
     res.status(500).json({error: "Internal error"});
   }
 });
