@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
+import 'package:ilnd_app/core/services/firebase_auth_bridge.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 
@@ -144,6 +145,10 @@ class ReferralRepository {
     // Köprü kapalı / oturum yok → kod geçersiz DEĞİL, henüz hazır değil.
     if (!AppConfig.isAuthBridgeConfigured) return RedeemResult.notReady;
 
+    // Kod ekrandaki hesap adına kullanılmalı (denetim M-8).
+    if (!await FirebaseAuthBridge.ensureSameAccount(_userId)) {
+      return RedeemResult.notReady;
+    }
     final idToken = await fb_auth.FirebaseAuth.instance.currentUser
         ?.getIdToken();
     if (idToken == null) return RedeemResult.notReady;

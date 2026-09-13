@@ -66,16 +66,39 @@ class FoodResult {
     yorum: yorum ?? this.yorum,
   );
 
+  /// Güvenlik denetimi L-5 / M-6: model çıktısı yapı olarak güvenilir sayılmaz.
+  /// Negatif, sonsuz ya da akıl dışı bir değer eskiden ekrana ve Firestore'a
+  /// olduğu gibi gidiyordu; artık Firestore kuralları da sınır koyduğu için
+  /// sınırın dışındaki bir değer kaydı sessizce reddettirirdi. Tavanlar,
+  /// porsiyon çarpanı (en fazla 2) uygulandıktan sonra da kural sınırının
+  /// (20000 kcal / 2000 g) altında kalacak şekilde seçildi.
+  static const maxKcal = 10000;
+  static const maxMacroGrams = 1000.0;
+  static const maxNameLength = 150;
+  static const maxIngredients = 50;
+  static const maxIngredientLength = 100;
+
   factory FoodResult.fromJson(Map<String, dynamic> j) => FoodResult(
-    yemekAdi: j['yemek_adi'] as String,
-    kalori: (j['kalori'] as num).toInt(),
-    protein: (j['protein'] as num).toDouble(),
-    karbonhidrat: (j['karbonhidrat'] as num).toDouble(),
-    yag: (j['yag'] as num).toDouble(),
-    malzemeler: List<String>.from(j['malzemeler'] as List),
+    yemekAdi: _bounded((j['yemek_adi'] as String).trim(), maxNameLength),
+    kalori: _finiteOrZero(j['kalori'] as num).round().clamp(0, maxKcal),
+    protein: _finiteOrZero(j['protein'] as num).clamp(0, maxMacroGrams),
+    karbonhidrat: _finiteOrZero(
+      j['karbonhidrat'] as num,
+    ).clamp(0, maxMacroGrams),
+    yag: _finiteOrZero(j['yag'] as num).clamp(0, maxMacroGrams),
+    malzemeler: [
+      for (final m in (j['malzemeler'] as List).take(maxIngredients))
+        if (m is String && m.trim().isNotEmpty)
+          _bounded(m.trim(), maxIngredientLength),
+    ],
     // Yeniden hesaplama yanıtında yorum istenmez: alan yoksa boş kalır.
     yorum: (j['yorum'] as String?)?.trim() ?? '',
   );
+
+  static double _finiteOrZero(num v) => v.isFinite ? v.toDouble() : 0.0;
+
+  static String _bounded(String s, int max) =>
+      s.length <= max ? s : s.substring(0, max);
 }
 
 // ─── Sonuç türleri ───────────────────────────────────────────────────────────

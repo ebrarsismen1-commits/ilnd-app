@@ -15,7 +15,8 @@
     "seed:movement": "node scripts/seedMovementPrograms.js",
     "seed:plans": "node scripts/seedPlans.js",
     "check:plans": "node scripts/checkPlans.js",
-    "report:tokens": "node scripts/tokenReport.js"
+    "report:tokens": "node scripts/tokenReport.js",
+    "backfill:counters": "node scripts/backfillCounters.js"
   },
   "dependencies": {
     "firebase-admin": "^13.10.0",

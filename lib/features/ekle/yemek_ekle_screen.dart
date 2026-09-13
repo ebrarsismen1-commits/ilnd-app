@@ -889,18 +889,25 @@ class _ManualEntryViewState extends State<_ManualEntryView> {
     super.dispose();
   }
 
-  /// Boş alan 0 sayılır; virgüllü giriş de kabul edilir ("12,5").
-  double _number(TextEditingController c) =>
-      double.tryParse(c.text.trim().replaceAll(',', '.')) ?? 0;
+  /// Boş alan 0 sayılır; virgüllü giriş de kabul edilir ("12,5"). Negatif ve
+  /// akıl dışı değerler analiz sonucuyla aynı sınıra çekilir (denetim M-6:
+  /// Firestore kuralları sınır dışı öğünü artık kaydetmez).
+  double _number(TextEditingController c) {
+    final v = double.tryParse(c.text.trim().replaceAll(',', '.')) ?? 0;
+    return v.isFinite ? v.clamp(0, FoodResult.maxMacroGrams) : 0;
+  }
 
   void _submit() {
-    final name = _name.text.trim();
+    var name = _name.text.trim();
     if (name.isEmpty) {
       setState(() => _error = widget.l10n.yemekEkleManualNameError);
       return;
     }
+    if (name.length > FoodResult.maxNameLength) {
+      name = name.substring(0, FoodResult.maxNameLength);
+    }
     final kalori = int.tryParse(_kalori.text.trim());
-    if (kalori == null || kalori <= 0) {
+    if (kalori == null || kalori <= 0 || kalori > FoodResult.maxKcal) {
       setState(() => _error = widget.l10n.yemekEkleManualCalorieError);
       return;
     }

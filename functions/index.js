@@ -1173,16 +1173,27 @@ exports.syncIslandItems = onRequest({cors: CORS_ORIGINS}, async (req, res) => {
     // bayatlamaz — istemci farkı kendi alır.
     const lastActiveDate = metrics.lastActiveDate || null;
     // Her gerçek senkronda yazılır: lastSyncAtMs hız sınırının dayanağı.
-    // Yazma en fazla pencere başına bir kez (varsayılan 30 sn).
-    await ref.set({
-      uid,
-      earned: nextEarned,
-      lastActiveDate,
-      lastSyncAtMs: Date.now(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    }, {merge: true});
+    // Transaction + birleşim (denetim L-4): iki eşzamanlı senkron kendi eski
+    // okumasını yazıp birbirinin kazandırdığı öğeyi silemesin. Kazanılmış öğe
+    // asla geri alınmaz kuralı burada da korunur.
+    const finalEarned = await db.runTransaction(async (tx) => {
+      const fresh = await tx.get(ref);
+      const stored = fresh.exists ? (fresh.data() || {}).earned : null;
+      const union = [...new Set([
+        ...(Array.isArray(stored) ? stored : []),
+        ...nextEarned,
+      ])];
+      tx.set(ref, {
+        uid,
+        earned: union,
+        lastActiveDate,
+        lastSyncAtMs: Date.now(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      }, {merge: true});
+      return union;
+    });
 
-    res.json({earned: nextEarned, gained, metrics});
+    res.json({earned: finalEarned, gained, metrics});
   } catch (err) {
     console.error("syncIslandItems failed:", err);
     res.status(500).json({error: "Internal error"});

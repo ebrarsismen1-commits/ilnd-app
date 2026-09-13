@@ -264,4 +264,17 @@ describe("syncIslandItems", () => {
       expect(body.earned).toContain("lantern");
     });
   });
+
+  // Denetim L-4: eşzamanlı senkronlar birbirinin öğesini silemez.
+  test("eşzamanlı senkronlar kazanılmış öğeleri birleştirir, kaybetmez", async () => {
+    await db.collection("island").doc(UID).set({uid: UID, earned: ["meetingStone"], lastSyncAtMs: 0});
+    await db.collection("users").doc(UID).collection("journal_entries").add({text: "x"});
+    const token = await getIdTokenForUid(UID);
+
+    await Promise.all([callSync(token), callSync(token), callSync(token)]);
+
+    const earned = (await db.collection("island").doc(UID).get()).data().earned;
+    expect(earned).toEqual(expect.arrayContaining(["meetingStone", "lantern"]));
+    expect(new Set(earned).size).toBe(earned.length);
+  });
 });

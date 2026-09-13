@@ -50,6 +50,35 @@ abstract final class FirebaseAuthBridge {
     }
   }
 
+  /// İki oturum aynı hesaba mı ait?
+  ///
+  /// Güvenlik denetimi M-8: köprü hata verince sessizce dönüyor ve önceki
+  /// kullanıcının Firebase oturumu açık kalabiliyordu. O durumda ekranda B
+  /// görünürken hesap silme ya da davet kodu A'nın token'ıyla gidiyordu.
+  @visibleForTesting
+  static bool sessionsMatch({
+    required String? firebaseUid,
+    required String? supabaseUid,
+  }) =>
+      firebaseUid != null && supabaseUid != null && firebaseUid == supabaseUid;
+
+  /// Hesabı etkileyen bir çağrıdan önce: Firebase oturumu [supabaseUid] ile
+  /// eşleşmiyorsa onu kapatır ve false döner (çağrı yapılmamalı; köprü bir
+  /// sonraki auth olayında doğru hesapla yeniden kurulur).
+  static Future<bool> ensureSameAccount(String? supabaseUid) async {
+    final firebaseUid = fb_auth.FirebaseAuth.instance.currentUser?.uid;
+    if (sessionsMatch(firebaseUid: firebaseUid, supabaseUid: supabaseUid)) {
+      return true;
+    }
+    if (firebaseUid != null) {
+      debugPrint(
+        '[FirebaseAuthBridge] session mismatch — signing out Firebase',
+      );
+      await signOut();
+    }
+    return false;
+  }
+
   static Future<void> signOut() async {
     try {
       await fb_auth.FirebaseAuth.instance.signOut();

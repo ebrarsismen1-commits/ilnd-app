@@ -1,0 +1,20 @@
+rules_version = '2';
+
+// Güvenlik denetimi H-8 (2026-09-13): Storage kuralları depoda yoktu; konsolda
+// ne olduğu doğrulanamıyordu ("test mode" ile oluşturulup süresi uzatılmış bir
+// proje herkese açık kalır).
+//
+// Uygulama bugün Storage'a HİÇ dosya yüklemiyor ve okumuyor: profil fotoğrafı
+// Firestore'da (users/{uid}.photoBase64), yemek fotoğrafı yalnız AI çağrısında
+// taşınıyor. Hareket videoları harici URL. Bu yüzden istemciye her şey kapalı.
+// Admin SDK (deleteAccount) kurallardan muaftır.
+//
+// Storage'a istemci yüklemesi eklenirse: yalnız users/{uid}/ altına, sahibine,
+// boyut ve içerik türü sınırıyla açın ve storage.rules.test.js'e test ekleyin.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

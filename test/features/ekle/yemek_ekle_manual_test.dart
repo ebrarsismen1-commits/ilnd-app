@@ -147,4 +147,20 @@ void main() {
     expect(find.text('kırmızı mercimek'), findsNothing);
     expect(find.text(l10n.yemekEkleRecalculate), findsNothing);
   });
+
+  // Güvenlik denetimi M-6: Firestore kuralları sınır dışı öğünü artık
+  // kaydetmez; form bunu kayıt anında sessiz bir hata yerine burada söyler.
+  testWidgets('akıl dışı kalori formda reddedilir, sonuç ekranına geçilmez', (
+    tester,
+  ) async {
+    await pumpScreen(tester);
+    await tapText(tester, l10n.yemekEkleManualButton);
+
+    await tester.enterText(find.byType(TextField).at(0), 'mercimek çorbası');
+    await tester.enterText(find.byType(TextField).at(1), '50000');
+    await tapText(tester, l10n.yemekEkleManualContinue);
+
+    expect(find.text(l10n.yemekEkleManualCalorieError), findsOneWidget);
+    expect(find.text(l10n.yemekEkleSaveButton), findsNothing);
+  });
 }

@@ -508,6 +508,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final previousState = state;
     state = const AuthLoading();
     try {
+      // Silinecek hesap ekrandaki hesap olmalı (denetim M-8).
+      if (!await FirebaseAuthBridge.ensureSameAccount(
+        _client.auth.currentUser?.id,
+      )) {
+        throw AuthErrorCode.deleteUnavailable;
+      }
       final idToken = await fb_auth.FirebaseAuth.instance.currentUser
           ?.getIdToken();
       if (idToken == null || !AppConfig.isAuthBridgeConfigured) {
