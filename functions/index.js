@@ -840,6 +840,23 @@ exports.retryAccountDeletions = onSchedule(
  * `serverVerifiable: false` olanlar listede kilitli görünür ama hiç
  * kazanılmaz — kaynakları henüz sunucudan okunamıyor (bkz. ADR-0006 §3).
  */
+// Seri hesabının geriye baktığı gün sayısı. En uzun seri eşiği 7 gün; pencere
+// bol tutuldu. daily_checkins doküman kimliği uid_tarih olduğu için bu pencere
+// en fazla bu kadar doküman okur (denetim H-6).
+const STREAK_WINDOW_DAYS = 60;
+
+/**
+ * İki senkron arasındaki en kısa süre (ms). Her senkron 5 sayım + 3 sorgu
+ * okur; ekran her açıldığında ve her eylemden sonra çağrılabildiği için
+ * sınırsız bırakılamaz. Testte ISLAND_SYNC_MIN_INTERVAL_MS ile değiştirilir.
+ * @return {number} ms
+ */
+function islandSyncMinIntervalMs() {
+  const raw = process.env.ISLAND_SYNC_MIN_INTERVAL_MS;
+  const parsed = raw === undefined ? NaN : Number(raw);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : 30 * 1000;
+}
+
 const ISLAND_ITEMS = [
   {id: "lantern", metric: "journalCount", threshold: 1, serverVerifiable: true},
   {id: "pine", metric: "streakDays", threshold: 3, serverVerifiable: true},
@@ -867,12 +884,21 @@ async function collectIslandMetrics(uid) {
 
   const [
     journalAgg, foodAgg, checkinSnap, ritualAgg, rsvpAgg,
-    lastFoodSnap, lastRitualSnap,
+    lastFoodSnap, lastRitualSnap, lastCheckinSnap,
   ] = await Promise.all([
     userRef.collection("journal_entries").count().get(),
     userRef.collection("food_entries").count().get(),
-    // Seri hesabı için son 60 günün check-in'leri yeter: en uzun eşik 7 gün.
-    db.collection("daily_checkins").where("userId", "==", uid).get(),
+    // Seri için yalnız son STREAK_WINDOW_DAYS gün. Eskiden sorguda ne tarih
+    // ne limit vardı: kullanıcının TÜM check-in'leri her senkronda okunuyordu
+    // (denetim H-6). +1: istemci yerel gününü yazar, UTC'nin bir gün önünde
+    // olabilir.
+    db.collection("daily_checkins")
+        .where("userId", "==", uid)
+        .where("date", ">=", islandDateKey(
+            new Date(Date.now() - STREAK_WINDOW_DAYS * 86400000)))
+        .orderBy("date", "desc")
+        .limit(STREAK_WINDOW_DAYS + 1)
+        .get(),
     // Gece ritüeli: gün başına tek doküman (istemci deterministik id yazar).
     userRef.collection("sleep_rituals").count().get(),
     // RSVP'ler events/{id}/rsvps/{uid} altında; collectionGroup + userId
@@ -885,6 +911,13 @@ async function collectIslandMetrics(uid) {
         .orderBy("createdAt", "desc").limit(1).get(),
     userRef.collection("sleep_rituals")
         .orderBy("date", "desc").limit(1).get(),
+    // Son check-in, seri penceresinin dışında olsa bile: 60 günden uzun
+    // sessiz kalmış kullanıcının suyu "hiç veri yok" sanılıp berraklaşmasın.
+    db.collection("daily_checkins")
+        .where("userId", "==", uid)
+        .orderBy("date", "desc")
+        .limit(1)
+        .get(),
   ]);
 
   const dates = new Set();
@@ -900,7 +933,7 @@ async function collectIslandMetrics(uid) {
   if (!dates.has(islandDateKey(cursor))) {
     cursor.setUTCDate(cursor.getUTCDate() - 1);
   }
-  while (dates.has(islandDateKey(cursor)) && streakDays < 400) {
+  while (dates.has(islandDateKey(cursor)) && streakDays < STREAK_WINDOW_DAYS) {
     streakDays += 1;
     cursor.setUTCDate(cursor.getUTCDate() - 1);
   }
@@ -915,6 +948,11 @@ async function collectIslandMetrics(uid) {
     if (createdAt && typeof createdAt.toDate === "function") {
       activeDays.push(islandDateKey(createdAt.toDate()));
     }
+  }
+  const lastCheckin = lastCheckinSnap.docs[0];
+  if (lastCheckin) {
+    const date = (lastCheckin.data() || {}).date;
+    if (typeof date === "string") activeDays.push(date);
   }
   const lastRitual = lastRitualSnap.docs[0];
   if (lastRitual) {
@@ -953,11 +991,21 @@ exports.syncIslandItems = onRequest({cors: true}, async (req, res) => {
   if (!uid) return;
 
   try {
-    const metrics = await collectIslandMetrics(uid);
     const ref = db.collection("island").doc(uid);
     const snap = await ref.get();
     const existing = (snap.exists ? snap.data() : null) || {};
     const earned = Array.isArray(existing.earned) ? existing.earned : [];
+
+    // Hız sınırı (denetim H-6): pencere içindeki tekrar çağrı hiçbir ölçüt
+    // okumadan son bilinen durumu döner. İstemci yanıt gövdesini kullanmıyor;
+    // ada ekranı island/{uid} dokümanını dinliyor.
+    const lastSyncAtMs = Number(existing.lastSyncAtMs) || 0;
+    if (snap.exists && Date.now() - lastSyncAtMs < islandSyncMinIntervalMs()) {
+      res.json({earned, gained: [], throttled: true});
+      return;
+    }
+
+    const metrics = await collectIslandMetrics(uid);
 
     const nextEarned = earned.slice();
     for (const item of ISLAND_ITEMS) {
@@ -973,15 +1021,15 @@ exports.syncIslandItems = onRequest({cors: true}, async (req, res) => {
     // yazılır, gün SAYISI değil: sayı iki senkron arasında bayatlar, dize
     // bayatlamaz — istemci farkı kendi alır.
     const lastActiveDate = metrics.lastActiveDate || null;
-    const dateChanged = (existing.lastActiveDate || null) !== lastActiveDate;
-    if (gained.length > 0 || dateChanged || !snap.exists) {
-      await ref.set({
-        uid,
-        earned: nextEarned,
-        lastActiveDate,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      }, {merge: true});
-    }
+    // Her gerçek senkronda yazılır: lastSyncAtMs hız sınırının dayanağı.
+    // Yazma en fazla pencere başına bir kez (varsayılan 30 sn).
+    await ref.set({
+      uid,
+      earned: nextEarned,
+      lastActiveDate,
+      lastSyncAtMs: Date.now(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    }, {merge: true});
 
     res.json({earned: nextEarned, gained, metrics});
   } catch (err) {

@@ -179,6 +179,27 @@ describe("habit_completions (H-1, M-3)", () => {
     await assertFails(setDoc(doc(as("A"), "habit_completions/x_ha"), completion("A", "ha", {date: "x"})));
   });
 
+  // Phase 7: tamamlamalarda "bugüne yakın" şartı YOK, yani bu testler tarihin
+  // kendisinin geçerliliğini kesin olarak ölçer (daily_checkins'teki
+  // 2026-02-30 testi yakınlık şartı yüzünden de reddedilmiş olabilirdi).
+  test.each(["2026-02-30", "2026-02-29", "2025-04-31", "2026-06-31"])(
+      "takvimde olmayan gün %s reddedilir",
+      async (date) => {
+        await assertFails(setDoc(
+            doc(as("A"), `habit_completions/${date}_ha`),
+            completion("A", "ha", {date}),
+        ));
+      },
+  );
+
+  test("geçerli artık gün (2028-02-29) kabul edilir", async () => {
+    const date = "2028-02-29";
+    await assertSucceeds(setDoc(
+        doc(as("A"), `habit_completions/${date}_ha`),
+        completion("A", "ha", {date}),
+    ));
+  });
+
   test("A, B'nin tamamlamasını okuyamaz ve silemez", async () => {
     await seed(`habit_completions/${dateKey()}_hb`, {habitId: "hb", userId: "B", date: dateKey()});
     const a = as("A");
