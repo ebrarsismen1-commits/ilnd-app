@@ -90,3 +90,38 @@ describe("backend kimlik kapısı", () => {
     await db.collection("island").doc("attacker-uid").delete();
   });
 });
+
+// Denetim L-7: CORS artık her kaynağa açık değil.
+describe("CORS izin listesi", () => {
+  /** OPTIONS ön kontrol isteği gönderir. */
+  async function preflight(fn, origin) {
+    const req = httpMocks.createRequest({
+      method: "OPTIONS",
+      headers: {
+        "origin": origin,
+        "access-control-request-method": "POST",
+        "access-control-request-headers": "authorization,content-type",
+      },
+    });
+    const res = httpMocks.createResponse({eventEmitter: require("events").EventEmitter});
+    await fns[fn](req, res);
+    return res;
+  }
+
+  const fnNames = [...ENDPOINTS.map(([fn]) => fn), "mintFirebaseToken"];
+
+  test.each(fnNames)("%s bilinmeyen siteye izin vermez", async (fn) => {
+    const res = await preflight(fn, "https://evil.example");
+    expect(res.getHeader("access-control-allow-origin")).toBeUndefined();
+  });
+
+  test.each(fnNames)("%s Hosting kaynağına izin verir", async (fn) => {
+    const res = await preflight(fn, "https://ilnd-app-8dcbd.web.app");
+    expect(res.getHeader("access-control-allow-origin")).toBe("https://ilnd-app-8dcbd.web.app");
+  });
+
+  test("yerel geliştirme kaynağına izin verir", async () => {
+    const res = await preflight("anthropicProxy", "http://localhost:5173");
+    expect(res.getHeader("access-control-allow-origin")).toBe("http://localhost:5173");
+  });
+});

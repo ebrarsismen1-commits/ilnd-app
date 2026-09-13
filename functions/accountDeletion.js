@@ -155,6 +155,7 @@ async function runAccountDeletion(uid, deps) {
   await step("firestore-rsvps", () =>
     deleteQuery(db.collectionGroup("rsvps").where("userId", "==", uid)));
   await step("firestore-island", () => db.collection("island").doc(uid).delete());
+  await step("firestore-ai-leases", () => db.collection("ai_leases").doc(uid).delete());
   await step("firestore-referral-code", async () => {
     const growth = await db.collection("user_growth").doc(uid).get();
     const code = growth.exists ? (growth.data() || {}).referral_code : null;

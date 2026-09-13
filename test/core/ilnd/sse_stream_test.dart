@@ -40,6 +40,31 @@ void main() {
     expect(delta('data: [1,2,3]'), isNull);
   });
 
+  // Güvenlik denetimi M-1: yarım kalan akış tamamlanmış sayılmamalı.
+  test('message_stop akışın düzgün bittiğini söyler', () {
+    expect(sseIsMessageStop('data: {"type":"message_stop"}'), isTrue);
+    expect(sseIsMessageStop('event: message_stop'), isFalse);
+    expect(sseIsMessageStop('data: {"type":"message_delta"}'), isFalse);
+    expect(sseIsMessageStop('data: {bozuk'), isFalse);
+  });
+
+  test('proxy ve Anthropic hata olayları tanınır', () {
+    expect(
+      sseIsError(
+        'data: {"type":"error","error":{"type":"proxy_error",'
+        '"message":"Upstream AI request failed"}}',
+      ),
+      isTrue,
+    );
+    expect(
+      sseIsError('data: {"type":"error","error":{"type":"overloaded_error"}}'),
+      isTrue,
+    );
+    expect(sseIsError('event: error'), isFalse);
+    expect(sseIsError('data: {"type":"ping"}'), isFalse);
+    expect(sseIsError('data: [DONE]'), isFalse);
+  });
+
   test('boşluklar ve Türkçe karakterler korunur', () {
     expect(
       delta(

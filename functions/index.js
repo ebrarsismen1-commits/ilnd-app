@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const {onRequest} = require("firebase-functions/v2/https");
 const {onDocumentWritten} = require("firebase-functions/v2/firestore");
 const {onSchedule} = require("firebase-functions/v2/scheduler");
@@ -23,6 +24,21 @@ const {ensureReferralCodeFor, redeemReferral} = require("./referrals");
 
 admin.initializeApp();
 setGlobalOptions({maxInstances: 10});
+
+// Tarayıcıdan çağrıya izin verilen kaynaklar (denetim L-7). Eskiden her
+// uçta `cors: CORS_ORIGINS` vardı: herhangi bir sitenin sayfası, kullanıcının token'ı
+// eline geçerse bu uçları tarayıcıdan çağırabiliyordu. Bearer token
+// kullanıldığı için CSRF değil, ama yüzeyi gereksiz genişletiyordu.
+// iOS/Android uygulaması Origin başlığı göndermez, CORS'tan etkilenmez.
+// Özel alan adı eklenirse ALLOWED_ORIGINS ile (virgülle ayrılmış) verilir.
+const CORS_ORIGINS = process.env.ALLOWED_ORIGINS ?
+  process.env.ALLOWED_ORIGINS.split(",").map((s) => s.trim()).filter(Boolean) :
+  [
+    "https://ilnd-app-8dcbd.web.app",
+    "https://ilnd-app-8dcbd.firebaseapp.com",
+    /^http:\/\/localhost(:\d+)?$/,
+    /^http:\/\/127\.0\.0\.1(:\d+)?$/,
+  ];
 
 const db = admin.firestore();
 
@@ -81,7 +97,7 @@ const REVENUECAT_ENTITLEMENT = "premium";
  * gerektiriyor) ayrı tutuldu. Asıl güvenlik sınırı zaten Supabase JWT
  * doğrulaması.
  */
-exports.mintFirebaseToken = onRequest({cors: true}, async (req, res) => {
+exports.mintFirebaseToken = onRequest({cors: CORS_ORIGINS}, async (req, res) => {
   if (req.method !== "POST") {
     res.status(405).json({error: "Method Not Allowed"});
     return;
@@ -283,6 +299,96 @@ const DEFAULT_DAILY_USD_LIMIT = Number(process.env.AI_DAILY_USD_LIMIT) > 0 ?
   Number(process.env.AI_DAILY_USD_LIMIT) :
   5;
 
+// ─── Eşzamanlılık ve dayanıklılık (denetim M-1 / M-2) ───────────────────────
+
+// Kullanıcı başına aynı anda en fazla bu kadar AI çağrısı. Olmasa birkaç hesap
+// onlarca paralel akış açıp proxy'nin tüm örnek kapasitesini tutabiliyordu.
+const MAX_CONCURRENT_AI_CALLS = 2;
+// Kiralama süresi: fonksiyon çökse bile kilit sonsuza kalmasın. Fonksiyon zaman
+// aşımından (120 sn) uzun.
+const AI_LEASE_MS = 150 * 1000;
+// Anthropic çağrısı en fazla bu kadar sürer; eskiden hiç zaman aşımı yoktu.
+const UPSTREAM_TIMEOUT_MS = 90 * 1000;
+
+/**
+ * Kullanıcı için bir çağrı yeri ayırır. Süresi dolmuş kiralamalar sayılmaz.
+ * @param {string} uid Firebase uid
+ * @param {number} [now] epoch ms
+ * @return {Promise<string|null>} kiralama kimliği; yer yoksa null
+ */
+async function acquireAiLease(uid, now = Date.now()) {
+  const ref = db.collection("ai_leases").doc(uid);
+  const id = crypto.randomUUID();
+  return db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    const leases = snap.exists ? ((snap.data() || {}).leases || []) : [];
+    const active = leases.filter((l) => l && Number(l.expiresAtMs) > now);
+    if (active.length >= MAX_CONCURRENT_AI_CALLS) return null;
+    tx.set(ref, {uid, leases: [...active, {id, expiresAtMs: now + AI_LEASE_MS}]});
+    return id;
+  });
+}
+
+/**
+ * Kiralamayı bırakır. Hata yalnız loglanır: kiralama zaten süreyle düşer.
+ * @param {string} uid Firebase uid
+ * @param {string} id kiralama kimliği
+ * @return {Promise<void>}
+ */
+async function releaseAiLease(uid, id) {
+  const ref = db.collection("ai_leases").doc(uid);
+  try {
+    await db.runTransaction(async (tx) => {
+      const snap = await tx.get(ref);
+      if (!snap.exists) return;
+      const leases = ((snap.data() || {}).leases || []).filter((l) => l && l.id !== id);
+      tx.set(ref, {uid, leases});
+    });
+  } catch (err) {
+    console.warn("releaseAiLease failed:", err.message || err);
+  }
+}
+
+/**
+ * Sağlayıcı tarafında başarısız olan çağrının kotadan düşülen hakkını geri
+ * verir (denetim M-1): 6 saatlik bir Anthropic kesintisinde ücretsiz
+ * kullanıcının haftalık mesajları sessizce tükeniyordu.
+ * @param {string} uid Firebase uid
+ * @param {string} tier kademe
+ * @param {string} kind tür
+ * @param {boolean} weekly haftalık sayaç da artırılmış mıydı
+ * @return {Promise<void>}
+ */
+async function refundUsage(uid, tier, kind, weekly) {
+  const day = new Date().toISOString().slice(0, 10);
+  const dayRef = db.collection("ai_usage").doc(`${uid}_${day}`);
+  const weekRef = db.collection("ai_usage").doc(`${uid}_${currentWeekKey()}`);
+  await db.runTransaction(async (tx) => {
+    const daySnap = await tx.get(dayRef);
+    const weekSnap = weekly ? await tx.get(weekRef) : null;
+    if (daySnap.exists) {
+      const counts = {...((daySnap.data() || {}).counts || {})};
+      counts[tier] = Math.max(0, (counts[tier] || 0) - 1);
+      if (kind === "system") counts.system = Math.max(0, (counts.system || 0) - 1);
+      tx.set(dayRef, {counts}, {merge: true});
+    }
+    if (weekly && weekSnap && weekSnap.exists) {
+      const counts = {...((weekSnap.data() || {}).counts || {})};
+      counts[kind] = Math.max(0, (counts[kind] || 0) - 1);
+      tx.set(weekRef, {counts}, {merge: true});
+    }
+  });
+}
+
+/**
+ * Akış başladıktan sonra oluşan hata için SSE hata olayı. HTTP durum kodu
+ * artık değiştirilemez; istemci bu olayı görünce yarım cevabı tamam saymaz.
+ */
+const SSE_PROXY_ERROR = "event: error\ndata: " + JSON.stringify({
+  type: "error",
+  error: {type: "proxy_error", message: "Upstream AI request failed"},
+}) + "\n\n";
+
 // Doğrulanmış premium sonucu bu kadar süre önbelleklenir. Yalnız POZİTİF
 // sonuç önbelleklenir: "premium değil" saklansaydı, aboneliği yeni satın
 // alan kullanıcı saatlerce sınırda kalırdı.
@@ -369,7 +475,8 @@ async function checkAndIncrementUsage(uid, tier, kind, freeQuotaApplies) {
       counts: dayCounts,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     }, {merge: true});
-    return {allowed: true};
+    // weekly: iade gerekirse haftalık sayaç da geri alınsın mı.
+    return {allowed: true, weekly: metered};
   });
 }
 
@@ -511,7 +618,8 @@ exports.anthropicProxy = onRequest(
     // dosyanın başındaki not). Secret Manager'a taşınırsa bu listeye de
     // eklenmeli, çünkü resolvePremium ücretsiz katman kotasını bu
     // fonksiyonun içinde uyguluyor.
-    {cors: true, secrets: [ANTHROPIC_API_KEY]},
+    // timeoutSeconds: akış + UPSTREAM_TIMEOUT_MS (90 sn) sığsın.
+    {cors: CORS_ORIGINS, secrets: [ANTHROPIC_API_KEY], timeoutSeconds: 120},
     async (req, res) => {
       if (req.method !== "POST") {
         res.status(405).json({error: "Method Not Allowed"});
@@ -556,113 +664,190 @@ exports.anthropicProxy = onRequest(
         return;
       }
 
-      let quota;
+      // Kullanıcı başına eşzamanlı çağrı sınırı (denetim M-2). Kota sayacından
+      // ÖNCE: sınıra takılan çağrı hak yemesin.
+      let leaseId;
       try {
-        quota = await checkAndIncrementUsage(uid, tier, kind, true);
-        // Haftalık ücretsiz kota doldu — premium hesaplar bundan muaf. Bu
-        // kontrol bilerek sona bırakıldı: premium doğrulaması (Firestore +
-        // RevenueCat) yalnız sınıra DAYANAN çağrıda çalışır, her mesajda
-        // değil.
-        if (!quota.allowed && quota.reason === "free-weekly-limit") {
-          if (await resolvePremium(uid)) {
-            quota = await checkAndIncrementUsage(uid, tier, kind, false);
-          }
-        }
+        leaseId = await acquireAiLease(uid);
       } catch (err) {
-        console.error("anthropicProxy usage check failed:", err);
+        console.error("anthropicProxy lease failed:", err);
         res.status(500).json({error: "Internal error"});
         return;
       }
-      if (!quota.allowed) {
+      if (!leaseId) {
         res.status(429).json({
-          error: quota.reason === "free-weekly-limit" ?
-            "Free weekly usage limit reached" :
-            "Daily AI usage limit reached",
-          // İstemci bu alana bakıp paywall mı yoksa "yarın tekrar dene"
-          // mesajı mı göstereceğine karar verir.
-          reason: quota.reason,
+          error: "Too many concurrent AI requests",
+          reason: "concurrency-limit",
           kind,
-          used: quota.used,
-          limit: quota.limit,
         });
         return;
       }
 
-      // stream=true: yanit parca parca aksin. Akissiz cagrida kullanici
-      // cevabin SONU gelene kadar bos balona bakiyor; Sonnet'te bu birkac
-      // saniye. Akista ilk kelime saniyenin altinda ekranda oluyor ve model,
-      // kalite, kota ayni kaliyor.
-      const wantsStream = parsed.stream;
-      const usageCollector = createUsageCollector();
-
       try {
-        const upstream = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "x-api-key": ANTHROPIC_API_KEY.value(),
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            model: config.model,
-            max_tokens: config.maxTokens,
-            // Çok turlu konuşmalarda (sohbet) system prompt'u (kişilik +
-            // hafıza, ~600-800 token) her mesajda tam fiyattan gitmesin:
-            // prompt caching ile takip mesajlarında %90 indirimli okunur.
-            // Tek atımlık çağrılarda (ritüel, öneri) cache yazma primi
-            // (%25) boşa gider — o yüzden yalnız messages.length > 1 iken.
-            system: typeof system === "string" ?
-              (Array.isArray(messages) && messages.length > 1 ?
-                [{
-                  type: "text",
-                  text: system,
-                  cache_control: {type: "ephemeral"},
-                }] :
-                system) :
-              undefined,
-            messages,
-            ...(wantsStream ? {stream: true} : {}),
-          }),
+        await runProxiedCall({
+          res, uid, tier, kind, system, messages, config,
+          wantsStream: parsed.stream,
         });
-
-        // Hata govdesi JSON'dur (429 kota, 400 gecersiz istek): istemcinin
-        // paywall ayrimi buna bakiyor, akisa cevirmeden aynen gecir.
-        if (!wantsStream || upstream.status !== 200) {
-          const data = await upstream.json();
-          res.status(upstream.status).json(data);
-          usageCollector.feedJson(data);
-          await recordTokenUsage(uid, tier, kind, usageCollector.result());
-          return;
-        }
-
-        // Akis: Anthropic'in SSE govdesi oldugu gibi istemciye tasinir.
-        // Ara katman parse etmez; parse istemcide, tek yerde.
-        res.status(200);
-        res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
-        res.setHeader("Cache-Control", "no-cache, no-transform");
-        res.setHeader("Connection", "keep-alive");
-        if (typeof res.flushHeaders === "function") {
-          res.flushHeaders();
-        }
-
-        const reader = upstream.body.getReader();
-        const decoder = new TextDecoder();
-        for (;;) {
-          const {done, value} = await reader.read();
-          if (done) break;
-          // Once istemciye yaz, sonra muhasebe: olcum kullaniciyi
-          // bekletmemeli.
-          res.write(Buffer.from(value));
-          usageCollector.feedSse(decoder.decode(value, {stream: true}));
-        }
-        res.end();
-        await recordTokenUsage(uid, tier, kind, usageCollector.result());
-      } catch (err) {
-        console.error("anthropicProxy upstream failed:", err);
-        res.status(502).json({error: "Upstream AI request failed"});
+      } finally {
+        await releaseAiLease(uid, leaseId);
       }
     },
 );
+
+/**
+ * Kota + Anthropic çağrısı + yanıtın istemciye aktarılması.
+ * @param {object} args çağrı bilgileri
+ * @return {Promise<void>}
+ */
+async function runProxiedCall({res, uid, tier, kind, system, messages, config, wantsStream}) {
+  let quota;
+  try {
+    quota = await checkAndIncrementUsage(uid, tier, kind, true);
+    // Haftalık ücretsiz kota doldu — premium hesaplar bundan muaf. Bu
+    // kontrol bilerek sona bırakıldı: premium doğrulaması (Firestore +
+    // RevenueCat) yalnız sınıra DAYANAN çağrıda çalışır, her mesajda
+    // değil.
+    if (!quota.allowed && quota.reason === "free-weekly-limit") {
+      if (await resolvePremium(uid)) {
+        quota = await checkAndIncrementUsage(uid, tier, kind, false);
+      }
+    }
+  } catch (err) {
+    console.error("anthropicProxy usage check failed:", err);
+    res.status(500).json({error: "Internal error"});
+    return;
+  }
+  if (!quota.allowed) {
+    res.status(429).json({
+      error: quota.reason === "free-weekly-limit" ?
+        "Free weekly usage limit reached" :
+        "Daily AI usage limit reached",
+      // İstemci bu alana bakıp paywall mı yoksa "yarın tekrar dene"
+      // mesajı mı göstereceğine karar verir.
+      reason: quota.reason,
+      kind,
+      used: quota.used,
+      limit: quota.limit,
+    });
+    return;
+  }
+
+  const usageCollector = createUsageCollector();
+  // Kullanıcı ekranı kapatınca Anthropic üretmeye (ve faturalamaya) devam
+  // etmesin (denetim M-1). `res` 'close' yanıt bitmeden gelirse bağlantı
+  // kopmuştur; `req` 'close' Node'da gövde okununca da gelir, kullanılmaz.
+  const clientGone = new AbortController();
+  res.on("close", () => {
+    if (!res.writableFinished) clientGone.abort();
+  });
+  const signal = AbortSignal.any([
+    clientGone.signal,
+    AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+  ]);
+  let streamStarted = false;
+
+  try {
+    // stream=true: yanit parca parca aksin. Akissiz cagrida kullanici
+    // cevabin SONU gelene kadar bos balona bakiyor; Sonnet'te bu birkac
+    // saniye. Akista ilk kelime saniyenin altinda ekranda oluyor ve model,
+    // kalite, kota ayni kaliyor.
+    const upstream = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      signal,
+      headers: {
+        "x-api-key": ANTHROPIC_API_KEY.value(),
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        model: config.model,
+        max_tokens: config.maxTokens,
+        // Çok turlu konuşmalarda (sohbet) system prompt'u (kişilik +
+        // hafıza, ~600-800 token) her mesajda tam fiyattan gitmesin:
+        // prompt caching ile takip mesajlarında %90 indirimli okunur.
+        // Tek atımlık çağrılarda (ritüel, öneri) cache yazma primi
+        // (%25) boşa gider — o yüzden yalnız messages.length > 1 iken.
+        system: typeof system === "string" ?
+          (messages.length > 1 ?
+            [{type: "text", text: system, cache_control: {type: "ephemeral"}}] :
+            system) :
+          undefined,
+        messages,
+        ...(wantsStream ? {stream: true} : {}),
+      }),
+    });
+
+    // Hata govdesi JSON'dur (429 kota, 400 gecersiz istek): istemcinin
+    // paywall ayrimi buna bakiyor, akisa cevirmeden aynen gecir.
+    if (!wantsStream || upstream.status !== 200) {
+      // Sağlayıcı kaynaklı başarısızlık (5xx, 529 aşırı yük, 429 hız) hak
+      // yemez. 4xx istemci hatası sayılır, iade edilmez.
+      if (upstream.status >= 500 || upstream.status === 429) {
+        await refundUsage(uid, tier, kind, quota.weekly);
+      }
+      let data;
+      try {
+        data = await upstream.json();
+      } catch (err) {
+        // Ara katmanlardan gelen HTML hata sayfası: istemciye yine JSON.
+        data = {error: {type: "upstream_error", message: "Upstream AI request failed"}};
+      }
+      res.status(upstream.status).json(data);
+      usageCollector.feedJson(data);
+      await recordTokenUsage(uid, tier, kind, usageCollector.result());
+      return;
+    }
+
+    // Akis: Anthropic'in SSE govdesi oldugu gibi istemciye tasinir.
+    // Ara katman parse etmez; parse istemcide, tek yerde.
+    res.status(200);
+    res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
+    res.setHeader("Cache-Control", "no-cache, no-transform");
+    res.setHeader("Connection", "keep-alive");
+    if (typeof res.flushHeaders === "function") {
+      res.flushHeaders();
+    }
+    streamStarted = true;
+
+    const reader = upstream.body.getReader();
+    const decoder = new TextDecoder();
+    for (;;) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      // Once istemciye yaz, sonra muhasebe: olcum kullaniciyi
+      // bekletmemeli.
+      res.write(Buffer.from(value));
+      usageCollector.feedSse(decoder.decode(value, {stream: true}));
+    }
+    res.end();
+    await recordTokenUsage(uid, tier, kind, usageCollector.result());
+  } catch (err) {
+    const clientLeft = clientGone.signal.aborted;
+    console.error(JSON.stringify({
+      event: "ai_upstream_failed",
+      clientLeft,
+      streamStarted,
+      error: err && err.name,
+    }));
+    // Kullanıcı kendisi ayrıldıysa maliyet oluştu, hak iade edilmez.
+    if (!clientLeft) {
+      await refundUsage(uid, tier, kind, quota.weekly).catch((e) =>
+        console.warn("refundUsage failed:", e.message || e));
+    }
+    if (streamStarted) {
+      // Başlıklar gönderildi, durum kodu değişemez. Eskiden burada
+      // res.status(502) çağrılıyor, ERR_HTTP_HEADERS_SENT fırlıyor ve istemci
+      // yarım cevabı tamamlanmış sanıyordu (denetim M-1).
+      if (!clientLeft && !res.writableEnded) {
+        res.write(SSE_PROXY_ERROR);
+        res.end();
+      }
+      await recordTokenUsage(uid, tier, kind, usageCollector.result());
+    } else if (!clientLeft) {
+      res.status(502).json({error: "Upstream AI request failed"});
+    }
+  }
+}
 
 // ─── Referral redemption ────────────────────────────────────────────────────
 
@@ -677,7 +862,7 @@ exports.anthropicProxy = onRequest(
  * Yanıt: 200 {redeemed: true, referrerRewarded} | 200 {redeemed: false,
  *   reason} | 400 geçersiz biçim
  */
-exports.redeemReferralCode = onRequest({cors: true}, async (req, res) => {
+exports.redeemReferralCode = onRequest({cors: CORS_ORIGINS}, async (req, res) => {
   if (req.method !== "POST") {
     res.status(405).json({error: "Method Not Allowed"});
     return;
@@ -703,7 +888,7 @@ exports.redeemReferralCode = onRequest({cors: true}, async (req, res) => {
  * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
  * Yanıt: 200 {code}
  */
-exports.ensureReferralCode = onRequest({cors: true}, async (req, res) => {
+exports.ensureReferralCode = onRequest({cors: CORS_ORIGINS}, async (req, res) => {
   if (req.method !== "POST") {
     res.status(405).json({error: "Method Not Allowed"});
     return;
@@ -753,7 +938,7 @@ function deletionDeps() {
  * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
  */
 exports.deleteAccount = onRequest(
-    {cors: true, secrets: [SUPABASE_SERVICE_ROLE_KEY]},
+    {cors: CORS_ORIGINS, secrets: [SUPABASE_SERVICE_ROLE_KEY]},
     async (req, res) => {
       if (req.method !== "POST") {
         res.status(405).json({error: "Method Not Allowed"});
@@ -947,7 +1132,7 @@ async function collectIslandMetrics(uid) {
  *
  * İstek: POST, header "Authorization: Bearer <firebase_id_token>"
  */
-exports.syncIslandItems = onRequest({cors: true}, async (req, res) => {
+exports.syncIslandItems = onRequest({cors: CORS_ORIGINS}, async (req, res) => {
   if (req.method !== "POST") {
     res.status(405).json({error: "Method Not Allowed"});
     return;

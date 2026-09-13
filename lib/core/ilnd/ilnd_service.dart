@@ -231,6 +231,7 @@ class IlndService {
       }
 
       final buffer = StringBuffer();
+      var completed = false;
       await for (final line
           in response.stream
               .transform(utf8.decoder)
@@ -238,6 +239,14 @@ class IlndService {
               // Olaylar arasında 60 saniye sessizlik: bağlantı asılı
               // kalmış demektir, sohbeti kilitte bırakma.
               .timeout(const Duration(seconds: 60))) {
+        // Güvenlik denetimi M-1: akış ortasında kopan bağlantı eskiden
+        // normal bitiş gibi görünüyor, yarım cevap tamamlanmış sayılıp
+        // kaydediliyordu. Sunucu artık hata olayı yolluyor; `message_stop`
+        // gelmeden biten akış da başarısız sayılır.
+        if (sseIsError(line)) {
+          throw IlndServiceException(l10n.ilndServiceGenericError);
+        }
+        if (sseIsMessageStop(line)) completed = true;
         final delta = sseTextDelta(line);
         if (delta == null) continue;
         buffer.write(delta);
@@ -245,7 +254,11 @@ class IlndService {
       }
 
       // Akış tek kelime getirmediyse boş balon bırakma.
-      if (buffer.isEmpty) yield await once();
+      if (buffer.isEmpty) {
+        yield await once();
+      } else if (!completed) {
+        throw IlndServiceException(l10n.ilndServiceGenericError);
+      }
     } on IlndFreeLimitException {
       rethrow;
     } catch (e) {
@@ -473,6 +486,25 @@ String? sseTextDelta(String line) {
     final delta = event['delta'] as Map<String, dynamic>?;
     if (delta == null || delta['type'] != 'text_delta') return null;
     return delta['text'] as String?;
+  } catch (_) {
+    return null;
+  }
+}
+
+/// Satır, akışın düzgün bittiğini söyleyen `message_stop` olayı mı?
+bool sseIsMessageStop(String line) => _sseEventType(line) == 'message_stop';
+
+/// Satır bir hata olayı mı? Anthropic'in `error` olayı da, proxy'nin akış
+/// başladıktan sonra yolladığı `proxy_error` da `type: error` taşır.
+bool sseIsError(String line) => _sseEventType(line) == 'error';
+
+String? _sseEventType(String line) {
+  if (!line.startsWith('data:')) return null;
+  final payload = line.substring(5).trim();
+  if (payload.isEmpty || payload == '[DONE]') return null;
+  try {
+    final event = jsonDecode(payload);
+    return event is Map<String, dynamic> ? event['type'] as String? : null;
   } catch (_) {
     return null;
   }
