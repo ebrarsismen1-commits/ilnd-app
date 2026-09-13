@@ -1,9 +1,13 @@
--- ADR-0003: profiles tablosuna onboarding + profil alanları.
--- Supabase SQL Editor'de bir kez çalıştırılır. Idempotent (if not exists).
+-- ESKİ — yerine: supabase/migrations/20260913000000_profiles_rls.sql
 --
--- RLS: satır-bazlı mevcut politikalar (kullanıcı kendi id'sini okur/yazar) yeni
--- kolonları da kapsar; ek politika gerekmez. Politikalar yoksa aşağıdaki blok
--- açar (yorumlu — projede zaten varsa tekrar açmayın).
+-- Bu dosya yalnız tarihçe için duruyor. Aşağıdaki "isteğe bağlı" RLS bloğu
+-- güvenlik denetiminde (H-8, 2026-09-13) yetersiz bulundu: politikalar
+-- depoda hiç tanımlı değildi, update politikasında `with check` yoktu (satırın
+-- id'si başkasına çevrilebilir) ve Supabase'in varsayılan TRUNCATE yetkisi ile
+-- başlangıç şablonunun "herkese açık" politikası hesaba katılmamıştı.
+-- Kolonlar ve doğru politikalar migration dosyasında; bunu çalıştırmayın.
+--
+-- ADR-0003: profiles tablosuna onboarding + profil alanları.
 
 alter table public.profiles
   add column if not exists onboarding_done  boolean not null default false,
