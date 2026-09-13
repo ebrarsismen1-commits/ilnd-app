@@ -25,9 +25,107 @@ service cloud.firestore {
         && request.time < dateOf(d) + duration.value(36, 'h');
     }
 
-    // Kullanıcılar sadece kendi verilerine erişebilir
+    // ── users/{uid} alt ağacı ───────────────────────────────────────────────
+    // Güvenlik denetimi M-6 (2026-09-13): eskiden sahibi bu ağaca HER şeyi
+    // yazabiliyordu: sınırsız sayıda 1 MiB doküman, rastgele alt koleksiyon,
+    // negatif kalori, 1 MB yemek adı, gelecek tarihli kayıt. Okuma aynı kaldı
+    // (yalnız sahibi). Yazma artık yalnız istemcinin gerçekten gönderdiği
+    // şekillerle. Güncellemelerde yalnız DEĞİŞEN alanlara bakılır: eski
+    // sürümlerin bıraktığı fazladan alanlar mevcut dokümanı kilitlemesin.
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function changedKeys() {
+      return resource == null ?
+        request.resource.data.keys() :
+        request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    function boundedString(v, max) {
+      return v is string && v.size() <= max;
+    }
+
+    // İstemci saati: saat dilimi ve küçük sapma payı olarak bir gün ileri.
+    function notFuture(t) {
+      return t is timestamp && t < request.time + duration.value(1, 'd');
+    }
+
+    function validFood(d) {
+      return boundedString(d.yemekAdi, 300)
+        && d.kalori is number && d.kalori >= 0 && d.kalori <= 20000
+        && d.protein is number && d.protein >= 0 && d.protein <= 2000
+        && d.karbonhidrat is number && d.karbonhidrat >= 0 && d.karbonhidrat <= 2000
+        && d.yag is number && d.yag >= 0 && d.yag <= 2000
+        && d.get('malzemeler', []) is list
+        && d.get('malzemeler', []).size() <= 50
+        && notFuture(d.createdAt);
+    }
+
     match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isOwner(userId);
+    }
+
+    match /users/{userId} {
+      // Profil fotoğrafı (avatar_repository): küçültülmüş base64.
+      allow create, update: if isOwner(userId)
+        && changedKeys().hasOnly(['photoBase64', 'photoUpdatedAt'])
+        && (request.resource.data.get('photoBase64', null) == null
+          || boundedString(request.resource.data.photoBase64, 900000));
+      allow delete: if false; // hesap silme sunucuda
+
+      match /journal_entries/{entryId} {
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['userId', 'body', 'ilndReply', 'createdAt'])
+          && request.resource.data.userId == userId
+          && boundedString(request.resource.data.body, 50000)
+          && boundedString(request.resource.data.ilndReply, 10000)
+          && notFuture(request.resource.data.createdAt);
+        allow delete: if isOwner(userId);
+        allow update: if false; // istemci günlüğü düzenlemiyor
+      }
+
+      match /food_entries/{entryId} {
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['userId', 'yemekAdi', 'kalori', 'protein', 'karbonhidrat', 'yag', 'createdAt', 'malzemeler'])
+          && request.resource.data.userId == userId
+          && validFood(request.resource.data);
+        // Malzeme düzeltme ve makro yeniden hesaplama (food_repository).
+        allow update: if isOwner(userId)
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['malzemeler', 'kalori', 'protein', 'karbonhidrat', 'yag'])
+          && validFood(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      // Gün başına tek doküman; kimlik gün dizesinin kendisi.
+      match /sleep_rituals/{date} {
+        allow create, update: if isOwner(userId)
+          && changedKeys().hasOnly(['date', 'createdAt'])
+          && request.resource.data.date == date
+          && isDateKey(date);
+        allow delete: if false;
+      }
+
+      match /plan_progress/{planId} {
+        allow create, update: if isOwner(userId)
+          && planId.size() <= 100
+          && changedKeys().hasOnly(['activePlanId', 'startedAt', 'updatedAt', 'completedDayIds'])
+          && boundedString(request.resource.data.get('activePlanId', ''), 100)
+          && request.resource.data.get('completedDayIds', []) is list
+          && request.resource.data.get('completedDayIds', []).size() <= 60;
+        allow delete: if false;
+      }
+
+      match /movement_progress/{programId} {
+        allow create, update: if isOwner(userId)
+          && programId.size() <= 100
+          && changedKeys().hasOnly(['completedSessionIds', 'updatedAt'])
+          && request.resource.data.get('completedSessionIds', []) is list
+          && request.resource.data.get('completedSessionIds', []).size() <= 200;
+        allow delete: if false;
+      }
     }
 
     // Makaleler herkese açık (okuma), yazma sadece admin

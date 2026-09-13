@@ -28,6 +28,8 @@ const {
   where,
   serverTimestamp,
   Timestamp,
+  arrayUnion,
+  writeBatch,
 } = require("firebase/firestore");
 
 jest.setTimeout(30000);
@@ -300,6 +302,152 @@ describe("events/rsvps (H-1)", () => {
   });
 });
 
+// ── Phase 10 (denetim M-6): users alt ağacında şema ─────────────────────
+// İlk blok, uygulamanın GERÇEK yazma şekillerinin (repository'lerdeki map'ler)
+// hâlâ geçtiğini kanıtlar; ikincisi düşmanca şekillerin reddedildiğini.
+describe("users alt ağacı şeması (M-6)", () => {
+  const food = (over = {}) => ({
+    userId: "A",
+    yemekAdi: "Mercimek çorbası",
+    kalori: 180,
+    protein: 9,
+    karbonhidrat: 27,
+    yag: 4,
+    createdAt: Timestamp.now(),
+    malzemeler: ["kırmızı mercimek", "soğan"],
+    ...over,
+  });
+  const today = new Date().toISOString().slice(0, 10);
+
+  describe("gerçek istemci yazmaları geçer", () => {
+    test("öğün ekleme, malzeme düzeltme, yeniden hesaplama (food_repository)", async () => {
+      const a = as("A");
+      await assertSucceeds(setDoc(doc(a, "users/A/food_entries/f1"), food()));
+      await assertSucceeds(updateDoc(doc(a, "users/A/food_entries/f1"), {malzemeler: ["mercimek"]}));
+      await assertSucceeds(updateDoc(doc(a, "users/A/food_entries/f1"), {
+        malzemeler: ["mercimek", "zeytinyağı"], kalori: 240, protein: 9, karbonhidrat: 27, yag: 10,
+      }));
+    });
+
+    test("malzemesi olmayan eski öğün düzeltilebilir", async () => {
+      const legacy = food();
+      delete legacy.malzemeler;
+      await seed("users/A/food_entries/old", legacy);
+      await assertSucceeds(updateDoc(doc(as("A"), "users/A/food_entries/old"), {malzemeler: ["pilav"]}));
+    });
+
+    test("günlük ekleme ve silme (journal_repository)", async () => {
+      const a = as("A");
+      await assertSucceeds(setDoc(doc(a, "users/A/journal_entries/j1"), {
+        userId: "A", body: "x".repeat(5000), ilndReply: "sıcak bir karşılık", createdAt: Timestamp.now(),
+      }));
+      await assertSucceeds(deleteDoc(doc(a, "users/A/journal_entries/j1")));
+    });
+
+    test("gece ritüeli iki kez merge ile yazılır (sleep_ritual_provider)", async () => {
+      const a = as("A");
+      const data = {date: today, createdAt: serverTimestamp()};
+      await assertSucceeds(setDoc(doc(a, `users/A/sleep_rituals/${today}`), data, {merge: true}));
+      await assertSucceeds(setDoc(doc(a, `users/A/sleep_rituals/${today}`), data, {merge: true}));
+    });
+
+    test("plan başlat, gün bitir, sıfırla (plans_repository)", async () => {
+      const a = as("A");
+      const batch = writeBatch(a);
+      batch.set(doc(a, "users/A/plan_progress/_state"), {activePlanId: "uyku-7", updatedAt: serverTimestamp()}, {merge: true});
+      batch.set(doc(a, "users/A/plan_progress/uyku-7"), {startedAt: serverTimestamp(), updatedAt: serverTimestamp()}, {merge: true});
+      await assertSucceeds(batch.commit());
+      await assertSucceeds(setDoc(doc(a, "users/A/plan_progress/uyku-7"),
+          {completedDayIds: arrayUnion("d1"), updatedAt: serverTimestamp()}, {merge: true}));
+      await assertSucceeds(setDoc(doc(a, "users/A/plan_progress/uyku-7"),
+          {completedDayIds: [], startedAt: serverTimestamp(), updatedAt: serverTimestamp()}, {merge: true}));
+    });
+
+    test("hareket seansı bitir ve sıfırla (movement_repository)", async () => {
+      const a = as("A");
+      await assertSucceeds(setDoc(doc(a, "users/A/movement_progress/sabah"),
+          {completedSessionIds: arrayUnion("s1"), updatedAt: serverTimestamp()}, {merge: true}));
+      await assertSucceeds(setDoc(doc(a, "users/A/movement_progress/sabah"),
+          {completedSessionIds: [], updatedAt: serverTimestamp()}, {merge: true}));
+    });
+
+    test("profil fotoğrafı kaydet ve kaldır (avatar_repository)", async () => {
+      const a = as("A");
+      await assertSucceeds(setDoc(doc(a, "users/A"),
+          {photoBase64: "A".repeat(200000), photoUpdatedAt: serverTimestamp()}, {merge: true}));
+      await assertSucceeds(setDoc(doc(a, "users/A"), {photoBase64: null}, {merge: true}));
+    });
+
+    test("eski sürümün bıraktığı fazladan alan dokümanı kilitlemez", async () => {
+      await seed("users/A", {legacyField: "eski", photoBase64: null});
+      await assertSucceeds(setDoc(doc(as("A"), "users/A"), {photoBase64: "AAAA"}, {merge: true}));
+    });
+  });
+
+  describe("düşmanca yazmalar reddedilir", () => {
+    test.each([
+      ["fazladan alan", {isPremium: true}],
+      ["negatif kalori", {kalori: -5}],
+      ["akıl dışı kalori", {kalori: 999999}],
+      ["string kalori", {kalori: "180"}],
+      ["1 MB yemek adı", {yemekAdi: "x".repeat(1000)}],
+      ["51 malzeme", {malzemeler: Array.from({length: 51}, (_, i) => `m${i}`)}],
+      ["başka kullanıcı adına", {userId: "B"}],
+      ["gelecek tarih", {createdAt: Timestamp.fromMillis(Date.now() + 3 * 86400000)}],
+    ])("öğün: %s", async (_, over) => {
+      await assertFails(setDoc(doc(as("A"), "users/A/food_entries/f1"), food(over)));
+    });
+
+    test("öğün güncellemesi adını ya da sahibini değiştiremez", async () => {
+      await seed("users/A/food_entries/f1", food());
+      const a = as("A");
+      await assertFails(updateDoc(doc(a, "users/A/food_entries/f1"), {yemekAdi: "başka"}));
+      await assertFails(updateDoc(doc(a, "users/A/food_entries/f1"), {userId: "B"}));
+    });
+
+    test("günlük: aşırı uzun metin, güncelleme ve fazladan alan", async () => {
+      const a = as("A");
+      await assertFails(setDoc(doc(a, "users/A/journal_entries/big"), {
+        userId: "A", body: "x".repeat(50001), ilndReply: "", createdAt: Timestamp.now(),
+      }));
+      await seed("users/A/journal_entries/j1", {userId: "A", body: "ilk", ilndReply: "", createdAt: Timestamp.now()});
+      await assertFails(updateDoc(doc(a, "users/A/journal_entries/j1"), {body: "değişti"}));
+      await assertFails(setDoc(doc(a, "users/A/journal_entries/j2"), {
+        userId: "A", body: "x", ilndReply: "", createdAt: Timestamp.now(), mood: "sad",
+      }));
+    });
+
+    test("tanımsız alt koleksiyona yazılamaz", async () => {
+      await assertFails(setDoc(doc(as("A"), "users/A/anything/x"), {junk: "x".repeat(1000)}));
+    });
+
+    test("gece ritüeli: kimlik gün dizesiyle eşleşmeli", async () => {
+      await assertFails(setDoc(doc(as("A"), "users/A/sleep_rituals/junk-1"), {date: "junk-1"}));
+      await assertFails(setDoc(doc(as("A"), `users/A/sleep_rituals/${today}`), {date: "2026-01-01"}));
+    });
+
+    test("ilerleme listeleri sınırsız büyüyemez", async () => {
+      const a = as("A");
+      await assertFails(setDoc(doc(a, "users/A/plan_progress/p"),
+          {completedDayIds: Array.from({length: 61}, (_, i) => `d${i}`)}));
+      await assertFails(setDoc(doc(a, "users/A/movement_progress/m"),
+          {completedSessionIds: Array.from({length: 201}, (_, i) => `s${i}`)}));
+    });
+
+    test("profil dokümanı: sınırı aşan fotoğraf, başka alan, silme", async () => {
+      const a = as("A");
+      await assertFails(setDoc(doc(a, "users/A"), {photoBase64: "A".repeat(900001)}));
+      await assertFails(setDoc(doc(a, "users/A"), {isAdmin: true}, {merge: true}));
+      await seed("users/A", {photoBase64: null});
+      await assertFails(deleteDoc(doc(a, "users/A")));
+    });
+
+    test("B, A'nın ağacına geçerli şekilde bile yazamaz", async () => {
+      await assertFails(setDoc(doc(as("B"), "users/A/food_entries/f1"), food()));
+    });
+  });
+});
+
 describe("mevcut sahiplik ve kapalı koleksiyonlar", () => {
   test("B, A'nın users alt ağacını okuyamaz ve yazamaz", async () => {
     await seed("users/A/journal_entries/j1", {body: "özel"});
@@ -312,7 +460,9 @@ describe("mevcut sahiplik ve kapalı koleksiyonlar", () => {
 
   test("A kendi users alt ağacına erişir", async () => {
     const a = as("A");
-    await assertSucceeds(setDoc(doc(a, "users/A/journal_entries/j1"), {body: "benim"}));
+    await assertSucceeds(setDoc(doc(a, "users/A/journal_entries/j1"), {
+      userId: "A", body: "benim", ilndReply: "", createdAt: Timestamp.now(),
+    }));
     await assertSucceeds(getDoc(doc(a, "users/A/journal_entries/j1")));
   });
 
