@@ -28,7 +28,11 @@ void main() {
       final bytes = await rootBundle.load(path);
       expect(bytes.lengthInBytes, File(path).lengthSync(), reason: path);
       if (path.endsWith('.webp')) {
-        expect(bytes.getUint32(0), 0x52494646, reason: 'WebP RIFF header: $path');
+        expect(
+          bytes.getUint32(0),
+          0x52494646,
+          reason: 'WebP RIFF header: $path',
+        );
       }
       if (path.endsWith('.svg')) continue;
       final codec = await ui.instantiateImageCodec(
