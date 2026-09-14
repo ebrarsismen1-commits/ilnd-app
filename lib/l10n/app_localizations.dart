@@ -4241,7 +4241,7 @@ abstract class AppLocalizations {
   /// No description provided for @adanNameInvalid.
   ///
   /// In tr, this message translates to:
-  /// **'1–32 karakter arasında bir isim yaz.'**
+  /// **'1 ile 32 karakter arasında bir isim yaz.'**
   String get adanNameInvalid;
 }
 
