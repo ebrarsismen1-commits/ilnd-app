@@ -1,0 +1,591 @@
+{
+  "generator": "Built-in image_gen",
+  "encoding": "WebP quality 82; original dimensions retained",
+  "covers": [
+    {
+      "id": "klasik-sporcu-icecegi",
+      "asset": "assets/explore/klasik-sporcu-icecegi.webp",
+      "prompt": "Use case: photorealistic-natural. Create one landscape editorial photograph for ILND wellness article 'uzun kardiyolar için klasik sporcu içeceği'. Subject: a clear glass of homemade water sugar salt citrus sports drink, lemon and orange wedges alongside, subtle running towel in background. Natural soft daylight, cream linen and pale stone, sage accents, refined realistic food magazine photography, no text, no logos, no collage. Main subject centered suitable for wide card and square crop."
+    },
+    {
+      "id": "akcaagacli-elektrolit",
+      "asset": "assets/explore/akcaagacli-elektrolit.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: one landscape editorial cover photograph for ILND wellness app article. Title: hassas mideler için akçaağaçlı içecek. Topic: Rafine şeker yerine akçaağaç: daha yavaş, daha yumuşak bir enerji.. Ingredients if recipe: [\"750 ml su\",\"1 yemek kaşığı akçaağaç şurubu\",\"1 tutam deniz tuzu\",\"2 yemek kaşığı limon suyu\"]. Depict the actual finished drink or dish if recipe, otherwise one concrete natural scene expressing the topic. Soft daylight, muted cream, sage, warm stone palette, tactile linen, sophisticated authentic editorial photography. No text, no logos, no collage, no medical claims. Centered clear subject suitable for wide and square crops."
+    },
+    {
+      "id": "hizli-hidrasyon",
+      "asset": "assets/explore/hizli-hidrasyon.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: one landscape editorial cover photograph for ILND wellness app article. Title: kısa ve sert seanslar için ballı hidrasyon içeceği. Topic: Az karbonhidrat, yeterli sodyum. Terle gideni en kısa yoldan geri koyar.. Ingredients if recipe: [\"500 ml su\",\"1 yemek kaşığı bal\",\"1 tutam tuz\",\"1 yemek kaşığı limon suyu\"]. Depict the actual finished drink or dish if recipe, otherwise one concrete natural scene expressing the topic. Soft daylight, muted cream, sage, warm stone palette, tactile linen, sophisticated authentic editorial photography. No text, no logos, no collage, no medical claims. Centered clear subject suitable for wide and square crops."
+    },
+    {
+      "id": "hindistan-cevizi-turuncgil",
+      "asset": "assets/explore/hindistan-cevizi-turuncgil.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: one landscape editorial cover photograph for ILND wellness app article. Title: antrenman sonrası için hindistan cevizli içecek. Topic: Potasyumu yüksek, serinletici. Bitişten sonraki ilk saatin içeceği.. Ingredients if recipe: [\"250 ml hindistan cevizi suyu\",\"250 ml su\",\"100 ml ananas-portakal suyu\",\"1/8 çay kaşığı tuz\"]. Depict the actual finished drink or dish if recipe, otherwise one concrete natural scene expressing the topic. Soft daylight, muted cream, sage, warm stone palette, tactile linen, sophisticated authentic editorial photography. No text, no logos, no collage, no medical claims. Centered clear subject suitable for wide and square crops."
+    },
+    {
+      "id": "salatalik-lime",
+      "asset": "assets/explore/salatalik-lime.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"sıcak günler için salatalıklı lime içeceği\". Topic: \"Salatalık, lime, nane. Enerji değil, sıcakta kaybettiğini geri koymak için.\". Recipe ingredients: [\"500 ml su\",\"4 ince salatalık dilimi\",\"1 yemek kaşığı lime suyu\",\"1 tatlı kaşığı bal\",\"1 tutam tuz\",\"birkaç nane yaprağı\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "portakal-zencefil",
+      "asset": "assets/explore/portakal-zencefil.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"uzun mesafe koşuları için portakallı zencefil içeceği\". Topic: \"Portakal suyu enerjiyi, zencefil mideyi taşır. Saatler süren tempolarda.\". Recipe ingredients: [\"300 ml portakal suyu\",\"300 ml su\",\"1 çay kaşığı rendelenmiş zencefil\",\"1 tutam tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "karpuzlu-potasyum",
+      "asset": "assets/explore/karpuzlu-potasyum.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yaz antrenmanları için karpuzlu potasyum içeceği\". Topic: \"Karpuz, bal, bir tutam tuz. Sıcakta terleyerek kaybettiğinin karşılığı.\". Recipe ingredients: [\"1 su bardağı karpuz\",\"300 ml soğuk su\",\"1 çay kaşığı bal\",\"1 tutam tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "uzum-limon",
+      "asset": "assets/explore/uzum-limon.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"hızlı enerji için üzüm limon içeceği\". Topic: \"Üzüm suyu, limon, tuz. Kana en çabuk karışan karbonhidrat.\". Recipe ingredients: [\"200 ml üzüm suyu\",\"400 ml su\",\"1 yemek kaşığı limon suyu\",\"1 tutam tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "hurmali-kakao",
+      "asset": "assets/explore/hurmali-kakao.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"dayanıklılık için hurmalı kakao içeceği\". Topic: \"İki hurma, bir kaşık kakao, tuz. Doğal şeker ve magnezyum bir arada.\". Recipe ingredients: [\"2 çekirdeksiz hurma\",\"400 ml su\",\"1 çay kaşığı kakao\",\"1 tutam tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yesil-cay-sporcu",
+      "asset": "assets/explore/yesil-cay-sporcu.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"hafif kafein için yeşil çay içeceği\". Topic: \"Soğuk demlenmiş yeşil çay, bal, limon. Sert bir kafein değil, yumuşak bir uyanış.\". Recipe ingredients: [\"250 ml demlenmiş soğuk yeşil çay\",\"250 ml su\",\"1 tatlı kaşığı bal\",\"1 limon dilimi\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "cilekli-kefir",
+      "asset": "assets/explore/cilekli-kefir.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"ağırlık antrenmanı sonrası çilekli kefir içeceği\". Topic: \"Çilek, kefir, bal. Protein ve karbonhidrat aynı bardakta.\". Recipe ingredients: [\"150 g çilek\",\"200 ml kefir\",\"1 tatlı kaşığı bal\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yaban-mersinli-antioksidan",
+      "asset": "assets/explore/yaban-mersinli-antioksidan.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yoğun günler sonrası yaban mersinli içecek\". Topic: \"Yaban mersini, su, bal. Sert seansın ardından gelen onarım.\". Recipe ingredients: [\"yarım su bardağı yaban mersini\",\"250 ml su\",\"1 tatlı kaşığı bal\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "muzlu-tarcinli-smoothie",
+      "asset": "assets/explore/muzlu-tarcinli-smoothie.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kas toparlanması için muzlu tarçınlı smoothie\". Topic: \"Muz, süt, tarçın. Boşalan glikojen deposunu dolduran en sade karışım.\". Recipe ingredients: [\"1 küçük muz\",\"200 ml süt ya da badem sütü\",\"1 çay kaşığı tarçın\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "espresso-tarcin",
+      "asset": "assets/explore/espresso-tarcin.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"antrenman öncesi için tarçınlı espresso\". Topic: \"Tek shot espresso, su, tarçın. Başlamadan yirmi dakika önce.\". Recipe ingredients: [\"1 shot espresso\",\"100 ml su\",\"1 tutam tarçın\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "kakaolu-enerji-shotu",
+      "asset": "assets/explore/kakaolu-enerji-shotu.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"hafif enerji için kakaolu enerji shotu\". Topic: \"Kakao, süt, bal, bir tutam deniz tuzu. Küçük bardak, yeterli itki.\". Recipe ingredients: [\"150 ml süt ya da yulaf sütü\",\"1 tatlı kaşığı şekersiz kakao\",\"1 çay kaşığı bal\",\"çok küçük bir tutam deniz tuzu\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "ozempic-ne-biliyoruz",
+      "asset": "assets/explore/ozempic-ne-biliyoruz.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"Ozempic: sayıların söylediği ve söylemediği\". Topic: \"Üç büyük klinik çalışma, bir bırakma verisi ve kimsenin konuşmadığı bir kas sorusu.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "sporcu-beslenmesi-temeller",
+      "asset": "assets/explore/sporcu-beslenmesi-temeller.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"Sporcu beslenmesi: üç sayı, bir de yıkılmış efsane\". Topic: \"Protein ne kadar, karbonhidrat ne zaman, anabolik pencere gerçek mi? Meta-analizlerin cevabı salonda anlatılandan sakin.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "sporun-gune-etkisi",
+      "asset": "assets/explore/sporun-gune-etkisi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"Sporun asıl etkisi, spor yaparken değil geri kalan 23 saatte\". Topic: \"Egzersiz kaç kalori yakar sorusu en az ilginç soru. İştah, kan şekeri, uyku ve ruh hâli tarafında ölçülenler daha çarpıcı.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "bagirsak-diyetleri",
+      "asset": "assets/explore/bagirsak-diyetleri.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"Bağırsak diyetleri: işe yarayan protokol, yanlış uygulanan hayat tarzı\". Topic: \"Düşük FODMAP gerçekten çalışıyor ama bir yaşam tarzı değil, üç aşamalı bir protokol. Fermente gıdada ise beklenmedik bir sonuç çıktı.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "sporcu-icecegi-rehberi",
+      "asset": "assets/explore/sporcu-icecegi-rehberi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"Sporcu içeceği kullanım rehberi: hangisi, ne zaman, ne kadar\". Topic: \"Uygulamadaki on beş tarifin hangisi hangi antrenman için? Tek soruyla başlıyor: kaç dakika ve ne kadar sıcak?\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "protein-cesitlendirme",
+      "asset": "assets/explore/protein-cesitlendirme.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"Protein çeşitlendirme: aynı üç yemekten çıkmak\". Topic: \"Sorun protein miktarı değil, kaynak sayısı. Dağılım ve kaynak üzerine iki meta-analiz, birbirini tam olarak doğrulamıyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "lor-kasesi",
+      "asset": "assets/explore/lor-kasesi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"çırpılmış lor kâsesi\". Topic: \"Lor peyniri blenderdan geçince kremaya dönüşüyor. Porsiyon başına 33 gram protein.\". Recipe ingredients: [\"200 g lor peyniri\",\"2 yemek kaşığı süzme yoğurt\",\"1 yumurta\",\"1 salatalık\",\"1 domates\",\"1 yemek kaşığı zeytinyağı\",\"1 dilim ekşi mayalı ekmek\",\"dereotu\",\"karabiber\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "edamame-nohut",
+      "asset": "assets/explore/edamame-nohut.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"edamame nohut salatası\". Topic: \"Soya, meta-analizde süt proteinine denk çıkan tek bitkisel kaynak. Kâsede 27 gram protein, 17 gram lif.\". Recipe ingredients: [\"150 g kabuğu ayıklanmış donmuş edamame\",\"120 g haşlanmış nohut\",\"1 kırmızı soğan\",\"1 avuç maydanoz\",\"1 yemek kaşığı zeytinyağı\",\"yarım limon\",\"1 çay kaşığı kimyon\",\"tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "firinda-tofu-kinoa",
+      "asset": "assets/explore/firinda-tofu-kinoa.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"fırında baharatlı tofu ve kinoa\". Topic: \"Tofunun sorunu tadı değil suyu. Sıkılmadan pişen tofu yumuşak kalıyor.\". Recipe ingredients: [\"200 g sert tofu\",\"60 g kinoa\",\"1 yemek kaşığı tahin\",\"yarım limon\",\"1 tatlı kaşığı tatlı toz biber\",\"yarım çay kaşığı kimyon\",\"1 yemek kaşığı zeytinyağı\",\"1 avuç roka\",\"tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "ton-fasulye-piyaz",
+      "asset": "assets/explore/ton-fasulye-piyaz.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"ton balıklı fasulye piyazı\". Topic: \"Piyaz zaten var olan bir tarif. Ton balığı eklendiğinde protein iki katına çıkıyor.\". Recipe ingredients: [\"1 kutu ton balığı (suyu süzülmüş)\",\"100 g haşlanmış kuru fasulye\",\"1 domates\",\"yarım kırmızı soğan\",\"1 avuç maydanoz\",\"2 yemek kaşığı zeytinyağı\",\"yarım limon\",\"1 tatlı kaşığı sumak\",\"tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "tuzlu-yulaf",
+      "asset": "assets/explore/tuzlu-yulaf.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yumurtalı tuzlu yulaf\". Topic: \"Yulaf tatlı yenmek zorunda değil. Tuzlu hâli, kahvaltıya protein sokmanın en hızlı yolu.\". Recipe ingredients: [\"50 g yulaf ezmesi\",\"250 ml su ya da sebze suyu\",\"2 yumurta\",\"30 g beyaz peynir\",\"1 tatlı kaşığı zeytinyağı\",\"taze soğan\",\"karabiber\",\"pul biber\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "kefirli-protein-smoothie",
+      "asset": "assets/explore/kefirli-protein-smoothie.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kefirli fıstık ezmeli smoothie\". Topic: \"Kefir hem protein hem fermente gıda. Bağırsak florası bulgusuyla aynı öğünde buluşuyor.\". Recipe ingredients: [\"300 ml kefir\",\"30 g şekersiz fıstık ezmesi\",\"40 g yulaf\",\"1 donmuş muz\",\"1 çay kaşığı tarçın\",\"buz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "uzun-nefes-verme",
+      "asset": "assets/explore/uzun-nefes-verme.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"nefes vermeyi uzat, gerisi kendiliğinden gelir\". Topic: \"Günde beş dakika, nefes vermeyi uzatarak. Karşılaştırmalı bir çalışmada meditasyondan daha hızlı sonuç verdi.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "zihin-nerede",
+      "asset": "assets/explore/zihin-nerede.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"zihnin şu an nerede\". Topic: \"Uyanık saatlerinin neredeyse yarısında başka bir yerdesin. Bunun ölçülmüş bir bedeli var.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "uykuya-hazirlik",
+      "asset": "assets/explore/uykuya-hazirlik.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"uykuya hazırlık, kurallarla değil dikkatle\". Topic: \"Uyku hijyeni kurallarıyla karşılaştırıldığında, farkındalık pratiği daha iyi sonuç verdi.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "zihnin-dolu",
+      "asset": "assets/explore/zihnin-dolu.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"zihnin dolu, bu normal\". Topic: \"Aklımı boşaltamıyorum diye bırakanlar, aslında doğru şeyi yapıyordu.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "beden-taramasi",
+      "asset": "assets/explore/beden-taramasi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"beden taraması: ayaktan başla\". Topic: \"Kliniklerde kırk yıldır öğretilen pratiğin en sade hâli: ayaktan başla, yukarı çık.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "kacirdigin-gun",
+      "asset": "assets/explore/kacirdigin-gun.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kaçırdığın günü kaçırılmış say\". Topic: \"Üst üste yapamadığın günler pratiği bitirmiyor. Bitiren şey, o günlerden sonra kurduğun cümle.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "dort-gun",
+      "asset": "assets/explore/dort-gun.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"dört gün yeter mi\". Topic: \"Dört gün, günde yirmi dakika. Ölçülebilir fark için gereken süre sandığından kısa.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "ne-zaman-yaparim",
+      "asset": "assets/explore/ne-zaman-yaparim.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"niyet değil, cümle kur\". Topic: \"Her gün meditasyon yapacağım işe yaramıyor. Cümleyi değiştirince oran değişiyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "odak-mi-acik-mi",
+      "asset": "assets/explore/odak-mi-acik-mi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"iki tür pratik, iki farklı gün\". Topic: \"Meditasyon tek bir şey değil. İki farklı aile var ve farklı günlerde farklı olan işe yarıyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yururken",
+      "asset": "assets/explore/yururken.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yürürken\". Topic: \"Oturmak zorunda değilsin. Yürüyüş, gözü açık yapılan bir pratik.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "poz-meselesi",
+      "asset": "assets/explore/poz-meselesi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"nasıl oturulur meselesi\". Topic: \"Bağdaş kurmak zorunda değilsin. Tek gereken, uykuya davet etmeyen bir duruş.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "iki-dakikalik-sifirlama",
+      "asset": "assets/explore/iki-dakikalik-sifirlama.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"iki dakikalık sıfırlama\". Topic: \"İki iş arasında geçen iki dakika, bir sonrakine hangi kafayla başladığını belirliyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "sefkat-pratigi",
+      "asset": "assets/explore/sefkat-pratigi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kendine söylenen cümleler\". Topic: \"Kendine iyi davranmak bir his değil, cümle kurma pratiği. Hissetmek sonra geliyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "sabah-mi-aksam-mi",
+      "asset": "assets/explore/sabah-mi-aksam-mi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"sabah mı, akşam mı\". Topic: \"En iyi saat, gerçekten yapabildiğin saat. Ama sabahın bir avantajı var.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "uygulamasiz-devam",
+      "asset": "assets/explore/uygulamasiz-devam.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"bir gün uygulamayı kapat\". Topic: \"Rehberli pratik başlangıçta yardımcı. Bir noktadan sonra tek başına oturabilmek gerekiyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "on-dakika-kurali",
+      "asset": "assets/explore/on-dakika-kurali.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"on dakika kuralı kalktı\". Topic: \"İki dakikalık yürüyüş de sayılıyor. Bu kural 2018'de resmen değişti.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yedi-bin-adim",
+      "asset": "assets/explore/yedi-bin-adim.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yedi bin adım\". Topic: \"On bin adım bir pazarlama sayısıydı. Asıl eşik daha düşük ve ölçüldü.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "en-iyi-egzersiz",
+      "asset": "assets/explore/en-iyi-egzersiz.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"en iyi egzersiz hangisi\". Topic: \"Sorunun cevabı programda değil, altı ay sonra hâlâ yapıyor olmanda.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "agirlik-kaldirmak",
+      "asset": "assets/explore/agirlik-kaldirmak.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"ağırlık kaldırmak\". Topic: \"Kaslı görünmekten korkanlara: o görünüm kazara oluşmuyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "isinma-gerekli-mi",
+      "asset": "assets/explore/isinma-gerekli-mi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"ısınmak gerekli mi\". Topic: \"Uzun esnetme seansı değil. Beş dakika hareketli ısınma, iki farklı işi birden yapıyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "kas-agrisi",
+      "asset": "assets/explore/kas-agrisi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kas ağrısı ne anlatıyor\". Topic: \"Ertesi gün ağrımak iyi antrenman göstergesi değil. Laktik asitle de ilgisi yok.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "evde-ekipmansiz",
+      "asset": "assets/explore/evde-ekipmansiz.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"evde ekipmansız\". Topic: \"Dört hareket, on beş dakika, hiçbir alet yok. Odanın ortasında yapılıyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "merdiven",
+      "asset": "assets/explore/merdiven.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"merdiven\". Topic: \"Günde üç kat, ayrıca zaman ayırmadan yapılan tek egzersiz.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "haftada-kac-gun",
+      "asset": "assets/explore/haftada-kac-gun.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"haftada kaç gün\". Topic: \"Her gün çalışmak daha hızlı sonuç vermiyor. Gelişme dinlenirken oluyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "motivasyon-beklemek",
+      "asset": "assets/explore/motivasyon-beklemek.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"motivasyonu beklemek\". Topic: \"Motivasyon hareketten önce değil sonra geliyor. Sıra genelde ters kuruluyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "oturmayi-bolmek",
+      "asset": "assets/explore/oturmayi-bolmek.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"uzun oturmayı bölmek\". Topic: \"Akşam bir saat spor yapmak, gün boyu oturmanın etkisini tamamen silmiyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "fazla-hevesle-baslamak",
+      "asset": "assets/explore/fazla-hevesle-baslamak.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"fazla hevesle başlamak\". Topic: \"İlk hafta yapılan hata genelde tembellik değil, aşırılık.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "iki-saat-doga",
+      "asset": "assets/explore/iki-saat-doga.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"haftada iki saat doğa\". Topic: \"Haftada iki saat. Tek seferde ya da parça parça, fark etmiyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yalnizlik-ve-saglik",
+      "asset": "assets/explore/yalnizlik-ve-saglik.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"bağlar bir lüks değil\". Topic: \"Sosyal bağların sağlık üzerindeki etkisi, bilinen büyük risk faktörleriyle aynı ölçekte çıktı.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "ayni-saatte-kalkmak",
+      "asset": "assets/explore/ayni-saatte-kalkmak.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"sabit olan kalkma saati olsun\". Topic: \"Uyku düzenini yatma saati değil, kalkma saati kuruyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "ekran-ve-uyku",
+      "asset": "assets/explore/ekran-ve-uyku.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yatmadan önce ekran\". Topic: \"Mavi ışık tek suçlu değil. Asıl mesele ekranın ne yaptırdığı.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "dus-riteli",
+      "asset": "assets/explore/dus-riteli.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"duş bir geçiş\". Topic: \"Akşam duşu temizlik değil, gün ile gece arasına konan bir sınır.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "hayir-demek",
+      "asset": "assets/explore/hayir-demek.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"hayır demenin pratiği\". Topic: \"Her evet, başka bir şeye söylenmiş sessiz bir hayır.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "dinlenme-turleri",
+      "asset": "assets/explore/dinlenme-turleri.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"uyku her yorgunluğu çözmüyor\". Topic: \"Uyuduğun hâlde yorgunsan, eksik olan uyku olmayabilir.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "sabahin-ilk-yirmi-dakikasi",
+      "asset": "assets/explore/sabahin-ilk-yirmi-dakikasi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"ilk yirmi dakika\". Topic: \"Uyanır uyanmaz telefona bakmak, günün tonunu başkasının belirlemesi demek.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "bes-dakikalik-toparlama",
+      "asset": "assets/explore/bes-dakikalik-toparlama.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"beş dakikalık toparlama\". Topic: \"Dağınık ev, dağınık zihinle aynı şey değil ama birbirini besliyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "gunes-koruyucu",
+      "asset": "assets/explore/gunes-koruyucu-v2.webp",
+      "prompt": "Use case: photorealistic-natural. One landscape editorial wellness photograph specifically about DAILY SUNSCREEN, NOT face washing. An adult woman applying a small dab of white sunscreen to her cheek beside a bright open window, holding a plain unbranded sunscreen tube; broad sun hat rests nearby. Face and sunscreen action clearly visible in centered composition. Soft natural daylight, warm cream and sage tones, realistic skin texture, calm ILND editorial style. No basin, no running water, no face washing, no text, no logos, no collage. Suitable for wide card or square crop."
+    },
+    {
+      "id": "sade-cilt-rutini",
+      "asset": "assets/explore/sade-cilt-rutini.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"üç adımlık rutin\". Topic: \"On adımlık rutin gerekmiyor. Üç adım çoğu cilde yetiyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "mikro-molalar",
+      "asset": "assets/explore/mikro-molalar.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"saat başı doksan saniye\". Topic: \"Öğle arası tek başına yetmiyor. Asıl fark saatlik küçük duraklarda.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "duygusal-yorgunluk",
+      "asset": "assets/explore/duygusal-yorgunluk.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"idare etmenin yorgunluğu\". Topic: \"Bazı günler bedenin değil, idare etmenin yorgunluğu.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "kendine-randevu",
+      "asset": "assets/explore/kendine-randevu.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"takvime yaz\". Topic: \"Takvimde yeri olmayan şey yapılmıyor. Kendin için ayrılan zaman da öyle.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "bildirimleri-kapatmak",
+      "asset": "assets/explore/bildirimleri-kapatmak.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kim böldüğüne karar veriyor\". Topic: \"Dikkatini bölen şey telefonun kendisi değil, kim ne zaman böleceğine karar veriyor olması.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "sosyal-medya-akisi",
+      "asset": "assets/explore/sosyal-medya-akisi-v2.webp",
+      "prompt": "Use case: photorealistic-natural. One landscape ILND wellness editorial cover. Over-the-shoulder candid view of an adult woman calmly reviewing a simple thumbnail feed on her phone beside a window, with one potted plant and a ceramic cup nearby. Represents curating social media intentionally. Screen contains only abstract photo thumbnails without words. No floating bubbles, no surreal elements, no collage. Soft natural light, muted sage and cream, authentic textures, refined quiet photography, centered subject for wide and square crops. No text, no logos, no collage."
+    },
+    {
+      "id": "sessizlik",
+      "asset": "assets/explore/sessizlik.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"sessizlikte on dakika\". Topic: \"Gün boyu kulağında bir şey varsa, zihnin hiç boşta kalmıyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yardim-istemek",
+      "asset": "assets/explore/yardim-istemek.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yardım istemek\". Topic: \"Yardım istemek zayıflık değil, ama zor olmasının gerçek bir sebebi var.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "altmis-alti-gun",
+      "asset": "assets/explore/altmis-alti-gun-v2.webp",
+      "prompt": "Use case: photorealistic-natural. One landscape ILND wellness editorial cover. Close editorial still life of a paper habit tracker filled with many small hand-drawn checkmarks across several rows, a pair of used walking shoes beside the desk and an adult woman's hand adding today's checkmark with a pencil. Represents habits forming over many repeated days. Do not show a woman's face or chin-resting pose. Soft natural light, muted sage and cream, authentic textures, refined quiet photography, centered subject for wide and square crops. No text, no logos, no collage."
+    },
+    {
+      "id": "on-bin-saat",
+      "asset": "assets/explore/on-bin-saat-v2.webp",
+      "prompt": "Use case: photorealistic-natural. One landscape ILND wellness editorial cover. Close view of an adult woman's hands actively practicing an acoustic piano, with softly blurred sheet music and a small analog clock in the background. Represents deliberate practice and the ten-thousand-hours idea. No laptop, no chin-resting pose. Soft natural light, muted sage and cream, authentic textures, refined quiet photography, centered subject for wide and square crops. No text, no logos, no collage."
+    },
+    {
+      "id": "erteleme",
+      "asset": "assets/explore/erteleme.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"erteleme neyin kaçışı\". Topic: \"Erteleme zaman yönetimi sorunu değil. Kaçtığın şey iş değil, işin hissettirdiği.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "iki-dakika",
+      "asset": "assets/explore/iki-dakika-v2.webp",
+      "prompt": "Use case: photorealistic-natural. One landscape ILND wellness editorial cover. An adult woman tying her walking shoe laces beside her front door, a small analog two-minute hourglass on a nearby low bench. Represents starting with the two-minute version of a habit. Focus on hands, shoes and the first step, no desk. Soft natural light, muted sage and cream, authentic textures, refined quiet photography, centered subject for wide and square crops. No text, no logos, no collage."
+    },
+    {
+      "id": "kimlik-ve-aliskanlik",
+      "asset": "assets/explore/kimlik-ve-aliskanlik.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"davranış mı kimlik mi\". Topic: \"Koşuyorum ile koşucuyum arasındaki fark, altıncı ayda ortaya çıkıyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "hedef-degil-sistem",
+      "asset": "assets/explore/hedef-degil-sistem.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"hedefi bırak, sistemi kur\". Topic: \"Hedef nereye gideceğini söylüyor, sistem oraya nasıl gidileceğini.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "haftalik-gozden-gecirme",
+      "asset": "assets/explore/haftalik-gozden-gecirme.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"haftalık gözden geçirme\". Topic: \"Haftada yirmi dakika, bir sonraki haftanın yarısını kurtarıyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "karar-yorgunlugu",
+      "asset": "assets/explore/karar-yorgunlugu.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kararı azalt\". Topic: \"Gün içinde verdiğin karar sayısı, akşam verdiğin kararların kalitesini belirliyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "derin-calisma",
+      "asset": "assets/explore/derin-calisma.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kesintisiz doksan dakika\". Topic: \"Dört saatlik dağınık çalışma, doksan dakikalık kesintisiz çalışmayı geçmiyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "ogrenmeyi-ogrenmek",
+      "asset": "assets/explore/ogrenmeyi-ogrenmek.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"okumak değil, hatırlamaya çalışmak\". Topic: \"Tekrar okumak öğrenme hissi veriyor ama öğretmiyor. Hatırlamaya çalışmak öğretiyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "not-almak",
+      "asset": "assets/explore/not-almak.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"notların işe yaraması\". Topic: \"Not almanın işi hatırlamak değil, düşünmeyi görünür kılmak.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "geri-bildirim",
+      "asset": "assets/explore/geri-bildirim.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"işe yarayan geri bildirim\". Topic: \"Nasıl olmuş diye sorarsan iyi olmuş derler. Soruyu daralt.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "karsilastirma",
+      "asset": "assets/explore/karsilastirma.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kiminle kıyaslıyorsun\". Topic: \"Kıyaslamayı bırakamıyorsan, en azından kiminle kıyasladığını seç.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "mukemmeliyetcilik",
+      "asset": "assets/explore/mukemmeliyetcilik.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"mükemmeliyetçilik neyi saklıyor\". Topic: \"Mükemmeliyetçilik yüksek standart değil, çoğu zaman ertelemenin kibar hâli.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "basarisizliktan-sonra",
+      "asset": "assets/explore/basarisizliktan-sonra.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"başarısızlıktan sonraki hafta\". Topic: \"Başarısızlıktan ders çıkarmak otomatik değil. Çıkarmayan çoğunluk.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "zaman-tahmini",
+      "asset": "assets/explore/zaman-tahmini.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"neden hep geç kalıyorsun\". Topic: \"İşlerin ne kadar süreceğini sistematik olarak yanlış tahmin ediyoruz. Yönü hep aynı.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "gunun-uc-isi",
+      "asset": "assets/explore/gunun-uc-isi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"bugünün üç işi\". Topic: \"Yapılacaklar listesi uzadıkça işe yaramıyor. Üçe indir.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "takvimi-savunmak",
+      "asset": "assets/explore/takvimi-savunmak.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"boş görünen zaman doluyor\". Topic: \"Takvimin boşsa dolduruluyor. Dolu görünen zaman korunuyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "okuma-aliskanligi",
+      "asset": "assets/explore/okuma-aliskanligi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kitabı bırakma izni\". Topic: \"Kitap bitirme zorunluluğu, okumayı en çok baltalayan kural.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "merak-listesi",
+      "asset": "assets/explore/merak-listesi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"merak listesi\". Topic: \"Öğrenme isteği plan değil merak istiyor. Merak da not almazsan kayboluyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "konfor-alani",
+      "asset": "assets/explore/konfor-alani.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"konfor alanı meselesi\". Topic: \"Konfor alanından çıkmak her zaman iyi değil. Ölçü, çıkışın ne öğrettiği.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "tavsiye-secmek",
+      "asset": "assets/explore/tavsiye-secmek.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"tavsiyeyi süzmek\". Topic: \"Herkesin işe yaradığını söylediği şey, sana yaramayabilir. Üç filtre.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "birikimli-etki",
+      "asset": "assets/explore/birikimli-etki.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"başta hiçbir şey olmuyor\". Topic: \"Küçük şeylerin toplamı doğrusal değil. O yüzden başta hiçbir şey olmuyor gibi hissediyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "enerji-yonetimi",
+      "asset": "assets/explore/enerji-yonetimi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"saatler eşit değil\". Topic: \"Hangi işi ne zaman yaptığın, ne kadar çalıştığından önemli.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "kim-olmak-istiyorsun",
+      "asset": "assets/explore/kim-olmak-istiyorsun.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"neye doğru\". Topic: \"Gelişim listesi uzayınca amaç kayboluyor. Tek soruya dön.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "islenmis-gida-farki",
+      "asset": "assets/explore/islenmis-gida-farki.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"neden aynı kalori aynı sonucu vermiyor\". Topic: \"Aynı kaloriyi, aynı yağı, aynı şekeri verdiler. Yine de bir grup günde 500 kalori fazla yedi.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "lif-meselesi",
+      "asset": "assets/explore/lif-meselesi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"takip edilecek tek sayı: lif\". Topic: \"Beslenmede tek bir sayıyı takip edecek olsan, o sayı lif olurdu.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "tabak-duzeni",
+      "asset": "assets/explore/tabak-duzeni.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"tabağı kurmanın basit yolu\". Topic: \"Ne yediğini hesaplamak yerine tabağın nasıl kurulduğuna bak.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yavas-ye",
+      "asset": "assets/explore/yavas-ye.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"tokluk gecikmeli geliyor\". Topic: \"Tokluk sinyali mideden beyne gecikmeli gidiyor. O gecikme, fazladan yenen kısmı belirliyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "kahvalti-sart-mi",
+      "asset": "assets/explore/kahvalti-sart-mi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"kahvaltı şart mı\". Topic: \"Günün en önemli öğünü cümlesi bir reklam sloganıydı. Gerçek cevap daha sıkıcı.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "siviyla-gelen-kalori",
+      "asset": "assets/explore/siviyla-gelen-kalori.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"içtiğin kaloriler\". Topic: \"İçtiğin kaloriler tokluk üretmiyor. Günlük toplamın en sessiz kısmı burada.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "aksam-atistirmasi",
+      "asset": "assets/explore/aksam-atistirmasi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"akşam atıştırması neyin işareti\". Topic: \"Akşam dokuzdaki atıştırma açlık değil. O yüzden yemekle çözülmüyor.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "etiket-okuma",
+      "asset": "assets/explore/etiket-okuma.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"paketin arkasına bakmak\". Topic: \"Paketin önü pazarlama, arkası bilgi. Bakılacak üç satır var.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "disarida-yemek",
+      "asset": "assets/explore/disarida-yemek.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"dışarıda yerken\". Topic: \"Dışarıda yemek planı bozmuyor. Bozan şey, o günü zaten kaçtı saymak.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "su-ne-kadar",
+      "asset": "assets/explore/su-ne-kadar.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"su: sekiz bardak nereden çıktı\". Topic: \"Günde sekiz bardak kuralının kaynağı belirsiz. Daha iyi bir gösterge var ve ücretsiz.\". Recipe ingredients: []. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "cirpilmis-peynir-tost",
+      "asset": "assets/explore/cirpilmis-peynir-tost.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"çırpılmış beyaz peynirli tost\". Topic: \"Beyaz peyniri çırpınca krema kıvamına geliyor. Üstüne bal, karabiber, taze kekik.\". Recipe ingredients: [\"150 g beyaz peynir\",\"2 yemek kaşığı süzme yoğurt\",\"1 yemek kaşığı zeytinyağı\",\"2 dilim ekşi mayalı ekmek\",\"1 tatlı kaşığı bal\",\"iri çekilmiş karabiber\",\"taze kekik ya da nane\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "firinda-yulaf",
+      "asset": "assets/explore/firinda-yulaf.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"fırında yulaf\". Topic: \"Kaşık batırınca ortası akan, kek kıvamında bir kahvaltı. Tek kapta, on beş dakika fırında.\". Recipe ingredients: [\"yarım su bardağı yulaf ezmesi\",\"1 olgun muz\",\"1 yumurta\",\"yarım su bardağı süt\",\"1 tatlı kaşığı kakao\",\"1 çay kaşığı kabartma tozu\",\"1 tatlı kaşığı bal\",\"2 kare bitter çikolata\",\"bir tutam tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yesil-tanrica-kase",
+      "asset": "assets/explore/yesil-tanrica-kase.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yeşil tanrıça kâsesi\". Topic: \"Sosu blenderdan çıkınca fosforlu yeşil oluyor. Lahana, salatalık ve bir avuç ot.\". Recipe ingredients: [\"çeyrek beyaz lahana\",\"2 salatalık\",\"1 avuç taze soğan\",\"yarım su bardağı ceviz\",\"yarım su bardağı beyaz peynir\",\"1 su bardağı süzme yoğurt\",\"2 yemek kaşığı tahin\",\"1 avuç maydanoz\",\"1 avuç fesleğen ya da dereotu\",\"yarım limon suyu\",\"1 diş sarımsak\",\"tuz\",\"zeytinyağı\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "tahinli-hurma-smoothie",
+      "asset": "assets/explore/tahinli-hurma-smoothie.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"tahinli hurma smoothie\". Topic: \"Tadı çikolatalı bara benziyor ama içinde sadece hurma, tahin ve muz var.\". Recipe ingredients: [\"1 donmuş muz\",\"3 adet hurma\",\"1 yemek kaşığı tahin\",\"1 su bardağı süt ya da badem sütü\",\"1 tatlı kaşığı kakao\",\"buz\",\"susam\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "yogun-fasulye-salatasi",
+      "asset": "assets/explore/yogun-fasulye-salatasi.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"yoğun fasulye salatası\". Topic: \"Üç çeşit bakliyat, bir kavanoz sos. Buzdolabında üç gün, her gün daha iyi.\". Recipe ingredients: [\"1 kutu nohut\",\"1 kutu barbunya ya da börülce\",\"1 su bardağı haşlanmış yeşil mercimek\",\"1 kırmızı soğan\",\"1 kırmızı biber\",\"1 demet maydanoz\",\"yarım su bardağı zeytin\",\"4 yemek kaşığı zeytinyağı\",\"2 yemek kaşığı nar ekşisi\",\"1 yemek kaşığı hardal\",\"1 diş sarımsak\",\"1 çay kaşığı kimyon\",\"tuz, karabiber\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "firinda-peynirli-makarna",
+      "asset": "assets/explore/firinda-peynirli-makarna.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"fırında peynirli domates makarna\". Topic: \"Bir blok peynir, bir tepsi kiraz domates. Fırından çıkınca çatalla eziyorsun, sos kendiliğinden oluyor.\". Recipe ingredients: [\"200 g blok beyaz peynir\",\"500 g kiraz domates\",\"4 diş sarımsak\",\"4 yemek kaşığı zeytinyağı\",\"1 çay kaşığı kuru kekik\",\"pul biber, karabiber\",\"250 g makarna\",\"taze fesleğen\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "pancar-humusu",
+      "asset": "assets/explore/pancar-humusu.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"pancar humusu\". Topic: \"Fuşya. Tadı klasik humus, rengi tamamen başka bir şey.\". Recipe ingredients: [\"1 kutu nohut\",\"1 orta boy haşlanmış pancar\",\"3 yemek kaşığı tahin\",\"1 limon suyu\",\"1 diş sarımsak\",\"yarım çay kaşığı kimyon\",\"3 yemek kaşığı zeytinyağı\",\"tuz\",\"3 yemek kaşığı buzlu su\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "tepside-balli-tavuk",
+      "asset": "assets/explore/tepside-balli-tavuk.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"tepside ballı hardallı tavuk\". Topic: \"Tek tepsi, tek bulaşık. Tavuk ve sebzeler aynı anda karamelize oluyor.\". Recipe ingredients: [\"6 tavuk baget ya da but\",\"2 tatlı patates\",\"2 kırmızı soğan\",\"1 kırmızı biber\",\"3 yemek kaşığı bal\",\"2 yemek kaşığı hardal\",\"3 yemek kaşığı zeytinyağı\",\"1 limon suyu\",\"2 diş sarımsak\",\"kekik, tuz, karabiber\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "karpuz-peynir-salata",
+      "asset": "assets/explore/karpuz-peynir-salata.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"karpuz peynir salatası\". Topic: \"Yaz akşamlarının en kolay tarifi. Doğra, üst üste koy, nane at.\". Recipe ingredients: [\"yarım kg karpuz\",\"200 g beyaz peynir\",\"1 avuç taze nane\",\"2 yemek kaşığı zeytinyağı\",\"1 yemek kaşığı nar ekşisi\",\"iri çekilmiş karabiber\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    },
+    {
+      "id": "firinda-baharatli-nohut",
+      "asset": "assets/explore/firinda-baharatli-nohut.webp",
+      "prompt": "Use case: photorealistic-natural. Asset: a single landscape editorial cover photograph for ILND wellness app. Article title: \"fırında baharatlı nohut\". Topic: \"Cips yerine geçen, çıtır, baharatlı bir atıştırmalık. Kavanozda bir hafta duruyor.\". Recipe ingredients: [\"2 kutu nohut\",\"2 yemek kaşığı zeytinyağı\",\"1 çay kaşığı tatlı toz biber\",\"1 çay kaşığı kimyon\",\"yarım çay kaşığı sarımsak tozu\",\"pul biber\",\"tuz\"]. If a recipe, show the finished dish or drink accurately with a few actual ingredients. Otherwise compose one specific scene that clearly expresses this article's topic, using real everyday objects or natural candid adult women when appropriate. Sophisticated calm wellness magazine aesthetic, authentic textures, soft natural light, muted cream and sage, warm stone and linen. Vary settings to suit the topic. Centered subject for wide card and square crops. No text, no logos, no collage, no before-after or medical efficacy claims."
+    }
+  ]
+}

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ilnd_app/core/repositories/events_repository.dart';
-import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/topluluk/topluluk_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -34,20 +33,24 @@ void main() {
         ),
       ),
     );
-    // AnimatedBackground + BreathRing sonsuz animasyon → pumpAndSettle yasak.
+    // Sürekli arka plan animasyonu nedeniyle pumpAndSettle kullanmıyoruz.
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 700));
   }
 
-  testWidgets('empty state shows invitation with breath ring (tr)', (
+  testWidgets('no events shows community invitation and city guidance (tr)', (
     tester,
   ) async {
     await pump(tester, const Locale('tr'));
     final l10n = lookupAppLocalizations(const Locale('tr'));
     expect(find.text(l10n.topulukTitle), findsOneWidget);
     expect(find.text(l10n.topulukComingTitle), findsOneWidget);
+    expect(find.text(l10n.topulukComingBody), findsOneWidget);
+    expect(find.text(l10n.topulukCityTitle), findsOneWidget);
+    expect(find.text(l10n.topulukCitySubtitle), findsOneWidget);
     expect(find.text(l10n.topulukInviteCta), findsOneWidget);
-    expect(find.byType(BreathRing), findsOneWidget);
+    expect(find.text(l10n.topulukUpcomingLabel), findsNothing);
+    expect(find.text(l10n.topulukRsvpJoin), findsNothing);
   });
 
   testWidgets('renders event card with RSVP button and count (tr)', (
@@ -55,10 +58,10 @@ void main() {
   ) async {
     final event = CommunityEvent(
       id: 'e1',
-      title: 'sabah rutini yürüyüşü',
+      title: 'sabah  yürüyüşü',
       city: 'İstanbul',
       venue: 'Caddebostan sahili',
-      startsAt: DateTime(2026, 9, 14, 8),
+      startsAt: DateTime(2026, 9, 28, 8),
     );
     await pump(tester, const Locale('tr'), events: [event]);
     final l10n = lookupAppLocalizations(const Locale('tr'));
@@ -85,10 +88,10 @@ void main() {
   group('kontenjan', () {
     CommunityEvent eventWith({int? capacity}) => CommunityEvent(
       id: 'e1',
-      title: 'sabah rutini yürüyüşü',
+      title: 'sabah yürüyüşü',
       city: 'İstanbul',
       venue: 'Caddebostan sahili',
-      startsAt: DateTime(2026, 9, 14, 8),
+      startsAt: DateTime(2026, 9, 28, 8),
       capacity: capacity,
     );
 

@@ -9,6 +9,99 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get homeNextLabel => 'A SMALL NEXT STEP';
+
+  @override
+  String get homeNextRestartTitle => 'Begin again';
+
+  @override
+  String get homeNextRestartBody =>
+      'It may have been a while. Start by noticing how you feel today.';
+
+  @override
+  String get homeNextRestartCta => 'Start a short check-in';
+
+  @override
+  String get homeNextMorningTitle => 'Ease into your day';
+
+  @override
+  String get homeNextMorningBody =>
+      'Make a little room for yourself before the day picks up.';
+
+  @override
+  String get homeNextMorningCta => 'Start a morning check-in';
+
+  @override
+  String get homeNextCheckInTitle => 'What would help right now?';
+
+  @override
+  String get homeNextCheckInBody =>
+      'Let\'s notice how you are doing and find a small next step.';
+
+  @override
+  String get homeNextCheckInCta => 'Start a check-in';
+
+  @override
+  String get homeNextRestTitle => 'Take it gently today';
+
+  @override
+  String get homeNextRestBody =>
+      'Start with a short breathing practice, without pushing yourself.';
+
+  @override
+  String get homeNextRestCta => 'Start breathing practice';
+
+  @override
+  String get homeNextFocusTitle => 'Give one thing your attention';
+
+  @override
+  String get homeNextFocusBody =>
+      'Choose one small task and set a pace that suits you.';
+
+  @override
+  String get homeNextFocusCta => 'Start focusing';
+
+  @override
+  String get homeNextJournalTitle => 'Keep a note of this moment';
+
+  @override
+  String get homeNextJournalBody =>
+      'Write a few lines about something you want to keep from today.';
+
+  @override
+  String get homeNextJournalCta => 'Open your journal';
+
+  @override
+  String get homeNextNightBody =>
+      'Ease out of the day with a closing routine suited to you.';
+
+  @override
+  String get homeNextNightCta => 'Start your night routine';
+
+  @override
+  String get homeFeedbackCalm =>
+      'You said you feel calm. Make a little room for this moment.';
+
+  @override
+  String get homeFeedbackGood =>
+      'You said you feel good. Turn that energy into a small step.';
+
+  @override
+  String get homeFeedbackOkay =>
+      'You\'re doing okay today. A small start is enough.';
+
+  @override
+  String get homeFeedbackTired =>
+      'You said you feel tired. It\'s okay to ask less of yourself today.';
+
+  @override
+  String get homeFeedbackHard =>
+      'You said it\'s a hard day. You don\'t need to solve everything right now.';
+
+  @override
+  String get homeToolsLabel => 'WHEN YOU NEED THEM';
+
+  @override
   String get loginTagline => 'welcome back.';
 
   @override
@@ -74,7 +167,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'We\'re starting with small, warm gatherings in Istanbul: morning walks, workshops, conversations. The first event announcement will land right here.';
 
   @override
-  String get topulukInviteCta => 'invite a friend ahead of time';
+  String get topulukInviteCta => 'invite a friend';
 
   @override
   String get topulukUpcomingLabel => 'UPCOMING MEETUPS';
@@ -873,6 +966,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exploreFilterEmpty => 'nothing under this tag yet';
+
+  @override
+  String get exploreTabForYou => 'for you';
+
+  @override
+  String get exploreTabDo => 'do';
+
+  @override
+  String get exploreTabRead => 'read';
+
+  @override
+  String get exploreTabRecipes => 'recipes';
 
   @override
   String get exploreMoreLabel => 'MORE';
@@ -2072,7 +2177,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileTagline => 'at your own pace.';
 
   @override
-  String get profileWeekLabel => 'FROM THIS WEEK';
+  String get profileWeekLabel => 'THIS WEEK';
 
   @override
   String profileWeekLine(int journal, int meals) {
@@ -2093,6 +2198,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileWeekHint => 'look back and remember your week.';
+
+  @override
+  String get profilePlusTitle => 'see your patterns more closely';
+
+  @override
+  String get profilePlusBody =>
+      'Access personal insights that build over time with ILND+.';
+
+  @override
+  String get profilePlusCta => 'explore ILND+';
 
   @override
   String get profileIslandRowSubtitle => 'back to your objects and memories';
@@ -2170,13 +2285,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get topulukCitySubtitle => 'new meetups will show up here.';
 
   @override
-  String get topulukTogetherTitle => 'more familiar together.';
+  String get topulukTogetherTitle => 'easier together.';
 
   @override
-  String get topulukTogetherBody => 'bring a friend along.';
+  String get topulukTogetherBody => 'Start a small routine with a friend.';
 
   @override
   String get adanSubtitle => 'your own order, traces of you.';
+
+  @override
+  String get adanLowData => 'your first traces will gather here.';
+
+  @override
+  String adanContext(int count) {
+    return '$count small traces are gathering here.';
+  }
 
   @override
   String get adanItemsTitle => 'on your island';
@@ -2198,4 +2321,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatSendA11y => 'Send';
+
+  @override
+  String get stateLoading => 'loading…';
+
+  @override
+  String get stateError => 'could not connect right now';
+
+  @override
+  String get stateRetry => 'try again';
+
+  @override
+  String get adanNameTitle => 'name your island';
+
+  @override
+  String get adanNameLabel => 'island name';
+
+  @override
+  String get adanNameHint => 'e.g. quiet cove';
+
+  @override
+  String get adanNameEdit => 'rename island';
+
+  @override
+  String get adanNameInvalid => 'Enter a name between 1 and 32 characters.';
 }

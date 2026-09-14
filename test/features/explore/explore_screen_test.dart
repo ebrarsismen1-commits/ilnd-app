@@ -141,7 +141,7 @@ void main() {
       expect(find.text(l10n.exploreRitualsLabel), findsOneWidget);
 
       // Bir kategoriye süzülünce ritüel şeridi konuyla ilgisiz kalıyordu.
-      await tester.tap(find.text(l10n.exploreFilterNutrition));
+      await tester.tap(find.text(l10n.exploreTabRead));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
 

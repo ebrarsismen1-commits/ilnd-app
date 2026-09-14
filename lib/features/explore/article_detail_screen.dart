@@ -31,7 +31,7 @@ class ArticleDetailScreen extends ConsumerWidget {
                   height: 300,
                   width: double.infinity,
                   child: CoverImage(
-                    imageUrl: article.imageUrl,
+                    imageUrl: article.coverImageUrl,
                     palette: article.category.palette,
                   ),
                 ),

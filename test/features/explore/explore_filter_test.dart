@@ -7,7 +7,7 @@ import 'package:ilnd_app/features/explore/article_model.dart';
 import 'package:ilnd_app/features/explore/explore_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
-/// Etiket rayı gerçekten filtreliyor mu?
+/// Üst seviye keşfet sekmeleri gerçekten filtreliyor mu?
 ///
 /// Pill'ler tasarım geçişinde iki kez yer değiştirdi (önce listenin üstüne,
 /// sonra başlığın altına). Yer değişimi sırasında bağlantının kopması sessiz
@@ -42,14 +42,14 @@ void main() {
     final l10n = lookupAppLocalizations(const Locale('tr'));
 
     final title = find.text(l10n.exploreTitle);
-    final allPill = find.text(l10n.exploreFilterAll);
+    final allPill = find.text(l10n.exploreTabForYou);
     final moreLabel = find.text(l10n.exploreMoreLabel);
 
     expect(title, findsOneWidget);
     expect(allPill, findsOneWidget);
     expect(moreLabel, findsOneWidget);
 
-    // Prototipteki sıra: başlık → etiket rayı → kapak → DAHA FAZLA listesi.
+    // Sıra: başlık → ana sekmeler → içerik.
     expect(tester.getRect(title).top, lessThan(tester.getRect(allPill).top));
     expect(
       tester.getRect(allPill).top,
@@ -81,7 +81,7 @@ void main() {
     // Yerleşik içeriğin tamamı "tarif"; meditasyon
     // kategorisinde henüz makale YOK. Eskiden bu dokunuş listeyi hiçbir
     // açıklama bırakmadan siliyordu ve ekran bozulmuş gibi görünüyordu.
-    await tester.tap(find.text(l10n.exploreFilterMeditation));
+    await tester.tap(find.text(l10n.exploreTabDo));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 
@@ -126,7 +126,7 @@ void main() {
     await pump(tester, articles: const [tarif, meditasyon, meditasyon2]);
     final l10n = lookupAppLocalizations(const Locale('tr'));
 
-    await tester.tap(find.text(l10n.exploreFilterMeditation));
+    await tester.tap(find.text(l10n.exploreTabDo));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
 

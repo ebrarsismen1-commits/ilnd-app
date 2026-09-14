@@ -6,7 +6,6 @@ import 'package:ilnd_app/core/repositories/events_repository.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/core/widgets/ilnd_toast.dart';
@@ -22,7 +21,7 @@ class TopulukScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
-    final events = ref.watch(upcomingEventsProvider).valueOrNull ?? const [];
+    final eventsState = ref.watch(upcomingEventsProvider);
 
     return Scaffold(
       backgroundColor: p.base,
@@ -47,7 +46,16 @@ class TopulukScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 22),
-            if (events.isEmpty)
+            if (eventsState.isLoading)
+              _StateNotice(p: p, message: l10n.stateLoading)
+            else if (eventsState.hasError)
+              _StateNotice(
+                p: p,
+                message: l10n.stateError,
+                actionLabel: l10n.stateRetry,
+                onAction: () => ref.invalidate(upcomingEventsProvider),
+              )
+            else if ((eventsState.value ?? const []).isEmpty)
               _EmptyInvite(l10n: l10n, p: p)
             else ...[
               Entrance(
@@ -58,7 +66,7 @@ class TopulukScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              for (final (i, e) in events.indexed) ...[
+              for (final (i, e) in (eventsState.value ?? const []).indexed) ...[
                 Entrance(
                   index: 2 + i,
                   child: _EventCard(event: e, p: p),
@@ -67,7 +75,7 @@ class TopulukScreen extends ConsumerWidget {
               ],
               const SizedBox(height: 8),
               Entrance(
-                index: 2 + events.length,
+                index: 2 + (eventsState.value ?? const []).length,
                 child: IlndButton(
                   p: p,
                   label: l10n.topulukInviteCta,
@@ -80,6 +88,36 @@ class TopulukScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _StateNotice extends StatelessWidget {
+  const _StateNotice({
+    required this.p,
+    required this.message,
+    this.actionLabel,
+    this.onAction,
+  });
+  final AppPalette p;
+  final String message;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 28),
+    child: Column(
+      children: [
+        Text(
+          message,
+          textAlign: TextAlign.center,
+          style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+        ),
+        if (actionLabel != null && onAction != null) ...[
+          const SizedBox(height: 12),
+          TextButton(onPressed: onAction, child: Text(actionLabel!)),
+        ],
+      ],
+    ),
+  );
 }
 
 // ─── Etkinlik kartı ────────────────────────────────────────────────────────────
@@ -191,6 +229,20 @@ class _EventCard extends ConsumerWidget {
                     ),
                   ],
                 ),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    Icon(Icons.schedule_outlined, size: 14, color: p.textMuted),
+                    const SizedBox(width: 4),
+                    Text(
+                      DateFormat('HH:mm', locale).format(event.startsAt),
+                      style: AppTextStyles.body(
+                        fontSize: 12,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 12),
                 Row(
                   children: [
@@ -267,15 +319,8 @@ class _EmptyInvite extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // İllüstrasyon gelene kadar adanın ortasında nefes halkası durur.
-        Entrance(
-          index: 1,
-          child: IslandFrame(
-            p: p,
-            height: 170,
-            child: const Center(child: BreathRing(size: 64)),
-          ),
-        ),
+        // Diğer ekranlarla aynı ada illüstrasyonu.
+        Entrance(index: 1, child: IslandFrame(p: p, height: 170)),
         const SizedBox(height: 24),
         Entrance(
           index: 2,

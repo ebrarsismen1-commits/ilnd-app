@@ -78,6 +78,8 @@ flutter:
   # şart koşuyor.
   assets:
     - assets/fonts/Lora-OFL.txt
+    - assets/island/
+    - assets/explore/
 
   # Üç aile de pakete GÖMÜLÜ, hiçbiri çalışma anında indirilmiyor.
   #

@@ -70,6 +70,29 @@ void main() {
     expect(find.text(l10n.profileWeekLine(2, 4)), findsOneWidget);
   });
 
+  testWidgets('yeni kullanıcıya soğuk sıfır duvarı göstermez', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(390, 2200));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    await tester.pumpWidget(ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        profileStatsProvider.overrideWith((ref) async => ProfileStats.zero),
+      ],
+      child: const MaterialApp(
+        locale: Locale('tr'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: ProfileScreen(),
+      ),
+    ));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 800));
+    expect(find.text(l10n.profileWeekEmpty), findsOneWidget);
+    expect(find.text(l10n.profileWeekLine(0, 0)), findsNothing);
+  });
+
   testWidgets('dört kapı da duruyor', (tester) async {
     await pump(tester, width: 390);
 

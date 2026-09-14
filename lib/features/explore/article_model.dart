@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ilnd_app/features/explore/article_cover_assets.dart';
 
 /// Editoryal kategoriler (owner kararı 2026-08-20). Beşi de içerik
 /// planındaki adlandırmayı taşır; sıra da ondan gelir.
@@ -188,6 +189,10 @@ class Article {
   final String excerpt;
   final List<String> body;
   final String? imageUrl;
+
+  /// Preserve explicit CMS covers; use bundled art for empty cover fields.
+  String? get coverImageUrl =>
+      (imageUrl?.isNotEmpty ?? false) ? imageUrl : articleCoverAssets[id];
   final int order;
 
   /// Tarif alanları — dolu olduklarında makale interaktif tarife dönüşür:

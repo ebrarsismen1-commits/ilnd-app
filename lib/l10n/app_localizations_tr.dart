@@ -9,6 +9,99 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
+  String get homeNextLabel => 'ŞİMDİ SANA İYİ GELEBİLİR';
+
+  @override
+  String get homeNextRestartTitle => 'Tekrar başlayalım';
+
+  @override
+  String get homeNextRestartBody =>
+      'Aradan zaman geçmiş olabilir. Bugün nasıl olduğunu söylemen yeterli.';
+
+  @override
+  String get homeNextRestartCta => 'Kısa bir check-in yap';
+
+  @override
+  String get homeNextMorningTitle => 'Güne yumuşak başla';
+
+  @override
+  String get homeNextMorningBody =>
+      'Günün hızına kapılmadan önce kendine küçük bir alan aç.';
+
+  @override
+  String get homeNextMorningCta => 'Sabah check-in’ini başlat';
+
+  @override
+  String get homeNextCheckInTitle => 'Şu an sana ne iyi gelir?';
+
+  @override
+  String get homeNextCheckInBody =>
+      'Nasıl olduğunu birlikte fark edelim. Buradan küçük bir adım seçebiliriz.';
+
+  @override
+  String get homeNextCheckInCta => 'Check-in’e başla';
+
+  @override
+  String get homeNextRestTitle => 'Bugün biraz yavaşlayalım';
+
+  @override
+  String get homeNextRestBody =>
+      'Kendini zorlamadan, kısa bir nefes pratiğiyle başlayabilirsin.';
+
+  @override
+  String get homeNextRestCta => 'Nefes pratiğini başlat';
+
+  @override
+  String get homeNextFocusTitle => 'Bu enerjiyi tek bir şeye ayır';
+
+  @override
+  String get homeNextFocusBody =>
+      'Aklındaki küçük bir işi seç. Süreyi kendi ritmine göre belirle.';
+
+  @override
+  String get homeNextFocusCta => 'Odaklanmaya başla';
+
+  @override
+  String get homeNextJournalTitle => 'Bu andan bir iz bırak';
+
+  @override
+  String get homeNextJournalBody =>
+      'Bugünden yanında kalsın istediğin şeyi birkaç cümleyle yaz.';
+
+  @override
+  String get homeNextJournalCta => 'Günlüğünü aç';
+
+  @override
+  String get homeNextNightBody =>
+      'Günü geride bırakmak için sana uygun bir kapanış rutiniyle devam edelim.';
+
+  @override
+  String get homeNextNightCta => 'Gece rutinini başlat';
+
+  @override
+  String get homeFeedbackCalm =>
+      'Sakin hissettiğini söyledin. Bu ana biraz alan açalım.';
+
+  @override
+  String get homeFeedbackGood =>
+      'İyi hissettiğini söyledin. Bu enerjiyi küçük bir adıma dönüştürebiliriz.';
+
+  @override
+  String get homeFeedbackOkay =>
+      'Bugün idare ediyorsun. Küçük bir başlangıç yeterli.';
+
+  @override
+  String get homeFeedbackTired =>
+      'Yorgun hissettiğini söyledin. Bugün kendinden daha azını isteyebilirsin.';
+
+  @override
+  String get homeFeedbackHard =>
+      'Zorlandığını söyledin. Şu an her şeyi çözmen gerekmiyor.';
+
+  @override
+  String get homeToolsLabel => 'İHTİYACIN OLDUĞUNDA';
+
+  @override
   String get loginTagline => 'tekrar hoş geldin.';
 
   @override
@@ -75,7 +168,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'İstanbul\'da küçük, sıcak buluşmalarla başlıyoruz: sabah yürüyüşleri, atölyeler, sohbetler. İlk etkinlik duyurusu buraya düşecek.';
 
   @override
-  String get topulukInviteCta => 'arkadaşını şimdiden davet et';
+  String get topulukInviteCta => 'arkadaşını davet et';
 
   @override
   String get topulukUpcomingLabel => 'YAKLAŞAN BULUŞMALAR';
@@ -858,6 +951,18 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get exploreFilterEmpty => 'bu etikette henüz yazı yok';
+
+  @override
+  String get exploreTabForYou => 'senin için';
+
+  @override
+  String get exploreTabDo => 'yap';
+
+  @override
+  String get exploreTabRead => 'oku';
+
+  @override
+  String get exploreTabRecipes => 'tarifler';
 
   @override
   String get exploreMoreLabel => 'DAHA FAZLA';
@@ -2050,7 +2155,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileTagline => 'kendi ritminde.';
 
   @override
-  String get profileWeekLabel => 'BU HAFTADAN KALANLAR';
+  String get profileWeekLabel => 'BU HAFTA';
 
   @override
   String profileWeekLine(int journal, int meals) {
@@ -2059,6 +2164,16 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get profileWeekHint => 'kayıtlarına dön, haftanı hatırla.';
+
+  @override
+  String get profilePlusTitle => 'örüntülerini daha yakından gör';
+
+  @override
+  String get profilePlusBody =>
+      'ILND+ ile zaman içinde biriken kişisel içgörülere eriş.';
+
+  @override
+  String get profilePlusCta => 'ILND+’ı keşfet';
 
   @override
   String get profileIslandRowSubtitle => 'nesnelerine ve anılarına dön';
@@ -2135,13 +2250,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get topulukCitySubtitle => 'yeni buluşmalar burada görünecek.';
 
   @override
-  String get topulukTogetherTitle => 'birlikte daha tanıdık.';
+  String get topulukTogetherTitle => 'birlikte daha kolay.';
 
   @override
-  String get topulukTogetherBody => 'bir arkadaşını da yanına çağır.';
+  String get topulukTogetherBody => 'Bir arkadaşınla küçük bir rutin başlat.';
 
   @override
   String get adanSubtitle => 'kendi düzenin, sana ait izler.';
+
+  @override
+  String get adanLowData => 'ilk izlerin burada birikecek.';
+
+  @override
+  String adanContext(int count) {
+    return '$count küçük iz burada birikiyor.';
+  }
 
   @override
   String get adanItemsTitle => 'adandaki öğeler';
@@ -2163,4 +2286,28 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get chatSendA11y => 'Gönder';
+
+  @override
+  String get stateLoading => 'yükleniyor…';
+
+  @override
+  String get stateError => 'şu an bağlanılamıyor';
+
+  @override
+  String get stateRetry => 'tekrar dene';
+
+  @override
+  String get adanNameTitle => 'adana isim ver';
+
+  @override
+  String get adanNameLabel => 'adanın adı';
+
+  @override
+  String get adanNameHint => 'ör. sakin koy';
+
+  @override
+  String get adanNameEdit => 'ismi değiştir';
+
+  @override
+  String get adanNameInvalid => '1–32 karakter arasında bir isim yaz.';
 }

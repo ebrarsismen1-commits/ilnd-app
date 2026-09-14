@@ -1,6 +1,32 @@
 {
   "@@locale": "en",
-
+  "homeNextLabel": "A SMALL NEXT STEP",
+  "homeNextRestartTitle": "Begin again",
+  "homeNextRestartBody": "It may have been a while. Start by noticing how you feel today.",
+  "homeNextRestartCta": "Start a short check-in",
+  "homeNextMorningTitle": "Ease into your day",
+  "homeNextMorningBody": "Make a little room for yourself before the day picks up.",
+  "homeNextMorningCta": "Start a morning check-in",
+  "homeNextCheckInTitle": "What would help right now?",
+  "homeNextCheckInBody": "Let's notice how you are doing and find a small next step.",
+  "homeNextCheckInCta": "Start a check-in",
+  "homeNextRestTitle": "Take it gently today",
+  "homeNextRestBody": "Start with a short breathing practice, without pushing yourself.",
+  "homeNextRestCta": "Start breathing practice",
+  "homeNextFocusTitle": "Give one thing your attention",
+  "homeNextFocusBody": "Choose one small task and set a pace that suits you.",
+  "homeNextFocusCta": "Start focusing",
+  "homeNextJournalTitle": "Keep a note of this moment",
+  "homeNextJournalBody": "Write a few lines about something you want to keep from today.",
+  "homeNextJournalCta": "Open your journal",
+  "homeNextNightBody": "Ease out of the day with a closing routine suited to you.",
+  "homeNextNightCta": "Start your night routine",
+  "homeFeedbackCalm": "You said you feel calm. Make a little room for this moment.",
+  "homeFeedbackGood": "You said you feel good. Turn that energy into a small step.",
+  "homeFeedbackOkay": "You're doing okay today. A small start is enough.",
+  "homeFeedbackTired": "You said you feel tired. It's okay to ask less of yourself today.",
+  "homeFeedbackHard": "You said it's a hard day. You don't need to solve everything right now.",
+  "homeToolsLabel": "WHEN YOU NEED THEM",
   "loginTagline": "welcome back.",
   "loginEmailHint": "email",
   "loginPasswordHint": "password",
@@ -13,18 +39,16 @@
   "authOrDivider": "or",
   "authContinueWithGoogle": "Continue with Google",
   "authContinueWithApple": "Continue with Apple",
-
   "navHome": "Today",
   "navExplore": "Explore",
   "navCommunity": "Community",
   "navYou": "You",
   "navRing": "Chat",
-
   "topulukTitle": "community.",
   "topulukTagline": "in your city, by your side",
   "topulukComingTitle": "the first meetup is on its way",
   "topulukComingBody": "We're starting with small, warm gatherings in Istanbul: morning walks, workshops, conversations. The first event announcement will land right here.",
-  "topulukInviteCta": "invite a friend ahead of time",
+  "topulukInviteCta": "invite a friend",
   "topulukUpcomingLabel": "UPCOMING MEETUPS",
   "topulukRsvpJoin": "join",
   "topulukRsvpGoing": "going",
@@ -32,16 +56,12 @@
   "topulukGoingCount": "{count, plural, =1{1 person going} other{{count} people going}}",
   "topulukGoingCountOfCapacity": "{count}/{capacity} going",
   "topulukRsvpFailed": "Couldn't save that. Try again?",
-
   "socialProofWeekly": "{count, plural, =1{1 person made time for themselves this week.} other{{count} people made time for themselves this week.}}",
-
   "legalPrivacyTitle": "Privacy Policy",
   "legalTermsTitle": "Terms of Service",
-
   "startupFailedTitle": "ilnd couldn't start",
   "startupFailedBody": "Check your internet connection and try again.",
   "startupRetry": "Try again",
-
   "authErrorInvalidCredentials": "Incorrect email or password.",
   "authErrorEmailInUse": "This email address is already in use.",
   "authErrorWeakPassword": "Password must be at least 6 characters.",
@@ -65,13 +85,11 @@
   "authErrorResetLinkInvalid": "This password reset link has expired or was already used. Request a new one.",
   "authErrorDeleteUnavailable": "Account deletion is unavailable right now.",
   "authErrorDeleteFailed": "Couldn't delete your account. Try again?",
-
   "crisisTitle": "you deserve real support",
   "crisisBody": "It sounds like you might be going through a hard moment, and sharing that matters. ILND is an AI. There are real people you can talk to right now:",
   "crisisLine112": "112 · Emergency (Türkiye)",
   "crisisLine183": "183 · Social Support Line (24/7, free)",
   "crisisDismiss": "got it",
-
   "registerTagline": "create an account.",
   "registerNameHint": "your name",
   "registerEmailHint": "email",
@@ -87,7 +105,6 @@
   "registerLoginLink": "sign in",
   "registerSuccess": "Your account has been created! Welcome",
   "registerConfirmEmailSent": "We sent a confirmation link to your email. Check your inbox (and spam folder), then sign in.",
-
   "validatorEmailRequired": "Email address is required.",
   "validatorEmailInvalid": "Enter a valid email address.",
   "validatorPasswordRequired": "Password is required.",
@@ -96,97 +113,144 @@
   "validatorPasswordMismatch": "Passwords don't match.",
   "validatorNameRequired": "Enter your name.",
   "validatorNameTooShort": "Name must be at least 2 characters.",
-
   "welcomeTagline": "journal, track your mood, talk to ILND.",
   "welcomeTaglineEn": "journal, track your mood, talk to ILND.",
   "welcomeBeatMemory": "ILND learns from what you write and remembers you",
-  "@welcomeBeatMemory": {"description": "Welcome screen value beat"},
-
+  "@welcomeBeatMemory": {
+    "description": "Welcome screen value beat"
+  },
   "welcomeBeatCommunity": "we meet face to face at gatherings in your city",
-  "@welcomeBeatCommunity": {"description": "Welcome screen value beat"},
-
+  "@welcomeBeatCommunity": {
+    "description": "Welcome screen value beat"
+  },
   "adanLabel": "ISLAND",
-  "@adanLabel": {"description": "Adan (island) surface"},
-
+  "@adanLabel": {
+    "description": "Adan (island) surface"
+  },
   "adanTitle": "island.",
-  "@adanTitle": {"description": "Adan (island) surface"},
-
+  "@adanTitle": {
+    "description": "Adan (island) surface"
+  },
   "adanLead": "your island grows from what you finish.",
-  "@adanLead": {"description": "Adan (island) surface"},
-
+  "@adanLead": {
+    "description": "Adan (island) surface"
+  },
   "adanBody": "every task earns a piece: a lantern, an oven, moonlight. pieces settle onto the island, and the island becomes a map of your memory. nothing is ever removed. quiet days only deepen the water, they do not punish.",
-  "@adanBody": {"description": "Adan (island) surface"},
-
+  "@adanBody": {
+    "description": "Adan (island) surface"
+  },
   "adanItemsLabel": "PIECES",
-  "@adanItemsLabel": {"description": "Adan (island) surface"},
-
+  "@adanItemsLabel": {
+    "description": "Adan (island) surface"
+  },
   "adanStateOpen": "OPEN",
-  "@adanStateOpen": {"description": "Adan (island) surface"},
-
+  "@adanStateOpen": {
+    "description": "Adan (island) surface"
+  },
   "adanStateLocked": "LOCKED",
-  "@adanStateLocked": {"description": "Adan (island) surface"},
-
+  "@adanStateLocked": {
+    "description": "Adan (island) surface"
+  },
   "adanItemLantern": "lantern",
-  "@adanItemLantern": {"description": "Adan (island) surface"},
-
+  "@adanItemLantern": {
+    "description": "Adan (island) surface"
+  },
   "adanItemPine": "pine",
-  "@adanItemPine": {"description": "Adan (island) surface"},
-
+  "@adanItemPine": {
+    "description": "Adan (island) surface"
+  },
   "adanItemOven": "oven",
-  "@adanItemOven": {"description": "Adan (island) surface"},
-
+  "@adanItemOven": {
+    "description": "Adan (island) surface"
+  },
   "adanItemMoonlight": "moonlight",
-  "@adanItemMoonlight": {"description": "Adan (island) surface"},
-
+  "@adanItemMoonlight": {
+    "description": "Adan (island) surface"
+  },
   "adanItemWindrose": "weather vane",
-  "@adanItemWindrose": {"description": "Adan (island) surface"},
-
+  "@adanItemWindrose": {
+    "description": "Adan (island) surface"
+  },
   "adanItemMeetingStone": "meetup stone",
-  "@adanItemMeetingStone": {"description": "Adan (island) surface"},
-
+  "@adanItemMeetingStone": {
+    "description": "Adan (island) surface"
+  },
   "adanHowLantern": "first journal",
-  "@adanHowLantern": {"description": "Adan (island) surface"},
-
+  "@adanHowLantern": {
+    "description": "Adan (island) surface"
+  },
   "adanHowPine": "3-day streak",
-  "@adanHowPine": {"description": "Adan (island) surface"},
-
+  "@adanHowPine": {
+    "description": "Adan (island) surface"
+  },
   "adanHowOven": "10 meals logged",
-  "@adanHowOven": {"description": "Adan (island) surface"},
-
+  "@adanHowOven": {
+    "description": "Adan (island) surface"
+  },
   "adanHowMoonlight": "first night ritual",
-  "@adanHowMoonlight": {"description": "Adan (island) surface"},
-
+  "@adanHowMoonlight": {
+    "description": "Adan (island) surface"
+  },
   "adanHowWindrose": "7-day streak",
-  "@adanHowWindrose": {"description": "Adan (island) surface"},
-
+  "@adanHowWindrose": {
+    "description": "Adan (island) surface"
+  },
   "adanHowMeetingStone": "first community meetup",
-  "@adanHowMeetingStone": {"description": "Adan (island) surface"},
-
+  "@adanHowMeetingStone": {
+    "description": "Adan (island) surface"
+  },
   "adanEarnedSuffix": "earned",
-  "@adanEarnedSuffix": {"description": "Adan (island) surface"},
-
+  "@adanEarnedSuffix": {
+    "description": "Adan (island) surface"
+  },
   "adanEmptyProgress": "no pieces yet",
-  "@adanEmptyProgress": {"description": "Adan (island) surface"},
-
+  "@adanEmptyProgress": {
+    "description": "Adan (island) surface"
+  },
   "profileStatIslandItems": "PIECES",
-  "@profileStatIslandItems": {"description": "Adan (island) surface"},
-
+  "@profileStatIslandItems": {
+    "description": "Adan (island) surface"
+  },
   "welcomeBeatIsland": "three small things a day, finish them and your island grows",
-  "@welcomeBeatIsland": {"description": "Adan (island) surface"},
-
+  "@welcomeBeatIsland": {
+    "description": "Adan (island) surface"
+  },
   "adanProgress": "{count} pieces · next: {next}",
-  "@adanProgress": {"description": "Island progress line", "placeholders": {"count": {"type": "int"}, "next": {"type": "String"}}},
-
+  "@adanProgress": {
+    "description": "Island progress line",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "next": {
+        "type": "String"
+      }
+    }
+  },
   "adanCanvasSemantics": "island illustration, {count} pieces settled",
-  "@adanCanvasSemantics": {"description": "Screen reader label for the island illustration", "placeholders": {"count": {"type": "int"}}},
-
+  "@adanCanvasSemantics": {
+    "description": "Screen reader label for the island illustration",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "adanNextNote": "{next} settles in once {how} is done.",
-  "@adanNextNote": {"description": "Note about the next island piece", "placeholders": {"next": {"type": "String"}, "how": {"type": "String"}}},
-
+  "@adanNextNote": {
+    "description": "Note about the next island piece",
+    "placeholders": {
+      "next": {
+        "type": "String"
+      },
+      "how": {
+        "type": "String"
+      }
+    }
+  },
   "welcomeStart": "start",
   "welcomeHaveAccount": "already have an account? ",
   "welcomeLoginLink": "sign in",
-
   "quickSetupTitle": "let's get to know you",
   "quickSetupTitleEn": "let's get to know you a little",
   "quickSetupNameHint": "what's your name?",
@@ -226,30 +290,34 @@
   "quickSetupStepCounter": "{current} / {total}",
   "@quickSetupStepCounter": {
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "quickSetupBack": "back",
   "quickSetupSkipStep": "skip for now",
   "quickSetupFinish": "i'm ready",
-
   "quickSetupContinue": "continue",
-
   "firstEntryHeader": "LET'S BEGIN",
   "firstEntrySkip": "not now",
   "firstEntryNeedsPrompt": "what do you need?",
   "firstEntryNeedsLoading": "getting a few ideas ready for you...",
-
   "homeTrackRowSubtitle": "meals, water, habits",
-  "@homeTrackRowSubtitle": {"description": "Home quiet row subtitle for the tracking screen"},
-
+  "@homeTrackRowSubtitle": {
+    "description": "Home quiet row subtitle for the tracking screen"
+  },
   "homeWeeklyCardRowTitle": "your weekly card is ready",
-  "@homeWeeklyCardRowTitle": {"description": "Home quiet row: opens the weekly streak card"},
-
+  "@homeWeeklyCardRowTitle": {
+    "description": "Home quiet row: opens the weekly streak card"
+  },
   "homeWeeklyCardRowSubtitle": "share it, or keep it to yourself",
-  "@homeWeeklyCardRowSubtitle": {"description": "Home quiet row subtitle for the weekly card"},
-
+  "@homeWeeklyCardRowSubtitle": {
+    "description": "Home quiet row subtitle for the weekly card"
+  },
   "homeTodaysReadTitle": "TODAY'S READ",
   "homeGreetingNight": "good night",
   "homeGreetingMorning": "good morning",
@@ -258,8 +326,12 @@
   "homeGreetingWithName": "{greeting}, {name}",
   "@homeGreetingWithName": {
     "placeholders": {
-      "greeting": {"type": "String"},
-      "name": {"type": "String"}
+      "greeting": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      }
     }
   },
   "homeMoodQuestion": "how are you right now?",
@@ -270,15 +342,20 @@
   "homeMoodHard": "hard",
   "homeMoodAnsweredToday": "today: {mood}",
   "@homeMoodAnsweredToday": {
-    "placeholders": {"mood": {"type": "String"}}
+    "placeholders": {
+      "mood": {
+        "type": "String"
+      }
+    }
   },
   "homeReadTimeArrow": "{readTime} read →",
   "@homeReadTimeArrow": {
     "placeholders": {
-      "readTime": {"type": "String"}
+      "readTime": {
+        "type": "String"
+      }
     }
   },
-
   "journalTitle": "journal",
   "journalConnectionError": "connection issue",
   "journalConnectionErrorBody": "can't reach your journal right now. check your connection.",
@@ -293,7 +370,6 @@
   "journalDone": "done",
   "journalSave": "save",
   "journalWritingHint": "what's on your mind?",
-
   "profileShareWeeklySummary": "share your weekly summary",
   "profileDefaultUserName": "User",
   "profilePhotoFromGallery": "choose from gallery",
@@ -312,7 +388,6 @@
   "profileBadgeSevenDays": "7-day",
   "profileBadgeReader": "reader",
   "profileBadgeThirtyDays": "30-day",
-
   "profileWeekdaysShort": "Mon,Tue,Wed,Thu,Fri,Sat,Sun",
   "profileWeekEmpty": "no marks this week yet. no rush either.",
   "profileWeeklySummaryLabel": "WEEKLY SUMMARY",
@@ -358,34 +433,45 @@
   "profileDeleteAccountCancel": "Cancel",
   "profileDeleteAccountConfirm": "Delete my account",
   "profileAccountDeleted": "Your account has been deleted. Take care",
-
   "exploreTitle": "explore.",
   "exploreSubtitle": "small steps toward feeling good",
   "exploreFilterMeditation": "meditation",
-  "@exploreFilterMeditation": {"description": "Explore category filter"},
-
+  "@exploreFilterMeditation": {
+    "description": "Explore category filter"
+  },
   "exploreFilterRecipes": "recipes",
-  "@exploreFilterRecipes": {"description": "Explore category filter"},
-
+  "@exploreFilterRecipes": {
+    "description": "Explore category filter"
+  },
   "exploreFilterNutrition": "eating",
-  "@exploreFilterNutrition": {"description": "Explore category filter"},
-
+  "@exploreFilterNutrition": {
+    "description": "Explore category filter"
+  },
   "exploreFilterMovement": "movement",
-  "@exploreFilterMovement": {"description": "Explore category filter"},
-
+  "@exploreFilterMovement": {
+    "description": "Explore category filter"
+  },
   "exploreFilterSelfCare": "self-care",
-  "@exploreFilterSelfCare": {"description": "Explore category filter"},
-
+  "@exploreFilterSelfCare": {
+    "description": "Explore category filter"
+  },
   "exploreFilterGrowth": "growth",
-  "@exploreFilterGrowth": {"description": "Explore category filter"},
-
+  "@exploreFilterGrowth": {
+    "description": "Explore category filter"
+  },
   "exploreFilterAll": "all",
   "exploreFilterEmpty": "nothing under this tag yet",
-  "@exploreFilterEmpty": {"description": "Shown when a tag filter matches no articles"},
-
+  "@exploreFilterEmpty": {
+    "description": "Shown when a tag filter matches no articles"
+  },
+  "exploreTabForYou": "for you",
+  "exploreTabDo": "do",
+  "exploreTabRead": "read",
+  "exploreTabRecipes": "recipes",
   "exploreMoreLabel": "MORE",
-  "@exploreMoreLabel": {"description": "Section label above the full article list on Explore"},
-
+  "@exploreMoreLabel": {
+    "description": "Section label above the full article list on Explore"
+  },
   "exploreRitualsLabel": "RITUALS",
   "exploreRitualBreathTitle": "2 min breath",
   "exploreRitualSleepTitle": "night ritual",
@@ -393,31 +479,59 @@
   "sleepRitualTitle": "sleep ritual",
   "sleepRitualPreparing": "ilnd is shaping your night…",
   "recipeNutritionLabel": "PER SERVING",
-  "@recipeNutritionLabel": {"description": "Recipe nutrition row"},
-
+  "@recipeNutritionLabel": {
+    "description": "Recipe nutrition row"
+  },
   "recipeNutritionApprox": "approximate, varies with ingredients",
-  "@recipeNutritionApprox": {"description": "Recipe nutrition row"},
-
+  "@recipeNutritionApprox": {
+    "description": "Recipe nutrition row"
+  },
   "recipeNutritionFiber": "fibre",
-  "@recipeNutritionFiber": {"description": "Recipe nutrition row"},
-
+  "@recipeNutritionFiber": {
+    "description": "Recipe nutrition row"
+  },
   "articleSourcesLabel": "SOURCES",
-  "@articleSourcesLabel": {"description": "Section label above the reference list"},
-
+  "@articleSourcesLabel": {
+    "description": "Section label above the reference list"
+  },
   "recipeIngredientsTitle": "ingredients",
   "recipeStartCooking": "start cooking",
   "recipeStepProgress": "step {current} / {total}",
-  "@recipeStepProgress": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@recipeStepProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "recipeNextButton": "next step",
   "recipeFinishButton": "enjoy",
   "breathScreenTitle": "breath",
   "breathMinutesChip": "{minutes} min",
-  "@breathMinutesChip": {"placeholders": {"minutes": {"type": "int"}}},
+  "@breathMinutesChip": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "breathPhaseInhale": "in",
   "breathPhaseHold": "hold",
   "breathPhaseExhale": "out",
   "breathCycleProgress": "breath {current} / {total}",
-  "@breathCycleProgress": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@breathCycleProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "breathDoneTitle": "that was a good breath.",
   "breathAgainButton": "one more round",
   "breathCloseButton": "close",
@@ -425,7 +539,16 @@
   "sleepRitualSkipButton": "skip",
   "sleepRitualFinishButton": "goodnight",
   "sleepRitualStepProgress": "{current} / {total}",
-  "@sleepRitualStepProgress": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+  "@sleepRitualStepProgress": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "sleepRitualStepPrepTitle": "getting ready",
   "sleepRitualPrepItemLights": "dim the lights",
   "sleepRitualPrepItemPhone": "silence your phone",
@@ -440,7 +563,6 @@
   "sleepRitualClosing4": "thank you for making this space for yourself. goodnight.",
   "sleepRitualHomeCardTitle": "ready for your night ritual?",
   "sleepRitualHomeCardSubtitle": "a few minutes, then sleep",
-
   "paywallSubtitle": "unlimited chat, deeper memory, a personal plan.",
   "paywallBenefitUnlimitedChatTitle": "unlimited chat",
   "paywallBenefitUnlimitedChatSubtitle": "talk to ILND as much as you want",
@@ -461,18 +583,17 @@
   "paywallRestoreSuccess": "Your purchases have been restored!",
   "paywallNoActiveSubscription": "No active subscription found.",
   "paywallRestoreFailed": "Restore failed. Try again.",
-
   "articleDetailReadTime": "  ·  {readTime}",
   "@articleDetailReadTime": {
     "placeholders": {
-      "readTime": {"type": "String"}
+      "readTime": {
+        "type": "String"
+      }
     }
   },
-
   "referralTitle": "invite a friend",
   "referralSubtitle": "share your code, you both get a reward",
   "referralEnterCode": "enter invite code",
-
   "vibeCardShareText": "sharing my mood on ilnd",
   "vibeCardShareTextWithCode": "sharing my mood on ilnd my invite code: {code}",
   "vibeCardInviteCode": "my invite code: {code}",
@@ -491,13 +612,14 @@
   "vibeCardStatStreak": "streak",
   "vibeCardStatJournal": "journal",
   "vibeCardStatHabit": "habits",
-
   "chatPaywallReason": "you've talked to me a lot this week",
   "chatGreeting": "hey.",
   "chatGreetingWithName": "hey, {name}.",
   "@chatGreetingWithName": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "chatEmptyPrompt": "what's on your mind? I'm here with you.",
@@ -512,14 +634,15 @@
   "chatSessionDaysAgo": "{days} days ago",
   "@chatSessionDaysAgo": {
     "placeholders": {
-      "days": {"type": "int"}
+      "days": {
+        "type": "int"
+      }
     }
   },
   "chatSessionDeleteTitle": "Delete this chat",
   "chatSessionDeleteBody": "This conversation will be permanently deleted from your device. What ILND remembers about you stays.",
   "chatSessionDeleted": "Chat deleted.",
   "chatSessionDeleteFailed": "Couldn't delete it. Want to try again?",
-
   "redeemCodeSuccess": "Invite code redeemed!",
   "redeemCodeInvalid": "No such invite code. Double-check it.",
   "redeemCodeSelfReferral": "That's your own code Try a friend's code.",
@@ -529,7 +652,6 @@
   "redeemCodeTitle": "have an invite code?",
   "redeemCodeHint": "invite code",
   "redeemCodeConfirm": "redeem",
-
   "referralCodeLoadError": "couldn't load your code",
   "referralCodeLoadErrorBody": "your invite code can't be loaded right now. check your connection.",
   "referralRetry": "try again",
@@ -537,7 +659,9 @@
   "referralShareText": "join me on ilnd! my invite code: {code}",
   "@referralShareText": {
     "placeholders": {
-      "code": {"type": "String"}
+      "code": {
+        "type": "String"
+      }
     }
   },
   "referralShareSubject": "my ilnd invite code",
@@ -545,7 +669,6 @@
   "referralYourCode": "YOUR INVITE CODE",
   "referralCopy": "copy",
   "referralShare": "share",
-
   "splashTagline": "feel good, live good",
   "takipTitle": "tracking",
   "takipMacrosLabel": "MACROS",
@@ -558,15 +681,23 @@
   "takipMacroSummary": "{protein}g protein · {carbs}g carbs · {fat}g fat",
   "@takipMacroSummary": {
     "placeholders": {
-      "protein": {"type": "int"},
-      "carbs": {"type": "int"},
-      "fat": {"type": "int"}
+      "protein": {
+        "type": "int"
+      },
+      "carbs": {
+        "type": "int"
+      },
+      "fat": {
+        "type": "int"
+      }
     }
   },
   "takipKcal": "{kcal} kcal",
   "@takipKcal": {
     "placeholders": {
-      "kcal": {"type": "int"}
+      "kcal": {
+        "type": "int"
+      }
     }
   },
   "takipActivityLabel": "ACTIVITY",
@@ -574,7 +705,9 @@
   "takipWaterGoal": "goal: {ml}ml",
   "@takipWaterGoal": {
     "placeholders": {
-      "ml": {"type": "int"}
+      "ml": {
+        "type": "int"
+      }
     }
   },
   "takipHabitsLabel": "HABITS",
@@ -584,11 +717,14 @@
   "takipWaterAverage": "{range} avg. {ml}ml",
   "@takipWaterAverage": {
     "placeholders": {
-      "range": {"type": "String"},
-      "ml": {"type": "int"}
+      "range": {
+        "type": "String"
+      },
+      "ml": {
+        "type": "int"
+      }
     }
   },
-
   "takipDayToday": "today",
   "takipDayYesterday": "yesterday",
   "takipDayPrev": "previous day",
@@ -600,26 +736,28 @@
   "takipMealEditOpen": "edit {name}",
   "@takipMealEditOpen": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "takipMealEditFreeHint": "correcting ingredients is free; the macros stay as they are.",
   "takipMealEditSave": "save changes",
   "takipMealUpdated": "meal updated",
   "takipMealUpdateFailed": "couldn't update the meal",
-
   "ilndServiceSessionError": "Couldn't verify your session.",
   "ilndServiceUnavailable": "ILND can't respond right now.",
   "ilndServiceDailyLimitReached": "You've reached today's chat limit with ILND, try again tomorrow.",
   "ilndServiceResponseFailed": "ILND couldn't respond ({statusCode}).",
   "@ilndServiceResponseFailed": {
     "placeholders": {
-      "statusCode": {"type": "int"}
+      "statusCode": {
+        "type": "int"
+      }
     }
   },
   "ilndServiceNoInternet": "No internet connection. Check your connection.",
   "ilndServiceGenericError": "Something went wrong. Want to try again in a bit?",
-
   "ekleFoodTitle": "food",
   "ekleFoodSubtitle": "snap a photo, analyze it",
   "ekleJournalTitle": "journal",
@@ -631,7 +769,6 @@
   "ekleSheetSubtitle": "what would you like to do?",
   "ekleAskIlndTitle": "ask ILND",
   "ekleAskIlndSubtitle": "talk it through",
-
   "gorevEkleNameEmpty": "Give the habit a name first.",
   "gorevEkleSuccess": "Habit added!",
   "gorevEkleFailed": "Couldn't add it. Try again.",
@@ -639,19 +776,24 @@
   "gorevEkleHint": "what's the habit?",
   "gorevEkleDaysPerWeek": "DAYS PER WEEK",
   "gorevEkleSave": "save",
-
   "suEkleTitle": "water tracking",
   "suEkleDailyGoal": "daily goal: {ml}ml",
   "@suEkleDailyGoal": {
     "placeholders": {
-      "ml": {"type": "int"}
+      "ml": {
+        "type": "int"
+      }
     }
   },
   "suEkleProgress": "{current}ml / {goal}ml",
   "@suEkleProgress": {
     "placeholders": {
-      "current": {"type": "int"},
-      "goal": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "goal": {
+        "type": "int"
+      }
     }
   },
   "suEkleReset": "Reset.",
@@ -660,11 +802,12 @@
   "suEkleAdded": "+{ml}ml added",
   "@suEkleAdded": {
     "placeholders": {
-      "ml": {"type": "int"}
+      "ml": {
+        "type": "int"
+      }
     }
   },
   "suEkleMl": "ML",
-
   "yemekEklePaywallReason": "you've used today's food scans",
   "yemekEklePhotoAccessError": "Couldn't access the photo. Try again.",
   "yemekEkleAnalysisFailed": "Analysis failed. Want to try again?",
@@ -673,7 +816,9 @@
   "yemekEkleAnalysisFailedStatus": "Analysis failed ({statusCode}).",
   "@yemekEkleAnalysisFailedStatus": {
     "placeholders": {
-      "statusCode": {"type": "int"}
+      "statusCode": {
+        "type": "int"
+      }
     }
   },
   "yemekEkleNoInternet": "No internet connection. Check your connection.",
@@ -704,7 +849,9 @@
   "yemekEkleIngredientRemove": "remove {name}",
   "@yemekEkleIngredientRemove": {
     "placeholders": {
-      "name": {"type": "String"}
+      "name": {
+        "type": "String"
+      }
     }
   },
   "yemekEkleRecalculate": "recalculate macros",
@@ -714,9 +861,7 @@
   "yemekEkleRetryButton": "try again",
   "yemekEkleErrorTitle": "something went wrong",
   "yemekEkleIlndThinking": "ILND is thinking...",
-
   "legalBackTooltip": "Back",
-
   "ilndFallbackGreeting1": "glad you're here. how is your day going?",
   "ilndFallbackGreeting2": "I'm here. anything on your mind, or shall we just sit quietly for a bit?",
   "ilndFallbackGreeting3": "hey. how are you treating yourself today?",
@@ -724,11 +869,9 @@
   "ilndFallbackChat2": "thanks for sharing that. where do you feel it in your body right now?",
   "ilndFallbackChat3": "I'm here. what touched you most today?",
   "ilndFallbackChat4": "I hear you. if we dig into that a bit more, what's underneath it?",
-
   "ilndFallbackJournal1": "thank you for writing this. what's one small thing that felt good today?",
   "ilndFallbackJournal2": "it matters that you put this down. what would you wish for yourself tomorrow?",
   "ilndFallbackJournal3": "I hear you. what might this feeling be trying to tell you?",
-
   "ilndFallbackFood1": "nice choice. add a bit of greens and it's perfectly balanced.",
   "ilndFallbackFood2": "looks good. don't forget to drink plenty of water, it'll do you good.",
   "ilndFallbackFood3": "a balanced meal. protein's solid, try adding some fiber next meal.",
@@ -737,21 +880,31 @@
   "ilndFallbackNeed2": "a recipe for today",
   "ilndFallbackNeed3": "a skincare routine",
   "ilndFallbackNeed4": "a small movement idea",
-
   "streakCopyLongStreak": "{days} days of showing up for yourself. that's a habit now.",
   "@streakCopyLongStreak": {
-    "placeholders": { "days": {"type": "int"} }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "streakCopyWeekStreak": "{days} days of making time for yourself.",
   "@streakCopyWeekStreak": {
-    "placeholders": { "days": {"type": "int"} }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "streakCopyDayStreak": "day {days}, you're keeping it up.",
   "@streakCopyDayStreak": {
-    "placeholders": { "days": {"type": "int"} }
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   },
   "streakCopyRestart": "starting again is still a start. take one small step today.",
-
   "vibeCardHeadlineWeekStreak": "You've shown up for yourself all week.",
   "vibeCardHeadlineActiveWeek": "You made time for yourself this week.",
   "vibeCardHeadlineFirstStep": "You've already taken the first step.",
@@ -760,29 +913,30 @@
   "vibeCardSublineJournalCount": "{count, plural, =1{wrote 1 journal entry} other{wrote {count} journal entries}}",
   "@vibeCardSublineJournalCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "vibeCardSublineHabitCount": "{count, plural, =1{completed 1 habit} other{completed {count} habits}}",
   "@vibeCardSublineHabitCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
-
   "a11yToggleTheme": "Toggle light/dark theme",
   "a11yOpenProfile": "Open profile",
   "a11yOpenIlnd": "Open ILND",
   "a11yBack": "Back",
   "a11yClose": "Close",
-
   "reminderSettingLabel": "Daily reminder",
   "reminderSettingSubtitle": "A gentle nudge before the day slips by",
   "reminderTimeLabel": "Time: {time}",
   "reminderNotificationTitle": "Make a little room for yourself",
   "reminderNotificationBody": "A small moment is enough today. One sentence, one breath. ILND is here.",
   "reminderPermissionDenied": "Notification permission was declined. Allow it in device settings and I can remind you.",
-
   "planShelfLabel": "PLANS",
   "planDayCount": "{count, plural, =1{1 day} other{{count} days}}",
   "planProgress": "{done}/{total} days",
@@ -805,7 +959,6 @@
   "planSwitchConfirm": "switch",
   "planSwitchCancel": "never mind",
   "homeActivePlanLabel": "YOUR PLAN",
-
   "movementShelfLabel": "MOVEMENT PROGRAMS",
   "movementLevelEasy": "gentle",
   "movementLevelMedium": "medium",
@@ -813,20 +966,28 @@
   "movementSessionCount": "{count, plural, =1{1 session} other{{count} sessions}}",
   "@movementSessionCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "movementMinutes": "{m} min",
   "@movementMinutes": {
     "placeholders": {
-      "m": {"type": "int"}
+      "m": {
+        "type": "int"
+      }
     }
   },
   "movementProgress": "{done}/{total} sessions",
   "@movementProgress": {
     "placeholders": {
-      "done": {"type": "int"},
-      "total": {"type": "int"}
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "movementStart": "start",
@@ -840,16 +1001,13 @@
   "movementPremiumBadge": "ILND+",
   "a11yMovementPlay": "Play the video",
   "a11yMovementPause": "Pause the video",
-
   "discoverTodayTitle": "Today, for you",
-
   "homeIslandOwned": "{owner} island",
   "homeIslandVisit": "see your island",
   "homePracticeLabel": "TODAY'S SMALL PRACTICE",
   "practiceBreathTitle": "a pause for breath",
   "practiceBreathMeta": "breathing practice · 2 min",
   "homeShortcutFocus": "focus",
-
   "focusTitle": "a little focus",
   "focusSubtitle": "what would you like to give this time to?",
   "focusIntentLabel": "your intention",
@@ -859,18 +1017,39 @@
   "focusIntentHint": "write your intention",
   "focusDurationLabel": "your time",
   "focusMinutes": "{minutes} min",
-  "@focusMinutes": {"placeholders": {"minutes": {"type": "int"}}},
+  "@focusMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "focusNote": "this time is yours. pause whenever you like.",
   "focusStart": "start focusing",
   "focusSessionMeta": "{minutes}-minute focus break",
-  "@focusSessionMeta": {"placeholders": {"minutes": {"type": "int"}}},
+  "@focusSessionMeta": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "focusPause": "pause",
   "focusResume": "resume",
   "focusEnd": "end session",
   "focusSessionFooter": "one task, one moment.",
   "focusDoneTitle": "you made time for yourself.",
   "focusDoneMeta": "{minutes} min · {intent}",
-  "@focusDoneMeta": {"placeholders": {"minutes": {"type": "int"}, "intent": {"type": "String"}}},
+  "@focusDoneMeta": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "intent": {
+        "type": "String"
+      }
+    }
+  },
   "focusFeelQuestion": "how did it feel?",
   "focusFeelGood": "it helped",
   "focusFeelUnsure": "not sure",
@@ -878,60 +1057,119 @@
   "focusBackToToday": "back to today",
   "focusDoneFooter": "however short, it has a place here.",
   "a11yFocusTimeLeft": "Time left {time}",
-  "@a11yFocusTimeLeft": {"placeholders": {"time": {"type": "String"}}},
-
+  "@a11yFocusTimeLeft": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
   "chatPageTitle": "let's talk a little.",
   "chatEmptyTitle": "what's on your mind today?",
   "chatEmptySubtitle": "we can start somewhere, if you like.",
   "chatSuggestTired": "feeling a bit tired today",
   "chatSuggestSort": "want to sort out my thoughts",
   "chatSuggestShare": "want to share something good",
-
   "profileTagline": "at your own pace.",
-  "profileWeekLabel": "FROM THIS WEEK",
+  "profileWeekLabel": "THIS WEEK",
   "profileWeekLine": "{journal, plural, =1{1 entry} other{{journal} entries}} · {meals, plural, =1{1 meal} other{{meals} meals}}",
-  "@profileWeekLine": {"placeholders": {"journal": {"type": "int"}, "meals": {"type": "int"}}},
+  "@profileWeekLine": {
+    "placeholders": {
+      "journal": {
+        "type": "int"
+      },
+      "meals": {
+        "type": "int"
+      }
+    }
+  },
   "profileWeekHint": "look back and remember your week.",
+  "profilePlusTitle": "see your patterns more closely",
+  "profilePlusBody": "Access personal insights that build over time with ILND+.",
+  "profilePlusCta": "explore ILND+",
   "profileIslandRowSubtitle": "back to your objects and memories",
   "profileNotificationsRow": "your notifications",
   "profileNotificationsRowSubtitle": "choose when you're reminded",
   "profileDataRow": "your data & privacy",
   "profileDataRowSubtitle": "what ILND remembers, your account, documents",
   "profileNightView": "night view",
-
   "dataTitle": "your data is yours",
   "dataSubtitle": "see where and why it's used.",
   "dataMemoryEmpty": "ILND doesn't remember anything about you yet.",
-
   "notifTitle": "at a time that suits you",
   "notifSubtitle": "you set the rhythm of your reminders.",
-
   "takipSubtitle": "how did you look after yourself today?",
   "takipWaterProgress": "{ml} / {goal} ml",
-  "@takipWaterProgress": {"placeholders": {"ml": {"type": "String"}, "goal": {"type": "String"}}},
+  "@takipWaterProgress": {
+    "placeholders": {
+      "ml": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
   "takipWaterAdd": "+ {ml} ml",
-  "@takipWaterAdd": {"placeholders": {"ml": {"type": "int"}}},
+  "@takipWaterAdd": {
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
+  },
   "takipNutritionLabel": "NUTRITION SUMMARY",
   "takipKcalProgress": "{kcal} / {goal} kcal",
-  "@takipKcalProgress": {"placeholders": {"kcal": {"type": "String"}, "goal": {"type": "String"}}},
-
+  "@takipKcalProgress": {
+    "placeholders": {
+      "kcal": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
   "journalSubtitle": "make room for what stays with you.",
   "journalQuestionLabel": "TODAY'S QUESTION",
   "journalQuestion": "what small thing did you good today?",
   "journalNoWrongAnswer": "there are no right or wrong answers here.",
-
   "topulukCityTitle": "Istanbul",
   "topulukCitySubtitle": "new meetups will show up here.",
-  "topulukTogetherTitle": "more familiar together.",
-  "topulukTogetherBody": "bring a friend along.",
-
+  "topulukTogetherTitle": "easier together.",
+  "topulukTogetherBody": "Start a small routine with a friend.",
   "adanSubtitle": "your own order, traces of you.",
+  "adanLowData": "your first traces will gather here.",
+  "adanContext": "{count} small traces are gathering here.",
+  "@adanContext": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "adanItemsTitle": "on your island",
-
   "welcomeHeadline": "an island of your own.",
   "loginSubtitle": "pick up where you left off.",
   "authEmailLabel": "email",
   "authPasswordLabel": "password",
   "exploreStartLabel": "A GENTLE PLACE TO START",
-  "chatSendA11y": "Send"
+  "chatSendA11y": "Send",
+  "stateLoading": "loading…",
+  "@stateLoading": {
+    "description": "Generic loading state"
+  },
+  "stateError": "could not connect right now",
+  "@stateError": {
+    "description": "Generic data error state"
+  },
+  "stateRetry": "try again",
+  "@stateRetry": {
+    "description": "Generic retry action"
+  },
+  "adanNameTitle": "name your island",
+  "adanNameLabel": "island name",
+  "adanNameHint": "e.g. quiet cove",
+  "adanNameEdit": "rename island",
+  "adanNameInvalid": "Enter a name between 1 and 32 characters."
 }

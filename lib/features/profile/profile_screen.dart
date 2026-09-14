@@ -252,8 +252,38 @@ class _WeekCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final stats =
-        ref.watch(profileStatsProvider).valueOrNull ?? ProfileStats.zero;
+    final statsState = ref.watch(profileStatsProvider);
+    final stats = statsState.valueOrNull ?? ProfileStats.zero;
+    if (statsState.isLoading) {
+      return IlndCard(
+        p: p,
+        color: p.surfaceStrong,
+        child: Text(
+          l10n.stateLoading,
+          style: AppTextStyles.body(color: p.textMuted),
+        ),
+      );
+    }
+    if (statsState.hasError) {
+      return IlndCard(
+        p: p,
+        color: p.surfaceStrong,
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.stateError,
+                style: AppTextStyles.body(color: p.textMuted),
+              ),
+            ),
+            TextButton(
+              onPressed: () => ref.invalidate(profileStatsProvider),
+              child: Text(l10n.stateRetry),
+            ),
+          ],
+        ),
+      );
+    }
     return IlndCard(
       p: p,
       color: p.surfaceStrong,
@@ -268,10 +298,12 @@ class _WeekCard extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            l10n.profileWeekLine(
-              stats.weeklyJournalCount,
-              stats.weeklyFoodCount,
-            ),
+            stats.weeklyJournalCount == 0 && stats.weeklyFoodCount == 0
+                ? l10n.profileWeekEmpty
+                : l10n.profileWeekLine(
+                    stats.weeklyJournalCount,
+                    stats.weeklyFoodCount,
+                  ),
             style: AppTextStyles.serifTitle(color: p.text, fontSize: 22),
           ),
           const SizedBox(height: 4),
@@ -302,22 +334,31 @@ class _PlusCard extends ConsumerWidget {
       onTap: isPremium
           ? null
           : () => PaywallScreen.show(context, source: 'profile'),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              isPremium ? l10n.profilePremiumMember : l10n.profileGoPremium,
-              style: AppTextStyles.body(
-                fontSize: 15,
-                color: p.accent,
-              ).copyWith(fontWeight: FontWeight.w500),
+          Text(
+            isPremium ? l10n.profilePremiumMember : l10n.profilePlusTitle,
+            style: AppTextStyles.serifTitle(color: p.accent, fontSize: 19),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            l10n.profilePlusBody,
+            style: AppTextStyles.body(fontSize: 12.5, color: p.textMuted),
+          ),
+          if (!isPremium) ...[
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                l10n.profilePlusCta,
+                style: AppTextStyles.body(
+                  fontSize: 12,
+                  color: p.accent,
+                ).copyWith(fontWeight: FontWeight.w600),
+              ),
             ),
-          ),
-          Icon(
-            isPremium ? Icons.verified_outlined : Icons.arrow_forward_rounded,
-            size: 20,
-            color: p.accent,
-          ),
+          ],
         ],
       ),
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ilnd_app/core/widgets/editorial_gradient.dart';
 
-/// Kapak görseli: gerçek web fotoğrafını yükler, yüklenemezse (internet yok,
-/// 404, demo) editoryal degradeye düşer. Yani asla kırık görünmez.
+/// Paketlenmiş editoryal kapağı veya içerik yönetimindeki web görselini yükler.
+/// Görsel yoksa ya da yüklenemezse editoryal degradeye düşer.
 class CoverImage extends StatelessWidget {
   const CoverImage({super.key, required this.imageUrl, required this.palette});
 
@@ -28,6 +28,15 @@ class CoverImage extends StatelessWidget {
     final fallback = EditorialGradient(palette: palette);
     final url = imageUrl;
     if (url == null || url.isEmpty) return fallback;
+
+    if (url.startsWith('assets/')) {
+      return Image.asset(
+        url,
+        fit: BoxFit.cover,
+        gaplessPlayback: true,
+        errorBuilder: (context, error, stack) => fallback,
+      );
+    }
 
     return Image.network(
       _editorial(url),

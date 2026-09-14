@@ -16,6 +16,11 @@ import 'package:ilnd_app/core/widgets/breath_animation.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/features/home/home_recommendation.dart';
+import 'package:ilnd_app/features/adan/adan_model.dart';
+import 'package:ilnd_app/features/adan/island_name_provider.dart';
+import 'package:ilnd_app/features/adan/adan_repository.dart';
+import 'package:ilnd_app/features/adan/island_scene.dart';
 import 'package:ilnd_app/features/journal/journal_screen.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/plans/plan_detail_screen.dart';
@@ -25,25 +30,82 @@ import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/features/sleep_ritual/sleep_ritual_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
-/// Bugün (Ada tasarımı 03).
-///
-/// Sıra: selamlama → ada kartı → ruh hali → günün küçük pratiği → üç kapı
-/// (günlük, odaklan, takip). Sonrasında yalnız KOŞULLU iki satır var: aktif
-/// plan (ADR-0005, plan yoksa hiç çizilmez) ve akşam penceresinde gece
-/// ritüeli daveti.
-///
-/// 2026-09-11'de ekrandan çıkanlar ve yeni yerleri: fotoğraflı hero (ada
-/// kartı yerini aldı), günün okuması (Keşfet'teki "Bugün senin için"
-/// rafında), haftalık kart satırı (Sen'deki "Bu haftadan kalanlar"
-/// kartında), tema anahtarı (Sen'de "gece görünümü").
-class HomeScreen extends ConsumerWidget {
+/// Personal island first, then the daily recommendation and supporting tools.
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key, this.hourOverride});
-
-  /// Saat testte enjekte edilir; null'sa cihaz saati (gece ritüeli daveti).
   final int? hourOverride;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with WidgetsBindingObserver {
+  static const _visitKey = 'home_last_visit';
+  Timer? _clock;
+  late bool _returning;
+  bool _foreground = true;
+  late DateTime _observedDay;
+
+  @override
+  void initState() {
+    super.initState();
+    final prefs = ref.read(sharedPreferencesProvider);
+    final previous = DateTime.tryParse(prefs.getString(_visitKey) ?? '');
+    _observedDay = DateTime.now();
+    _returning =
+        previous != null && _observedDay.difference(previous).inDays >= 7;
+    _recordVisit();
+    WidgetsBinding.instance.addObserver(this);
+    _clock = Timer.periodic(const Duration(minutes: 1), (_) => _refresh());
+  }
+
+  void _recordVisit() {
+    unawaited(
+      ref
+          .read(sharedPreferencesProvider)
+          .setString(_visitKey, DateTime.now().toIso8601String()),
+    );
+  }
+
+  void _refresh() {
+    if (!mounted || !_foreground) return;
+    final now = DateTime.now();
+    if (DateUtils.dateOnly(now) != DateUtils.dateOnly(_observedDay)) {
+      ref.invalidate(todaysMoodProvider);
+      ref.invalidate(sleepRitualDoneTonightProvider);
+    }
+    _observedDay = now;
+    _recordVisit();
+    setState(() {});
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final previous = DateTime.tryParse(
+        ref.read(sharedPreferencesProvider).getString(_visitKey) ?? '',
+      );
+      if (previous != null && DateTime.now().difference(previous).inDays >= 7) {
+        _returning = true;
+      }
+      _foreground = true;
+      _refresh();
+    } else {
+      if (_foreground) _recordVisit();
+      _foreground = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _clock?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final onboardingName = ref.watch(userNameProvider);
@@ -65,9 +127,15 @@ class HomeScreen extends ConsumerWidget {
           ),
     );
 
-    final hour = hourOverride ?? DateTime.now().hour;
-    final showRitual =
-        isSleepRitualWindow(hour) && !ref.watch(sleepRitualDoneTonightProvider);
+    final hour = widget.hourOverride ?? DateTime.now().hour;
+    final mood = ref.watch(todaysMoodProvider);
+    if (mood != null) _returning = false;
+    final recommendation = recommendForHome(
+      hour: hour,
+      mood: mood,
+      returning: _returning,
+      ritualDone: ref.watch(sleepRitualDoneTonightProvider),
+    );
 
     return Scaffold(
       backgroundColor: p.base,
@@ -83,34 +151,30 @@ class HomeScreen extends ConsumerWidget {
           children: [
             Entrance(
               index: 0,
-              child: _Header(name: name, p: p),
+              child: _Header(name: name, p: p, hour: hour),
             ),
             const SizedBox(height: 18),
             Entrance(
               index: 1,
               child: _IslandCard(name: name, p: p),
             ),
-            const SizedBox(height: 26),
-            Entrance(index: 2, child: _MoodCheckIn(p: p)),
-            const SizedBox(height: 26),
-            Entrance(index: 3, child: _PracticeCard(p: p)),
-            const SizedBox(height: 12),
-            Entrance(index: 4, child: _Shortcuts(p: p)),
-            // Aktif plan Bugün'de yaşar: kullanıcı Keşfet'e girmeyi
-            // unutur, ana ekranı unutmaz. Plan yoksa satır hiç çizilmez.
-            const _ActivePlanRow(),
-            if (showRitual)
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: IlndListRow(
-                  p: p,
-                  icon: Icons.nightlight_outlined,
-                  iconColor: p.amber,
-                  title: l10n.sleepRitualHomeCardTitle,
-                  subtitle: l10n.sleepRitualHomeCardSubtitle,
-                  onTap: () => context.push(routeSleepRitual),
-                ),
+            const SizedBox(height: 24),
+            Entrance(
+              index: 2,
+              child: _NextStep(
+                p: p,
+                recommendation: recommendation,
+                mood: mood,
               ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              l10n.homeToolsLabel,
+              style: AppTextStyles.body(fontSize: 11, color: p.textMuted),
+            ),
+            const SizedBox(height: 8),
+            Entrance(index: 3, child: _Shortcuts(p: p)),
+            const _ActivePlanRow(),
           ],
         ),
       ),
@@ -121,12 +185,13 @@ class HomeScreen extends ConsumerWidget {
 // ─── Selamlama ────────────────────────────────────────────────────────────────
 
 class _Header extends ConsumerWidget {
-  const _Header({required this.name, required this.p});
+  const _Header({required this.name, required this.p, required this.hour});
+  final int hour;
   final String name;
   final AppPalette p;
 
   String _greeting(AppLocalizations l10n) {
-    final h = DateTime.now().hour;
+    final h = hour;
     if (h < 6) return l10n.homeGreetingNight;
     if (h < 12) return l10n.homeGreetingMorning;
     if (h < 18) return l10n.homeGreetingDay;
@@ -218,25 +283,28 @@ class _Header extends ConsumerWidget {
 
 // ─── Ada kartı ────────────────────────────────────────────────────────────────
 
-/// Kişisel ada: şimdilik illüstrasyonsuz (bkz. [IslandFrame]). Karta
-/// dokunmak Adan ekranını açar; alttaki hap aynı kapının görünür etiketi.
-class _IslandCard extends StatelessWidget {
+/// Personal island below the greeting, above the daily recommendation.
+class _IslandCard extends ConsumerWidget {
   const _IslandCard({required this.name, required this.p});
   final String name;
   final AppPalette p;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final island = ref.watch(islandStateProvider).valueOrNull;
     final l10n = AppLocalizations.of(context)!;
-    final title = name.isEmpty
-        ? l10n.adanTitle
-        : l10n.homeIslandOwned(possessiveName(l10n, name));
+    final customName = ref.watch(islandNameProvider).valueOrNull;
+    final title =
+        customName ??
+        (name.isEmpty
+            ? l10n.adanTitle
+            : l10n.homeIslandOwned(possessiveName(l10n, name)));
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Tasarım oranı 362 × 271. Dar telefonda kısalır, geniş ekranda
+        // Kompakt önizleme. Dar telefonda kısalır, geniş ekranda
         // (web, tablet) tavanda durur: kart hiçbir zaman ekranı yutmaz.
-        final height = (constraints.maxWidth / 1.34).clamp(180.0, 280.0);
+        final height = (constraints.maxWidth / 1.9).clamp(160.0, 220.0);
         return Semantics(
           button: true,
           label: title,
@@ -246,6 +314,11 @@ class _IslandCard extends StatelessWidget {
             child: IslandFrame(
               p: p,
               height: height,
+              artwork: IslandScene(
+                state: island ?? const IslandState(),
+                p: p,
+                contentPadding: const EdgeInsets.only(top: 34, bottom: 38),
+              ),
               child: Stack(
                 children: [
                   Positioned(
@@ -269,18 +342,21 @@ class _IslandCard extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.fromLTRB(16, 8, 10, 8),
                         decoration: BoxDecoration(
-                          color: p.surface,
+                          color: p.surface.withValues(alpha: 0.85),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              l10n.homeIslandVisit,
-                              style: AppTextStyles.body(
-                                fontSize: 12.5,
-                                color: p.accent,
-                              ).copyWith(fontWeight: FontWeight.w700),
+                            Flexible(
+                              child: Text(
+                                l10n.homeIslandVisit,
+                                textAlign: TextAlign.center,
+                                style: AppTextStyles.body(
+                                  fontSize: 12.5,
+                                  color: p.textMuted,
+                                ),
+                              ),
                             ),
                             const SizedBox(width: 2),
                             Icon(
@@ -306,7 +382,7 @@ class _IslandCard extends StatelessWidget {
 // ─── Ruh hali ─────────────────────────────────────────────────────────────────
 
 class _MoodCheckIn extends ConsumerStatefulWidget {
-  const _MoodCheckIn({required this.p});
+  const _MoodCheckIn({super.key, required this.p});
   final AppPalette p;
 
   @override
@@ -334,8 +410,7 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
     _ => key,
   };
 
-  // Seçim önce yerine otursun (dolgu + ölçek), sonra sohbete geçilsin:
-  // anlık, sarsıcı bir geçiş yerine bir onay anı.
+  // Selection updates the recommendation in place; navigation requires the CTA.
   // Bir kez cevaplanınca günün geri kalanında tekrar sorulmaz.
   Future<void> _select(int index, AppLocalizations l10n) async {
     if (_selected != null) return;
@@ -349,9 +424,6 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
           // Zamanı notun kendi damgası taşıyor (MemoryNote.at).
           .addNote('Ruh hali: ${_moodLabel(l10n, moodKey)}'),
     );
-    await Future.delayed(const Duration(milliseconds: 320));
-    if (!mounted) return;
-    context.push(routeChat);
   }
 
   @override
@@ -440,9 +512,9 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
                             const SizedBox(height: 7),
                             Text(
                               _moodLabel(l10n, m.$2),
-                              maxLines: 1,
-                              overflow: TextOverflow.visible,
-                              softWrap: false,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
                               textAlign: TextAlign.center,
                               style: AppTextStyles.body(
                                 fontSize: 12,
@@ -468,23 +540,134 @@ class _MoodCheckInState extends ConsumerState<_MoodCheckIn> {
 
 // ─── Günün küçük pratiği ─────────────────────────────────────────────────────
 
-/// Bugün'ün tek önerisi: iki dakikalık nefes. Keşfet'teki nefes kartıyla
-/// aynı deneyimi (BreathScreen) açar.
-class _PracticeCard extends StatelessWidget {
-  const _PracticeCard({required this.p});
+class _NextStep extends StatelessWidget {
+  const _NextStep({
+    required this.p,
+    required this.recommendation,
+    required this.mood,
+  });
   final AppPalette p;
+  final HomeRecommendation recommendation;
+  final String? mood;
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return PracticeCard(
+    final l = AppLocalizations.of(context)!;
+    final (title, body, cta) = switch (recommendation) {
+      HomeRecommendation.restart => (
+        l.homeNextRestartTitle,
+        l.homeNextRestartBody,
+        l.homeNextRestartCta,
+      ),
+      HomeRecommendation.morning => (
+        l.homeNextMorningTitle,
+        l.homeNextMorningBody,
+        l.homeNextMorningCta,
+      ),
+      HomeRecommendation.checkIn => (
+        l.homeNextCheckInTitle,
+        l.homeNextCheckInBody,
+        l.homeNextCheckInCta,
+      ),
+      HomeRecommendation.rest => (
+        l.homeNextRestTitle,
+        l.homeNextRestBody,
+        l.homeNextRestCta,
+      ),
+      HomeRecommendation.focus => (
+        l.homeNextFocusTitle,
+        l.homeNextFocusBody,
+        l.homeNextFocusCta,
+      ),
+      HomeRecommendation.journal => (
+        l.homeNextJournalTitle,
+        l.homeNextJournalBody,
+        l.homeNextJournalCta,
+      ),
+      HomeRecommendation.night => (
+        l.sleepRitualHomeCardTitle,
+        l.homeNextNightBody,
+        l.homeNextNightCta,
+      ),
+    };
+    final feedback = switch (mood) {
+      'calm' => l.homeFeedbackCalm,
+      'good' => l.homeFeedbackGood,
+      'okay' => l.homeFeedbackOkay,
+      'tired' => l.homeFeedbackTired,
+      'hard' => l.homeFeedbackHard,
+      _ => null,
+    };
+    return IlndCard(
       p: p,
-      label: l10n.homePracticeLabel,
-      title: l10n.practiceBreathTitle,
-      meta: l10n.practiceBreathMeta,
-      onTap: () => Navigator.of(
-        context,
-      ).push(MaterialPageRoute<void>(builder: (_) => BreathScreen(p: p))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l.homeNextLabel,
+            style: AppTextStyles.body(fontSize: 11, color: p.textMuted),
+          ),
+          const SizedBox(height: 12),
+          Semantics(
+            liveRegion: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyles.display(
+                    fontSize: 27,
+                    color: p.text,
+                    height: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                if (feedback != null) ...[
+                  Text(
+                    feedback,
+                    style: AppTextStyles.body(fontSize: 14, color: p.text),
+                  ),
+                  const SizedBox(height: 8),
+                ],
+                Text(
+                  body,
+                  style: AppTextStyles.body(fontSize: 14, color: p.textMuted),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          _MoodCheckIn(key: ValueKey(DateUtils.dateOnly(DateTime.now())), p: p),
+          const SizedBox(height: 20),
+          IlndButton(
+            key: const ValueKey('home-primary-action'),
+            p: p,
+            label: cta,
+            onTap: () {
+              switch (recommendation) {
+                case HomeRecommendation.night:
+                  context.push(routeSleepRitual);
+                case HomeRecommendation.focus:
+                  context.push(routeFocus);
+                case HomeRecommendation.journal:
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const JournalScreen(),
+                    ),
+                  );
+                case HomeRecommendation.rest:
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: (_) => BreathScreen(p: p)),
+                  );
+                case HomeRecommendation.restart:
+                case HomeRecommendation.morning:
+                case HomeRecommendation.checkIn:
+                  context.push(routeChat);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -552,23 +735,24 @@ class _ShortcutTile extends StatelessWidget {
       button: true,
       label: label,
       excludeSemantics: true,
-      child: IlndCard(
-        p: p,
+      child: Pressable(
         onTap: onTap,
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 24, color: p.accent),
-            const SizedBox(height: 10),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: AppTextStyles.body(fontSize: 14, color: p.text),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 20, color: p.textMuted),
+              const SizedBox(height: 10),
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -591,9 +775,36 @@ class _ActivePlanRow extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
     final localized = plan.forLocale(l10n.localeName);
-    final progress =
-        ref.watch(planProgressProvider(plan.id)).valueOrNull ??
-        const PlanProgress();
+    final progressState = ref.watch(planProgressProvider(plan.id));
+    if (progressState.isLoading) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: Text(
+          l10n.stateLoading,
+          style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+        ),
+      );
+    }
+    if (progressState.hasError) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 12),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.stateError,
+                style: AppTextStyles.body(fontSize: 12, color: p.textMuted),
+              ),
+            ),
+            TextButton(
+              onPressed: () => ref.invalidate(planProgressProvider(plan.id)),
+              child: Text(l10n.stateRetry),
+            ),
+          ],
+        ),
+      );
+    }
+    final progress = progressState.valueOrNull ?? const PlanProgress();
     final next = progress.nextDay(localized);
     if (next == null) return const SizedBox.shrink(); // plan bitti
 

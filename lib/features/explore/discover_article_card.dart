@@ -91,7 +91,7 @@ class DiscoverArticleCard extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: CoverImage(
-                  imageUrl: article.imageUrl,
+                  imageUrl: article.coverImageUrl,
                   palette: article.category.palette,
                 ),
               ),

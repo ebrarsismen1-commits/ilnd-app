@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
-import 'package:ilnd_app/core/widgets/breath_ring.dart';
 import 'package:ilnd_app/core/widgets/motion.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
 import 'package:ilnd_app/features/ekle/ekle_sheet.dart';
@@ -66,7 +65,13 @@ class _BottomNav extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 64,
+          // Keep the normal bar compact; allow two-line accessibility labels.
+          height:
+              64 +
+              (MediaQuery.textScalerOf(context).scale(24) - 24).clamp(
+                0,
+                double.infinity,
+              ),
           child: Row(
             children: [
               _NavItem(
@@ -106,8 +111,8 @@ class _BottomNav extends StatelessWidget {
   }
 }
 
-/// Merkez: sohbeti açan nefes halkası. Sekme değil, her sekmenin üzerinden
-/// erişilen kapı; bu yüzden hiçbir zaman "aktif" boyanmaz.
+/// Primary action, not a fifth branch. Chat opens above the shell; returning
+/// restores the selected branch without introducing a second selection state.
 class _RingItem extends StatelessWidget {
   const _RingItem({required this.p, required this.l10n});
   final AppPalette p;
@@ -123,21 +128,34 @@ class _RingItem extends StatelessWidget {
           onTap: () => context.push(routeChat),
           onLongPress: () => showEkleSheet(context),
           child: SizedBox(
-            height: 64,
+            width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const BreathRing(size: 40, strokeWidth: 1.5, hollow: true),
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: p.accent,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: p.accent),
+                  ),
+                  child: Icon(
+                    Icons.chat_bubble_outline_rounded,
+                    size: 20,
+                    color: p.onAccent,
+                  ),
+                ),
                 const SizedBox(height: 3),
                 ExcludeSemantics(
                   child: Text(
                     l10n.navRing,
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                    softWrap: false,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.body(
                       fontSize: 10,
-                      color: p.textMuted,
+                      color: p.accent,
                       height: 1.2,
                     ),
                   ),
@@ -213,7 +231,7 @@ class _NavItemState extends State<_NavItem>
         child: Pressable(
           onTap: widget.onTap,
           child: SizedBox(
-            height: 64,
+            width: double.infinity,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -255,9 +273,9 @@ class _NavItemState extends State<_NavItem>
                         ),
                     child: Text(
                       widget.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.fade,
-                      softWrap: false,
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),

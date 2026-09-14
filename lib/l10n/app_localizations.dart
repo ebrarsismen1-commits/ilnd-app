@@ -98,6 +98,168 @@ abstract class AppLocalizations {
     Locale('tr'),
   ];
 
+  /// No description provided for @homeNextLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'ŞİMDİ SANA İYİ GELEBİLİR'**
+  String get homeNextLabel;
+
+  /// No description provided for @homeNextRestartTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar başlayalım'**
+  String get homeNextRestartTitle;
+
+  /// No description provided for @homeNextRestartBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aradan zaman geçmiş olabilir. Bugün nasıl olduğunu söylemen yeterli.'**
+  String get homeNextRestartBody;
+
+  /// No description provided for @homeNextRestartCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kısa bir check-in yap'**
+  String get homeNextRestartCta;
+
+  /// No description provided for @homeNextMorningTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güne yumuşak başla'**
+  String get homeNextMorningTitle;
+
+  /// No description provided for @homeNextMorningBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günün hızına kapılmadan önce kendine küçük bir alan aç.'**
+  String get homeNextMorningBody;
+
+  /// No description provided for @homeNextMorningCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sabah check-in’ini başlat'**
+  String get homeNextMorningCta;
+
+  /// No description provided for @homeNextCheckInTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an sana ne iyi gelir?'**
+  String get homeNextCheckInTitle;
+
+  /// No description provided for @homeNextCheckInBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nasıl olduğunu birlikte fark edelim. Buradan küçük bir adım seçebiliriz.'**
+  String get homeNextCheckInBody;
+
+  /// No description provided for @homeNextCheckInCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Check-in’e başla'**
+  String get homeNextCheckInCta;
+
+  /// No description provided for @homeNextRestTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün biraz yavaşlayalım'**
+  String get homeNextRestTitle;
+
+  /// No description provided for @homeNextRestBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kendini zorlamadan, kısa bir nefes pratiğiyle başlayabilirsin.'**
+  String get homeNextRestBody;
+
+  /// No description provided for @homeNextRestCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Nefes pratiğini başlat'**
+  String get homeNextRestCta;
+
+  /// No description provided for @homeNextFocusTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu enerjiyi tek bir şeye ayır'**
+  String get homeNextFocusTitle;
+
+  /// No description provided for @homeNextFocusBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aklındaki küçük bir işi seç. Süreyi kendi ritmine göre belirle.'**
+  String get homeNextFocusBody;
+
+  /// No description provided for @homeNextFocusCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odaklanmaya başla'**
+  String get homeNextFocusCta;
+
+  /// No description provided for @homeNextJournalTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu andan bir iz bırak'**
+  String get homeNextJournalTitle;
+
+  /// No description provided for @homeNextJournalBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünden yanında kalsın istediğin şeyi birkaç cümleyle yaz.'**
+  String get homeNextJournalBody;
+
+  /// No description provided for @homeNextJournalCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günlüğünü aç'**
+  String get homeNextJournalCta;
+
+  /// No description provided for @homeNextNightBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günü geride bırakmak için sana uygun bir kapanış rutiniyle devam edelim.'**
+  String get homeNextNightBody;
+
+  /// No description provided for @homeNextNightCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gece rutinini başlat'**
+  String get homeNextNightCta;
+
+  /// No description provided for @homeFeedbackCalm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin hissettiğini söyledin. Bu ana biraz alan açalım.'**
+  String get homeFeedbackCalm;
+
+  /// No description provided for @homeFeedbackGood.
+  ///
+  /// In tr, this message translates to:
+  /// **'İyi hissettiğini söyledin. Bu enerjiyi küçük bir adıma dönüştürebiliriz.'**
+  String get homeFeedbackGood;
+
+  /// No description provided for @homeFeedbackOkay.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün idare ediyorsun. Küçük bir başlangıç yeterli.'**
+  String get homeFeedbackOkay;
+
+  /// No description provided for @homeFeedbackTired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yorgun hissettiğini söyledin. Bugün kendinden daha azını isteyebilirsin.'**
+  String get homeFeedbackTired;
+
+  /// No description provided for @homeFeedbackHard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zorlandığını söyledin. Şu an her şeyi çözmen gerekmiyor.'**
+  String get homeFeedbackHard;
+
+  /// No description provided for @homeToolsLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'İHTİYACIN OLDUĞUNDA'**
+  String get homeToolsLabel;
+
   /// Login screen tagline below the logo
   ///
   /// In tr, this message translates to:
@@ -227,7 +389,7 @@ abstract class AppLocalizations {
   /// Community v1 CTA routing to referral
   ///
   /// In tr, this message translates to:
-  /// **'arkadaşını şimdiden davet et'**
+  /// **'arkadaşını davet et'**
   String get topulukInviteCta;
 
   /// Section label above event list
@@ -1705,6 +1867,30 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'bu etikette henüz yazı yok'**
   String get exploreFilterEmpty;
+
+  /// No description provided for @exploreTabForYou.
+  ///
+  /// In tr, this message translates to:
+  /// **'senin için'**
+  String get exploreTabForYou;
+
+  /// No description provided for @exploreTabDo.
+  ///
+  /// In tr, this message translates to:
+  /// **'yap'**
+  String get exploreTabDo;
+
+  /// No description provided for @exploreTabRead.
+  ///
+  /// In tr, this message translates to:
+  /// **'oku'**
+  String get exploreTabRead;
+
+  /// No description provided for @exploreTabRecipes.
+  ///
+  /// In tr, this message translates to:
+  /// **'tarifler'**
+  String get exploreTabRecipes;
 
   /// Section label above the full article list on Explore
   ///
@@ -3773,7 +3959,7 @@ abstract class AppLocalizations {
   /// You screen weekly card label
   ///
   /// In tr, this message translates to:
-  /// **'BU HAFTADAN KALANLAR'**
+  /// **'BU HAFTA'**
   String get profileWeekLabel;
 
   /// You screen weekly card headline
@@ -3787,6 +3973,24 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'kayıtlarına dön, haftanı hatırla.'**
   String get profileWeekHint;
+
+  /// No description provided for @profilePlusTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'örüntülerini daha yakından gör'**
+  String get profilePlusTitle;
+
+  /// No description provided for @profilePlusBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND+ ile zaman içinde biriken kişisel içgörülere eriş.'**
+  String get profilePlusBody;
+
+  /// No description provided for @profilePlusCta.
+  ///
+  /// In tr, this message translates to:
+  /// **'ILND+’ı keşfet'**
+  String get profilePlusCta;
 
   /// You screen island row subtitle
   ///
@@ -3923,13 +4127,13 @@ abstract class AppLocalizations {
   /// Community: bring a friend card title
   ///
   /// In tr, this message translates to:
-  /// **'birlikte daha tanıdık.'**
+  /// **'birlikte daha kolay.'**
   String get topulukTogetherTitle;
 
   /// Community: bring a friend card body
   ///
   /// In tr, this message translates to:
-  /// **'bir arkadaşını da yanına çağır.'**
+  /// **'Bir arkadaşınla küçük bir rutin başlat.'**
   String get topulukTogetherBody;
 
   /// Island screen subtitle
@@ -3937,6 +4141,18 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'kendi düzenin, sana ait izler.'**
   String get adanSubtitle;
+
+  /// No description provided for @adanLowData.
+  ///
+  /// In tr, this message translates to:
+  /// **'ilk izlerin burada birikecek.'**
+  String get adanLowData;
+
+  /// No description provided for @adanContext.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} küçük iz burada birikiyor.'**
+  String adanContext(int count);
 
   /// Island screen items section title
   ///
@@ -3979,6 +4195,54 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Gönder'**
   String get chatSendA11y;
+
+  /// Generic loading state
+  ///
+  /// In tr, this message translates to:
+  /// **'yükleniyor…'**
+  String get stateLoading;
+
+  /// Generic data error state
+  ///
+  /// In tr, this message translates to:
+  /// **'şu an bağlanılamıyor'**
+  String get stateError;
+
+  /// Generic retry action
+  ///
+  /// In tr, this message translates to:
+  /// **'tekrar dene'**
+  String get stateRetry;
+
+  /// No description provided for @adanNameTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'adana isim ver'**
+  String get adanNameTitle;
+
+  /// No description provided for @adanNameLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'adanın adı'**
+  String get adanNameLabel;
+
+  /// No description provided for @adanNameHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'ör. sakin koy'**
+  String get adanNameHint;
+
+  /// No description provided for @adanNameEdit.
+  ///
+  /// In tr, this message translates to:
+  /// **'ismi değiştir'**
+  String get adanNameEdit;
+
+  /// No description provided for @adanNameInvalid.
+  ///
+  /// In tr, this message translates to:
+  /// **'1–32 karakter arasında bir isim yaz.'**
+  String get adanNameInvalid;
 }
 
 class _AppLocalizationsDelegate

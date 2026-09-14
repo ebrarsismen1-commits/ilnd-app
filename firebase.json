@@ -10,6 +10,15 @@
     ],
     "headers": [
       {
+        "source": "**",
+        "headers": [
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+          { "key": "Permissions-Policy", "value": "geolocation=(), usb=()" }
+        ]
+      },
+      {
         "//": "Flutter web'in bu dosyalarinin adinda icerik ozeti (hash) YOK — Hosting varsayilani onlari 1 saat onbellege aliyor ve deploy sonrasi kullanici eski surumu goruyor. Yazi tipi degisikligi tam olarak boyle 'uygulanmamis' gibi gorundu (2026-08-14). must-revalidate: tarayici her acilista sunucuya sorar, degismediyse 304 alir — maliyet yok.",
         "source": "/@(main.dart.js|flutter_bootstrap.js|flutter_service_worker.js|index.html|manifest.json)",
         "headers": [

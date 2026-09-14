@@ -27,10 +27,16 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 /// Etiket rayı doğrudan [ArticleCategory]'yi yansıtır — "hepsi" dışında her
 /// pill bir kategoriye birebir karşılık gelir. Ayrı bir filtre listesi
 /// tutmak, kategori eklendiğinde iki yerin ayrışması demekti.
-enum _Filter { hepsi, meditasyon, beslenme, tarif, hareket, ozBakim, gelisim }
+enum _ExploreTab { forYou, doIt, read, recipes }
 
-extension _FilterX on _Filter {
-  ArticleCategory? get category => switch (this) {
+extension _ExploreTabX on _ExploreTab {
+  String label(AppLocalizations l10n) => switch (this) {
+    _ExploreTab.forYou => l10n.exploreTabForYou,
+    _ExploreTab.doIt => l10n.exploreTabDo,
+    _ExploreTab.read => l10n.exploreTabRead,
+    _ExploreTab.recipes => l10n.exploreTabRecipes,
+  };
+  /* ArticleCategory? get category => switch (this) {
     _Filter.hepsi => null,
     _Filter.meditasyon => ArticleCategory.meditasyon,
     _Filter.beslenme => ArticleCategory.beslenme,
@@ -50,7 +56,7 @@ extension _FilterX on _Filter {
     _Filter.gelisim => l10n.exploreFilterGrowth,
   };
 
-  bool matches(Article a) => category == null || a.category == category;
+  bool matches(Article a) => category == null || a.category == category; */
 }
 
 // ─── Screen ──────────────────────────────────────────────────────────────────
@@ -63,7 +69,7 @@ class ExploreScreen extends ConsumerStatefulWidget {
 }
 
 class _ExploreScreenState extends ConsumerState<ExploreScreen> {
-  _Filter _selected = _Filter.hepsi;
+  _ExploreTab _selected = _ExploreTab.forYou;
 
   void _open(Article a) {
     Navigator.of(context).push(
@@ -91,10 +97,14 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
-    final fetched = ref.watch(articlesProvider).valueOrNull;
+    final articlesState = ref.watch(articlesProvider);
+    final fetched = articlesState.valueOrNull;
     // Uygulama diline göre sürüm seç (EN çevirisi olmayan alan TR'ye düşer).
     final allArticles =
-        ((fetched == null || fetched.isEmpty) ? kArticles : fetched)
+        ((articlesState.hasError ||
+                    (fetched == null && !articlesState.isLoading))
+                ? kArticles
+                : (fetched ?? const <Article>[]))
             .map((a) => a.forLocale(l10n.localeName))
             .toList();
     // Sıra iki kez düzeltildi. Firestore `order` alanına göre veriyor ve o
@@ -108,7 +118,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     final ordered = interleaveByCategory(allArticles);
     // "Bugün senin için" rafının günlük dilimi. Yalnız süzülmemiş görünümde
     // çizildiği için seçim de orada anlamlı.
-    final todaysPicks = _selected == _Filter.hepsi
+    final todaysPicks = _selected == _ExploreTab.forYou
         ? pickDaily(ordered)
         : const <Article>[];
     final railIds = todaysPicks.map((a) => a.id).toSet();
@@ -120,7 +130,20 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     // görünmesi 2026-08-31'de büyük kapak kartının kaldırılma sebebiydi;
     // raf da aynı tuzağa düşmesin.
     final filtered = ordered
-        .where((a) => _selected.matches(a) && !railIds.contains(a.id))
+        .where(
+          (a) => switch (_selected) {
+            _ExploreTab.forYou => true,
+            _ExploreTab.doIt =>
+              a.category == ArticleCategory.meditasyon ||
+                  a.category == ArticleCategory.hareket,
+            _ExploreTab.read =>
+              a.category == ArticleCategory.beslenme ||
+                  a.category == ArticleCategory.ozBakim ||
+                  a.category == ArticleCategory.gelisim,
+            _ExploreTab.recipes => a.category == ArticleCategory.tarif,
+          },
+        )
+        .where((a) => !railIds.contains(a.id))
         .toList();
     // Yalnız oynatılabilir seansı olan programlar (ADR-0004). Makalelerdeki
     // kArticles gibi bir offline yedeği YOK: video içeriğinin yerel karşılığı
@@ -192,7 +215,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    for (final f in _Filter.values)
+                    for (final f in _ExploreTab.values)
                       IlndChip(
                         p: p,
                         label: f.label(l10n),
@@ -206,6 +229,50 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
             const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
+            if (articlesState.isLoading)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Center(
+                    child: Text(
+                      l10n.stateLoading,
+                      style: AppTextStyles.body(
+                        fontSize: 13,
+                        color: p.textMuted,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (articlesState.hasError)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.screenPadding,
+                    0,
+                    AppSpacing.screenPadding,
+                    18,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.stateError,
+                          style: AppTextStyles.body(
+                            fontSize: 13,
+                            color: p.textMuted,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => ref.invalidate(articlesProvider),
+                        child: Text(l10n.stateRetry),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
             // ── Ritüeller ────────────────────────────────────────────────
             // Yalnız "hepsi" seçiliyken çizilir (owner kararı 2026-08-31):
             // bir kategoriye süzülmüşken ritüel şeridi konuyla ilgisiz bir
@@ -213,7 +280,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             //
             // Büyük kapak kartı aynı kararla kaldırıldı; ekranın ilk şeyi
             // artık etiket rayı ve hemen altındaki ritüeller.
-            if (_selected == _Filter.hepsi) ...[
+            if (_selected == _ExploreTab.forYou) ...[
               // ── Bugün senin için ───────────────────────────────────────
               // Kişiselleştirilmiş günlük raf, listenin ÜSTÜNDE ama etiket
               // rayının ALTINDA duruyor: rayın ekranın ilk öğesi olması
@@ -645,7 +712,7 @@ class _RitualCard extends StatelessWidget {
             _RitualTitle(title: title, color: textColor),
             trailing ??
                 Icon(
-                  Icons.arrow_outward_rounded,
+                  Icons.chevron_right_rounded,
                   size: 15,
                   color: onLight
                       ? Colors.white.withValues(alpha: 0.85)
@@ -717,7 +784,7 @@ class _FeedRow extends StatelessWidget {
                 width: 68,
                 height: 82,
                 child: CoverImage(
-                  imageUrl: article.imageUrl,
+                  imageUrl: article.coverImageUrl,
                   palette: article.category.palette,
                 ),
               ),

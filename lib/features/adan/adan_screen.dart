@@ -7,14 +7,17 @@ import 'package:ilnd_app/core/utils/possessive.dart';
 import 'package:ilnd_app/core/widgets/entrance.dart';
 import 'package:ilnd_app/core/widgets/ilnd_surfaces.dart';
 import 'package:ilnd_app/features/adan/adan_model.dart';
+import 'package:ilnd_app/features/adan/island_name_provider.dart';
+import 'package:ilnd_app/features/adan/island_name_dialog.dart';
+import 'package:ilnd_app/features/adan/island_scene.dart';
 import 'package:ilnd_app/features/adan/adan_repository.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// Adan (Ada tasarımı 04): ilerleme sayı değil yer olarak (ADR-0006).
 ///
-/// Ada kartı şimdilik illüstrasyonsuz (bkz. [IslandFrame]); öğeler ve
-/// kazanım mantığı değişmedi, yalnız kart olarak dizildiler.
+/// Layered editorial artwork reflects server-earned objects without changing
+/// earning rules or provider behavior.
 class AdanScreen extends ConsumerStatefulWidget {
   const AdanScreen({super.key});
 
@@ -35,8 +38,9 @@ class _AdanScreenState extends ConsumerState<AdanScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final p = ref.watch(paletteProvider);
-    final state =
-        ref.watch(islandStateProvider).valueOrNull ?? const IslandState();
+    final islandAsync = ref.watch(islandStateProvider);
+    final state = islandAsync.valueOrNull ?? const IslandState();
+    final customName = ref.watch(islandNameProvider);
     final onboardingName = ref.watch(userNameProvider);
     final name = onboardingName.isNotEmpty
         ? onboardingName
@@ -59,55 +63,136 @@ class _AdanScreenState extends ConsumerState<AdanScreen> {
               subtitle: l10n.adanSubtitle,
             ),
             const SizedBox(height: 18),
-            Entrance(
-              index: 0,
-              child: LayoutBuilder(
-                builder: (context, constraints) => SizedBox(
-                  height: (constraints.maxWidth / 1.34).clamp(180.0, 300.0),
-                  child: AdanCanvas(state: state, p: p, showWordmark: false),
-                ),
-              ),
-            ),
-            const SizedBox(height: 22),
-            Entrance(
-              index: 1,
-              child: Text(
-                name.isEmpty
-                    ? l10n.adanTitle
-                    : l10n.homeIslandOwned(possessiveName(l10n, name)),
-                style: AppTextStyles.display(fontSize: 25, color: p.text),
-              ),
-            ),
-            const SizedBox(height: 22),
-            Text(
-              l10n.adanItemsTitle,
-              style: AppTextStyles.serifTitle(color: p.text),
-            ),
-            const SizedBox(height: 12),
-            for (final (i, item) in kIslandItems.indexed)
-              Entrance(
-                index: 2 + i,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: _ItemRow(item: item, state: state, p: p),
-                ),
-              ),
-            if (state.nextItem case final next?)
+            if (islandAsync.isLoading)
               Padding(
-                padding: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
-                  l10n.adanNextNote(
-                    adanItemName(l10n, next.id),
-                    adanItemHow(l10n, next.id),
-                  ),
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.body(
-                    fontSize: 12.5,
-                    color: p.textMuted,
-                    height: 1.55,
+                  l10n.stateLoading,
+                  style: AppTextStyles.body(fontSize: 13, color: p.textMuted),
+                ),
+              )
+            else if (islandAsync.hasError)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.stateError,
+                      style: AppTextStyles.body(
+                        fontSize: 13,
+                        color: p.textMuted,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => ref.invalidate(islandStateProvider),
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
+                      child: Text(l10n.stateRetry),
+                    ),
+                  ],
+                ),
+              ),
+            if (!islandAsync.isLoading && !islandAsync.hasError)
+              Entrance(
+                index: 0,
+                child: LayoutBuilder(
+                  builder: (context, constraints) => SizedBox(
+                    height: constraints.maxWidth.clamp(240.0, 420.0),
+                    child: AdanCanvas(state: state, p: p, showWordmark: false),
                   ),
                 ),
               ),
+            const SizedBox(height: 22),
+            if (!islandAsync.isLoading && !islandAsync.hasError)
+              Entrance(
+                index: 1,
+                child: Text(
+                  state.earnedCount == 0
+                      ? l10n.adanLowData
+                      : l10n.adanContext(state.earnedCount),
+                  style: AppTextStyles.body(
+                    fontSize: 13,
+                    color: p.textMuted,
+                    height: 1.45,
+                  ),
+                ),
+              ),
+            const SizedBox(height: 18),
+            Entrance(
+              index: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    customName.valueOrNull ??
+                        (name.isEmpty
+                            ? l10n.adanTitle
+                            : l10n.homeIslandOwned(possessiveName(l10n, name))),
+                    style: AppTextStyles.display(fontSize: 25, color: p.text),
+                  ),
+                  TextButton.icon(
+                    onPressed: customName.isLoading
+                        ? null
+                        : () {
+                            if (customName.hasError) {
+                              refreshIslandName(ref);
+                              return;
+                            }
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (_) => IslandNameDialog(
+                                initialName: customName.valueOrNull,
+                                save: ref.read(saveIslandNameProvider),
+                              ),
+                            );
+                          },
+                    icon: const Icon(Icons.edit_outlined, size: 18),
+                    label: Text(
+                      customName.hasError
+                          ? l10n.stateRetry
+                          : customName.valueOrNull == null
+                          ? l10n.adanNameTitle
+                          : l10n.adanNameEdit,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (!islandAsync.isLoading && !islandAsync.hasError) ...[
+              const SizedBox(height: 22),
+              Text(
+                l10n.adanItemsTitle,
+                style: AppTextStyles.serifTitle(color: p.text),
+              ),
+              const SizedBox(height: 12),
+              for (final (i, item) in kIslandItems.indexed)
+                Entrance(
+                  index: 3 + i,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _ItemRow(item: item, state: state, p: p),
+                  ),
+                ),
+              if (state.nextItem case final next?)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    l10n.adanNextNote(
+                      adanItemName(l10n, next.id),
+                      adanItemHow(l10n, next.id),
+                    ),
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.body(
+                      fontSize: 12.5,
+                      color: p.textMuted,
+                      height: 1.55,
+                    ),
+                  ),
+                ),
+            ],
           ],
         ),
       ),
@@ -115,11 +200,8 @@ class _AdanScreenState extends ConsumerState<AdanScreen> {
   }
 }
 
-/// Ada yüzeyi: iki tonlu çerçeve + ilerleme satırı.
-///
-/// Yüksekliği vermez, ebeveyninin verdiği alanı doldurur. İllüstrasyon
-/// geldiğinde yalnız [IslandFrame]'in arka planı değişir; ilerleme satırı
-/// ve ekran okuyucu etiketi burada kalır.
+/// Layered island surface with the existing localized progress and semantics.
+/// Height remains controlled by the parent for compact previews and full views.
 class AdanCanvas extends StatelessWidget {
   const AdanCanvas({
     super.key,
@@ -156,6 +238,7 @@ class AdanCanvas extends StatelessWidget {
     return IslandFrame(
       p: p,
       radius: rounded ? AppSpacing.radiusHero : 0,
+      artwork: IslandScene(state: state, p: p),
       child: Stack(
         children: [
           // Etiket yalnız yüzeyin kendisinde: üstteki satırlar ekran
@@ -176,17 +259,18 @@ class AdanCanvas extends StatelessWidget {
                 style: AppTextStyles.heading(fontSize: 19, color: p.text),
               ),
             ),
-          Positioned(
-            left: 16,
-            right: 16,
-            bottom: 13,
-            child: Text(
-              progress,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.body(fontSize: 12, color: p.text),
+          if (showWordmark)
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 13,
+              child: Text(
+                progress,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.body(fontSize: 12, color: p.text),
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -248,15 +332,15 @@ class _ItemRow extends StatelessWidget {
                     height: 1.35,
                   ),
                 ),
+                const SizedBox(height: 6),
+                Text(
+                  earned ? l10n.adanStateOpen : l10n.adanStateLocked,
+                  style: AppTextStyles.mono(
+                    fontSize: 10,
+                    color: earned ? p.accent : p.textMuted,
+                  ),
+                ),
               ],
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(
-            earned ? l10n.adanStateOpen : l10n.adanStateLocked,
-            style: AppTextStyles.mono(
-              fontSize: 10,
-              color: earned ? p.accent : p.textMuted,
             ),
           ),
         ],

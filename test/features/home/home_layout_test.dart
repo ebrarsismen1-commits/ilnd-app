@@ -7,6 +7,8 @@ import 'package:ilnd_app/core/repositories/food_repository.dart';
 import 'package:ilnd_app/features/habits/habits_provider.dart';
 import 'package:ilnd_app/core/repositories/checkin_repository.dart';
 import 'package:ilnd_app/features/home/home_screen.dart';
+import 'package:ilnd_app/features/adan/adan_model.dart';
+import 'package:ilnd_app/features/adan/adan_repository.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
@@ -31,6 +33,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          islandStateProvider.overrideWith(
+            (_) => Stream.value(const IslandState()),
+          ),
           // Bugün ekranı artık Takip bölümlerini de taşıyor; alışkanlık
           // bölümü auth'a dokunuyor (Supabase), o yüzden sahtelenir.
           dailyMacrosProvider.overrideWithValue(
@@ -70,16 +75,15 @@ void main() {
     final moodFinder = find.text(l10n.homeMoodQuestion);
     expect(moodFinder, findsOneWidget);
 
-    // Hero 330px (handoff §1); mood satırı hero'nun altında + nefes payıyla
-    // başlamalı.
-    // Not: eski bindirme Transform.translate'ti (paint-only) — getRect'e
-    // yansımaz; bu eşik layout'taki gerçek boşluğu kilitler (eski düzen
-    // 287.5 veriyordu, ayrık düzen ~304).
-    final moodRect = tester.getRect(moodFinder);
+    final primary = find.byKey(const ValueKey('home-primary-action'));
+    expect(primary, findsOneWidget);
     expect(
-      moodRect.top,
-      greaterThanOrEqualTo(330 + 16),
-      reason: 'Mood satırı hero/selamlamayla çakışmamalı, ayrık durmalı',
+      tester.getRect(moodFinder).bottom,
+      lessThan(tester.getRect(primary).top),
+    );
+    expect(
+      tester.getRect(find.text(l10n.homeIslandVisit)).bottom,
+      lessThan(tester.getRect(moodFinder).top),
     );
   });
 }

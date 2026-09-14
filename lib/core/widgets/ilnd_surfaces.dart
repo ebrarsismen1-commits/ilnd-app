@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/core/widgets/pressable.dart';
+import 'package:ilnd_app/core/widgets/island_artwork.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 
 /// "Ada" tasarımının (Figma Page 2) ortak yüzeyleri.
@@ -456,12 +457,10 @@ class PracticeCard extends StatelessWidget {
   }
 }
 
-/// Ada kartı: gökyüzü + deniz iki tonu, üstünde isteğe bağlı içerik.
+/// Ada illüstrasyonu ve üstünde isteğe bağlı ekran içeriği.
 ///
-/// İllüstrasyon BİLEREK yok (owner kararı 2026-09-11: "ada çizimlerini
-/// şimdilik boş bırak"). Kart yerini ve oranını korur ki çizim geldiğinde
-/// tek bir yere, bu widget'ın arka planına girsin; Bugün, Adan, Karşılama,
-/// Topluluk ve Odaklan aynı çerçeveyi kullanıyor.
+/// Onaylanan Figma ada katmanları ortak arka planda yer alır; Bugün, Adan,
+/// Karşılama, Topluluk ve Odaklan kendi ölçülerini ve içeriklerini korur.
 class IslandFrame extends StatelessWidget {
   const IslandFrame({
     super.key,
@@ -470,6 +469,7 @@ class IslandFrame extends StatelessWidget {
     this.radius = AppSpacing.radiusHero,
     this.child,
     this.seaColor,
+    this.artwork,
   });
 
   final AppPalette p;
@@ -482,6 +482,9 @@ class IslandFrame extends StatelessWidget {
   /// Deniz katmanının rengi. Adan'da sessiz günlerde koyulaşan su bu
   /// katmandan anlatılır (ADR-0006); verilmezse `sea`.
   final Color? seaColor;
+
+  /// Optional screen-specific illustration; other previews retain their artwork.
+  final Widget? artwork;
 
   @override
   Widget build(BuildContext context) {
@@ -509,6 +512,22 @@ class IslandFrame extends StatelessWidget {
                 ],
               ),
             ),
+            ExcludeSemantics(child: artwork ?? IslandArtwork(p: p)),
+            if (seaColor != null && seaColor != p.sea)
+              ExcludeSemantics(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        seaColor!.withValues(alpha: 0.14),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ?child,
           ],
         ),
