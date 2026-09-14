@@ -58,7 +58,7 @@ void main() {
   ) async {
     final event = CommunityEvent(
       id: 'e1',
-      title: 'sabah  yürüyüşü',
+      title: 'sabah yürüyüşü',
       city: 'İstanbul',
       venue: 'Caddebostan sahili',
       startsAt: DateTime(2026, 9, 28, 8),
@@ -67,7 +67,7 @@ void main() {
     final l10n = lookupAppLocalizations(const Locale('tr'));
 
     expect(find.text(l10n.topulukUpcomingLabel), findsOneWidget);
-    expect(find.text('sabah rutini yürüyüşü'), findsOneWidget);
+    expect(find.text('sabah yürüyüşü'), findsOneWidget);
     expect(find.textContaining('Caddebostan'), findsOneWidget);
     expect(find.text(l10n.topulukRsvpJoin), findsOneWidget); // henüz katılmadı
     expect(find.text(l10n.topulukGoingCount(12)), findsOneWidget);

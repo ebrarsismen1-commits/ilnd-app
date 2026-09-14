@@ -2989,5 +2989,5 @@
   "adanNameLabel": "adanın adı",
   "adanNameHint": "ör. sakin koy",
   "adanNameEdit": "ismi değiştir",
-  "adanNameInvalid": "1–32 karakter arasında bir isim yaz."
+  "adanNameInvalid": "1 ile 32 karakter arasında bir isim yaz."
 }

@@ -2309,5 +2309,5 @@ class AppLocalizationsTr extends AppLocalizations {
   String get adanNameEdit => 'ismi değiştir';
 
   @override
-  String get adanNameInvalid => '1–32 karakter arasında bir isim yaz.';
+  String get adanNameInvalid => '1 ile 32 karakter arasında bir isim yaz.';
 }
