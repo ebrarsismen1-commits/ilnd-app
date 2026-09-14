@@ -15,10 +15,12 @@
  *   - removing an article from the JSON does NOT delete it from Firestore
  *     automatically (run with --prune to also delete orphaned docs)
  *
- * Usage:
- *   node functions/scripts/seedArticles.js                  # against prod
- *   node functions/scripts/seedArticles.js --prune          # also delete orphans
+ * Usage (an explicit target is REQUIRED — see scripts/lib/target.js):
  *   FIRESTORE_EMULATOR_HOST=localhost:8080 node functions/scripts/seedArticles.js
+ *   node functions/scripts/seedArticles.js --project=<staging-id>
+ *   node functions/scripts/seedArticles.js --project=ilnd-app-8dcbd --confirm-prod
+ *   ... --prune                   # on prod: dry run, lists what would be deleted
+ *   ... --prune --confirm-prune   # on prod: actually delete orphans
  *
  * Requires a service account: either run inside an environment with
  * Application Default Credentials (e.g. `gcloud auth application-default
@@ -28,6 +30,7 @@
 const fs = require("fs");
 const path = require("path");
 const admin = require("firebase-admin");
+const {resolveTarget, pruneOrphans, describeTarget} = require("./lib/target");
 
 const ARTICLES_PATH = path.join(__dirname, "..", "..", "content", "articles.json");
 
@@ -35,10 +38,11 @@ const ARTICLES_PATH = path.join(__dirname, "..", "..", "content", "articles.json
  * @return {Promise<void>}
  */
 async function main() {
-  const prune = process.argv.includes("--prune");
+  const target = resolveTarget();
+  console.log(describeTarget(target));
 
   if (!admin.apps.length) {
-    admin.initializeApp();
+    admin.initializeApp({projectId: target.projectId});
   }
   const db = admin.firestore();
   const col = db.collection("articles");
@@ -58,16 +62,7 @@ async function main() {
   await batch.commit();
   console.log(`Upserted ${articles.length} articles.`);
 
-  if (prune) {
-    const existing = await col.get();
-    const orphaned = existing.docs.filter((d) => !seenIds.has(d.id));
-    if (orphaned.length > 0) {
-      const pruneBatch = db.batch();
-      orphaned.forEach((d) => pruneBatch.delete(d.ref));
-      await pruneBatch.commit();
-      console.log(`Pruned ${orphaned.length} orphaned article(s) not in articles.json.`);
-    }
-  }
+  await pruneOrphans(col, seenIds, target, "article(s) not in articles.json");
 }
 
 main().catch((err) => {

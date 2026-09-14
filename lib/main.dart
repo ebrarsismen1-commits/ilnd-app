@@ -9,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
+import 'package:ilnd_app/core/services/crash_reporting.dart';
+import 'package:ilnd_app/core/services/local_data_guard.dart';
 import 'package:ilnd_app/core/theme/app_palette.dart';
 import 'package:ilnd_app/core/theme/app_theme.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
@@ -20,6 +22,8 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Yayın derlemesinde cihaz loguna hiçbir şey yazılmasın (denetim L-1).
+  silenceDebugPrintInRelease(isRelease: kReleaseMode);
 
   // Lora OFL ile geliyor: lisans metni fontla birlikte dağıtılmak zorunda.
   // Uygulamanın lisans ekranında (showLicensePage) görünür.
@@ -75,14 +79,25 @@ void main() async {
       if (kDebugMode) {
         debugPrint('[FlutterError] ${details.exceptionAsString()}');
       } else {
-        FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+        // Çerçeve hatası (çizim/yerleşim) ölümcül kalır, ama mesajı
+        // kişisel içerikten arındırılır (denetim L-2).
+        FirebaseCrashlytics.instance.recordFlutterFatalError(
+          details.copyWith(exception: scrubForCrashReport(details.exception)),
+        );
       }
     };
     PlatformDispatcher.instance.onError = (error, stack) {
       if (kDebugMode) {
         debugPrint('[PlatformDispatcher] $error\n$stack');
       } else {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        // Yakalanmayan asenkron hataların çoğu ağ kaynaklı ve uygulamayı
+        // kapatmıyor: ölümcül sayılınca çökme oranı gerçeği yansıtmıyordu
+        // (denetim L-2).
+        FirebaseCrashlytics.instance.recordError(
+          scrubForCrashReport(error),
+          stack,
+          fatal: false,
+        );
       }
       return true;
     };
@@ -238,6 +253,8 @@ class _IlndAppState extends ConsumerState<IlndApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
+    // Çıkışta / hesap değişiminde önceki kişinin yerel verisini siler (H-2).
+    ref.watch(localDataGuardProvider);
     // Tema geçişi hem özel paleti hem Material bileşenlerini (dialog,
     // bottom sheet, picker) birlikte karartsın — bkz. AppTheme.dark notu.
     final brightness = ref.watch(themeModeProvider);
@@ -250,6 +267,18 @@ class _IlndAppState extends ConsumerState<IlndApp> with WidgetsBindingObserver {
           ? ThemeMode.dark
           : ThemeMode.light,
       debugShowCheckedModeBanner: false,
+      // Debug derleme canlı veriye yazıyorsa bunu herkes görsün (denetim C-2).
+      builder: (context, child) =>
+          AppConfig.isDebugBuildOnProd(
+            isDebug: kDebugMode,
+            projectId: AppConfig.firebaseProjectId,
+          )
+          ? Banner(
+              message: 'PROD',
+              location: BannerLocation.topStart,
+              child: child ?? const SizedBox.shrink(),
+            )
+          : child ?? const SizedBox.shrink(),
       routerConfig: router,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

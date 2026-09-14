@@ -123,11 +123,12 @@ class IlndService {
         );
       }
 
-      final decoded =
-          jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      final content = decoded['content'] as List;
+      final text = firstTextBlock(jsonDecode(utf8.decode(response.bodyBytes)));
+      if (text == null) {
+        throw IlndServiceException(l10n.ilndServiceGenericError);
+      }
       // Ad jetonu burada, cevap ekrana gitmeden önce gerçek adla değişir.
-      return personalize((content.first['text'] as String).trim(), memory.name);
+      return personalize(text.trim(), memory.name);
     } on IlndFreeLimitException {
       // Kota duvarı karakter-içi bir cevapla gizlenemez: kullanıcıya paywall
       // gösterilmesi gerekiyor, fallback'e düşülürse bunu hiç öğrenemez.
@@ -231,6 +232,7 @@ class IlndService {
       }
 
       final buffer = StringBuffer();
+      var completed = false;
       await for (final line
           in response.stream
               .transform(utf8.decoder)
@@ -238,6 +240,14 @@ class IlndService {
               // Olaylar arasında 60 saniye sessizlik: bağlantı asılı
               // kalmış demektir, sohbeti kilitte bırakma.
               .timeout(const Duration(seconds: 60))) {
+        // Güvenlik denetimi M-1: akış ortasında kopan bağlantı eskiden
+        // normal bitiş gibi görünüyor, yarım cevap tamamlanmış sayılıp
+        // kaydediliyordu. Sunucu artık hata olayı yolluyor; `message_stop`
+        // gelmeden biten akış da başarısız sayılır.
+        if (sseIsError(line)) {
+          throw IlndServiceException(l10n.ilndServiceGenericError);
+        }
+        if (sseIsMessageStop(line)) completed = true;
         final delta = sseTextDelta(line);
         if (delta == null) continue;
         buffer.write(delta);
@@ -245,7 +255,11 @@ class IlndService {
       }
 
       // Akış tek kelime getirmediyse boş balon bırakma.
-      if (buffer.isEmpty) yield await once();
+      if (buffer.isEmpty) {
+        yield await once();
+      } else if (!completed) {
+        throw IlndServiceException(l10n.ilndServiceGenericError);
+      }
     } on IlndFreeLimitException {
       rethrow;
     } catch (e) {
@@ -315,9 +329,8 @@ class IlndService {
     try {
       final decoded =
           jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      final raw = extractJsonObject(
-        (decoded['content'] as List).first['text'] as String,
-      );
+      final text = firstTextBlock(decoded);
+      final raw = text == null ? null : extractJsonObject(text);
       if (raw == null) {
         return (goals: const <String>[], facts: const <String>[]);
       }
@@ -374,9 +387,8 @@ class IlndService {
     try {
       final decoded =
           jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
-      final raw = extractJsonObject(
-        (decoded['content'] as List).first['text'] as String,
-      );
+      final text = firstTextBlock(decoded);
+      final raw = text == null ? null : extractJsonObject(text);
       if (raw == null) return const [];
       final parsed = jsonDecode(raw) as Map<String, dynamic>;
       final list = List<String>.from(
@@ -457,6 +469,24 @@ bool isFreeWeeklyLimitBody(String body) {
   }
 }
 
+/// Anthropic yanıtındaki İLK metin bloğu; yoksa null.
+///
+/// Güvenlik denetimi L-5: `content.first['text'] as String` varsayımı boş
+/// `content` (reddetme / max_tokens), metin olmayan ilk blok ya da bozuk
+/// gövdede StateError / TypeError fırlatıyordu. Hata yakalanıyordu ama nedeni
+/// kayboluyordu; artık "metin yok" açık bir durum.
+String? firstTextBlock(Object? decoded) {
+  if (decoded is! Map) return null;
+  final content = decoded['content'];
+  if (content is! List) return null;
+  for (final block in content) {
+    if (block is Map && block['type'] == 'text' && block['text'] is String) {
+      return block['text'] as String;
+    }
+  }
+  return null;
+}
+
 /// Anthropic SSE akışındaki bir satırdan metin parçasını ayıklar.
 ///
 /// Akışta yalnız `content_block_delta` olayları metin taşır; `event:`
@@ -473,6 +503,25 @@ String? sseTextDelta(String line) {
     final delta = event['delta'] as Map<String, dynamic>?;
     if (delta == null || delta['type'] != 'text_delta') return null;
     return delta['text'] as String?;
+  } catch (_) {
+    return null;
+  }
+}
+
+/// Satır, akışın düzgün bittiğini söyleyen `message_stop` olayı mı?
+bool sseIsMessageStop(String line) => _sseEventType(line) == 'message_stop';
+
+/// Satır bir hata olayı mı? Anthropic'in `error` olayı da, proxy'nin akış
+/// başladıktan sonra yolladığı `proxy_error` da `type: error` taşır.
+bool sseIsError(String line) => _sseEventType(line) == 'error';
+
+String? _sseEventType(String line) {
+  if (!line.startsWith('data:')) return null;
+  final payload = line.substring(5).trim();
+  if (payload.isEmpty || payload == '[DONE]') return null;
+  try {
+    final event = jsonDecode(payload);
+    return event is Map<String, dynamic> ? event['type'] as String? : null;
   } catch (_) {
     return null;
   }

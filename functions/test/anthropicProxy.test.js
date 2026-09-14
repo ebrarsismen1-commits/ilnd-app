@@ -3,6 +3,7 @@ const httpMocks = require("node-mocks-http");
 const {getIdTokenForUid, getAppCheckHeaderForTests} = require("./helpers");
 
 const myFunctions = require("../index");
+const {resetAiConfigCache} = require("../aiConfig");
 
 const db = admin.firestore();
 
@@ -52,10 +53,16 @@ describe("anthropicProxy", () => {
   });
 
   afterEach(async () => {
-    const snap = await db.collection("ai_usage").get();
-    await Promise.all(snap.docs.map((d) => d.ref.delete()));
+    for (const col of ["ai_usage", "ai_token_usage", "config"]) {
+      const snap = await db.collection(col).get();
+      await Promise.all(snap.docs.map((d) => d.ref.delete()));
+    }
+    resetAiConfigCache();
     global.fetch.mockClear();
   });
+
+  const anthropicCalls = () =>
+    global.fetch.mock.calls.filter(([url]) => String(url).includes("api.anthropic.com"));
 
   test("rejects requests with no bearer token", async () => {
     const res = await callProxy(null, {tier: "quick", messages: [{role: "user", content: "hi"}]});
@@ -152,6 +159,9 @@ describe("anthropicProxy", () => {
       const idToken = await getIdTokenForUid("ai-limit-5");
       const res = await callProxy(idToken, {
         tier: "deep",
+        // İstemci (food_analysis.dart) her zaman kind: food gönderir; görsel
+        // artık yalnız bu türde kabul ediliyor (denetim C-1).
+        kind: "food",
         messages: [{
           role: "user",
           content: [
@@ -169,6 +179,118 @@ describe("anthropicProxy", () => {
         }],
       });
       expect(res.statusCode).toBe(200);
+    });
+  });
+
+  // ── Denetim C-1 (2026-09-13): izin listesi + kind'sız çağrı tavanları ────
+  describe("C-1 kötüye kullanım regresyonları", () => {
+    test("document bloğu Anthropic'e hiç ulaşmaz", async () => {
+      const idToken = await getIdTokenForUid("c1-doc");
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        messages: [{role: "user", content: [{
+          type: "document",
+          source: {type: "text", media_type: "text/plain", data: "x".repeat(400000)},
+        }]}],
+      });
+      expect(res.statusCode).toBe(400);
+      expect(anthropicCalls()).toHaveLength(0);
+    });
+
+    test("iç içe tool_result metni bütçeyi atlatamaz", async () => {
+      const idToken = await getIdTokenForUid("c1-nested");
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        kind: "message",
+        messages: [{role: "user", content: [{
+          type: "tool_result",
+          tool_use_id: "x",
+          content: [{type: "text", text: "x".repeat(400000)}],
+        }]}],
+      });
+      expect(res.statusCode).toBe(400);
+      expect(anthropicCalls()).toHaveLength(0);
+    });
+
+    test("iletilen gövde yalnız temiz alanlardan kurulur", async () => {
+      const idToken = await getIdTokenForUid("c1-strip");
+      const res = await callProxy(idToken, {
+        tier: "quick",
+        kind: "message",
+        tools: [{name: "exfil", input_schema: {type: "object"}}],
+        metadata: {user_id: "someone-else"},
+        messages: [{role: "user", content: [{type: "text", text: "hi", cache_control: {type: "ephemeral"}}]}],
+      });
+      expect(res.statusCode).toBe(200);
+      const forwarded = JSON.parse(anthropicCalls()[0][1].body);
+      for (const key of Object.keys(forwarded)) {
+        expect(["model", "max_tokens", "system", "messages", "stream"]).toContain(key);
+      }
+      expect(forwarded.tools).toBeUndefined();
+      expect(forwarded.metadata).toBeUndefined();
+      expect(forwarded.messages).toEqual([{role: "user", content: [{type: "text", text: "hi"}]}]);
+    });
+
+    test("kind göndermeyen çağrı günlük system tavanında durur", async () => {
+      const uid = "c1-system-cap";
+      const today = new Date().toISOString().slice(0, 10);
+      await db.collection("ai_usage").doc(`${uid}_${today}`).set({uid, day: today, counts: {system: 80}});
+      const idToken = await getIdTokenForUid(uid);
+      const res = await callProxy(idToken, {tier: "quick", messages: [{role: "user", content: "hi"}]});
+      expect(res.statusCode).toBe(429);
+      expect(res.body.reason).toBe("daily-system-limit");
+      expect(anthropicCalls()).toHaveLength(0);
+    });
+
+    test("system çağrısı günlük sayaca yazılır", async () => {
+      const uid = "c1-system-count";
+      const idToken = await getIdTokenForUid(uid);
+      await callProxy(idToken, {tier: "quick", messages: [{role: "user", content: "hi"}]});
+      const today = new Date().toISOString().slice(0, 10);
+      const doc = await db.collection("ai_usage").doc(`${uid}_${today}`).get();
+      expect(doc.data().counts.system).toBe(1);
+    });
+
+    test("günlük dolar tavanı tüm türleri keser", async () => {
+      const uid = "c1-usd";
+      const today = new Date().toISOString().slice(0, 10);
+      await db.collection("ai_token_usage").doc(`${uid}_${today}`).set({uid, day: today, estimatedUsd: 5.01});
+      const idToken = await getIdTokenForUid(uid);
+      const res = await callProxy(idToken, {tier: "quick", kind: "message", messages: [{role: "user", content: "hi"}]});
+      expect(res.statusCode).toBe(429);
+      expect(res.body.reason).toBe("daily-cost-limit");
+      expect(anthropicCalls()).toHaveLength(0);
+    });
+
+    test("config/ai.dailyUsdLimit tavanı düşürebilir", async () => {
+      const uid = "c1-usd-config";
+      const today = new Date().toISOString().slice(0, 10);
+      await db.collection("config").doc("ai").set({dailyUsdLimit: 1});
+      await db.collection("ai_token_usage").doc(`${uid}_${today}`).set({uid, day: today, estimatedUsd: 1.2});
+      const idToken = await getIdTokenForUid(uid);
+      const res = await callProxy(idToken, {tier: "quick", kind: "message", messages: [{role: "user", content: "hi"}]});
+      expect(res.body.reason).toBe("daily-cost-limit");
+    });
+
+    test("acil durum anahtarı kapalıyken 503 döner ve sayaç artmaz", async () => {
+      await db.collection("config").doc("ai").set({enabled: false});
+      const uid = "c1-breaker";
+      const idToken = await getIdTokenForUid(uid);
+      const res = await callProxy(idToken, {tier: "quick", kind: "message", messages: [{role: "user", content: "hi"}]});
+      expect(res.statusCode).toBe(503);
+      expect(res.body.reason).toBe("ai-disabled");
+      expect(anthropicCalls()).toHaveLength(0);
+      const snap = await db.collection("ai_usage").where("uid", "==", uid).get();
+      expect(snap.empty).toBe(true);
+    });
+
+    test("yardımcı çağrıda görsel reddedilir (vision faturası)", async () => {
+      const idToken = await getIdTokenForUid("c1-img-system");
+      const res = await callProxy(idToken, {
+        tier: "deep",
+        messages: [{role: "user", content: [{type: "image", source: {type: "base64", media_type: "image/jpeg", data: "AAAA"}}]}],
+      });
+      expect(res.statusCode).toBe(400);
     });
   });
 
@@ -370,6 +492,7 @@ describe("anthropicProxy", () => {
 
     const today = new Date().toISOString().slice(0, 10);
     const usageDoc = await db.collection("ai_usage").doc(`ai-user-5_${today}`).get();
-    expect(usageDoc.data().counts).toEqual({quick: 1});
+    // kind'sız çağrı artık "system" günlük sayacına da yazılır (denetim C-1).
+    expect(usageDoc.data().counts).toEqual({quick: 1, system: 1});
   });
 });

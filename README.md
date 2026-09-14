@@ -30,7 +30,7 @@ A Gen-Z wellness journaling app powered by an AI companion that learns from your
 | Database | Firebase Firestore |
 | AI | Anthropic Claude (haiku-4-5 / sonnet-4-6) via Cloud Function proxy |
 | Subscriptions | RevenueCat / purchases_flutter 8.x |
-| Functions | Firebase Cloud Functions v2 (Node 20) |
+| Functions | Firebase Cloud Functions v2 (Node 22) |
 | Security | Firebase App Check (Play Integrity / App Attest) |
 | Observability | Firebase Crashlytics + Analytics |
 | i18n | flutter_localizations + intl (.arb files, TR + EN) |
@@ -43,7 +43,7 @@ A Gen-Z wellness journaling app powered by an AI companion that learns from your
 ### Prerequisites
 
 - Flutter 3.44.1 ([install](https://flutter.dev/install))
-- Node.js 20.x
+- Node.js 22.x (Cloud Functions runtime; Node 20 is decommissioned on 2026-10-30)
 - Firebase CLI: `npm install -g firebase-tools`
 
 ### Setup
@@ -61,8 +61,9 @@ cd functions && npm install && cd ..
 # Start Firebase emulators
 firebase emulators:start
 
-# Seed article content
-cd functions && npm run seed:articles && cd ..
+# Seed article content (into the emulator — the script refuses to run without
+# an explicit target, see functions/scripts/lib/target.js)
+cd functions && FIRESTORE_EMULATOR_HOST=localhost:8080 npm run seed:articles && cd ..
 
 # Run the app
 flutter run
@@ -92,7 +93,7 @@ ilnd_app/
 │   ├── main.dart                    # App entry, Crashlytics, App Check
 │   ├── core/                        # Shared: billing, AI, repos, router, theme, utils
 │   └── features/                    # Auth, chat, ekle, explore, habits, home, …
-├── functions/                       # Firebase Cloud Functions (Node 20)
+├── functions/                       # Firebase Cloud Functions (Node 22)
 │   ├── index.js                     # mintFirebaseToken, anthropicProxy, referral, delete
 │   ├── scripts/seedArticles.js      # Content pipeline
 │   └── test/                        # Jest test suite (14 tests)
@@ -130,11 +131,13 @@ Articles are managed via JSON and seeded to Firestore:
 ```bash
 cd functions
 
-# Add/update articles (idempotent)
-npm run seed:articles
+# Add/update articles (idempotent). A target is required; production also
+# needs --confirm-prod.
+npm run seed:articles -- --project=<project-id>
 
-# Also remove deleted articles
-npm run seed:articles -- --prune
+# Also remove deleted articles (on production this is a dry run unless
+# --confirm-prune is added)
+npm run seed:articles -- --project=<project-id> --prune
 ```
 
 Edit [`content/articles.json`](content/articles.json) to add content. No app update required — Firestore is the live source.
@@ -198,7 +201,7 @@ Private — all rights reserved.
 - Flutter + Riverpod + go_router
 - Supabase (auth) bridged to Firebase Auth (Firestore security rules need
   `request.auth`) — see `lib/core/services/firebase_auth_bridge.dart`
-- Firebase Firestore (data) + Cloud Functions (`functions/`, Node 20)
+- Firebase Firestore (data) + Cloud Functions (`functions/`, Node 22)
 - Anthropic Claude via a server-side proxy (`functions/index.js`'s
   `anthropicProxy`) — the API key never ships in the client
 - RevenueCat (subscriptions)
@@ -257,8 +260,9 @@ To publish content changes:
 ```bash
 cd functions
 npm install
-npm run seed:articles            # upserts content/articles.json into Firestore
-npm run seed:articles -- --prune # also deletes articles removed from the JSON
+npm run seed:articles -- --project=ilnd-app-8dcbd --confirm-prod            # upsert
+npm run seed:articles -- --project=ilnd-app-8dcbd --confirm-prod --prune    # dry run: lists orphans
+npm run seed:articles -- --project=ilnd-app-8dcbd --confirm-prod --prune --confirm-prune  # deletes
 ```
 
 This requires Application Default Credentials for the target Firebase

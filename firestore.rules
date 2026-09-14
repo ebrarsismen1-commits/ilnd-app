@@ -2,9 +2,130 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Kullanıcılar sadece kendi verilerine erişebilir
+    // YYYY-MM-DD biçiminde, takvimde gerçekten var olan bir gün mü?
+    // Biçim ifadesi 2026-02-30'u geçirir; timestamp.date bu günü hata vermeden
+    // bir sonraki aya kaydırabilir. Bu yüzden oluşan tarihin yıl/ay/günü
+    // dizedekiyle birebir karşılaştırılır (denetim H-6, Phase 7).
+    function isDateKey(d) {
+      return d is string
+        && d.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$')
+        && dateOf(d).year() == int(d.split('-')[0])
+        && dateOf(d).month() == int(d.split('-')[1])
+        && dateOf(d).day() == int(d.split('-')[2]);
+    }
+
+    function dateOf(d) {
+      return timestamp.date(int(d.split('-')[0]), int(d.split('-')[1]), int(d.split('-')[2]));
+    }
+
+    // İstemci YEREL gününü yazar; UTC-12..UTC+14 arası her saat dilimi için
+    // "bugün" o günün UTC başlangıcına göre [-14s, +36s] aralığına düşer.
+    function isNearToday(d) {
+      return request.time >= dateOf(d) - duration.value(14, 'h')
+        && request.time < dateOf(d) + duration.value(36, 'h');
+    }
+
+    // ── users/{uid} alt ağacı ───────────────────────────────────────────────
+    // Güvenlik denetimi M-6 (2026-09-13): eskiden sahibi bu ağaca HER şeyi
+    // yazabiliyordu: sınırsız sayıda 1 MiB doküman, rastgele alt koleksiyon,
+    // negatif kalori, 1 MB yemek adı, gelecek tarihli kayıt. Okuma aynı kaldı
+    // (yalnız sahibi). Yazma artık yalnız istemcinin gerçekten gönderdiği
+    // şekillerle. Güncellemelerde yalnız DEĞİŞEN alanlara bakılır: eski
+    // sürümlerin bıraktığı fazladan alanlar mevcut dokümanı kilitlemesin.
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function changedKeys() {
+      return resource == null ?
+        request.resource.data.keys() :
+        request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    function boundedString(v, max) {
+      return v is string && v.size() <= max;
+    }
+
+    // İstemci saati: saat dilimi ve küçük sapma payı olarak bir gün ileri.
+    function notFuture(t) {
+      return t is timestamp && t < request.time + duration.value(1, 'd');
+    }
+
+    function validFood(d) {
+      return boundedString(d.yemekAdi, 300)
+        && d.kalori is number && d.kalori >= 0 && d.kalori <= 20000
+        && d.protein is number && d.protein >= 0 && d.protein <= 2000
+        && d.karbonhidrat is number && d.karbonhidrat >= 0 && d.karbonhidrat <= 2000
+        && d.yag is number && d.yag >= 0 && d.yag <= 2000
+        && d.get('malzemeler', []) is list
+        && d.get('malzemeler', []).size() <= 50
+        && notFuture(d.createdAt);
+    }
+
     match /users/{userId}/{document=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if isOwner(userId);
+    }
+
+    match /users/{userId} {
+      // Profil fotoğrafı (avatar_repository): küçültülmüş base64.
+      allow create, update: if isOwner(userId)
+        && changedKeys().hasOnly(['photoBase64', 'photoUpdatedAt'])
+        && (request.resource.data.get('photoBase64', null) == null
+          || boundedString(request.resource.data.photoBase64, 900000));
+      allow delete: if false; // hesap silme sunucuda
+
+      match /journal_entries/{entryId} {
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['userId', 'body', 'ilndReply', 'createdAt'])
+          && request.resource.data.userId == userId
+          && boundedString(request.resource.data.body, 50000)
+          && boundedString(request.resource.data.ilndReply, 10000)
+          && notFuture(request.resource.data.createdAt);
+        allow delete: if isOwner(userId);
+        allow update: if false; // istemci günlüğü düzenlemiyor
+      }
+
+      match /food_entries/{entryId} {
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasOnly(['userId', 'yemekAdi', 'kalori', 'protein', 'karbonhidrat', 'yag', 'createdAt', 'malzemeler'])
+          && request.resource.data.userId == userId
+          && validFood(request.resource.data);
+        // Malzeme düzeltme ve makro yeniden hesaplama (food_repository).
+        allow update: if isOwner(userId)
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['malzemeler', 'kalori', 'protein', 'karbonhidrat', 'yag'])
+          && validFood(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      // Gün başına tek doküman; kimlik gün dizesinin kendisi.
+      match /sleep_rituals/{date} {
+        allow create, update: if isOwner(userId)
+          && changedKeys().hasOnly(['date', 'createdAt'])
+          && request.resource.data.date == date
+          && isDateKey(date);
+        allow delete: if false;
+      }
+
+      match /plan_progress/{planId} {
+        allow create, update: if isOwner(userId)
+          && planId.size() <= 100
+          && changedKeys().hasOnly(['activePlanId', 'startedAt', 'updatedAt', 'completedDayIds'])
+          && boundedString(request.resource.data.get('activePlanId', ''), 100)
+          && request.resource.data.get('completedDayIds', []) is list
+          && request.resource.data.get('completedDayIds', []).size() <= 60;
+        allow delete: if false;
+      }
+
+      match /movement_progress/{programId} {
+        allow create, update: if isOwner(userId)
+          && programId.size() <= 100
+          && changedKeys().hasOnly(['completedSessionIds', 'updatedAt'])
+          && request.resource.data.get('completedSessionIds', []) is list
+          && request.resource.data.get('completedSessionIds', []).size() <= 200;
+        allow delete: if false;
+      }
     }
 
     // Makaleler herkese açık (okuma), yazma sadece admin
@@ -48,14 +169,18 @@ service cloud.firestore {
     // çakışma kontrolü için gereken koleksiyon-geneli sorgu kaldırıldı;
     // yerine daha uzun (8 karakter) kod üretiliyor — bkz.
     // referral_repository.ensureReferralCode.
+    // Denetim H-4 (2026-09-13): create kuralı referral_code'u hiç
+    // denetlemiyordu; biri başkasının paylaştığı kodu kendi dokümanına yazıp
+    // ödülünü çalabiliyordu. Kod artık yalnız sunucuda (ensureReferralCode,
+    // Admin SDK) ayrılıyor: istemci user_growth'a HİÇ yazamaz.
     match /user_growth/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null
-        && request.auth.uid == userId
-        && request.resource.data.founding_member == false
-        && request.resource.data.premium_access_until == null
-        && request.resource.data.referred_by_code == null;
-      allow update, delete: if false;
+      allow write: if false;
+    }
+
+    // Kod → sahip eşlemesi ve ödül tavanı sayacı. Yalnız Admin SDK.
+    match /referral_codes/{code} {
+      allow read, write: if false;
     }
 
     // Append-only referral kayıtları — sadece redeemReferralCode (Admin SDK)
@@ -74,20 +199,50 @@ service cloud.firestore {
     // permission-denied veriyordu. Bu, Phase 1 audit sırasında keşfedilen
     // ayrı bir fonksiyonel hataydı (bilinen güvenlik bulgularından biri
     // değil), düzeltildi.
+    // Güvenlik denetimi H-1 (2026-09-13): update kuralı yalnız MEVCUT sahibe
+    // bakıyordu, yeni userId'ye bakmıyordu. Kullanıcı kendi dokümanını
+    // başkasının uid'ine taşıyıp kurbanın listesine içerik (ya da habitId'siz
+    // bozuk doküman → takip ekranı hatası) sokabiliyordu. İstemci bu
+    // dokümanları hiç güncellemiyor: update tamamen kapalı, sahiplik yalnız
+    // create anında ve sunucu saatine bağlı sabit bir şemayla kurulur.
+    //
+    // `get` ayrı: var olmayan dokümanda resource.data okumak kuralı hataya
+    // düşürür. toggleCompletion transaction'ı önce tx.get ile yokluğu
+    // kontrol ediyor; eski kural ilk işaretlemeyi reddediyordu (M-3).
     match /habits/{habitId} {
-      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
-      allow create: if request.auth != null
-        && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if request.auth != null
+      allow get: if request.auth != null
+        && (resource == null || resource.data.userId == request.auth.uid);
+      allow list, delete: if request.auth != null
         && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['userId', 'name', 'targetDaysPerWeek', 'createdAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 500
+        && request.resource.data.targetDaysPerWeek is int
+        && request.resource.data.targetDaysPerWeek >= 0
+        && request.resource.data.targetDaysPerWeek <= 7
+        && request.resource.data.createdAt == request.time;
+      allow update: if false;
     }
 
     match /habit_completions/{completionId} {
-      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
-      allow create: if request.auth != null
-        && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if request.auth != null
+      allow get: if request.auth != null
+        && (resource == null || resource.data.userId == request.auth.uid);
+      allow list, delete: if request.auth != null
         && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly(['habitId', 'userId', 'date', 'completedAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.habitId is string
+        && isDateKey(request.resource.data.date)
+        && completionId == request.resource.data.date + '_' + request.resource.data.habitId
+        && request.resource.data.completedAt == request.time
+        // Tamamlama yalnız KENDİ alışkanlığına yazılabilir.
+        && get(/databases/$(database)/documents/habits/$(request.resource.data.habitId)).data.userId
+             == request.auth.uid;
+      allow update: if false;
     }
 
     // Etkinlikler (ADR-0002): içerik yalnız seed script'ten (Admin SDK)
@@ -97,14 +252,28 @@ service cloud.firestore {
       allow read: if request.auth != null;
       allow write: if false; // Admin SDK ile yazılır
 
+      // Denetim H-1/H-6: RSVP listesi herkese açıktı; kimin hangi fiziksel
+      // buluşmaya gittiği ve tüm uid'ler okunabiliyordu. Artık yalnız kendi
+      // kaydın okunur. Katılımcı sayısı `events/{id}.rsvpCount` alanında,
+      // onRsvpWritten tetikleyicisi (Admin SDK) yazar.
       match /rsvps/{userId} {
-        allow read: if request.auth != null;
+        allow get: if request.auth != null && request.auth.uid == userId;
         allow create: if request.auth != null
           && request.auth.uid == userId
-          && request.resource.data.userId == userId;
+          && request.resource.data.keys().hasOnly(['userId', 'createdAt'])
+          && request.resource.data.userId == userId
+          && request.resource.data.createdAt == request.time
+          && exists(/databases/$(database)/documents/events/$(eventId));
         allow delete: if request.auth != null && request.auth.uid == userId;
-        allow update: if false;
+        allow list, update: if false;
       }
+    }
+
+    // Toplu, anonim sayılar (sosyal kanıt). Yalnız weeklyActiveStats
+    // (Admin SDK) yazar.
+    match /public_stats/{statId} {
+      allow read: if request.auth != null;
+      allow write: if false;
     }
 
     // AI kullanım sayaçları (günlük kademe tavanı + haftalık ücretsiz kota).
@@ -143,10 +312,20 @@ service cloud.firestore {
     // alanına bakılıyordu, bu yüzden herhangi bir kullanıcı istediği id'yle
     // sınırsız kayıt üretip sayacı şişirebiliyordu (denetim bulgusu,
     // 2026-07-24). Kimlik sabitlenince kullanıcı-gün başına tek kayıt kalır.
+    // Denetim H-6 (2026-09-13): `date` hiç doğrulanmıyordu (herhangi bir dize
+    // → sınırsız doküman) ve koleksiyon tüm girişli kullanıcılara açıktı
+    // (herkesin uid'i + aktif günleri). Artık:
+    //   - okuma kapalı; haftalık sayı public_stats/weekly_active'te,
+    //   - date gerçek bir takvim günü (YYYY-MM-DD) ve sunucu saatine göre
+    //     yalnız "bugün" olabilir (her saat dilimi için ±1 gün pay),
+    //   - şema sabit.
     match /daily_checkins/{checkinId} {
-      allow read: if request.auth != null;
+      allow read: if false;
       allow create, update: if request.auth != null
+        && request.resource.data.keys().hasOnly(['userId', 'date', 'createdAt'])
         && request.resource.data.userId == request.auth.uid
+        && isDateKey(request.resource.data.date)
+        && isNearToday(request.resource.data.date)
         && checkinId == request.auth.uid + '_' + request.resource.data.date;
       allow delete: if false;
     }

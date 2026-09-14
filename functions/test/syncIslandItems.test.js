@@ -15,6 +15,20 @@ const myFunctions = require("../index");
 const db = admin.firestore();
 const UID = "island-test-user";
 
+// Hız sınırı bu dosyada kapalı: testler art arda senkron çağırıp veri
+// değişimini ölçüyor. Sınırın kendisi "Phase 7" bloğunda açılır. Değer her
+// istekte okunduğu için modül yüklendikten sonra ayarlamak yeterli.
+process.env.ISLAND_SYNC_MIN_INTERVAL_MS = "0";
+
+/**
+ * Göreli tarih: sabit tarihler seri penceresinden (60 gün) zamanla düşüp
+ * testleri kendiliğinden kırardı.
+ * @param {number} n kaç gün önce
+ * @return {string} UTC YYYY-MM-DD
+ */
+const daysAgo = (n) =>
+  new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
+
 /**
  * syncIslandItems handler'ını sahte req/res ile çağırır.
  * @param {string|null} idToken Bearer token, yoksa null.
@@ -140,32 +154,35 @@ describe("syncIslandItems", () => {
   test("son etkin gün sunucuda hesaplanır ve yazılır", async () => {
     // Su bu alandan koyulaşıyor (ADR-0006 §5). Gün SAYISI değil, gün
     // DİZESİ yazılır: sayı iki senkron arasında bayatlardı.
-    await db.collection("daily_checkins").doc(`${UID}_2026-08-20`)
-        .set({userId: UID, date: "2026-08-20"});
+    const day = daysAgo(24);
+    await db.collection("daily_checkins").doc(`${UID}_${day}`)
+        .set({userId: UID, date: day});
 
     const token = await getIdTokenForUid(UID);
     const {body} = await callSync(token);
 
-    expect(body.metrics.lastActiveDate).toBe("2026-08-20");
+    expect(body.metrics.lastActiveDate).toBe(day);
     const doc = await db.collection("island").doc(UID).get();
-    expect(doc.data().lastActiveDate).toBe("2026-08-20");
+    expect(doc.data().lastActiveDate).toBe(day);
   });
 
   test("öğün, check-in yazmasa bile son etkin günü ilerletir", async () => {
-    await db.collection("daily_checkins").doc(`${UID}_2026-08-10`)
-        .set({userId: UID, date: "2026-08-10"});
+    const checkinDay = daysAgo(34);
+    const mealDay = daysAgo(22);
+    await db.collection("daily_checkins").doc(`${UID}_${checkinDay}`)
+        .set({userId: UID, date: checkinDay});
     await db.collection("users").doc(UID).collection("food_entries").add({
       kalori: 300,
       createdAt: admin.firestore.Timestamp.fromDate(
-          new Date("2026-08-22T10:00:00Z")),
+          new Date(`${mealDay}T10:00:00Z`)),
     });
 
     const token = await getIdTokenForUid(UID);
     const {body} = await callSync(token);
 
-    // Yalnız check-in'e bakılsaydı bu kullanıcının suyu 12 gün sessizmiş
-    // gibi koyulaşacaktı — oysa dün yemeğini yazmış.
-    expect(body.metrics.lastActiveDate).toBe("2026-08-22");
+    // Yalnız check-in'e bakılsaydı bu kullanıcının suyu 12 gün daha uzun
+    // sessizmiş gibi koyulaşacaktı — oysa sonradan yemeğini yazmış.
+    expect(body.metrics.lastActiveDate).toBe(mealDay);
   });
 
   test("hiç veri yoksa son etkin gün null, su berrak kalır", async () => {
@@ -185,5 +202,79 @@ describe("syncIslandItems", () => {
 
     expect(body.gained).toEqual([]);
     expect(body.earned).toEqual(["lantern"]);
+  });
+
+  // ── Phase 7 (denetim H-6): sınırlı okuma ve hız sınırı ─────────────────
+  describe("sınırlı okuma ve hız sınırı", () => {
+    afterEach(() => {
+      process.env.ISLAND_SYNC_MIN_INTERVAL_MS = "0";
+    });
+
+    test("400 günlük geçmiş okunmaz: seri pencerede (60) durur", async () => {
+      // Eski sorgu kullanıcının TÜM check-in'lerini okuyordu ve bu durumda
+      // seri 400 çıkıyordu.
+      const batch = db.batch();
+      for (let i = 0; i < 400; i++) {
+        const d = daysAgo(i);
+        batch.set(db.collection("daily_checkins").doc(`${UID}_${d}`), {userId: UID, date: d});
+      }
+      await batch.commit();
+
+      const {body} = await callSync(await getIdTokenForUid(UID));
+
+      expect(body.metrics.streakDays).toBe(60);
+      expect(body.earned).toEqual(expect.arrayContaining(["pine", "windrose"]));
+    }, 30000);
+
+    test("pencere dışındaki son check-in yine son etkin gün sayılır (su koyulaşır)", async () => {
+      const d = daysAgo(90);
+      await db.collection("daily_checkins").doc(`${UID}_${d}`).set({userId: UID, date: d});
+
+      const {body} = await callSync(await getIdTokenForUid(UID));
+
+      expect(body.metrics.lastActiveDate).toBe(d);
+      expect(body.metrics.streakDays).toBe(0);
+    });
+
+    test("pencere içindeki tekrar çağrı ölçüt okumaz, son bilinen durumu döner", async () => {
+      process.env.ISLAND_SYNC_MIN_INTERVAL_MS = "60000";
+      const token = await getIdTokenForUid(UID);
+
+      const first = await callSync(token);
+      expect(first.body.earned).toEqual([]);
+
+      await db.collection("users").doc(UID).collection("journal_entries").add({text: "x"});
+      const second = await callSync(token);
+      expect(second.body).toEqual({earned: [], gained: [], throttled: true});
+      expect((await db.collection("island").doc(UID).get()).data().earned).toEqual([]);
+
+      // Pencere geçince yeni kazanım gelir.
+      process.env.ISLAND_SYNC_MIN_INTERVAL_MS = "0";
+      const third = await callSync(token);
+      expect(third.body.earned).toContain("lantern");
+    });
+
+    test("ilk senkron hız sınırına takılmaz", async () => {
+      process.env.ISLAND_SYNC_MIN_INTERVAL_MS = "60000";
+      await db.collection("users").doc(UID).collection("journal_entries").add({text: "x"});
+
+      const {body} = await callSync(await getIdTokenForUid(UID));
+
+      expect(body.throttled).toBeUndefined();
+      expect(body.earned).toContain("lantern");
+    });
+  });
+
+  // Denetim L-4: eşzamanlı senkronlar birbirinin öğesini silemez.
+  test("eşzamanlı senkronlar kazanılmış öğeleri birleştirir, kaybetmez", async () => {
+    await db.collection("island").doc(UID).set({uid: UID, earned: ["meetingStone"], lastSyncAtMs: 0});
+    await db.collection("users").doc(UID).collection("journal_entries").add({text: "x"});
+    const token = await getIdTokenForUid(UID);
+
+    await Promise.all([callSync(token), callSync(token), callSync(token)]);
+
+    const earned = (await db.collection("island").doc(UID).get()).data().earned;
+    expect(earned).toEqual(expect.arrayContaining(["meetingStone", "lantern"]));
+    expect(new Set(earned).size).toBe(earned.length);
   });
 });

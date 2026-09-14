@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
 
 /// ILND auth Supabase üzerinden yapılıyor, ama Firestore güvenlik kuralları
@@ -23,7 +24,12 @@ abstract final class FirebaseAuthBridge {
       final response = await http
           .post(
             Uri.parse(AppConfig.authBridgeUrl),
-            headers: {'Authorization': 'Bearer $supabaseAccessToken'},
+            headers: {
+              'Authorization': 'Bearer $supabaseAccessToken',
+              // Sunucu bu uçta App Check'i yalnız izler, reddetmez; token
+              // gönderilmezse doğrulanmış istek oranı ölçülemez (denetim H-5).
+              ...await appCheckHeaders(),
+            },
           )
           .timeout(const Duration(seconds: 10));
 
@@ -42,6 +48,35 @@ abstract final class FirebaseAuthBridge {
     } catch (e) {
       debugPrint('[FirebaseAuthBridge] sync failed: $e');
     }
+  }
+
+  /// İki oturum aynı hesaba mı ait?
+  ///
+  /// Güvenlik denetimi M-8: köprü hata verince sessizce dönüyor ve önceki
+  /// kullanıcının Firebase oturumu açık kalabiliyordu. O durumda ekranda B
+  /// görünürken hesap silme ya da davet kodu A'nın token'ıyla gidiyordu.
+  @visibleForTesting
+  static bool sessionsMatch({
+    required String? firebaseUid,
+    required String? supabaseUid,
+  }) =>
+      firebaseUid != null && supabaseUid != null && firebaseUid == supabaseUid;
+
+  /// Hesabı etkileyen bir çağrıdan önce: Firebase oturumu [supabaseUid] ile
+  /// eşleşmiyorsa onu kapatır ve false döner (çağrı yapılmamalı; köprü bir
+  /// sonraki auth olayında doğru hesapla yeniden kurulur).
+  static Future<bool> ensureSameAccount(String? supabaseUid) async {
+    final firebaseUid = fb_auth.FirebaseAuth.instance.currentUser?.uid;
+    if (sessionsMatch(firebaseUid: firebaseUid, supabaseUid: supabaseUid)) {
+      return true;
+    }
+    if (firebaseUid != null) {
+      debugPrint(
+        '[FirebaseAuthBridge] session mismatch — signing out Firebase',
+      );
+      await signOut();
+    }
+    return false;
   }
 
   static Future<void> signOut() async {

@@ -10,12 +10,14 @@
     ],
     "headers": [
       {
+        "//": "Guvenlik denetimi M-11 (2026-09-13): hicbir guvenlik basligi yoktu. frame-ancestors/X-Frame-Options: baska bir site uygulamayi cercevele(iframe)yip kullaniciya 'Hesabi sil' onayina gorunmez tiklatamasin (clickjacking). Bilerek script-src iceren tam bir CSP YOK: Flutter web CanvasKit'i gstatic'ten, Firebase/Supabase/Google girisi/reCAPTCHA farkli kaynaklardan yukluyor; tarayicida staging'de dogrulanmamis bir CSP uygulamayi bos ekrana dusurur (manuel kontrol listesinde).",
         "source": "**",
         "headers": [
+          { "key": "Content-Security-Policy", "value": "frame-ancestors 'none'" },
+          { "key": "X-Frame-Options", "value": "DENY" },
           { "key": "X-Content-Type-Options", "value": "nosniff" },
           { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-          { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-          { "key": "Permissions-Policy", "value": "geolocation=(), usb=()" }
+          { "key": "Permissions-Policy", "value": "camera=(self), microphone=(), geolocation=(), payment=(), usb=()" }
         ]
       },
       {
@@ -37,6 +39,9 @@
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
   },
   "functions": [
     {

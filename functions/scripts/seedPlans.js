@@ -40,6 +40,9 @@
  * Usage:
  *   node functions/scripts/seedPlans.js              # against prod
  *   node functions/scripts/seedPlans.js --prune      # also delete orphans
+ *   An explicit target is REQUIRED: --project=<id> (prod also needs
+ *   --confirm-prod; prod --prune is a dry run without --confirm-prune).
+ *   See scripts/lib/target.js.
  *   FIRESTORE_EMULATOR_HOST=localhost:8080 node functions/scripts/seedPlans.js
  *
  * Requires a service account: Application Default Credentials or
@@ -48,6 +51,7 @@
 const fs = require("fs");
 const path = require("path");
 const admin = require("firebase-admin");
+const {resolveTarget, pruneOrphans, describeTarget} = require("./lib/target");
 
 const PLANS_PATH = path.join(__dirname, "..", "..", "content", "plans.json");
 
@@ -117,10 +121,11 @@ function validatePlan(plan) {
  * @return {Promise<void>}
  */
 async function main() {
-  const prune = process.argv.includes("--prune");
+  const target = resolveTarget();
+  console.log(describeTarget(target));
 
   if (!admin.apps.length) {
-    admin.initializeApp();
+    admin.initializeApp({projectId: target.projectId});
   }
   const db = admin.firestore();
   const col = db.collection("plans");
@@ -141,18 +146,7 @@ async function main() {
   await batch.commit();
   console.log(`Upserted ${plans.length} plan(s).`);
 
-  if (prune) {
-    const existing = await col.get();
-    const orphaned = existing.docs.filter((d) => !seenIds.has(d.id));
-    if (orphaned.length > 0) {
-      const pruneBatch = db.batch();
-      orphaned.forEach((d) => pruneBatch.delete(d.ref));
-      await pruneBatch.commit();
-      console.log(
-          `Pruned ${orphaned.length} orphaned plan(s) not in plans.json.`,
-      );
-    }
-  }
+  await pruneOrphans(col, seenIds, target, "plan(s) not in plans.json");
 }
 
 // Yalnız doğrudan çalıştırılınca Firestore'a bağlanır. `require` edildiğinde

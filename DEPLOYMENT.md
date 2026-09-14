@@ -80,8 +80,12 @@ Notes:
 ```bash
 cd functions
 npm install
-npm run seed:articles   # populates Firestore 'articles' collection
-npm run seed:movement   # populates Firestore 'movement_programs' collection
+# Every Admin SDK script needs an explicit target (functions/scripts/lib/target.js).
+# Production writes need --confirm-prod; --prune on production is a dry run
+# unless --confirm-prune is also given. There is no default Firebase project
+# in .firebaserc on purpose: deploys must name one (`--project prod`).
+npm run seed:articles -- --project=ilnd-app-8dcbd --confirm-prod
+npm run seed:movement -- --project=ilnd-app-8dcbd --confirm-prod
 ```
 Movement programs (ADR-0004) are optional: `content/movementPrograms.json`
 ships empty on purpose, and the Explore shelf stays hidden until at least one

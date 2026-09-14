@@ -12,16 +12,21 @@
  * Kimlik: `gcloud auth application-default login` ya da
  * GOOGLE_APPLICATION_CREDENTIALS.
  *
- * Kullanim:
- *   npm run report:tokens          (son 7 gun)
- *   node scripts/tokenReport.js 30 (son 30 gun)
+ * Kullanim (hedef proje ZORUNLU, salt okunur oldugu icin prod onayi istemez):
+ *   npm run report:tokens -- --project=<id>          (son 7 gun)
+ *   node scripts/tokenReport.js 30 --project=<id>    (son 30 gun)
  */
 const admin = require("firebase-admin");
+const {resolveTarget, describeTarget} = require("./lib/target");
 
-const DAYS = Number(process.argv[2] || 7);
+const target = resolveTarget({writes: false});
+console.log(describeTarget(target));
+
+const dayArg = process.argv.slice(2).find((a) => /^\d+$/.test(a));
+const DAYS = Number(dayArg || 7);
 
 if (!admin.apps.length) {
-  admin.initializeApp();
+  admin.initializeApp({projectId: target.projectId});
 }
 const db = admin.firestore();
 

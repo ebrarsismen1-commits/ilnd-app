@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,8 @@ import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
 import 'package:ilnd_app/core/services/firebase_auth_bridge.dart';
+import 'package:ilnd_app/core/services/local_user_data.dart';
+import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
 // ─── Deep link ────────────────────────────────────────────────────────────────
 
@@ -505,6 +508,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final previousState = state;
     state = const AuthLoading();
     try {
+      // Silinecek hesap ekrandaki hesap olmalı (denetim M-8).
+      if (!await FirebaseAuthBridge.ensureSameAccount(
+        _client.auth.currentUser?.id,
+      )) {
+        throw AuthErrorCode.deleteUnavailable;
+      }
       final idToken = await fb_auth.FirebaseAuth.instance.currentUser
           ?.getIdToken();
       if (idToken == null || !AppConfig.isAuthBridgeConfigured) {
@@ -525,8 +534,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
         throw AuthErrorCode.deleteFailed;
       }
 
+      final deletedUid = fb_auth.FirebaseAuth.instance.currentUser?.uid;
       await _client.auth.signOut();
       await FirebaseAuthBridge.signOut();
+      await _wipeDeletedAccountLocally(deletedUid);
       state = const AuthUnauthenticated();
     } catch (e) {
       debugPrint('[Auth] deleteAccount error: $e');
@@ -535,6 +546,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // kullanıcı hâlâ giriş yapmış durumda, tekrar deneyebilmeli.
       state = previousState;
       throw code;
+    }
+  }
+
+  /// Silinen hesabın cihazda kalan izleri (güvenlik denetimi H-3/M-5):
+  /// uid'e bağlı sohbet geçmişi ve AI hafızası, kişisel anahtarlar ve
+  /// Firestore'un çevrimdışı önbelleği. Her adım kendi try'ında: hesap
+  /// sunucuda zaten silindi, burada bir hata kullanıcıya yansıtılmaz.
+  Future<void> _wipeDeletedAccountLocally(String? uid) async {
+    try {
+      final prefs = _ref.read(sharedPreferencesProvider);
+      await clearPersonalLocalData(prefs);
+      if (uid != null) await clearUidScopedLocalData(prefs, uid);
+    } catch (e) {
+      debugPrint('[Auth] local wipe failed: $e');
+    }
+    if (kIsWeb) return;
+    try {
+      await FirebaseFirestore.instance.terminate();
+      await FirebaseFirestore.instance.clearPersistence();
+    } catch (e) {
+      debugPrint('[Auth] Firestore cache clear failed: $e');
     }
   }
 

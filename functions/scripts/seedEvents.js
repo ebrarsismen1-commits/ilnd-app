@@ -3,19 +3,21 @@
  * content/events.json → `events` koleksiyonuna upsert (ADR-0002).
  * seedArticles.js ile aynı desen: stable id, merge, --prune ile orphan silme.
  *
- * Kullanım:
- *   node functions/scripts/seedEvents.js [--prune]
+ * Kullanım (hedef ZORUNLU — bkz. scripts/lib/target.js):
+ *   node functions/scripts/seedEvents.js --project=<id> [--confirm-prod] [--prune [--confirm-prune]]
  * (Application Default Credentials veya GOOGLE_APPLICATION_CREDENTIALS gerekir.)
  */
 const fs = require("fs");
 const path = require("path");
 const admin = require("firebase-admin");
+const {resolveTarget, pruneOrphans, describeTarget} = require("./lib/target");
 
 const EVENTS_PATH = path.join(__dirname, "..", "..", "content", "events.json");
 
 async function main() {
-  const prune = process.argv.includes("--prune");
-  if (!admin.apps.length) admin.initializeApp();
+  const target = resolveTarget();
+  console.log(describeTarget(target));
+  if (!admin.apps.length) admin.initializeApp({projectId: target.projectId});
   const db = admin.firestore();
   const col = db.collection("events");
 
@@ -36,16 +38,7 @@ async function main() {
   await batch.commit();
   console.log(`Upserted ${events.length} event(s).`);
 
-  if (prune) {
-    const existing = await col.get();
-    const orphaned = existing.docs.filter((d) => !seenIds.has(d.id));
-    if (orphaned.length > 0) {
-      const pruneBatch = db.batch();
-      orphaned.forEach((d) => pruneBatch.delete(d.ref));
-      await pruneBatch.commit();
-      console.log(`Pruned ${orphaned.length} orphaned event(s).`);
-    }
-  }
+  await pruneOrphans(col, seenIds, target, "event(s)");
 }
 
 main().catch((err) => {

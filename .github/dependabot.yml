@@ -1,0 +1,21 @@
+# Güvenlik denetimi M-12 / H-7 (2026-09-13): bağımlılık ve Actions güncellemeleri
+# otomatik PR olarak gelsin. Actions commit SHA'sına sabitlendiği için
+# güncellemeyi yalnız bu PR'lar getirir.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /functions
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: pub
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
