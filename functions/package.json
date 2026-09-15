@@ -16,6 +16,7 @@
     "seed:plans": "node scripts/seedPlans.js",
     "check:plans": "node scripts/checkPlans.js",
     "report:tokens": "node scripts/tokenReport.js",
+    "sim:p5": "node scripts/simulateP5.js",
     "backfill:counters": "node scripts/backfillCounters.js"
   },
   "dependencies": {
