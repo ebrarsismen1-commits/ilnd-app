@@ -1,0 +1,726 @@
+{
+  "adr": "ADR-0009",
+  "engineVersion": "intel-v0.1.0",
+  "config": {
+    "users": 2000,
+    "permutations": 2000,
+    "determinismUsers": 300,
+    "nights": 90
+  },
+  "node": "v20.20.2",
+  "generatedAt": "2026-09-15T19:46:01.132Z",
+  "results": [
+    {
+      "id": "N-tipik-r0",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.581,
+      "everStrong90": {
+        "count": 153,
+        "total": 2000,
+        "rate": 0.0765,
+        "wilsonLower": 0.06564592724758744,
+        "wilsonUpper": 0.0889778117996338
+      },
+      "everStrong60": {
+        "count": 78,
+        "total": 2000,
+        "rate": 0.039,
+        "wilsonLower": 0.03136143254939691,
+        "wilsonUpper": 0.04840608504391829
+      },
+      "everEmergingStatus": {
+        "count": 412,
+        "total": 2000,
+        "rate": 0.206,
+        "wilsonLower": 0.188847021374138,
+        "wilsonUpper": 0.22428020242723862
+      },
+      "everCandidateStatus": {
+        "count": 676,
+        "total": 2000,
+        "rate": 0.338,
+        "wilsonLower": 0.3175971051636417,
+        "wilsonUpper": 0.35902401815548424
+      },
+      "everNotObservedShown": {
+        "count": 1887,
+        "total": 2000,
+        "rate": 0.9435,
+        "wilsonLower": 0.9325050206793213,
+        "wilsonUpper": 0.9527945583822073
+      },
+      "weakenedAfterStrong": {
+        "count": 137,
+        "total": 153,
+        "rate": 0.8954248366013072,
+        "wilsonLower": 0.8368801609855367,
+        "wilsonUpper": 0.9345995288223148
+      },
+      "summaryHash": "854260d6"
+    },
+    {
+      "id": "N-tipik-r0.3",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.4065,
+      "everStrong90": {
+        "count": 123,
+        "total": 2000,
+        "rate": 0.0615,
+        "wilsonLower": 0.05178817023412858,
+        "wilsonUpper": 0.07289308023153022
+      },
+      "everStrong60": {
+        "count": 60,
+        "total": 2000,
+        "rate": 0.03,
+        "wilsonLower": 0.02337785471293825,
+        "wilsonUpper": 0.03842416973143951
+      },
+      "everEmergingStatus": {
+        "count": 404,
+        "total": 2000,
+        "rate": 0.202,
+        "wilsonLower": 0.18498302507432463,
+        "wilsonUpper": 0.22015953510530212
+      },
+      "everCandidateStatus": {
+        "count": 638,
+        "total": 2000,
+        "rate": 0.319,
+        "wilsonLower": 0.29893674711467677,
+        "wilsonUpper": 0.3397572240011367
+      },
+      "everNotObservedShown": {
+        "count": 1875,
+        "total": 2000,
+        "rate": 0.9375,
+        "wilsonLower": 0.9260297152353917,
+        "wilsonUpper": 0.9472928683935119
+      },
+      "weakenedAfterStrong": {
+        "count": 109,
+        "total": 123,
+        "rate": 0.8861788617886179,
+        "wilsonLower": 0.8179893170669815,
+        "wilsonUpper": 0.9309771555931453
+      },
+      "summaryHash": "baf5a5e7"
+    },
+    {
+      "id": "N-tipik-r0.6",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.4675,
+      "everStrong90": {
+        "count": 193,
+        "total": 2000,
+        "rate": 0.0965,
+        "wilsonLower": 0.0843220272921492,
+        "wilsonUpper": 0.11022502986382192
+      },
+      "everStrong60": {
+        "count": 101,
+        "total": 2000,
+        "rate": 0.0505,
+        "wilsonLower": 0.04173547326167801,
+        "wilsonUpper": 0.06098795224416838
+      },
+      "everEmergingStatus": {
+        "count": 523,
+        "total": 2000,
+        "rate": 0.2615,
+        "wilsonLower": 0.2427107900339757,
+        "wilsonUpper": 0.2812036415191819
+      },
+      "everCandidateStatus": {
+        "count": 759,
+        "total": 2000,
+        "rate": 0.3795,
+        "wilsonLower": 0.35848296481803094,
+        "wilsonUpper": 0.4009790435767509
+      },
+      "everNotObservedShown": {
+        "count": 1772,
+        "total": 2000,
+        "rate": 0.886,
+        "wilsonLower": 0.8713252784756669,
+        "wilsonUpper": 0.8991947610232058
+      },
+      "weakenedAfterStrong": {
+        "count": 170,
+        "total": 193,
+        "rate": 0.8808290155440415,
+        "wilsonLower": 0.8275301532244085,
+        "wilsonUpper": 0.9192637431462974
+      },
+      "summaryHash": "ed0ad1e2"
+    },
+    {
+      "id": "N-nadiren-r0",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.541,
+      "everStrong90": {
+        "count": 4,
+        "total": 2000,
+        "rate": 0.002,
+        "wilsonLower": 0.0007780273070510575,
+        "wilsonUpper": 0.005131351785076866
+      },
+      "everStrong60": {
+        "count": 0,
+        "total": 2000,
+        "rate": 0,
+        "wilsonLower": 1.0842021724855044e-19,
+        "wilsonUpper": 0.001917047281252934
+      },
+      "everEmergingStatus": {
+        "count": 69,
+        "total": 2000,
+        "rate": 0.0345,
+        "wilsonLower": 0.027351694147721588,
+        "wilsonUpper": 0.04343307687112489
+      },
+      "everCandidateStatus": {
+        "count": 214,
+        "total": 2000,
+        "rate": 0.107,
+        "wilsonLower": 0.09419820147525404,
+        "wilsonUpper": 0.12130859768781074
+      },
+      "everNotObservedShown": {
+        "count": 168,
+        "total": 2000,
+        "rate": 0.084,
+        "wilsonLower": 0.0726261614635203,
+        "wilsonUpper": 0.09696882187448214
+      },
+      "weakenedAfterStrong": {
+        "count": 4,
+        "total": 4,
+        "rate": 1,
+        "wilsonLower": 0.5101091635454027,
+        "wilsonUpper": 1
+      },
+      "summaryHash": "17966304"
+    },
+    {
+      "id": "N-nadiren-r0.3",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.4485,
+      "everStrong90": {
+        "count": 11,
+        "total": 2000,
+        "rate": 0.0055,
+        "wilsonLower": 0.003073897009543817,
+        "wilsonUpper": 0.009822062751615332
+      },
+      "everStrong60": {
+        "count": 5,
+        "total": 2000,
+        "rate": 0.0025,
+        "wilsonLower": 0.0010683087284139143,
+        "wilsonUpper": 0.005839153316432755
+      },
+      "everEmergingStatus": {
+        "count": 74,
+        "total": 2000,
+        "rate": 0.037,
+        "wilsonLower": 0.029575304829629133,
+        "wilsonUpper": 0.04619988095281107
+      },
+      "everCandidateStatus": {
+        "count": 223,
+        "total": 2000,
+        "rate": 0.1115,
+        "wilsonLower": 0.0984436045333179,
+        "wilsonUpper": 0.1260459412042156
+      },
+      "everNotObservedShown": {
+        "count": 203,
+        "total": 2000,
+        "rate": 0.1015,
+        "wilsonLower": 0.0890195479939982,
+        "wilsonUpper": 0.11550833868916041
+      },
+      "weakenedAfterStrong": {
+        "count": 10,
+        "total": 11,
+        "rate": 0.9090909090909091,
+        "wilsonLower": 0.6226415635484043,
+        "wilsonUpper": 0.9837678271141151
+      },
+      "summaryHash": "6696451e"
+    },
+    {
+      "id": "N-nadiren-r0.6",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.475,
+      "everStrong90": {
+        "count": 13,
+        "total": 2000,
+        "rate": 0.0065,
+        "wilsonLower": 0.0038025964940741515,
+        "wilsonUpper": 0.011089529172522494
+      },
+      "everStrong60": {
+        "count": 5,
+        "total": 2000,
+        "rate": 0.0025,
+        "wilsonLower": 0.0010683087284139143,
+        "wilsonUpper": 0.005839153316432755
+      },
+      "everEmergingStatus": {
+        "count": 130,
+        "total": 2000,
+        "rate": 0.065,
+        "wilsonLower": 0.055007837621403224,
+        "wilsonUpper": 0.07665999351328683
+      },
+      "everCandidateStatus": {
+        "count": 273,
+        "total": 2000,
+        "rate": 0.1365,
+        "wilsonLower": 0.12214880212972688,
+        "wilsonUpper": 0.152244891243744
+      },
+      "everNotObservedShown": {
+        "count": 315,
+        "total": 2000,
+        "rate": 0.1575,
+        "wilsonLower": 0.14219377874728084,
+        "wilsonUpper": 0.1741193986403774
+      },
+      "weakenedAfterStrong": {
+        "count": 11,
+        "total": 13,
+        "rate": 0.8461538461538461,
+        "wilsonLower": 0.5776536898051745,
+        "wilsonUpper": 0.9567418216419186
+      },
+      "summaryHash": "1febf165"
+    },
+    {
+      "id": "N-sik-r0",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.3455,
+      "everStrong90": {
+        "count": 146,
+        "total": 2000,
+        "rate": 0.073,
+        "wilsonLower": 0.06239935949340271,
+        "wilsonUpper": 0.08523779888478729
+      },
+      "everStrong60": {
+        "count": 86,
+        "total": 2000,
+        "rate": 0.043,
+        "wilsonLower": 0.03495107254461269,
+        "wilsonUpper": 0.05280110867045247
+      },
+      "everEmergingStatus": {
+        "count": 422,
+        "total": 2000,
+        "rate": 0.211,
+        "wilsonLower": 0.19368072087378985,
+        "wilsonUpper": 0.22942733245477426
+      },
+      "everCandidateStatus": {
+        "count": 598,
+        "total": 2000,
+        "rate": 0.299,
+        "wilsonLower": 0.27933639462131776,
+        "wilsonUpper": 0.3194342583857458
+      },
+      "everNotObservedShown": {
+        "count": 1921,
+        "total": 2000,
+        "rate": 0.9605,
+        "wilsonLower": 0.9510433073255731,
+        "wilsonUpper": 0.9681910921283929
+      },
+      "weakenedAfterStrong": {
+        "count": 138,
+        "total": 146,
+        "rate": 0.9452054794520548,
+        "wilsonLower": 0.8956073281741972,
+        "wilsonUpper": 0.971976323394244
+      },
+      "summaryHash": "01d76c74"
+    },
+    {
+      "id": "N-sik-r0.3",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.317,
+      "everStrong90": {
+        "count": 150,
+        "total": 2000,
+        "rate": 0.075,
+        "wilsonLower": 0.0642536480572273,
+        "wilsonUpper": 0.08737584213183769
+      },
+      "everStrong60": {
+        "count": 87,
+        "total": 2000,
+        "rate": 0.0435,
+        "wilsonLower": 0.03540128785854411,
+        "wilsonUpper": 0.0533489763092398
+      },
+      "everEmergingStatus": {
+        "count": 449,
+        "total": 2000,
+        "rate": 0.2245,
+        "wilsonLower": 0.20675148405284127,
+        "wilsonUpper": 0.24330480899912904
+      },
+      "everCandidateStatus": {
+        "count": 647,
+        "total": 2000,
+        "rate": 0.3235,
+        "wilsonLower": 0.3033528524844502,
+        "wilsonUpper": 0.344323865205832
+      },
+      "everNotObservedShown": {
+        "count": 1913,
+        "total": 2000,
+        "rate": 0.9565,
+        "wilsonLower": 0.9466510236907602,
+        "wilsonUpper": 0.9645987121414559
+      },
+      "weakenedAfterStrong": {
+        "count": 134,
+        "total": 150,
+        "rate": 0.8933333333333333,
+        "wilsonLower": 0.8337537774158531,
+        "wilsonUpper": 0.9332696303479265
+      },
+      "summaryHash": "fdbdd404"
+    },
+    {
+      "id": "N-sik-r0.6",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.4615,
+      "everStrong90": {
+        "count": 208,
+        "total": 2000,
+        "rate": 0.104,
+        "wilsonLower": 0.09137205082544919,
+        "wilsonUpper": 0.1181462506213031
+      },
+      "everStrong60": {
+        "count": 125,
+        "total": 2000,
+        "rate": 0.0625,
+        "wilsonLower": 0.05270713160648804,
+        "wilsonUpper": 0.07397028476460826
+      },
+      "everEmergingStatus": {
+        "count": 568,
+        "total": 2000,
+        "rate": 0.284,
+        "wilsonLower": 0.26466587909352945,
+        "wilsonUpper": 0.30416228533197165
+      },
+      "everCandidateStatus": {
+        "count": 771,
+        "total": 2000,
+        "rate": 0.3855,
+        "wilsonLower": 0.3644080722975489,
+        "wilsonUpper": 0.4070309315298579
+      },
+      "everNotObservedShown": {
+        "count": 1877,
+        "total": 2000,
+        "rate": 0.9385,
+        "wilsonLower": 0.9271069197684697,
+        "wilsonUpper": 0.9482118297658714
+      },
+      "weakenedAfterStrong": {
+        "count": 185,
+        "total": 208,
+        "rate": 0.8894230769230769,
+        "wilsonLower": 0.8395442985060947,
+        "wilsonUpper": 0.9251785319627007
+      },
+      "summaryHash": "ef247822"
+    },
+    {
+      "id": "N-tipik-r0-weekend",
+      "kind": "null",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 61.312,
+      "everStrong90": {
+        "count": 104,
+        "total": 2000,
+        "rate": 0.052,
+        "wilsonLower": 0.043099720209557914,
+        "wilsonUpper": 0.06261795415444468
+      },
+      "everStrong60": {
+        "count": 44,
+        "total": 2000,
+        "rate": 0.022,
+        "wilsonLower": 0.0164289081143177,
+        "wilsonUpper": 0.0294037890865601
+      },
+      "everEmergingStatus": {
+        "count": 309,
+        "total": 2000,
+        "rate": 0.1545,
+        "wilsonLower": 0.13932371296507043,
+        "wilsonUpper": 0.17100096670627532
+      },
+      "everCandidateStatus": {
+        "count": 562,
+        "total": 2000,
+        "rate": 0.281,
+        "wilsonLower": 0.2617349514473364,
+        "wilsonUpper": 0.30110471526185234
+      },
+      "everNotObservedShown": {
+        "count": 1889,
+        "total": 2000,
+        "rate": 0.9445,
+        "wilsonLower": 0.9335871935538151,
+        "wilsonUpper": 0.9537085514131509
+      },
+      "weakenedAfterStrong": {
+        "count": 91,
+        "total": 104,
+        "rate": 0.875,
+        "wilsonLower": 0.7978100094584702,
+        "wilsonUpper": 0.9254739747621908
+      },
+      "summaryHash": "6826eb3a"
+    },
+    {
+      "id": "P-tipik-r0-b1.0",
+      "kind": "power",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.7125,
+      "everStrong90": {
+        "count": 1706,
+        "total": 2000,
+        "rate": 0.853,
+        "wilsonLower": 0.8368043125476514,
+        "wilsonUpper": 0.8678422520717839
+      },
+      "everStrong60": {
+        "count": 1240,
+        "total": 2000,
+        "rate": 0.62,
+        "wilsonLower": 0.5985165014191288,
+        "wilsonUpper": 0.6410234072333704
+      },
+      "everEmergingStatus": {
+        "count": 1914,
+        "total": 2000,
+        "rate": 0.957,
+        "wilsonLower": 0.9471988913295474,
+        "wilsonUpper": 0.9650489274553872
+      },
+      "everCandidateStatus": {
+        "count": 1950,
+        "total": 2000,
+        "rate": 0.975,
+        "wilsonLower": 0.9671932285868021,
+        "wilsonUpper": 0.9809855764960074
+      },
+      "everNotObservedShown": {
+        "count": 493,
+        "total": 2000,
+        "rate": 0.2465,
+        "wilsonLower": 0.22810994921020825,
+        "wilsonUpper": 0.26586199376138697
+      },
+      "weakenedAfterStrong": {
+        "count": 1136,
+        "total": 1706,
+        "rate": 0.6658851113716295,
+        "wilsonLower": 0.6431520985609,
+        "wilsonUpper": 0.6878727441694776
+      },
+      "summaryHash": "d9ef5d39"
+    },
+    {
+      "id": "P-tipik-r0-b0.5",
+      "kind": "power",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.3485,
+      "everStrong90": {
+        "count": 780,
+        "total": 2000,
+        "rate": 0.39,
+        "wilsonLower": 0.36885414285349183,
+        "wilsonUpper": 0.41156760754838373
+      },
+      "everStrong60": {
+        "count": 420,
+        "total": 2000,
+        "rate": 0.21,
+        "wilsonLower": 0.19271365637584625,
+        "wilsonUpper": 0.22839823104728035
+      },
+      "everEmergingStatus": {
+        "count": 1257,
+        "total": 2000,
+        "rate": 0.6285,
+        "wilsonLower": 0.6070954992958749,
+        "wilsonUpper": 0.649411819552843
+      },
+      "everCandidateStatus": {
+        "count": 1553,
+        "total": 2000,
+        "rate": 0.7765,
+        "wilsonLower": 0.7577221910948639,
+        "wilsonUpper": 0.7942176817586031
+      },
+      "everNotObservedShown": {
+        "count": 1451,
+        "total": 2000,
+        "rate": 0.7255,
+        "wilsonLower": 0.705523746028404,
+        "wilsonUpper": 0.7446116656477509
+      },
+      "weakenedAfterStrong": {
+        "count": 635,
+        "total": 780,
+        "rate": 0.8141025641025641,
+        "wilsonLower": 0.7852858115712175,
+        "wilsonUpper": 0.8398406020497401
+      },
+      "summaryHash": "b6ef01ff"
+    },
+    {
+      "id": "W-tipik-r0-b1.0-s30",
+      "kind": "weaken",
+      "users": 2000,
+      "permutations": 2000,
+      "meanPairs": 67.537,
+      "everStrong90": {
+        "count": 751,
+        "total": 2000,
+        "rate": 0.3755,
+        "wilsonLower": 0.3545348031004616,
+        "wilsonUpper": 0.39694254167257026
+      },
+      "everStrong60": {
+        "count": 669,
+        "total": 2000,
+        "rate": 0.3345,
+        "wilsonLower": 0.31415682415874446,
+        "wilsonUpper": 0.35547771849135024
+      },
+      "everEmergingStatus": {
+        "count": 1284,
+        "total": 2000,
+        "rate": 0.642,
+        "wilsonLower": 0.620735385829118,
+        "wilsonUpper": 0.6627201727430061
+      },
+      "everCandidateStatus": {
+        "count": 1590,
+        "total": 2000,
+        "rate": 0.795,
+        "wilsonLower": 0.7767497148011462,
+        "wilsonUpper": 0.8121192273029145
+      },
+      "everNotObservedShown": {
+        "count": 1242,
+        "total": 2000,
+        "rate": 0.621,
+        "wilsonLower": 0.5995254353250561,
+        "wilsonUpper": 0.6420106392328806
+      },
+      "weakenedAfterStrong": {
+        "count": 737,
+        "total": 751,
+        "rate": 0.9813581890812251,
+        "wilsonLower": 0.9689534989084095,
+        "wilsonUpper": 0.9888635255162416
+      },
+      "summaryHash": "3243c3de"
+    }
+  ],
+  "determinism": {
+    "pass": true,
+    "detail": "aynı: N-tipik-r0:5603c495 N-tipik-r0.3:781ac594 N-tipik-r0.6:fae5df25 N-nadiren-r0:8972e016 N-nadiren-r0.3:58b03109 N-nadiren-r0.6:d657dd9f N-sik-r0:9a6d123e N-sik-r0.3:cde49539 N-sik-r0.6:e9ca54a9 N-tipik-r0-weekend:54199a1a P-tipik-r0-b1.0:348ce5c0 P-tipik-r0-b0.5:cc93911c W-tipik-r0-b1.0-s30:01373f8a"
+  },
+  "criteria": [
+    {
+      "code": "G1",
+      "type": "primary",
+      "scenarios": [
+        "N-tipik-r0",
+        "N-tipik-r0.3",
+        "N-nadiren-r0",
+        "N-nadiren-r0.3",
+        "N-sik-r0",
+        "N-sik-r0.3",
+        "N-tipik-r0-weekend"
+      ],
+      "pass": false
+    },
+    {
+      "code": "G2",
+      "type": "primary-conditional",
+      "scenarios": [
+        "N-tipik-r0.6",
+        "N-nadiren-r0.6",
+        "N-sik-r0.6"
+      ],
+      "pass": false
+    },
+    {
+      "code": "G3",
+      "type": "primary",
+      "pass": true,
+      "detail": "aynı: N-tipik-r0:5603c495 N-tipik-r0.3:781ac594 N-tipik-r0.6:fae5df25 N-nadiren-r0:8972e016 N-nadiren-r0.3:58b03109 N-nadiren-r0.6:d657dd9f N-sik-r0:9a6d123e N-sik-r0.3:cde49539 N-sik-r0.6:e9ca54a9 N-tipik-r0-weekend:54199a1a P-tipik-r0-b1.0:348ce5c0 P-tipik-r0-b0.5:cc93911c W-tipik-r0-b1.0-s30:01373f8a"
+    },
+    {
+      "code": "S1",
+      "type": "secondary",
+      "scenarios": [
+        "P-tipik-r0-b1.0"
+      ],
+      "pass": true
+    },
+    {
+      "code": "S2",
+      "type": "report",
+      "scenarios": [
+        "P-tipik-r0-b0.5"
+      ],
+      "pass": null,
+      "value": 0.21
+    },
+    {
+      "code": "S3",
+      "type": "secondary",
+      "scenarios": [
+        "W-tipik-r0-b1.0-s30"
+      ],
+      "pass": true
+    }
+  ],
+  "gate": "FAIL"
+}

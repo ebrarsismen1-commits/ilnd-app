@@ -251,3 +251,63 @@ ortalama farkı + permütasyon testi + iki ardışık onaydır.
 ## Future Impact
 Kapı geçilirse aynı motor P1–P4'e genişletilebilir; her yeni örüntü kendi
 simülasyon kapısını geçer. Geri alma maliyeti düşük: modüller bağımsızdır.
+
+## Simülasyon sonucu (2026-09-15): STATISTICAL GATE: FAIL
+
+Kod: `ccb9d4a` (`intel-v0.1.0`). Yapılandırma: senaryo başına 2000 kullanıcı,
+`B = 2000`, 90 gece; belirlilik 300 kullanıcı × 2 çalıştırma. Süre ~3,3 dk
+(Node 20, 9 worker). Ham rapor: `0009-p5-simulation-results.json`.
+
+Eşikler ve ölçütler bu sonuçtan sonra DEĞİŞTİRİLMEDİ. Tam koşudan önce yalnız
+süre ölçmek için 40 kullanıcılık bir koşu yapıldı (kapı kararı değildi).
+
+| Senaryo | ort. gece | strong90 (Wilson üst) | strong60 | emerging* | not_observed | zayıflama |
+|---|---|---|---|---|---|---|
+| N-tipik-r0 | 67.6 | **7.65%** (8.90%) | 3.90% | 20.60% | 94.35% | 89.5% |
+| N-tipik-r0.3 | 67.4 | **6.15%** (7.29%) | 3.00% | 20.20% | 93.75% | 88.6% |
+| N-tipik-r0.6 | 67.5 | **9.65%** (11.02%) | 5.05% | 26.15% | 88.60% | 88.1% |
+| N-nadiren-r0 | 67.5 | 0.20% (0.51%) | 0.00% | 3.45% | 8.40% | 100% (4) |
+| N-nadiren-r0.3 | 67.4 | 0.55% (0.98%) | 0.25% | 3.70% | 10.15% | 90.9% |
+| N-nadiren-r0.6 | 67.5 | 0.65% (1.11%) | 0.25% | 6.50% | 15.75% | 84.6% |
+| N-sik-r0 | 67.3 | **7.30%** (8.52%) | 4.30% | 21.10% | 96.05% | 94.5% |
+| N-sik-r0.3 | 67.3 | **7.50%** (8.74%) | 4.35% | 22.45% | 95.65% | 89.3% |
+| N-sik-r0.6 | 67.5 | **10.40%** (11.81%) | 6.25% | 28.40% | 93.85% | 88.9% |
+| N-tipik-r0-weekend | 61.3 | **5.20%** (6.26%) | 2.20% | 15.45% | 94.45% | 87.5% |
+| P-tipik-r0-b1.0 | 67.7 | 85.30% | **62.00%** | 95.70% | 24.65% | 66.6% |
+| P-tipik-r0-b0.5 | 67.3 | 39.00% | 21.00% | 62.85% | 72.55% | 81.4% |
+| W-tipik-r0-b1.0-s30 | 67.5 | 37.55% | 33.45% | 64.20% | 62.10% | **98.1%** |
+
+\* iç durum, kullanıcıya gösterilmez. "zayıflama" = strong gösterilenler içinde
+sonradan weakened/faded görenler.
+
+| Ölçüt | Sonuç |
+|---|---|
+| G1 boş veri ρ∈{0,0.3} ≤5% ve Wilson ≤6.5% | **KALDI** (tipik ve sik marjinallerin tümü, hafta sonu) |
+| G2 boş veri ρ=0.6 ≤8% | **KALDI** (tipik 9.65%, sik 10.40%) |
+| G3 belirlilik | GEÇTİ (iki çalıştırmanın 13 özet hash'i aynı) |
+| S1 güç β=−1.0 strong60 ≥60% | GEÇTİ (62.00%) |
+| S2 güç β=−0.5 strong60 | rapor: 21.00% |
+| S3 zayıflama ≥50% | GEÇTİ (98.14%) |
+
+**Kapı eşlemesine göre sonuç: FAIL** (G1 birincil ölçüt).
+
+### Gözlem (yöntem değişikliği değil)
+- Yanlış pozitif tek bir bakışta değil, **tekrarlı bakışta** birikiyor: durum
+  her yeni gecede (~50 değerlendirme) yeniden hesaplanıyor ve 90 gecenin
+  herhangi birinde strong görülmesi yeterli. 60 gecede oran %3–4, 90 gecede
+  %6–8.
+- `S(N−1)` onayı `S(N)` ile neredeyse aynı veriyi paylaştığı için bu birikimi
+  pek azaltmıyor.
+- Zor akşamı nadir olan kullanıcıda oran düşük, çünkü `nLow ≥ 7` nadiren
+  oluşuyor.
+- Otokorelasyon (ρ=0.6) oranı ek olarak ~2–3 puan artırıyor. Ancak G1 ρ=0'da
+  da kaldığı için hafta bloğu permütasyonu tek başına sorunu çözmez.
+- Boş veride gösterilen yanlış strong'ların ~%88–95'i sonradan weakened ya da
+  faded oluyor: yanlış iddia çoğunlukla geçici, ama yine de gösteriliyor.
+
+### Sonraki adım: owner kararı gerekli (hiçbiri uygulanmadı)
+Herhangi bir değişiklik yeni bir ADR revizyonu, `engineVersion` artışı,
+sonuç görülmeden dondurulmuş yeni ölçütler ve yeni bir tohum ad alanıyla
+(`sim2|…`) yeniden koşu gerektirir. Bu sonuçlar görüldüğü için bir sonraki
+tasarım kısmen sonradan (post hoc) yapılmış olacaktır; bu açıkça kayda
+geçirilmelidir.
