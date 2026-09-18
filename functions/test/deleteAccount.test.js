@@ -176,24 +176,32 @@ describe("deleteAccount", () => {
     expect(res.body.retryable).toBe(true);
     expect(res.body.failedSteps).toEqual(["supabase"]);
     // Firebase kullanıcısı silinmedi (mevcut oturumla tekrar deneyebilsin),
-    // ama mezar taşı var: mintFirebaseToken bu uid'e yeni oturum açmaz.
-    await expect(admin.auth().getUser(uid)).resolves.toBeDefined();
+    // ama devre dışı: yeni giriş ve token yenileme reddedilir (ADR-0010).
+    const user = await admin.auth().getUser(uid);
+    expect(user.disabled).toBe(true);
     expect(await hasDeletionRequest(db, uid)).toBe(true);
     // Bağımsız veri adımları yine de çalıştı.
     expect(await remainingFor(uid)).toEqual([]);
     expect((await db.doc(`deletion_requests/${uid}`).get()).data().status).toBe("failed");
   });
 
+  // Yarım silme Firebase kullanıcısını devre dışı bırakır (ADR-0010). ÜRETİMDE
+  // elindeki ID token (en çok 1 saat) ile tekrar denenebilir: verifyIdToken
+  // checkRevoked olmadan kullanıcı kaydına bakmaz. Auth EMÜLATÖRÜNDE Admin SDK
+  // her zaman devre dışı/iptal kontrolü yapar, yani aynı token 401 alır; bu
+  // yüzden tekrar deneme modül düzeyinde doğrulanır, emülatör davranışı da
+  // açıkça kilitlenir (devre dışı hesap yeni oturumla uçlara giremez).
   test("H-3: başarısız silme tekrar denenince tamamlanır", async () => {
     const uid = "del-retry-1";
     await admin.auth().createUser({uid});
     const idToken = await getIdTokenForUid(uid);
     supabaseStatus.profiles = 503;
     expect((await callDelete(idToken)).statusCode).toBe(500);
+    expect((await admin.auth().getUser(uid)).disabled).toBe(true);
 
     supabaseStatus.profiles = 204;
-    const retry = await callDelete(idToken);
-    expect(retry.statusCode).toBe(200);
+    const retry = await runAccountDeletion(uid, moduleDeps());
+    expect(retry.complete).toBe(true);
     await expect(admin.auth().getUser(uid)).rejects.toThrow();
     const tomb = (await db.doc(`deletion_requests/${uid}`).get()).data();
     expect(tomb.status).toBe("done");
@@ -217,16 +225,19 @@ describe("deleteAccount", () => {
     expect((await db.doc(`deletion_requests/${uid}`).get()).data().attempts).toBe(2);
   });
 
-  test("H-3: yarım silmeden sonra ikinci HTTP çağrısı tamamlar (200, 500 değil)", async () => {
+  test("H-3: yarım silmeden sonra devre dışı hesap uçlara yeni oturumla giremez", async () => {
     const uid = "del-twice-http";
     await admin.auth().createUser({uid});
     const idToken = await getIdTokenForUid(uid);
     supabaseStatus.authUser = 502;
     expect((await callDelete(idToken)).statusCode).toBe(500);
     supabaseStatus.authUser = 200;
-    const second = await callDelete(idToken);
-    expect(second.statusCode).toBe(200);
-    expect(second.body).toEqual({deleted: true});
+    // Devre dışı kullanıcı parolayla yeniden giriş yapamaz.
+    await expect(getIdTokenForUid(uid)).rejects.toThrow(/USER_DISABLED/);
+    // Tamamlama zamanlanmış görevin (ya da üretimde mevcut token'ın) işi.
+    const summary = await retryPendingDeletions(moduleDeps());
+    expect(summary.completed).toBeGreaterThanOrEqual(1);
+    await expect(admin.auth().getUser(uid)).rejects.toThrow();
   });
 
   test("silme istenmemiş hesapta yeniden giriş kilidi yok", async () => {

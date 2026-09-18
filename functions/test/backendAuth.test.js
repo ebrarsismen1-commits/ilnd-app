@@ -1,11 +1,11 @@
 /**
- * Emülatörde çalışır. Denetim H-5: her hassas uç yalnız Supabase köprüsünün
- * ürettiği oturumu kabul eder; App Check enforce modunda tokensız istek
+ * Emülatörde çalışır. Denetim H-5 / ADR-0010: her hassas uç yalnız
+ * doğrulanmış e-posta, Google ya da Apple oturumunu kabul eder; App Check enforce modunda tokensız istek
  * reddedilir. Hiçbir test 401 dışındaki bir yola (silme, AI çağrısı) inmez.
  */
 const admin = require("firebase-admin");
 const httpMocks = require("node-mocks-http");
-const {getIdTokenForUid, getAnonymousIdToken} = require("./helpers");
+const {getIdTokenForUid, getCustomTokenIdToken, getAnonymousIdToken} = require("./helpers");
 
 const fns = require("../index");
 
@@ -43,8 +43,14 @@ describe("backend kimlik kapısı", () => {
     expect(res.statusCode).toBe(401);
   });
 
-  test.each(ENDPOINTS)("%s köprü claim'i olmayan custom token'ı reddeder", async (fn, body) => {
-    const idToken = await getIdTokenForUid(`no-claim-${fn}`, {});
+  test.each(ENDPOINTS)("%s eski köprünün custom token'ını reddeder", async (fn, body) => {
+    const idToken = await getCustomTokenIdToken(`bridge-${fn}`, {provider: "supabase"});
+    const res = await call(fn, {idToken, body});
+    expect(res.statusCode).toBe(401);
+  });
+
+  test.each(ENDPOINTS)("%s e-postası doğrulanmamış oturumu reddeder", async (fn, body) => {
+    const idToken = await getIdTokenForUid(`unverified-${fn}`, {emailVerified: false});
     const res = await call(fn, {idToken, body});
     expect(res.statusCode).toBe(401);
   });
@@ -108,7 +114,7 @@ describe("CORS izin listesi", () => {
     return res;
   }
 
-  const fnNames = [...ENDPOINTS.map(([fn]) => fn), "mintFirebaseToken"];
+  const fnNames = ENDPOINTS.map(([fn]) => fn);
 
   test.each(fnNames)("%s bilinmeyen siteye izin vermez", async (fn) => {
     const res = await preflight(fn, "https://evil.example");

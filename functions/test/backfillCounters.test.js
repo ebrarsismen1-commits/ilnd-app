@@ -18,11 +18,16 @@ async function wipe(col) {
   await Promise.all(snap.docs.map((d) => db.recursiveDelete(d.ref)));
 }
 
-afterEach(async () => {
+// Önce de temizlenir: başka test dosyalarının bıraktığı check-in'ler
+// (ör. deleteAccount'un dokunmadığı "seyirci" kullanıcı) haftalık sayıyı
+// dosya sırasına bağımlı hale getiriyordu.
+const wipeAll = async () => {
   await wipe("events");
   await wipe("daily_checkins");
   await wipe("public_stats");
-});
+};
+beforeEach(wipeAll);
+afterEach(wipeAll);
 
 test("mevcut etkinliklerin katılımcı sayısını ve haftalık sayıyı doldurur", async () => {
   const today = new Date().toISOString().slice(0, 10);
