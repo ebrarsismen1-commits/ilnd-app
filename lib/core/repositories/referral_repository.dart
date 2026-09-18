@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
-import 'package:ilnd_app/core/services/firebase_auth_bridge.dart';
 import 'package:ilnd_app/core/services/firebase_service.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 
@@ -101,8 +100,8 @@ class ReferralRepository {
   }
 
   Future<String> _requestServerCode() async {
-    if (!AppConfig.isAuthBridgeConfigured) {
-      throw StateError('Auth bridge is not configured');
+    if (!AppConfig.isFunctionsConfigured) {
+      throw StateError('Cloud Functions URL is not configured');
     }
     final idToken = await fb_auth.FirebaseAuth.instance.currentUser
         ?.getIdToken();
@@ -142,15 +141,15 @@ class ReferralRepository {
   /// client'ın founding_member/premium_access_until alanlarını yazmasına izin
   /// vermiyor, bu yüzden client artık ödülü kendisi hesaplayıp yazamaz.
   Future<RedeemResult> redeemCode(String code) async {
-    // Köprü kapalı / oturum yok → kod geçersiz DEĞİL, henüz hazır değil.
-    if (!AppConfig.isAuthBridgeConfigured) return RedeemResult.notReady;
+    // Fonksiyon adresi yok / oturum yok → kod geçersiz DEĞİL, henüz hazır değil.
+    if (!AppConfig.isFunctionsConfigured) return RedeemResult.notReady;
 
     // Kod ekrandaki hesap adına kullanılmalı (denetim M-8).
-    if (!await FirebaseAuthBridge.ensureSameAccount(_userId)) {
+    final current = fb_auth.FirebaseAuth.instance.currentUser;
+    if (current == null || current.uid != _userId) {
       return RedeemResult.notReady;
     }
-    final idToken = await fb_auth.FirebaseAuth.instance.currentUser
-        ?.getIdToken();
+    final idToken = await current.getIdToken();
     if (idToken == null) return RedeemResult.notReady;
 
     try {

@@ -10,13 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
 import 'package:ilnd_app/core/repositories/profile_repository.dart';
 import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
-import 'package:ilnd_app/core/services/firebase_auth_bridge.dart';
 import 'package:ilnd_app/core/services/local_user_data.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 
@@ -40,6 +38,19 @@ const authDeepLinkRedirect = '$authDeepLinkScheme://$authDeepLinkHost';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 
+/// Oturumdaki kullanıcının uygulamanın ihtiyaç duyduğu kadarı. Eskiden
+/// Supabase `User` tipiydi; uygulama yalnız `id`'yi (Firebase uid'i) kullanıyor.
+@immutable
+class AuthUser {
+  const AuthUser({required this.id, this.email});
+
+  factory AuthUser.fromFirebase(fb_auth.User u) =>
+      AuthUser(id: u.uid, email: u.email);
+
+  final String id;
+  final String? email;
+}
+
 sealed class AuthState {
   const AuthState();
 }
@@ -54,14 +65,14 @@ class AuthLoading extends AuthState {
 
 class AuthAuthenticated extends AuthState {
   const AuthAuthenticated(this.user);
-  final User user;
+  final AuthUser user;
 }
 
 class AuthUnauthenticated extends AuthState {
   const AuthUnauthenticated();
 }
 
-/// Kayıt başarılı ama oturum yok: Supabase "Confirm email" açıkken kullanıcı
+/// Kayıt başarılı ama oturum yok: e-posta doğrulaması zorunlu, kullanıcı
 /// mailindeki bağlantıyı onaylayana kadar giriş yapamaz. UI bu durumda
 /// "onay maili gönderildi" mesajı gösterir — bu bir hata değildir.
 class AuthConfirmEmailPending extends AuthState {
@@ -70,12 +81,14 @@ class AuthConfirmEmailPending extends AuthState {
 }
 
 /// Kullanıcı şifre sıfırlama linkinden geldi: oturum recovery token'ıyla
-/// açık ama önce YENİ ŞİFRE belirlenmeli. Router bu durumda kullanıcıyı
+/// açık ama önce YENİ ŞİFRE belirlenmeli. Firebase'e geçişten sonra (ADR-0010)
+/// sıfırlama Firebase'in kendi sayfasında tamamlanıyor ve bu durum üretilmiyor;
+/// router kilidi Supabase temizliğinde kaldırılacak. Router bu durumda kullanıcıyı
 /// yeni-şifre ekranına kilitler; updatePassword başarılı olunca
 /// [AuthAuthenticated]'a geçilir.
 class AuthPasswordRecovery extends AuthState {
   const AuthPasswordRecovery(this.user);
-  final User user;
+  final AuthUser user;
 }
 
 class AuthError extends AuthState {
@@ -109,13 +122,19 @@ enum AuthErrorCode {
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
-/// Firestore kuralları Firebase'in kendi request.auth'una bakar; o oturum
-/// FirebaseAuthBridge tamamlanınca açılır. Kullanıcıya bağlı Firestore
-/// provider'ları bunu da izler: köprü bitmeden stream açıp permission-denied
-/// ile ölmek yerine (Firestore stream'i hatadan sonra kendini yenilemez),
-/// köprü girişi geldiğinde otomatik yeniden kurulurlar.
+/// Testlerin sahte FirebaseAuth vermesi için kanca; üretimde null.
+@visibleForTesting
+fb_auth.FirebaseAuth? debugFirebaseAuthOverride;
+
+fb_auth.FirebaseAuth get _firebaseAuth =>
+    debugFirebaseAuthOverride ?? fb_auth.FirebaseAuth.instance;
+
+/// Firebase oturumundaki uid. Kimlik artık doğrudan Firebase Auth'ta
+/// (ADR-0010), yani bu değer [authNotifierProvider]'daki kullanıcıyla aynı
+/// anda oluşur; kullanıcıya bağlı Firestore provider'ları yine de ikisini
+/// birlikte izler (Sert Kural #2).
 final firebaseAuthUidProvider = StreamProvider<String?>(
-  (ref) => fb_auth.FirebaseAuth.instance.authStateChanges().map((u) => u?.uid),
+  (ref) => _firebaseAuth.authStateChanges().map((u) => u?.uid),
 );
 
 /// E-posta linkinden (şifre sıfırlama / hesap onayı) dönen oturum hiç
@@ -129,33 +148,15 @@ final authNotifierProvider = StateNotifierProvider<AuthNotifier, AuthState>(
   (ref) => AuthNotifier(ref),
 );
 
-/// E-posta linkindeki tek kullanımlık sıfırlama token’ı.
-///
-/// Supabase’in varsayılan `{{ .ConfirmationURL }}` şablonu linki önce kendi
-/// `/auth/v1/verify` ucuna götürür; o uç token’ı ORADA tüketir ve uygulamaya
-/// yalnızca sonucu yollar. Linki bir mail tarayıcısı ya da güvenlik servisi
-/// sen tıklamadan önce açarsa token ölür, kullanıcıya
-/// `?error=access_denied&error_code=otp_expired` döner (yaşandı).
-///
-/// `{{ .TokenHash }}` şablonunda link doğrudan uygulamaya gelir ve token
-/// YALNIZCA burada, verifyOTP çağrısında tüketilir: linki önden açan bir
-/// tarayıcı hiçbir şeyi harcamamış olur.
-///
-/// Hem query hem fragment okunur; şablonun parametreleri `?` ya da `#`
-/// arkasına koyması ayrımı kullanıcıya yansımasın.
-@visibleForTesting
-String? recoveryTokenHashFrom(Uri uri) {
-  final fragment = Uri.splitQueryString(uri.fragment);
-  String? param(String key) => uri.queryParameters[key] ?? fragment[key];
-
-  if (param('type') != 'recovery') return null;
-  final tokenHash = param('token_hash');
-  if (tokenHash == null || tokenHash.isEmpty) return null;
-  return tokenHash;
-}
-
 // ─── Notifier ─────────────────────────────────────────────────────────────────
 
+/// Kimlik Firebase Auth'ta (ADR-0010; eskiden Supabase + köprü, ADR-0001).
+///
+/// E-posta doğrulaması ZORUNLU: Supabase'teki "Confirm email" davranışı
+/// korunur. Firebase doğrulanmamış hesabın oturum açmasını kendiliğinden
+/// engellemediği için doğrulanmamış e-posta/şifre oturumu burada
+/// kimliksiz sayılır ve kapatılır; sunucu uçları da aynı kuralı uygular
+/// (functions/authClaims.js).
 class AuthNotifier extends StateNotifier<AuthState> {
   AuthNotifier(this._ref) : super(const AuthInitial()) {
     _init();
@@ -163,127 +164,64 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   final Ref _ref;
 
-  StreamSubscription<AuthState>? _sub;
+  StreamSubscription<fb_auth.User?>? _sub;
 
-  /// token_hash doğrulanırken true. Bu sırada gelen ara olaylar (initialSession
-  /// gibi) durumu kimliksize çekip router’ı onboarding duvarına atmasın diye
-  /// dinleyici bekletilir; akış passwordRecovery ile kapanır.
-  bool _verifyingRecoveryLink = false;
+  /// Kayıt/giriş akışı doğrulanmamış hesabı kendisi kapatırken true: o
+  /// sırada gelen "oturum yok" olayı akışın koyduğu durumu (onay bekleniyor,
+  /// hata) ezmesin.
+  bool _holdAuthEvents = false;
 
-  SupabaseClient get _client => Supabase.instance.client;
+  fb_auth.FirebaseAuth get _auth => _firebaseAuth;
+
+  /// Uygulamaya girebilir mi? Google/Apple e-postayı zaten doğrulamış
+  /// sayılır; yalnız e-posta/şifre hesabı doğrulama bekler.
+  static bool _isUsable(fb_auth.User u) =>
+      u.emailVerified || u.providerData.any((p) => p.providerId != 'password');
+
+  AuthState _stateFor(fb_auth.User? u) => (u != null && _isUsable(u))
+      ? AuthAuthenticated(AuthUser.fromFirebase(u))
+      : const AuthUnauthenticated();
 
   void _init() {
-    // Resolve synchronously so the router redirect has a concrete state on first build.
-    final session = _client.auth.currentSession;
-
-    // Sıfırlama linki uygulamaya token_hash ile geldiyse önce onu tüket.
-    // Oturum zaten varsa (başarılı sıfırlamadan sonra sayfa yenilendi) tekrar
-    // denemenin anlamı yok: token tek kullanımlık, ikinci deneme hata verir.
-    // Mobilde link https olduğu için tarayıcıda açılır; bu yol web’e özgü.
-    final tokenHash = (kIsWeb && session == null)
-        ? recoveryTokenHashFrom(Uri.base)
-        : null;
-    _verifyingRecoveryLink = tokenHash != null;
-
-    // Doğrulama bitene kadar durum AuthInitial kalır, yani kullanıcı splash
-    // görür. Aksi hâlde ilk karede kimliksiz sayılıp welcome’a atılır ve
-    // doğrulama bitince ekran altından kayardı.
-    if (!_verifyingRecoveryLink) {
-      state = session != null
-          ? AuthAuthenticated(session.user)
-          : const AuthUnauthenticated();
-    }
-    if (session != null) {
-      unawaited(FirebaseAuthBridge.syncFromSupabase(session.accessToken));
-      unawaited(RevenueCatService.identify(session.user.id));
+    // Resolve synchronously so the router redirect has a concrete state on
+    // first build. Web'de Firebase oturumu diskten asenkron yüklenir; o
+    // zaman ilk olay gelene kadar AuthInitial (splash) kalınır.
+    final current = _auth.currentUser;
+    if (current != null || !kIsWeb) state = _stateFor(current);
+    if (state is AuthAuthenticated) {
+      unawaited(RevenueCatService.identify(current!.uid));
     }
 
-    // Stay in sync with token refresh, sign-out from other tabs, etc.
-    _sub = _client.auth.onAuthStateChange
-        .map<AuthState>((data) {
-          // Şifre sıfırlama linki: oturum var ama önce yeni şifre belirlenmeli
-          // — router kullanıcıyı yeni-şifre ekranına kilitler.
-          if (data.event == AuthChangeEvent.passwordRecovery &&
-              data.session != null) {
-            return AuthPasswordRecovery(data.session!.user);
-          }
-          return data.session != null
-              ? AuthAuthenticated(data.session!.user)
-              : const AuthUnauthenticated();
-        })
-        .listen((s) {
-          if (!mounted) return;
-          if (_verifyingRecoveryLink && s is! AuthPasswordRecovery) return;
-          // Recovery akışı sürerken sonradan gelen tokenRefreshed/signedIn
-          // olayları kullanıcıyı yeni-şifre ekranından koparmasın; akış
-          // updatePassword ile kapanır.
-          if (state is AuthPasswordRecovery && s is AuthAuthenticated) return;
-          state = s;
-          // Supabase oturumu her (yeniden) kurulduğunda Firebase Auth'u da
-          // senkronize tut — request.auth Firestore kurallarında kullanılabilsin.
-          final token = _client.auth.currentSession?.accessToken;
-          if (s is AuthAuthenticated && token != null) {
-            unawaited(FirebaseAuthBridge.syncFromSupabase(token));
-            // Abonelik hesaba bağlansın: cihaz değişince de aynı hak, aynı
-            // kullanım sınırı geçerli olsun.
-            unawaited(RevenueCatService.identify(s.user.id));
-          } else if (s is AuthUnauthenticated) {
-            unawaited(FirebaseAuthBridge.signOut());
-            unawaited(RevenueCatService.forget());
-          }
-        }, onError: _onAuthStreamError);
-
-    if (tokenHash != null) unawaited(_verifyRecoveryLink(tokenHash));
+    // Stay in sync with sign-in/out, token refresh, other tabs, etc.
+    _sub = _auth.userChanges().listen((u) {
+      if (!mounted || _holdAuthEvents) return;
+      final next = _stateFor(u);
+      // Akışın bıraktığı mesaj (onay maili gönderildi / hata) ekranda kalsın:
+      // kapattığımız doğrulanmamış oturumun olayları akış bittikten SONRA da
+      // gelebilir. İkisi de router için zaten kimliksiz durum.
+      if (next is AuthUnauthenticated &&
+          (state is AuthConfirmEmailPending || state is AuthError)) {
+        return;
+      }
+      final prevUid = switch (state) {
+        AuthAuthenticated(:final user) => user.id,
+        _ => null,
+      };
+      state = next;
+      if (next is AuthAuthenticated) {
+        if (prevUid != next.user.id) {
+          // Abonelik hesaba bağlansın: cihaz değişince de aynı hak, aynı
+          // kullanım sınırı geçerli olsun.
+          unawaited(RevenueCatService.identify(next.user.id));
+        }
+      } else if (prevUid != null) {
+        unawaited(RevenueCatService.forget());
+      }
+    }, onError: _onAuthStreamError);
   }
 
-  /// Sıfırlama linkindeki token_hash’i oturuma çevirir. Başarılı olursa gotrue
-  /// passwordRecovery yayar ve durum dinleyicide kurulur; router kullanıcıyı
-  /// yeni-şifre ekranına kilitler.
-  Future<void> _verifyRecoveryLink(String tokenHash) async {
-    try {
-      await _client.auth
-          .verifyOTP(type: OtpType.recovery, tokenHash: tokenHash)
-          .timeout(const Duration(seconds: 15));
-    } catch (e) {
-      debugPrint('[Auth] recovery token_hash verify failed: $e');
-      if (!mounted) return;
-      _ref.read(authLinkErrorProvider.notifier).state =
-          AuthErrorCode.resetLinkInvalid;
-      state = const AuthUnauthenticated();
-    } finally {
-      _verifyingRecoveryLink = false;
-    }
-  }
-
-  /// E-posta linkinden (sıfırlama/onay) dönen oturum kurulamazsa gotrue hatayı
-  /// veri değil **stream hatası** olarak yayar. onError yoksa hata zone'a kaçar
-  /// ve release'de fatal Crashlytics kaydına dönüşürdü; kullanıcı ise sessizce
-  /// giriş ekranında kalırdı.
-  ///
-  /// Eski sürüm hatayı yalnızca `state is AuthPasswordRecovery` iken işliyordu;
-  /// o koşul pratikte hiç oluşmuyor, çünkü recovery durumuna ancak takas
-  /// BAŞARILI olunca geçiliyor. Takas patlarsa durum hâlâ kimliksiz oluyor,
-  /// koşul tutmuyor ve router kullanıcıyı sessizce giriş ekranına bırakıyordu:
-  /// "linke bastım, şifre yenileme yerine giriş ekranı çıkıyor" şikâyetinin
-  /// görünen yüzü tam olarak buydu. Artık [authLinkErrorProvider] doluyor ve
-  /// giriş ekranı nedeni söylüyor.
   void _onAuthStreamError(Object error, StackTrace stackTrace) {
-    debugPrint('[Auth] onAuthStateChange error: $error\n$stackTrace');
-    if (!mounted) return;
-    // Oturum yokken gelen hata = e-posta linki çözülemedi: kod tükenmiş ya
-    // da süresi dolmuş; link, sıfırlamayı isteyenden başka bir
-    // cihazda/tarayıcıda açıldığı için PKCE code verifier yerel depoda yok;
-    // ya da bir e-posta tarayıcısı linki önden tüketmiş. Oturum VARKEN gelen
-    // stream hataları token yenileme/ağ kaynaklı, sıfırlamayla ilgisi yok.
-    if (_client.auth.currentSession == null) {
-      _ref.read(authLinkErrorProvider.notifier).state =
-          AuthErrorCode.resetLinkInvalid;
-      state = const AuthUnauthenticated();
-      return;
-    }
-    if (state is AuthPasswordRecovery) {
-      state = const AuthError(AuthErrorCode.resetFailed);
-    }
+    debugPrint('[Auth] authStateChanges error: $error\n$stackTrace');
   }
 
   @override
@@ -292,83 +230,108 @@ class AuthNotifier extends StateNotifier<AuthState> {
     super.dispose();
   }
 
+  /// Her yeni hesap bir referral koduna sahip olsun — fire-and-forget,
+  /// girişi engellemesin. Sunucu doğrulanmış oturum istediği için yalnız
+  /// uygulamaya girebilen hesapla çağrılır.
+  void _ensureReferral(String uid) {
+    unawaited(
+      ReferralRepository(uid).ensureReferralCode().catchError((e) {
+        debugPrint('[Auth] ensureReferralCode failed: $e');
+        return '';
+      }),
+    );
+  }
+
+  /// Doğrulanmamış e-posta hesabını kapatır ve onay mailini (yeniden)
+  /// gönderir. Mail gönderimi başarısız olsa da oturum kapanır.
+  Future<void> _closeUnverified(fb_auth.User user) async {
+    try {
+      await user.sendEmailVerification(_actionCodeSettings);
+    } catch (e) {
+      debugPrint('[Auth] sendEmailVerification failed: $e');
+    }
+    await _auth.signOut();
+  }
+
   // ── Public API ──────────────────────────────────────────────────────────────
 
   Future<void> signIn(String email, String password) async {
     state = const AuthLoading();
+    _holdAuthEvents = true;
     try {
-      final res = await _client.auth
-          .signInWithPassword(email: email.trim(), password: password)
+      final res = await _auth
+          .signInWithEmailAndPassword(email: email.trim(), password: password)
           .timeout(const Duration(seconds: 15));
-      // Stream zaten state'i güncelliyor ama başarı garantisi için:
-      if (res.session != null) {
-        state = AuthAuthenticated(res.user!);
-      } else {
+      final user = res.user;
+      if (user == null) {
+        state = const AuthError(AuthErrorCode.generic);
+      } else if (!_isUsable(user)) {
+        await _closeUnverified(user);
         state = const AuthError(AuthErrorCode.confirmEmail);
+      } else {
+        state = AuthAuthenticated(AuthUser.fromFirebase(user));
+        unawaited(RevenueCatService.identify(user.uid));
+        _ensureReferral(user.uid);
       }
-    } on AuthException catch (e) {
+    } on fb_auth.FirebaseAuthException catch (e) {
       state = AuthError(_mapError(e));
     } catch (e) {
       debugPrint('[Auth] signIn error: $e');
       state = const AuthError(AuthErrorCode.network);
+    } finally {
+      _holdAuthEvents = false;
     }
   }
 
   Future<void> signUp(String email, String password, String name) async {
     state = const AuthLoading();
+    _holdAuthEvents = true;
     try {
-      final res = await _client.auth
-          .signUp(
+      final res = await _auth
+          .createUserWithEmailAndPassword(
             email: email.trim(),
             password: password,
-            data: {'name': name.trim()},
-            // Onay linki de panel Site URL'inden bağımsız uygulamaya dönsün.
-            emailRedirectTo: _emailRedirect,
           )
           .timeout(const Duration(seconds: 15));
-      // Confirm email açıkken kullanıcı yaratılır ama oturum verilmez —
-      // stream hiç tetiklenmez ve state AuthLoading'de asılı kalırdı.
-      // UI'a "onay maili gönderildi" durumunu açıkça bildir.
-      if (res.user != null && res.session == null) {
-        state = AuthConfirmEmailPending(email.trim());
+      final user = res.user;
+      if (user == null) {
+        state = const AuthError(AuthErrorCode.signupFailed);
         return;
       }
-      if (res.user != null) {
-        // Profil adı Firestore users/{uid}'e. Fire-and-forget: yazım köprü
-        // girişini bekler, kayıt başarısını engellemesin; hata repository'de
-        // yutulur ve onboarding flush'ı adı yeniden yazar.
-        final trimmed = name.trim();
-        if (trimmed.isNotEmpty) {
-          unawaited(
-            ProfileRepository(
-              res.user!.id,
-            ).updateFields({ProfileFields.name: trimmed}),
-          );
+      final trimmed = name.trim();
+      if (trimmed.isNotEmpty) {
+        try {
+          await user.updateDisplayName(trimmed);
+        } catch (e) {
+          debugPrint('[Auth] updateDisplayName failed: $e');
         }
-        // Her yeni kullanıcı kayıt anında bir referral koduna sahip olsun —
-        // fire-and-forget, kayıt başarısını engellemesin.
-        unawaited(
-          ReferralRepository(res.user!.id).ensureReferralCode().catchError((e) {
-            debugPrint('[Auth] ensureReferralCode failed: $e');
-            return '';
-          }),
-        );
+        // Profil adı Firestore users/{uid}'e — oturum kapanmadan ÖNCE
+        // (kurallar sahibini ister). Hata repository'de yutulur; onboarding
+        // flush'ı adı yeniden yazar.
+        await ProfileRepository(
+          user.uid,
+        ).updateFields({ProfileFields.name: trimmed});
       }
-      // signUp state'i auth stream'den otomatik gelir (AuthAuthenticated)
-    } on AuthException catch (e) {
+      // Doğrulama zorunlu: onay maili gider, kullanıcı linke tıklayıp giriş
+      // yapana kadar uygulamaya giremez. UI "onay maili gönderildi" gösterir.
+      await _closeUnverified(user);
+      state = AuthConfirmEmailPending(email.trim());
+    } on fb_auth.FirebaseAuthException catch (e) {
       state = AuthError(_mapError(e));
     } catch (e) {
       debugPrint('[Auth] signUp error: $e');
       state = const AuthError(AuthErrorCode.signupFailed);
+    } finally {
+      _holdAuthEvents = false;
     }
   }
 
   /// Google ile giriş — native hesap seçici (google_sign_in), id_token'ı
-  /// Supabase'e devrederek oturum açar. Kullanıcı seçiciyi kapatırsa (iptal)
+  /// Firebase'e devrederek oturum açar. Kullanıcı seçiciyi kapatırsa (iptal)
   /// state sessizce [AuthUnauthenticated]'a döner, hata gösterilmez.
   ///
-  /// Ön koşul: Supabase Authentication > Providers > Google aktif ve
-  /// AppConfig.googleServerClientId (Web OAuth client ID) dolu olmalı —
+  /// Ön koşul: Firebase Authentication > Sign-in method > Google aktif ve
+  /// AppConfig.googleServerClientId o projenin Web OAuth client ID'si olmalı —
   /// bkz. AppConfig.isGoogleSignInConfigured.
   Future<void> signInWithGoogle() async {
     state = const AuthLoading();
@@ -390,24 +353,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return;
       }
 
-      final res = await _client.auth
-          .signInWithIdToken(
-            provider: OAuthProvider.google,
-            idToken: idToken,
-            accessToken: googleAuth.accessToken,
+      final res = await _auth
+          .signInWithCredential(
+            fb_auth.GoogleAuthProvider.credential(
+              idToken: idToken,
+              accessToken: googleAuth.accessToken,
+            ),
           )
           .timeout(const Duration(seconds: 15));
-
-      if (res.user != null) {
-        unawaited(
-          ReferralRepository(res.user!.id).ensureReferralCode().catchError((e) {
-            debugPrint('[Auth] ensureReferralCode failed: $e');
-            return '';
-          }),
-        );
-      }
+      final user = res.user;
+      if (user != null) _ensureReferral(user.uid);
       // Başarı state'i auth stream'den otomatik gelir (AuthAuthenticated).
-    } on AuthException catch (e) {
+    } on fb_auth.FirebaseAuthException catch (e) {
       state = AuthError(_mapError(e));
     } catch (e) {
       debugPrint('[Auth] signInWithGoogle error: $e');
@@ -415,12 +372,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  /// Apple ile giriş — Sign in with Apple, id_token'ı Supabase'e devreder.
+  /// Apple ile giriş — Sign in with Apple, id_token'ı Firebase'e devreder.
   /// Nonce, Apple'ın döndürdüğü id_token'ın bu istek için üretildiğini
-  /// doğrular (replay saldırılarına karşı) — Supabase dokümantasyonundaki
-  /// önerilen akış budur.
+  /// doğrular (replay saldırılarına karşı): Apple'a hash'i, Firebase'e ham
+  /// değeri verilir.
   ///
-  /// Ön koşul: Supabase Authentication > Providers > Apple aktif olmalı,
+  /// Ön koşul: Firebase Authentication > Sign-in method > Apple aktif olmalı,
   /// iOS hedefinde "Sign in with Apple" capability eklenmiş olmalı.
   Future<void> signInWithApple() async {
     state = const AuthLoading();
@@ -442,22 +399,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return;
       }
 
-      final res = await _client.auth
-          .signInWithIdToken(
-            provider: OAuthProvider.apple,
-            idToken: idToken,
-            nonce: rawNonce,
+      final res = await _auth
+          .signInWithCredential(
+            fb_auth.OAuthProvider(
+              'apple.com',
+            ).credential(idToken: idToken, rawNonce: rawNonce),
           )
           .timeout(const Duration(seconds: 15));
-
-      if (res.user != null) {
-        unawaited(
-          ReferralRepository(res.user!.id).ensureReferralCode().catchError((e) {
-            debugPrint('[Auth] ensureReferralCode failed: $e');
-            return '';
-          }),
-        );
-      }
+      final user = res.user;
+      if (user != null) _ensureReferral(user.uid);
       // Başarı state'i auth stream'den otomatik gelir (AuthAuthenticated).
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code == AuthorizationErrorCode.canceled) {
@@ -467,7 +417,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
       debugPrint('[Auth] signInWithApple authorization error: $e');
       state = const AuthError(AuthErrorCode.appleFailed);
-    } on AuthException catch (e) {
+    } on fb_auth.FirebaseAuthException catch (e) {
       state = AuthError(_mapError(e));
     } catch (e) {
       debugPrint('[Auth] signInWithApple error: $e');
@@ -487,12 +437,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> signOut() async {
     try {
-      await _client.auth.signOut();
+      await _auth.signOut();
       // Başarı state'i auth stream'den otomatik gelir (AuthUnauthenticated).
     } catch (e) {
       debugPrint('[Auth] signOut error: $e');
-      // Başarıyı taklit etme: gerçek oturum sunucuda hâlâ açık olabilir,
-      // bunu AuthUnauthenticated'a çevirmek yeniden açılışta yanıltıcı
+      // Başarıyı taklit etme: gerçek oturum hâlâ açık olabilir, bunu
+      // AuthUnauthenticated'a çevirmek yeniden açılışta yanıltıcı
       // sessiz-yeniden-giriş'e yol açar.
       state = const AuthError(AuthErrorCode.signOutFailed);
     }
@@ -501,24 +451,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Hesabı ve tüm verilerini kalıcı olarak siler.
   ///
   /// functions/index.js'teki deleteAccount (Admin SDK) Firestore alt
-  /// ağacını, Storage dosyalarını, Supabase kullanıcısını ve Firebase Auth
-  /// kullanıcısını siler. Bu metod onu çağırıp ardından her iki taraftan da
-  /// (Supabase + Firebase) çıkış yapar. Başarısız olursa state'i
-  /// [AuthError]'a çevirir ve hatayı yeniden fırlatır — UI bunu yakalayıp
-  /// kullanıcıya göstermeli.
+  /// ağacını, Storage dosyalarını, Supabase'te kalan eski kaydı ve Firebase
+  /// Auth kullanıcısını siler. Bu metod onu çağırıp ardından çıkış yapar.
+  /// Başarısız olursa state'i önceki hâline döndürür ve hatayı yeniden
+  /// fırlatır — UI bunu yakalayıp kullanıcıya göstermeli.
   Future<void> deleteAccount() async {
     final previousState = state;
     state = const AuthLoading();
     try {
       // Silinecek hesap ekrandaki hesap olmalı (denetim M-8).
-      if (!await FirebaseAuthBridge.ensureSameAccount(
-        _client.auth.currentUser?.id,
-      )) {
+      final shown = switch (previousState) {
+        AuthAuthenticated(:final user) => user.id,
+        _ => null,
+      };
+      final user = _auth.currentUser;
+      if (user == null || user.uid != shown) {
         throw AuthErrorCode.deleteUnavailable;
       }
-      final idToken = await fb_auth.FirebaseAuth.instance.currentUser
-          ?.getIdToken();
-      if (idToken == null || !AppConfig.isAuthBridgeConfigured) {
+      final idToken = await user.getIdToken();
+      if (idToken == null || !AppConfig.isFunctionsConfigured) {
         throw AuthErrorCode.deleteUnavailable;
       }
 
@@ -536,9 +487,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
         throw AuthErrorCode.deleteFailed;
       }
 
-      final deletedUid = fb_auth.FirebaseAuth.instance.currentUser?.uid;
-      await _client.auth.signOut();
-      await FirebaseAuthBridge.signOut();
+      final deletedUid = user.uid;
+      try {
+        await _auth.signOut();
+      } catch (e) {
+        // Kullanıcı sunucuda silindi; yerel oturum zaten geçersiz.
+        debugPrint('[Auth] signOut after delete failed: $e');
+      }
       await _wipeDeletedAccountLocally(deletedUid);
       state = const AuthUnauthenticated();
     } catch (e) {
@@ -572,87 +527,88 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  /// E-posta bağlantılarının (şifre sıfırlama, hesap onayı) dönüş adresi:
-  /// web'de uygulamanın kendi origin'i, mobilde [authDeepLinkRedirect] özel
-  /// şeması. Mobilde bunu göndermek şart — `null` bırakılırsa Supabase panel
-  /// Site URL'ini kullanır, link tarayıcıda açılır ve PKCE code verifier
-  /// uygulamanın deposunda kaldığı için oturum hiç kurulamaz.
-  ///
-  /// DİKKAT — bunu göndermek tek başına YETMEZ: Supabase, allowlist'te
-  /// olmayan bir `redirect_to` gelirse onu sessizce yok sayıp panel Site
-  /// URL'ine düşürür. Bu yüzden sıfırlama ve onay linkleri localhost:3000'e
-  /// gidiyordu (iki kez yaşandı). Hem web origin'leri hem de
-  /// `$authDeepLinkRedirect` Supabase panelinde Authentication → URL
-  /// Configuration → Redirect URLs listesinde kayıtlı olmalı; aksi hâlde
-  /// buradaki değer hiç kullanılmaz.
-  static String? get _emailRedirect =>
-      kIsWeb ? Uri.base.origin : authDeepLinkRedirect;
+  /// E-posta bağlantılarının (onay, şifre sıfırlama) işlem bittikten sonra
+  /// döneceği adres. Bağlantının kendisi Firebase'in barındırdığı işlem
+  /// sayfasına gider (şifre orada belirlenir); bu yalnız "devam et" hedefi.
+  /// Web'de uygulamanın kendi origin'i; mobilde Firebase özel şemayı kabul
+  /// etmediği için null (varsayılan işlem sayfası kendi onayını gösterir).
+  /// Web origin'i Firebase Console → Authentication → Authorized domains
+  /// listesinde olmalı.
+  static fb_auth.ActionCodeSettings? get _actionCodeSettings =>
+      kIsWeb ? fb_auth.ActionCodeSettings(url: Uri.base.origin) : null;
 
-  /// Sends a password-reset e-mail via Supabase.
+  /// Sends a password-reset e-mail via Firebase Auth.
   /// Throws an [AuthErrorCode] on failure — UI localizes it.
   Future<void> resetPassword(String email) async {
     try {
-      await _client.auth
-          .resetPasswordForEmail(email.trim(), redirectTo: _emailRedirect)
+      await _auth
+          .sendPasswordResetEmail(
+            email: email.trim(),
+            actionCodeSettings: _actionCodeSettings,
+          )
           .timeout(const Duration(seconds: 15));
-    } on AuthException catch (e) {
+    } on fb_auth.FirebaseAuthException catch (e) {
       throw _mapError(e);
     } catch (_) {
       throw AuthErrorCode.resetFailed;
     }
   }
 
-  /// Recovery oturumundayken yeni şifreyi kaydeder; başarılıysa akış
+  /// Oturum açıkken yeni şifreyi kaydeder; başarılıysa akış
   /// [AuthAuthenticated]'a kapanır. Hata UI'da lokalize edilir.
   Future<void> updatePassword(String newPassword) async {
     try {
-      final res = await _client.auth
-          .updateUser(UserAttributes(password: newPassword))
-          .timeout(const Duration(seconds: 15));
-      final user = res.user;
+      final user = _auth.currentUser;
       if (user == null) throw AuthErrorCode.updatePasswordFailed;
-      state = AuthAuthenticated(user);
+      await user
+          .updatePassword(newPassword)
+          .timeout(const Duration(seconds: 15));
+      state = AuthAuthenticated(AuthUser.fromFirebase(user));
     } on AuthErrorCode {
       rethrow;
-    } on AuthException catch (e) {
+    } on fb_auth.FirebaseAuthException catch (e) {
       throw _mapError(e);
     } catch (_) {
       throw AuthErrorCode.updatePasswordFailed;
     }
   }
 
-  AuthErrorCode _mapError(AuthException e) => mapSupabaseAuthError(e);
+  AuthErrorCode _mapError(fb_auth.FirebaseAuthException e) =>
+      mapFirebaseAuthError(e);
 }
 
 // ── Error mapping ─────────────────────────────────────────────────────────────
 
-/// Supabase auth hatasını locale-bağımsız koda çevirir. Notifier dışında,
-/// saf fonksiyon olarak durur ki testlenebilsin (Supabase init gerektirmez).
-AuthErrorCode mapSupabaseAuthError(AuthException e) {
-  final msg = e.message.toLowerCase();
-  if (msg.contains('not confirmed')) {
-    // "Email not confirmed" — Confirm email açıkken onaysız girişte döner.
-    return AuthErrorCode.confirmEmail;
+/// Firebase Auth hata kodunu locale-bağımsız koda çevirir. Notifier dışında,
+/// saf fonksiyon olarak durur ki testlenebilsin (Firebase init gerektirmez).
+///
+/// E-posta numaralandırma koruması açıkken Firebase yanlış şifre ile olmayan
+/// hesabı ayırt etmez (`invalid-credential`). Supabase'ten taşınan
+/// kullanıcıların Firebase'de şifresi yok; ilk girişleri de bu koda düşer,
+/// bu yüzden [AuthErrorCode.invalidCredentials] metni şifre sıfırlamayı
+/// hatırlatır (ADR-0010).
+AuthErrorCode mapFirebaseAuthError(fb_auth.FirebaseAuthException e) {
+  switch (e.code) {
+    case 'invalid-credential':
+    case 'wrong-password':
+    case 'INVALID_LOGIN_CREDENTIALS':
+      return AuthErrorCode.invalidCredentials;
+    case 'user-not-found':
+      return AuthErrorCode.userNotFound;
+    case 'email-already-in-use':
+    case 'account-exists-with-different-credential':
+    case 'credential-already-in-use':
+      return AuthErrorCode.emailInUse;
+    case 'weak-password':
+      return AuthErrorCode.weakPassword;
+    case 'invalid-email':
+    case 'missing-email':
+      return AuthErrorCode.invalidEmail;
+    case 'network-request-failed':
+      return AuthErrorCode.network;
+    case 'requires-recent-login':
+      return AuthErrorCode.updatePasswordFailed;
   }
-  if (msg.contains('invalid login') ||
-      msg.contains('invalid email or password')) {
-    return AuthErrorCode.invalidCredentials;
-  }
-  if (msg.contains('email already') || msg.contains('already registered')) {
-    return AuthErrorCode.emailInUse;
-  }
-  if (msg.contains('weak password') || msg.contains('at least 6')) {
-    return AuthErrorCode.weakPassword;
-  }
-  if (msg.contains('user not found')) {
-    return AuthErrorCode.userNotFound;
-  }
-  if (msg.contains('network') || msg.contains('socket')) {
-    return AuthErrorCode.network;
-  }
-  if (msg.contains('valid') && msg.contains('email')) {
-    return AuthErrorCode.invalidEmail;
-  }
-  debugPrint('[Auth] ${e.message}');
+  debugPrint('[Auth] ${e.code}');
   return AuthErrorCode.generic;
 }

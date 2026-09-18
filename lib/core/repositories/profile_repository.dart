@@ -124,10 +124,10 @@ class FirestoreProfileStore implements ProfileStore {
   DocumentReference<Map<String, dynamic>> _doc(String uid) =>
       FirebaseService.firestore.collection('users').doc(uid);
 
-  /// Firestore kuralları `request.auth.uid == uid` ister. Auth Supabase'te,
-  /// Firebase oturumu ise köprüyle (FirebaseAuthBridge) birkaç yüz ms sonra
-  /// gelir; beklemeden okursak permission-denied alır ve kayıtlı kullanıcıyı
-  /// yeni cihazda onboarding'e düşürürdük.
+  /// Firestore kuralları `request.auth.uid == uid` ister. Auth artık Firebase'te
+  /// (ADR-0010), yani oturum genelde zaten hazır; bekleme, önceki hesabın
+  /// oturumu kapanırken ya da web'de oturum diskten yüklenirken yanlış uid ile
+  /// okumayı önler.
   Future<void> _waitForBridge(String uid) async {
     final auth = fb_auth.FirebaseAuth.instance;
     if (auth.currentUser?.uid == uid) return;
@@ -204,7 +204,7 @@ class ProfileRepository {
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
-/// uid Supabase auth'tan gelir. Firestore köprüsünü (Firebase oturumu)
+/// uid auth durumundan gelir. Firebase oturumunun o uid'le hazır olmasını
 /// beklemek [FirestoreProfileStore]'un işi: hidratlama auth'a geçildiği anda
 /// başlamalı ki router splash'te beklesin.
 final profileRepositoryProvider = Provider<ProfileRepository?>((ref) {

@@ -29,7 +29,7 @@ import 'package:ilnd_app/features/takip/takip_screen.dart';
 import 'package:ilnd_app/features/topluluk/topluluk_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import '../helpers/fake_firebase_auth.dart';
 
 /// "Her telefonda bozulmadan çalışsın" (owner, 2026-09-11).
 ///
@@ -47,10 +47,7 @@ void main() {
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    await Supabase.initialize(
-      url: 'https://example.supabase.co',
-      publishableKey: 'test-anon-key',
-    );
+    useFakeFirebaseAuth();
   });
 
   /// Gerçek cihaz ölçüleri (nokta cinsinden), dar → geniş.

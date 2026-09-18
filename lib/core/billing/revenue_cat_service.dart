@@ -9,7 +9,7 @@ const _kOffering = 'default';
 class RevenueCatService {
   RevenueCatService._();
 
-  /// Call once in main(), after Supabase.initialize().
+  /// Call once in main(), after FirebaseService.initialize().
   /// apiKey: set via --dart-define-from-file=.env (REVENUECAT_API_KEY)
   static Future<void> initialize(String apiKey) async {
     if (apiKey.isEmpty) {

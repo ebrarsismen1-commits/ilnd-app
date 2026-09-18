@@ -14,7 +14,7 @@ Son güncelleme: $lastUpdated
 ilnd ("biz", "uygulama") gizliliğine önem verir. Bu politika hangi verileri topladığımızı, neden topladığımızı ve verilerin nasıl kullanıldığını açıklar.
 
 TOPLADIĞIMIZ VERİLER
-• Hesap bilgileri: e-posta adresi, isim (Supabase üzerinden kimlik doğrulama).
+• Hesap bilgileri: e-posta adresi, isim (Firebase Authentication üzerinden kimlik doğrulama).
 • İçerik verisi: günlük yazıların, ruh hali kayıtların, yemek girişlerin, alışkanlık/seri takibin (Firebase Firestore'da saklanır).
 • Kullanım verisi: uygulama açılışları, özellik kullanımı (Firebase Analytics).
 • Cihaz/teknik veri: işletim sistemi, uygulama sürümü, çökme/hata günlükleri.
@@ -27,7 +27,7 @@ VERİLERİ NASIL KULLANIYORUZ
 • Abonelik/ödeme durumunu doğrulamak.
 
 KİMLERLE PAYLAŞIYORUZ
-Verilerini reklam amacıyla satmıyoruz. Uygulamanın çalışması için şu hizmet sağlayıcılarla paylaşılır: Supabase (kimlik doğrulama), Google Firebase (veritabanı, analytics), RevenueCat (abonelik yönetimi), Anthropic (yapay zeka yanıtları — sadece gönderdiğin metin, sunucumuz üzerinden, kalıcı olarak saklanmaz).
+Verilerini reklam amacıyla satmıyoruz. Uygulamanın çalışması için şu hizmet sağlayıcılarla paylaşılır: Google Firebase (kimlik doğrulama, veritabanı, analytics), RevenueCat (abonelik yönetimi), Anthropic (yapay zeka yanıtları — sadece gönderdiğin metin, sunucumuz üzerinden, kalıcı olarak saklanmaz).
 
 VERİ SAKLAMA VE SİLME
 Verilerin hesabın aktif olduğu sürece saklanır. Profil > Ayarlar > "hesabımı sil" ile hesabını ve tüm verilerini (günlükler, yemek kayıtları, seri geçmişi, abonelik bağlantısı) kalıcı ve geri alınamaz şekilde silebilirsin. Silme işlemi sunucularımızdan ve kimlik doğrulama sağlayıcılarımızdan veriyi kaldırır.

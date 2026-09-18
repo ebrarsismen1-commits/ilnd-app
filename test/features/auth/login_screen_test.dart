@@ -6,21 +6,14 @@ import 'package:ilnd_app/features/auth/login_screen.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../helpers/fake_firebase_auth.dart';
 
 void main() {
-  // AuthNotifier reads Supabase.instance.client in its constructor — give
-  // it a real (but fake-credentialed) client so it resolves to
-  // AuthUnauthenticated instead of throwing "Supabase not initialized".
-  // No network call happens here: currentSession just reads local state.
+  // AuthNotifier reads FirebaseAuth in its constructor — give it a fake with
+  // no session so it resolves to AuthUnauthenticated. No network call.
   setUpAll(() async {
-    // Supabase.initialize() uses SharedPreferences internally for session
-    // storage, so the mock must be in place before it runs.
     SharedPreferences.setMockInitialValues({});
-    await Supabase.initialize(
-      url: 'https://example.supabase.co',
-      publishableKey: 'test-anon-key',
-    );
+    useFakeFirebaseAuth();
   });
 
   setUp(() {

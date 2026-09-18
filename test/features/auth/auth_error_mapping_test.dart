@@ -1,39 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' show AuthException;
 
 void main() {
-  test('"Email not confirmed" → confirmEmail (generic\'e düşmemeli)', () {
-    // Supabase, onaylanmamış hesapla girişte bu mesajı döndürür. Genel
-    // hataya düşerse kullanıcı neden giremediğini asla anlayamaz.
-    expect(
-      mapSupabaseAuthError(const AuthException('Email not confirmed')),
-      AuthErrorCode.confirmEmail,
-    );
+  AuthErrorCode map(String code) =>
+      mapFirebaseAuthError(FirebaseAuthException(code: code));
+
+  test('yanlış şifre / olmayan hesap / taşınmış şifresiz hesap', () {
+    // Numaralandırma koruması açıkken üçü de invalid-credential döner;
+    // metin şifre sıfırlamayı hatırlatır (ADR-0010).
+    expect(map('invalid-credential'), AuthErrorCode.invalidCredentials);
+    expect(map('wrong-password'), AuthErrorCode.invalidCredentials);
+    expect(map('INVALID_LOGIN_CREDENTIALS'), AuthErrorCode.invalidCredentials);
+    expect(map('user-not-found'), AuthErrorCode.userNotFound);
   });
 
-  test('bilinen mesajlar doğru kodlara eşlenir', () {
-    expect(
-      mapSupabaseAuthError(const AuthException('Invalid login credentials')),
-      AuthErrorCode.invalidCredentials,
-    );
-    expect(
-      mapSupabaseAuthError(const AuthException('User already registered')),
-      AuthErrorCode.emailInUse,
-    );
-    expect(
-      mapSupabaseAuthError(
-        const AuthException('Password should be at least 6 characters'),
-      ),
-      AuthErrorCode.weakPassword,
-    );
-    expect(
-      mapSupabaseAuthError(const AuthException('Network request failed')),
-      AuthErrorCode.network,
-    );
-    expect(
-      mapSupabaseAuthError(const AuthException('something unexpected')),
-      AuthErrorCode.generic,
-    );
+  test('kayıt hataları', () {
+    expect(map('email-already-in-use'), AuthErrorCode.emailInUse);
+    expect(map('weak-password'), AuthErrorCode.weakPassword);
+    expect(map('invalid-email'), AuthErrorCode.invalidEmail);
+  });
+
+  test('ağ ve bilinmeyen', () {
+    expect(map('network-request-failed'), AuthErrorCode.network);
+    expect(map('too-many-requests'), AuthErrorCode.generic);
+    expect(map('something-unexpected'), AuthErrorCode.generic);
   });
 }

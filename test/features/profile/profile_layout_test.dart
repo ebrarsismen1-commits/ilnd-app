@@ -7,7 +7,7 @@ import 'package:ilnd_app/features/profile/profile_provider.dart';
 import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../helpers/fake_firebase_auth.dart';
 
 /// Sen ekranının yerleşimi (Ada tasarımı 10).
 ///
@@ -24,10 +24,7 @@ void main() {
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    await Supabase.initialize(
-      url: 'https://example.supabase.co',
-      publishableKey: 'test-anon-key',
-    );
+    useFakeFirebaseAuth();
   });
 
   final l10n = lookupAppLocalizations(const Locale('tr'));

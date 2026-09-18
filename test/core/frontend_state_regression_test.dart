@@ -15,17 +15,14 @@ import 'package:ilnd_app/features/profile/profile_screen.dart';
 import 'package:ilnd_app/features/topluluk/topluluk_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import '../helpers/fake_firebase_auth.dart';
 
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    await Supabase.initialize(
-      url: 'https://example.supabase.co',
-      publishableKey: 'test-anon-key',
-    );
+    useFakeFirebaseAuth();
   });
 
   Widget app(Widget child) => MaterialApp(

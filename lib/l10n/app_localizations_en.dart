@@ -228,7 +228,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startupRetry => 'Try again';
 
   @override
-  String get authErrorInvalidCredentials => 'Incorrect email or password.';
+  String get authErrorInvalidCredentials =>
+      'Incorrect email or password. We moved to a new sign-in system: if this is your first sign-in since then, use \"forgot password\" to set a new password.';
 
   @override
   String get authErrorEmailInUse => 'This email address is already in use.';
