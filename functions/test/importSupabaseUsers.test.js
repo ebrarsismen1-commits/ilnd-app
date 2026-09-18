@@ -145,15 +145,21 @@ describe("uçtan uca (Auth emülatörü)", () => {
     expect(out).toContain("DRY RUN");
     expect(out).toMatch(/"wouldCreate": 2/);
     expect(out).toMatch(/"wouldAddEmail": 1/);
+    expect(out).toContain(`"created": [`);
     await expect(admin.auth().getUser(A)).rejects.toThrow();
     expect((await admin.auth().getUser(B)).email).toBeUndefined();
   });
 
   test("--apply: aynı uid, e-posta, doğrulama durumu; şifre yok", async () => {
-    const {status, out} = run(["--apply"]);
+    const report = path.join(path.dirname(input), "apply-report.json");
+    const {status, out} = run(["--apply", `--report=${report}`]);
     expect(status).toBe(0);
     expect(out).toMatch(/"created": 2/);
     expect(out).toMatch(/"emailAdded": 1/);
+    // Geri alma için hangi uid'lerin yaratıldığı / e-posta aldığı raporda.
+    const lists = JSON.parse(fs.readFileSync(report, "utf8")).lists;
+    expect(lists.created.sort()).toEqual([A, U].sort());
+    expect(lists.emailAdded).toEqual([B]);
 
     const a = await admin.auth().getUser(A);
     expect(a).toMatchObject({email: email("a"), emailVerified: true, displayName: "Ela"});

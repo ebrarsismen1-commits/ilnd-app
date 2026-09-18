@@ -141,6 +141,10 @@ function summarizeUserImport({users, plan, apply, created = [], updated = [], fa
     unsupportedProvider: plan.unsupportedProvider.length,
     failed: failed.length,
     lists: {
+      // Geri alma için: apply'da yaratılan ve e-posta eklenen uid'ler. Kuru
+      // çalışmada "yaratılacak / eklenecek" listesi.
+      created: apply ? created : plan.create.map((p) => p.uid),
+      emailAdded: apply ? updated : plan.addEmail.map((p) => p.uid),
       conflicts: plan.conflicts,
       duplicates: plan.duplicates,
       invalid: plan.invalid,
