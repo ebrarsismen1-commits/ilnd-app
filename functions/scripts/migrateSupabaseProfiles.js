@@ -49,6 +49,19 @@ const COLUMNS = [
 const PAGE = 1000;
 
 /**
+ * Yönetici isteği başlıkları. Legacy service_role anahtarı bir JWT'dir ve
+ * Authorization'da da gönderilir. Yeni `sb_secret_…` anahtarı JWT DEĞİLDİR:
+ * Authorization: Bearer'da gönderilirse platform onu JWT sanıp 401 döner;
+ * yalnız `apikey` başlığında gider.
+ * @param {string} key service_role ya da sb_secret anahtarı
+ * @return {Object<string, string>} başlıklar
+ */
+function supabaseAdminHeaders(key) {
+  const k = String(key).trim();
+  return k.startsWith("eyJ") ? {apikey: k, Authorization: `Bearer ${k}`} : {apikey: k};
+}
+
+/**
  * PostgREST'ten tüm satırları sayfa sayfa okur.
  * @param {object} p girdiler
  * @param {string} p.url Supabase proje URL'i
@@ -62,7 +75,7 @@ async function fetchSupabaseProfiles({url, key, fetchImpl = fetch}) {
     const res = await fetchImpl(
         `${url.replace(/\/$/, "")}/rest/v1/profiles?select=${COLUMNS}&order=id.asc` +
         `&limit=${PAGE}&offset=${offset}`,
-        {headers: {apikey: key, Authorization: `Bearer ${key}`}},
+        {headers: supabaseAdminHeaders(key)},
     );
     // Yanıt gövdesi loglanmaz: hata mesajı isteği yansıtabilir.
     if (!res.ok) throw new Error(`Supabase profiles read failed: HTTP ${res.status}`);
@@ -210,4 +223,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = {main, fetchSupabaseProfiles};
+module.exports = {main, fetchSupabaseProfiles, supabaseAdminHeaders};
