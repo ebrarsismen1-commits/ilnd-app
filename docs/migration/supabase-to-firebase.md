@@ -1,141 +1,117 @@
 # Supabase → Firebase birleştirme
 
-Hedef: runtime'da Supabase'e ihtiyaç kalmaması. İki aşama:
+Hedef: runtime'da Supabase'e hiç ihtiyaç kalmaması. Kod tarafı tamam:
 
-- **Aşama A — profil (bu dal, `feat/firebase-unification`):** Supabase
-  `profiles` → Firestore `users/{uid}`. Auth'a dokunulmadı. ADR-0009.
-- **Aşama B — kimlik (henüz yapılmadı, karar bekliyor):** Supabase Auth →
-  Firebase Auth. Aşağıda taslak.
+- **Aşama A — profil** (`feat/firebase-unification`, ADR-0009): Supabase
+  `profiles` → Firestore `users/{uid}`.
+- **Aşama B — kimlik** (`feat/firebase-auth`, ADR-0010): Supabase Auth +
+  köprü → doğrudan Firebase Auth. `supabase_flutter` kaldırıldı.
 
-Aşama A bitince Supabase yalnız kimlik için kalır (giriş, kayıt, Google/Apple,
-e-posta onayı, şifre sıfırlama, köprü, hesap silmenin Supabase adımı).
+Prod Supabase'te taşınacak her şey (yapı taraması, 2026-09-18): `auth.users`
+(yalnız e-posta sağlayıcısı) ve `public.profiles` (1 satır). Storage, edge
+function, realtime, trigger yok.
+
+Owner kararları: şifre taşınmaz (kullanıcı sıfırlar) · sert kesme (eski
+sürümler giriş yapamaz) · e-posta doğrulaması zorunlu.
 
 ---
 
-## Aşama A — deploy sırası (değiştirmeyin)
+## Deploy sırası (hiçbiri yapılmadı; önce staging `ilnd-staging-2026`)
 
-Hiçbiri yapılmadı. Her adım önce staging'de (`ilnd-staging-2026`).
-
-1. **Firestore kuralları**
-   `firebase deploy --only firestore:rules --project <alias>`
-   Eski uygulama etkilenmez: yeni kurallar yalnız izin genişletir (profil
-   alanları) ve fotoğraf yazımı aynı kalır.
-2. **Migration — kuru çalışma** (yazmaz; prod onayı istemez)
+1. **Firebase Console → Authentication** (owner)
+   - Sign-in method: **Email/Password** açık. Google/Apple kullanılacaksa
+     onlar da (Google için `GOOGLE_SERVER_CLIENT_ID` = bu projenin Web client
+     ID'si; Apple için Services ID + anahtar).
+   - Authorized domains: web origin'leri.
+   - Templates: e-posta doğrulama + şifre sıfırlama, dil TR.
+2. **Firestore kuralları** — `firebase deploy --only firestore:rules`.
+   Eski uygulamayı bozmaz (yalnız profil alanlarına izin ekler).
+3. **Kullanıcılar** (şifresiz, aynı uid):
    ```
    cd functions
-   gcloud auth application-default login          # depoya kimlik dosyası koymayın
+   gcloud auth application-default login        # kimlik dosyası depoya girmez
    export SUPABASE_URL=https://<ref>.supabase.co
    read -s SUPABASE_SERVICE_ROLE_KEY && export SUPABASE_SERVICE_ROLE_KEY
-   node scripts/migrateSupabaseProfiles.js --project=<id> --report=/tmp/mig-dry.json
+   node scripts/importSupabaseUsers.js --project=<id> --report=/tmp/users-dry.json
+   # conflicts / duplicates / noEmail / unsupportedProvider sıfır değilse DUR
+   node scripts/importSupabaseUsers.js --project=<id> --apply [--confirm-prod]
    ```
-   Özetteki `missingUsers`, `duplicates`, `invalidIds`, `sanitizedProfiles`
-   sıfır değilse **durun ve raporu inceleyin** (liste yalnız uid içerir).
-3. **Migration — yazma**
-   `node scripts/migrateSupabaseProfiles.js --project=<id> --apply [--confirm-prod] --report=/tmp/mig-apply.json`
-   `failed > 0` ise çıkış kodu 1; aynı komut güvenle tekrar çalıştırılabilir.
-4. **Uygulama sürümü** (web hosting + mağaza). Bu sürüm profili yalnız
-   Firestore'dan okur/yazar.
-5. **Yeniden migration (yazma)** eski sürümler piyasadan çekilene kadar
-   aralıklı: eski sürümde profil düzenleyen kullanıcıların Supabase'teki
-   değişiklikleri taşınır. Yeni sürümün yazdığı profiller
-   (`profileUpdatedAt` var) ezilmez.
+4. **Profiller**:
+   ```
+   node scripts/migrateSupabaseProfiles.js --project=<id> --report=/tmp/prof-dry.json
+   node scripts/migrateSupabaseProfiles.js --project=<id> --apply [--confirm-prod]
+   ```
+5. **Kesme — aynı pencerede, arka arkaya:**
+   - 3 ve 4'ü `--apply` ile **bir kez daha** çalıştırın (arada eski
+     uygulamayla kayıt olan / profil değiştiren kullanıcılar için; ikisi de
+     tekrar çalıştırmaya güvenli).
+   - `firebase deploy --only functions` — yeni kimlik kapısı; `mintFirebaseToken`
+     silinir (CLI onay ister). Bu andan sonra eski sürümler hiçbir uca
+     ulaşamaz.
+   - `.env`'e `FUNCTIONS_BASE_URL` (yoksa eski `AUTH_BRIDGE_URL` de iş görür),
+     `flutter build web --release --dart-define-from-file=.env`,
+     `grep -c "<project-id>" build/web/main.dart.js` ≠ 0, hosting deploy.
+   - Mobil sürüm mağazaya.
+6. **Doğrulama** (gerçek cihaz + web): yeni kayıt → onay maili → onay →
+   giriş → onboarding → çıkış → başka cihazda giriş → profil geri geliyor;
+   taşınmış hesap: yanlış şifre metni → "şifremi unuttum" → yeni şifre →
+   giriş → profil geri geliyor; hesap silme.
+7. **Supabase kapatma** — aşağıdaki envanter, doğrulamadan ve yedekten sonra.
 
-Sıra neden önemli: 4, 3'ten önce giderse yeni sürüm kayıtlı kullanıcının
-profilini boş bulur; yeni cihazda onboarding'e düşer ve oradan yazdığı profil
-(`profileUpdatedAt`) sonraki migration'ı o kullanıcı için kapatır.
+Neden sıra: 3 olmadan taşınmış kullanıcı yeni sürümde "hesap yok" yaşar
+(aynı e-postayla yeni kayıt olursa YENİ uid alır ve eski verisinden kopar);
+4 olmadan profil boş gelir ve kullanıcı onboarding'e düşer.
 
-### Script özeti
-- Varsayılan **DRY RUN**; `--apply` olmadan hiçbir şey yazılmaz.
-- Eşleşme uid ile (köprü aynı uid'i kullanıyor); e-posta eşlemesi yok.
-  Firebase Auth'ta kaydı olmayan uid yazılmaz → `missingUsers` (köprüden hiç
-  geçmemiş, yani hiç giriş yapmamış hesap). Bu kullanıcılar ilk girişten
-  sonra script tekrar çalıştırılınca taşınır.
-- `merge` + transaction; mevcut alan silinmez, `profileUpdatedAt` olan
-  doküman atlanır (`skipped`).
-- Kural sınırı dışındaki değer yazılmaz, `sanitized` listesine girer.
-- Çıktı yalnız uid ve sayı; ad/alerji/kilo ve anahtar loglanmaz.
-- Kaynak alternatifi: `--input=profiles.json` (SQL editöründen JSON dışa
-  aktarım). Anahtar gerekmez.
+### Scriptlerin ortak özellikleri
+- Varsayılan **DRY RUN**; `--apply` olmadan yazmaz, prod'da `--confirm-prod`.
+- Eşleşme uid ile; e-posta eşlemesi yok. Çakışan / çift / belirsiz kayıt
+  yazılmaz, listelenir.
+- Mevcut Firebase kaydı silinmez: köprünün bıraktığı e-postasız kullanıcıya
+  yalnız e-posta eklenir; profil `merge` ile yazılır, istemcinin yazdığı
+  profil (`profileUpdatedAt`) ezilmez.
+- Çıktı yalnız uid ve sayı; e-posta, ad, sağlık verisi, anahtar loglanmaz.
 
-Örnek özet:
-```
-{ "mode": "dry-run", "totalProfiles": 5, "matchedUsers": 4, "migrated": 0,
-  "wouldMigrate": 3, "skipped": 1, "missingUsers": 1, "duplicates": 0,
-  "invalidIds": 0, "sanitizedProfiles": 1, "failed": 0 }
-```
+---
 
-### Doğrulama (yapıldı, emülatör/birim)
+## Doğrulama (yapıldı)
+
 | Madde | Nerede |
 |---|---|
-| profil kaydet / yükle / güncelle, yeniden açılışta geri gelme | `test/core/profile_repository_test.dart` |
-| onboarding tamamlama (`onboardingDone`/`firstEntryDone`) | aynı dosya + rules testi |
-| alan eşlemesi, eski snake_case okunmaz | `test/core/profile_data_test.dart` |
-| hesap değişiminde başka hesabın profili yazılmaz | `test/features/onboarding/account_switch_test.dart` |
-| başka kullanıcının profili okunamaz/yazılamaz, sınırlar, sahte damga | `functions/test/firestore.rules.test.js` → "users/{uid} profil alanları" |
-| migration: kuru çalışma, merge, eksik/çift/geçersiz, tekrar çalıştırma, gizli anahtar loglanmaz, prod koruması | `functions/test/migrateSupabaseProfiles.test.js` |
+| signup (onay maili, oturum kapanır), login, logout, current user, restart sonrası oturum | `test/features/auth/auth_notifier_test.dart` |
+| doğrulanmamış e-postayla giriş reddedilir, Google/Apple beklemez | aynı dosya |
+| Firebase hata kodları → UI hata kodları | `test/features/auth/auth_error_mapping_test.dart` |
+| profil kaydet / yükle / güncelle / restart / onboarding bayrakları | `test/core/profile_repository_test.dart`, `profile_data_test.dart` |
+| başka hesabın profili yazılmaz (hesap değişimi) | `test/features/onboarding/account_switch_test.dart` |
+| Firestore kuralları: başka kullanıcı okuyamaz/yazamaz, sınırlar, sahte damga | `functions/test/firestore.rules.test.js` |
+| uçlar: anonim, eski köprü token'ı, doğrulanmamış e-posta reddedilir | `functions/test/backendAuth.test.js`, `authClaims.test.js` |
+| hesap silme yarım kalırsa hesap kilitlenir, tamamlanır | `functions/test/deleteAccount.test.js` |
+| kullanıcı ve profil taşıma scriptleri | `functions/test/importSupabaseUsers.test.js`, `migrateSupabaseProfiles.test.js` |
 
-Signup / login / logout / current user **değişmedi** (Aşama A auth'a dokunmuyor);
-mevcut testler (`login_screen_test`, `router_redirect_test`,
-`auth_error_mapping_test`, `bridge_session_match_test`) yeşil. Gerçek
-cihazda uçtan uca (köprü + Firestore) staging'de manuel doğrulanmalı:
-kayıt → onboarding → çıkış → başka cihazda giriş → profil geri geliyor mu.
-
----
-
-## Aşama B — kimlik taşıma (taslak, onay bekliyor)
-
-Bugün Firebase Auth kullanıcılarının e-postası/şifresi/sağlayıcısı yok (custom
-token). Supabase'i kaldırmak şunları gerektirir:
-
-1. Supabase `auth.users` → Firebase Auth `importUsers`: **aynı uid**, e-posta,
-   `email_verified`, bcrypt şifre hash'i (`hash: {algorithm: "BCRYPT"}`),
-   Google/Apple için `providerData`. Hash'lerin dışa aktarımı SQL erişimi ister;
-   yalnız owner yapmalı, dosya depoya girmemeli.
-2. Konsol: Firebase Auth'ta E-posta/Şifre, Google, Apple sağlayıcıları;
-   yetkili alan adları; e-posta şablonları (onay, şifre sıfırlama) ve
-   action URL'i; Apple Services ID / anahtar.
-3. İstemci: `AuthNotifier` → `firebase_auth` (signIn/signUp/Google/Apple/
-   reset/updatePassword/confirm), `AuthAuthenticated.user` tipi (şu an
-   Supabase `User`), `mapSupabaseAuthError` → Firebase hata kodları, deep link
-   akışı (`authDeepLinkRedirect`, token_hash yolu).
-4. Sunucu: `isBridgedSession` (denetim H-5) yeni sağlayıcıları kabul edecek
-   şekilde yeniden tasarlanmalı — anonim ve kontrolsüz e-posta kaydı açık
-   kalmamalı (App Check + e-posta doğrulama şartı); `mintFirebaseToken`
-   kaldırılır; `deleteAccount`'un Supabase adımı çıkar.
-5. Geçiş dönemi: eski sürümler Supabase ile girer ve köprüden geçer; köprü
-   eski sürümler bitene kadar açık kalmalı. Şifre değiştiren kullanıcı iki
-   sistemde ayrışır → kesme tarihi / zorunlu güncelleme (M-9) gerekir.
+Emülatör/birim dışı, **yapılmadı**: gerçek Firebase projesinde uçtan uca akış
+(adım 6), Google/Apple girişi (konsol ayarı gerekiyor).
 
 ---
 
-## Supabase temizlik envanteri (SİLİNMEDİ — Aşama B + doğrulama sonrası)
+## Supabase temizlik envanteri (SİLİNMEDİ)
 
-**Aşama A sonrası artık gereksiz (profil):**
-- `supabase/migrations/20260913000000_profiles_rls.sql`, `supabase/tests/profiles_rls.test.sql`
-- `functions/test/supabaseMigration.test.js` (SQL dosyasını kilitliyor)
-- `docs/db/profiles_onboarding.sql`
-- `functions/accountDeletion.js` → `profiles` satırı silme isteği (tablo
-  silinene kadar KALMALI: eski satırda kişisel veri var)
-- Supabase `public.profiles` tablosu — migration doğrulanıp yedek alındıktan sonra
+Uygulama runtime'da artık Supabase kullanmıyor. Kalanlar (Supabase projesi
+kapatılırken, yedekten sonra):
 
-**Aşama B ile kalkacaklar (kimlik):**
-- Dependency: `supabase_flutter` (pubspec.yaml)
-- Import: `lib/main.dart`, `lib/features/auth/auth_provider.dart`,
-  testler (`login_screen`, `account_switch`, `preferences_screen`,
-  `profile_layout`, `ada_layout`, `frontend_state_regression`,
-  `router_redirect`, `auth_error_mapping`)
-- Init: `Supabase.initialize` + `_StartupFailureApp` (`lib/main.dart`)
-- Config: `AppConfig.supabaseUrl/supabaseAnonKey/isSupabaseConfigured`,
-  `AUTH_BRIDGE_URL`
-- Env: `.env`/`.env.example` `SUPABASE_URL`, `SUPABASE_ANON_KEY`;
-  `functions/.env(.example)` `SUPABASE_URL`; Secret Manager `SUPABASE_SERVICE_ROLE_KEY`
-- Servisler: `lib/core/services/firebase_auth_bridge.dart`,
-  `functions/supabaseClaims.js`, `mintFirebaseToken` (functions/index.js),
-  `deleteAccount` Supabase adımı, `test/core/bridge_session_match_test.dart`,
-  `functions/test/supabaseClaims.test.js`, `helpers.js` `provider: "supabase"` claim'i
-- Platform: AndroidManifest / Info.plist e-posta deep link girdileri
-  (Firebase action URL'ine göre yeniden değerlendirilir)
-- Metin: `legal_content.dart` (gizlilik politikasında Supabase), l10n
-  "Supabase init failed" açıklaması, README/DEPLOYMENT/docs/en/*
-- `supabase/` klasörü ve Supabase projeleri (prod `qygmovihgbpmhtlidfov`,
-  staging `ocepgiootcsdqcqushqi`) — en son, yedekten sonra
+- `supabase/` klasörü (migrations, tests), `docs/db/profiles_onboarding.sql`,
+  `functions/test/supabaseMigration.test.js`
+- `functions/accountDeletion.js` Supabase adımı + `SUPABASE_URL`
+  (functions/.env) + `SUPABASE_SERVICE_ROLE_KEY` secret'ı + `deleteAccount.test.js`
+  içindeki sahte Supabase sunucusu — proje kapanana kadar KALMALI (eski
+  kayıtları silmek için)
+- İki migration script'i ve testleri (taşıma bitince)
+- `functions/package.json` → `jose` bağımlılığı (artık kullanılmıyor; lockfile
+  ile birlikte kaldırılmalı)
+- `AuthPasswordRecovery`, `new_password_screen.dart`, router'daki recovery
+  kilidi, `authLinkErrorProvider` / `resetLinkInvalid` (Supabase e-posta
+  linki akışı)
+- AndroidManifest / Info.plist `com.ilnd.app://login-callback` deep link
+  girdileri ve `deep_link_config_test.dart`
+- Yorumlar ve dokümanlar: README, docs/en/*, docs/tr/*, ARCHITECTURE_BLUEPRINT,
+  DIFFERENTIATION, APP_STORE_CHECKLIST (veri paylaşımı beyanından Supabase
+  çıkarılmalı — mağaza formu owner'da)
+- Supabase projeleri: prod `qygmovihgbpmhtlidfov`, staging `ocepgiootcsdqcqushqi`

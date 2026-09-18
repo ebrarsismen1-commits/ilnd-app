@@ -1,6 +1,6 @@
 # ADR-0001: Supabase + Firebase çift-auth köprüsü korunuyor
 
-**Status:** Accepted
+**Status:** Superseded by ADR-0010 (2026-09-18): kimlik doğrudan Firebase Auth, köprü kaldırıldı
 **Date:** 2026-07-04
 
 ## Decision
