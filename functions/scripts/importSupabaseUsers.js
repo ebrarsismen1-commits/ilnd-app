@@ -35,6 +35,8 @@ const fs = require("fs");
 const admin = require("firebase-admin");
 const {resolveTarget, describeTarget, readFlag} = require("./lib/target");
 const {normalizeSupabaseUser, planUserImport, summarizeUserImport} = require("./lib/userImport");
+// sb_secret anahtarı Authorization: Bearer'da 401 verir; ortak başlık kuralı.
+const {supabaseAdminHeaders} = require("./migrateSupabaseProfiles");
 
 const PER_PAGE = 1000;
 
@@ -51,7 +53,7 @@ async function fetchSupabaseUsers({url, key, fetchImpl = fetch}) {
   for (let page = 1; ; page++) {
     const res = await fetchImpl(
         `${url.replace(/\/$/, "")}/auth/v1/admin/users?page=${page}&per_page=${PER_PAGE}`,
-        {headers: {apikey: key, Authorization: `Bearer ${key}`}},
+        {headers: supabaseAdminHeaders(key)},
     );
     if (!res.ok) throw new Error(`Supabase users read failed: HTTP ${res.status}`);
     const body = await res.json();

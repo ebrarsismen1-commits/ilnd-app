@@ -86,10 +86,12 @@ describe("fetchSupabaseUsers", () => {
       calls.push({url, opts});
       return {ok: true, status: 200, json: async () => pages[calls.length - 1]};
     };
-    const users = await fetchSupabaseUsers({url: "https://sb.test", key: "k-9", fetchImpl});
+    const users = await fetchSupabaseUsers({url: "https://sb.test", key: "sb_secret_k-9", fetchImpl});
     expect(users).toHaveLength(1001);
     expect(calls[1].url).toBe("https://sb.test/auth/v1/admin/users?page=2&per_page=1000");
     expect(calls[0].url).not.toContain("k-9");
+    // sb_secret: yalnız apikey (Authorization: Bearer'da platform 401 döner).
+    expect(calls[0].opts.headers).toEqual({apikey: "sb_secret_k-9"});
   });
 
   test("HTTP hatasında yalnız durum kodu", async () => {
