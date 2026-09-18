@@ -452,7 +452,7 @@ abstract class AppLocalizations {
   /// **'Kullanım Şartları'**
   String get legalTermsTitle;
 
-  /// Shown when Supabase init fails at startup
+  /// Shown when Firebase init fails at startup
   ///
   /// In tr, this message translates to:
   /// **'ilnd başlatılamadı'**
@@ -473,7 +473,7 @@ abstract class AppLocalizations {
   /// Auth error: wrong email/password
   ///
   /// In tr, this message translates to:
-  /// **'E-posta veya şifre hatalı.'**
+  /// **'E-posta veya şifre hatalı. Giriş sistemimizi yeniledik: eski hesabınla ilk kez giriyorsan önce \"şifremi unuttum\" ile yeni şifre belirle.'**
   String get authErrorInvalidCredentials;
 
   /// Auth error: email already registered

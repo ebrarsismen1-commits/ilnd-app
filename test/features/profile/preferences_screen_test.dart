@@ -7,7 +7,7 @@ import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/profile/preferences_screen.dart';
 import 'package:ilnd_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../helpers/fake_firebase_auth.dart';
 
 /// Onboarding'de verilen bilgilerin sonradan düzenlenmesi.
 ///
@@ -16,18 +16,15 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 /// düzenlenebilir olması bir güvenlik meselesi.
 ///
 /// Kaydetme iki yere birden yazar: cihaz-yerel depo ve ILND'nin "bilinen
-/// gerçekler" hafızası. Testte Supabase oturumu olmadığı için sunucu yazımı
+/// gerçekler" hafızası. Testte oturum olmadığı için sunucu yazımı
 /// atlanır, hafıza yazımı yine de olmalı.
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
 
   setUpAll(() async {
-    // AuthNotifier kurucusunda Supabase istemcisini okuyor; ağ çağrısı yok.
+    // AuthNotifier kurucusunda FirebaseAuth'u okuyor; sahte, ağ çağrısı yok.
     SharedPreferences.setMockInitialValues({});
-    await Supabase.initialize(
-      url: 'https://example.supabase.co',
-      publishableKey: 'test-anon-key',
-    );
+    useFakeFirebaseAuth();
   });
 
   final l10n = lookupAppLocalizations(const Locale('tr'));

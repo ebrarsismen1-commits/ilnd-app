@@ -1,6 +1,6 @@
 {
   "name": "ilnd-functions",
-  "description": "Supabase -> Firebase Auth bridge for ILND",
+  "description": "ILND Cloud Functions (Firebase Auth, AI proxy, referrals, account deletion)",
   "engines": {
     "node": "22"
   },
@@ -17,12 +17,12 @@
     "check:plans": "node scripts/checkPlans.js",
     "report:tokens": "node scripts/tokenReport.js",
     "backfill:counters": "node scripts/backfillCounters.js",
-    "migrate:profiles": "node scripts/migrateSupabaseProfiles.js"
+    "migrate:profiles": "node scripts/migrateSupabaseProfiles.js",
+    "import:users": "node scripts/importSupabaseUsers.js"
   },
   "dependencies": {
     "firebase-admin": "^13.10.0",
-    "firebase-functions": "^7.3.2",
-    "jose": "^5.2.0"
+    "firebase-functions": "^7.3.2"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "^5.0.2",

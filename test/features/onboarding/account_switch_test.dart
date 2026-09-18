@@ -10,18 +10,18 @@ import 'package:ilnd_app/features/habits/habits_provider.dart';
 import 'package:ilnd_app/features/onboarding/onboarding_provider.dart';
 import 'package:ilnd_app/features/onboarding/profile_sync.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
+import '../../helpers/fake_firebase_auth.dart';
 
 /// Güvenlik denetimi H-2: paylaşılan bir cihazda A'nın yerel verisi
 /// (onboarding cevapları, sağlık alanları, AI hafızası, sohbet, premium, su,
 /// ruh hali) B'nin hesabında GÖRÜNMEMELİ ve B'nin sunucu profiline
 /// SENKRONİZE EDİLMEMELİ.
 
-/// Durumu testten sürülen AuthNotifier. Kurucu Supabase istemcisini okuyor
+/// Durumu testten sürülen AuthNotifier. Kurucu FirebaseAuth'u okuyor
 /// (oturum yok, ağ çağrısı yok) ve ilk durumu kurar; SONRASINI yalnız test
 /// belirler.
 ///
-/// Neden durum yazımı kilitli: gerçek notifier Supabase'in onAuthStateChange
+/// Neden durum yazımı kilitli: gerçek notifier Firebase'in userChanges
 /// akışına abone. O akış ilk olayını (initialSession, oturum yok) ASENKRON
 /// yayıyor ve testin verdiği "B girdi" durumunu bir pompa sonra
 /// "kimliksiz"e çeviriyordu; hidratlama yarıda kalıyor, testler yanlış
@@ -79,23 +79,14 @@ class _NoStore implements ProfileStore {
       throw StateError('store kullanılmamalı');
 }
 
-User _user(String id) => User(
-  id: id,
-  appMetadata: const {},
-  userMetadata: const {},
-  aud: 'authenticated',
-  createdAt: '2026-01-01T00:00:00Z',
-);
+AuthUser _user(String id) => AuthUser(id: id);
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    await Supabase.initialize(
-      url: 'https://example.supabase.co',
-      publishableKey: 'test-anon-key',
-    );
+    useFakeFirebaseAuth();
   });
 
   late SharedPreferences prefs;

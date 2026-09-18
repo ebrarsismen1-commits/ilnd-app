@@ -42,39 +42,23 @@ Before tagging `v1.0.0`, all of the following must pass:
 4. Verify App Check is configured (Play Integrity / App Attest) in console
 5. Register debug App Check token for CI (`FIREBASE_APP_CHECK_TEST_APP_ID`)
 
-### Supabase (password reset e-mail)
+### Firebase Authentication (ADR-0010)
 
-The "Reset Password" e-mail template **must** link straight into the app with a
-token hash. The default `{{ .ConfirmationURL }}` template sends the user through
-Supabase's own `/auth/v1/verify` endpoint, which burns the one-time token on the
-first HTTP GET. Mail scanners and corporate "safe links" services follow that URL
-before the user does, so by the time the user clicks, the token is gone and the
-app receives `?error=access_denied&error_code=otp_expired`. This happened in
-production on 2026-08-31.
+Kimlik Firebase Auth'ta; Supabase Auth ve köprü (mintFirebaseToken) kalktı.
+Console → Authentication:
 
-Dashboard → Authentication → Emails → **Reset Password**, set the link to:
+- **Sign-in method:** Email/Password açık. Google ve Apple kullanılacaksa
+  onlar da açık (Google: `GOOGLE_SERVER_CLIENT_ID` = bu projenin Web client
+  ID'si; Apple: Services ID + anahtar).
+- **Settings → Authorized domains:** web origin'leri (`ilnd-app-8dcbd.web.app`
+  ve özel alan adı). Onay/sıfırlama maillerinin "devam et" adresi bu listede
+  olmalı.
+- **Templates:** e-posta doğrulama ve şifre sıfırlama şablonları (dil TR).
+  Bağlantılar Firebase'in kendi işlem sayfasına gider; şifre orada belirlenir.
+- Email enumeration protection açık kalabilir: istemci yanlış şifre ile
+  olmayan hesabı ayırt etmiyor.
 
-```html
-<a href="https://ilnd-app-8dcbd.web.app/?token_hash={{ .TokenHash }}&type=recovery">
-  sifreni sifirla
-</a>
-```
-
-With this template the link points at our own page and the token is consumed only
-when the app calls `verifyOTP` (see `recoveryTokenHashFrom` and
-`_verifyRecoveryLink` in `lib/features/auth/auth_provider.dart`). A scanner that
-opens the URL consumes nothing.
-
-Notes:
-
-- The app handles both templates. Until this change is made the old flow stays
-  in effect, so shipping the code first is safe.
-- Password reset now completes **on the web**. A mobile user opens the link in a
-  browser, sets the new password there, and signs into the app with it.
-- Do not change the **Confirm signup** template: account confirmation still uses
-  `{{ .ConfirmationURL }}` plus the `com.ilnd.app://login-callback` deep link.
-- Verify after changing: request a reset, then check Dashboard → Logs → Auth.
-  There must be exactly one `/verify` call, made when you click the link.
+Taşıma sırası ve scriptler: `docs/migration/supabase-to-firebase.md`.
 
 ### Content
 ```bash
@@ -118,17 +102,16 @@ firebase deploy --only hosting --project ilnd-app-8dcbd
 
 `--dart-define-from-file=.env` is NOT optional. Every value in `AppConfig`
 falls back to an empty string, so a build without it compiles cleanly, passes
-analysis, deploys successfully, and then fails silently at runtime: Supabase
-never initializes, no session is restored, and every user is redirected to the
-login screen. Nothing in the build output warns about this.
+analysis, deploys successfully, and then fails silently at runtime: Firebase
+never initializes and every user lands on the startup-failure screen. Nothing in the build output warns about this.
 
 Verify before deploying:
 
 ```bash
-grep -c "supabase.co" build/web/main.dart.js
+grep -c "ilnd-app-8dcbd" build/web/main.dart.js
 ```
 
-Anything other than `1` means the config was not baked in. Do not deploy.
+`0` means the config was not baked in. Do not deploy.
 
 Known gap: `.env` currently has no `RECAPTCHA_SITE_KEY` (App Check on web) or
 `REVENUECAT_API_KEY` (paywall). Both fall back to empty, so App Check tokens
@@ -139,8 +122,6 @@ fail on web and the paywall stays inert until they are added.
 Copy `.env.example` to `.env` and fill in:
 ```
 ANTHROPIC_API_KEY=sk-ant-...         # set as Firebase Secret, not here
-SUPABASE_URL=https://xxxx.supabase.co
-SUPABASE_ANON_KEY=eyJ...
 FIREBASE_API_KEY=AIza...
 FIREBASE_AUTH_DOMAIN=...
 FIREBASE_PROJECT_ID=...
@@ -148,13 +129,13 @@ FIREBASE_STORAGE_BUCKET=...
 FIREBASE_MESSAGING_SENDER_ID=...
 FIREBASE_APP_ID=...
 REVENUECAT_API_KEY=appl_...
-AUTH_BRIDGE_URL=https://<region>-<project-id>.cloudfunctions.net/mintFirebaseToken
+FUNCTIONS_BASE_URL=https://<region>-<project-id>.cloudfunctions.net/
 ```
 
 Set Cloud Function secrets:
 ```bash
 firebase functions:secrets:set ANTHROPIC_API_KEY
-firebase functions:secrets:set SUPABASE_SERVICE_ROLE_KEY
+firebase functions:secrets:set SUPABASE_SERVICE_ROLE_KEY   # yalnız Supabase kapatılana kadar (deleteAccount eski kayıt temizliği)
 ```
 
 ---
@@ -165,7 +146,8 @@ After installing a release build on a clean device:
 
 - [ ] App opens without crash (check Crashlytics for any init errors)
 - [ ] Welcome screen loads; "başla" button navigates to quick-setup
-- [ ] Registration creates Supabase account + assigns referral code
+- [ ] Registration creates a Firebase account and sends a verification e-mail; after verifying, login works and a referral code is assigned
+- [ ] A migrated (pre-2026-09) account can set a new password via "şifremi unuttum" and then log in
 - [ ] Login works for existing account
 - [ ] First journal entry triggers ILND AI response
 - [ ] Home screen shows mood check-in, today's article, daily intention
@@ -213,7 +195,7 @@ Check these within the first 24 hours after launch, and daily for the first week
 
 ### Crashlytics
 - [ ] No crash rate spike above 0.1% of sessions (Firebase console)
-- [ ] Check for any `main()` init failures (FirebaseService, Supabase, RevenueCat)
+- [ ] Check for any `main()` init failures (FirebaseService, RevenueCat)
 - [ ] Check for any non-fatal errors from AuthNotifier (signIn/signUp/deleteAccount)
 
 ### Firebase Performance / Costs

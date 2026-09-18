@@ -175,7 +175,7 @@
   },
   "startupFailedTitle": "ilnd başlatılamadı",
   "@startupFailedTitle": {
-    "description": "Shown when Supabase init fails at startup"
+    "description": "Shown when Firebase init fails at startup"
   },
   "startupFailedBody": "İnternet bağlantını kontrol edip tekrar dene.",
   "@startupFailedBody": {
@@ -185,7 +185,7 @@
   "@startupRetry": {
     "description": "Startup failure retry button"
   },
-  "authErrorInvalidCredentials": "E-posta veya şifre hatalı.",
+  "authErrorInvalidCredentials": "E-posta veya şifre hatalı. Giriş sistemimizi yeniledik: eski hesabınla ilk kez giriyorsan önce \"şifremi unuttum\" ile yeni şifre belirle.",
   "@authErrorInvalidCredentials": {
     "description": "Auth error: wrong email/password"
   },

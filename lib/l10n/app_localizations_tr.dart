@@ -217,7 +217,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get startupRetry => 'Tekrar dene';
 
   @override
-  String get authErrorInvalidCredentials => 'E-posta veya şifre hatalı.';
+  String get authErrorInvalidCredentials =>
+      'E-posta veya şifre hatalı. Giriş sistemimizi yeniledik: eski hesabınla ilk kez giriyorsan önce \"şifremi unuttum\" ile yeni şifre belirle.';
 
   @override
   String get authErrorEmailInUse => 'Bu e-posta adresi zaten kullanılıyor.';

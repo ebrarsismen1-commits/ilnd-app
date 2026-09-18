@@ -13,9 +13,9 @@
  *
  * Tasarım:
  *   - İlk iş `deletion_requests/{uid}` mezar taşı (yalnız uid + durum +
- *     zaman). Mezar taşı olan uid için mintFirebaseToken yeni oturum AÇMAZ:
- *     Supabase adımı başarısız olsa bile kullanıcı yeniden giriş yapıp geride
- *     kalan veriye geri bağlanamaz.
+ *     zaman), ardından Firebase kullanıcısı devre dışı bırakılır: bir adım
+ *     başarısız olsa bile kullanıcı yeniden giriş yapıp geride kalan veriye
+ *     geri bağlanamaz (eskiden bunu köprü yapıyordu; ADR-0010).
  *   - Veri adımları birbirinden bağımsız çalışır, hepsi denenir; biri
  *     başarısız olursa Firebase kullanıcısı SİLİNMEZ, yanıt 500 + başarısız
  *     adımlar olur. Kullanıcı mevcut oturumuyla tekrar deneyebilir;
@@ -108,11 +108,23 @@ async function runAccountDeletion(uid, deps) {
     }
   };
 
-  // 1. Yeniden giriş kilidi: yukarıda yazılan mezar taşı var olduğu sürece
-  //    mintFirebaseToken bu uid için yeni oturum açmaz (hasDeletionRequest).
-  //    Firebase kullanıcısı bilerek devre dışı bırakılmıyor / token'ları iptal
-  //    edilmiyor: yarım kalan silmeyi kullanıcının mevcut oturumuyla tekrar
-  //    deneyebilmesi gerekiyor.
+  // 1. Yeniden giriş kilidi: Firebase kullanıcısı devre dışı bırakılır.
+  //    Eskiden köprü (mintFirebaseToken) mezar taşı olan uid'e oturum
+  //    açmıyordu; kimlik doğrudan Firebase Auth'a geçince (ADR-0010) aynı
+  //    güvence bu: yeni giriş ve token yenileme reddedilir, yarım kalan bir
+  //    silmeden sonra geride kalan veriye geri bağlanılamaz. Refresh token'lar
+  //    İPTAL EDİLMEZ: elindeki ID token (en çok 1 saat) ile kullanıcı silmeyi
+  //    tekrar deneyebilir; sonrası retryPendingDeletions'ın işi.
+  //    Kullanıcı zaten yoksa (önceki deneme sildi) başarı sayılır.
+  await step("auth-disable", async () => {
+    try {
+      await auth.updateUser(uid, {disabled: true});
+    } catch (err) {
+      if (err && err.code === "auth/user-not-found") return {skipped: "already-deleted"};
+      throw err;
+    }
+    return null;
+  });
 
   // 2. Supabase: profil satırı + kimlik. Yapılandırma yoksa BAŞARISIZ: sessizce
   //    atlamak, parasını ödemiş bir kullanıcıya "silindi" deyip kimliğini
@@ -244,8 +256,8 @@ async function retryPendingDeletions(deps, {limit = 20} = {}) {
 }
 
 /**
- * Bu uid için silme istendi mi? mintFirebaseToken buna bakar: istenmişse yeni
- * oturum açılmaz. Okuma hatası fırlatılır (çağıran taraf reddeder).
+ * Bu uid için silme istendi mi? Okuma hatası fırlatılır (çağıran taraf
+ * reddeder).
  * @param {FirebaseFirestore.Firestore} db Firestore
  * @param {string} uid uid
  * @return {Promise<boolean>} mezar taşı varsa true

@@ -6,7 +6,6 @@ const {recomputeRsvpCount, recomputeWeeklyActive} = require("./counters");
 const {setGlobalOptions} = require("firebase-functions/v2");
 const {defineSecret} = require("firebase-functions/params");
 const admin = require("firebase-admin");
-const {createRemoteJWKSet, jwtVerify} = require("jose");
 const {
   createUsageCollector,
   buildUsageIncrements,
@@ -14,9 +13,8 @@ const {
 const {parseAiRequest, METERED_KINDS} = require("./aiRequest");
 const {getAiConfig} = require("./aiConfig");
 const {appCheckMode, checkAppCheck} = require("./appCheck");
-const {validateSupabaseClaims, isBridgedSession} = require("./supabaseClaims");
+const {checkSession} = require("./authClaims");
 const {
-  hasDeletionRequest,
   runAccountDeletion,
   retryPendingDeletions,
 } = require("./accountDeletion");
@@ -43,13 +41,9 @@ const CORS_ORIGINS = process.env.ALLOWED_ORIGINS ?
 const db = admin.firestore();
 
 // SUPABASE_URL gelir functions/.env dosyasından (deploy/emulator sırasında
-// otomatik yüklenir) ya da `firebase functions:secrets:set` ile.
+// otomatik yüklenir). Kimlik artık Firebase Auth'ta (ADR-0010); Supabase
+// yalnız hesap silmede eski kayıtları temizlemek için, proje kapatılana kadar.
 const SUPABASE_URL = process.env.SUPABASE_URL;
-const JWKS = SUPABASE_URL ?
-  createRemoteJWKSet(
-      new URL(`${SUPABASE_URL}/auth/v1/.well-known/jwks.json`),
-  ) :
-  null;
 
 const ANTHROPIC_API_KEY = defineSecret("ANTHROPIC_API_KEY");
 const SUPABASE_SERVICE_ROLE_KEY = defineSecret("SUPABASE_SERVICE_ROLE_KEY");
@@ -80,94 +74,6 @@ const REVENUECAT_SECRET_KEY = process.env.REVENUECAT_SECRET_KEY || "";
 const REVENUECAT_ENTITLEMENT = "premium";
 
 /**
- * Supabase oturum JWT'sini doğrulayıp aynı user id (uid) ile bir Firebase
- * custom token üretir. ILND auth Supabase üzerinden yapılıyor ama Firestore
- * güvenlik kuralları Firebase'in kendi request.auth'una bakıyor — bu köprü
- * olmadan request.auth hep null kalır ve tüm Firestore okuma/yazmaları
- * permission-denied ile başarısız olur.
- *
- * İstek: POST, header "Authorization: Bearer <supabase_access_token>"
- * Yanıt: { "firebaseToken": "..." }
- *
- * Not: bilerek `enforceAppCheck` yok — bu, oturum açma akışının en başında
- * çağrılıyor (Firebase henüz Auth'lanmamış kullanıcı için), App Check
- * aktivasyonunda beklenmedik bir sorun çıkarsa kullanıcıyı giriş yapamaz
- * duruma düşürmemek için diğer üç endpoint'ten (anthropicProxy,
- * redeemReferralCode, deleteAccount — hepsi zaten bir Firebase oturumu
- * gerektiriyor) ayrı tutuldu. Asıl güvenlik sınırı zaten Supabase JWT
- * doğrulaması.
- */
-exports.mintFirebaseToken = onRequest({cors: CORS_ORIGINS}, async (req, res) => {
-  if (req.method !== "POST") {
-    res.status(405).json({error: "Method Not Allowed"});
-    return;
-  }
-
-  // Oturum açmanın ilk adımı: App Check burada ASLA reddetmez (bir
-  // yapılandırma hatası kimseyi giriş yapamaz hale getirmesin), yalnız
-  // izlenir. Asıl sınır Supabase JWT doğrulaması + aşağıdaki claim kontrolü.
-  await checkAppCheck(req, {
-    mode: appCheckMode() === "off" ? "off" : "monitor",
-    verify: (token) => admin.appCheck().verifyToken(token),
-    fn: "mintFirebaseToken",
-  });
-
-  const authHeader = req.headers.authorization || "";
-  const supabaseToken = authHeader.startsWith("Bearer ") ?
-    authHeader.slice(7) :
-    null;
-
-  if (!supabaseToken) {
-    res.status(401).json({error: "Missing bearer token"});
-    return;
-  }
-
-  if (!JWKS) {
-    res.status(500).json({
-      error: "SUPABASE_URL not configured on the function " +
-        "(set functions/.env or use functions:secrets:set)",
-    });
-    return;
-  }
-
-  try {
-    const {payload} = await jwtVerify(supabaseToken, JWKS, {
-      issuer: `${SUPABASE_URL}/auth/v1`,
-    });
-
-    // aud/role/anonim oturum kontrolü (denetim L-6).
-    const claims = validateSupabaseClaims(payload);
-    if (!claims.ok) {
-      console.warn(JSON.stringify({event: "mint_rejected", reason: claims.reason}));
-      res.status(401).json({error: "Invalid Supabase token"});
-      return;
-    }
-    const uid = claims.uid;
-
-    // Silinmesi istenmiş hesap yeniden oturum açamaz (denetim H-3): yarım kalan
-    // bir silmeden sonra geride kalan veriye geri bağlanılmasın.
-    if (await hasDeletionRequest(db, uid)) {
-      res.status(403).json({
-        error: "Account deletion in progress",
-        reason: "account-deletion-pending",
-      });
-      return;
-    }
-
-    const firebaseToken = await admin.auth().createCustomToken(uid, {
-      provider: "supabase",
-    });
-
-    res.status(200).json({firebaseToken});
-  } catch (err) {
-    // Geçici: teşhis için hata mesajını ayrı alanla logla (Cloud Logging
-    // CLI görüntüleyicisi bazen ham Error objesini boş gösteriyor).
-    console.error("mintFirebaseToken failed:", err.message || err, err.name);
-    res.status(401).json({error: "Invalid Supabase token"});
-  }
-});
-
-/**
  * Verifies the Firebase ID token from the Authorization header and returns
  * the decoded token (with `.uid`). Throws on missing/invalid token — every
  * sensitive endpoint below calls this before doing anything else so a
@@ -183,9 +89,11 @@ async function requireFirebaseAuth(req) {
     null;
   if (!idToken) throw new Error("Missing bearer token");
   const decoded = await admin.auth().verifyIdToken(idToken);
-  // Yalnız Supabase köprüsünün ürettiği oturum (denetim H-5).
-  if (!isBridgedSession(decoded)) {
-    throw new Error("Unsupported sign-in provider");
+  // Yalnız doğrulanmış e-posta, Google ya da Apple oturumu (denetim H-5,
+  // ADR-0010). Anonim ve custom token (eski köprü dahil) reddedilir.
+  const session = checkSession(decoded);
+  if (!session.ok) {
+    throw new Error(`Unsupported session: ${session.reason}`);
   }
   return decoded;
 }

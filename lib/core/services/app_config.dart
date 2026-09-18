@@ -1,20 +1,11 @@
+import 'package:flutter/foundation.dart';
+
 /// Tüm environment değişkenlerini tek yerden oku.
 /// Kullanım: `flutter run --dart-define-from-file=.env`
 ///
 /// `fromEnvironment` compile-time sabitler okur, bu yüzden
 /// --dart-define-from-file olmadan çalıştırılırsa fallback değerler döner.
 abstract final class AppConfig {
-  // ── Supabase ────────────────────────────────────────────────────────────────
-  static const supabaseUrl = String.fromEnvironment(
-    'SUPABASE_URL',
-    defaultValue: '',
-  );
-
-  static const supabaseAnonKey = String.fromEnvironment(
-    'SUPABASE_ANON_KEY',
-    defaultValue: '',
-  );
-
   // ── Firebase ────────────────────────────────────────────────────────────────
   static const firebaseApiKey = String.fromEnvironment(
     'FIREBASE_API_KEY',
@@ -47,11 +38,11 @@ abstract final class AppConfig {
   );
 
   // ── Google Sign-In ──────────────────────────────────────────────────────────
-  // Google Cloud Console'daki "Web application" OAuth client ID'si — Supabase
-  // Authentication > Providers > Google'a da aynısı girilmeli. google_sign_in
-  // paketi, Android/iOS istemci ID'lerini google-services.json /
-  // GoogleService-Info.plist üzerinden otomatik okur; bu sadece Supabase'in
-  // id_token'ı doğrulayabilmesi için gereken "audience" değeridir.
+  // Firebase projesinin "Web client" OAuth ID'si (Firebase Console →
+  // Authentication → Google sağlayıcısı açılınca oluşur). google_sign_in
+  // paketi Android/iOS istemci ID'lerini google-services.json /
+  // GoogleService-Info.plist'ten okur; bu, Firebase'in id_token'ı
+  // doğrulayabilmesi için gereken "audience" değeridir.
   static const googleServerClientId = String.fromEnvironment(
     'GOOGLE_SERVER_CLIENT_ID',
     defaultValue: '',
@@ -79,26 +70,43 @@ abstract final class AppConfig {
 
   static bool get isWebAppCheckConfigured => recaptchaSiteKey.isNotEmpty;
 
-  // ── Auth köprüsü (Supabase JWT -> Firebase custom token) ──────────────────────
-  // functions/index.js'teki mintFirebaseToken endpoint'i. Deploy edilince
-  // https://<region>-<project-id>.cloudfunctions.net/mintFirebaseToken olur.
-  static const authBridgeUrl = String.fromEnvironment(
+  // ── Cloud Functions ─────────────────────────────────────────────────────────
+  // Hepsi aynı projeye deploy edilir: https://<region>-<project-id>.cloudfunctions.net/
+  // FUNCTIONS_BASE_URL bu taban. Eski .env'ler yalnız AUTH_BRIDGE_URL
+  // (…/mintFirebaseToken) taşıyor; köprü kalktı (ADR-0010) ama taban oradan
+  // da türetilebilsin ki .env güncellenmeden derlenen sürüm AI/davet/hesap
+  // silmeyi sessizce kaybetmesin.
+  static const _functionsBaseUrl = String.fromEnvironment(
+    'FUNCTIONS_BASE_URL',
+    defaultValue: '',
+  );
+
+  static const _legacyAuthBridgeUrl = String.fromEnvironment(
     'AUTH_BRIDGE_URL',
     defaultValue: '',
   );
 
-  static bool get isAuthBridgeConfigured => authBridgeUrl.isNotEmpty;
-
-  // ── Diğer Cloud Functions ───────────────────────────────────────────────────
-  // Hepsi aynı projeye deploy edilir, bu yüzden authBridgeUrl'in tabanından
-  // (https://<region>-<project-id>.cloudfunctions.net/) türetilir — her
-  // fonksiyon için ayrı bir env değişkeni eklemeye gerek bırakmaz.
-  static String _siblingFunctionUrl(String functionName) {
-    if (authBridgeUrl.isEmpty) return '';
-    final lastSlash = authBridgeUrl.lastIndexOf('/');
+  /// Sonu `/` ile biten taban; yapılandırılmamışsa boş.
+  @visibleForTesting
+  static String functionsBaseFrom({
+    required String base,
+    required String legacyBridge,
+  }) {
+    if (base.isNotEmpty) return base.endsWith('/') ? base : '$base/';
+    final lastSlash = legacyBridge.lastIndexOf('/');
     if (lastSlash == -1) return '';
-    return '${authBridgeUrl.substring(0, lastSlash + 1)}$functionName';
+    return legacyBridge.substring(0, lastSlash + 1);
   }
+
+  static String get functionsBaseUrl => functionsBaseFrom(
+    base: _functionsBaseUrl,
+    legacyBridge: _legacyAuthBridgeUrl,
+  );
+
+  static bool get isFunctionsConfigured => functionsBaseUrl.isNotEmpty;
+
+  static String _siblingFunctionUrl(String functionName) =>
+      isFunctionsConfigured ? '$functionsBaseUrl$functionName' : '';
 
   static String get anthropicProxyUrl => _siblingFunctionUrl('anthropicProxy');
   static String get redeemReferralCodeUrl =>
@@ -112,14 +120,11 @@ abstract final class AppConfig {
   static bool get isAnthropicProxyConfigured => anthropicProxyUrl.isNotEmpty;
 
   // ── Validation ──────────────────────────────────────────────────────────────
-  static bool get isSupabaseConfigured =>
-      supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
-
   static bool get isFirebaseConfigured =>
       firebaseApiKey.isNotEmpty && firebaseProjectId.isNotEmpty;
 
   // ── Ortam ayrımı (güvenlik denetimi C-2) ────────────────────────────────────
-  // Tek bir Firebase/Supabase projesi var ve `.env` hem debug hem release
+  // Tek bir Firebase projesi var ve `.env` hem debug hem release
   // derlemesine gidiyor: `flutter run` canlı veriye yazıyor. Staging projesi
   // kurulana kadar en azından GÖRÜNÜR olsun: debug derleme canlı projeye
   // bağlıysa ekranda "PROD" bandı çıkar ve analitik toplanmaz.

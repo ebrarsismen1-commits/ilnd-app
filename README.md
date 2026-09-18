@@ -26,7 +26,7 @@ A Gen-Z wellness journaling app powered by an AI companion that learns from your
 | Mobile | Flutter 3.44.1 / Dart 3.12.1 |
 | State management | Riverpod 2.6.1 |
 | Navigation | go_router 14.x |
-| Auth | Supabase (email/password) → Firebase Auth (custom token bridge) |
+| Auth | Firebase Auth (email/password with required verification, Google, Apple) — ADR-0010 |
 | Database | Firebase Firestore |
 | AI | Anthropic Claude (haiku-4-5 / sonnet-4-6) via Cloud Function proxy |
 | Subscriptions | RevenueCat / purchases_flutter 8.x |
@@ -199,8 +199,8 @@ Private — all rights reserved.
 ## Stack
 
 - Flutter + Riverpod + go_router
-- Supabase (auth) bridged to Firebase Auth (Firestore security rules need
-  `request.auth`) — see `lib/core/services/firebase_auth_bridge.dart`
+- Firebase Auth (identity; Supabase removed from the app, see
+  `docs/migration/supabase-to-firebase.md`)
 - Firebase Firestore (data) + Cloud Functions (`functions/`, Node 22)
 - Anthropic Claude via a server-side proxy (`functions/index.js`'s
   `anthropicProxy`) — the API key never ships in the client
@@ -209,7 +209,7 @@ Private — all rights reserved.
 ## Local setup
 
 ```bash
-cp .env.example .env   # fill in real Supabase/Firebase/RevenueCat values
+cp .env.example .env   # fill in real Firebase/RevenueCat values
 flutter pub get
 flutter gen-l10n
 flutter run --dart-define-from-file=.env
@@ -237,10 +237,6 @@ To run them locally exactly as CI does:
 npm install -g firebase-tools
 firebase emulators:exec --project demo-ilnd-test "cd functions && npm test"
 ```
-
-`mintFirebaseToken` isn't covered by the emulator test suite — it depends on
-a real Supabase project's JWKS endpoint, so it's verified manually/in
-staging rather than mocked.
 
 `anthropicProxy`/`redeemReferralCode`/`deleteAccount` now run with
 `enforceAppCheck: true`. The test suite mints a real App Check token
@@ -286,7 +282,7 @@ error rather than silently produce a debug-signed bundle.
 
 - `lib/core/` — services, repositories, theme, shared widgets, l10n source
 - `lib/features/` — one directory per screen/feature
-- `functions/` — Cloud Functions (Supabase↔Firebase auth bridge, AI proxy,
+- `functions/` — Cloud Functions (AI proxy,
   referral redemption, account deletion) — all of these are server-
   authoritative specifically because the client must never be trusted with
   them (see commit history / `firestore.rules` comments for why)

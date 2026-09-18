@@ -12,7 +12,7 @@ import 'package:ilnd_app/features/auth/auth_provider.dart';
 /// `island/{uid}` dokümanı — SADECE OKUNUR. Yazma `firestore.rules`'da
 /// kapalıdır; öğeyi yalnız `syncIslandItems` (Admin SDK) verir (ADR-0006).
 final islandStateProvider = StreamProvider<IslandState>((ref) {
-  // Sert Kural #2: hem Supabase oturumu hem köprüden gelen Firebase uid'i
+  // Sert Kural #2: hem auth durumu hem Firebase uid'i
   // izlenir. Yalnız birini izleyen provider ilk girişte ölü stream ya da
   // hesaplar arası sızıntı demek.
   final fbUid = ref.watch(firebaseAuthUidProvider).valueOrNull;
@@ -60,7 +60,7 @@ int _quietDaysSince(Object? rawDate) {
 /// her build'de DEĞİL.
 final syncIslandProvider = Provider<Future<void> Function()>((ref) {
   return () async {
-    if (!AppConfig.isAuthBridgeConfigured) return;
+    if (!AppConfig.isFunctionsConfigured) return;
     final idToken = await fb_auth.FirebaseAuth.instance.currentUser
         ?.getIdToken();
     if (idToken == null) return;

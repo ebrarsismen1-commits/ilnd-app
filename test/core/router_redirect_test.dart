@@ -2,16 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/features/auth/auth_provider.dart';
 import 'package:ilnd_app/features/onboarding/profile_sync.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' show User;
 
 void main() {
-  final user = User(
-    id: 'u1',
-    appMetadata: const {},
-    userMetadata: const {},
-    aud: 'authenticated',
-    createdAt: '2026-01-01T00:00:00Z',
-  );
+  const user = AuthUser(id: 'u1');
 
   String? redirect({
     AuthState? authState,

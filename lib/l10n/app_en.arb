@@ -62,7 +62,7 @@
   "startupFailedTitle": "ilnd couldn't start",
   "startupFailedBody": "Check your internet connection and try again.",
   "startupRetry": "Try again",
-  "authErrorInvalidCredentials": "Incorrect email or password.",
+  "authErrorInvalidCredentials": "Incorrect email or password. We moved to a new sign-in system: if this is your first sign-in since then, use \"forgot password\" to set a new password.",
   "authErrorEmailInUse": "This email address is already in use.",
   "authErrorWeakPassword": "Password must be at least 6 characters.",
   "authErrorUserNotFound": "No account found with this email.",

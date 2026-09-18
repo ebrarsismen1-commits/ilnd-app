@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ilnd_app/core/router/app_router.dart';
 import 'package:ilnd_app/core/services/crash_reporting.dart';
 import 'package:ilnd_app/core/services/local_data_guard.dart';
@@ -36,7 +35,8 @@ void main() async {
   // Her dış servis kendi try/catch'inde başlatılır: biri başarısız olsa da
   // (ağ yok, yanlış key, ilk açılışta kota) diğerleri ve runApp() devam eder.
   // Firebase tamamen başarısız olursa auth/Firestore çalışmaz — bu durumda
-  // kullanıcıya beyaz ekran/crash yerine yeniden deneme ekranı gösterilir.
+  // kullanıcıya beyaz ekran/crash yerine yeniden deneme ekranı gösterilir
+  // (aşağıda, runApp'ten önce).
   var firebaseReady = false;
   try {
     await FirebaseService.initialize();
@@ -127,18 +127,6 @@ void main() async {
     debugPrint('[main] AnalyticsService.initialize failed: $e\n$st');
   }
 
-  var supabaseReady = false;
-  try {
-    // Supabase — key'ler --dart-define-from-file=.env ile gelir
-    await Supabase.initialize(
-      url: AppConfig.supabaseUrl,
-      publishableKey: AppConfig.supabaseAnonKey,
-    );
-    supabaseReady = true;
-  } catch (e, st) {
-    debugPrint('[main] Supabase.initialize failed: $e\n$st');
-  }
-
   try {
     await RevenueCatService.initialize(AppConfig.revenueCatApiKey);
   } catch (e, st) {
@@ -147,9 +135,10 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
 
-  // Supabase olmadan auth çalışamaz — kullanıcıya çözülebilir bir hata
-  // ekranı göster (yeniden dene), uygulamayı çökertme.
-  if (!supabaseReady) {
+  // Firebase olmadan auth ve veri çalışamaz (kimlik Firebase Auth'ta,
+  // ADR-0010) — kullanıcıya çözülebilir bir hata ekranı göster (yeniden
+  // dene), uygulamayı çökertme.
+  if (!firebaseReady) {
     runApp(const _StartupFailureApp());
     return;
   }
@@ -162,7 +151,7 @@ void main() async {
   );
 }
 
-/// Supabase (auth için zorunlu) başlatılamadığında gösterilen, yeniden
+/// Firebase (auth ve veri için zorunlu) başlatılamadığında gösterilen, yeniden
 /// deneme imkanı veren ekran. Beyaz ekran/crash yerine kullanıcıya ne
 /// olduğunu anlatır ve `main()`'i tekrar çalıştırma şansı verir.
 class _StartupFailureApp extends StatelessWidget {
