@@ -11,7 +11,7 @@ const os = require("os");
 const path = require("path");
 const admin = require("firebase-admin");
 const {mapProfileRow, planMigration, summarize} = require("../scripts/lib/profileMigration");
-const {fetchSupabaseProfiles} = require("../scripts/migrateSupabaseProfiles");
+const {fetchSupabaseProfiles, supabaseAdminHeaders} = require("../scripts/migrateSupabaseProfiles");
 
 const SCRIPT = path.join(__dirname, "..", "scripts", "migrateSupabaseProfiles.js");
 jest.setTimeout(60000);
@@ -99,12 +99,17 @@ describe("fetchSupabaseProfiles", () => {
       calls.push({url, opts});
       return {ok: true, status: 200, json: async () => pages[calls.length - 1]};
     };
-    const rows = await fetchSupabaseProfiles({url: "https://sb.test/", key: "k-123", fetchImpl});
+    const rows = await fetchSupabaseProfiles({url: "https://sb.test/", key: "eyJk-123", fetchImpl});
     expect(rows).toHaveLength(1001);
     expect(calls[0].url).toMatch(/^https:\/\/sb\.test\/rest\/v1\/profiles\?select=id,name,.*&offset=0$/);
     expect(calls[1].url).toMatch(/offset=1000$/);
     expect(calls[0].url).not.toContain("k-123");
-    expect(calls[0].opts.headers.Authorization).toBe("Bearer k-123");
+    expect(calls[0].opts.headers.Authorization).toBe("Bearer eyJk-123");
+  });
+
+  test("sb_secret anahtarı yalnız apikey başlığında gider (Bearer'da 401 olur)", () => {
+    expect(supabaseAdminHeaders(" sb_secret_abc \n")).toEqual({apikey: "sb_secret_abc"});
+    expect(supabaseAdminHeaders("eyJx.y.z")).toEqual({apikey: "eyJx.y.z", Authorization: "Bearer eyJx.y.z"});
   });
 
   test("HTTP hatası gövdeyi değil yalnız durum kodunu taşır", async () => {
