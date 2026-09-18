@@ -113,8 +113,8 @@ class _FirstEntryScreenState extends ConsumerState<FirstEntryScreen> {
     await ref.read(firstEntryDoneProvider.notifier).setDone();
     unawaited(
       ref.read(profileRepositoryProvider)?.updateFields({
-            'onboarding_done': true,
-            'first_entry_done': true,
+            ProfileFields.onboardingDone: true,
+            ProfileFields.firstEntryDone: true,
           }) ??
           Future<void>.value(),
     );

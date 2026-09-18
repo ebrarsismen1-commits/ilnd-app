@@ -1,6 +1,6 @@
 # ADR-0003: Onboarding & profil kalıcılığı Supabase `profiles`'a taşınır
 
-**Status:** Accepted
+**Status:** Superseded by ADR-0009 (2026-09-18): profil artık Firestore `users/{uid}`
 **Date:** 2026-07-07
 
 ## Decision

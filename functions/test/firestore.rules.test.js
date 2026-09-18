@@ -448,6 +448,90 @@ describe("users alt ağacı şeması (M-6)", () => {
   });
 });
 
+describe("users/{uid} profil alanları (Supabase profiles → Firestore)", () => {
+  // profile_repository.dart'ın gerçekten gönderdiği şekil: toDoc() + sunucu damgası.
+  const profile = (over = {}) => ({
+    name: "Ela",
+    onboardingDone: true,
+    firstEntryDone: false,
+    goals: ["uyku"],
+    activityLevel: "aktif",
+    diet: "vegan",
+    allergies: ["gluten"],
+    age: 31,
+    heightCm: 168,
+    weightKg: 72,
+    profileUpdatedAt: serverTimestamp(),
+    ...over,
+  });
+
+  describe("gerçek istemci yazmaları geçer", () => {
+    test("onboarding kaydı → sahibi geri okur (uygulama yeniden açılışı)", async () => {
+      const a = as("A");
+      await assertSucceeds(setDoc(doc(a, "users/A"), profile(), {merge: true}));
+      const snap = await assertSucceeds(getDoc(doc(a, "users/A")));
+      expect(snap.data()).toMatchObject({name: "Ela", onboardingDone: true, heightCm: 168, weightKg: 72});
+    });
+
+    test("tekil bayrak güncellemesi (first_entry_screen) ve kayıt adı (signUp)", async () => {
+      const a = as("A");
+      await assertSucceeds(setDoc(doc(a, "users/A"),
+          {onboardingDone: true, firstEntryDone: true, profileUpdatedAt: serverTimestamp()}, {merge: true}));
+      await assertSucceeds(setDoc(doc(a, "users/A"),
+          {name: "Deniz", profileUpdatedAt: serverTimestamp()}, {merge: true}));
+    });
+
+    test("fotoğraf ve profil aynı dokümanda birbirini kilitlemez", async () => {
+      await seed("users/A", {photoBase64: "AAAA", photoUpdatedAt: Timestamp.now()});
+      const a = as("A");
+      await assertSucceeds(setDoc(doc(a, "users/A"), profile(), {merge: true}));
+      await assertSucceeds(setDoc(doc(a, "users/A"),
+          {photoBase64: "BBBB", photoUpdatedAt: serverTimestamp()}, {merge: true}));
+    });
+
+    test("migration script'inin yazdığı doküman istemci tarafından güncellenebilir", async () => {
+      await seed("users/A", {
+        name: "Ela", onboardingDone: true, firstEntryDone: true, goals: [], allergies: [],
+        age: 31, heightCm: 168, weightKg: 72,
+        profileMigratedAt: Timestamp.now(), profileMigratedFrom: "supabase",
+      });
+      await assertSucceeds(setDoc(doc(as("A"), "users/A"),
+          {weightKg: 70, profileUpdatedAt: serverTimestamp()}, {merge: true}));
+    });
+  });
+
+  describe("düşmanca yazmalar reddedilir", () => {
+    test.each([
+      ["sunucu damgası yok", {profileUpdatedAt: undefined}],
+      ["sahte damga (migration'ı atlatmak)", {profileUpdatedAt: Timestamp.fromMillis(Date.now() + 86400000)}],
+      ["131 yaş", {age: 131}],
+      ["kesirli yaş", {age: 30.5}],
+      ["negatif boy", {heightCm: -1}],
+      ["701 kg", {weightKg: 701}],
+      ["101 karakter ad", {name: "x".repeat(101)}],
+      ["41 karakter diyet", {diet: "x".repeat(41)}],
+      ["string bayrak", {onboardingDone: "true"}],
+      ["51 hedef", {goals: Array.from({length: 51}, (_, i) => `g${i}`)}],
+      ["liste olmayan alerji", {allergies: "gluten"}],
+      ["istemci migration işareti koyamaz", {profileMigratedFrom: "supabase"}],
+      ["tanımsız alan", {isPremium: true}],
+    ])("%s", async (_, over) => {
+      const data = profile(over);
+      Object.keys(data).forEach((k) => data[k] === undefined && delete data[k]);
+      await assertFails(setDoc(doc(as("A"), "users/A"), data, {merge: true}));
+    });
+
+    test("başka kullanıcının profili okunamaz ve yazılamaz", async () => {
+      await seed("users/A", {name: "Ela", weightKg: 72, allergies: ["gluten"]});
+      const b = as("B");
+      await assertFails(getDoc(doc(b, "users/A")));
+      await assertFails(setDoc(doc(b, "users/A"), profile(), {merge: true}));
+      await assertFails(getDoc(doc(anon(), "users/A")));
+      await assertFails(setDoc(doc(anon(), "users/A"), profile(), {merge: true}));
+    });
+  });
+});
+
 describe("mevcut sahiplik ve kapalı koleksiyonlar", () => {
   test("B, A'nın users alt ağacını okuyamaz ve yazamaz", async () => {
     await seed("users/A/journal_entries/j1", {body: "özel"});
