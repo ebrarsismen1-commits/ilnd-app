@@ -51,8 +51,7 @@ class _FakeAuth extends AuthNotifier {
 }
 
 class _FakeProfileRepository extends ProfileRepository {
-  _FakeProfileRepository(this.server, String uid)
-    : super(Supabase.instance.client, uid);
+  _FakeProfileRepository(this.server, String uid) : super(uid, _NoStore());
 
   final ProfileData? server;
   final upserts = <Map<String, dynamic>>[];
@@ -61,11 +60,23 @@ class _FakeProfileRepository extends ProfileRepository {
   Future<ProfileData?> fetch() async => server;
 
   @override
-  Future<void> upsert(ProfileData data) async => upserts.add(data.toUpsert());
+  Future<void> upsert(ProfileData data) async => upserts.add(data.toDoc());
 
   @override
   Future<void> updateFields(Map<String, dynamic> fields) async =>
       upserts.add(fields);
+}
+
+/// Sahte repository hiçbir metodu üst sınıfa devretmez; store'a asla
+/// ulaşılmamalı.
+class _NoStore implements ProfileStore {
+  @override
+  Future<Map<String, dynamic>?> read(String uid) =>
+      throw StateError('store kullanılmamalı');
+
+  @override
+  Future<void> merge(String uid, Map<String, dynamic> fields) =>
+      throw StateError('store kullanılmamalı');
 }
 
 User _user(String id) => User(
@@ -238,7 +249,7 @@ void main() {
     await settle();
 
     expect(repos['uid-B']!.upserts, hasLength(1));
-    expect(repos['uid-B']!.upserts.single['weight'], 64);
+    expect(repos['uid-B']!.upserts.single['weightKg'], 64);
     expect(prefs.getString('local_profile_owner'), 'uid-B');
     expect(c.read(onboardingDoneProvider), isTrue);
   });

@@ -16,7 +16,7 @@ import 'package:ilnd_app/l10n/app_localizations.dart';
 /// için bunun bir güvenlik tarafı da var.
 ///
 /// Kaydetme [ProfileHydrationNotifier.pushLocalProfile] üzerinden gider:
-/// değişiklik hem Supabase profiline hem ILND'nin "bilinen gerçekler"
+/// değişiklik hem Firestore profiline hem ILND'nin "bilinen gerçekler"
 /// hafızasına yazılır. Yalnız birine yazmak, ILND'nin eski kiloyu bilmeye
 /// devam etmesi demek olurdu.
 class PreferencesScreen extends ConsumerStatefulWidget {

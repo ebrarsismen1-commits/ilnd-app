@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ilnd_app/core/billing/revenue_cat_service.dart';
+import 'package:ilnd_app/core/repositories/profile_repository.dart';
 import 'package:ilnd_app/core/repositories/referral_repository.dart';
 import 'package:ilnd_app/core/services/app_check_headers.dart';
 import 'package:ilnd_app/core/services/app_config.dart';
@@ -332,16 +333,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = AuthConfirmEmailPending(email.trim());
         return;
       }
-      // profiles tablosu opsiyonel — hata verse bile kayıt başarılı sayılır
       if (res.user != null) {
-        try {
-          await _client.from('profiles').upsert({
-            'id': res.user!.id,
-            'name': name.trim(),
-            'updated_at': DateTime.now().toIso8601String(),
-          });
-        } catch (e) {
-          debugPrint('[Auth] profiles upsert failed: $e');
+        // Profil adı Firestore users/{uid}'e. Fire-and-forget: yazım köprü
+        // girişini bekler, kayıt başarısını engellemesin; hata repository'de
+        // yutulur ve onboarding flush'ı adı yeniden yazar.
+        final trimmed = name.trim();
+        if (trimmed.isNotEmpty) {
+          unawaited(
+            ProfileRepository(
+              res.user!.id,
+            ).updateFields({ProfileFields.name: trimmed}),
+          );
         }
         // Her yeni kullanıcı kayıt anında bir referral koduna sahip olsun —
         // fire-and-forget, kayıt başarısını engellemesin.

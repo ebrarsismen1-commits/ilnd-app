@@ -67,12 +67,63 @@ service cloud.firestore {
       allow read: if isOwner(userId);
     }
 
+    // Profil (profile_repository.dart, eskiden Supabase `profiles`). Sınırlar
+    // supabase/migrations/…_profiles_rls.sql'deki profiles_field_bounds ile
+    // aynı; migration script'i (functions/scripts/migrateSupabaseProfiles.js)
+    // sınır dışı değerleri yazmaz. Değerler dokümanın TAMAMINDA doğrulanır:
+    // yalnız değişen alana bakılsaydı bir kez girmiş geçersiz bir değer
+    // sonsuza dek kalırdı.
+    function profileKeys() {
+      return ['name', 'onboardingDone', 'firstEntryDone', 'goals',
+        'activityLevel', 'diet', 'allergies', 'age', 'heightCm', 'weightKg',
+        'profileUpdatedAt'];
+    }
+
+    function optString(d, k, max) {
+      return d.get(k, null) == null || boundedString(d.get(k, null), max);
+    }
+
+    function optInt(d, k, lo, hi) {
+      return d.get(k, null) == null
+        || (d.get(k, null) is int && d.get(k, null) >= lo && d.get(k, null) <= hi);
+    }
+
+    function optBool(d, k) {
+      return d.get(k, null) == null || d.get(k, null) is bool;
+    }
+
+    function optList(d, k) {
+      return d.get(k, null) == null
+        || (d.get(k, null) is list && d.get(k, null).size() <= 50);
+    }
+
+    function validProfile(d) {
+      return optString(d, 'name', 100)
+        && optBool(d, 'onboardingDone')
+        && optBool(d, 'firstEntryDone')
+        && optList(d, 'goals')
+        && optList(d, 'allergies')
+        && optString(d, 'activityLevel', 40)
+        && optString(d, 'diet', 40)
+        && optInt(d, 'age', 0, 130)
+        && optInt(d, 'heightCm', 0, 300)
+        && optInt(d, 'weightKg', 0, 700);
+    }
+
     match /users/{userId} {
       // Profil fotoğrafı (avatar_repository): küçültülmüş base64.
+      // Profil alanları (profile_repository): her yazımda profileUpdatedAt
+      // sunucu saatine eşit olmalı. Migration script'i bu damgayı "istemci
+      // profili yazdı, Supabase'teki eskidir" diye okuyor; sahtelenemesin.
+      // profileMigratedAt/From yalnız Admin SDK'dan (listede yok).
       allow create, update: if isOwner(userId)
-        && changedKeys().hasOnly(['photoBase64', 'photoUpdatedAt'])
+        && changedKeys().hasOnly(
+          ['photoBase64', 'photoUpdatedAt'].concat(profileKeys()))
         && (request.resource.data.get('photoBase64', null) == null
-          || boundedString(request.resource.data.photoBase64, 900000));
+          || boundedString(request.resource.data.photoBase64, 900000))
+        && validProfile(request.resource.data)
+        && (!changedKeys().hasAny(profileKeys())
+          || request.resource.data.get('profileUpdatedAt', null) == request.time);
       allow delete: if false; // hesap silme sunucuda
 
       match /journal_entries/{entryId} {
